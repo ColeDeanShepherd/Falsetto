@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as Vex from 'vexflow';
+import * as clone from 'clone';
 
 import * as Utils from './Utils';
 
@@ -8,11 +9,30 @@ enum Mode {
   GuessNumHalfSteps
 }
 
+class AnswerStats<T> {
+  public constructor(
+    public answer: T,
+    public numCorrectGuesses: number,
+    public numIncorrectGuesses: number
+  ) {}
+}
+class QuizStats<T> {
+  public constructor(
+    public answersStats: Array<AnswerStats<T>>
+  ) {}
+  
+  public get numCorrectGuesses(): number {
+    return Utils.sumNumbers(this.answersStats.map(x => x.numCorrectGuesses));
+  }
+  public get numIncorrectGuesses(): number {
+    return Utils.sumNumbers(this.answersStats.map(x => x.numIncorrectGuesses));
+  }
+}
+
 export interface IntervalNamesAndSymbolsState {
   currentMode: Mode;
   currentIntervalHalfSteps: number;
-  numCorrectGuesses: number;
-  numIncorrectGuesses: number;
+  quizStats: QuizStats<number>
 }
 export class IntervalNamesAndSymbols extends React.Component<{}, IntervalNamesAndSymbolsState> {
   constructor(props: {}) {
@@ -23,8 +43,10 @@ export class IntervalNamesAndSymbols extends React.Component<{}, IntervalNamesAn
     this.state = {
       currentMode: Mode.GuessNumHalfSteps,
       currentIntervalHalfSteps: this.generateNewRandomIntervalHalfSteps(),
-      numCorrectGuesses: 0,
-      numIncorrectGuesses: 0
+      quizStats: new QuizStats<number>(
+        this.intervalNames
+          .map((name, i) => new AnswerStats<number>(i, 0, 0))
+      )
     };
   }
 
@@ -55,25 +77,31 @@ export class IntervalNamesAndSymbols extends React.Component<{}, IntervalNamesAn
     const modeButtons = Utils.getNonConstEnumValues(Mode).map(mode =>
       <span key={mode}><input type="radio" name="mode" value={mode} checked={this.state.currentMode === mode} onClick={event => this.changeMode(mode)} /> {Mode[mode]}</span>
     , this);
+
+    const answerStats = this.state.quizStats.answersStats
+      .map(a => <p key={a.answer}>{a.answer} {a.numCorrectGuesses} / {a.numIncorrectGuesses}</p>);
+
     const questionText = (this.state.currentMode === Mode.GuessNames)
       ? this.state.currentIntervalHalfSteps
-      : this.intervals[this.state.currentIntervalHalfSteps];
-    const intervalButtons = this.intervals.map((interval, i) => {
+      : this.intervalNames[this.state.currentIntervalHalfSteps];
+    const intervalButtons = this.intervalNames.map((interval, i) => {
       const text = (this.state.currentMode === Mode.GuessNames) ? interval : i;
       return <button key={i} onClick={event => this.guessInterval(i)}>{text}</button>;
     }, this);
 
-    const numGuesses = this.state.numCorrectGuesses + this.state.numIncorrectGuesses;
-    const percentCorrect = (this.state.numIncorrectGuesses !== 0)
-      ? (this.state.numCorrectGuesses / numGuesses)
+    const numGuesses = this.state.quizStats.numCorrectGuesses + this.state.quizStats.numIncorrectGuesses;
+    const percentCorrect = (this.state.quizStats.numIncorrectGuesses !== 0)
+      ? (this.state.quizStats.numCorrectGuesses / numGuesses)
       : 1;
 
     return (
       <div>
         {modeButtons}
-        <p>Correct: {this.state.numCorrectGuesses}</p>
-        <p>Incorrect: {this.state.numIncorrectGuesses}</p>
+        <p>Correct: {this.state.quizStats.numCorrectGuesses}</p>
+        <p>Incorrect: {this.state.quizStats.numIncorrectGuesses}</p>
         <p>% Correct: {(100 * percentCorrect).toFixed(2)}%</p>
+        {answerStats}
+
         <p style={{ fontSize: "2em" }}>{questionText}</p>
         {intervalButtons}
         <div ref={this.sheetMusicRef} />
@@ -85,7 +113,7 @@ export class IntervalNamesAndSymbols extends React.Component<{}, IntervalNamesAn
     let halfSteps: number;
 
     do {
-      halfSteps = Utils.randomInt(0, this.intervals.length - 1);
+      halfSteps = Utils.randomInt(0, this.intervalNames.length - 1);
     } while(this.state && (halfSteps === this.state.currentIntervalHalfSteps));
 
     return halfSteps;
@@ -96,25 +124,39 @@ export class IntervalNamesAndSymbols extends React.Component<{}, IntervalNamesAn
   }
   private guessInterval(halfSteps: number) {
     if (halfSteps === this.state.currentIntervalHalfSteps) {
-      this.onAnswerCorrect();
+      this.onAnswerCorrect(halfSteps);
     } else {
-      this.onAnswerIncorrect();
+      this.onAnswerIncorrect(halfSteps);
     }
   }
-  private onAnswerCorrect() {
+  private onAnswerCorrect(answer: number) {
+    const newQuizStats = clone(this.state.quizStats);
+
+    const answerStats = newQuizStats.answersStats
+      .find(a => a.answer === answer);
+    if (!answerStats) { return; }
+    answerStats.numCorrectGuesses++;
+
     this.setState({
-      numCorrectGuesses: this.state.numCorrectGuesses + 1,
+      quizStats: newQuizStats,
       currentIntervalHalfSteps: this.generateNewRandomIntervalHalfSteps()
     });
   }
-  private onAnswerIncorrect() {
+  private onAnswerIncorrect(answer: number) {
+    const newQuizStats = clone(this.state.quizStats);
+
+    const answerStats = newQuizStats.answersStats
+      .find(a => a.answer === answer);
+    if (!answerStats) { return; }
+    answerStats.numIncorrectGuesses++;
+
     this.setState({
-      numIncorrectGuesses: this.state.numIncorrectGuesses + 1
+      quizStats: newQuizStats
     });
   }
 
   private sheetMusicRef: React.Ref<HTMLDivElement>;
-  private intervals = [
+  private intervalNames = [
     "Unison",
     "m2",
     "M2",

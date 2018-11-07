@@ -1,3 +1,8 @@
+export function identity<T>(value: T): T {
+  return value;
+}
+
+// TODO: don't run asserts in prod?
 // TODO: add tests
 export function assert(condition: boolean) {
   if (!condition) {
@@ -41,4 +46,20 @@ export function getNonConstEnumValues(enumType: any): any[] {
   return Object.keys(enumType)
     .map(key => parseInt(enumType[key], 10))
     .filter(value => !isNaN(value));
+}
+
+// TODO: add tests
+export function sumNumbers(array: Array<number>): number {
+  return array.reduce(
+    (prevVal, curVal) => prevVal + curVal,
+    0
+  );
+}
+
+// TODO: add tests
+export function sum<T>(array: Array<T>, callbackFn: (value: T) => number): number {
+  return array.reduce(
+    (prevVal, curVal) => prevVal + callbackFn(curVal),
+    0
+  );
 }
