@@ -1,18 +1,34 @@
 import * as React from 'react';
 import * as Vex from 'vexflow';
 
-import { Quiz } from "./Quiz";
-import { Quiz as QuizComponent } from "./Components/Quiz";
+import { Quiz } from "../Quiz";
+import { Quiz as QuizComponent } from "./Quiz";
 
 export class IntervalNamesToHalfSteps extends React.Component<{}, {}> {
   constructor(props: {}) {
     super(props);
 
     this.sheetMusicRef = React.createRef();
+
+    const intervalNames = [
+      "Unison",
+      "m2",
+      "M2",
+      "m3",
+      "M3",
+      "P4",
+      "A4/d5",
+      "P5",
+      "m6",
+      "M6",
+      "m7",
+      "M7",
+      "P8"
+    ];
     this.quiz = new Quiz(
-      this.intervalNames.map(intervalName => (() => <span style={{ fontSize: "2em" }}>{intervalName}</span>)),
+      intervalNames.map(intervalName => (() => <span style={{ fontSize: "2em" }}>{intervalName}</span>)),
       selectAnswerIndex => {
-        const intervalButtons = this.intervalNames.map((interval, i) => {
+        const intervalButtons = intervalNames.map((interval, i) => {
           const text = i;
           return <button key={i} onClick={event => selectAnswerIndex(i)}>{text}</button>;
         }, this);
@@ -55,19 +71,4 @@ export class IntervalNamesToHalfSteps extends React.Component<{}, {}> {
 
   private sheetMusicRef: React.Ref<HTMLDivElement>;
   private quiz: Quiz;
-  private intervalNames = [
-    "Unison",
-    "m2",
-    "M2",
-    "m3",
-    "M3",
-    "P4",
-    "A4/d5",
-    "P5",
-    "m6",
-    "M6",
-    "m7",
-    "M7",
-    "P8"
-  ];
 }
