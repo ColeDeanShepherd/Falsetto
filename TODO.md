@@ -1,7 +1,7 @@
 # To-Do
-* Interval Quality Symbols
+* Interval Quality Symbols (reverse)
 * Interval Recognition (Staff)
-* Perfect vs. Imperfect Intervals
+* Perfect vs. Imperfect Intervals (reverse)
 * Interval Type Changes When Lowering/Raising
 * Interval Dissonance/Consonance Classification
 * Diatonic Triad/Seventh Chord Types

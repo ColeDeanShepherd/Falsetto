@@ -24,6 +24,7 @@ export class IntervalHalfStepsToNames extends React.Component<{}, {}> {
     ];
     this.quiz = new Quiz(
       intervalNames.map((_, i) => (() => <span style={{ fontSize: "2em" }}>{i}</span>)),
+      intervalNames.map((_, i) => i),
       selectAnswerIndex => {
         const intervalButtons = intervalNames.map((intervalName, i) => {
           return <button key={i} onClick={event => selectAnswerIndex(i)}>{intervalName}</button>;

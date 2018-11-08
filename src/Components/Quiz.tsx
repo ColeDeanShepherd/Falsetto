@@ -54,6 +54,10 @@ export class Quiz extends React.Component<IQuizProps, IQuizState> {
   }
   
   private getNextQuestionIndex(): number {
+    if (this.props.quiz.questionRenderFuncs.length <= 1) {
+      return 0;
+    }
+
     let nextQuestionIndex: number;
 
     do {
@@ -64,18 +68,18 @@ export class Quiz extends React.Component<IQuizProps, IQuizState> {
   }
 
   private guessAnswer(answerIndex: number) {
-    const correctAnswerIndex = this.state.currentQuestionIndex;
+    const correctAnswerIndex = this.props.quiz.questionAnswerIndices[this.state.currentQuestionIndex];
     const isAnswerCorrect = answerIndex === correctAnswerIndex;
     if (isAnswerCorrect) {
-      this.onAnswerCorrect(answerIndex);
+      this.onAnswerCorrect();
     } else {
-      this.onAnswerIncorrect(answerIndex);
+      this.onAnswerIncorrect();
     }
   }
-  private onAnswerCorrect(answerIndex: number) {
+  private onAnswerCorrect() {
     const newQuizStats = clone(this.state.quizStats);
 
-    const questionStats = newQuizStats.questionStats[answerIndex];
+    const questionStats = newQuizStats.questionStats[this.state.currentQuestionIndex];
     questionStats.numCorrectGuesses++;
 
     this.setState({
@@ -83,10 +87,10 @@ export class Quiz extends React.Component<IQuizProps, IQuizState> {
       currentQuestionIndex: this.getNextQuestionIndex()
     });
   }
-  private onAnswerIncorrect(answerIndex: number) {
+  private onAnswerIncorrect() {
     const newQuizStats = clone(this.state.quizStats);
 
-    const questionStats = newQuizStats.questionStats[answerIndex];
+    const questionStats = newQuizStats.questionStats[this.state.currentQuestionIndex];
     questionStats.numIncorrectGuesses++;
 
     this.setState({
