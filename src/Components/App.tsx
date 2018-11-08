@@ -5,6 +5,8 @@ import { IntervalHalfStepsToNames } from './IntervalHalfStepsToNames';
 import { IntervalQualitySymbolsToQualities } from './IntervalQualitySymbolsToQualities';
 import { GenericIntervalsToIntervalQualities } from "./GenericIntervalsToIntervalQualities";
 import { IntervalsToConsonanceDissonance } from "./IntervalsToConsonanceDissonance";
+import { MajorDiatonicTriads } from "./MajorDiatonicTriads";
+import { NaturalMinorDiatonicTriads } from "./NaturalMinorDiatonicTriads";
 
 import './App.css';
 
@@ -45,14 +47,18 @@ class App extends React.Component<{}, IAppState> {
     "IntervalHalfStepsToNames",
     "IntervalQualitySymbolsToQualities",
     "GenericIntervalsToIntervalQualities",
-    "IntervalsToConsonanceDissonance"
+    "IntervalsToConsonanceDissonance",
+    "MajorDiatonicTriads",
+    "NaturalMinorDiatonicTriads"
   ];
   private quizComponents = [
     IntervalNamesToHalfSteps,
     IntervalHalfStepsToNames,
     IntervalQualitySymbolsToQualities,
     GenericIntervalsToIntervalQualities,
-    IntervalsToConsonanceDissonance
+    IntervalsToConsonanceDissonance,
+    MajorDiatonicTriads,
+    NaturalMinorDiatonicTriads
   ];
 
   private changeQuiz(quizIndex: number) {
