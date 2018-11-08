@@ -4,6 +4,7 @@ import { IntervalNamesToHalfSteps } from './IntervalNamesToHalfSteps';
 import { IntervalHalfStepsToNames } from './IntervalHalfStepsToNames';
 import { IntervalQualitySymbolsToQualities } from './IntervalQualitySymbolsToQualities';
 import { GenericIntervalsToIntervalQualities } from "./GenericIntervalsToIntervalQualities";
+import { IntervalsToConsonanceDissonance } from "./IntervalsToConsonanceDissonance";
 
 import './App.css';
 
@@ -15,6 +16,7 @@ class App extends React.Component {
         <IntervalHalfStepsToNames />
         <IntervalQualitySymbolsToQualities />
         <GenericIntervalsToIntervalQualities />
+        <IntervalsToConsonanceDissonance />
       </div>
     );
   }

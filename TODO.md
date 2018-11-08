@@ -1,4 +1,5 @@
 # To-Do
+* Improve random question selection
 * Interval Quality Symbols (reverse)
 * Interval Recognition (Staff)
 * Perfect vs. Imperfect Intervals (reverse)
