@@ -1,4 +1,6 @@
 # To-Do
+* Zip question & answer arrays.
+* Move exercises into dedicated folder.
 * Improve random question selection
 * Interval Quality Symbols (reverse)
 * Interval Recognition (Staff)

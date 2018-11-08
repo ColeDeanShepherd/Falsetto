@@ -35,7 +35,14 @@ export class IntervalsToConsonanceDissonance extends React.Component<{}, {}> {
       "sharp dissonance",
       "open consonance"
     ];
-    const answers = ["sharp dissonance", "mild dissonance", "consonance or dissonance", "neutral or restless", "soft consonance", "open consonance"];
+    const answers = [
+      "sharp dissonance",
+      "mild dissonance",
+      "consonance or dissonance",
+      "neutral or restless",
+      "soft consonance",
+      "open consonance"
+    ];
     const questionAnswerIndices = consonanceDissonances.map(answer => answers.indexOf(answer));
 
     this.quiz = new Quiz(
