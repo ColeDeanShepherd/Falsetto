@@ -7,6 +7,11 @@ import { GenericIntervalsToIntervalQualities } from "./GenericIntervalsToInterva
 import { IntervalsToConsonanceDissonance } from "./IntervalsToConsonanceDissonance";
 import { MajorDiatonicTriads } from "./MajorDiatonicTriads";
 import { NaturalMinorDiatonicTriads } from "./NaturalMinorDiatonicTriads";
+import { MajorDiatonicSeventhChords } from "./MajorDiatonicSeventhChords";
+import { NaturalMinorDiatonicSeventhChords } from "./NaturalMinorDiatonicSeventhChords";
+import { MelodicMinorDiatonicSeventhChords } from "./MelodicMinorDiatonicSeventhChords";
+import { HarmonicMinorDiatonicSeventhChords } from "./HarmonicMinorDiatonicSeventhChords";
+import { MajorScaleDegreeModes } from "./MajorScaleDegreeModes";
 
 import './App.css';
 
@@ -49,7 +54,12 @@ class App extends React.Component<{}, IAppState> {
     "GenericIntervalsToIntervalQualities",
     "IntervalsToConsonanceDissonance",
     "MajorDiatonicTriads",
-    "NaturalMinorDiatonicTriads"
+    "NaturalMinorDiatonicTriads",
+    "MajorDiatonicSeventhChords",
+    "NaturalMinorDiatonicSeventhChords",
+    "MelodicMinorDiatonicSeventhChords",
+    "HarmonicMinorDiatonicSeventhChords",
+    "MajorScaleDegreeModes"
   ];
   private quizComponents = [
     IntervalNamesToHalfSteps,
@@ -58,7 +68,12 @@ class App extends React.Component<{}, IAppState> {
     GenericIntervalsToIntervalQualities,
     IntervalsToConsonanceDissonance,
     MajorDiatonicTriads,
-    NaturalMinorDiatonicTriads
+    NaturalMinorDiatonicTriads,
+    MajorDiatonicSeventhChords,
+    NaturalMinorDiatonicSeventhChords,
+    MelodicMinorDiatonicSeventhChords,
+    HarmonicMinorDiatonicSeventhChords,
+    MajorScaleDegreeModes
   ];
 
   private changeQuiz(quizIndex: number) {
