@@ -7,10 +7,16 @@ import { GenericIntervalsToIntervalQualities } from "./GenericIntervalsToInterva
 import { IntervalsToConsonanceDissonance } from "./IntervalsToConsonanceDissonance";
 import { MajorDiatonicTriads } from "./MajorDiatonicTriads";
 import { NaturalMinorDiatonicTriads } from "./NaturalMinorDiatonicTriads";
+import { MelodicMinorDiatonicTriads } from "./MelodicMinorDiatonicTriads";
+import { HarmonicMinorDiatonicTriads } from "./HarmonicMinorDiatonicTriads";
+import { HarmonicMajorDiatonicTriads } from "./HarmonicMajorDiatonicTriads";
+import { DoubleHarmonicMajorDiatonicTriads } from "./DoubleHarmonicMajorDiatonicTriads";
 import { MajorDiatonicSeventhChords } from "./MajorDiatonicSeventhChords";
 import { NaturalMinorDiatonicSeventhChords } from "./NaturalMinorDiatonicSeventhChords";
 import { MelodicMinorDiatonicSeventhChords } from "./MelodicMinorDiatonicSeventhChords";
 import { HarmonicMinorDiatonicSeventhChords } from "./HarmonicMinorDiatonicSeventhChords";
+import { HarmonicMajorDiatonicSeventhChords } from "./HarmonicMajorDiatonicSeventhChords";
+import { DoubleHarmonicMajorDiatonicSeventhChords } from "./DoubleHarmonicMajorDiatonicSeventhChords";
 import { MajorScaleDegreeModes } from "./MajorScaleDegreeModes";
 
 import './App.css';
@@ -55,10 +61,16 @@ class App extends React.Component<{}, IAppState> {
     "IntervalsToConsonanceDissonance",
     "MajorDiatonicTriads",
     "NaturalMinorDiatonicTriads",
+    "MelodicMinorDiatonicTriads",
+    "HarmonicMinorDiatonicTriads",
+    "HarmonicMajorDiatonicTriads",
+    "DoubleHarmonicMajorDiatonicTriads",
     "MajorDiatonicSeventhChords",
     "NaturalMinorDiatonicSeventhChords",
     "MelodicMinorDiatonicSeventhChords",
     "HarmonicMinorDiatonicSeventhChords",
+    "HarmonicMajorDiatonicSeventhChords",
+    "DoubleHarmonicMajorDiatonicSeventhChords",
     "MajorScaleDegreeModes"
   ];
   private quizComponents = [
@@ -69,10 +81,16 @@ class App extends React.Component<{}, IAppState> {
     IntervalsToConsonanceDissonance,
     MajorDiatonicTriads,
     NaturalMinorDiatonicTriads,
+    MelodicMinorDiatonicTriads,
+    HarmonicMinorDiatonicTriads,
+    HarmonicMajorDiatonicTriads,
+    DoubleHarmonicMajorDiatonicTriads,
     MajorDiatonicSeventhChords,
     NaturalMinorDiatonicSeventhChords,
     MelodicMinorDiatonicSeventhChords,
     HarmonicMinorDiatonicSeventhChords,
+    HarmonicMajorDiatonicSeventhChords,
+    DoubleHarmonicMajorDiatonicSeventhChords,
     MajorScaleDegreeModes
   ];
 
