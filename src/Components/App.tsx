@@ -18,6 +18,8 @@ import { HarmonicMinorDiatonicSeventhChords } from "./HarmonicMinorDiatonicSeven
 import { HarmonicMajorDiatonicSeventhChords } from "./HarmonicMajorDiatonicSeventhChords";
 import { DoubleHarmonicMajorDiatonicSeventhChords } from "./DoubleHarmonicMajorDiatonicSeventhChords";
 import { MajorScaleDegreeModes } from "./MajorScaleDegreeModes";
+import { ChordNotes } from "./ChordNotes";
+import { ScaleNotes } from "./ScaleNotes";
 
 import './App.css';
 
@@ -71,7 +73,9 @@ class App extends React.Component<{}, IAppState> {
     "HarmonicMinorDiatonicSeventhChords",
     "HarmonicMajorDiatonicSeventhChords",
     "DoubleHarmonicMajorDiatonicSeventhChords",
-    "MajorScaleDegreeModes"
+    "MajorScaleDegreeModes",
+    "ChordNotes",
+    "ScaleNotes"
   ];
   private quizComponents = [
     IntervalNamesToHalfSteps,
@@ -91,7 +95,9 @@ class App extends React.Component<{}, IAppState> {
     HarmonicMinorDiatonicSeventhChords,
     HarmonicMajorDiatonicSeventhChords,
     DoubleHarmonicMajorDiatonicSeventhChords,
-    MajorScaleDegreeModes
+    MajorScaleDegreeModes,
+    ChordNotes,
+    ScaleNotes
   ];
 
   private changeQuiz(quizIndex: number) {

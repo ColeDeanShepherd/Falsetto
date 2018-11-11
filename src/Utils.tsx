@@ -63,3 +63,16 @@ export function sum<T>(array: Array<T>, callbackFn: (value: T) => number): numbe
     0
   );
 }
+
+// TODO: add tests
+export function min<T>(array: Array<T>, callbackFn: (value: T) => number): number {
+  precondition(array.length > 0);
+
+  let minValue = callbackFn(array[0]);
+
+  for (let i = 1; i < array.length; i++) {
+    minValue = Math.min(callbackFn(array[i]), minValue);
+  }
+
+  return minValue;
+}

@@ -17,11 +17,13 @@ export class Quiz extends React.Component<IQuizProps, IQuizState> {
   constructor(props: IQuizProps) {
     super(props);
 
+    const quizStats = new QuizStats<string>(
+      this.props.quiz.questionRenderFuncs.map(x => new QuestionStats<string>(0, 0))
+    );
+
     this.state = {
-      currentQuestionIndex: this.getNextQuestionIndex(),
-      quizStats: new QuizStats<string>(
-        this.props.quiz.questionRenderFuncs.map(x => new QuestionStats<string>(0, 0))
-      )
+      currentQuestionIndex: this.getNextQuestionIndex(this.props.quiz, quizStats, -1),
+      quizStats: quizStats
     };
   }
 
@@ -53,16 +55,28 @@ export class Quiz extends React.Component<IQuizProps, IQuizState> {
     );
   }
   
-  private getNextQuestionIndex(): number {
-    if (this.props.quiz.questionRenderFuncs.length <= 1) {
+  private getNextQuestionIndex(quiz: QuizModel, quizStats: QuizStats<string>, currentQuestionIndex: number): number {
+    if (quiz.questionRenderFuncs.length <= 1) {
       return 0;
     }
 
+    const minQuestionAskedCount = Utils.min(
+      quizStats.questionStats,
+      qs => qs.numCorrectGuesses + qs.numIncorrectGuesses
+    );
+    const leastCorrectQuestionIndices = quizStats.questionStats
+      .map((qs, i) => (qs.numCorrectGuesses === minQuestionAskedCount)
+        ? i
+        : -1
+      )
+      .filter(x => x >= 0);
+    
     let nextQuestionIndex: number;
 
     do {
-      nextQuestionIndex = Utils.randomInt(0, this.props.quiz.questionRenderFuncs.length - 1);
-    } while(this.state && (nextQuestionIndex === this.state.currentQuestionIndex));
+      const nextQuestionIndexIndex = Utils.randomInt(0, leastCorrectQuestionIndices.length - 1);
+      nextQuestionIndex = leastCorrectQuestionIndices[nextQuestionIndexIndex];
+    } while(nextQuestionIndex === currentQuestionIndex);
 
     return nextQuestionIndex;
   }
@@ -84,7 +98,9 @@ export class Quiz extends React.Component<IQuizProps, IQuizState> {
 
     this.setState({
       quizStats: newQuizStats,
-      currentQuestionIndex: this.getNextQuestionIndex()
+      currentQuestionIndex: this.getNextQuestionIndex(
+        this.props.quiz, newQuizStats, this.state.currentQuestionIndex
+      )
     });
   }
   private onAnswerIncorrect() {
