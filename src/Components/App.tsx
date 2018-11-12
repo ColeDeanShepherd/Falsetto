@@ -24,8 +24,8 @@ import { ScaleChords } from "./ScaleChords";
 import { ScaleCharacteristics } from "./ScaleCharacteristics";
 import { ScaleFamilies } from "./ScaleFamilies";
 import { ScaleDegreeNames } from "./ScaleDegreeNames";
-
-import './App.css';
+import { ChordFamilies } from "./ChordFamilies";
+import { ChordFamilyDefinitions } from "./ChordFamilyDefinitions";
 
 export interface IAppState {
   currentQuizIndex: number;
@@ -51,7 +51,9 @@ class App extends React.Component<{}, IAppState> {
 
     return (
       <div className="App">
-        {quizLinks}
+        <div className="left-nav">
+          {quizLinks}
+        </div>
 
         <h1>{currentQuizName}</h1>
         {renderedQuiz}
@@ -60,30 +62,32 @@ class App extends React.Component<{}, IAppState> {
   }
 
   private quizNames = [
-    "IntervalNamesToHalfSteps",
-    "IntervalHalfStepsToNames",
-    "IntervalQualitySymbolsToQualities",
-    "GenericIntervalsToIntervalQualities",
-    "IntervalsToConsonanceDissonance",
-    "MajorDiatonicTriads",
-    "NaturalMinorDiatonicTriads",
-    "MelodicMinorDiatonicTriads",
-    "HarmonicMinorDiatonicTriads",
-    "HarmonicMajorDiatonicTriads",
-    "DoubleHarmonicMajorDiatonicTriads",
-    "MajorDiatonicSeventhChords",
-    "NaturalMinorDiatonicSeventhChords",
-    "MelodicMinorDiatonicSeventhChords",
-    "HarmonicMinorDiatonicSeventhChords",
-    "HarmonicMajorDiatonicSeventhChords",
-    "DoubleHarmonicMajorDiatonicSeventhChords",
-    "MajorScaleDegreeModes",
-    "ChordNotes",
-    "ScaleNotes",
-    "ScaleChords",
-    "ScaleCharacteristics",
-    "ScaleFamilies",
-    "ScaleDegreeNames"
+    "Interval Names To Half Steps",
+    "Interval Half Steps To Names",
+    "Interval Quality Symbols To Qualities",
+    "Generic Intervals To Interval Qualities",
+    "Intervals To Consonance Dissonance",
+    "Major Diatonic Triads",
+    "Natural Minor Diatonic Triads",
+    "Melodic Minor Diatonic Triads",
+    "Harmonic Minor Diatonic Triads",
+    "Harmonic Major Diatonic Triads",
+    "Double Harmonic Major Diatonic Triads",
+    "Major Diatonic Seventh Chords",
+    "Natural Minor Diatonic Seventh Chords",
+    "Melodic Minor Diatonic Seventh Chords",
+    "Harmonic Minor Diatonic Seventh Chords",
+    "Harmonic Major Diatonic Seventh Chords",
+    "Double Harmonic Major Diatonic Seventh Chords",
+    "Major Scale Degree Modes",
+    "Chord Notes",
+    "Scale Notes",
+    "Scale Chords",
+    "Scale Characteristics",
+    "Scale Families",
+    "Scale Degree Names",
+    "Chord Families",
+    "Chord Family Definitions"
   ];
   private quizComponents = [
     IntervalNamesToHalfSteps,
@@ -109,7 +113,9 @@ class App extends React.Component<{}, IAppState> {
     ScaleChords,
     ScaleCharacteristics,
     ScaleFamilies,
-    ScaleDegreeNames
+    ScaleDegreeNames,
+    ChordFamilies,
+    ChordFamilyDefinitions
   ];
 
   private changeQuiz(quizIndex: number) {
