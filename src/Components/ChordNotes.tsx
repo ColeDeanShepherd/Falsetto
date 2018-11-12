@@ -27,7 +27,9 @@ export class ChordNotes extends React.Component<{}, {}> {
       "1 3 #5 b7",
       "1 b3 b5 7",
       "1 b3 #5 b7",
-      "1 4 b7"
+      "1 4 b7",
+      "1 4 7",
+      "1 #4 7"
     ];
     const chordTypes = [
       "major",
@@ -49,7 +51,9 @@ export class ChordNotes extends React.Component<{}, {}> {
       "+7",
       "dimMa7",
       "-7#5",
-      "quartal"
+      "quartal",
+      "quartal aug.",
+      "G+4Q"
     ];
     const questionAnswerIndices = chordNotes.map((_, i) => i);
 

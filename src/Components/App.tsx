@@ -21,6 +21,7 @@ import { MajorScaleDegreeModes } from "./MajorScaleDegreeModes";
 import { ChordNotes } from "./ChordNotes";
 import { ScaleNotes } from "./ScaleNotes";
 import { ScaleChords } from "./ScaleChords";
+import { ScaleCharacteristics } from "./ScaleCharacteristics";
 
 import './App.css';
 
@@ -77,7 +78,8 @@ class App extends React.Component<{}, IAppState> {
     "MajorScaleDegreeModes",
     "ChordNotes",
     "ScaleNotes",
-    "ScaleChords"
+    "ScaleChords",
+    "ScaleCharacteristics"
   ];
   private quizComponents = [
     IntervalNamesToHalfSteps,
@@ -100,7 +102,8 @@ class App extends React.Component<{}, IAppState> {
     MajorScaleDegreeModes,
     ChordNotes,
     ScaleNotes,
-    ScaleChords
+    ScaleChords,
+    ScaleCharacteristics
   ];
 
   private changeQuiz(quizIndex: number) {
