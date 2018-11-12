@@ -27,6 +27,8 @@ import { ScaleDegreeNames } from "./ScaleDegreeNames";
 import { ChordFamilies } from "./ChordFamilies";
 import { ChordFamilyDefinitions } from "./ChordFamilyDefinitions";
 
+import "./App.css";
+
 export interface IAppState {
   currentQuizIndex: number;
 }
@@ -42,7 +44,7 @@ class App extends React.Component<{}, IAppState> {
   public render(): JSX.Element {
     const quizLinks = this.quizNames
       .map(
-        (quizName, i) => <div key={i}><a href="" onClick={event => { event.preventDefault(); this.changeQuiz(i); }}>{quizName}</a></div>,
+        (quizName, i) => <a key={i} href="" onClick={event => { event.preventDefault(); this.changeQuiz(i); }} className="nav-link">{quizName}</a>,
         this
       );
     const currentQuizName = this.quizNames[this.state.currentQuizIndex];
@@ -50,13 +52,16 @@ class App extends React.Component<{}, IAppState> {
     const renderedQuiz = React.createElement(quizComponent);
 
     return (
-      <div className="App">
-        <div className="left-nav">
-          {quizLinks}
+      <div className="app">
+        <div className="left-pane">
+          <div className="left-nav">
+            {quizLinks}
+          </div>
         </div>
-
-        <h1>{currentQuizName}</h1>
-        {renderedQuiz}
+        <div className="right-pane">
+          <h1>{currentQuizName}</h1>
+          {renderedQuiz}
+        </div>
       </div>
     );
   }
