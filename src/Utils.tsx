@@ -76,3 +76,11 @@ export function min<T>(array: Array<T>, callbackFn: (value: T) => number): numbe
 
   return minValue;
 }
+
+// TODO: add tests
+export function uniq<T>(array: Array<T>) {
+  return array.filter((x, index) => array.indexOf(x) === index);
+}
+export function isUniqueArrayElement<T>(value: T, index: number, array: Array<T>) {
+  return array.indexOf(value) === index;
+}

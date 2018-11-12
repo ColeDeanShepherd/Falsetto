@@ -22,6 +22,7 @@ import { ChordNotes } from "./ChordNotes";
 import { ScaleNotes } from "./ScaleNotes";
 import { ScaleChords } from "./ScaleChords";
 import { ScaleCharacteristics } from "./ScaleCharacteristics";
+import { ScaleFamilies } from "./ScaleFamilies";
 
 import './App.css';
 
@@ -79,7 +80,8 @@ class App extends React.Component<{}, IAppState> {
     "ChordNotes",
     "ScaleNotes",
     "ScaleChords",
-    "ScaleCharacteristics"
+    "ScaleCharacteristics",
+    "ScaleFamilies"
   ];
   private quizComponents = [
     IntervalNamesToHalfSteps,
@@ -103,7 +105,8 @@ class App extends React.Component<{}, IAppState> {
     ChordNotes,
     ScaleNotes,
     ScaleChords,
-    ScaleCharacteristics
+    ScaleCharacteristics,
+    ScaleFamilies
   ];
 
   private changeQuiz(quizIndex: number) {
