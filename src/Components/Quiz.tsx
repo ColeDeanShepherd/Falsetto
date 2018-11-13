@@ -37,7 +37,7 @@ export class Quiz extends React.Component<IQuizProps, IQuizState> {
       .map((qs, i) => {
         const renderedQuestion = this.props.quiz.questionRenderFuncs[i]();
         return <p key={i}>{renderedQuestion} {qs.numCorrectGuesses} / {qs.numIncorrectGuesses}</p>;
-      });
+      }, this);
 
     const renderedCurrentQuestion = this.props.quiz.questionRenderFuncs[this.state.currentQuestionIndex]();
     const renderedAnswers = this.props.quiz.answersRenderFunc(this.guessAnswer.bind(this));
