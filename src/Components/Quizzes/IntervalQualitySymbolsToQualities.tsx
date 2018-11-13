@@ -21,11 +21,11 @@ export function createQuiz(): Quiz {
   ];
   return new Quiz(
     "Interval Quality Symbols To Qualities",
-    intervalQualitySymbols.map(symbol => (() => <span style={{ fontSize: "2em" }}>{symbol}</span>)),
+    intervalQualitySymbols.map(symbol => (() => <p style={{ fontSize: "2em" }}>{symbol}</p>)),
     intervalQualitySymbols.map((_, i) => i),
     selectAnswerIndex => {
       const answerButtons = intervalQualities.map((intervalQuality, i) => {
-        return <span key={i} style={{padding: "1em"}}><Button onClick={event => selectAnswerIndex(i)} variant="outlined" color="primary">{intervalQuality}</Button></span>;
+        return <span key={i} style={{padding: "1em 1em 1em 0"}}><Button onClick={event => selectAnswerIndex(i)} variant="outlined" color="primary">{intervalQuality}</Button></span>;
       });
       return <div style={{lineHeight: 3}}>{answerButtons}</div>;
     }

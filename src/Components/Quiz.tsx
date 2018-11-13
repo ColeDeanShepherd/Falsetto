@@ -55,14 +55,13 @@ export class Quiz extends React.Component<IQuizProps, IQuizState> {
           </Typography>
 
           <p>
-            <span style={{paddingRight: "2em"}}>Correct: {this.state.quizStats.numCorrectGuesses}</span>
-            <span style={{paddingRight: "2em"}}>Incorrect: {this.state.quizStats.numIncorrectGuesses}</span>
-            <span style={{paddingRight: "2em"}}>% Correct: {(100 * percentCorrect).toFixed(2)}%</span>
+            <span style={{paddingRight: "2em"}}>{this.state.quizStats.numCorrectGuesses} / {this.state.quizStats.numIncorrectGuesses}</span>
+            <span style={{paddingRight: "2em"}}>{(100 * percentCorrect).toFixed(2)}%</span>
           </p>
 
           {this.state.showDetailedStats ? questionStats : null}
 
-          <div>{renderedCurrentQuestion}</div>
+          <div style={{textAlign: "center"}}>{renderedCurrentQuestion}</div>
           {renderedAnswers}
         </CardContent>
       </Card>

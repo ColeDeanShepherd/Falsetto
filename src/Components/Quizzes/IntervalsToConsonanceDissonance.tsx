@@ -45,11 +45,11 @@ export function createQuiz(): Quiz {
 
   return new Quiz(
     "Intervals To Consonance Dissonance",
-    intervals.map(genericInterval => (() => <span style={{ fontSize: "2em" }}>{genericInterval}</span>)),
+    intervals.map(genericInterval => (() => <p style={{ fontSize: "2em" }}>{genericInterval}</p>)),
     questionAnswerIndices,
     selectAnswerIndex => {
       const answerButtons = answers.map((answer, i) => {
-        return <span key={i} style={{padding: "1em"}}><Button onClick={event => selectAnswerIndex(i)} variant="outlined" color="primary">{answer}</Button></span>;
+        return <span key={i} style={{padding: "1em 1em 1em 0"}}><Button onClick={event => selectAnswerIndex(i)} variant="outlined" color="primary">{answer}</Button></span>;
       });
       return <div style={{lineHeight: 3}}>{answerButtons}</div>;
     }

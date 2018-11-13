@@ -22,12 +22,12 @@ export function createQuiz(): Quiz {
   ];
   return new Quiz(
     "Interval Names To Half Steps",
-    intervalNames.map(intervalName => (() => <span style={{ fontSize: "2em" }}>{intervalName}</span>)),
+    intervalNames.map(intervalName => (() => <p style={{ fontSize: "2em" }}>{intervalName}</p>)),
     intervalNames.map((_, i) => i),
     selectAnswerIndex => {
       const intervalButtons = intervalNames.map((interval, i) => {
         const text = i;
-        return <span key={i} style={{padding: "1em"}}><Button onClick={event => selectAnswerIndex(i)} variant="outlined" color="primary">{text}</Button></span>;
+        return <span key={i} style={{padding: "1em 1em 1em 0"}}><Button onClick={event => selectAnswerIndex(i)} variant="outlined" color="primary">{text}</Button></span>;
       });
       return <div style={{lineHeight: 3}}>{intervalButtons}</div>;
     }

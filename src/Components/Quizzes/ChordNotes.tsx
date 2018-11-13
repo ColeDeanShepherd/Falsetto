@@ -57,11 +57,11 @@ export function createQuiz(): Quiz {
 
   return new Quiz(
     "Chord Notes",
-    chordNotes.map(cn => (() => <span style={{ fontSize: "2em" }}>{cn}</span>)),
+    chordNotes.map(cn => (() => <p style={{ fontSize: "2em" }}>{cn}</p>)),
     questionAnswerIndices,
     selectAnswerIndex => {
       const answerButtons = chordTypes.map((chordType, i) => {
-        return <span key={i} style={{padding: "1em"}}><Button onClick={event => selectAnswerIndex(i)} variant="outlined" color="primary">{chordType}</Button></span>;
+        return <span key={i} style={{padding: "1em 1em 1em 0"}}><Button onClick={event => selectAnswerIndex(i)} variant="outlined" color="primary">{chordType}</Button></span>;
       });
       return <div style={{lineHeight: 3}}>{answerButtons}</div>;
     }

@@ -81,11 +81,11 @@ export function createQuiz(): Quiz {
 
   return new Quiz(
     "Scale Characteristics",
-    chordTypes.map(ct => (() => <span style={{ fontSize: "2em" }}>{ct}</span>)),
+    chordTypes.map(ct => (() => <p style={{ fontSize: "2em" }}>{ct}</p>)),
     questionAnswerIndices,
     selectAnswerIndex => {
       const answerButtons = characteristics.map((x, i) => {
-        return <span key={i} style={{padding: "1em"}}><Button onClick={event => selectAnswerIndex(i)} variant="outlined" color="primary">{x}</Button></span>;
+        return <span key={i} style={{padding: "1em 1em 1em 0"}}><Button onClick={event => selectAnswerIndex(i)} variant="outlined" color="primary">{x}</Button></span>;
       });
       return <div style={{lineHeight: 3}}>{answerButtons}</div>;
     }

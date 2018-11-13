@@ -30,7 +30,7 @@ export function createQuiz(): Quiz {
 
   return new Quiz(
     "Double Harmonic Major Diatonic Seventh Chords",
-    chordRoots.map(chordRoot => (() => <span style={{ fontSize: "2em" }}>{chordRoot}</span>)),
+    chordRoots.map(chordRoot => (() => <p style={{ fontSize: "2em" }}>{chordRoot}</p>)),
     questionAnswerIndices,
     selectAnswerIndex => {
       const answerButtons = answers.map((answer, i) => {
