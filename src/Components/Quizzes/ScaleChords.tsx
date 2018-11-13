@@ -1,12 +1,12 @@
 import * as React from 'react';
 
-import { Quiz } from "../Quiz";
-import { Quiz as QuizComponent } from "./Quiz";
+import { Quiz } from "../../Quiz";
+import { Quiz as QuizComponent } from "../Quiz";
+
+import Button from "@material-ui/core/Button";
 
 export class ScaleChords extends React.Component<{}, {}> {
-  constructor(props: {}) {
-    super(props);
-
+  public static createQuiz(): Quiz {
     const chordTypes = [
       "Ionian (Major)",
       "Dorian",
@@ -71,16 +71,22 @@ export class ScaleChords extends React.Component<{}, {}> {
     ];
     const questionAnswerIndices = chordTypes.map((_, i) => i);
 
-    this.quiz = new Quiz(
+    return new Quiz(
+      "Scale Chords",
       chordTypes.map(ct => (() => <span style={{ fontSize: "2em" }}>{ct}</span>)),
       questionAnswerIndices,
       selectAnswerIndex => {
         const answerButtons = mostCommonUses.map((use, i) => {
-          return <button key={i} onClick={event => selectAnswerIndex(i)}>{use}</button>;
+          return <span key={i} style={{padding: "1em"}}><Button onClick={event => selectAnswerIndex(i)} variant="outlined" color="primary">{use}</Button></span>;
         }, this);
-        return <div>{answerButtons}</div>;
+        return <div style={{lineHeight: 3}}>{answerButtons}</div>;
       }
     );
+  }
+  
+  constructor(props: {}) {
+    super(props);
+    this.quiz = ScaleChords.createQuiz();
   }
 
   public render(): JSX.Element {

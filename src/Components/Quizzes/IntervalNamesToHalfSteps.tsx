@@ -1,15 +1,13 @@
 import * as React from 'react';
 import * as Vex from 'vexflow';
 
-import { Quiz } from "../Quiz";
-import { Quiz as QuizComponent } from "./Quiz";
+import { Quiz } from "../../Quiz";
+import { Quiz as QuizComponent } from "../Quiz";
+
+import Button from "@material-ui/core/Button";
 
 export class IntervalNamesToHalfSteps extends React.Component<{}, {}> {
-  constructor(props: {}) {
-    super(props);
-
-    this.sheetMusicRef = React.createRef();
-
+  public static createQuiz(): Quiz {
     const intervalNames = [
       "Unison",
       "m2",
@@ -25,17 +23,25 @@ export class IntervalNamesToHalfSteps extends React.Component<{}, {}> {
       "M7",
       "P8"
     ];
-    this.quiz = new Quiz(
+    return new Quiz(
+      "Interval Names To Half Steps",
       intervalNames.map(intervalName => (() => <span style={{ fontSize: "2em" }}>{intervalName}</span>)),
       intervalNames.map((_, i) => i),
       selectAnswerIndex => {
         const intervalButtons = intervalNames.map((interval, i) => {
           const text = i;
-          return <button key={i} onClick={event => selectAnswerIndex(i)}>{text}</button>;
+          return <span key={i} style={{padding: "1em"}}><Button onClick={event => selectAnswerIndex(i)} variant="outlined" color="primary">{text}</Button></span>;
         }, this);
-        return <div>{intervalButtons}</div>;
+        return <div style={{lineHeight: 3}}>{intervalButtons}</div>;
       }
     );
+  }
+
+  constructor(props: {}) {
+    super(props);
+
+    this.sheetMusicRef = React.createRef();
+    this.quiz = IntervalNamesToHalfSteps.createQuiz();
   }
 
   public componentDidMount() {

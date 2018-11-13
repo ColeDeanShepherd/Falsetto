@@ -1,12 +1,12 @@
 import * as React from 'react';
 
-import { Quiz } from "../Quiz";
-import { Quiz as QuizComponent } from "./Quiz";
+import { Quiz } from "../../Quiz";
+import { Quiz as QuizComponent } from "../Quiz";
+
+import Button from "@material-ui/core/Button";
 
 export class DoubleHarmonicMajorDiatonicSeventhChords extends React.Component<{}, {}> {
-  constructor(props: {}) {
-    super(props);
-
+  public static createQuiz(): Quiz {
     const chordRoots = [1, 2, 3, 4, 5, 6, 7];
     const chordTypes = [
       "M7",
@@ -30,16 +30,22 @@ export class DoubleHarmonicMajorDiatonicSeventhChords extends React.Component<{}
     ];
     const questionAnswerIndices = chordTypes.map(answer => answers.indexOf(answer));
 
-    this.quiz = new Quiz(
+    return new Quiz(
+      "Double Harmonic Major Diatonic Seventh Chords",
       chordRoots.map(chordRoot => (() => <span style={{ fontSize: "2em" }}>{chordRoot}</span>)),
       questionAnswerIndices,
       selectAnswerIndex => {
         const answerButtons = answers.map((answer, i) => {
-          return <button key={i} onClick={event => selectAnswerIndex(i)}>{answer}</button>;
+          return <span key={i} style={{paddingLeft: "1em"}}><Button onClick={event => selectAnswerIndex(i)} variant="outlined" color="primary">{answer}</Button></span>;
         }, this);
-        return <div>{answerButtons}</div>;
+        return <div style={{lineHeight: 3}}>{answerButtons}</div>;
       }
     );
+  }
+  
+  constructor(props: {}) {
+    super(props);
+    this.quiz = DoubleHarmonicMajorDiatonicSeventhChords.createQuiz();
   }
 
   public render(): JSX.Element {

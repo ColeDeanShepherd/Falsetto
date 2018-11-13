@@ -1,12 +1,12 @@
 import * as React from 'react';
 
-import { Quiz } from "../Quiz";
-import { Quiz as QuizComponent } from "./Quiz";
+import { Quiz } from "../../Quiz";
+import { Quiz as QuizComponent } from "../Quiz";
+
+import Button from "@material-ui/core/Button";
 
 export class ChordNotes extends React.Component<{}, {}> {
-  constructor(props: {}) {
-    super(props);
-
+  public static createQuiz(): Quiz {
     const chordNotes = [
       "1 3 5",
       "1 b3 5",
@@ -57,16 +57,22 @@ export class ChordNotes extends React.Component<{}, {}> {
     ];
     const questionAnswerIndices = chordNotes.map((_, i) => i);
 
-    this.quiz = new Quiz(
+    return new Quiz(
+      "Chord Notes",
       chordNotes.map(cn => (() => <span style={{ fontSize: "2em" }}>{cn}</span>)),
       questionAnswerIndices,
       selectAnswerIndex => {
         const answerButtons = chordTypes.map((chordType, i) => {
-          return <button key={i} onClick={event => selectAnswerIndex(i)}>{chordType}</button>;
+          return <span key={i} style={{padding: "1em"}}><Button onClick={event => selectAnswerIndex(i)} variant="outlined" color="primary">{chordType}</Button></span>;
         }, this);
-        return <div>{answerButtons}</div>;
+        return <div style={{lineHeight: 3}}>{answerButtons}</div>;
       }
     );
+  }
+  
+  constructor(props: {}) {
+    super(props);
+    this.quiz = ChordNotes.createQuiz();
   }
 
   public render(): JSX.Element {

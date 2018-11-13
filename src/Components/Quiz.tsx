@@ -1,5 +1,8 @@
 import * as React from 'react';
 import * as clone from 'clone';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
 
 import * as Utils from '../Utils';
 import { Quiz as QuizModel } from "../Quiz";
@@ -11,7 +14,8 @@ export interface IQuizProps {
 }
 export interface IQuizState {
   currentQuestionIndex: number;
-  quizStats: QuizStats<string>
+  quizStats: QuizStats<string>;
+  showDetailedStats: boolean;
 }
 export class Quiz extends React.Component<IQuizProps, IQuizState> {
   constructor(props: IQuizProps) {
@@ -23,7 +27,8 @@ export class Quiz extends React.Component<IQuizProps, IQuizState> {
 
     this.state = {
       currentQuestionIndex: this.getNextQuestionIndex(this.props.quiz, quizStats, -1),
-      quizStats: quizStats
+      quizStats: quizStats,
+      showDetailedStats: false
     };
   }
 
@@ -43,15 +48,24 @@ export class Quiz extends React.Component<IQuizProps, IQuizState> {
       : 1;
 
     return (
-      <div>
-        <p>Correct: {this.state.quizStats.numCorrectGuesses}</p>
-        <p>Incorrect: {this.state.quizStats.numIncorrectGuesses}</p>
-        <p>% Correct: {(100 * percentCorrect).toFixed(2)}%</p>
-        {questionStats}
+      <Card>
+        <CardContent>
+          <Typography gutterBottom={true} variant="h5" component="h2">
+            {this.props.quiz.name}
+          </Typography>
 
-        <div>{renderedCurrentQuestion}</div>
-        {renderedAnswers}
-      </div>
+          <p>
+            <span style={{paddingRight: "2em"}}>Correct: {this.state.quizStats.numCorrectGuesses}</span>
+            <span style={{paddingRight: "2em"}}>Incorrect: {this.state.quizStats.numIncorrectGuesses}</span>
+            <span style={{paddingRight: "2em"}}>% Correct: {(100 * percentCorrect).toFixed(2)}%</span>
+          </p>
+
+          {this.state.showDetailedStats ? questionStats : null}
+
+          <div>{renderedCurrentQuestion}</div>
+          {renderedAnswers}
+        </CardContent>
+      </Card>
     );
   }
   
