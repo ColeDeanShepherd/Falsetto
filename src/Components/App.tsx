@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Paper, AppBar, Typography, Toolbar } from '@material-ui/core';
 
 import "./App.css";
 
@@ -52,13 +53,22 @@ class App extends React.Component<{}, IAppState> {
 
     return (
       <div className="app">
-        <div className="left-pane">
-          <div className="left-nav">
-            {quizLinks}
+        <AppBar position="static" className="top-pane">
+          <Toolbar>
+            <Typography variant="h6" color="inherit">
+              Header
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <div className="bottom-pane horizontal-panes">
+          <Paper className="left-pane">
+            <div className="left-nav">
+              {quizLinks}
+            </div>
+          </Paper>
+          <div className="right-pane">
+            <QuizComponent key={this.state.currentQuizIndex} quiz={currentQuiz} />
           </div>
-        </div>
-        <div className="right-pane">
-          <QuizComponent key={this.state.currentQuizIndex} quiz={currentQuiz} />
         </div>
       </div>
     );
