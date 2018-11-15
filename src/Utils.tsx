@@ -42,6 +42,13 @@ export function randomInt(minValue: number, maxValue: number): number {
 }
 
 // TODO: add tests
+export function randomElement<T>(array: Array<T>): T {
+  precondition(array.length > 0);
+
+  return array[randomInt(0, array.length - 1)];
+}
+
+// TODO: add tests
 export function getNonConstEnumValues(enumType: any): any[] {
   return Object.keys(enumType)
     .map(key => parseInt(enumType[key], 10))

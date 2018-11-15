@@ -30,16 +30,19 @@ import * as ScaleFamilies from "./Quizzes/ScaleFamilies";
 import * as ScaleDegreeNames from "./Quizzes/ScaleDegreeNames";
 import * as ChordFamilies from "./Quizzes/ChordFamilies";
 import * as ChordFamilyDefinitions from "./Quizzes/ChordFamilyDefinitions";
+import { RandomChordGenerator } from "./RandomChordGenerator";
 
 export interface IAppState {
   currentQuizIndex: number;
+  currentComponentOverride: any;
 }
 class App extends React.Component<{}, IAppState> {
   public constructor(props: {}) {
     super(props);
 
     this.state = {
-      currentQuizIndex: 0
+      currentQuizIndex: 0,
+      currentComponentOverride: null
     };
   }
 
@@ -64,10 +67,12 @@ class App extends React.Component<{}, IAppState> {
           <Paper className="left-pane">
             <div className="left-nav">
               {quizLinks}
+              <a href="" onClick={event => { event.preventDefault(); this.setComponentOverride(RandomChordGenerator); }} className="nav-link">Random Chord Generator</a>
             </div>
           </Paper>
           <div className="right-pane">
-            <QuizComponent key={this.state.currentQuizIndex} quiz={currentQuiz} />
+            {!this.state.currentComponentOverride ? <QuizComponent key={this.state.currentQuizIndex} quiz={currentQuiz} /> : null}
+            {this.state.currentComponentOverride ? React.createElement(this.state.currentComponentOverride) : null}
           </div>
         </div>
       </div>
@@ -104,7 +109,10 @@ class App extends React.Component<{}, IAppState> {
   ]
 
   private changeQuiz(quizIndex: number) {
-    this.setState({ currentQuizIndex: quizIndex });
+    this.setState({ currentQuizIndex: quizIndex, currentComponentOverride: null });
+  }
+  private setComponentOverride(component: any) {
+    this.setState({ currentComponentOverride: component });
   }
 }
 
