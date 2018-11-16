@@ -1,8 +1,6 @@
 import * as React from 'react';
 import * as clone from 'clone';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
+import { Card, CardContent, Typography, Checkbox } from '@material-ui/core';
 
 import * as Utils from '../Utils';
 import { Quiz as QuizModel } from "../Quiz";
@@ -15,6 +13,7 @@ export interface IQuizProps {
 export interface IQuizState {
   currentQuestionIndex: number;
   quizStats: QuizStats<string>;
+  enabledQuestionIndices: number[];
   showDetailedStats: boolean;
 }
 export class Quiz extends React.Component<IQuizProps, IQuizState> {
@@ -24,10 +23,12 @@ export class Quiz extends React.Component<IQuizProps, IQuizState> {
     const quizStats = new QuizStats<string>(
       this.props.quiz.questionRenderFuncs.map(x => new QuestionStats<string>(0, 0))
     );
+    const enabledQuestionIndices = this.props.quiz.questionRenderFuncs.map((_, i) => i)
 
     this.state = {
-      currentQuestionIndex: this.getNextQuestionIndex(this.props.quiz, quizStats, -1),
+      currentQuestionIndex: this.getNextQuestionIndex(this.props.quiz, quizStats, enabledQuestionIndices, -1),
       quizStats: quizStats,
+      enabledQuestionIndices: enabledQuestionIndices,
       showDetailedStats: false
     };
   }
@@ -37,6 +38,17 @@ export class Quiz extends React.Component<IQuizProps, IQuizState> {
       .map((qs, i) => {
         const renderedQuestion = this.props.quiz.questionRenderFuncs[i]();
         return <p key={i}>{renderedQuestion} {qs.numCorrectGuesses} / {qs.numIncorrectGuesses}</p>;
+      }, this);
+    
+    const questionCheckboxes = this.props.quiz.questionRenderFuncs
+      .map((qrf, i) => {
+        const isEnabled = this.state.enabledQuestionIndices.indexOf(i) >= 0;
+
+        return (
+          <div key={i}>
+            <Checkbox checked={isEnabled} onChange={event => this.toggleQuestionEnabled(i)} />{qrf()}
+          </div>
+        );
       }, this);
 
     const renderedCurrentQuestion = this.props.quiz.questionRenderFuncs[this.state.currentQuestionIndex]();
@@ -54,6 +66,10 @@ export class Quiz extends React.Component<IQuizProps, IQuizState> {
             {this.props.quiz.name}
           </Typography>
 
+          <div>
+            {questionCheckboxes}
+          </div>
+
           <p>
             <span style={{paddingRight: "2em"}}>{this.state.quizStats.numCorrectGuesses} / {this.state.quizStats.numIncorrectGuesses}</span>
             <span style={{paddingRight: "2em"}}>{(100 * percentCorrect).toFixed(2)}%</span>
@@ -68,21 +84,32 @@ export class Quiz extends React.Component<IQuizProps, IQuizState> {
     );
   }
   
-  private getNextQuestionIndex(quiz: QuizModel, quizStats: QuizStats<string>, currentQuestionIndex: number): number {
-    if (quiz.questionRenderFuncs.length <= 1) {
+  private getNextQuestionIndex(
+    quiz: QuizModel,
+    quizStats: QuizStats<string>,
+    enabledQuestionIndices: number[],
+    currentQuestionIndex: number
+  ): number {
+    if (enabledQuestionIndices.length <= 1) {
       return 0;
     }
 
+    const enabledQuestionStats = quizStats.questionStats
+      .filter((_, i) => enabledQuestionIndices.indexOf(i) >= 0);
     const minQuestionAskedCount = Utils.min(
-      quizStats.questionStats,
+      enabledQuestionStats,
       qs => qs.numCorrectGuesses + qs.numIncorrectGuesses
     );
-    const leastCorrectQuestionIndices = quizStats.questionStats
+    let leastCorrectQuestionIndices = enabledQuestionStats
       .map((qs, i) => (qs.numCorrectGuesses === minQuestionAskedCount)
         ? i
         : -1
       )
       .filter(x => x >= 0);
+    
+    if ((leastCorrectQuestionIndices.length === 1) && (leastCorrectQuestionIndices[0] === currentQuestionIndex)) {
+      leastCorrectQuestionIndices = enabledQuestionStats.map((_, i) => i);
+    }
     
     let nextQuestionIndex: number;
 
@@ -112,7 +139,7 @@ export class Quiz extends React.Component<IQuizProps, IQuizState> {
     this.setState({
       quizStats: newQuizStats,
       currentQuestionIndex: this.getNextQuestionIndex(
-        this.props.quiz, newQuizStats, this.state.currentQuestionIndex
+        this.props.quiz, newQuizStats, this.state.enabledQuestionIndices, this.state.currentQuestionIndex
       )
     });
   }
@@ -125,5 +152,26 @@ export class Quiz extends React.Component<IQuizProps, IQuizState> {
     this.setState({
       quizStats: newQuizStats
     });
+  }
+
+  private toggleQuestionEnabled(questionIndex: number) {
+    const newEnabledQuestionIndices = this.state.enabledQuestionIndices.slice();
+    const i = this.state.enabledQuestionIndices.indexOf(questionIndex);
+    const wasQuestionEnabled = i >= 0;
+
+    if (!wasQuestionEnabled) {
+      newEnabledQuestionIndices.push(questionIndex);
+    } else {
+      newEnabledQuestionIndices.splice(i, 1);
+    }
+
+    const stateDelta: any = { enabledQuestionIndices: newEnabledQuestionIndices };
+    if (wasQuestionEnabled && (this.state.currentQuestionIndex === questionIndex)) {
+      stateDelta.currentQuestionIndex = this.getNextQuestionIndex(
+        this.props.quiz, this.state.quizStats, newEnabledQuestionIndices, this.state.currentQuestionIndex
+      );
+    }
+
+    this.setState(stateDelta);
   }
 }
