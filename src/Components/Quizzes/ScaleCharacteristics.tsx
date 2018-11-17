@@ -81,7 +81,7 @@ export function createQuiz(): Quiz {
 
   return new Quiz(
     "Scale Characteristics",
-    chordTypes.map(ct => (() => <p style={{ fontSize: "2em" }}>{ct}</p>)),
+    chordTypes.map(ct => (() => <span>{ct}</span>)),
     questionAnswerIndices,
     selectAnswerIndex => {
       const answerButtons = characteristics.map((x, i) => {

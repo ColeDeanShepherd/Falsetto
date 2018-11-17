@@ -77,7 +77,7 @@ export class Quiz extends React.Component<IQuizProps, IQuizState> {
 
           {this.state.showDetailedStats ? questionStats : null}
 
-          <div style={{textAlign: "center"}}>{renderedCurrentQuestion}</div>
+          <div style={{textAlign: "center", fontSize: "2em", padding: "1em 0"}}>{renderedCurrentQuestion}</div>
           {renderedAnswers}
         </CardContent>
       </Card>
@@ -156,7 +156,7 @@ export class Quiz extends React.Component<IQuizProps, IQuizState> {
 
   private toggleQuestionEnabled(questionIndex: number) {
     const newEnabledQuestionIndices = this.state.enabledQuestionIndices.slice();
-    const i = this.state.enabledQuestionIndices.indexOf(questionIndex);
+    const i = newEnabledQuestionIndices.indexOf(questionIndex);
     const wasQuestionEnabled = i >= 0;
 
     if (!wasQuestionEnabled) {

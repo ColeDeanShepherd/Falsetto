@@ -1,4 +1,5 @@
 # To-Do
+* Protect against disabling all questions.
 * Zip question & answer arrays
 * Move exercises into dedicated folder
 * Improve random question selection

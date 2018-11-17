@@ -21,7 +21,7 @@ export function createQuiz(): Quiz {
 
   return new Quiz(
     "Chord Family Definitions",
-    chordFamily.map(cf => (() => <p style={{ fontSize: "2em" }}>{cf}</p>)),
+    chordFamily.map(cf => (() => <span>{cf}</span>)),
     questionAnswerIndices,
     selectAnswerIndex => {
       const answerButtons = answers.map((answer, i) => {

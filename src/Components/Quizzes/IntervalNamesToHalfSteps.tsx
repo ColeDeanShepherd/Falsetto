@@ -22,7 +22,7 @@ export function createQuiz(): Quiz {
   ];
   return new Quiz(
     "Interval Names To Half Steps",
-    intervalNames.map(intervalName => (() => <p style={{ fontSize: "2em" }}>{intervalName}</p>)),
+    intervalNames.map(intervalName => (() => <span>{intervalName}</span>)),
     intervalNames.map((_, i) => i),
     selectAnswerIndex => {
       const intervalButtons = intervalNames.map((interval, i) => {

@@ -29,7 +29,7 @@ export function createQuiz(): Quiz {
 
   return new Quiz(
     "Chord Families",
-    diatonicChord.map(dc => (() => <p style={{ fontSize: "2em" }}>{dc}</p>)),
+    diatonicChord.map(dc => (() => <span>{dc}</span>)),
     questionAnswerIndices,
     selectAnswerIndex => {
       const answerButtons = answers.map((answer, i) => {

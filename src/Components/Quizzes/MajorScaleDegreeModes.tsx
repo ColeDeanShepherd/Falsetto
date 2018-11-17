@@ -28,7 +28,7 @@ export function createQuiz(): Quiz {
 
   return new Quiz(
     "Major Scale Degree Modes",
-    scaleDegrees.map(scaleDegree => (() => <p style={{ fontSize: "2em" }}>{scaleDegree}</p>)),
+    scaleDegrees.map(scaleDegree => (() => <span>{scaleDegree}</span>)),
     questionAnswerIndices,
     selectAnswerIndex => {
       const answerButtons = answers.map((answer, i) => {

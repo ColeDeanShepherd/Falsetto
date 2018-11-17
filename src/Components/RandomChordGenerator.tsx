@@ -1,17 +1,24 @@
 import * as React from 'react';
-import { Card, CardContent, Typography, Button } from '@material-ui/core';
+import { Card, CardContent, Typography, Button, Checkbox } from '@material-ui/core';
 
 import * as Utils from '../Utils';
 
 export interface IRandomChordGeneratorState {
-  currentChord: string;
+  currentChordType: string;
+  currentChordRoot: string;
+  enabledChordTypeIndices: number[];
 }
 export class RandomChordGenerator extends React.Component<{}, IRandomChordGeneratorState> {
   constructor(props: {}) {
     super(props);
 
+    const enabledChordTypeIndices = this.chordTypes.map((_, i) => i);
+    const randomChord = this.generateRandomChord(enabledChordTypeIndices);
+
     this.state = {
-      currentChord: this.generateRandomChord()
+      currentChordType: randomChord.type,
+      currentChordRoot: randomChord.root,
+      enabledChordTypeIndices: enabledChordTypeIndices
     };
   }
 
@@ -23,7 +30,17 @@ export class RandomChordGenerator extends React.Component<{}, IRandomChordGenera
             Random Chord Generator
           </Typography>
 
-          <div style={{textAlign: "center", fontSize: "2em"}}>{this.state.currentChord}</div>
+          {this.chordTypes.map((ct, i) => {
+            const isEnabled = this.state.enabledChordTypeIndices.indexOf(i) >= 0;
+            
+            return (
+              <div key={i}>
+                <Checkbox checked={isEnabled} onChange={event => this.toggleChordTypeEnabled(i)} />{ct}
+              </div>
+            );
+          }, this)}
+
+          <div style={{textAlign: "center", fontSize: "2em"}}>{this.state.currentChordRoot}{this.state.currentChordType}</div>
           
           <Button onClick={event => this.moveToNextChord()} variant="outlined" color="primary">Next</Button>
         </CardContent>
@@ -32,13 +49,38 @@ export class RandomChordGenerator extends React.Component<{}, IRandomChordGenera
   }
   
   private moveToNextChord() {
-    this.setState({ currentChord: this.generateRandomChord() });
+    const randomChord = this.generateRandomChord(this.state.enabledChordTypeIndices);
+    this.setState({
+      currentChordType: randomChord.type,
+      currentChordRoot: randomChord.root
+    });
   }
 
-  private generateRandomChord(): string {
-    const chordRoot = Utils.randomElement(this.chordRoots);
-    const chordType = Utils.randomElement(this.chordTypes);
-    return `${chordRoot} ${chordType}`;
+  private generateRandomChord(enabledChordTypeIndices: number[]): { type: string, root: string } {
+    const chordTypeIndex = Utils.randomElement(enabledChordTypeIndices);
+
+    return {
+      root: Utils.randomElement(this.chordRoots),
+      type: this.chordTypes[chordTypeIndex]
+    };
+  }
+  private toggleChordTypeEnabled(chordTypeIndex: number) {
+    const newEnabledChordTypeIndices = this.state.enabledChordTypeIndices.slice();
+    const i = newEnabledChordTypeIndices.indexOf(chordTypeIndex);
+    const wasChordTypeEnabled = i >= 0;
+
+    if (!wasChordTypeEnabled) {
+      newEnabledChordTypeIndices.push(chordTypeIndex);
+    } else {
+      newEnabledChordTypeIndices.splice(i, 1);
+    }
+
+    const stateDelta: any = { enabledChordTypeIndices: newEnabledChordTypeIndices };
+    if (wasChordTypeEnabled && (this.state.currentChordType === this.chordTypes[chordTypeIndex])) {
+      stateDelta.currentChordType = this.generateRandomChord(newEnabledChordTypeIndices).type;
+    }
+
+    this.setState(stateDelta);
   }
 
   private chordRoots = [

@@ -45,7 +45,7 @@ export function createQuiz(): Quiz {
 
   return new Quiz(
     "Intervals To Consonance Dissonance",
-    intervals.map(genericInterval => (() => <p style={{ fontSize: "2em" }}>{genericInterval}</p>)),
+    intervals.map(genericInterval => (() => <span>{genericInterval}</span>)),
     questionAnswerIndices,
     selectAnswerIndex => {
       const answerButtons = answers.map((answer, i) => {

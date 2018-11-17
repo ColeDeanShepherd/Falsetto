@@ -83,7 +83,7 @@ export function createQuiz(): Quiz {
 
   return new Quiz(
     "Scale Families",
-    chordTypes.map(ct => (() => <p style={{ fontSize: "2em" }}>{ct}</p>)),
+    chordTypes.map(ct => (() => <span>{ct}</span>)),
     questionAnswerIndices,
     selectAnswerIndex => {
       const answerButtons = answers.map((answer, i) => {

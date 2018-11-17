@@ -21,7 +21,7 @@ export function createQuiz(): Quiz {
   ];
   return new Quiz(
     "Interval Quality Symbols To Qualities",
-    intervalQualitySymbols.map(symbol => (() => <p style={{ fontSize: "2em" }}>{symbol}</p>)),
+    intervalQualitySymbols.map(symbol => (() => <span>{symbol}</span>)),
     intervalQualitySymbols.map((_, i) => i),
     selectAnswerIndex => {
       const answerButtons = intervalQualities.map((intervalQuality, i) => {

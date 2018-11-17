@@ -28,7 +28,7 @@ export function createQuiz(): Quiz {
 
   return new Quiz(
     "Major Diatonic Seventh Chords",
-    chordRoots.map(chordRoot => (() => <p style={{ fontSize: "2em" }}>{chordRoot}</p>)),
+    chordRoots.map(chordRoot => (() => <span>{chordRoot}</span>)),
     questionAnswerIndices,
     selectAnswerIndex => {
       const answerButtons = answers.map((answer, i) => {

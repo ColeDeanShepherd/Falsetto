@@ -71,7 +71,7 @@ export function createQuiz(): Quiz {
 
   return new Quiz(
     "Scale Chords",
-    chordTypes.map(ct => (() => <p style={{ fontSize: "2em" }}>{ct}</p>)),
+    chordTypes.map(ct => (() => <span>{ct}</span>)),
     questionAnswerIndices,
     selectAnswerIndex => {
       const answerButtons = mostCommonUses.map((use, i) => {

@@ -12,7 +12,7 @@ export function createQuiz(): Quiz {
 
   return new Quiz(
     "Generic Intervals To Interval Qualities",
-    genericIntervals.map(genericInterval => (() => <p style={{ fontSize: "2em" }}>{genericInterval}</p>)),
+    genericIntervals.map(genericInterval => (() => <span>{genericInterval}</span>)),
     questionAnswerIndices,
     selectAnswerIndex => {
       const answerButtons = answers.map((answer, i) => {
