@@ -1,12 +1,9 @@
 # To-Do
 * Protect against disabling all questions.
+* Make an easy way to "invert" multiple choice quizzes.
 * Zip question & answer arrays
 * Fix issue with generating next question.
-* Clear multi-answer checkboxes on submit.
-* Move exercises into dedicated folder
 * Improve random question selection
-* Improve styling
-* Make quizzes configurable
 * Staff Interval Recognition
 * Note Interval Recognition (generic, specific)
 * Chord intervals.

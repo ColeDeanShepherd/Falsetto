@@ -52,7 +52,7 @@ export class Quiz extends React.Component<IQuizProps, IQuizState> {
       }, this);
 
     const renderedCurrentQuestion = this.props.quiz.questionRenderFuncs[this.state.currentQuestionIndex]();
-    const renderedAnswers = this.props.quiz.answersRenderFunc(this.guessAnswer.bind(this));
+    const renderedAnswers = this.props.quiz.answersRenderFunc(this.guessAnswer.bind(this), this.state.currentQuestionIndex);
 
     const numGuesses = this.state.quizStats.numCorrectGuesses + this.state.quizStats.numIncorrectGuesses;
     const percentCorrect = (this.state.quizStats.numIncorrectGuesses !== 0)

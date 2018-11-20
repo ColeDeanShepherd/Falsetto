@@ -71,6 +71,6 @@ export function createQuiz(): Quiz {
     "Interval Qualities To Generic Intervals",
     intervalQualities.map(intervalQuality => (() => <span>{intervalQuality}</span>)),
     questionAnswerIndices,
-    selectAnswerId => <AnswerCheckboxes answers={answers} selectAnswerId={selectAnswerId} />
+    (selectAnswerId, questionId) => <AnswerCheckboxes key={questionId} answers={answers} selectAnswerId={selectAnswerId} />
   );
 }
