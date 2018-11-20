@@ -1,6 +1,8 @@
 # To-Do
 * Protect against disabling all questions.
 * Zip question & answer arrays
+* Fix issue with generating next question.
+* Clear multi-answer checkboxes on submit.
 * Move exercises into dedicated folder
 * Improve random question selection
 * Improve styling

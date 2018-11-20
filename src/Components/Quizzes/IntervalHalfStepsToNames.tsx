@@ -24,9 +24,9 @@ export function createQuiz(): Quiz {
     "Interval Half Steps To Names",
     intervalNames.map((_, i) => (() => <span>{i}</span>)),
     intervalNames.map((_, i) => i),
-    selectAnswerIndex => {
+    selectAnswerId => {
       const intervalButtons = intervalNames.map((intervalName, i) => {
-        return <span key={i} style={{padding: "1em 1em 1em 0"}}><Button onClick={event => selectAnswerIndex(i)} variant="outlined" color="primary">{intervalName}</Button></span>;
+        return <span key={i} style={{padding: "1em 1em 1em 0"}}><Button onClick={event => selectAnswerId(i)} variant="outlined" color="primary">{intervalName}</Button></span>;
       });
       return <div style={{lineHeight: 3}}>{intervalButtons}</div>;
     }

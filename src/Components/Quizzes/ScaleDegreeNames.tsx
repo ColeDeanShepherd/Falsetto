@@ -31,9 +31,9 @@ export function createQuiz(): Quiz {
     "Scale Degree Names",
     chordNotes.map(cn => (() => <span>{cn}</span>)),
     questionAnswerIndices,
-    selectAnswerIndex => {
+    selectAnswerId => {
       const answerButtons = chordTypes.map((chordType, i) => {
-        return <span key={i} style={{padding: "1em 1em 1em 0"}}><Button onClick={event => selectAnswerIndex(i)} variant="outlined" color="primary">{chordType}</Button></span>;
+        return <span key={i} style={{padding: "1em 1em 1em 0"}}><Button onClick={event => selectAnswerId(i)} variant="outlined" color="primary">{chordType}</Button></span>;
       });
       return <div style={{lineHeight: 3}}>{answerButtons}</div>;
     }

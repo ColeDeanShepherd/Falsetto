@@ -8,6 +8,7 @@ import * as IntervalNamesToHalfSteps from './Quizzes/IntervalNamesToHalfSteps';
 import * as IntervalHalfStepsToNames from './Quizzes/IntervalHalfStepsToNames';
 import * as IntervalQualitySymbolsToQualities from './Quizzes/IntervalQualitySymbolsToQualities';
 import * as GenericIntervalsToIntervalQualities from "./Quizzes/GenericIntervalsToIntervalQualities";
+import * as IntervalQualitiesToGenericIntervals from "./Quizzes/IntervalQualitiesToGenericIntervals";
 import * as IntervalsToConsonanceDissonance from "./Quizzes/IntervalsToConsonanceDissonance";
 import * as MajorDiatonicTriads from "./Quizzes/MajorDiatonicTriads";
 import * as NaturalMinorDiatonicTriads from "./Quizzes/NaturalMinorDiatonicTriads";
@@ -84,6 +85,7 @@ class App extends React.Component<{}, IAppState> {
     IntervalHalfStepsToNames.createQuiz(),
     IntervalQualitySymbolsToQualities.createQuiz(),
     GenericIntervalsToIntervalQualities.createQuiz(),
+    IntervalQualitiesToGenericIntervals.createQuiz(),
     IntervalsToConsonanceDissonance.createQuiz(),
     MajorDiatonicTriads.createQuiz(),
     NaturalMinorDiatonicTriads.createQuiz(),

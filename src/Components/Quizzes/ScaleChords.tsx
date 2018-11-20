@@ -73,9 +73,9 @@ export function createQuiz(): Quiz {
     "Scale Chords",
     chordTypes.map(ct => (() => <span>{ct}</span>)),
     questionAnswerIndices,
-    selectAnswerIndex => {
+    selectAnswerId => {
       const answerButtons = mostCommonUses.map((use, i) => {
-        return <span key={i} style={{padding: "1em 1em 1em 0"}}><Button onClick={event => selectAnswerIndex(i)} variant="outlined" color="primary">{use}</Button></span>;
+        return <span key={i} style={{padding: "1em 1em 1em 0"}}><Button onClick={event => selectAnswerId(i)} variant="outlined" color="primary">{use}</Button></span>;
       });
       return <div style={{lineHeight: 3}}>{answerButtons}</div>;
     }

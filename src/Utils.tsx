@@ -88,6 +88,19 @@ export function min<T>(array: Array<T>, callbackFn: (value: T) => number): numbe
 export function uniq<T>(array: Array<T>) {
   return array.filter((x, index) => array.indexOf(x) === index);
 }
+
+// TODO: add tests
 export function isUniqueArrayElement<T>(value: T, index: number, array: Array<T>) {
   return array.indexOf(value) === index;
+}
+
+// TODO: add tests
+export function setBitIndicesToInt(setBitIndices: number[]): number {
+  let result = 0;
+
+  for (const bitIndex of setBitIndices) {
+    result |= (1 << bitIndex);
+  }
+
+  return result;
 }

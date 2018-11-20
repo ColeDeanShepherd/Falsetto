@@ -23,9 +23,9 @@ export function createQuiz(): Quiz {
     "Interval Quality Symbols To Qualities",
     intervalQualitySymbols.map(symbol => (() => <span>{symbol}</span>)),
     intervalQualitySymbols.map((_, i) => i),
-    selectAnswerIndex => {
+    selectAnswerId => {
       const answerButtons = intervalQualities.map((intervalQuality, i) => {
-        return <span key={i} style={{padding: "1em 1em 1em 0"}}><Button onClick={event => selectAnswerIndex(i)} variant="outlined" color="primary">{intervalQuality}</Button></span>;
+        return <span key={i} style={{padding: "1em 1em 1em 0"}}><Button onClick={event => selectAnswerId(i)} variant="outlined" color="primary">{intervalQuality}</Button></span>;
       });
       return <div style={{lineHeight: 3}}>{answerButtons}</div>;
     }
