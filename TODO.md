@@ -1,6 +1,5 @@
 # To-Do
 * Protect against disabling all questions.
-* Make an easy way to "invert" multiple choice quizzes.
 * Zip question & answer arrays
 * Fix issue with generating next question.
 * Improve random question selection

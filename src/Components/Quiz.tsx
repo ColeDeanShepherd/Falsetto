@@ -1,11 +1,12 @@
 import * as React from 'react';
 import * as clone from 'clone';
-import { Card, CardContent, Typography, Checkbox } from '@material-ui/core';
+import { Button, Card, CardContent, Typography, Checkbox } from '@material-ui/core';
 
 import * as Utils from '../Utils';
 import { Quiz as QuizModel } from "../Quiz";
 import { QuizStats } from "../QuizStats";
 import { QuestionStats } from "../QuestionStats";
+import { AnswerCheckboxes } from "./AnswerCheckboxes";
 
 export interface IQuizProps {
   quiz: QuizModel;
@@ -174,4 +175,45 @@ export class Quiz extends React.Component<IQuizProps, IQuizState> {
 
     this.setState(stateDelta);
   }
+}
+
+export function createTextMultipleChoiceQuiz(
+  quizName: string,
+  questions: string[],
+  questionAnswers: string[],
+  allAnswers: string[],
+  invertQuestionsAndAnswers: boolean
+): QuizModel {
+  let answerIds: number[];
+  let answersRenderFunc: (selectAnswerId: (answerId: number) => void, questionId?: number) => JSX.Element;
+
+  if (!invertQuestionsAndAnswers) {
+    answerIds = questions.map((_, i) => allAnswers.indexOf(questionAnswers[i]));
+    answersRenderFunc = selectAnswerId => {
+      const answerButtons = questions.map((_, i) => {
+        return <span key={i} style={{padding: "1em 1em 1em 0"}}><Button onClick={event => selectAnswerId(i)} variant="outlined" color="primary">{questionAnswers[i]}</Button></span>;
+      });
+      return <div style={{lineHeight: 3}}>{answerButtons}</div>;
+    };
+  } else {
+    const invertedQuestions = allAnswers;
+    const invertedAnswers = allAnswers
+      .map(a => questions.filter((q, i) => questionAnswers[i] === a));
+    answerIds = invertedAnswers
+      .map((invertedAnswer, i) => {
+        const setBitIndices = invertedAnswer.map(ia => questions.indexOf(ia));
+        return Utils.setBitIndicesToInt(setBitIndices);
+      });
+    
+    allAnswers = questions;
+    questions = invertedQuestions;
+    answersRenderFunc = (selectAnswerId, questionId) => <AnswerCheckboxes key={questionId} answers={allAnswers} selectAnswerId={selectAnswerId} />;      
+  }
+
+  return new QuizModel(
+    quizName,
+    questions.map(question => (() => <span>{question}</span>)),
+    answerIds,
+    answersRenderFunc
+  );
 }

@@ -1,4 +1,4 @@
-import { precondition } from "./Utils";
+import * as Utils from "./Utils";
 
 export class Quiz {
   public constructor(
@@ -7,6 +7,6 @@ export class Quiz {
     public questionAnswerIndices: Array<number>,
     public answersRenderFunc: (selectAnswerId: (answerId: number) => void, questionId?: number) => JSX.Element
   ) {
-    precondition(questionRenderFuncs.length === questionAnswerIndices.length);
+    Utils.precondition(questionRenderFuncs.length === questionAnswerIndices.length);
   }
 }
