@@ -50,7 +50,26 @@ class App extends React.Component<{}, IAppState> {
   public render(): JSX.Element {
     const quizLinks = this.quizzes
       .map(
-        (quiz, i) => <a key={i} href="" onClick={event => { event.preventDefault(); this.changeQuiz(i); }} className="nav-link">{quiz.name}</a>,
+        (quiz, i) => {
+          let className = "nav-link";
+          if ((!this.state.currentComponentOverride) && (i === this.state.currentQuizIndex)) {
+            className += " active";
+          }
+
+          return <a key={i} href="" onClick={event => { event.preventDefault(); this.changeQuiz(i); }} className={className}>{quiz.name}</a>
+        },
+        this
+      );
+    const componentOverrideLinks = this.componentOverrides
+      .map(
+        (componentOverride, i) => {
+          let className = "nav-link";
+          if (this.state.currentComponentOverride === componentOverride.component) {
+            className += " active";
+          }
+
+          return <a key={i} href="" onClick={event => { event.preventDefault(); this.setComponentOverride(componentOverride.component); }} className={className}>{componentOverride.name}</a>
+        },
         this
       );
     const currentQuiz = this.quizzes[this.state.currentQuizIndex];
@@ -68,7 +87,7 @@ class App extends React.Component<{}, IAppState> {
           <Paper className="left-pane">
             <div className="left-nav">
               {quizLinks}
-              <a href="" onClick={event => { event.preventDefault(); this.setComponentOverride(RandomChordGenerator); }} className="nav-link">Random Chord Generator</a>
+              {componentOverrideLinks}
             </div>
           </Paper>
           <div className="right-pane">
@@ -108,8 +127,13 @@ class App extends React.Component<{}, IAppState> {
     ScaleDegreeNames.createQuiz(),
     ChordFamilies.createQuiz(),
     ChordFamilyDefinitions.createQuiz()
-  ]
-
+  ];
+  private componentOverrides = [
+    {
+      name: "Random Chord Generator",
+      component: RandomChordGenerator
+    }
+  ];
   private changeQuiz(quizIndex: number) {
     this.setState({ currentQuizIndex: quizIndex, currentComponentOverride: null });
   }

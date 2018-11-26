@@ -44,3 +44,7 @@ body {
   display: block;
   margin-bottom: 0.5em;
 }
+
+.nav-link.active {
+  text-decoration: underline;
+}

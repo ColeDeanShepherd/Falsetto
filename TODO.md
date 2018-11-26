@@ -14,3 +14,4 @@
 * Scale Identification
 * Chord Symbols
 * Scale Intervals
+* Support multiple quizzes at once.
