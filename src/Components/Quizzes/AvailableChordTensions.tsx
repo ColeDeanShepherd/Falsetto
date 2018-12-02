@@ -1,9 +1,5 @@
-import * as React from 'react';
-
-import * as Utils from "../../Utils";
 import { Quiz } from "../../Quiz";
-import { AnswerCheckboxes } from "../AnswerCheckboxes";
-import { createTextMultipleChoiceQuiz } from "../Quiz";
+import { createTextMultipleChoiceMultipleAnswerQuiz } from "../Quiz";
 
 export function createQuiz(): Quiz {
   const chordTypes = [
@@ -29,16 +25,12 @@ export function createQuiz(): Quiz {
     ["b9", "9", "#9", "#11", "13"],
   ];
   const answers = ["7", "b9", "9", "#9", "b11", "11", "#11", "b13", "13"];
-  const questionAnswerIds = chordTypes
-    .map((_, i) => {
-      const setBitIndices = questionAnswers[i].map(qa => answers.indexOf(qa));
-      return Utils.setBitIndicesToInt(setBitIndices);
-    });
-
-  return new Quiz(
+  
+  return createTextMultipleChoiceMultipleAnswerQuiz(
     "Available Chord Tensions",
-    chordTypes.map(chordType => (() => <span>{chordType}</span>)),
-    questionAnswerIds,
-    (selectAnswerId, questionId) => <AnswerCheckboxes key={questionId} answers={answers} selectAnswerId={selectAnswerId} />
+    chordTypes,
+    questionAnswers,
+    answers,
+    false
   );
 }

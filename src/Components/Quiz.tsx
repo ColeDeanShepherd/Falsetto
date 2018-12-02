@@ -54,7 +54,7 @@ export class Quiz extends React.Component<IQuizProps, IQuizState> {
       }, this);
 
     const renderedCurrentQuestion = this.props.quiz.questionRenderFuncs[this.state.currentQuestionIndex]();
-    const renderedAnswers = this.props.quiz.answersRenderFunc(this.guessAnswer.bind(this), this.state.currentQuestionIndex);
+    const renderedAnswers = this.props.quiz.answerSelectorsRenderFunc(this.guessAnswer.bind(this), this.state.currentQuestionIndex);
 
     const numGuesses = this.state.quizStats.numCorrectGuesses + this.state.quizStats.numIncorrectGuesses;
     const percentCorrect = (this.state.quizStats.numIncorrectGuesses !== 0)
@@ -186,11 +186,13 @@ export function createTextMultipleChoiceQuiz(
   invertQuestionsAndAnswers: boolean
 ): QuizModel {
   let answerIds: number[];
-  let answersRenderFunc: (selectAnswerId: (answerId: number) => void, questionId?: number) => JSX.Element;
+  let answerRenderFunc: (questionId: number) => JSX.Element;
+  let answerSelectorsRenderFunc: (selectAnswerId: (answerId: number) => void, questionId?: number) => JSX.Element;
 
   if (!invertQuestionsAndAnswers) {
     answerIds = questions.map((_, i) => allAnswers.indexOf(questionAnswers[i]));
-    answersRenderFunc = selectAnswerId => {
+    answerRenderFunc = questionId => <div>{questionAnswers[questionId]}</div>;
+    answerSelectorsRenderFunc = selectAnswerId => {
       const answerButtons = questions.map((_, i) => {
         return <span key={i} style={{padding: "1em 1em 1em 0"}}><Button onClick={event => selectAnswerId(i)} variant="outlined" color="primary">{questionAnswers[i]}</Button></span>;
       });
@@ -208,13 +210,54 @@ export function createTextMultipleChoiceQuiz(
     
     allAnswers = questions;
     questions = invertedQuestions;
-    answersRenderFunc = (selectAnswerId, questionId) => <AnswerCheckboxes key={questionId} answers={allAnswers} selectAnswerId={selectAnswerId} />;      
+    answerRenderFunc = questionId => {
+      const answers = invertedAnswers[questionId];
+      return <div>{answers.join(", ")}</div>
+    };
+    answerSelectorsRenderFunc = (selectAnswerId, questionId) => <AnswerCheckboxes key={questionId} answers={allAnswers} selectAnswerId={selectAnswerId} />;      
   }
 
   return new QuizModel(
     quizName,
     questions.map(question => (() => <span>{question}</span>)),
     answerIds,
-    answersRenderFunc
+    answerRenderFunc,
+    answerSelectorsRenderFunc
+  );
+}
+
+export function createTextMultipleChoiceMultipleAnswerQuiz(
+  quizName: string,
+  questions: string[],
+  questionAnswers: string[][],
+  allAnswers: string[],
+  invertQuestionsAndAnswers: boolean
+): QuizModel {
+  let answerIds: number[];
+  let answerRenderFunc: (questionId: number) => JSX.Element;
+  let answerSelectorsRenderFunc: (selectAnswerId: (answerId: number) => void, questionId?: number) => JSX.Element;
+
+  if (!invertQuestionsAndAnswers) {
+    answerIds = questionAnswers
+      .map((answer, i) => {
+        const setBitIndices = answer.map(a => allAnswers.indexOf(a));
+        return Utils.setBitIndicesToInt(setBitIndices);
+      });
+    
+    answerRenderFunc = questionId => {
+      const answers = questionAnswers[questionId];
+      return <div>{answers.join(", ")}</div>
+    };
+    answerSelectorsRenderFunc = (selectAnswerId, questionId) => <AnswerCheckboxes key={questionId} answers={allAnswers} selectAnswerId={selectAnswerId} />;
+  } else {
+    throw new Error("Not implemented.");
+  }
+
+  return new QuizModel(
+    quizName,
+    questions.map(question => (() => <span>{question}</span>)),
+    answerIds,
+    answerRenderFunc,
+    answerSelectorsRenderFunc
   );
 }
