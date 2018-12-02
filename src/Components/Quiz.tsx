@@ -58,7 +58,7 @@ export class Quiz extends React.Component<IQuizProps, IQuizState> {
       }, this);
 
     const renderedCurrentQuestion = this.props.quiz.questionRenderFuncs[this.state.currentQuestionIndex]();
-    const renderedCurrentAnswer = <div style={{textAlign: "center", fontSize: "2em"}}>{this.props.quiz.answerRenderFunc(this.state.currentQuestionIndex)}</div>;
+    const renderedCurrentAnswer = <div style={{textAlign: "center", fontSize: "2em", padding: "1em 0"}}>{this.props.quiz.answerRenderFunc(this.state.currentQuestionIndex)}</div>;
     const renderedAnswerSelectors = this.props.quiz.answerSelectorsRenderFunc(this.guessAnswer.bind(this), this.state.currentQuestionIndex);
 
     const numGuesses = this.state.quizStats.numCorrectGuesses + this.state.quizStats.numIncorrectGuesses;
