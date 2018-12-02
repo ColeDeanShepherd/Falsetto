@@ -1,5 +1,5 @@
 # To-Do
-* Add study (flashcard) mode
+* Only allow 1 guess per question
 * Zip question & answer arrays
 * Fix issue with generating next question.
 * Improve random question selection

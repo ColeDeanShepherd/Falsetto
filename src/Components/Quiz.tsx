@@ -16,6 +16,8 @@ export interface IQuizState {
   quizStats: QuizStats<string>;
   enabledQuestionIndices: number[];
   showDetailedStats: boolean;
+  isInStudyMode: boolean;
+  isShowingAnswer: boolean;
 }
 export class Quiz extends React.Component<IQuizProps, IQuizState> {
   constructor(props: IQuizProps) {
@@ -30,7 +32,9 @@ export class Quiz extends React.Component<IQuizProps, IQuizState> {
       currentQuestionIndex: this.getNextQuestionIndex(this.props.quiz, quizStats, enabledQuestionIndices, -1),
       quizStats: quizStats,
       enabledQuestionIndices: enabledQuestionIndices,
-      showDetailedStats: false
+      showDetailedStats: false,
+      isInStudyMode: true,
+      isShowingAnswer: false
     };
   }
 
@@ -54,7 +58,8 @@ export class Quiz extends React.Component<IQuizProps, IQuizState> {
       }, this);
 
     const renderedCurrentQuestion = this.props.quiz.questionRenderFuncs[this.state.currentQuestionIndex]();
-    const renderedAnswers = this.props.quiz.answerSelectorsRenderFunc(this.guessAnswer.bind(this), this.state.currentQuestionIndex);
+    const renderedCurrentAnswer = <div style={{textAlign: "center", fontSize: "2em"}}>{this.props.quiz.answerRenderFunc(this.state.currentQuestionIndex)}</div>;
+    const renderedAnswerSelectors = this.props.quiz.answerSelectorsRenderFunc(this.guessAnswer.bind(this), this.state.currentQuestionIndex);
 
     const numGuesses = this.state.quizStats.numCorrectGuesses + this.state.quizStats.numIncorrectGuesses;
     const percentCorrect = (this.state.quizStats.numIncorrectGuesses !== 0)
@@ -79,8 +84,11 @@ export class Quiz extends React.Component<IQuizProps, IQuizState> {
 
           {this.state.showDetailedStats ? questionStats : null}
 
-          <div style={{textAlign: "center", fontSize: "2em", padding: "1em 0"}}>{renderedCurrentQuestion}</div>
-          {renderedAnswers}
+          {(!this.state.isInStudyMode || !this.state.isShowingAnswer) ? <div style={{textAlign: "center", fontSize: "2em", padding: "1em 0"}}>{renderedCurrentQuestion}</div> : null}
+
+          {(this.state.isInStudyMode && this.state.isShowingAnswer) ? renderedCurrentAnswer : null}
+          {!this.state.isInStudyMode ? renderedAnswerSelectors : <Button onClick={event => this.flipFlashCard()}>Flip</Button>}
+          {this.state.isInStudyMode ? <Button onClick={event => this.moveToNextFlashCard()}>Next</Button> : null}
         </CardContent>
       </Card>
     );
@@ -175,6 +183,18 @@ export class Quiz extends React.Component<IQuizProps, IQuizState> {
     }
 
     this.setState(stateDelta);
+  }
+
+  private flipFlashCard() {
+    this.setState({ isShowingAnswer: !this.state.isShowingAnswer });
+  }
+  private moveToNextFlashCard() {
+    this.setState({
+      currentQuestionIndex: this.getNextQuestionIndex(
+        this.props.quiz, this.state.quizStats, this.state.enabledQuestionIndices, this.state.currentQuestionIndex
+      ),
+      isShowingAnswer: false
+    });
   }
 }
 
