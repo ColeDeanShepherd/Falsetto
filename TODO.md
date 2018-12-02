@@ -1,5 +1,5 @@
 # To-Do
-* Protect against disabling all questions.
+* Add study (flashcard) mode
 * Zip question & answer arrays
 * Fix issue with generating next question.
 * Improve random question selection

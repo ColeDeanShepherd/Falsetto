@@ -1,8 +1,5 @@
-import * as React from 'react';
-
 import { Quiz } from "../../Quiz";
-
-import Button from "@material-ui/core/Button";
+import { createTextMultipleChoiceQuiz } from "../Quiz";
 
 export function createQuiz(): Quiz {
   const intervalQualitySymbols = [
@@ -19,15 +16,12 @@ export function createQuiz(): Quiz {
     "diminished",
     "perfect"
   ];
-  return new Quiz(
-    "Interval Quality Symbols To Qualities",
-    intervalQualitySymbols.map(symbol => (() => <span>{symbol}</span>)),
-    intervalQualitySymbols.map((_, i) => i),
-    selectAnswerId => {
-      const answerButtons = intervalQualities.map((intervalQuality, i) => {
-        return <span key={i} style={{padding: "1em 1em 1em 0"}}><Button onClick={event => selectAnswerId(i)} variant="outlined" color="primary">{intervalQuality}</Button></span>;
-      });
-      return <div style={{lineHeight: 3}}>{answerButtons}</div>;
-    }
+  
+  return createTextMultipleChoiceQuiz(
+    "Interval Names to Half Steps",
+    intervalQualitySymbols,
+    intervalQualities,
+    intervalQualities,
+    false
   );
 }

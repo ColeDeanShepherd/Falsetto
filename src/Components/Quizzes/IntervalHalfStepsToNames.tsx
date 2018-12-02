@@ -1,8 +1,5 @@
-import * as React from 'react';
-
 import { Quiz } from "../../Quiz";
-
-import Button from "@material-ui/core/Button";
+import { createTextMultipleChoiceQuiz } from "../Quiz";
 
 export function createQuiz(): Quiz {
   const intervalNames = [
@@ -20,15 +17,13 @@ export function createQuiz(): Quiz {
     "M7",
     "P8"
   ];
-  return new Quiz(
+  const answers = intervalNames.map((_, i) => i.toString());
+  
+  return createTextMultipleChoiceQuiz(
     "Interval Half Steps To Names",
-    intervalNames.map((_, i) => (() => <span>{i}</span>)),
-    intervalNames.map((_, i) => i),
-    selectAnswerId => {
-      const intervalButtons = intervalNames.map((intervalName, i) => {
-        return <span key={i} style={{padding: "1em 1em 1em 0"}}><Button onClick={event => selectAnswerId(i)} variant="outlined" color="primary">{intervalName}</Button></span>;
-      });
-      return <div style={{lineHeight: 3}}>{intervalButtons}</div>;
-    }
+    intervalNames,
+    answers,
+    answers,
+    false
   );
 }

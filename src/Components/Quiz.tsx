@@ -43,11 +43,12 @@ export class Quiz extends React.Component<IQuizProps, IQuizState> {
     
     const questionCheckboxes = this.props.quiz.questionRenderFuncs
       .map((qrf, i) => {
-        const isEnabled = this.state.enabledQuestionIndices.indexOf(i) >= 0;
+        const isChecked = this.state.enabledQuestionIndices.indexOf(i) >= 0;
+        const isEnabled = !isChecked || (this.state.enabledQuestionIndices.length > 1);
 
         return (
           <div key={i}>
-            <Checkbox checked={isEnabled} onChange={event => this.toggleQuestionEnabled(i)} />{qrf()}
+            <Checkbox checked={isChecked} onChange={event => this.toggleQuestionEnabled(i)} disabled={!isEnabled} />{qrf()}
           </div>
         );
       }, this);
@@ -162,7 +163,7 @@ export class Quiz extends React.Component<IQuizProps, IQuizState> {
 
     if (!wasQuestionEnabled) {
       newEnabledQuestionIndices.push(questionIndex);
-    } else {
+    } else if (this.state.enabledQuestionIndices.length > 1) {
       newEnabledQuestionIndices.splice(i, 1);
     }
 

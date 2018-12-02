@@ -1,11 +1,8 @@
-import * as React from 'react';
-
 import { Quiz } from "../../Quiz";
-
-import Button from "@material-ui/core/Button";
+import { createTextMultipleChoiceQuiz } from "../Quiz";
 
 export function createQuiz(): Quiz {
-  const chordRoots = [1, 2, 3, 4, 5, 6, 7];
+  const chordRoots = ["1", "2", "3", "4", "5", "6", "7"];
   const chordTypes = [
     "M7",
     "M7",
@@ -26,17 +23,12 @@ export function createQuiz(): Quiz {
     "mbb7",
     "7b5"
   ];
-  const questionAnswerIndices = chordTypes.map(answer => answers.indexOf(answer));
-
-  return new Quiz(
+  
+  return createTextMultipleChoiceQuiz(
     "Double Harmonic Major Diatonic Seventh Chords",
-    chordRoots.map(chordRoot => (() => <span>{chordRoot}</span>)),
-    questionAnswerIndices,
-    selectAnswerId => {
-      const answerButtons = answers.map((answer, i) => {
-        return <span key={i} style={{paddingLeft: "1em"}}><Button onClick={event => selectAnswerId(i)} variant="outlined" color="primary">{answer}</Button></span>;
-      });
-      return <div style={{lineHeight: 3}}>{answerButtons}</div>;
-    }
+    chordRoots,
+    chordTypes,
+    answers,
+    false
   );
 }

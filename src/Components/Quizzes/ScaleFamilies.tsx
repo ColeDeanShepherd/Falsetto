@@ -1,9 +1,6 @@
-import * as React from 'react';
-
 import * as Utils from "../../Utils";
 import { Quiz } from "../../Quiz";
-
-import Button from "@material-ui/core/Button";
+import { createTextMultipleChoiceQuiz } from "../Quiz";
 
 export function createQuiz(): Quiz {
   const chordTypes = [
@@ -79,17 +76,12 @@ export function createQuiz(): Quiz {
     "Augmented"
   ];
   const answers = Utils.uniq(scaleFamilies);
-  const questionAnswerIndices = scaleFamilies.map(answer => answers.indexOf(answer));
 
-  return new Quiz(
+  return createTextMultipleChoiceQuiz(
     "Scale Families",
-    chordTypes.map(ct => (() => <span>{ct}</span>)),
-    questionAnswerIndices,
-    selectAnswerId => {
-      const answerButtons = answers.map((answer, i) => {
-        return <span key={i} style={{padding: "1em 1em 1em 0"}}><Button onClick={event => selectAnswerId(i)} variant="outlined" color="primary">{answer}</Button></span>;
-      });
-      return <div style={{lineHeight: 3}}>{answerButtons}</div>;
-    }
+    chordTypes,
+    scaleFamilies,
+    answers,
+    false
   );
 }

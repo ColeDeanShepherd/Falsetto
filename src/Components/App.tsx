@@ -31,6 +31,7 @@ import * as ScaleFamilies from "./Quizzes/ScaleFamilies";
 import * as ScaleDegreeNames from "./Quizzes/ScaleDegreeNames";
 import * as ChordFamilies from "./Quizzes/ChordFamilies";
 import * as ChordFamilyDefinitions from "./Quizzes/ChordFamilyDefinitions";
+import * as AvailableChordTensions from "./Quizzes/AvailableChordTensions";
 import { RandomChordGenerator } from "./RandomChordGenerator";
 
 export interface IAppState {
@@ -126,7 +127,8 @@ class App extends React.Component<{}, IAppState> {
     ScaleFamilies.createQuiz(),
     ScaleDegreeNames.createQuiz(),
     ChordFamilies.createQuiz(),
-    ChordFamilyDefinitions.createQuiz()
+    ChordFamilyDefinitions.createQuiz(),
+    AvailableChordTensions.createQuiz()
   ];
   private componentOverrides = [
     {
