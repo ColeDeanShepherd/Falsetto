@@ -1,11 +1,16 @@
-import * as React from 'react';
-
 import * as Utils from "../../Utils";
 import { Quiz } from "../../Quiz";
 import { createTextMultipleChoiceQuiz } from "../Quiz";
 
-import Button from "@material-ui/core/Button";
+import { FlashCard } from "../../FlashCard";
 
+export function createFlashCards(): FlashCard[] {
+  return [
+    new FlashCard("Tonic", "doesn't contain the 4th scale degree"),
+    new FlashCard("Pre-Dominant", "contains only 4th scale degree"),
+    new FlashCard("Dominant", "contains the 4th and 7th scale degrees"),
+  ];
+}
 export function createQuiz(): Quiz {
   const chordFamilies = [
     "Tonic",

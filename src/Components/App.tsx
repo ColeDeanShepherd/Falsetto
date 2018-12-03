@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Paper, AppBar, Typography, Toolbar } from '@material-ui/core';
+import * as Utils from "../Utils";
 
 import "./App.css";
 
@@ -33,31 +34,67 @@ import * as ChordFamilies from "./Quizzes/ChordFamilies";
 import * as ChordFamilyDefinitions from "./Quizzes/ChordFamilyDefinitions";
 import * as AvailableChordTensions from "./Quizzes/AvailableChordTensions";
 import { RandomChordGenerator } from "./RandomChordGenerator";
+import { FlashCard } from 'src/FlashCard';
+import { FlashCardGroup } from 'src/FlashCardGroup';
+import { StudyFlashCards } from './StudyFlashCards';
 
 export interface IAppState {
-  currentQuizIndex: number;
+  currentFlashCardGroupIndex: number;
   currentComponentOverride: any;
 }
 class App extends React.Component<{}, IAppState> {
   public constructor(props: {}) {
     super(props);
 
+    this.flashCardGroups = [
+      new FlashCardGroup("IntervalNamesToHalfSteps", IntervalNamesToHalfSteps.createFlashCards()),
+      new FlashCardGroup("IntervalHalfStepsToNames", IntervalHalfStepsToNames.createFlashCards()),
+      new FlashCardGroup("IntervalQualitySymbolsToQualities", IntervalQualitySymbolsToQualities.createFlashCards()),
+      new FlashCardGroup("GenericIntervalsToIntervalQualities", GenericIntervalsToIntervalQualities.createFlashCards()),
+      new FlashCardGroup("IntervalQualitiesToGenericIntervals", IntervalQualitiesToGenericIntervals.createFlashCards()),
+      new FlashCardGroup("IntervalsToConsonanceDissonance", IntervalsToConsonanceDissonance.createFlashCards()),
+      new FlashCardGroup("MajorDiatonicTriads", MajorDiatonicTriads.createFlashCards()),
+      new FlashCardGroup("NaturalMinorDiatonicTriads", NaturalMinorDiatonicTriads.createFlashCards()),
+      new FlashCardGroup("MelodicMinorDiatonicTriads", MelodicMinorDiatonicTriads.createFlashCards()),
+      new FlashCardGroup("HarmonicMinorDiatonicTriads", HarmonicMinorDiatonicTriads.createFlashCards()),
+      new FlashCardGroup("HarmonicMajorDiatonicTriads", HarmonicMajorDiatonicTriads.createFlashCards()),
+      new FlashCardGroup("DoubleHarmonicMajorDiatonicTriads", DoubleHarmonicMajorDiatonicTriads.createFlashCards()),
+      new FlashCardGroup("MajorDiatonicSeventhChords", MajorDiatonicSeventhChords.createFlashCards()),
+      new FlashCardGroup("NaturalMinorDiatonicSeventhChords", NaturalMinorDiatonicSeventhChords.createFlashCards()),
+      new FlashCardGroup("MelodicMinorDiatonicSeventhChords", MelodicMinorDiatonicSeventhChords.createFlashCards()),
+      new FlashCardGroup("HarmonicMinorDiatonicSeventhChords", HarmonicMinorDiatonicSeventhChords.createFlashCards()),
+      new FlashCardGroup("HarmonicMajorDiatonicSeventhChords", HarmonicMajorDiatonicSeventhChords.createFlashCards()),
+      new FlashCardGroup("DoubleHarmonicMajorDiatonicSeventhChords", DoubleHarmonicMajorDiatonicSeventhChords.createFlashCards()),
+      new FlashCardGroup("MajorScaleDegreeModes", MajorScaleDegreeModes.createFlashCards()),
+      new FlashCardGroup("ChordNotes", ChordNotes.createFlashCards()),
+      new FlashCardGroup("ScaleNotes", ScaleNotes.createFlashCards()),
+      new FlashCardGroup("ScaleChords", ScaleChords.createFlashCards()),
+      new FlashCardGroup("ScaleCharacteristics", ScaleCharacteristics.createFlashCards()),
+      new FlashCardGroup("ScaleFamilies", ScaleFamilies.createFlashCards()),
+      new FlashCardGroup("ScaleDegreeNames", ScaleDegreeNames.createFlashCards()),
+      new FlashCardGroup("ChordFamilies", ChordFamilies.createFlashCards()),
+      new FlashCardGroup("ChordFamilyDefinitions", ChordFamilyDefinitions.createFlashCards()),
+      new FlashCardGroup("AvailableChordTensions", AvailableChordTensions.createFlashCards())
+    ];
+
+    this.flashCards = Utils.flattenArrays<FlashCard>(this.flashCardGroups.map(g => g.flashCards));
+
     this.state = {
-      currentQuizIndex: 0,
+      currentFlashCardGroupIndex: 0,
       currentComponentOverride: null
     };
   }
 
   public render(): JSX.Element {
-    const quizLinks = this.quizzes
+    const flashCardGroupLinks = this.flashCardGroups
       .map(
-        (quiz, i) => {
+        (flashCardGroup, i) => {
           let className = "nav-link";
-          if ((!this.state.currentComponentOverride) && (i === this.state.currentQuizIndex)) {
+          if ((!this.state.currentComponentOverride) && (i === this.state.currentFlashCardGroupIndex)) {
             className += " active";
           }
 
-          return <a key={i} href="" onClick={event => { event.preventDefault(); this.changeQuiz(i); }} className={className}>{quiz.name}</a>
+          return <a key={i} href="" onClick={event => { event.preventDefault(); this.changeQuiz(i); }} className={className}>{flashCardGroup.name}</a>
         },
         this
       );
@@ -73,7 +110,7 @@ class App extends React.Component<{}, IAppState> {
         },
         this
       );
-    const currentQuiz = this.quizzes[this.state.currentQuizIndex];
+    const currentFlashCardGroup = this.flashCardGroups[this.state.currentFlashCardGroupIndex];
 
     return (
       <div className="app">
@@ -87,12 +124,12 @@ class App extends React.Component<{}, IAppState> {
         <div className="bottom-pane horizontal-panes">
           <Paper className="left-pane">
             <div className="left-nav">
-              {quizLinks}
+              {flashCardGroupLinks}
               {componentOverrideLinks}
             </div>
           </Paper>
           <div className="right-pane">
-            {!this.state.currentComponentOverride ? <QuizComponent key={this.state.currentQuizIndex} quiz={currentQuiz} /> : null}
+            {!this.state.currentComponentOverride ? <StudyFlashCards key={this.state.currentFlashCardGroupIndex} flashCardGroup={currentFlashCardGroup} /> : null}
             {this.state.currentComponentOverride ? React.createElement(this.state.currentComponentOverride) : null}
           </div>
         </div>
@@ -100,44 +137,17 @@ class App extends React.Component<{}, IAppState> {
     );
   }
 
-  private quizzes = [
-    IntervalNamesToHalfSteps.createQuiz(),
-    IntervalHalfStepsToNames.createQuiz(),
-    IntervalQualitySymbolsToQualities.createQuiz(),
-    GenericIntervalsToIntervalQualities.createQuiz(),
-    IntervalQualitiesToGenericIntervals.createQuiz(),
-    IntervalsToConsonanceDissonance.createQuiz(),
-    MajorDiatonicTriads.createQuiz(),
-    NaturalMinorDiatonicTriads.createQuiz(),
-    MelodicMinorDiatonicTriads.createQuiz(),
-    HarmonicMinorDiatonicTriads.createQuiz(),
-    HarmonicMajorDiatonicTriads.createQuiz(),
-    DoubleHarmonicMajorDiatonicTriads.createQuiz(),
-    MajorDiatonicSeventhChords.createQuiz(),
-    NaturalMinorDiatonicSeventhChords.createQuiz(),
-    MelodicMinorDiatonicSeventhChords.createQuiz(),
-    HarmonicMinorDiatonicSeventhChords.createQuiz(),
-    HarmonicMajorDiatonicSeventhChords.createQuiz(),
-    DoubleHarmonicMajorDiatonicSeventhChords.createQuiz(),
-    MajorScaleDegreeModes.createQuiz(),
-    ChordNotes.createQuiz(),
-    ScaleNotes.createQuiz(),
-    ScaleChords.createQuiz(),
-    ScaleCharacteristics.createQuiz(),
-    ScaleFamilies.createQuiz(),
-    ScaleDegreeNames.createQuiz(),
-    ChordFamilies.createQuiz(),
-    ChordFamilyDefinitions.createQuiz(),
-    AvailableChordTensions.createQuiz()
-  ];
+  private flashCards: FlashCard[];
+  private flashCardGroups: FlashCardGroup[];
   private componentOverrides = [
     {
       name: "Random Chord Generator",
       component: RandomChordGenerator
     }
   ];
+
   private changeQuiz(quizIndex: number) {
-    this.setState({ currentQuizIndex: quizIndex, currentComponentOverride: null });
+    this.setState({ currentFlashCardGroupIndex: quizIndex, currentComponentOverride: null });
   }
   private setComponentOverride(component: any) {
     this.setState({ currentComponentOverride: component });

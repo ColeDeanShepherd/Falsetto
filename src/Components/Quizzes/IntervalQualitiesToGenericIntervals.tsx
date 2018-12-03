@@ -1,6 +1,13 @@
 import { Quiz } from "../../Quiz";
 import { createTextMultipleChoiceMultipleAnswerQuiz } from "../Quiz";
+import { FlashCard } from "../../FlashCard";
 
+export function createFlashCards(): FlashCard[] {
+  return [
+    new FlashCard("perfect", "1st, 4th, 5th, 8th"),
+    new FlashCard("imperfect", "2nd, 3rd, 6th, 7th"),
+  ];
+}
 export function createQuiz(): Quiz {
   const intervalQualities = ["perfect", "imperfect"];
   const questionAnswers = [

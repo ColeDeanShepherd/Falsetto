@@ -73,9 +73,7 @@ export class Quiz extends React.Component<IQuizProps, IQuizState> {
             {this.props.quiz.name}
           </Typography>
 
-          <div>
-            {questionCheckboxes}
-          </div>
+          <div>{questionCheckboxes}</div>
 
           <p>
             <span style={{paddingRight: "2em"}}>{this.state.quizStats.numCorrectGuesses} / {this.state.quizStats.numIncorrectGuesses}</span>
@@ -229,6 +227,7 @@ export function createTextMultipleChoiceQuiz(
       });
     
     allAnswers = questions;
+    questionAnswers = questions;
     questions = invertedQuestions;
     answerRenderFunc = questionId => {
       const answers = invertedAnswers[questionId];

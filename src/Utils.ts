@@ -104,3 +104,11 @@ export function setBitIndicesToInt(setBitIndices: number[]): number {
 
   return result;
 }
+
+// TODO: add tests
+export function flattenArrays<T>(arrays: any): T[] {
+  return arrays.reduce(
+    (flat: any, toFlatten: any) => flat.concat(Array.isArray(toFlatten) ? flattenArrays(toFlatten) : toFlatten),
+    []
+  );
+}

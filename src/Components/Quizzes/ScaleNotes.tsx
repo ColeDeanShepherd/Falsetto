@@ -1,6 +1,40 @@
 import { Quiz } from "../../Quiz";
 import { createTextMultipleChoiceQuiz } from "../Quiz";
+import { FlashCard } from "../../FlashCard";
 
+export function createFlashCards(): FlashCard[] {
+  return [
+    new FlashCard("1 2 3 4 5 6 7", "Ionian (Major)"),
+    new FlashCard("1 2 b3 4 5 6 b7", "Dorian"),
+    new FlashCard("1 b2 b3 4 5 b6 b7", "Phrygian"),
+    new FlashCard("1 2 3 #4 5 6 7", "Lydian"),
+    new FlashCard("1 2 3 4 5 6 b7", "Mixolydian"),
+    new FlashCard("1 2 b3 4 5 b6 b7", "Aeolian (Natural Minor)"),
+    new FlashCard("1 b2 b3 4 b5 b6 b7", "Locrian"),
+    new FlashCard("1 2 b3 4 5 6 7", "Melodic Minor"),
+    new FlashCard("1 b2 b3 4 5 6 b7", "Dorian b2"),
+    new FlashCard("1 2 3 #4 #5 6 7", "Lydian Aug."),
+    new FlashCard("1 2 3 #4 5 6 b7", "Mixolydian #11"),
+    new FlashCard("1 2 3 4 5 b6 b7", "Mixolydian b6"),
+    new FlashCard("1 2 b3 4 b5 b6 b7", "Locrian Nat. 9"),
+    new FlashCard("1 b2 b3 b4 b5 b6 b7", "Altered Dominant"),
+    new FlashCard("1 2 b3 4 5 b6 7", "Harmonic Minor"),
+    new FlashCard("1 b2 b3 4 b5 6 b7", "Locrian Nat. 6"),
+    new FlashCard("1 2 3 4 #5 6 7", "Ionian Aug."),
+    new FlashCard("1 2 b3 #4 5 6 b7", "Dorian #11"),
+    new FlashCard("1 b2 3 4 5 b6 b7", "Phrygian Major"),
+    new FlashCard("1 #2 3 #4 5 6 7", "Lydian #9"),
+    new FlashCard("1 b2 b3 b4 b5 b6 bb7", "Altered Dominant bb7"),
+    new FlashCard("1 2 b3 4 b5 b6 bb7 7", "Tonic Diminished"),
+    new FlashCard("1 b2 b3 b4 b5 5 6 b7", "Dominant Diminished"),
+    new FlashCard("1 2 3 #4 #5 b7", "Whole Tone"),
+    new FlashCard("1 #2 3 5 #5 7", "Augmented"),
+    new FlashCard("1 2 3 5 6", "Major Pentatonic"),
+    new FlashCard("1 b3 4 5 b7", "Minor Pentatonic"),
+    new FlashCard("1 2 b3 3 5 6", "Major Blues"),
+    new FlashCard("1 b3 4 b5 5 b7", "Minor Blues"),
+  ];
+}
 export function createQuiz(): Quiz {
   const chordNotes = [
     "1 2 3 4 5 6 7",

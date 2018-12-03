@@ -1,6 +1,20 @@
 import { Quiz } from "../../Quiz";
 import { createTextMultipleChoiceMultipleAnswerQuiz } from "../Quiz";
+import { FlashCard } from "../../FlashCard";
 
+export function createFlashCards(): FlashCard[] {
+  return [
+    new FlashCard("Maj7", "9, #11, 13"),
+    new FlashCard("m7", "9, 11, 13"),
+    new FlashCard("ø7", "9, 11, b13"),
+    new FlashCard("mMaj7", "9, 11, 13"),
+    new FlashCard("Maj+7", "9, #11"),
+    new FlashCard("o", "9, 11, b13, 7"),
+    new FlashCard("7", "b9, 9, #9, #11, b13, 13"),
+    new FlashCard("7sus", "b9, 9, #9, b11, b13, 13"),
+    new FlashCard("+7", "b9, 9, #9, #11, 13"),
+  ];
+}
 export function createQuiz(): Quiz {
   const chordTypes = [
     "Maj7",
