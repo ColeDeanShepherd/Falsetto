@@ -6,7 +6,6 @@ import "./App.css";
 
 import { Quiz as QuizComponent } from "./Quiz";
 import * as IntervalNamesToHalfSteps from './Quizzes/IntervalNamesToHalfSteps';
-import * as IntervalHalfStepsToNames from './Quizzes/IntervalHalfStepsToNames';
 import * as IntervalQualitySymbolsToQualities from './Quizzes/IntervalQualitySymbolsToQualities';
 import * as GenericIntervalsToIntervalQualities from "./Quizzes/GenericIntervalsToIntervalQualities";
 import * as IntervalQualitiesToGenericIntervals from "./Quizzes/IntervalQualitiesToGenericIntervals";
@@ -34,6 +33,7 @@ import * as ChordFamilies from "./Quizzes/ChordFamilies";
 import * as ChordFamilyDefinitions from "./Quizzes/ChordFamilyDefinitions";
 import * as AvailableChordTensions from "./Quizzes/AvailableChordTensions";
 import { RandomChordGenerator } from "./RandomChordGenerator";
+import { GuitarNotes } from "./GuitarNotes";
 import { FlashCard } from 'src/FlashCard';
 import { FlashCardGroup } from 'src/FlashCardGroup';
 import { StudyFlashCards } from './StudyFlashCards';
@@ -47,34 +47,33 @@ class App extends React.Component<{}, IAppState> {
     super(props);
 
     this.flashCardGroups = [
-      new FlashCardGroup("IntervalNamesToHalfSteps", IntervalNamesToHalfSteps.createFlashCards()),
-      new FlashCardGroup("IntervalHalfStepsToNames", IntervalHalfStepsToNames.createFlashCards()),
-      new FlashCardGroup("IntervalQualitySymbolsToQualities", IntervalQualitySymbolsToQualities.createFlashCards()),
-      new FlashCardGroup("GenericIntervalsToIntervalQualities", GenericIntervalsToIntervalQualities.createFlashCards()),
-      new FlashCardGroup("IntervalQualitiesToGenericIntervals", IntervalQualitiesToGenericIntervals.createFlashCards()),
-      new FlashCardGroup("IntervalsToConsonanceDissonance", IntervalsToConsonanceDissonance.createFlashCards()),
-      new FlashCardGroup("MajorDiatonicTriads", MajorDiatonicTriads.createFlashCards()),
-      new FlashCardGroup("NaturalMinorDiatonicTriads", NaturalMinorDiatonicTriads.createFlashCards()),
-      new FlashCardGroup("MelodicMinorDiatonicTriads", MelodicMinorDiatonicTriads.createFlashCards()),
-      new FlashCardGroup("HarmonicMinorDiatonicTriads", HarmonicMinorDiatonicTriads.createFlashCards()),
-      new FlashCardGroup("HarmonicMajorDiatonicTriads", HarmonicMajorDiatonicTriads.createFlashCards()),
-      new FlashCardGroup("DoubleHarmonicMajorDiatonicTriads", DoubleHarmonicMajorDiatonicTriads.createFlashCards()),
-      new FlashCardGroup("MajorDiatonicSeventhChords", MajorDiatonicSeventhChords.createFlashCards()),
-      new FlashCardGroup("NaturalMinorDiatonicSeventhChords", NaturalMinorDiatonicSeventhChords.createFlashCards()),
-      new FlashCardGroup("MelodicMinorDiatonicSeventhChords", MelodicMinorDiatonicSeventhChords.createFlashCards()),
-      new FlashCardGroup("HarmonicMinorDiatonicSeventhChords", HarmonicMinorDiatonicSeventhChords.createFlashCards()),
-      new FlashCardGroup("HarmonicMajorDiatonicSeventhChords", HarmonicMajorDiatonicSeventhChords.createFlashCards()),
-      new FlashCardGroup("DoubleHarmonicMajorDiatonicSeventhChords", DoubleHarmonicMajorDiatonicSeventhChords.createFlashCards()),
-      new FlashCardGroup("MajorScaleDegreeModes", MajorScaleDegreeModes.createFlashCards()),
-      new FlashCardGroup("ChordNotes", ChordNotes.createFlashCards()),
-      new FlashCardGroup("ScaleNotes", ScaleNotes.createFlashCards()),
-      new FlashCardGroup("ScaleChords", ScaleChords.createFlashCards()),
-      new FlashCardGroup("ScaleCharacteristics", ScaleCharacteristics.createFlashCards()),
-      new FlashCardGroup("ScaleFamilies", ScaleFamilies.createFlashCards()),
-      new FlashCardGroup("ScaleDegreeNames", ScaleDegreeNames.createFlashCards()),
-      new FlashCardGroup("ChordFamilies", ChordFamilies.createFlashCards()),
-      new FlashCardGroup("ChordFamilyDefinitions", ChordFamilyDefinitions.createFlashCards()),
-      new FlashCardGroup("AvailableChordTensions", AvailableChordTensions.createFlashCards())
+      new FlashCardGroup("Interval Names To Half Steps", IntervalNamesToHalfSteps.createFlashCards()),
+      new FlashCardGroup("Interval Quality Symbols To Qualities", IntervalQualitySymbolsToQualities.createFlashCards()),
+      new FlashCardGroup("Generic Intervals To Interval Qualities", GenericIntervalsToIntervalQualities.createFlashCards()),
+      new FlashCardGroup("Interval Qualities To Generic Intervals", IntervalQualitiesToGenericIntervals.createFlashCards()),
+      new FlashCardGroup("Intervals To Consonance Dissonance", IntervalsToConsonanceDissonance.createFlashCards()),
+      new FlashCardGroup("Major Diatonic Triads", MajorDiatonicTriads.createFlashCards()),
+      new FlashCardGroup("Natural Minor Diatonic Triads", NaturalMinorDiatonicTriads.createFlashCards()),
+      new FlashCardGroup("Melodic Minor Diatonic Triads", MelodicMinorDiatonicTriads.createFlashCards()),
+      new FlashCardGroup("Harmonic Minor Diatonic Triads", HarmonicMinorDiatonicTriads.createFlashCards()),
+      new FlashCardGroup("Harmonic Major Diatonic Triads", HarmonicMajorDiatonicTriads.createFlashCards()),
+      new FlashCardGroup("Double Harmonic Major Diatonic Triads", DoubleHarmonicMajorDiatonicTriads.createFlashCards()),
+      new FlashCardGroup("Major Diatonic Seventh Chords", MajorDiatonicSeventhChords.createFlashCards()),
+      new FlashCardGroup("Natural Minor Diatonic Seventh Chords", NaturalMinorDiatonicSeventhChords.createFlashCards()),
+      new FlashCardGroup("Melodic Minor Diatonic Seventh Chords", MelodicMinorDiatonicSeventhChords.createFlashCards()),
+      new FlashCardGroup("Harmonic Minor Diatonic Seventh Chords", HarmonicMinorDiatonicSeventhChords.createFlashCards()),
+      new FlashCardGroup("Harmonic Major Diatonic Seventh Chords", HarmonicMajorDiatonicSeventhChords.createFlashCards()),
+      new FlashCardGroup("Double Harmonic Major Diatonic Seventh Chords", DoubleHarmonicMajorDiatonicSeventhChords.createFlashCards()),
+      new FlashCardGroup("Major Scale Degree Modes", MajorScaleDegreeModes.createFlashCards()),
+      new FlashCardGroup("Chord Notes", ChordNotes.createFlashCards()),
+      new FlashCardGroup("Scale Notes", ScaleNotes.createFlashCards()),
+      new FlashCardGroup("Scale Chords", ScaleChords.createFlashCards()),
+      new FlashCardGroup("Scale Characteristics", ScaleCharacteristics.createFlashCards()),
+      new FlashCardGroup("Scale Families", ScaleFamilies.createFlashCards()),
+      new FlashCardGroup("Scale Degree Names", ScaleDegreeNames.createFlashCards()),
+      new FlashCardGroup("Chord Families", ChordFamilies.createFlashCards()),
+      new FlashCardGroup("Chord Family Definitions", ChordFamilyDefinitions.createFlashCards()),
+      new FlashCardGroup("Available Chord Tensions", AvailableChordTensions.createFlashCards())
     ];
 
     this.flashCards = Utils.flattenArrays<FlashCard>(this.flashCardGroups.map(g => g.flashCards));
@@ -129,7 +128,7 @@ class App extends React.Component<{}, IAppState> {
             </div>
           </Paper>
           <div className="right-pane">
-            {!this.state.currentComponentOverride ? <StudyFlashCards key={this.state.currentFlashCardGroupIndex} flashCardGroup={currentFlashCardGroup} /> : null}
+            {!this.state.currentComponentOverride ? <StudyFlashCards key={this.state.currentFlashCardGroupIndex} title={currentFlashCardGroup.name} flashCards={currentFlashCardGroup.flashCards} /> : null}
             {this.state.currentComponentOverride ? React.createElement(this.state.currentComponentOverride) : null}
           </div>
         </div>
@@ -143,6 +142,10 @@ class App extends React.Component<{}, IAppState> {
     {
       name: "Random Chord Generator",
       component: RandomChordGenerator
+    },
+    {
+      name: "Guitar Notes",
+      component: GuitarNotes
     }
   ];
 

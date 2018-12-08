@@ -32,6 +32,19 @@ export function range(minValue: number, maxValue: number): Array<number> {
 }
 
 // TODO: add tests
+export function clamp(value: number, minValue: number, maxValue: number): number {
+  precondition(maxValue >= minValue);
+
+  if (value < minValue) {
+    return minValue;
+  } else if (value > maxValue) {
+    return maxValue;
+  } else {
+    return value;
+  }
+}
+
+// TODO: add tests
 export function randomInt(minValue: number, maxValue: number): number {
   precondition(Number.isInteger(minValue));
   precondition(Number.isInteger(maxValue));

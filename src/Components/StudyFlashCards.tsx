@@ -4,35 +4,35 @@ import { Button, Card, CardContent, Typography, Checkbox } from '@material-ui/co
 
 import * as Utils from '../Utils';
 import { FlashCard, FlashCardSide } from "../FlashCard";
-import { FlashCardGroup } from "../FlashCardGroup";
 import { QuizStats } from "../QuizStats";
 import { QuestionStats } from "../QuestionStats";
 
 export interface IStudyFlashCardsProps {
-  flashCardGroup: FlashCardGroup;
+  title: string;
+  flashCards: FlashCard[];
 }
 export interface IStudyFlashCardsState {
   currentFlashCardIndex: number;
   quizStats: QuizStats<string>;
   enabledFlashCardIndices: number[];
   showDetailedStats: boolean;
-  isShowingAnswer: boolean;
+  isShowingBackSide: boolean;
 }
 export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStudyFlashCardsState> {
   constructor(props: IStudyFlashCardsProps) {
     super(props);
 
     const quizStats = new QuizStats<string>(
-      this.props.flashCardGroup.flashCards.map(_ => new QuestionStats<string>(0, 0))
+      this.props.flashCards.map(_ => new QuestionStats<string>(0, 0))
     );
-    const enabledFlashCardIndices = this.props.flashCardGroup.flashCards.map((_, i) => i);
+    const enabledFlashCardIndices = this.props.flashCards.map((_, i) => i);
 
     this.state = {
-      currentFlashCardIndex: this.getNextFlashCardIndex(this.props.flashCardGroup, quizStats, enabledFlashCardIndices, -1),
+      currentFlashCardIndex: this.getNextFlashCardIndex(quizStats, enabledFlashCardIndices, -1),
       quizStats: quizStats,
       enabledFlashCardIndices: enabledFlashCardIndices,
       showDetailedStats: false,
-      isShowingAnswer: false
+      isShowingBackSide: false
     };
   }
 
@@ -45,7 +45,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
       }
     }
 
-    const flashCardCheckboxes = this.props.flashCardGroup.flashCards
+    const flashCardCheckboxes = this.props.flashCards
       .map((fc, i) => {
         const isChecked = this.state.enabledFlashCardIndices.indexOf(i) >= 0;
         const isEnabled = !isChecked || (this.state.enabledFlashCardIndices.length > 1);
@@ -58,12 +58,12 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
       }, this);
     const questionStats = this.state.quizStats.questionStats
       .map((qs, i) => {
-        const renderedFlashCard = renderFlashCardSide(this.props.flashCardGroup.flashCards[i].frontSide);
+        const renderedFlashCard = renderFlashCardSide(this.props.flashCards[i].frontSide);
         return <p key={i}>{renderedFlashCard} {qs.numCorrectGuesses} / {qs.numIncorrectGuesses}</p>;
       }, this);
     
-    const renderedCurrentFlashCard = renderFlashCardSide(this.props.flashCardGroup.flashCards[this.state.currentFlashCardIndex].frontSide);
-    const renderedCurrentAnswer = renderFlashCardSide(this.props.flashCardGroup.flashCards[this.state.currentFlashCardIndex].backSide);
+    const renderedCurrentFlashCard = renderFlashCardSide(this.props.flashCards[this.state.currentFlashCardIndex].frontSide);
+    const renderedCurrentAnswer = renderFlashCardSide(this.props.flashCards[this.state.currentFlashCardIndex].backSide);
 
     const numGuesses = this.state.quizStats.numCorrectGuesses + this.state.quizStats.numIncorrectGuesses;
     const percentCorrect = (this.state.quizStats.numIncorrectGuesses !== 0)
@@ -74,7 +74,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
       <Card>
         <CardContent>
           <Typography gutterBottom={true} variant="h5" component="h2">
-            {this.props.flashCardGroup.name}
+            {this.props.title}
           </Typography>
 
           <div>{flashCardCheckboxes}</div>
@@ -86,9 +86,9 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
 
           {this.state.showDetailedStats ? questionStats : null}
 
-          <div style={{fontSize: "2em", textAlign: "center", padding: "1em 0"}}>{!this.state.isShowingAnswer ? renderedCurrentFlashCard : renderedCurrentAnswer}</div>
+          <div style={{fontSize: "2em", textAlign: "center", padding: "1em 0"}}>{!this.state.isShowingBackSide ? renderedCurrentFlashCard : renderedCurrentAnswer}</div>
 
-          <Button onClick={event => this.flipFlashCard()}>Flip</Button>
+          <Button onClick={event => this.flipFlashCard()}>Flip to {this.state.isShowingBackSide ? "Front" : "Back"}</Button>
           <Button onClick={event => this.moveToNextFlashCard()}>Next</Button>
         </CardContent>
       </Card>
@@ -96,7 +96,6 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
   }
   
   private getNextFlashCardIndex(
-    flashCardGroup: FlashCardGroup,
     quizStats: QuizStats<string>,
     enabledFlashCardIndices: number[],
     currentFlashCardIndex: number
@@ -141,7 +140,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
     this.setState({
       quizStats: newQuizStats,
       currentFlashCardIndex: this.getNextFlashCardIndex(
-        this.props.flashCardGroup, newQuizStats, this.state.enabledFlashCardIndices, this.state.currentFlashCardIndex
+        newQuizStats, this.state.enabledFlashCardIndices, this.state.currentFlashCardIndex
       )
     });
   }
@@ -170,7 +169,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
     const stateDelta: any = { enabledFlashCardIndices: newEnabledFlashCardIndices };
     if (wasFlashCardEnabled && (this.state.currentFlashCardIndex === questionIndex)) {
       stateDelta.currentFlashCardIndex = this.getNextFlashCardIndex(
-        this.props.flashCardGroup, this.state.quizStats, newEnabledFlashCardIndices, this.state.currentFlashCardIndex
+        this.state.quizStats, newEnabledFlashCardIndices, this.state.currentFlashCardIndex
       );
     }
 
@@ -178,14 +177,14 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
   }
 
   private flipFlashCard() {
-    this.setState({ isShowingAnswer: !this.state.isShowingAnswer });
+    this.setState({ isShowingBackSide: !this.state.isShowingBackSide });
   }
   private moveToNextFlashCard() {
     this.setState({
       currentFlashCardIndex: this.getNextFlashCardIndex(
-        this.props.flashCardGroup, this.state.quizStats, this.state.enabledFlashCardIndices, this.state.currentFlashCardIndex
+        this.state.quizStats, this.state.enabledFlashCardIndices, this.state.currentFlashCardIndex
       ),
-      isShowingAnswer: false
+      isShowingBackSide: false
     });
   }
 }
