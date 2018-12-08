@@ -4,6 +4,7 @@ import { Button, Card, CardContent, Typography, Checkbox } from '@material-ui/co
 
 import * as Utils from '../Utils';
 import { FlashCard, FlashCardSide } from "../FlashCard";
+import { renderFlashCardSide } from "./FlashCard";
 import { QuizStats } from "../QuizStats";
 import { QuestionStats } from "../QuestionStats";
 
@@ -37,14 +38,6 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
   }
 
   public render(): JSX.Element {
-    const renderFlashCardSide = (flashCardSide: FlashCardSide): JSX.Element => {
-      if (typeof(flashCardSide) === 'string') {
-        return <span>{flashCardSide}</span>;
-      } else {
-        return flashCardSide();
-      }
-    }
-
     const flashCardCheckboxes = this.props.flashCards
       .map((fc, i) => {
         const isChecked = this.state.enabledFlashCardIndices.indexOf(i) >= 0;

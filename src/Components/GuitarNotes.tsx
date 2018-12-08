@@ -1,13 +1,16 @@
 import * as React from 'react';
-import { Card, CardContent, Typography, Button, Checkbox, TextField } from '@material-ui/core';
+import { Card, CardContent, Typography, Button, TextField } from '@material-ui/core';
 
 import * as Utils from '../Utils';
 import { GuitarFretboard } from './GuitarFretboard';
+import { FlashCard } from 'src/FlashCard';
+import { renderFlashCardSide } from "./FlashCard";
 
 export interface IGuitarNotesState {
   currentStringIndex: number;
   currentFretNumber: number;
   maxFret: number;
+  isShowingFront: boolean;
 }
 export class GuitarNotes extends React.Component<{}, IGuitarNotesState> {
   public GUITAR_STRING_COUNT = 6;
@@ -16,11 +19,24 @@ export class GuitarNotes extends React.Component<{}, IGuitarNotesState> {
     super(props);
 
     const maxFret = 11;
-    this.state = Object.assign({ maxFret: maxFret }, this.getNextStringAndFret(maxFret));
+    this.state = Object.assign(
+      { maxFret: maxFret, isShowingFront: true },
+      this.getNextStringAndFret(maxFret)
+    );
   }
 
   public render(): JSX.Element {
     const currentNoteName = this.stringNotes[this.state.currentStringIndex][this.state.currentFretNumber];
+    const flashCard = new FlashCard(
+      () => (
+        <GuitarFretboard
+          width={300} height={100}
+          noteStringIndex={this.state.currentStringIndex}
+          noteFretNumber={this.state.currentFretNumber}
+        />
+      ),
+      currentNoteName
+    );
 
     return (
       <Card>
@@ -42,13 +58,12 @@ export class GuitarNotes extends React.Component<{}, IGuitarNotesState> {
             />
           </div>
 
-          <GuitarFretboard
-            width={300} height={100}
-            noteStringIndex={this.state.currentStringIndex}
-            noteFretNumber={this.state.currentFretNumber}
-          />
-          <div style={{textAlign: "center", fontSize: "2em"}}>{currentNoteName}</div>
+          {this.state.isShowingFront
+            ? <div style={{textAlign: "center", fontSize: "2em"}}>{renderFlashCardSide(flashCard.frontSide)}</div>
+            : <div style={{textAlign: "center", fontSize: "2em", height: 100}}>{renderFlashCardSide(flashCard.backSide)}</div>
+          }
           
+          <Button onClick={event => this.flipFlashCard()} variant="outlined" color="primary">Flip</Button>
           <Button onClick={event => this.moveToNextNote()} variant="outlined" color="primary">Next</Button>
         </CardContent>
       </Card>
@@ -61,8 +76,12 @@ export class GuitarNotes extends React.Component<{}, IGuitarNotesState> {
       currentFretNumber: Utils.randomInt(0, maxFret)
     };
   }
+
+  private flipFlashCard() {
+    this.setState({ isShowingFront: !this.state.isShowingFront });
+  }
   private moveToNextNote() {
-    this.setState(this.getNextStringAndFret(this.state.maxFret));
+    this.setState(Object.assign({ isShowingFront: true }, this.getNextStringAndFret(this.state.maxFret)));
   }
 
   private onMaxFretTextChange(newValue: string) {

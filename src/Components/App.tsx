@@ -34,6 +34,7 @@ import * as ChordFamilyDefinitions from "./Quizzes/ChordFamilyDefinitions";
 import * as AvailableChordTensions from "./Quizzes/AvailableChordTensions";
 import { RandomChordGenerator } from "./RandomChordGenerator";
 import { GuitarNotes } from "./GuitarNotes";
+import { PianoNotes } from "./PianoNotes";
 import { FlashCard } from 'src/FlashCard';
 import { FlashCardGroup } from 'src/FlashCardGroup';
 import { StudyFlashCards } from './StudyFlashCards';
@@ -146,6 +147,10 @@ class App extends React.Component<{}, IAppState> {
     {
       name: "Guitar Notes",
       component: GuitarNotes
+    },
+    {
+      name: "Piano Notes",
+      component: PianoNotes
     }
   ];
 
