@@ -15,6 +15,10 @@ export function precondition(condition: boolean) {
   assert(condition);
 }
 
+export function mod(n: number, m: number): number {
+  return ((n % m) + m) % m;
+}
+
 // TODO: add tests
 export function range(minValue: number, maxValue: number): Array<number> {
   precondition(Number.isInteger(minValue));
@@ -52,6 +56,11 @@ export function randomInt(minValue: number, maxValue: number): number {
 
   const numValues = 1 + (maxValue - minValue);
   return Math.floor(numValues * Math.random());
+}
+
+// TODO: add tests
+export function randomBoolean(): boolean {
+  return (Math.round(Math.random()) === 1) ? true : false;
 }
 
 // TODO: add tests

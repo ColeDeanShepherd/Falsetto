@@ -6,6 +6,31 @@ import { GuitarFretboard } from './GuitarFretboard';
 import { FlashCard } from 'src/FlashCard';
 import { renderFlashCardSide } from "./FlashCard";
 
+export function createFlashCards(): FlashCard[] {
+  const stringNotes = [
+    ["E", "F", "F#/Gb", "G", "G#/Ab", "A", "A#/Bb", "B", "C", "C#/Db", "D", "D#/Eb"], // low E string
+    ["A", "A#/Bb", "B", "C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb", "G", "G#/Ab"], // A string
+    ["D", "D#/Eb", "E", "F", "F#/Gb", "G", "G#/Ab", "A", "A#/Bb", "B", "C", "C#/Db"], // D string
+    ["G", "G#/Ab", "A", "A#/Bb", "B", "C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb"], // G string
+    ["B", "C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb", "G", "G#/Ab", "A", "A#/Bb"], // B string
+    ["E", "F", "F#/Gb", "G", "G#/Ab", "A", "A#/Bb", "B", "C", "C#/Db", "D", "D#/Eb"], // high E string
+  ];
+  return Utils.flattenArrays(stringNotes
+    .map((notes, stringIndex) => notes
+      .map((_, fretNumber) => new FlashCard(
+        () => (
+          <GuitarFretboard
+            width={300} height={100}
+            noteStringIndex={stringIndex}
+            noteFretNumber={fretNumber}
+          />
+        ),
+        stringNotes[stringIndex][fretNumber]
+      ))
+    )
+  );
+}
+
 export interface IGuitarNotesState {
   currentStringIndex: number;
   currentFretNumber: number;

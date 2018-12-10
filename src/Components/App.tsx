@@ -33,11 +33,14 @@ import * as ChordFamilies from "./Quizzes/ChordFamilies";
 import * as ChordFamilyDefinitions from "./Quizzes/ChordFamilyDefinitions";
 import * as AvailableChordTensions from "./Quizzes/AvailableChordTensions";
 import { RandomChordGenerator } from "./RandomChordGenerator";
-import { GuitarNotes } from "./GuitarNotes";
-import { PianoNotes } from "./PianoNotes";
+import * as GuitarNotes from "./GuitarNotes";
+import * as PianoNotes from "./PianoNotes";
+import * as SheetMusicNotes from "./SheetMusicNotes";
+import * as NoteDurations from "./Quizzes/NoteDurations";
 import { FlashCard } from 'src/FlashCard';
 import { FlashCardGroup } from 'src/FlashCardGroup';
 import { StudyFlashCards } from './StudyFlashCards';
+import * as Overview from "./Quizzes/TheJazzPianoSite/TheBasics/Overview"
 
 export interface IAppState {
   currentFlashCardGroupIndex: number;
@@ -74,7 +77,12 @@ class App extends React.Component<{}, IAppState> {
       new FlashCardGroup("Scale Degree Names", ScaleDegreeNames.createFlashCards()),
       new FlashCardGroup("Chord Families", ChordFamilies.createFlashCards()),
       new FlashCardGroup("Chord Family Definitions", ChordFamilyDefinitions.createFlashCards()),
-      new FlashCardGroup("Available Chord Tensions", AvailableChordTensions.createFlashCards())
+      new FlashCardGroup("Available Chord Tensions", AvailableChordTensions.createFlashCards()),
+      new FlashCardGroup("Piano Notes", PianoNotes.createFlashCards()),
+      new FlashCardGroup("Guitar Notes", GuitarNotes.createFlashCards()),
+      new FlashCardGroup("Sheet Music Notes", SheetMusicNotes.createFlashCards()),
+      new FlashCardGroup("Note Durations", NoteDurations.createFlashCards()),
+      new FlashCardGroup("Overview", Overview.createFlashCards())
     ];
 
     this.flashCards = Utils.flattenArrays<FlashCard>(this.flashCardGroups.map(g => g.flashCards));
@@ -143,14 +151,6 @@ class App extends React.Component<{}, IAppState> {
     {
       name: "Random Chord Generator",
       component: RandomChordGenerator
-    },
-    {
-      name: "Guitar Notes",
-      component: GuitarNotes
-    },
-    {
-      name: "Piano Notes",
-      component: PianoNotes
     }
   ];
 

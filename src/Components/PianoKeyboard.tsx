@@ -17,8 +17,8 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
       .map(i => <rect key={i} x={getWhiteKeyX(i)} y={0} width={whiteKeyWidth} height={whiteKeyHeight} fill="white" stroke="black" stroke-width="2"/>);
 
     const blackKeyCount = 5;
-    const blackKeyWidth = 0.75 * whiteKeyWidth;
-    const blackKeyHeight = this.props.height / 2;
+    const blackKeyWidth = 0.66 * whiteKeyWidth;
+    const blackKeyHeight = 0.6 * this.props.height;
     const getBlackKeyX = (i: number) => {
       const leftWhiteKeyI = (i <= 1) ? i : (i + 1);
       const leftWhiteKeyX = getWhiteKeyX(leftWhiteKeyI);
