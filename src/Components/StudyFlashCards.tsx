@@ -16,8 +16,10 @@ export interface IStudyFlashCardsState {
   currentFlashCardIndex: number;
   quizStats: QuizStats<string>;
   enabledFlashCardIndices: number[];
+  showConfiguration: boolean;
   showDetailedStats: boolean;
   isShowingBackSide: boolean;
+  invertFlashCards: boolean;
 }
 export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStudyFlashCardsState> {
   constructor(props: IStudyFlashCardsProps) {
@@ -32,8 +34,10 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
       currentFlashCardIndex: this.getNextFlashCardIndex(quizStats, enabledFlashCardIndices, -1),
       quizStats: quizStats,
       enabledFlashCardIndices: enabledFlashCardIndices,
+      showConfiguration: false,
       showDetailedStats: false,
-      isShowingBackSide: false
+      isShowingBackSide: false,
+      invertFlashCards: false
     };
   }
 
@@ -55,8 +59,14 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
         return <p key={i}>{renderedFlashCard} {qs.numCorrectGuesses} / {qs.numIncorrectGuesses}</p>;
       }, this);
     
-    const renderedCurrentFlashCard = renderFlashCardSide(this.props.flashCards[this.state.currentFlashCardIndex].frontSide);
-    const renderedCurrentAnswer = renderFlashCardSide(this.props.flashCards[this.state.currentFlashCardIndex].backSide);
+    let renderedFlashCardFrontSide = renderFlashCardSide(this.props.flashCards[this.state.currentFlashCardIndex].frontSide);
+    let renderedFlashCardBackSide = renderFlashCardSide(this.props.flashCards[this.state.currentFlashCardIndex].backSide);
+
+    if (this.state.invertFlashCards) {
+      const tmp = renderedFlashCardFrontSide;
+      renderedFlashCardFrontSide = renderedFlashCardBackSide;
+      renderedFlashCardBackSide = tmp;
+    }
 
     const numGuesses = this.state.quizStats.numCorrectGuesses + this.state.quizStats.numIncorrectGuesses;
     const percentCorrect = (this.state.quizStats.numIncorrectGuesses !== 0)
@@ -70,7 +80,8 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
             {this.props.title}
           </Typography>
 
-          <div>{flashCardCheckboxes}</div>
+          <Button onClick={event => this.toggleConfiguration()}>Configuration</Button>
+          {this.state.showConfiguration ? <div><div><Checkbox checked={this.state.invertFlashCards} onChange={event => this.toggleFlipFlashCards()} /> Invert Flash Cards</div>{flashCardCheckboxes}</div> : null}
 
           <p>
             <span style={{paddingRight: "2em"}}>{this.state.quizStats.numCorrectGuesses} / {this.state.quizStats.numIncorrectGuesses}</span>
@@ -79,7 +90,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
 
           {this.state.showDetailedStats ? questionStats : null}
 
-          <div style={{fontSize: "2em", textAlign: "center", padding: "1em 0"}}>{!this.state.isShowingBackSide ? renderedCurrentFlashCard : renderedCurrentAnswer}</div>
+          <div style={{fontSize: "2em", textAlign: "center", padding: "1em 0"}}>{!this.state.isShowingBackSide ? renderedFlashCardFrontSide : renderedFlashCardBackSide}</div>
 
           <Button onClick={event => this.flipFlashCard()}>Flip to {this.state.isShowingBackSide ? "Front" : "Back"}</Button>
           <Button onClick={event => this.moveToNextFlashCard()}>Next</Button>
@@ -148,6 +159,9 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
     });
   }
 
+  private toggleConfiguration() {
+    this.setState({ showConfiguration: !this.state.showConfiguration });
+  }
   private toggleFlashCardEnabled(questionIndex: number) {
     const newEnabledFlashCardIndices = this.state.enabledFlashCardIndices.slice();
     const i = newEnabledFlashCardIndices.indexOf(questionIndex);
@@ -168,6 +182,9 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
 
     this.setState(stateDelta);
   }
+  private toggleFlipFlashCards() {
+    this.setState({ invertFlashCards: !this.state.invertFlashCards });
+  }
 
   private flipFlashCard() {
     this.setState({ isShowingBackSide: !this.state.isShowingBackSide });
@@ -177,7 +194,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
       currentFlashCardIndex: this.getNextFlashCardIndex(
         this.state.quizStats, this.state.enabledFlashCardIndices, this.state.currentFlashCardIndex
       ),
-      isShowingBackSide: false
+      isShowingBackSide: this.state.invertFlashCards
     });
   }
 }

@@ -32,6 +32,8 @@ import * as ScaleDegreeNames from "./Quizzes/ScaleDegreeNames";
 import * as ChordFamilies from "./Quizzes/ChordFamilies";
 import * as ChordFamilyDefinitions from "./Quizzes/ChordFamilyDefinitions";
 import * as AvailableChordTensions from "./Quizzes/AvailableChordTensions";
+import * as DiatonicTriads from "./Quizzes/DiatonicTriads";
+import * as DiatonicSeventhChords from "./Quizzes/DiatonicSeventhChords";
 import { RandomChordGenerator } from "./RandomChordGenerator";
 import * as GuitarNotes from "./GuitarNotes";
 import * as PianoNotes from "./PianoNotes";
@@ -82,7 +84,9 @@ class App extends React.Component<{}, IAppState> {
       new FlashCardGroup("Guitar Notes", GuitarNotes.createFlashCards()),
       new FlashCardGroup("Sheet Music Notes", SheetMusicNotes.createFlashCards()),
       new FlashCardGroup("Note Durations", NoteDurations.createFlashCards()),
-      new FlashCardGroup("Overview", Overview.createFlashCards())
+      new FlashCardGroup("Overview", Overview.createFlashCards()),
+      new FlashCardGroup("Diatonic Triads", DiatonicTriads.createFlashCards()),
+      new FlashCardGroup("Diatonic Seventh Chords", DiatonicSeventhChords.createFlashCards())
     ];
 
     this.flashCards = Utils.flattenArrays<FlashCard>(this.flashCardGroups.map(g => g.flashCards));

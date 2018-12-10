@@ -4,13 +4,13 @@ import { FlashCard } from "../../FlashCard";
 
 export function createFlashCards(): FlashCard[] {
   return [
-    new FlashCard("1", "major"),
-    new FlashCard("2", "minor"),
-    new FlashCard("3", "minor"),
-    new FlashCard("4", "major"),
-    new FlashCard("5", "major"),
-    new FlashCard("6", "minor"),
-    new FlashCard("7", "diminished"),
+    new FlashCard("Major 1 Chord Type", "major"),
+    new FlashCard("Major 2 Chord Type", "minor"),
+    new FlashCard("Major 3 Chord Type", "minor"),
+    new FlashCard("Major 4 Chord Type", "major"),
+    new FlashCard("Major 5 Chord Type", "major"),
+    new FlashCard("Major 6 Chord Type", "minor"),
+    new FlashCard("Major 7 Chord Type", "diminished"),
   ];
 }
 export function createQuiz(): Quiz {
