@@ -21,7 +21,7 @@ import * as ChordFamilyDefinitions from "./Quizzes/ChordFamilyDefinitions";
 import * as AvailableChordTensions from "./Quizzes/AvailableChordTensions";
 import * as DiatonicTriads from "./Quizzes/DiatonicTriads";
 import * as DiatonicSeventhChords from "./Quizzes/DiatonicSeventhChords";
-import { RandomChordGenerator } from "./RandomChordGenerator";
+import * as RandomChordGenerator from "./RandomChordGenerator";
 import * as GuitarNotes from "./GuitarNotes";
 import * as PianoNotes from "./PianoNotes";
 import * as SheetMusicNotes from "./SheetMusicNotes";
@@ -60,7 +60,8 @@ class App extends React.Component<{}, IAppState> {
       new FlashCardGroup("Note Durations", NoteDurations.createFlashCards()),
       new FlashCardGroup("Overview", Overview.createFlashCards()),
       new FlashCardGroup("Diatonic Triads", DiatonicTriads.createFlashCards()),
-      new FlashCardGroup("Diatonic Seventh Chords", DiatonicSeventhChords.createFlashCards())
+      new FlashCardGroup("Diatonic Seventh Chords", DiatonicSeventhChords.createFlashCards()),
+      new FlashCardGroup("Random Chords", RandomChordGenerator.createFlashCards())
     ];
 
     this.flashCards = Utils.flattenArrays<FlashCard>(this.flashCardGroups.map(g => g.flashCards));
@@ -125,12 +126,7 @@ class App extends React.Component<{}, IAppState> {
 
   private flashCards: FlashCard[];
   private flashCardGroups: FlashCardGroup[];
-  private componentOverrides = [
-    {
-      name: "Random Chord Generator",
-      component: RandomChordGenerator
-    }
-  ];
+  private componentOverrides: Array<{name: string, component: any}> = [];
 
   private changeQuiz(quizIndex: number) {
     this.setState({ currentFlashCardGroupIndex: quizIndex, currentComponentOverride: null });

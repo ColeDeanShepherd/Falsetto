@@ -2,6 +2,58 @@ import * as React from 'react';
 import { Card, CardContent, Typography, Button, Checkbox } from '@material-ui/core';
 
 import * as Utils from '../Utils';
+import { FlashCard } from 'src/FlashCard';
+
+export function createFlashCards(): FlashCard[] {
+  const chordRoots = [
+    'Cb',
+    'C',
+    'C#',
+    'Db',
+    'D',
+    'Eb',
+    'E',
+    'F',
+    'F#',
+    'Gb',
+    'G',
+    'Ab',
+    'A',
+    'Bb',
+    'B'
+  ];
+  const chordTypes = [
+    "major",
+    "minor",
+    "diminished",
+    "augmented",
+    "sus2",
+    "sus4",
+    "lydian",
+    "sus4b5",
+    "phryg",
+    "maj7",
+    "7",
+    "-7",
+    "-7b5",
+    "dim7",
+    "+Ma7",
+    "-Ma7",
+    "+7",
+    "dimMa7",
+    "-7#5",
+    "quartal",
+    "quartal aug.",
+    "G+4Q"
+  ];
+  const randomChords = Utils.flattenArrays<string>(chordRoots
+    .map(chordRoot => chordTypes
+      .map(chordType => chordRoot + chordType)
+    )
+  );
+  return randomChords
+    .map(chord => new FlashCard(chord, chord));
+}
 
 export interface IRandomChordGeneratorState {
   currentChordType: string;
