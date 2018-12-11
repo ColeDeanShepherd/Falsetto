@@ -45,40 +45,46 @@ class App extends React.Component<{}, IAppState> {
         flashCardGroups: [
           new FlashCardGroup("Piano Notes", PianoNotes.createFlashCards()),
           new FlashCardGroup("Guitar Notes", GuitarNotes.createFlashCards()),
-          new FlashCardGroup("Sheet Music Notes", SheetMusicNotes.createFlashCards()),
           new FlashCardGroup("Note Durations", NoteDurations.createFlashCards()),
+          new FlashCardGroup("Sheet Music Notes", SheetMusicNotes.createFlashCards())
         ]
       },
       {
         title: "Intervals",
         flashCardGroups: [
-          new FlashCardGroup("Interval Names To Half Steps", IntervalNamesToHalfSteps.createFlashCards()),
           new FlashCardGroup("Interval Quality Symbols To Qualities", IntervalQualitySymbolsToQualities.createFlashCards()),
           new FlashCardGroup("Generic Intervals To Interval Qualities", GenericIntervalsToIntervalQualities.createFlashCards()),
+          new FlashCardGroup("Interval Names To Half Steps", IntervalNamesToHalfSteps.createFlashCards()),
           new FlashCardGroup("Intervals To Consonance Dissonance", IntervalsToConsonanceDissonance.createFlashCards())
         ]
       },
       {
         title: "Scales",
         flashCardGroups: [
-          new FlashCardGroup("Scale Degree Modes", ScaleDegreeModes.createFlashCards()),
+          new FlashCardGroup("Scale Degree Names", ScaleDegreeNames.createFlashCards()),
           new FlashCardGroup("Scale Notes", ScaleNotes.createFlashCards()),
+          new FlashCardGroup("Scale Degree Modes", ScaleDegreeModes.createFlashCards()),
           new FlashCardGroup("Scale Chords", ScaleChords.createFlashCards()),
-          new FlashCardGroup("Scale Characteristics", ScaleCharacteristics.createFlashCards()),
           new FlashCardGroup("Scale Families", ScaleFamilies.createFlashCards()),
-          new FlashCardGroup("Scale Degree Names", ScaleDegreeNames.createFlashCards())
+          new FlashCardGroup("Scale Characteristics", ScaleCharacteristics.createFlashCards()),
         ]
       },
       {
         title: "Chords",
         flashCardGroups: [
-          new FlashCardGroup("Chord Notes", ChordNotes.createFlashCards()),
-          new FlashCardGroup("Chord Families", ChordFamilies.createFlashCards()),
           new FlashCardGroup("Chord Family Definitions", ChordFamilyDefinitions.createFlashCards()),
+          new FlashCardGroup("Chord Families", ChordFamilies.createFlashCards()),
+          new FlashCardGroup("Chord Notes", ChordNotes.createFlashCards()),
           new FlashCardGroup("Available Chord Tensions", AvailableChordTensions.createFlashCards()),
           new FlashCardGroup("Diatonic Triads", DiatonicTriads.createFlashCards()),
           new FlashCardGroup("Diatonic Seventh Chords", DiatonicSeventhChords.createFlashCards()),
-          new FlashCardGroup("Random Chords", RandomChordGenerator.createFlashCards())
+          new FlashCardGroup("Random Chord Generator", RandomChordGenerator.createFlashCards())
+        ]
+      },
+      {
+        title: "The Jazz Piano Site",
+        flashCardGroups: [
+          new FlashCardGroup("Overview", Overview.createFlashCards())
         ]
       }
     ];
