@@ -1,5 +1,4 @@
 # To-Do
-* Convert "Major Scale Degree Modes" to generic "Scale Degree Modes"
 * Use proper symbols.
 * Only allow 1 guess per question
 * Zip question & answer arrays

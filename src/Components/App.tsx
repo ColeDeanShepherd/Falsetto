@@ -9,7 +9,7 @@ import * as IntervalNamesToHalfSteps from './Quizzes/IntervalNamesToHalfSteps';
 import * as IntervalQualitySymbolsToQualities from './Quizzes/IntervalQualitySymbolsToQualities';
 import * as GenericIntervalsToIntervalQualities from "./Quizzes/GenericIntervalsToIntervalQualities";
 import * as IntervalsToConsonanceDissonance from "./Quizzes/IntervalsToConsonanceDissonance";
-import * as MajorScaleDegreeModes from "./Quizzes/MajorScaleDegreeModes";
+import * as ScaleDegreeModes from "./Quizzes/ScaleDegreeModes";
 import * as ChordNotes from "./Quizzes/ChordNotes";
 import * as ScaleNotes from "./Quizzes/ScaleNotes";
 import * as ScaleChords from "./Quizzes/ScaleChords";
@@ -61,7 +61,7 @@ class App extends React.Component<{}, IAppState> {
       {
         title: "Scales",
         flashCardGroups: [
-          new FlashCardGroup("Major Scale Degree Modes", MajorScaleDegreeModes.createFlashCards()),
+          new FlashCardGroup("Scale Degree Modes", ScaleDegreeModes.createFlashCards()),
           new FlashCardGroup("Scale Notes", ScaleNotes.createFlashCards()),
           new FlashCardGroup("Scale Chords", ScaleChords.createFlashCards()),
           new FlashCardGroup("Scale Characteristics", ScaleCharacteristics.createFlashCards()),
