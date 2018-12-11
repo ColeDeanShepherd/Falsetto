@@ -8,20 +8,7 @@ import { Quiz as QuizComponent } from "./Quiz";
 import * as IntervalNamesToHalfSteps from './Quizzes/IntervalNamesToHalfSteps';
 import * as IntervalQualitySymbolsToQualities from './Quizzes/IntervalQualitySymbolsToQualities';
 import * as GenericIntervalsToIntervalQualities from "./Quizzes/GenericIntervalsToIntervalQualities";
-import * as IntervalQualitiesToGenericIntervals from "./Quizzes/IntervalQualitiesToGenericIntervals";
 import * as IntervalsToConsonanceDissonance from "./Quizzes/IntervalsToConsonanceDissonance";
-import * as MajorDiatonicTriads from "./Quizzes/MajorDiatonicTriads";
-import * as NaturalMinorDiatonicTriads from "./Quizzes/NaturalMinorDiatonicTriads";
-import * as MelodicMinorDiatonicTriads from "./Quizzes/MelodicMinorDiatonicTriads";
-import * as HarmonicMinorDiatonicTriads from "./Quizzes/HarmonicMinorDiatonicTriads";
-import * as HarmonicMajorDiatonicTriads from "./Quizzes/HarmonicMajorDiatonicTriads";
-import * as DoubleHarmonicMajorDiatonicTriads from "./Quizzes/DoubleHarmonicMajorDiatonicTriads";
-import * as MajorDiatonicSeventhChords from "./Quizzes/MajorDiatonicSeventhChords";
-import * as NaturalMinorDiatonicSeventhChords from "./Quizzes/NaturalMinorDiatonicSeventhChords";
-import * as MelodicMinorDiatonicSeventhChords from "./Quizzes/MelodicMinorDiatonicSeventhChords";
-import * as HarmonicMinorDiatonicSeventhChords from "./Quizzes/HarmonicMinorDiatonicSeventhChords";
-import * as HarmonicMajorDiatonicSeventhChords from "./Quizzes/HarmonicMajorDiatonicSeventhChords";
-import * as DoubleHarmonicMajorDiatonicSeventhChords from "./Quizzes/DoubleHarmonicMajorDiatonicSeventhChords";
 import * as MajorScaleDegreeModes from "./Quizzes/MajorScaleDegreeModes";
 import * as ChordNotes from "./Quizzes/ChordNotes";
 import * as ScaleNotes from "./Quizzes/ScaleNotes";
@@ -56,20 +43,7 @@ class App extends React.Component<{}, IAppState> {
       new FlashCardGroup("Interval Names To Half Steps", IntervalNamesToHalfSteps.createFlashCards()),
       new FlashCardGroup("Interval Quality Symbols To Qualities", IntervalQualitySymbolsToQualities.createFlashCards()),
       new FlashCardGroup("Generic Intervals To Interval Qualities", GenericIntervalsToIntervalQualities.createFlashCards()),
-      new FlashCardGroup("Interval Qualities To Generic Intervals", IntervalQualitiesToGenericIntervals.createFlashCards()),
       new FlashCardGroup("Intervals To Consonance Dissonance", IntervalsToConsonanceDissonance.createFlashCards()),
-      new FlashCardGroup("Major Diatonic Triads", MajorDiatonicTriads.createFlashCards()),
-      new FlashCardGroup("Natural Minor Diatonic Triads", NaturalMinorDiatonicTriads.createFlashCards()),
-      new FlashCardGroup("Melodic Minor Diatonic Triads", MelodicMinorDiatonicTriads.createFlashCards()),
-      new FlashCardGroup("Harmonic Minor Diatonic Triads", HarmonicMinorDiatonicTriads.createFlashCards()),
-      new FlashCardGroup("Harmonic Major Diatonic Triads", HarmonicMajorDiatonicTriads.createFlashCards()),
-      new FlashCardGroup("Double Harmonic Major Diatonic Triads", DoubleHarmonicMajorDiatonicTriads.createFlashCards()),
-      new FlashCardGroup("Major Diatonic Seventh Chords", MajorDiatonicSeventhChords.createFlashCards()),
-      new FlashCardGroup("Natural Minor Diatonic Seventh Chords", NaturalMinorDiatonicSeventhChords.createFlashCards()),
-      new FlashCardGroup("Melodic Minor Diatonic Seventh Chords", MelodicMinorDiatonicSeventhChords.createFlashCards()),
-      new FlashCardGroup("Harmonic Minor Diatonic Seventh Chords", HarmonicMinorDiatonicSeventhChords.createFlashCards()),
-      new FlashCardGroup("Harmonic Major Diatonic Seventh Chords", HarmonicMajorDiatonicSeventhChords.createFlashCards()),
-      new FlashCardGroup("Double Harmonic Major Diatonic Seventh Chords", DoubleHarmonicMajorDiatonicSeventhChords.createFlashCards()),
       new FlashCardGroup("Major Scale Degree Modes", MajorScaleDegreeModes.createFlashCards()),
       new FlashCardGroup("Chord Notes", ChordNotes.createFlashCards()),
       new FlashCardGroup("Scale Notes", ScaleNotes.createFlashCards()),

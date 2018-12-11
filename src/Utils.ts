@@ -134,3 +134,21 @@ export function flattenArrays<T>(arrays: any): T[] {
     []
   );
 }
+
+// TODO: add tests
+export function arrayJoin<T>(array: T[], separator: T) {
+  if (array.length === 0) { return []; }
+
+  const result = new Array<T>(array.length + (array.length - 1));
+
+  for (let i = 0; i < array.length; i++) {
+    const baseResultI = 2 * i;
+    result[baseResultI] = array[i];
+
+    if (i < (array.length - 1)) {
+      result[baseResultI + 1] = separator;
+    }
+  }
+
+  return result;
+}
