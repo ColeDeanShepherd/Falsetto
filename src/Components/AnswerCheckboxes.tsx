@@ -39,15 +39,10 @@ export class AnswerCheckboxes extends React.Component<IAnswerCheckboxesProps, IA
   }
   
   private toggleAnswerChecked(answerIndex: number) {
-    const newCheckedAnswerIndices = this.state.checkedAnswerIndices.slice();
-    const i = newCheckedAnswerIndices.indexOf(answerIndex);
-    const isAnswerChecked = i >= 0;
-
-    if (!isAnswerChecked) {
-      newCheckedAnswerIndices.push(answerIndex);
-    } else {
-      newCheckedAnswerIndices.splice(i, 1);
-    }
+    const newCheckedAnswerIndices = Utils.toggleArrayElement(
+      this.state.checkedAnswerIndices,
+      answerIndex
+    );
 
     this.setState({ checkedAnswerIndices: newCheckedAnswerIndices });
   }

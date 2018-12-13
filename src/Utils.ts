@@ -152,3 +152,23 @@ export function arrayJoin<T>(array: T[], separator: T) {
 
   return result;
 }
+
+// TODO: add tests
+export function toggleArrayElement<T>(array: T[], element: T): T[] {
+  const newArray = array.slice();
+  const i = newArray.indexOf(element);
+  const wasElementInArray = i >= 0;
+
+  if (!wasElementInArray) {
+    newArray.push(element);
+  } else {
+    newArray.splice(i, 1);
+  }
+
+  return newArray;
+}
+
+// TODO: add tests
+export function arrayContains<T>(array: T[], element: T): boolean {
+  return array.indexOf(element) >= 0;
+}

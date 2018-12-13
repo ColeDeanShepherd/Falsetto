@@ -14,7 +14,7 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
     const whiteKeyHeight = this.props.height;
     const getWhiteKeyX = (i: number) => i * whiteKeyWidth;
     const whiteKeys = Utils.range(0, whiteKeyCount - 1)
-      .map(i => <rect key={i} x={getWhiteKeyX(i)} y={0} width={whiteKeyWidth} height={whiteKeyHeight} fill="white" stroke="black" stroke-width="2"/>);
+      .map(i => <rect key={i} x={getWhiteKeyX(i)} y={0} width={whiteKeyWidth} height={whiteKeyHeight} fill="white" stroke="black" strokeWidth="2"/>);
 
     const blackKeyCount = 5;
     const blackKeyWidth = 0.66 * whiteKeyWidth;
@@ -28,7 +28,7 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
     };
     const blackKeys = Utils.range(0, blackKeyCount - 1)
       .map(i => {
-        return <rect key={i} x={getBlackKeyX(i)} y={0} width={blackKeyWidth} height={blackKeyHeight} fill="black" stroke-width="0" />;
+        return <rect key={i} x={getBlackKeyX(i)} y={0} width={blackKeyWidth} height={blackKeyHeight} fill="black" strokeWidth="0" />;
       });
     
     const noteDotRadius = blackKeyWidth / 3;

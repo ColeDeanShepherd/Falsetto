@@ -1,4 +1,8 @@
 # To-Do
+* Sheet Music Intervals
+* Ear Training
+* Flip scale notes flash cards.
+* Flip chord notes flash cards.
 * Use proper symbols.
 * Only allow 1 guess per question
 * Zip question & answer arrays

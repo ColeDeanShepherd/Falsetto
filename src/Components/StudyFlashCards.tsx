@@ -10,10 +10,12 @@ import { FlashCard, FlashCardSide, invertFlashCards } from "../FlashCard";
 import { renderFlashCardSide } from "./FlashCard";
 import { QuizStats } from "../QuizStats";
 import { QuestionStats } from "../QuestionStats";
+import { DefaultFlashCardMultiSelect } from './DefaultFlashCardMultiSelect';
 
 export interface IStudyFlashCardsProps {
   title: string;
   flashCards: FlashCard[];
+  renderFlashCardMultiSelect?: (selectedFlashCardIndices: number[], onChange: (newValue: number[]) => void) => JSX.Element;
 }
 export interface IStudyFlashCardsState {
   currentFlashCardIndex: number;
@@ -43,33 +45,6 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
 
   public render(): JSX.Element {
     const flashCards = !this.state.invertFlashCards ? this.props.flashCards : this.state.invertedFlashCards;
-    const flashCardCheckboxTableRows = flashCards
-      .map((fc, i) => {
-        const isChecked = this.state.enabledFlashCardIndices.indexOf(i) >= 0;
-        const isEnabled = !isChecked || (this.state.enabledFlashCardIndices.length > 1);
-
-        return (
-          <TableRow key={i}>
-            <TableCell><Checkbox checked={isChecked} onChange={event => this.toggleFlashCardEnabled(i)} disabled={!isEnabled} /></TableCell>
-            <TableCell>{renderFlashCardSide(fc.frontSide)}</TableCell>
-            <TableCell>{renderFlashCardSide(fc.backSide)}</TableCell>
-          </TableRow >
-        );
-      }, this);
-    const flashCardCheckboxes = (
-      <Table className="table">
-        <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell>Front</TableCell>
-            <TableCell>Back</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {flashCardCheckboxTableRows}
-        </TableBody>
-      </Table>
-    );
     const questionStats = this.state.quizStats.questionStats
       .map((qs, i) => {
         const renderedFlashCard = renderFlashCardSide(flashCards[i].frontSide);
@@ -92,7 +67,13 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
           </Typography>
 
           <Button onClick={event => this.toggleConfiguration()}>Configuration</Button>
-          {this.state.showConfiguration ? <div><div><Checkbox checked={this.state.invertFlashCards} onChange={event => this.toggleInvertFlashCards()} /> Invert Flash Cards</div>{flashCardCheckboxes}</div> : null}
+          {this.state.showConfiguration ? (
+            <div>
+              <div><Checkbox checked={this.state.invertFlashCards} onChange={event => this.toggleInvertFlashCards()} /> Invert Flash Cards</div>
+              <p>{flashCards.length} Flash Cards</p>
+              {this.renderFlashCardMultiSelect(flashCards)}
+            </div>
+          ) : null}
 
           <p>
             <span style={{paddingRight: "2em"}}>{this.state.quizStats.numCorrectGuesses} / {this.state.quizStats.numIncorrectGuesses}</span>
@@ -108,6 +89,17 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
         </CardContent>
       </Card>
     );
+  }
+  private renderFlashCardMultiSelect(flashCards: FlashCard[]): JSX.Element {
+    const onEnabledFlashCardIndicesChange = this.onEnabledFlashCardIndicesChange.bind(this);
+
+    return this.props.renderFlashCardMultiSelect
+      ? this.props.renderFlashCardMultiSelect(this.state.enabledFlashCardIndices, onEnabledFlashCardIndicesChange)
+      : <DefaultFlashCardMultiSelect
+          flashCards={flashCards}
+          selectedFlashCardIndices={this.state.enabledFlashCardIndices}
+          onChange={onEnabledFlashCardIndicesChange}
+        />;
   }
   
   private getInitialStateForFlashCards(flashCards: FlashCard[]) {
@@ -132,13 +124,13 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
     }
 
     const enabledFlashCardStats = quizStats.questionStats
-      .filter((_, i) => enabledFlashCardIndices.indexOf(i) >= 0);
+      .filter((_, i) => Utils.arrayContains(enabledFlashCardIndices, i));
     const minFlashCardAskedCount = Utils.min(
       enabledFlashCardStats,
       qs => qs.numCorrectGuesses + qs.numIncorrectGuesses
     );
-    let leastCorrectFlashCardIndices = enabledFlashCardStats
-      .map((qs, i) => (qs.numCorrectGuesses === minFlashCardAskedCount)
+    let leastCorrectFlashCardIndices = quizStats.questionStats
+      .map((qs, i) => (qs.numCorrectGuesses === minFlashCardAskedCount) && Utils.arrayContains(enabledFlashCardIndices, i)
         ? i
         : -1
       )
@@ -185,21 +177,12 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
   private toggleConfiguration() {
     this.setState({ showConfiguration: !this.state.showConfiguration });
   }
-  private toggleFlashCardEnabled(questionIndex: number) {
-    const newEnabledFlashCardIndices = this.state.enabledFlashCardIndices.slice();
-    const i = newEnabledFlashCardIndices.indexOf(questionIndex);
-    const wasFlashCardEnabled = i >= 0;
+  private onEnabledFlashCardIndicesChange(newValue: number[]) {
+    const stateDelta: any = { enabledFlashCardIndices: newValue };
 
-    if (!wasFlashCardEnabled) {
-      newEnabledFlashCardIndices.push(questionIndex);
-    } else if (this.state.enabledFlashCardIndices.length > 1) {
-      newEnabledFlashCardIndices.splice(i, 1);
-    }
-
-    const stateDelta: any = { enabledFlashCardIndices: newEnabledFlashCardIndices };
-    if (wasFlashCardEnabled && (this.state.currentFlashCardIndex === questionIndex)) {
+    if (newValue.indexOf(this.state.currentFlashCardIndex) < 0) {
       stateDelta.currentFlashCardIndex = this.getNextFlashCardIndex(
-        this.state.quizStats, newEnabledFlashCardIndices, this.state.currentFlashCardIndex
+        this.state.quizStats, newValue, this.state.currentFlashCardIndex
       );
     }
 
