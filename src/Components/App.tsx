@@ -27,6 +27,7 @@ import * as PianoNotes from "./PianoNotes";
 import * as SheetMusicNotes from "./SheetMusicNotes";
 import * as NoteDurations from "./Quizzes/NoteDurations";
 import * as KeyAccidentalCounts from "./Quizzes/KeyAccidentalCounts";
+import * as KeyAccidentalNotes from "./Quizzes/KeyAccidentalNotes";
 import { FlashCard } from 'src/FlashCard';
 import { FlashCardGroup } from 'src/FlashCardGroup';
 import { StudyFlashCards } from './StudyFlashCards';
@@ -71,9 +72,10 @@ class App extends React.Component<{}, IAppState> {
         ]
       },
       {
-        title: "keys",
+        title: "Keys",
         flashCardGroups: [
-          new FlashCardGroup("Key Accidental Counts", KeyAccidentalCounts.createFlashCards(), undefined)
+          new FlashCardGroup("Key Accidental Counts", KeyAccidentalCounts.createFlashCards(), undefined),
+          new FlashCardGroup("Key Accidental Notes", KeyAccidentalNotes.createFlashCards(), undefined)
         ]
       },
       {

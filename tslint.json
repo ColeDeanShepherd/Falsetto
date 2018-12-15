@@ -11,7 +11,8 @@
     "max-classes-per-file": false,
     "object-literal-shorthand": false,
     "comment-format": false,
-    "no-bitwise": false
+    "no-bitwise": false,
+    "jsx-boolean-value": false
   },
   "linterOptions": {
     "exclude": [

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Card, CardContent, Typography, Button, Checkbox, TableRow, TableCell, Table, TableHead, TableBody } from '@material-ui/core';
+import { Card, CardContent, Typography, Button, Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid } from '@material-ui/core';
 
 import * as Utils from '../Utils';
 import { FlashCard } from 'src/FlashCard';
@@ -83,7 +83,7 @@ export class RandomChordGeneratorFlashCardMultiSelect extends React.Component<IR
         <TableHead>
           <TableRow>
             <TableCell />
-            <TableCell>Front</TableCell>
+            <TableCell>Chord Root</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -109,7 +109,7 @@ export class RandomChordGeneratorFlashCardMultiSelect extends React.Component<IR
         <TableHead>
           <TableRow>
             <TableCell />
-            <TableCell>Front</TableCell>
+            <TableCell>Chord Type</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -119,10 +119,10 @@ export class RandomChordGeneratorFlashCardMultiSelect extends React.Component<IR
     );
 
     return (
-      <div>
-        {chordRootCheckboxes}
-        {chordTypeCheckboxes}
-      </div>
+      <Grid container spacing={32}>
+        <Grid item xs={6}>{chordRootCheckboxes}</Grid>
+        <Grid item xs={6}>{chordTypeCheckboxes}</Grid>
+      </Grid>
     );
   }
 
