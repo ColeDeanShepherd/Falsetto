@@ -29,6 +29,7 @@ import * as NoteDurations from "./Quizzes/NoteDurations";
 import * as KeyAccidentalCounts from "./Quizzes/KeyAccidentalCounts";
 import * as KeyAccidentalNotes from "./Quizzes/KeyAccidentalNotes";
 import * as IntervalNotes from "./Quizzes/IntervalNotes";
+import * as IntervalEarTraining from "./Quizzes/IntervalEarTraining";
 import { FlashCard } from 'src/FlashCard';
 import { FlashCardGroup } from 'src/FlashCardGroup';
 import { StudyFlashCards } from './StudyFlashCards';
@@ -59,7 +60,8 @@ class App extends React.Component<{}, IAppState> {
           new FlashCardGroup("Generic Intervals To Interval Qualities", GenericIntervalsToIntervalQualities.createFlashCards()),
           new FlashCardGroup("Interval Names To Half Steps", IntervalNamesToHalfSteps.createFlashCards()),
           new FlashCardGroup("Intervals To Consonance Dissonance", IntervalsToConsonanceDissonance.createFlashCards()),
-          IntervalNotes.createFlashCardGroup()
+          IntervalNotes.createFlashCardGroup(),
+          IntervalEarTraining.createFlashCardGroup()
         ]
       },
       {
