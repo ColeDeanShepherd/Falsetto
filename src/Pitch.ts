@@ -1,5 +1,10 @@
 import { PitchLetter, getPitchLetterMidiNoteNumberOffset } from './PitchLetter';
 import * as Utils from './Utils';
+import { VerticalDirection } from "./VerticalDirection";
+
+function isValidIntervalType(num: number) {
+  return Number.isInteger(num) && (num > 0);
+}
 
 class Pitch {
   public static createFromMidiNumber(midiNumber: number): Pitch {
@@ -47,6 +52,66 @@ class Pitch {
     );
   }
 
+  public static addInterval(
+    pitch: Pitch,
+    direction: VerticalDirection,
+    intervalType: number,
+    intervalQuality: number
+  ) {
+    Utils.precondition(isValidIntervalType(intervalType));
+    Utils.precondition(Number.isInteger(intervalQuality));
+
+    const offsetSign = direction as number;
+    
+    const halfStepsOffset = offsetSign * Pitch.intervalToHalfSteps(intervalType, intervalQuality);
+    const newMidiNumber = pitch.midiNumber + halfStepsOffset;
+
+    const result = Pitch.createFromLineOrSpaceOnStaffNumber(
+      pitch.lineOrSpaceOnStaffNumber + (offsetSign * (intervalType - 1)),
+      pitch.signedAccidental
+    );
+    result.signedAccidental += newMidiNumber - result.midiNumber;
+
+    return result;
+  }
+
+  public static intervalToHalfSteps(intervalType: number, intervalQuality: number) {
+    Utils.precondition(isValidIntervalType(intervalType));
+    Utils.precondition(Number.isInteger(intervalQuality));
+    
+    const octaveCount = Math.floor(intervalType / 8);
+    const simpleIntervalType = 1 + Utils.mod((intervalType - 1), 7);
+
+    let simpleIntervalHalfSteps: number;
+    switch (simpleIntervalType) {
+      case 1:
+        simpleIntervalHalfSteps = 0;
+        break;
+      case 2:
+        simpleIntervalHalfSteps = 2;
+        break;
+      case 3:
+        simpleIntervalHalfSteps = 4;
+        break;
+      case 4:
+        simpleIntervalHalfSteps = 5;
+        break;
+      case 5:
+        simpleIntervalHalfSteps = 7;
+        break;
+      case 6:
+        simpleIntervalHalfSteps = 9;
+        break;
+      case 7:
+        simpleIntervalHalfSteps = 11;
+        break;
+      default:
+        throw new Error(`Invalid simple interval type: ${simpleIntervalType}`);
+    }
+
+    return (12 * octaveCount) + simpleIntervalHalfSteps + intervalQuality;
+  }
+
   public constructor(
     public letter: PitchLetter,
     public signedAccidental: number,
@@ -77,6 +142,9 @@ class Pitch {
 
     const accidentalCharacter = (this.signedAccidental > 0) ? "#" : "b";
     return accidentalCharacter.repeat(Math.abs(this.signedAccidental));
+  }
+  public toString(includeOctaveNumber: boolean = true): string {
+    return PitchLetter[this.letter] + this.getAccidentalString() + (includeOctaveNumber ? this.octaveNumber.toString() : "");
   }
 }
 

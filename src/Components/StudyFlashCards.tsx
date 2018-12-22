@@ -16,6 +16,7 @@ export interface IStudyFlashCardsProps {
   title: string;
   flashCards: FlashCard[];
   renderFlashCardMultiSelect?: (selectedFlashCardIndices: number[], onChange: (newValue: number[]) => void) => JSX.Element;
+  enableInvertFlashCards?: boolean;
 }
 export interface IStudyFlashCardsState {
   currentFlashCardIndex: number;
@@ -69,7 +70,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
           <Button onClick={event => this.toggleConfiguration()}>Configuration</Button>
           {this.state.showConfiguration ? (
             <div>
-              <div><Checkbox checked={this.state.invertFlashCards} onChange={event => this.toggleInvertFlashCards()} /> Invert Flash Cards</div>
+              {this.props.enableInvertFlashCards ? <div><Checkbox checked={this.state.invertFlashCards} onChange={event => this.toggleInvertFlashCards()} /> Invert Flash Cards</div> : null}
               <p>{flashCards.length} Flash Cards</p>
               {this.renderFlashCardMultiSelect(flashCards)}
             </div>

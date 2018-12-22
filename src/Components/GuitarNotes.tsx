@@ -3,7 +3,7 @@ import { Card, CardContent, Typography, Button, TextField } from '@material-ui/c
 
 import * as Utils from '../Utils';
 import { GuitarFretboard } from './GuitarFretboard';
-import { FlashCard } from 'src/FlashCard';
+import { FlashCard } from '../FlashCard';
 import { renderFlashCardSide } from "./FlashCard";
 
 export function createFlashCards(): FlashCard[] {

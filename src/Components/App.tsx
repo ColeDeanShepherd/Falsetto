@@ -28,6 +28,7 @@ import * as SheetMusicNotes from "./SheetMusicNotes";
 import * as NoteDurations from "./Quizzes/NoteDurations";
 import * as KeyAccidentalCounts from "./Quizzes/KeyAccidentalCounts";
 import * as KeyAccidentalNotes from "./Quizzes/KeyAccidentalNotes";
+import * as IntervalNotes from "./Quizzes/IntervalNotes";
 import { FlashCard } from 'src/FlashCard';
 import { FlashCardGroup } from 'src/FlashCardGroup';
 import { StudyFlashCards } from './StudyFlashCards';
@@ -45,55 +46,56 @@ class App extends React.Component<{}, IAppState> {
       {
         title: "Notes",
         flashCardGroups: [
-          new FlashCardGroup("Piano Notes", PianoNotes.createFlashCards(), undefined),
-          new FlashCardGroup("Guitar Notes", GuitarNotes.createFlashCards(), undefined),
-          new FlashCardGroup("Note Durations", NoteDurations.createFlashCards(), undefined),
-          new FlashCardGroup("Sheet Music Notes", SheetMusicNotes.createFlashCards(), undefined)
+          new FlashCardGroup("Piano Notes", PianoNotes.createFlashCards()),
+          new FlashCardGroup("Guitar Notes", GuitarNotes.createFlashCards()),
+          new FlashCardGroup("Note Durations", NoteDurations.createFlashCards()),
+          new FlashCardGroup("Sheet Music Notes", SheetMusicNotes.createFlashCards())
         ]
       },
       {
         title: "Intervals",
         flashCardGroups: [
-          new FlashCardGroup("Interval Quality Symbols To Qualities", IntervalQualitySymbolsToQualities.createFlashCards(), undefined),
-          new FlashCardGroup("Generic Intervals To Interval Qualities", GenericIntervalsToIntervalQualities.createFlashCards(), undefined),
-          new FlashCardGroup("Interval Names To Half Steps", IntervalNamesToHalfSteps.createFlashCards(), undefined),
-          new FlashCardGroup("Intervals To Consonance Dissonance", IntervalsToConsonanceDissonance.createFlashCards(), undefined)
+          new FlashCardGroup("Interval Quality Symbols To Qualities", IntervalQualitySymbolsToQualities.createFlashCards()),
+          new FlashCardGroup("Generic Intervals To Interval Qualities", GenericIntervalsToIntervalQualities.createFlashCards()),
+          new FlashCardGroup("Interval Names To Half Steps", IntervalNamesToHalfSteps.createFlashCards()),
+          new FlashCardGroup("Intervals To Consonance Dissonance", IntervalsToConsonanceDissonance.createFlashCards()),
+          IntervalNotes.createFlashCardGroup()
         ]
       },
       {
         title: "Scales",
         flashCardGroups: [
-          new FlashCardGroup("Scale Degree Names", ScaleDegreeNames.createFlashCards(), undefined),
-          new FlashCardGroup("Scale Notes", ScaleNotes.createFlashCards(), undefined),
-          new FlashCardGroup("Scale Degree Modes", ScaleDegreeModes.createFlashCards(), undefined),
-          new FlashCardGroup("Scale Chords", ScaleChords.createFlashCards(), undefined),
-          new FlashCardGroup("Scale Families", ScaleFamilies.createFlashCards(), undefined),
-          new FlashCardGroup("Scale Characteristics", ScaleCharacteristics.createFlashCards(), undefined),
+          new FlashCardGroup("Scale Degree Names", ScaleDegreeNames.createFlashCards()),
+          new FlashCardGroup("Scale Notes", ScaleNotes.createFlashCards()),
+          new FlashCardGroup("Scale Degree Modes", ScaleDegreeModes.createFlashCards()),
+          new FlashCardGroup("Scale Chords", ScaleChords.createFlashCards()),
+          new FlashCardGroup("Scale Families", ScaleFamilies.createFlashCards()),
+          new FlashCardGroup("Scale Characteristics", ScaleCharacteristics.createFlashCards()),
         ]
       },
       {
         title: "Keys",
         flashCardGroups: [
-          new FlashCardGroup("Key Accidental Counts", KeyAccidentalCounts.createFlashCards(), undefined),
-          new FlashCardGroup("Key Accidental Notes", KeyAccidentalNotes.createFlashCards(), undefined)
+          new FlashCardGroup("Key Accidental Counts", KeyAccidentalCounts.createFlashCards()),
+          new FlashCardGroup("Key Accidental Notes", KeyAccidentalNotes.createFlashCards())
         ]
       },
       {
         title: "Chords",
         flashCardGroups: [
-          new FlashCardGroup("Chord Family Definitions", ChordFamilyDefinitions.createFlashCards(), undefined),
-          new FlashCardGroup("Chord Families", ChordFamilies.createFlashCards(), undefined),
-          new FlashCardGroup("Chord Notes", ChordNotes.createFlashCards(), undefined),
-          new FlashCardGroup("Available Chord Tensions", AvailableChordTensions.createFlashCards(), undefined),
-          new FlashCardGroup("Diatonic Triads", DiatonicTriads.createFlashCards(), undefined),
-          new FlashCardGroup("Diatonic Seventh Chords", DiatonicSeventhChords.createFlashCards(), undefined),
+          new FlashCardGroup("Chord Family Definitions", ChordFamilyDefinitions.createFlashCards()),
+          new FlashCardGroup("Chord Families", ChordFamilies.createFlashCards()),
+          new FlashCardGroup("Chord Notes", ChordNotes.createFlashCards()),
+          new FlashCardGroup("Available Chord Tensions", AvailableChordTensions.createFlashCards()),
+          new FlashCardGroup("Diatonic Triads", DiatonicTriads.createFlashCards()),
+          new FlashCardGroup("Diatonic Seventh Chords", DiatonicSeventhChords.createFlashCards()),
           RandomChordGenerator.createFlashCardGroup()
         ]
       },
       {
         title: "The Jazz Piano Site",
         flashCardGroups: [
-          new FlashCardGroup("Overview", Overview.createFlashCards(), undefined)
+          new FlashCardGroup("Overview", Overview.createFlashCards())
         ]
       }
     ];
@@ -167,7 +169,8 @@ class App extends React.Component<{}, IAppState> {
                 key={this.state.currentFlashCardGroupIndex}
                 title={currentFlashCardGroup.name}
                 flashCards={currentFlashCardGroup.flashCards}
-                renderFlashCardMultiSelect={currentFlashCardGroup.renderFlashCardMultiSelect} />
+                renderFlashCardMultiSelect={currentFlashCardGroup.renderFlashCardMultiSelect}
+                enableInvertFlashCards={currentFlashCardGroup.enableInvertFlashCards} />
             ) : null}
             {this.state.currentComponentOverride ? React.createElement(this.state.currentComponentOverride) : null}
           </div>

@@ -2,8 +2,8 @@ import * as React from 'react';
 import { Card, CardContent, Typography, Button, Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid } from '@material-ui/core';
 
 import * as Utils from '../Utils';
-import { FlashCard } from 'src/FlashCard';
-import { FlashCardGroup } from 'src/FlashCardGroup';
+import { FlashCard } from '../FlashCard';
+import { FlashCardGroup } from '../FlashCardGroup';
 
 const chordRoots = [
   'Cb',
@@ -184,11 +184,12 @@ export function createFlashCardGroup(): FlashCardGroup {
     );
   };
   
-  return new FlashCardGroup(
+  const group = new FlashCardGroup(
     "Random Chord Generator",
-    flashCards,
-    renderFlashCardMultiSelect
+    flashCards
   );
+  group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
+  return group;
 }
 
 export interface IRandomChordGeneratorState {

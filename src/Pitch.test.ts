@@ -1,5 +1,6 @@
 import Pitch from './Pitch';
 import { PitchLetter } from './PitchLetter';
+import { VerticalDirection } from './VerticalDirection';
 
 test('midiNumber of C-1 is 0', () => {
   expect((new Pitch(PitchLetter.C, 0, -1)).midiNumber).toEqual(0);
@@ -59,4 +60,57 @@ test('createFromLineOrSpaceOnStaffNumber(33, 0) is A4', () => {
   expect(
     Pitch.createFromLineOrSpaceOnStaffNumber(33, 0).equals(new Pitch(PitchLetter.A, 0, 4))
   ).toBeTruthy();
+});
+
+test('addInterval(B3 - P1) is B3', () => {
+  expect(
+    Pitch.addInterval(
+      new Pitch(PitchLetter.B, 0, 3),
+      VerticalDirection.Down, 1, 0
+    ).toString()
+  )
+    .toEqual("B3");
+});
+test('addInterval(C4 + P5) is G4', () => {
+  expect(
+    Pitch.addInterval(
+      new Pitch(PitchLetter.C, 0, 4),
+      VerticalDirection.Up, 5, 0
+    ).toString()
+  )
+    .toEqual("G4");
+});
+test('addInterval(C4 - A4) is Gb3', () => {
+  expect(
+    Pitch.addInterval(
+      new Pitch(PitchLetter.C, 0, 4),
+      VerticalDirection.Down, 4, 1
+    ).toString()
+  )
+    .toEqual("Gb3");
+});
+test('addInterval(A2 + dd12) is Ebb4', () => {
+  expect(
+    Pitch.addInterval(
+      new Pitch(PitchLetter.A, 0, 2),
+      VerticalDirection.Up, 12, -2
+    ).toString()
+  )
+    .toEqual("Ebb4");
+});
+
+test('intervalToHalfSteps(unison) is 0', () => {
+  expect(Pitch.intervalToHalfSteps(1, 0)).toEqual(0);
+});
+test('intervalToHalfSteps(m2) is 1', () => {
+  expect(Pitch.intervalToHalfSteps(2, -1)).toEqual(1);
+});
+test('intervalToHalfSteps(d4) is 4', () => {
+  expect(Pitch.intervalToHalfSteps(4, -1)).toEqual(4);
+});
+test('intervalToHalfSteps(P8) is 12', () => {
+  expect(Pitch.intervalToHalfSteps(8, 0)).toEqual(12);
+});
+test('intervalToHalfSteps(d12) is 18', () => {
+  expect(Pitch.intervalToHalfSteps(12, -1)).toEqual(18);
 });
