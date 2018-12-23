@@ -1,5 +1,6 @@
 # To-Do
 * Add support for dynamically generated flash card decks
+* Share more code between interval recognition exercises.
 * Add guitar chord shapes
 * Add guitar scale shapes
 * Add guitar chord voicings

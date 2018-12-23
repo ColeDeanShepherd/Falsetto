@@ -28,7 +28,7 @@ export function createFlashCards(): FlashCard[] {
           pitch.signedAccidental = signedAccidental;
 
           const pitchAccidentalString = pitch.getAccidentalString();
-          const vexFlowPitchString = `${PitchLetter[pitch.letter].toLowerCase()}${pitchAccidentalString}/${pitch.octaveNumber}`;
+          const vexFlowPitchString = pitch.toVexFlowString();
           
           const isTrebleNote = (clef.name === "treble");
           const trebleNotes = [
@@ -59,7 +59,7 @@ export function createFlashCards(): FlashCard[] {
           }
 
           return new FlashCard(
-            () => (
+            () => (  
               <SheetMusicSingleNote
                 width={150} height={200}
                 trebleNotes={trebleNotes}

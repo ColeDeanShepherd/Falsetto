@@ -31,6 +31,7 @@ import * as KeyAccidentalNotes from "./Quizzes/KeyAccidentalNotes";
 import * as Interval2ndNotes from "./Quizzes/Interval2ndNotes";
 import * as IntervalNotes from "./Quizzes/IntervalNotes";
 import * as IntervalEarTraining from "./Quizzes/IntervalEarTraining";
+import * as SheetMusicIntervalRecognition from "./Quizzes/SheetMusicIntervalRecognition";
 import { FlashCard } from 'src/FlashCard';
 import { FlashCardGroup } from 'src/FlashCardGroup';
 import { StudyFlashCards } from './StudyFlashCards';
@@ -63,7 +64,8 @@ class App extends React.Component<{}, IAppState> {
           new FlashCardGroup("Intervals To Consonance Dissonance", IntervalsToConsonanceDissonance.createFlashCards()),
           Interval2ndNotes.createFlashCardGroup(),
           IntervalNotes.createFlashCardGroup(),
-          IntervalEarTraining.createFlashCardGroup()
+          IntervalEarTraining.createFlashCardGroup(),
+          SheetMusicIntervalRecognition.createFlashCardGroup()
         ]
       },
       {

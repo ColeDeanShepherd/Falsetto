@@ -1,6 +1,7 @@
 import { PitchLetter, getPitchLetterMidiNoteNumberOffset } from './PitchLetter';
 import * as Utils from './Utils';
 import { VerticalDirection } from "./VerticalDirection";
+import { Interval } from './Components/Quizzes/Interval';
 
 function isValidIntervalType(num: number) {
   return Number.isInteger(num) && (num > 0);
@@ -52,6 +53,30 @@ class Pitch {
     );
   }
 
+  public static getInterval(
+    pitch1: Pitch,
+    pitch2: Pitch
+  ): Interval {
+    let lowerPitch: Pitch;
+    let higherPitch: Pitch;
+
+    if (pitch1.midiNumber < pitch2.midiNumber) {
+      lowerPitch = pitch1;
+      higherPitch = pitch2;
+    } else {
+      lowerPitch = pitch2;
+      higherPitch = pitch1;
+    }
+
+    const intervalType = higherPitch.lineOrSpaceOnStaffNumber - lowerPitch.lineOrSpaceOnStaffNumber + 1;
+    const guessedPitch = Pitch.createFromLineOrSpaceOnStaffNumber(
+      lowerPitch.lineOrSpaceOnStaffNumber + intervalType - 1,
+      lowerPitch.signedAccidental
+    );
+    const higherPitchOffsetFromGuessedPitch = higherPitch.midiNumber - guessedPitch.midiNumber;
+
+    return new Interval(intervalType, higherPitchOffsetFromGuessedPitch);
+  }
   public static addInterval(
     pitch: Pitch,
     direction: VerticalDirection,
@@ -145,6 +170,10 @@ class Pitch {
   }
   public toString(includeOctaveNumber: boolean = true): string {
     return PitchLetter[this.letter] + this.getAccidentalString() + (includeOctaveNumber ? this.octaveNumber.toString() : "");
+  }
+  // TODO: add tests
+  public toVexFlowString(): string {
+    return `${PitchLetter[this.letter].toLowerCase()}${this.getAccidentalString()}/${this.octaveNumber}`;
   }
 }
 

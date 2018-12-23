@@ -99,6 +99,55 @@ test('addInterval(A2 + dd12) is Ebb4', () => {
     .toEqual("Ebb4");
 });
 
+test('getInterval(B3, B3) is P1', () => {
+  expect(
+    Pitch.getInterval(
+      new Pitch(PitchLetter.B, 0, 3),
+      new Pitch(PitchLetter.B, 0, 3)
+    )
+  )
+    .toEqual({
+      intervalType: 1,
+      intervalQuality: 0
+    });
+});
+test('getInterval(C4, G4) is P5', () => {
+  expect(
+    Pitch.getInterval(
+      new Pitch(PitchLetter.C, 0, 4),
+      new Pitch(PitchLetter.G, 0, 4)
+    )
+  )
+    .toEqual({
+      intervalType: 5,
+      intervalQuality: 0
+    });
+});
+test('getInterval(C4, Gb3) is A4', () => {
+  expect(
+    Pitch.getInterval(
+      new Pitch(PitchLetter.C, 0, 4),
+      new Pitch(PitchLetter.G, -1, 3)
+    )
+  )
+    .toEqual({
+      intervalType: 4,
+      intervalQuality: 1
+    });
+});
+test('getInterval(A2, Ebb4) is dd12', () => {
+  expect(
+    Pitch.getInterval(
+      new Pitch(PitchLetter.E, -2, 4),
+      new Pitch(PitchLetter.A, 0, 2)
+    )
+  )
+    .toEqual({
+      intervalType: 12,
+      intervalQuality: -2
+    });
+});
+
 test('intervalToHalfSteps(unison) is 0', () => {
   expect(Pitch.intervalToHalfSteps(1, 0)).toEqual(0);
 });
