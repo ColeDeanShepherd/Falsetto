@@ -172,3 +172,18 @@ export function toggleArrayElement<T>(array: T[], element: T): T[] {
 export function arrayContains<T>(array: T[], element: T): boolean {
   return array.indexOf(element) >= 0;
 }
+
+export function intervalQualityToNumber(intervalQuality: string): number {
+  switch (intervalQuality) {
+    case "P":
+    case "M":
+      return 0;
+    case "m":
+    case "d":
+      return -1;
+    case "A":
+      return 1;
+    default:
+      throw new Error(`Unknown interval quality: ${intervalQuality}`);
+  }
+}

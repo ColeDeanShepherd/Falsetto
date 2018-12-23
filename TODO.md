@@ -1,5 +1,10 @@
 # To-Do
+* Add support for dynamically generated flash card decks
+* Add guitar chord shapes
+* Add guitar scale shapes
+* Add guitar chord voicings
 * Make buttons stop jumping around.
+* Add interactive? circle of fifths
 * Chord voicings
 * Better configure screen for sheet music notes.
 * Add more note durations.

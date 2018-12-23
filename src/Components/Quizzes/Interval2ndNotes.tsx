@@ -223,8 +223,8 @@ export function createFlashCardGroup(): FlashCardGroup {
           );
           
           return new FlashCard(
-            rootNote.toString(true) + ", " + newPitch.toString(true),
-            interval
+            rootNote.toString(false) + " " + sign + " " + interval,
+            newPitch.toString(false)
           );
         })
       )
@@ -244,7 +244,7 @@ export function createFlashCardGroup(): FlashCardGroup {
   };
   
   const group = new FlashCardGroup(
-    "Interval Notes",
+    "Interval 2nd Notes",
     flashCards
   );
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;

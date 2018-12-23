@@ -28,6 +28,7 @@ import * as SheetMusicNotes from "./SheetMusicNotes";
 import * as NoteDurations from "./Quizzes/NoteDurations";
 import * as KeyAccidentalCounts from "./Quizzes/KeyAccidentalCounts";
 import * as KeyAccidentalNotes from "./Quizzes/KeyAccidentalNotes";
+import * as Interval2ndNotes from "./Quizzes/Interval2ndNotes";
 import * as IntervalNotes from "./Quizzes/IntervalNotes";
 import * as IntervalEarTraining from "./Quizzes/IntervalEarTraining";
 import { FlashCard } from 'src/FlashCard';
@@ -60,6 +61,7 @@ class App extends React.Component<{}, IAppState> {
           new FlashCardGroup("Generic Intervals To Interval Qualities", GenericIntervalsToIntervalQualities.createFlashCards()),
           new FlashCardGroup("Interval Names To Half Steps", IntervalNamesToHalfSteps.createFlashCards()),
           new FlashCardGroup("Intervals To Consonance Dissonance", IntervalsToConsonanceDissonance.createFlashCards()),
+          Interval2ndNotes.createFlashCardGroup(),
           IntervalNotes.createFlashCardGroup(),
           IntervalEarTraining.createFlashCardGroup()
         ]
@@ -154,7 +156,7 @@ class App extends React.Component<{}, IAppState> {
         <AppBar position="static" className="top-pane">
           <Toolbar>
             <Typography variant="h6" color="inherit">
-              Header
+              Ritornello
             </Typography>
           </Toolbar>
         </AppBar>
