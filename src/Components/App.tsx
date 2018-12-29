@@ -22,9 +22,9 @@ import * as AvailableChordTensions from "./Quizzes/AvailableChordTensions";
 import * as DiatonicTriads from "./Quizzes/DiatonicTriads";
 import * as DiatonicSeventhChords from "./Quizzes/DiatonicSeventhChords";
 import * as RandomChordGenerator from "./RandomChordGenerator";
-import * as GuitarNotes from "./GuitarNotes";
-import * as PianoNotes from "./PianoNotes";
-import * as SheetMusicNotes from "./SheetMusicNotes";
+import * as GuitarNotes from "./Quizzes/GuitarNotes";
+import * as PianoNotes from "./Quizzes/PianoNotes";
+import * as SheetMusicNotes from "./Quizzes/SheetMusicNotes";
 import * as NoteDurations from "./Quizzes/NoteDurations";
 import * as KeyAccidentalCounts from "./Quizzes/KeyAccidentalCounts";
 import * as KeyAccidentalNotes from "./Quizzes/KeyAccidentalNotes";
@@ -50,7 +50,7 @@ class App extends React.Component<{}, IAppState> {
       {
         title: "Notes",
         flashCardGroups: [
-          new FlashCardGroup("Piano Notes", PianoNotes.createFlashCards()),
+          PianoNotes.createFlashCardGroup(),
           GuitarNotes.createFlashCardGroup(),
           new FlashCardGroup("Note Durations", NoteDurations.createFlashCards()),
           new FlashCardGroup("Sheet Music Notes", SheetMusicNotes.createFlashCards())
@@ -178,6 +178,7 @@ class App extends React.Component<{}, IAppState> {
                 title={currentFlashCardGroup.name}
                 flashCards={currentFlashCardGroup.flashCards}
                 renderFlashCardMultiSelect={currentFlashCardGroup.renderFlashCardMultiSelect}
+                renderAnswerSelect={currentFlashCardGroup.renderAnswerSelect}
                 enableInvertFlashCards={currentFlashCardGroup.enableInvertFlashCards} />
             ) : null}
             {this.state.currentComponentOverride ? React.createElement(this.state.currentComponentOverride) : null}

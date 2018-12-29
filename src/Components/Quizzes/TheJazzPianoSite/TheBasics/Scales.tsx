@@ -1,5 +1,5 @@
 import { FlashCard } from "../../../../FlashCard";
-import * as PianoNotes from "../../../PianoNotes";
+import * as PianoNotes from "../../PianoNotes";
 
 export function createFlashCards(): FlashCard[] {
   return [

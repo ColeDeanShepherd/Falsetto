@@ -1,4 +1,5 @@
 # To-Do
+* Don't count answers as correct if user was incorrect on current flashcard.
 * Sheet music chord identification
 * Organize files
 * Add support for dynamically generated flash card decks

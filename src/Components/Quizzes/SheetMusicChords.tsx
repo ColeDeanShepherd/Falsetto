@@ -1,10 +1,10 @@
 import * as React from 'react';
 import * as Vex from 'vexflow';
 
-import * as Utils from '../Utils';
+import * as Utils from '../../Utils';
 import { Pitch } from 'src/Pitch';
 import { PitchLetter } from 'src/PitchLetter';
-import { VexFlowComponent } from './VexFlowComponent';
+import { VexFlowComponent } from '../VexFlowComponent';
 
 export interface ISheetMusicChordProps {
   width: number;

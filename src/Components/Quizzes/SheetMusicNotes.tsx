@@ -2,11 +2,11 @@ import * as React from 'react';
 import { Card, CardContent, Typography, Button } from '@material-ui/core';
 import * as Vex from 'vexflow';
 
-import * as Utils from '../Utils';
-import { VexFlowComponent } from "./VexFlowComponent";
-import { PitchLetter } from "../PitchLetter";
+import * as Utils from '../../Utils';
+import { VexFlowComponent } from "../VexFlowComponent";
+import { PitchLetter } from "../../PitchLetter";
 import { FlashCard } from 'src/FlashCard';
-import { renderFlashCardSide } from "./FlashCard";
+import { renderFlashCardSide } from "../FlashCard";
 import { Pitch } from 'src/Pitch';
 
 export function createFlashCards(): FlashCard[] {

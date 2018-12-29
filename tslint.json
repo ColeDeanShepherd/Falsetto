@@ -12,7 +12,8 @@
     "object-literal-shorthand": false,
     "comment-format": false,
     "no-bitwise": false,
-    "jsx-boolean-value": false
+    "jsx-boolean-value": false,
+    "variable-name": [true, "allow-leading-underscore"]
   },
   "linterOptions": {
     "exclude": [

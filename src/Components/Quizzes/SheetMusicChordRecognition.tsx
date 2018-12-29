@@ -6,7 +6,7 @@ import { FlashCard } from 'src/FlashCard';
 import { FlashCardGroup } from 'src/FlashCardGroup';
 import { Pitch, pitchRange } from 'src/Pitch';
 import { PitchLetter } from 'src/PitchLetter';
-import { SheetMusicChord } from 'src/Components/SheetMusicChord';
+import { SheetMusicChord } from 'src/Components/Quizzes/SheetMusicChords';
 import { Chord } from 'src/Chord';
 
 // TODO: fix bug with FACE chords

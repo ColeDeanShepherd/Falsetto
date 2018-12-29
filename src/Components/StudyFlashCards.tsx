@@ -1,26 +1,23 @@
 import * as React from 'react';
-import * as clone from 'clone';
 import {
-  Button, Card, CardContent, Typography, Checkbox, Table,
-  TableHead, TableBody, TableRow, TableCell
+  Button, Card, CardContent, Typography, Checkbox
 } from '@material-ui/core';
 
 import * as Utils from '../Utils';
-import { FlashCard, FlashCardSide, invertFlashCards } from "../FlashCard";
+import { FlashCard, invertFlashCards } from "../FlashCard";
 import { renderFlashCardSide } from "./FlashCard";
-import { QuizStats } from "../QuizStats";
-import { QuestionStats } from "../QuestionStats";
 import { DefaultFlashCardMultiSelect } from './DefaultFlashCardMultiSelect';
+import { StudyAlgorithm, RandomStudyAlgorithm, AnswerDifficulty, isAnswerDifficultyCorrect } from 'src/StudyAlgorithm';
 
 export interface IStudyFlashCardsProps {
   title: string;
   flashCards: FlashCard[];
   renderFlashCardMultiSelect?: (selectedFlashCardIndices: number[], onChange: (newValue: number[]) => void) => JSX.Element;
+  renderAnswerSelect?: (flashCard: FlashCard, onAnswer: (answerDifficulty: AnswerDifficulty) => void) => JSX.Element;
   enableInvertFlashCards?: boolean;
 }
 export interface IStudyFlashCardsState {
   currentFlashCardIndex: number;
-  quizStats: QuizStats<string>;
   enabledFlashCardIndices: number[];
   showConfiguration: boolean;
   showDetailedStats: boolean;
@@ -29,7 +26,7 @@ export interface IStudyFlashCardsState {
   invertedFlashCards: FlashCard[];
 }
 export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStudyFlashCardsState> {
-  constructor(props: IStudyFlashCardsProps) {
+  public constructor(props: IStudyFlashCardsProps) {
     super(props);
 
     this.state = Object.assign(
@@ -46,19 +43,25 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
 
   public render(): JSX.Element {
     const flashCards = !this.state.invertFlashCards ? this.props.flashCards : this.state.invertedFlashCards;
-    const questionStats = this.state.quizStats.questionStats
+    const questionStats = this.studyAlgorithm.quizStats.questionStats
       .map((qs, i) => {
         const renderedFlashCard = renderFlashCardSide(flashCards[i].frontSide);
         return <p key={i}>{renderedFlashCard} {qs.numCorrectGuesses} / {qs.numIncorrectGuesses}</p>;
       }, this);
     
-    const renderedFlashCardFrontSide = renderFlashCardSide(flashCards[this.state.currentFlashCardIndex].frontSide);
-    const renderedFlashCardBackSide = renderFlashCardSide(flashCards[this.state.currentFlashCardIndex].backSide);
+    const currentFlashCard = flashCards[this.state.currentFlashCardIndex];
+    const renderedFlashCardFrontSide = renderFlashCardSide(currentFlashCard.frontSide);
+    const renderedFlashCardBackSide = renderFlashCardSide(currentFlashCard.backSide);
 
-    const numGuesses = this.state.quizStats.numCorrectGuesses + this.state.quizStats.numIncorrectGuesses;
-    const percentCorrect = (this.state.quizStats.numIncorrectGuesses !== 0)
-      ? (this.state.quizStats.numCorrectGuesses / numGuesses)
+    const numGuesses = this.studyAlgorithm.quizStats.numCorrectGuesses + this.studyAlgorithm.quizStats.numIncorrectGuesses;
+    const percentCorrect = (this.studyAlgorithm.quizStats.numIncorrectGuesses !== 0)
+      ? (this.studyAlgorithm.quizStats.numCorrectGuesses / numGuesses)
       : 1;
+    
+    const boundOnAnswer = this.onAnswer.bind(this);
+    const renderAnswerSelect = (this.props.renderAnswerSelect)
+      ? this.props.renderAnswerSelect
+      : this.defaultRenderAnswerSelect.bind(this);
 
     return (
       <Card>
@@ -77,7 +80,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
           ) : null}
 
           <p>
-            <span style={{paddingRight: "2em"}}>{this.state.quizStats.numCorrectGuesses} / {this.state.quizStats.numIncorrectGuesses}</span>
+            <span style={{paddingRight: "2em"}}>{this.studyAlgorithm.quizStats.numCorrectGuesses} / {this.studyAlgorithm.quizStats.numIncorrectGuesses}</span>
             <span style={{paddingRight: "2em"}}>{(100 * percentCorrect).toFixed(2)}%</span>
           </p>
 
@@ -86,11 +89,17 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
           <div style={{fontSize: "2em", textAlign: "center", padding: "1em 0"}}>{!this.state.isShowingBackSide ? renderedFlashCardFrontSide : renderedFlashCardBackSide}</div>
 
           <Button onClick={event => this.flipFlashCard()}>Flip to {this.state.isShowingBackSide ? "Front" : "Back"}</Button>
-          <Button onClick={event => this.moveToNextFlashCard()}>Next</Button>
+          {renderAnswerSelect(currentFlashCard, boundOnAnswer)}
         </CardContent>
       </Card>
     );
   }
+
+  private studyAlgorithm: StudyAlgorithm = new RandomStudyAlgorithm();
+
+  private defaultRenderAnswerSelect (flashCard: FlashCard, onAnswer: (answerDifficulty: AnswerDifficulty) => void): JSX.Element {
+    return <Button onClick={event => onAnswer(AnswerDifficulty.Easy)}>Next</Button>;
+  };
   private renderFlashCardMultiSelect(flashCards: FlashCard[]): JSX.Element {
     const onEnabledFlashCardIndicesChange = this.onEnabledFlashCardIndicesChange.bind(this);
 
@@ -104,89 +113,32 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
   }
   
   private getInitialStateForFlashCards(flashCards: FlashCard[]) {
-    const quizStats = new QuizStats<string>(
-      flashCards.map(_ => new QuestionStats<string>(0, 0))
-    );
-    const enabledFlashCardIndices = flashCards.map((_, i) => i);
+    this.studyAlgorithm.reset(this.props.flashCards);
 
     return {
-      currentFlashCardIndex: this.getNextFlashCardIndex(quizStats, enabledFlashCardIndices, -1),
-      quizStats: quizStats,
-      enabledFlashCardIndices: enabledFlashCardIndices
+      currentFlashCardIndex: this.studyAlgorithm.getNextFlashCardIndex(),
+      enabledFlashCardIndices: this.studyAlgorithm.enabledFlashCardIndices
     };
   }
-  private getNextFlashCardIndex(
-    quizStats: QuizStats<string>,
-    enabledFlashCardIndices: number[],
-    currentFlashCardIndex: number
-  ): number {
-    if (enabledFlashCardIndices.length <= 1) {
-      return 0;
+
+  private onAnswer(answerDifficulty: AnswerDifficulty) {
+    this.studyAlgorithm.onAnswer(answerDifficulty);
+
+    if (isAnswerDifficultyCorrect(answerDifficulty)) {
+      this.moveToNextFlashCard();
     }
-
-    const enabledFlashCardStats = quizStats.questionStats
-      .filter((_, i) => Utils.arrayContains(enabledFlashCardIndices, i));
-    const minFlashCardAskedCount = Utils.min(
-      enabledFlashCardStats,
-      qs => qs.numCorrectGuesses + qs.numIncorrectGuesses
-    );
-    let leastCorrectFlashCardIndices = quizStats.questionStats
-      .map((qs, i) => (qs.numCorrectGuesses === minFlashCardAskedCount) && Utils.arrayContains(enabledFlashCardIndices, i)
-        ? i
-        : -1
-      )
-      .filter(x => x >= 0);
-    
-    if ((leastCorrectFlashCardIndices.length === 1) && (leastCorrectFlashCardIndices[0] === currentFlashCardIndex)) {
-      leastCorrectFlashCardIndices = enabledFlashCardStats.map((_, i) => i);
-    }
-    
-    let nextFlashCardIndex: number;
-
-    do {
-      const nextFlashCardIndexIndex = Utils.randomInt(0, leastCorrectFlashCardIndices.length - 1);
-      nextFlashCardIndex = leastCorrectFlashCardIndices[nextFlashCardIndexIndex];
-    } while(nextFlashCardIndex === currentFlashCardIndex);
-
-    return nextFlashCardIndex;
-  }
-
-  private onAnswerCorrect() {
-    const newQuizStats = clone(this.state.quizStats);
-
-    const questionStats = newQuizStats.questionStats[this.state.currentFlashCardIndex];
-    questionStats.numCorrectGuesses++;
-
-    this.setState({
-      quizStats: newQuizStats,
-      currentFlashCardIndex: this.getNextFlashCardIndex(
-        newQuizStats, this.state.enabledFlashCardIndices, this.state.currentFlashCardIndex
-      )
-    });
-  }
-  private onAnswerIncorrect() {
-    const newQuizStats = clone(this.state.quizStats);
-
-    const questionStats = newQuizStats.questionStats[this.state.currentFlashCardIndex];
-    questionStats.numIncorrectGuesses++;
-
-    this.setState({
-      quizStats: newQuizStats
-    });
   }
 
   private toggleConfiguration() {
     this.setState({ showConfiguration: !this.state.showConfiguration });
   }
   private onEnabledFlashCardIndicesChange(newValue: number[]) {
+    this.studyAlgorithm.enabledFlashCardIndices = newValue;
+
     const stateDelta: any = { enabledFlashCardIndices: newValue };
-
     if (newValue.indexOf(this.state.currentFlashCardIndex) < 0) {
-      stateDelta.currentFlashCardIndex = this.getNextFlashCardIndex(
-        this.state.quizStats, newValue, this.state.currentFlashCardIndex
-      );
+      stateDelta.currentFlashCardIndex = this.studyAlgorithm.getNextFlashCardIndex();
     }
-
     this.setState(stateDelta);
   }
   private toggleInvertFlashCards() {
@@ -211,9 +163,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
   }
   private moveToNextFlashCard() {
     this.setState({
-      currentFlashCardIndex: this.getNextFlashCardIndex(
-        this.state.quizStats, this.state.enabledFlashCardIndices, this.state.currentFlashCardIndex
-      ),
+      currentFlashCardIndex: this.studyAlgorithm.getNextFlashCardIndex(),
       isShowingBackSide: false
     });
   }

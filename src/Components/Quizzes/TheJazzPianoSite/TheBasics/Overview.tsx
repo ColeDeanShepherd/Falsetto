@@ -1,6 +1,6 @@
 import { FlashCard } from "../../../../FlashCard";
-import * as PianoNotes from "../../../PianoNotes";
-import * as SheetMusicNotes from "../../../SheetMusicNotes";
+import * as PianoNotes from "../../PianoNotes";
+import * as SheetMusicNotes from "../../SheetMusicNotes";
 import * as NoteDurations from "../../NoteDurations";
 
 export function createFlashCards(): FlashCard[] {
