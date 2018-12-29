@@ -174,6 +174,19 @@ export function toggleArrayElement<T>(array: T[], element: T): T[] {
 }
 
 // TODO: add tests
+export function tryRemoveArrayElement<T>(array: T[], element: T): boolean {
+  const i = array.indexOf(element);
+  const wasElementInArray = i >= 0;
+
+  if (wasElementInArray) {
+    array.splice(i, 1);
+    return true;
+  } else {
+    return false;
+  }
+}
+
+// TODO: add tests
 export function arrayContains<T>(array: T[], element: T): boolean {
   return array.indexOf(element) >= 0;
 }

@@ -81,3 +81,90 @@ export class RandomStudyAlgorithm extends StudyAlgorithm {
     return nextFlashCardIndex;
   }
 }
+
+export class LeitnerStudyAlgorithm extends StudyAlgorithm {
+  public constructor(numTiers: number) {
+    Utils.invariant(Number.isInteger(numTiers) && (numTiers > 0));
+    super();
+
+    this.tieredFlashCardIndices = new Array<Array<number>>(numTiers);
+    for (let i = 0; i < this.tieredFlashCardIndices.length; i++) {
+      this.tieredFlashCardIndices[i] = new Array<number>();
+    }
+  }
+  public reset(flashCards: Array<FlashCard>) {
+    super.reset(flashCards);
+    
+    this.tieredFlashCardIndices[0] = this.enabledFlashCardIndices.slice();
+    for (let i = 1; i < this.tieredFlashCardIndices.length; i++) {
+      this.tieredFlashCardIndices[i] = new Array<number>();
+    }
+  }
+  public onAnswer(answerDifficulty: AnswerDifficulty) {
+    Utils.precondition(this.currentFlashCardIndex !== undefined);
+
+    super.onAnswer(answerDifficulty);
+
+    const oldTierIndex = this.getTierIndex(this.currentFlashCardIndex as number);
+    const newTierIndex = isAnswerDifficultyCorrect(answerDifficulty)
+      ? Math.min(oldTierIndex + 1, this.tieredFlashCardIndices.length - 1)
+      : 0;
+    
+    if (newTierIndex !== oldTierIndex) {
+      const removedFromOldTier = Utils.tryRemoveArrayElement(
+        this.tieredFlashCardIndices[oldTierIndex],
+        this.currentFlashCardIndex as number
+      );
+      Utils.assert(removedFromOldTier);
+
+      this.tieredFlashCardIndices[newTierIndex].push(this.currentFlashCardIndex as number);
+    }
+  }
+  public getNextFlashCardIndex(): number {
+    Utils.precondition(this.enabledFlashCardIndices.length > 0);
+
+    if (this.enabledFlashCardIndices.length === 1) {
+      const flashCardIndex = this.enabledFlashCardIndices[0];
+
+      this._currentFlashCardIndex = flashCardIndex;
+      return flashCardIndex;
+    }
+
+    const tierIndex = this.getLowestTierWithNewEnabledFlashCard();
+    const enabledFlashCardIndicesInTier = this.tieredFlashCardIndices[tierIndex]
+      .filter(i => Utils.arrayContains(this.enabledFlashCardIndices, i));
+
+    let nextFlashCardIndex: number;
+    do {
+      nextFlashCardIndex = Utils.randomElement(enabledFlashCardIndicesInTier);
+    } while(nextFlashCardIndex === this._currentFlashCardIndex);
+
+    this._currentFlashCardIndex = nextFlashCardIndex;
+    return nextFlashCardIndex;
+  }
+
+  private tieredFlashCardIndices: Array<Array<number>>;
+
+  private getTierIndex(flashCardIndex: number): number {
+    for (let tierIndex = 0; tierIndex < this.tieredFlashCardIndices.length; tierIndex++) {
+      if (Utils.arrayContains(this.tieredFlashCardIndices[tierIndex], flashCardIndex)) {
+        return tierIndex;
+      }
+    }
+
+    Utils.assert(false);
+    return -1;
+  }
+  private getLowestTierWithNewEnabledFlashCard(): number {
+    for (let tierIndex = 0; tierIndex < this.tieredFlashCardIndices.length; tierIndex++) {
+      if (this.tieredFlashCardIndices[tierIndex].some(i =>
+        (i !== this._currentFlashCardIndex) && Utils.arrayContains(this.enabledFlashCardIndices, i))
+      ) {
+        return tierIndex;
+      }
+    }
+
+    Utils.assert(false);
+    return -1;
+  }
+}

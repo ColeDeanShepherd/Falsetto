@@ -7,7 +7,7 @@ import * as Utils from '../Utils';
 import { FlashCard, invertFlashCards } from "../FlashCard";
 import { renderFlashCardSide } from "./FlashCard";
 import { DefaultFlashCardMultiSelect } from './DefaultFlashCardMultiSelect';
-import { StudyAlgorithm, RandomStudyAlgorithm, AnswerDifficulty, isAnswerDifficultyCorrect } from 'src/StudyAlgorithm';
+import { StudyAlgorithm, RandomStudyAlgorithm, AnswerDifficulty, isAnswerDifficultyCorrect, LeitnerStudyAlgorithm } from 'src/StudyAlgorithm';
 
 export interface IStudyFlashCardsProps {
   title: string;
@@ -18,6 +18,7 @@ export interface IStudyFlashCardsProps {
 }
 export interface IStudyFlashCardsState {
   currentFlashCardIndex: number;
+  haveGottenCurrentFlashCardWrong: boolean;
   enabledFlashCardIndices: number[];
   showConfiguration: boolean;
   showDetailedStats: boolean;
@@ -95,7 +96,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
     );
   }
 
-  private studyAlgorithm: StudyAlgorithm = new RandomStudyAlgorithm();
+  private studyAlgorithm: StudyAlgorithm = new LeitnerStudyAlgorithm(5);
 
   private defaultRenderAnswerSelect (flashCard: FlashCard, onAnswer: (answerDifficulty: AnswerDifficulty) => void): JSX.Element {
     return <Button onClick={event => onAnswer(AnswerDifficulty.Easy)}>Next</Button>;
@@ -117,15 +118,20 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
 
     return {
       currentFlashCardIndex: this.studyAlgorithm.getNextFlashCardIndex(),
+      haveGottenCurrentFlashCardWrong: false,
       enabledFlashCardIndices: this.studyAlgorithm.enabledFlashCardIndices
     };
   }
 
   private onAnswer(answerDifficulty: AnswerDifficulty) {
-    this.studyAlgorithm.onAnswer(answerDifficulty);
+    if (!this.state.haveGottenCurrentFlashCardWrong) {
+      this.studyAlgorithm.onAnswer(answerDifficulty);
+    }
 
     if (isAnswerDifficultyCorrect(answerDifficulty)) {
       this.moveToNextFlashCard();
+    } else {
+      this.setState({ haveGottenCurrentFlashCardWrong: true });
     }
   }
 
@@ -136,10 +142,11 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
     this.studyAlgorithm.enabledFlashCardIndices = newValue;
 
     const stateDelta: any = { enabledFlashCardIndices: newValue };
-    if (newValue.indexOf(this.state.currentFlashCardIndex) < 0) {
-      stateDelta.currentFlashCardIndex = this.studyAlgorithm.getNextFlashCardIndex();
-    }
-    this.setState(stateDelta);
+    const onStateChanged = !Utils.arrayContains(newValue, this.state.currentFlashCardIndex)
+      ? () => this.moveToNextFlashCard()
+      : undefined;
+
+    this.setState(stateDelta, onStateChanged);
   }
   private toggleInvertFlashCards() {
     const newInvertFlashCards = !this.state.invertFlashCards;
@@ -159,11 +166,13 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
   }
 
   private flipFlashCard() {
+    this.onAnswer(AnswerDifficulty.Incorrect);
     this.setState({ isShowingBackSide: !this.state.isShowingBackSide });
   }
   private moveToNextFlashCard() {
     this.setState({
       currentFlashCardIndex: this.studyAlgorithm.getNextFlashCardIndex(),
+      haveGottenCurrentFlashCardWrong: false,
       isShowingBackSide: false
     });
   }
