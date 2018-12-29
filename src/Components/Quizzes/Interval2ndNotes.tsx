@@ -4,9 +4,10 @@ import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid } from
 import * as Utils from '../../Utils';
 import { FlashCard } from 'src/FlashCard';
 import { FlashCardGroup } from 'src/FlashCardGroup';
-import Pitch from 'src/Pitch';
+import { Pitch } from 'src/Pitch';
 import { PitchLetter } from 'src/PitchLetter';
 import { VerticalDirection } from 'src/VerticalDirection';
+import { Interval } from 'src/Interval';
 
 const rootNotes = [
   new Pitch(PitchLetter.C, -1, 4),
@@ -218,8 +219,7 @@ export function createFlashCardGroup(): FlashCardGroup {
           const newPitch = Pitch.addInterval(
             rootNote,
             (sign === "+") ? VerticalDirection.Up : VerticalDirection.Down,
-            genericIntervalNum,
-            intervalQualityNum
+            new Interval(genericIntervalNum, intervalQualityNum)
           );
           
           return new FlashCard(

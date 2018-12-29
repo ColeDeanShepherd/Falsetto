@@ -15,6 +15,11 @@ export function precondition(condition: boolean) {
   assert(condition);
 }
 
+// TODO: add tests
+export function invariant(condition: boolean) {
+  assert(condition);
+}
+
 export function mod(n: number, m: number): number {
   return ((n % m) + m) % m;
 }
@@ -186,4 +191,23 @@ export function intervalQualityToNumber(intervalQuality: string): number {
     default:
       throw new Error(`Unknown interval quality: ${intervalQuality}`);
   }
+}
+
+// TODO: add tests
+export function isNullOrWhiteSpace(str: string | null): boolean {
+  if (str == null) { return true; }
+  
+  for (const char of str) {
+    if (!char.match(/\s/)) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+// TODO: add tests
+export function lastChar(str: string): string {
+  if (str.length === 0) { return ""; }
+  return str[str.length - 1];
 }

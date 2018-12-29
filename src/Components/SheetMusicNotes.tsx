@@ -7,7 +7,7 @@ import { VexFlowComponent } from "./VexFlowComponent";
 import { PitchLetter } from "../PitchLetter";
 import { FlashCard } from 'src/FlashCard';
 import { renderFlashCardSide } from "./FlashCard";
-import Pitch from 'src/Pitch';
+import { Pitch } from 'src/Pitch';
 
 export function createFlashCards(): FlashCard[] {
   const clefs = [

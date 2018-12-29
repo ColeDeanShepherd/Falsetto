@@ -1,13 +1,39 @@
 import { PitchLetter, getPitchLetterMidiNoteNumberOffset } from './PitchLetter';
 import * as Utils from './Utils';
 import { VerticalDirection } from "./VerticalDirection";
-import { Interval } from './Components/Quizzes/Interval';
+import { Interval } from './Interval';
 
-function isValidIntervalType(num: number) {
-  return Number.isInteger(num) && (num > 0);
+export function pitchRange(
+  minPitch: Pitch, maxPitch: Pitch,
+  minSignedAccidental: number, maxSignedAccidental: number
+): Array<Pitch> {
+  Utils.precondition(minSignedAccidental <= maxSignedAccidental);
+
+  const minLineOrSpaceOnStaffNumber = minPitch.lineOrSpaceOnStaffNumber;
+  const maxLineOrSpaceOnStaffNumber = maxPitch.lineOrSpaceOnStaffNumber;
+  const possibleNotes = new Array<Pitch>();
+
+  for (
+    let lineOrSpaceOnStaffNumber = minLineOrSpaceOnStaffNumber;
+    lineOrSpaceOnStaffNumber < maxLineOrSpaceOnStaffNumber;
+    lineOrSpaceOnStaffNumber++
+  ) {
+    for (
+      let signedAccidental = minSignedAccidental;
+      signedAccidental <= maxSignedAccidental;
+      signedAccidental++
+    ) {
+      possibleNotes.push(Pitch.createFromLineOrSpaceOnStaffNumber(
+        lineOrSpaceOnStaffNumber,
+        signedAccidental
+      ));
+    }
+  }
+
+  return possibleNotes;
 }
 
-class Pitch {
+export class Pitch {
   public static createFromMidiNumber(midiNumber: number): Pitch {
     const positivePitchOffsetFromC = Utils.mod(midiNumber, 12);
     const octaveNumber = Math.floor(midiNumber / 12) - 1;
@@ -60,7 +86,10 @@ class Pitch {
     let lowerPitch: Pitch;
     let higherPitch: Pitch;
 
-    if (pitch1.midiNumber < pitch2.midiNumber) {
+    if (
+      (pitch1.midiNumber < pitch2.midiNumber) ||
+      (pitch1.lineOrSpaceOnStaffNumber < pitch2.lineOrSpaceOnStaffNumber)
+    ) {
       lowerPitch = pitch1;
       higherPitch = pitch2;
     } else {
@@ -80,61 +109,20 @@ class Pitch {
   public static addInterval(
     pitch: Pitch,
     direction: VerticalDirection,
-    intervalType: number,
-    intervalQuality: number
+    interval: Interval
   ) {
-    Utils.precondition(isValidIntervalType(intervalType));
-    Utils.precondition(Number.isInteger(intervalQuality));
-
     const offsetSign = direction as number;
     
-    const halfStepsOffset = offsetSign * Pitch.intervalToHalfSteps(intervalType, intervalQuality);
+    const halfStepsOffset = offsetSign * interval.halfSteps;
     const newMidiNumber = pitch.midiNumber + halfStepsOffset;
 
     const result = Pitch.createFromLineOrSpaceOnStaffNumber(
-      pitch.lineOrSpaceOnStaffNumber + (offsetSign * (intervalType - 1)),
+      pitch.lineOrSpaceOnStaffNumber + (offsetSign * (interval.type - 1)),
       pitch.signedAccidental
     );
     result.signedAccidental += newMidiNumber - result.midiNumber;
 
     return result;
-  }
-
-  public static intervalToHalfSteps(intervalType: number, intervalQuality: number) {
-    Utils.precondition(isValidIntervalType(intervalType));
-    Utils.precondition(Number.isInteger(intervalQuality));
-    
-    const octaveCount = Math.floor(intervalType / 8);
-    const simpleIntervalType = 1 + Utils.mod((intervalType - 1), 7);
-
-    let simpleIntervalHalfSteps: number;
-    switch (simpleIntervalType) {
-      case 1:
-        simpleIntervalHalfSteps = 0;
-        break;
-      case 2:
-        simpleIntervalHalfSteps = 2;
-        break;
-      case 3:
-        simpleIntervalHalfSteps = 4;
-        break;
-      case 4:
-        simpleIntervalHalfSteps = 5;
-        break;
-      case 5:
-        simpleIntervalHalfSteps = 7;
-        break;
-      case 6:
-        simpleIntervalHalfSteps = 9;
-        break;
-      case 7:
-        simpleIntervalHalfSteps = 11;
-        break;
-      default:
-        throw new Error(`Invalid simple interval type: ${simpleIntervalType}`);
-    }
-
-    return (12 * octaveCount) + simpleIntervalHalfSteps + intervalQuality;
   }
 
   public constructor(
@@ -176,5 +164,3 @@ class Pitch {
     return `${PitchLetter[this.letter].toLowerCase()}${this.getAccidentalString()}/${this.octaveNumber}`;
   }
 }
-
-export default Pitch;

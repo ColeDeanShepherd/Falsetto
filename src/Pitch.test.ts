@@ -1,6 +1,7 @@
-import Pitch from './Pitch';
+import { Pitch } from './Pitch';
 import { PitchLetter } from './PitchLetter';
 import { VerticalDirection } from './VerticalDirection';
+import { Interval } from './Interval';
 
 test('midiNumber of C-1 is 0', () => {
   expect((new Pitch(PitchLetter.C, 0, -1)).midiNumber).toEqual(0);
@@ -66,7 +67,8 @@ test('addInterval(B3 - P1) is B3', () => {
   expect(
     Pitch.addInterval(
       new Pitch(PitchLetter.B, 0, 3),
-      VerticalDirection.Down, 1, 0
+      VerticalDirection.Down,
+      new Interval(1, 0)
     ).toString()
   )
     .toEqual("B3");
@@ -75,7 +77,8 @@ test('addInterval(C4 + P5) is G4', () => {
   expect(
     Pitch.addInterval(
       new Pitch(PitchLetter.C, 0, 4),
-      VerticalDirection.Up, 5, 0
+      VerticalDirection.Up,
+      new Interval(5, 0)
     ).toString()
   )
     .toEqual("G4");
@@ -84,7 +87,8 @@ test('addInterval(C4 - A4) is Gb3', () => {
   expect(
     Pitch.addInterval(
       new Pitch(PitchLetter.C, 0, 4),
-      VerticalDirection.Down, 4, 1
+      VerticalDirection.Down,
+      new Interval(4, 1)
     ).toString()
   )
     .toEqual("Gb3");
@@ -93,10 +97,21 @@ test('addInterval(A2 + dd12) is Ebb4', () => {
   expect(
     Pitch.addInterval(
       new Pitch(PitchLetter.A, 0, 2),
-      VerticalDirection.Up, 12, -2
+      VerticalDirection.Up,
+      new Interval(12, -2)
     ).toString()
   )
     .toEqual("Ebb4");
+});
+test('addInterval(C4 + M11) is F5', () => {
+  expect(
+    Pitch.addInterval(
+      new Pitch(PitchLetter.C, 0, 4),
+      VerticalDirection.Up,
+      new Interval(11, 0)
+    ).toString()
+  )
+    .toEqual("F5");
 });
 
 test('getInterval(B3, B3) is P1', () => {
@@ -106,10 +121,7 @@ test('getInterval(B3, B3) is P1', () => {
       new Pitch(PitchLetter.B, 0, 3)
     )
   )
-    .toEqual({
-      intervalType: 1,
-      intervalQuality: 0
-    });
+    .toEqual(new Interval(1, 0));
 });
 test('getInterval(C4, G4) is P5', () => {
   expect(
@@ -118,10 +130,7 @@ test('getInterval(C4, G4) is P5', () => {
       new Pitch(PitchLetter.G, 0, 4)
     )
   )
-    .toEqual({
-      intervalType: 5,
-      intervalQuality: 0
-    });
+    .toEqual(new Interval(5, 0));
 });
 test('getInterval(C4, Gb3) is A4', () => {
   expect(
@@ -130,10 +139,7 @@ test('getInterval(C4, Gb3) is A4', () => {
       new Pitch(PitchLetter.G, -1, 3)
     )
   )
-    .toEqual({
-      intervalType: 4,
-      intervalQuality: 1
-    });
+    .toEqual(new Interval(4, 1));
 });
 test('getInterval(A2, Ebb4) is dd12', () => {
   expect(
@@ -142,24 +148,5 @@ test('getInterval(A2, Ebb4) is dd12', () => {
       new Pitch(PitchLetter.A, 0, 2)
     )
   )
-    .toEqual({
-      intervalType: 12,
-      intervalQuality: -2
-    });
-});
-
-test('intervalToHalfSteps(unison) is 0', () => {
-  expect(Pitch.intervalToHalfSteps(1, 0)).toEqual(0);
-});
-test('intervalToHalfSteps(m2) is 1', () => {
-  expect(Pitch.intervalToHalfSteps(2, -1)).toEqual(1);
-});
-test('intervalToHalfSteps(d4) is 4', () => {
-  expect(Pitch.intervalToHalfSteps(4, -1)).toEqual(4);
-});
-test('intervalToHalfSteps(P8) is 12', () => {
-  expect(Pitch.intervalToHalfSteps(8, 0)).toEqual(12);
-});
-test('intervalToHalfSteps(d12) is 18', () => {
-  expect(Pitch.intervalToHalfSteps(12, -1)).toEqual(18);
+    .toEqual(new Interval(12, -2));
 });

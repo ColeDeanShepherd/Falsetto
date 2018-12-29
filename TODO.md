@@ -1,4 +1,5 @@
 # To-Do
+* Sheet music chord identification
 * Add support for dynamically generated flash card decks
 * Share more code between interval recognition exercises.
 * Add guitar chord shapes
@@ -9,7 +10,6 @@
 * Chord voicings
 * Better configure screen for sheet music notes.
 * Add more note durations.
-* Sheet Music Intervals
 * Ear Training
 * Use proper symbols.
 * Only allow 1 guess per question
