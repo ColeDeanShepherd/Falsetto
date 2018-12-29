@@ -74,7 +74,7 @@ export class IntervalNotesFlashCardMultiSelect extends React.Component<IInterval
 
     return (
       <Grid container spacing={32}>
-        <Grid item xs={4}>{intervalCheckboxes}</Grid>
+        <Grid item xs={12}>{intervalCheckboxes}</Grid>
       </Grid>
     );
   }

@@ -51,7 +51,7 @@ class App extends React.Component<{}, IAppState> {
         title: "Notes",
         flashCardGroups: [
           new FlashCardGroup("Piano Notes", PianoNotes.createFlashCards()),
-          new FlashCardGroup("Guitar Notes", GuitarNotes.createFlashCards()),
+          GuitarNotes.createFlashCardGroup(),
           new FlashCardGroup("Note Durations", NoteDurations.createFlashCards()),
           new FlashCardGroup("Sheet Music Notes", SheetMusicNotes.createFlashCards())
         ]

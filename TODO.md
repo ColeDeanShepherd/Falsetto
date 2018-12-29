@@ -1,5 +1,6 @@
 # To-Do
 * Sheet music chord identification
+* Organize files
 * Add support for dynamically generated flash card decks
 * Share more code between interval recognition exercises.
 * Add guitar chord shapes
