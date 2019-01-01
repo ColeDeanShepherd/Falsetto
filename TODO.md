@@ -1,4 +1,6 @@
 # To-Do
+* Diagram of all guitar notes.
+* Diagram of all piano notes.
 * Fix inverted flash cards.
 * Sheet music chord identification
 * Organize files
@@ -11,7 +13,6 @@
 * Add interactive? circle of fifths
 * Chord voicings
 * Better configure screen for sheet music notes.
-* Add more note durations.
 * Ear Training
 * Use proper symbols.
 * Only allow 1 guess per question

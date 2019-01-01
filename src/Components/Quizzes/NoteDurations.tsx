@@ -45,6 +45,42 @@ export function createFlashCards(): FlashCard[] {
       ),
       "Eighth Note = 1/2 beats"
     ),
+    new FlashCard(
+      () => (
+        <VexFlowComponent
+          width={width} height={height}
+          vexFlowRender={vexFlowRender.bind(null, "16", ["16r", "8r", "qr", "hr"])}
+        />
+      ),
+      "Sixteenth Note = 1/4 beats"
+    ),
+    new FlashCard(
+      () => (
+        <VexFlowComponent
+          width={width} height={height}
+          vexFlowRender={vexFlowRender.bind(null, "32", ["32r", "16r", "8r", "qr", "hr"])}
+        />
+      ),
+      "32nd Note = 1/8 beats"
+    ),
+    new FlashCard(
+      () => (
+        <VexFlowComponent
+          width={width} height={height}
+          vexFlowRender={vexFlowRender.bind(null, "64", ["64r", "32r", "16r", "8r", "qr", "hr"])}
+        />
+      ),
+      "64th Note = 1/16 beats"
+    ),
+    new FlashCard(
+      () => (
+        <VexFlowComponent
+          width={width} height={height}
+          vexFlowRender={vexFlowRender.bind(null, "128", ["128r", "64r", "32r", "16r", "8r", "qr", "hr"])}
+        />
+      ),
+      "128th Note = 1/32 beats"
+    )
   ];
 }
 function vexFlowRender(noteDurationString: string, restDurationStrings: string[], context: Vex.IRenderContext) {
