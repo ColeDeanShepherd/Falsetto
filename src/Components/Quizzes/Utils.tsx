@@ -13,6 +13,7 @@ export function renderNoteAnswerSelect(
     <div>
       {notes.map(n => (
         <Button
+          key={n}
           onClick={event => onAnswer((n === flashCard.backSide) ? AnswerDifficulty.Easy : AnswerDifficulty.Incorrect)}
           style={{ textTransform: "none" }}
         >

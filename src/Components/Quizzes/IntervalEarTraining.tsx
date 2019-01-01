@@ -8,6 +8,7 @@ import { Pitch } from 'src/Pitch';
 import { PitchLetter } from 'src/PitchLetter';
 import { VerticalDirection } from 'src/VerticalDirection';
 import { Interval } from 'src/Interval';
+import { pianoAudioFilePathsByMidiNumber } from "src/Components/Quizzes/PianoNotes";
 
 const rootNotes = [
   new Pitch(PitchLetter.C, -1, 4),
@@ -43,6 +44,19 @@ const intervals = [
 ];
 const signs = ["+", "-"];
 
+export function playPitch(pitch: Pitch) {
+  const kvp = pianoAudioFilePathsByMidiNumber
+    .find(x => x[0] === pitch.midiNumber);
+  if (!kvp) { return; }
+
+  const audio = new Audio(kvp[1]);
+  if (!audio.error) {
+    audio.play();
+  } else {
+    alert(audio.error);
+  }
+}
+
 export interface IIntervalEarTrainingFlashCardMultiSelectProps {
   flashCards: FlashCard[];
   selectedFlashCardIndices: number[];
@@ -56,11 +70,6 @@ export interface IIntervalEarTrainingFlashCardMultiSelectState {
 export class IntervalEarTrainingFlashCardMultiSelect extends React.Component<IIntervalEarTrainingFlashCardMultiSelectProps, IIntervalEarTrainingFlashCardMultiSelectState> {
   public constructor(props: IIntervalEarTrainingFlashCardMultiSelectProps) {
     super(props);
-
-    const audio = new Audio("notes/440-A.mp3");
-    if (!audio.error) {
-      audio.play();
-    }
 
     this.state = {
       enabledRootNotes: rootNotes.slice(),
@@ -183,6 +192,21 @@ export class IntervalEarTrainingFlashCardMultiSelect extends React.Component<IIn
   }
 }
 
+export interface IAsdfProps {
+  pitch1: Pitch;
+  pitch2: Pitch;
+}
+export class Asdf extends React.Component<IAsdfProps, {}> {
+  public componentDidMount() {
+    playPitch(this.props.pitch1);
+    setTimeout(() => playPitch(this.props.pitch2), 1000);
+  }
+
+  public render(): JSX.Element {
+    return <span>{this.props.pitch1.toString(true) + ", _"}</span>;
+  }
+}
+
 function intervalQualityToNumber(intervalQuality: string): number {
   switch (intervalQuality) {
     case "P":
@@ -198,8 +222,10 @@ function intervalQualityToNumber(intervalQuality: string): number {
   }
 }
 export function createFlashCardGroup(): FlashCardGroup {
+  let i = 0;
+
   const flashCards = Utils.flattenArrays<FlashCard>(rootNotes
-    .map(rootNote => intervals
+    .map(rootPitch => intervals
       .map(interval => signs
         .map(sign => {
           const intervalQuality = interval[0];
@@ -209,14 +235,17 @@ export function createFlashCardGroup(): FlashCardGroup {
           const genericIntervalNum = parseInt(genericInterval, 10);
 
           const newPitch = Pitch.addInterval(
-            rootNote,
+            rootPitch,
             (sign === "+") ? VerticalDirection.Up : VerticalDirection.Down,
             new Interval(genericIntervalNum, intervalQualityNum)
           );
+
+          const iCopy = i;
+          i++;
           
           return new FlashCard(
-            rootNote.toString(true) + ", " + newPitch.toString(true),
-            interval
+            () => <Asdf key={iCopy} pitch1={rootPitch} pitch2={newPitch} />,
+            newPitch.toString(true)
           );
         })
       )
