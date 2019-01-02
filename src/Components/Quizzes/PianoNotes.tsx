@@ -4,6 +4,7 @@ import * as FlashCardUtils from "./Utils";
 import { PianoKeyboard } from '../PianoKeyboard';
 import { FlashCard } from 'src/FlashCard';
 import { FlashCardGroup } from 'src/FlashCardGroup';
+import { Pitch } from 'src/Pitch';
 
 export const pianoAudioFilePathsByMidiNumber = new Array<[number, string]>();
 pianoAudioFilePathsByMidiNumber.push([21, "audio/piano/A0.mp3"]);
@@ -94,6 +95,20 @@ pianoAudioFilePathsByMidiNumber.push([105, "audio/piano/A7.mp3"]);
 pianoAudioFilePathsByMidiNumber.push([106, "audio/piano/As7.mp3"]);
 pianoAudioFilePathsByMidiNumber.push([107, "audio/piano/B7.mp3"]);
 pianoAudioFilePathsByMidiNumber.push([108, "audio/piano/C8.mp3"]);
+
+
+export function playPitch(pitch: Pitch) {
+  const kvp = pianoAudioFilePathsByMidiNumber
+    .find(x => x[0] === pitch.midiNumber);
+  if (!kvp) { return; }
+
+  const audio = new Audio(kvp[1]);
+  if (!audio.error) {
+    audio.play();
+  } else {
+    alert(audio.error);
+  }
+}
 
 export function createFlashCardGroup(): FlashCardGroup {
   const flashCards = createFlashCards();

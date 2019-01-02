@@ -74,3 +74,18 @@ export class Interval {
     return `${this.qualityString}${this.type}`;
   }
 }
+
+export function intervalQualityStringToNumber(intervalQualityString: string): number {
+  switch (intervalQualityString) {
+    case "P":
+    case "M":
+      return 0;
+    case "m":
+    case "d":
+      return -1;
+    case "A":
+      return 1;
+    default:
+      throw new Error(`Unknown interval quality: ${intervalQualityString}`);
+  }
+}

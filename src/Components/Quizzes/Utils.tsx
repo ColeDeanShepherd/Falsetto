@@ -9,15 +9,25 @@ export function renderNoteAnswerSelect(
   onAnswer: (answerDifficulty: AnswerDifficulty) => void
 ): JSX.Element {
   const notes = ["A", "A#/Bb", "B", "C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb", "G", "G#/Ab"];
+  return renderStringAnswerSelect(notes, true, flashCard, onAnswer);
+}
+export function renderStringAnswerSelect(
+  answers: string[],
+  areAnswersOnBackSide: boolean,
+  flashCard: FlashCard,
+  onAnswer: (answerDifficulty: AnswerDifficulty) => void
+): JSX.Element {
+  const flashCardSide = !areAnswersOnBackSide ? flashCard.frontSide : flashCard.backSide;
+
   return (
     <div>
-      {notes.map(n => (
+      {answers.map(a => (
         <Button
-          key={n}
-          onClick={event => onAnswer((n === flashCard.backSide) ? AnswerDifficulty.Easy : AnswerDifficulty.Incorrect)}
+          key={a}
+          onClick={_ => onAnswer((a === flashCardSide) ? AnswerDifficulty.Easy : AnswerDifficulty.Incorrect)}
           style={{ textTransform: "none" }}
         >
-          {n}
+          {a}
         </Button>))}
     </div>
   );

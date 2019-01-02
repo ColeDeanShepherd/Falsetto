@@ -4,7 +4,7 @@ import * as Utils from '../../Utils';
 import * as FlashCardUtils from "./Utils";
 import { FlashCard } from 'src/FlashCard';
 import { FlashCardGroup } from 'src/FlashCardGroup';
-import { Pitch } from 'src/Pitch';
+import { Pitch, ambiguousPitchStrings } from 'src/Pitch';
 import { VerticalDirection } from 'src/VerticalDirection';
 import { Interval, intervalQualityStringToNumber } from 'src/Interval';
 import { playPitch } from "src/Components/Quizzes/PianoNotes";
@@ -21,7 +21,7 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
   }
 
   public render(): JSX.Element {
-    return <span>sound is playing</span>;
+    return <span>{this.props.pitch1.toOneAccidentalAmbiguousString(false) + ", _"}</span>;
   }
 }
 
@@ -30,20 +30,18 @@ export function createFlashCardGroup(): FlashCardGroup {
 
   const flashCards = Utils.flattenArrays<FlashCard>(rootNotes
     .map(rootPitch => intervals
-      .map(intervalStr => signs
+      .map(interval => signs
         .map(sign => {
-          const intervalQuality = intervalStr[0];
+          const intervalQuality = interval[0];
           const intervalQualityNum = intervalQualityStringToNumber(intervalQuality);
 
-          const genericInterval = intervalStr[1];
+          const genericInterval = interval[1];
           const genericIntervalNum = parseInt(genericInterval, 10);
-
-          const interval = new Interval(genericIntervalNum, intervalQualityNum);
 
           const newPitch = Pitch.addInterval(
             rootPitch,
             (sign === "+") ? VerticalDirection.Up : VerticalDirection.Down,
-            interval
+            new Interval(genericIntervalNum, intervalQualityNum)
           );
 
           const iCopy = i;
@@ -51,7 +49,7 @@ export function createFlashCardGroup(): FlashCardGroup {
           
           return new FlashCard(
             () => <FlashCardFrontSide key={iCopy} pitch1={rootPitch} pitch2={newPitch} />,
-            interval.toString()
+            newPitch.toOneAccidentalAmbiguousString(false)
           );
         })
       )
@@ -71,12 +69,16 @@ export function createFlashCardGroup(): FlashCardGroup {
   };
   
   const group = new FlashCardGroup(
-    "Interval Ear Training",
+    "Interval 2nd Note Ear Training",
     flashCards
   );
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   group.enableInvertFlashCards = false;
-  group.renderAnswerSelect = FlashCardUtils.renderStringAnswerSelect.bind(null, intervals, true);
-
+  group.renderAnswerSelect = FlashCardUtils.renderStringAnswerSelect.bind(
+    null,
+    ambiguousPitchStrings,
+    true
+  );
+  
   return group;
 }

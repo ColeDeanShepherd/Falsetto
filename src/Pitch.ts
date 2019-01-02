@@ -33,6 +33,10 @@ export function pitchRange(
   return possibleNotes;
 }
 
+export const ambiguousPitchStrings = [
+  "C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb", "G", "G#/Ab", "A", "A#/Bb", "B"
+];
+
 export class Pitch {
   public static createFromMidiNumber(midiNumber: number): Pitch {
     const positivePitchOffsetFromC = Utils.mod(midiNumber, 12);
@@ -159,6 +163,18 @@ export class Pitch {
   public toString(includeOctaveNumber: boolean = true): string {
     return PitchLetter[this.letter] + this.getAccidentalString() + (includeOctaveNumber ? this.octaveNumber.toString() : "");
   }
+
+  // TODO: add tests
+  public toOneAccidentalAmbiguousString(includeOctaveNumber: boolean = true): string {
+    const positivePitchOffsetFromC = Utils.mod(this.midiNumber, 12);
+    const ambiguousPitchString = ambiguousPitchStrings[positivePitchOffsetFromC];
+    
+    const octaveNumber = Math.floor(this.midiNumber / 12) - 1;
+    const octaveNumberString = includeOctaveNumber ? octaveNumber.toString() : "";
+
+    return ambiguousPitchString + octaveNumberString;
+  }
+  
   // TODO: add tests
   public toVexFlowString(): string {
     return `${PitchLetter[this.letter].toLowerCase()}${this.getAccidentalString()}/${this.octaveNumber}`;
