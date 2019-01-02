@@ -224,3 +224,20 @@ export function lastChar(str: string): string {
   if (str.length === 0) { return ""; }
   return str[str.length - 1];
 }
+
+// TODO: add tests
+export function takeCharsWhile(
+  str: string,
+  startIndex: number,
+  predicate: (char: string) => boolean
+): string {
+  precondition((startIndex >= 0) && (startIndex <= str.length));
+  
+  let endIndexExclusive = startIndex;
+
+  while ((endIndexExclusive < str.length) && predicate(str[endIndexExclusive])) {
+    endIndexExclusive++;
+  }
+
+  return str.substring(startIndex, endIndexExclusive);
+}

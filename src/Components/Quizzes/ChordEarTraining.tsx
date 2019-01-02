@@ -2,12 +2,13 @@ import * as React from 'react';
 import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid } from '@material-ui/core';
 
 import * as Utils from '../../Utils';
+import * as FlashCardUtils from "./Utils";
 import { FlashCard } from 'src/FlashCard';
 import { FlashCardGroup } from 'src/FlashCardGroup';
 import { Pitch, pitchRange } from 'src/Pitch';
 import { PitchLetter } from 'src/PitchLetter';
-import { SheetMusicChord } from 'src/Components/Quizzes/SheetMusicChords';
 import { Chord } from 'src/Chord';
+import { playPitch } from './PianoNotes';
 
 // TODO: fix bug with FACE chords
 const minPitch = new Pitch(PitchLetter.C, -1, 2);
@@ -65,6 +66,21 @@ const chords = [
 ];
 
 // TODO: instead of generating all flash cards ahead of time, dynamically generate each one
+
+export interface IFlashCardFrontSideProps {
+  pitches: Array<Pitch>;
+}
+export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps, {}> {
+  public componentDidMount() {
+    for (const pitch of this.props.pitches) {
+      playPitch(pitch);
+    }
+  }
+
+  public render(): JSX.Element {
+    return <span>sound is playing</span>;
+  }
+}
 
 export interface IChordNotesFlashCardMultiSelectProps {
   flashCards: FlashCard[];
@@ -189,23 +205,20 @@ export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesF
 }
 
 export function createFlashCardGroup(): FlashCardGroup {
+  let i = 0;
+
   const flashCards = new Array<FlashCard>();
 
   for (const rootPitch of rootPitches) {
     for (const chord of chords) {
       const pitches = Chord.fromPitchAndFormulaString(rootPitch, chord.formulaString)
         .pitches;
+      
+      const iCopy = i;
+      i++;
 
       flashCards.push(new FlashCard(
-        () => (
-          <div>
-            {chord.type}
-            <SheetMusicChord
-              width={300} height={200}
-              pitches={pitches}
-            />
-          </div>
-        ),
+        () => <FlashCardFrontSide key={iCopy} pitches={pitches} />,
         chord.type
       ));
     }
@@ -225,10 +238,16 @@ export function createFlashCardGroup(): FlashCardGroup {
   };
   
   const group = new FlashCardGroup(
-    "Sheet Music Chords",
+    "Chord Ear Training",
     flashCards
   );
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   group.enableInvertFlashCards = false;
+  group.renderAnswerSelect = FlashCardUtils.renderStringAnswerSelect.bind(
+    null,
+    chords.map(c => c.type),
+    true
+  );
+
   return group;
 }

@@ -4,7 +4,6 @@ import * as Utils from "../Utils";
 
 import "./App.css";
 
-import { Quiz as QuizComponent } from "./Quiz";
 import * as IntervalNamesToHalfSteps from './Quizzes/IntervalNamesToHalfSteps';
 import * as IntervalQualitySymbolsToQualities from './Quizzes/IntervalQualitySymbolsToQualities';
 import * as GenericIntervalsToIntervalQualities from "./Quizzes/GenericIntervalsToIntervalQualities";
@@ -34,6 +33,7 @@ import * as IntervalEarTraining from "./Quizzes/IntervalEarTraining";
 import * as Interval2ndNoteEarTraining from "./Quizzes/Interval2ndNoteEarTraining";
 import * as SheetMusicIntervalRecognition from "./Quizzes/SheetMusicIntervalRecognition";
 import * as SheetMusicChordRecognition from "./Quizzes/SheetMusicChordRecognition";
+import * as ChordEarTraining from "./Quizzes/ChordEarTraining";
 import { FlashCard } from 'src/FlashCard';
 import { FlashCardGroup } from 'src/FlashCardGroup';
 import { StudyFlashCards } from './StudyFlashCards';
@@ -98,8 +98,9 @@ class App extends React.Component<{}, IAppState> {
           new FlashCardGroup("Available Chord Tensions", AvailableChordTensions.createFlashCards()),
           new FlashCardGroup("Diatonic Triads", DiatonicTriads.createFlashCards()),
           new FlashCardGroup("Diatonic Seventh Chords", DiatonicSeventhChords.createFlashCards()),
-          RandomChordGenerator.createFlashCardGroup(),
-          SheetMusicChordRecognition.createFlashCardGroup()
+          SheetMusicChordRecognition.createFlashCardGroup(),
+          ChordEarTraining.createFlashCardGroup(),
+          RandomChordGenerator.createFlashCardGroup()
         ]
       },
       {
