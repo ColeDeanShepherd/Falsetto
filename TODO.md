@@ -2,6 +2,8 @@
 * Diagram of all guitar notes.
 * Diagram of all piano notes.
 * Fix inverted flash cards.
+* Make sure I'm using selectedFlashCardIndices in all flash card multi selects.
+* Cut off old sounds when switching flash cards.
 * Sheet music chord identification
 * Organize files
 * Add support for dynamically generated flash card decks

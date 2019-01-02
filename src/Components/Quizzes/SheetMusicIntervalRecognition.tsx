@@ -95,14 +95,18 @@ export class IntervalNotesFlashCardMultiSelect extends React.Component<IInterval
 
     const newEnabledFlashCardIndices = new Array<number>();
 
-    for (let i = 0; i < notes.length; i++) {
-      for (let j = i + 1; j < notes.length; j++) {
-        const pitches = [notes[i], notes[j]];
+    let i = 0;
+
+    for (let note1Index = 0; note1Index < notes.length; note1Index++) {
+      for (let note2Index = note1Index + 1; note2Index < notes.length; note2Index++) {
+        const pitches = [notes[note1Index], notes[note2Index]];
         const interval = Pitch.getInterval(pitches[0], pitches[1]);
 
         if (Utils.arrayContains(intervals, interval.toString())) {
-          newEnabledFlashCardIndices.push(newEnabledFlashCardIndices.length);
+          newEnabledFlashCardIndices.push(note1Index);
         }
+
+        i++;
       }
     }
 

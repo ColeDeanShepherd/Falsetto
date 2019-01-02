@@ -9,7 +9,6 @@ import { PitchLetter } from 'src/PitchLetter';
 import { SheetMusicChord } from 'src/Components/Quizzes/SheetMusicChords';
 import { Chord } from 'src/Chord';
 
-// TODO: fix bug with FACE chords
 const minPitch = new Pitch(PitchLetter.C, -1, 2);
 const maxPitch = new Pitch(PitchLetter.C, 1, 6);
 const rootPitches = pitchRange(minPitch, maxPitch, -1, 1);
@@ -172,15 +171,19 @@ export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesF
 
     const newEnabledFlashCardIndices = new Array<number>();
 
+    let i = 0;
+
     for (const rootPitch of rootPitches) {
       for (const chord of chords) {
         const chordType = chord.type;
         if (
-          Utils.arrayContains(this.state.enabledRootPitches, rootPitch) &&
-          Utils.arrayContains(this.state.enabledChordTypes, chordType)
+          Utils.arrayContains(enabledRootPitches, rootPitch) &&
+          Utils.arrayContains(enabledChordTypes, chordType)
         ) {
-          newEnabledFlashCardIndices.push(newEnabledFlashCardIndices.length);
+          newEnabledFlashCardIndices.push(i);
         }
+
+        i++;
       }
     }
 

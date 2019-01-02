@@ -34,6 +34,7 @@ import * as Interval2ndNoteEarTraining from "./Quizzes/Interval2ndNoteEarTrainin
 import * as SheetMusicIntervalRecognition from "./Quizzes/SheetMusicIntervalRecognition";
 import * as SheetMusicChordRecognition from "./Quizzes/SheetMusicChordRecognition";
 import * as ChordEarTraining from "./Quizzes/ChordEarTraining";
+import * as ScaleEarTraining from "./Quizzes/ScaleEarTraining";
 import { FlashCard } from 'src/FlashCard';
 import { FlashCardGroup } from 'src/FlashCardGroup';
 import { StudyFlashCards } from './StudyFlashCards';
@@ -80,6 +81,7 @@ class App extends React.Component<{}, IAppState> {
           new FlashCardGroup("Scale Chords", ScaleChords.createFlashCards()),
           new FlashCardGroup("Scale Families", ScaleFamilies.createFlashCards()),
           new FlashCardGroup("Scale Characteristics", ScaleCharacteristics.createFlashCards()),
+          ScaleEarTraining.createFlashCardGroup()
         ]
       },
       {

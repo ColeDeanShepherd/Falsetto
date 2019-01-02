@@ -13,55 +13,123 @@ import { playPitch } from './PianoNotes';
 const minPitch = new Pitch(PitchLetter.C, -1, 2);
 const maxPitch = new Pitch(PitchLetter.C, 1, 6);
 const rootPitches = pitchRange(minPitch, maxPitch, -1, 1);
-const chords = [
+const scales = [
   {
-    type: "major",
-    formulaString: "1 3 5"
+    type: "Ionian (Major)",
+    formulaString: "1 2 3 4 5 6 7"
   },
   {
-    type: "minor",
-    formulaString: "1 b3 5"
+    type: "Dorian",
+    formulaString: "1 2 b3 4 5 6 b7"
   },
   {
-    type: "diminished",
-    formulaString: "1 b3 b5"
+    type: "Phrygian",
+    formulaString: "1 b2 b3 4 5 b6 b7"
   },
   {
-    type: "augmented",
-    formulaString: "1 3 #5"
+    type: "Lydian",
+    formulaString: "1 2 3 #4 5 6 7"
   },
   {
-    type: "sus2",
-    formulaString: "1 2 5"
+    type: "Mixolydian",
+    formulaString: "1 2 3 4 5 6 b7"
   },
   {
-    type: "sus4",
-    formulaString: "1 4 5"
+    type: "Aeolian (Natural Minor)",
+    formulaString: "1 2 b3 4 5 b6 b7"
   },
   {
-    type: "major 7",
-    formulaString: "1 3 5 7"
+    type: "Locrian",
+    formulaString: "1 b2 b3 4 b5 b6 b7"
   },
   {
-    type: "7",
-    formulaString: "1 3 5 b7"
+    type: "Melodic Minor",
+    formulaString: "1 2 b3 4 5 6 7"
   },
   {
-    type: "minor 7",
-    formulaString: "1 b3 5 b7"
+    type: "Dorian b2",
+    formulaString: "1 b2 b3 4 5 6 b7"
   },
   {
-    type: "minor/major 7",
-    formulaString: "1 b3 5 7"
+    type: "Lydian Aug.",
+    formulaString: "1 2 3 #4 #5 6 7"
   },
   {
-    type: "half-diminished 7",
-    formulaString: "1 b3 b5 b7"
+    type: "Mixolydian #11",
+    formulaString: "1 2 3 #4 5 6 b7"
   },
   {
-    type: "diminished 7",
-    formulaString: "1 b3 b5 bb7"
-  }
+    type: "Mixolydian b6",
+    formulaString: "1 2 3 4 5 b6 b7"
+  },
+  {
+    type: "Locrian Nat. 9",
+    formulaString: "1 2 b3 4 b5 b6 b7"
+  },
+  {
+    type: "Altered Dominant",
+    formulaString: "1 b2 b3 b4 b5 b6 b7"
+  },
+  {
+    type: "Harmonic Minor",
+    formulaString: "1 2 b3 4 5 b6 7"
+  },
+  {
+    type: "Locrian Nat. 6",
+    formulaString: "1 b2 b3 4 b5 6 b7"
+  },
+  {
+    type: "Ionian Aug.",
+    formulaString: "1 2 3 4 #5 6 7"
+  },
+  {
+    type: "Dorian #11",
+    formulaString: "1 2 b3 #4 5 6 b7"
+  },
+  {
+    type: "Phrygian Major",
+    formulaString: "1 b2 3 4 5 b6 b7"
+  },
+  {
+    type: "Lydian #9",
+    formulaString: "1 #2 3 #4 5 6 7"
+  },
+  {
+    type: "Altered Dominant bb7",
+    formulaString: "1 b2 b3 b4 b5 b6 bb7"
+  },
+  {
+    type: "Tonic Diminished",
+    formulaString: "1 2 b3 4 b5 b6 bb7 7"
+  },
+  {
+    type: "Dominant Diminished",
+    formulaString: "1 b2 b3 b4 b5 5 6 b7"
+  },
+  {
+    type: "Whole Tone",
+    formulaString: "1 2 3 #4 #5 b7"
+  },
+  {
+    type: "Augmented",
+    formulaString: "1 #2 3 5 #5 7"
+  },
+  {
+    type: "Major Pentatonic",
+    formulaString: "1 2 3 5 6"
+  },
+  {
+    type: "Minor Pentatonic",
+    formulaString: "1 b3 4 5 b7"
+  },
+  {
+    type: "Major Blues",
+    formulaString: "1 2 b3 3 5 6"
+  },
+  {
+    type: "Minor Blues",
+    formulaString: "1 b3 4 b5 5 b7"
+  }  
 ];
 
 // TODO: instead of generating all flash cards ahead of time, dynamically generate each one
@@ -71,8 +139,8 @@ export interface IFlashCardFrontSideProps {
 }
 export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps, {}> {
   public componentDidMount() {
-    for (const pitch of this.props.pitches) {
-      playPitch(pitch);
+    for (let i = 0; i < this.props.pitches.length; i++) {
+      setTimeout(() => playPitch(this.props.pitches[i]), 500 * i);
     }
   }
 
@@ -87,21 +155,21 @@ export interface IChordNotesFlashCardMultiSelectProps {
   onChange?: (newValue: number[]) => void;
 }
 export interface IChordNotesFlashCardMultiSelectState {
-  enabledChordTypes: string[];
+  enabledScaleTypes: string[];
 }
 export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesFlashCardMultiSelectProps, IChordNotesFlashCardMultiSelectState> {
   public constructor(props: IChordNotesFlashCardMultiSelectProps) {
     super(props);
 
     this.state = {
-      enabledChordTypes: chords.map(c => c.type)
+      enabledScaleTypes: scales.map(c => c.type)
     };
   }
   public render(): JSX.Element {
-    const chordTypeCheckboxTableRows = chords
+    const chordTypeCheckboxTableRows = scales
       .map((chord, i) => {
-        const isChecked = this.state.enabledChordTypes.indexOf(chord.type) >= 0;
-        const isEnabled = !isChecked || (this.state.enabledChordTypes.length > 1);
+        const isChecked = this.state.enabledScaleTypes.indexOf(chord.type) >= 0;
+        const isEnabled = !isChecked || (this.state.enabledScaleTypes.length > 1);
 
         return (
           <TableRow key={i}>
@@ -132,14 +200,14 @@ export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesF
   }
   
   private toggleChordEnabled(chord: string) {
-    const newEnabledScaleTypes = Utils.toggleArrayElement(
-      this.state.enabledChordTypes,
+    const newEnabledChords = Utils.toggleArrayElement(
+      this.state.enabledScaleTypes,
       chord
     );
     
-    if (newEnabledScaleTypes.length > 0) {
-      this.setState({ enabledChordTypes: newEnabledScaleTypes });
-      this.onChange(newEnabledScaleTypes);
+    if (newEnabledChords.length > 0) {
+      this.setState({ enabledScaleTypes: newEnabledChords });
+      this.onChange(newEnabledChords);
     }
   }
   private onChange(enabledChordTypes: string[]) {
@@ -150,7 +218,7 @@ export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesF
     let i = 0;
 
     for (const rootPitch of rootPitches) {
-      for (const chord of chords) {
+      for (const chord of scales) {
         const chordType = chord.type;
         if (Utils.arrayContains(enabledChordTypes, chordType)) {
           newEnabledFlashCardIndices.push(i);
@@ -170,7 +238,7 @@ export function createFlashCardGroup(): FlashCardGroup {
   const flashCards = new Array<FlashCard>();
 
   for (const rootPitch of rootPitches) {
-    for (const chord of chords) {
+    for (const chord of scales) {
       const pitches = Chord.fromPitchAndFormulaString(rootPitch, chord.formulaString)
         .pitches;
       
@@ -198,14 +266,14 @@ export function createFlashCardGroup(): FlashCardGroup {
   };
   
   const group = new FlashCardGroup(
-    "Chord Ear Training",
+    "Scale Ear Training",
     flashCards
   );
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   group.enableInvertFlashCards = false;
   group.renderAnswerSelect = FlashCardUtils.renderStringAnswerSelect.bind(
     null,
-    chords.map(c => c.type),
+    scales.map(c => c.type),
     true
   );
 
