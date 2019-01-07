@@ -8,12 +8,13 @@ import { FlashCard, invertFlashCards } from "../FlashCard";
 import { renderFlashCardSide } from "./FlashCard";
 import { DefaultFlashCardMultiSelect } from './DefaultFlashCardMultiSelect';
 import { StudyAlgorithm, RandomStudyAlgorithm, AnswerDifficulty, isAnswerDifficultyCorrect, LeitnerStudyAlgorithm } from 'src/StudyAlgorithm';
+import { CSSProperties } from 'jss/css';
 
 export interface IStudyFlashCardsProps {
   title: string;
   flashCards: FlashCard[];
   renderFlashCardMultiSelect?: (selectedFlashCardIndices: number[], onChange: (newValue: number[]) => void) => JSX.Element;
-  renderAnswerSelect?: (flashCard: FlashCard, onAnswer: (answerDifficulty: AnswerDifficulty) => void) => JSX.Element;
+  renderAnswerSelect?: (flashCards: FlashCard[], flashCard: FlashCard, onAnswer: (answerDifficulty: AnswerDifficulty) => void) => JSX.Element;
   enableInvertFlashCards?: boolean;
 }
 export interface IStudyFlashCardsState {
@@ -63,6 +64,16 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
     const renderAnswerSelect = (this.props.renderAnswerSelect)
       ? this.props.renderAnswerSelect
       : this.defaultRenderAnswerSelect.bind(this);
+    
+    const flashCardContainerStyle: any = {
+      fontSize: "2em",
+      textAlign: "center",
+      padding: "1em 0",
+      height: "240px",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center"
+    };
 
     return (
       <Card>
@@ -71,11 +82,11 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
             {this.props.title}{this.state.invertFlashCards ? " (Inverted)" : ""}
           </Typography>
 
-          <Button onClick={event => this.toggleConfiguration()}>Configuration</Button>
+          <Button variant="contained" onClick={event => this.toggleConfiguration()}>Configuration</Button>
           {this.state.showConfiguration ? (
             <div>
               {this.props.enableInvertFlashCards ? <div><Checkbox checked={this.state.invertFlashCards} onChange={event => this.toggleInvertFlashCards()} /> Invert Flash Cards</div> : null}
-              <p>{flashCards.length} Flash Cards</p>
+              {false ? <p>{flashCards.length} Flash Cards</p> : null}
               {this.renderFlashCardMultiSelect(flashCards)}
             </div>
           ) : null}
@@ -87,10 +98,28 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
 
           {this.state.showDetailedStats ? questionStats : null}
 
-          <div style={{fontSize: "2em", textAlign: "center", padding: "1em 0"}}>{!this.state.isShowingBackSide ? renderedFlashCardFrontSide : renderedFlashCardBackSide}</div>
+          <div
+            style={flashCardContainerStyle}
+          >
+            {!this.state.isShowingBackSide ? renderedFlashCardFrontSide : renderedFlashCardBackSide}
+          </div>
 
-          <Button onClick={event => this.flipFlashCard()}>Flip to {this.state.isShowingBackSide ? "Front" : "Back"}</Button>
-          {renderAnswerSelect(currentFlashCard, boundOnAnswer)}
+          <div style={{marginBottom: "1em"}}>
+            <Button
+              onClick={event => this.flipFlashCard()}
+              variant="contained"
+            >
+              Flip to {this.state.isShowingBackSide ? "Front" : "Back"}
+            </Button>
+            <Button
+              onClick={event => this.moveToNextFlashCard()}
+              variant="contained"
+            >
+              Skip
+            </Button>
+          </div>
+
+          {renderAnswerSelect(flashCards, currentFlashCard, boundOnAnswer)}
         </CardContent>
       </Card>
     );
@@ -98,8 +127,8 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
 
   private studyAlgorithm: StudyAlgorithm = new LeitnerStudyAlgorithm(5);
 
-  private defaultRenderAnswerSelect (flashCard: FlashCard, onAnswer: (answerDifficulty: AnswerDifficulty) => void): JSX.Element {
-    return <Button onClick={event => onAnswer(AnswerDifficulty.Easy)}>Next</Button>;
+  private defaultRenderAnswerSelect (flashCards: FlashCard[], flashCard: FlashCard, onAnswer: (answerDifficulty: AnswerDifficulty) => void): JSX.Element | null {
+    return null;
   };
   private renderFlashCardMultiSelect(flashCards: FlashCard[]): JSX.Element {
     const onEnabledFlashCardIndicesChange = this.onEnabledFlashCardIndicesChange.bind(this);

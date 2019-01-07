@@ -85,6 +85,7 @@ export function createFlashCardGroup(): FlashCardGroup {
   const group = new FlashCardGroup("Guitar Notes", flashCards);
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   group.renderAnswerSelect = FlashCardUtils.renderNoteAnswerSelect;
+  group.enableInvertFlashCards = false;
 
   return group;
 }

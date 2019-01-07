@@ -114,7 +114,8 @@ export function createFlashCardGroup(): FlashCardGroup {
   const flashCards = createFlashCards();
 
   const group = new FlashCardGroup("Piano Notes", flashCards);
-  group.renderAnswerSelect = FlashCardUtils.renderNoteAnswerSelect;
+  group.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect
+    .bind(null, flashCards);
 
   return group;
 }

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { Paper, AppBar, Typography, Toolbar } from '@material-ui/core';
 import * as Utils from "../Utils";
 
@@ -135,7 +136,7 @@ class App extends React.Component<{}, IAppState> {
                 className += " active";
               }
     
-              return <a key={flashCardGroupIndex} href="" onClick={event => { event.preventDefault(); this.changeQuiz(flashCardGroupIndex); }} className={className}>{flashCardGroup.name}</a>
+              return <Link key={flashCardGroupIndex} to={flashCardGroup.route}>{flashCardGroup.name}</Link>;
             },
             this
           );
@@ -146,63 +147,55 @@ class App extends React.Component<{}, IAppState> {
           </div>
         );
       });
-    const componentOverrideLinks = this.componentOverrides
-      .map(
-        (componentOverride, i) => {
-          let className = "nav-link";
-          if (this.state.currentComponentOverride === componentOverride.component) {
-            className += " active";
-          }
-
-          return <a key={i} href="" onClick={event => { event.preventDefault(); this.setComponentOverride(componentOverride.component); }} className={className}>{componentOverride.name}</a>
-        },
-        this
-      );
-    const currentFlashCardGroup = this.flashCardGroups[this.state.currentFlashCardGroupIndex];
 
     return (
-      <div className="app">
-        <AppBar position="static" className="top-pane">
-          <Toolbar>
-            <Typography variant="h6" color="inherit">
-              Ritornello
-            </Typography>
-          </Toolbar>
-        </AppBar>
-        <div className="bottom-pane horizontal-panes">
-          <Paper className="left-pane">
-            <div className="left-nav">
-              {flashCardSetLinks}
-              {componentOverrideLinks}
+      <Router>
+        <div>
+          <div className="app">
+            <AppBar position="static" className="top-pane">
+              <Toolbar>
+                <Typography variant="h6" color="inherit">
+                  Ritornello
+                </Typography>
+              </Toolbar>
+            </AppBar>
+            <div className="bottom-pane horizontal-panes">
+              <Paper className="left-pane">
+                <div className="left-nav">
+                  {flashCardSetLinks}
+                </div>
+              </Paper>
+              <div className="right-pane">
+                <Route exact path="/" component={() => null} />
+                {this.flashCardGroups.map(fcg => <Route key={fcg.route} path={fcg.route} component={this.createStudyFlashCardGroupComponent(fcg)} />)}
+                {this.state.currentComponentOverride ? React.createElement(this.state.currentComponentOverride) : null}
+              </div>
             </div>
-          </Paper>
-          <div className="right-pane">
-            {!this.state.currentComponentOverride ? (
-              <StudyFlashCards
-                key={this.state.currentFlashCardGroupIndex}
-                title={currentFlashCardGroup.name}
-                flashCards={currentFlashCardGroup.flashCards}
-                renderFlashCardMultiSelect={currentFlashCardGroup.renderFlashCardMultiSelect}
-                renderAnswerSelect={currentFlashCardGroup.renderAnswerSelect}
-                enableInvertFlashCards={currentFlashCardGroup.enableInvertFlashCards} />
-            ) : null}
-            {this.state.currentComponentOverride ? React.createElement(this.state.currentComponentOverride) : null}
           </div>
         </div>
-      </div>
+      </Router>
     );
   }
 
   private groupedFlashCardGroups: { title: string; flashCardGroups: FlashCardGroup[]; }[];
   private flashCardGroups: FlashCardGroup[];
   private flashCards: FlashCard[];
-  private componentOverrides: Array<{name: string, component: any}> = [];
 
   private changeQuiz(quizIndex: number) {
     this.setState({ currentFlashCardGroupIndex: quizIndex, currentComponentOverride: null });
   }
   private setComponentOverride(component: any) {
     this.setState({ currentComponentOverride: component });
+  }
+  
+  private createStudyFlashCardGroupComponent(currentFlashCardGroup: FlashCardGroup): () => JSX.Element {
+    return () => <StudyFlashCards
+      key={currentFlashCardGroup.route}
+      title={currentFlashCardGroup.name}
+      flashCards={currentFlashCardGroup.flashCards}
+      renderFlashCardMultiSelect={currentFlashCardGroup.renderFlashCardMultiSelect}
+      renderAnswerSelect={currentFlashCardGroup.renderAnswerSelect}
+      enableInvertFlashCards={currentFlashCardGroup.enableInvertFlashCards} />;
   }
 }
 
