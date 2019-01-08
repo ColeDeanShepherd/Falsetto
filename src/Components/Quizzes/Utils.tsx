@@ -1,10 +1,10 @@
 import * as React from 'react';
+import { Button } from '@material-ui/core';
 
 import * as Utils from "src/Utils";
 import { FlashCard } from 'src/FlashCard';
 import { renderFlashCardSide } from "src/Components/FlashCard";
 import { AnswerDifficulty } from 'src/StudyAlgorithm';
-import { Button } from '@material-ui/core';
 
 export function renderNoteAnswerSelect(
   flashCards: FlashCard[],

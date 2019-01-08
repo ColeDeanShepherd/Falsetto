@@ -54,7 +54,7 @@ class App extends React.Component<{}, IAppState> {
         title: "Notes",
         flashCardGroups: [
           PianoNotes.createFlashCardGroup(),
-          GuitarNotes.createFlashCardGroup(),
+          //GuitarNotes.createFlashCardGroup(),
           new FlashCardGroup("Note Durations", NoteDurations.createFlashCards()),
           new FlashCardGroup("Sheet Music Notes", SheetMusicNotes.createFlashCards())
         ]
@@ -114,7 +114,6 @@ class App extends React.Component<{}, IAppState> {
       }
     ];
 
-    this.flashCards = Utils.flattenArrays<FlashCard>(this.groupedFlashCardGroups.map(g => g.flashCardGroups.map(g2 => g2.flashCards)));
     this.flashCardGroups = Utils.flattenArrays<FlashCardGroup>(this.groupedFlashCardGroups.map(g => g.flashCardGroups));
 
     this.state = {
@@ -124,29 +123,9 @@ class App extends React.Component<{}, IAppState> {
   }
 
   public render(): JSX.Element {
-    const flashCardSetLinks = this.groupedFlashCardGroups
-      .map(g => {
-        const links = g.flashCardGroups
-          .map(
-            flashCardGroup => {
-              const flashCardGroupIndex = this.flashCardGroups.indexOf(flashCardGroup);
-
-              let className = "nav-link";
-              if ((!this.state.currentComponentOverride) && (flashCardGroupIndex === this.state.currentFlashCardGroupIndex)) {
-                className += " active";
-              }
-    
-              return <Link key={flashCardGroupIndex} to={flashCardGroup.route}>{flashCardGroup.name}</Link>;
-            },
-            this
-          );
-        return (
-          <div key={g.title}>
-            <p>{g.title}</p>
-            {links}
-          </div>
-        );
-      });
+    const renderFlashCardGroupLink = (flashCardGroup: FlashCardGroup) => (
+      <Link to={flashCardGroup.route}>{flashCardGroup.name}</Link>
+    );
 
     return (
       <Router>
@@ -162,12 +141,62 @@ class App extends React.Component<{}, IAppState> {
             <div className="bottom-pane horizontal-panes">
               <Paper className="left-pane">
                 <div className="left-nav">
-                  {flashCardSetLinks}
+                  <div>
+                    <p>Notes</p>
+                    {renderFlashCardGroupLink(PianoNotes.createFlashCardGroup())}
+                    {renderFlashCardGroupLink(GuitarNotes.createFlashCardGroup())}
+                    {renderFlashCardGroupLink(new FlashCardGroup("Note Durations", NoteDurations.createFlashCards()))}
+                    {renderFlashCardGroupLink(new FlashCardGroup("Sheet Music Notes", SheetMusicNotes.createFlashCards()))}
+                  </div>
+                  <div>
+                    <p>Intervals</p>
+                    {renderFlashCardGroupLink(new FlashCardGroup("Interval Quality Symbols To Qualities", IntervalQualitySymbolsToQualities.createFlashCards()))}
+                    {renderFlashCardGroupLink(new FlashCardGroup("Generic Intervals To Interval Qualities", GenericIntervalsToIntervalQualities.createFlashCards()))}
+                    {renderFlashCardGroupLink(new FlashCardGroup("Interval Names To Half Steps", IntervalNamesToHalfSteps.createFlashCards()))}
+                    {renderFlashCardGroupLink(new FlashCardGroup("Intervals To Consonance Dissonance", IntervalsToConsonanceDissonance.createFlashCards()))}
+                    {renderFlashCardGroupLink(Interval2ndNotes.createFlashCardGroup())}
+                    {renderFlashCardGroupLink(IntervalNotes.createFlashCardGroup())}
+                    {renderFlashCardGroupLink(SheetMusicIntervalRecognition.createFlashCardGroup())}
+                    {renderFlashCardGroupLink(IntervalEarTraining.createFlashCardGroup())}
+                    {renderFlashCardGroupLink(Interval2ndNoteEarTraining.createFlashCardGroup())}
+                  </div>
+                  <div>
+                    <p>Scales</p>
+                    {renderFlashCardGroupLink(new FlashCardGroup("Scale Degree Names", ScaleDegreeNames.createFlashCards()))}
+                    {renderFlashCardGroupLink(new FlashCardGroup("Scale Notes", ScaleNotes.createFlashCards()))}
+                    {renderFlashCardGroupLink(new FlashCardGroup("Scale Degree Modes", ScaleDegreeModes.createFlashCards()))}
+                    {renderFlashCardGroupLink(new FlashCardGroup("Scale Chords", ScaleChords.createFlashCards()))}
+                    {renderFlashCardGroupLink(new FlashCardGroup("Scale Families", ScaleFamilies.createFlashCards()))}
+                    {renderFlashCardGroupLink(new FlashCardGroup("Scale Characteristics", ScaleCharacteristics.createFlashCards()))}
+                    {renderFlashCardGroupLink(ScaleEarTraining.createFlashCardGroup())}
+                  </div>
+                  <div>
+                    <p>Keys</p>
+                    {renderFlashCardGroupLink(new FlashCardGroup("Key Accidental Counts", KeyAccidentalCounts.createFlashCards()))}
+                    {renderFlashCardGroupLink(new FlashCardGroup("Key Accidental Notes", KeyAccidentalNotes.createFlashCards()))}
+                  </div>
+                  <div>
+                    <p>Chords</p>
+                    {renderFlashCardGroupLink(new FlashCardGroup("Chord Family Definitions", ChordFamilyDefinitions.createFlashCards()))}
+                    {renderFlashCardGroupLink(new FlashCardGroup("Chord Families", ChordFamilies.createFlashCards()))}
+                    {renderFlashCardGroupLink(new FlashCardGroup("Chord Notes", ChordNotes.createFlashCards()))}
+                    {renderFlashCardGroupLink(new FlashCardGroup("Available Chord Tensions", AvailableChordTensions.createFlashCards()))}
+                    {renderFlashCardGroupLink(new FlashCardGroup("Diatonic Triads", DiatonicTriads.createFlashCards()))}
+                    {renderFlashCardGroupLink(new FlashCardGroup("Diatonic Seventh Chords", DiatonicSeventhChords.createFlashCards()))}
+                    {renderFlashCardGroupLink(SheetMusicChordRecognition.createFlashCardGroup())}
+                    {renderFlashCardGroupLink(ChordEarTraining.createFlashCardGroup())}
+                    {renderFlashCardGroupLink(RandomChordGenerator.createFlashCardGroup())}
+                  </div>
+                  <div>
+                    <p>The Jazz Piano Site</p>
+                    {renderFlashCardGroupLink(new FlashCardGroup("Overview", Overview.createFlashCards()))}
+                  </div>
                 </div>
               </Paper>
               <div className="right-pane">
                 <Route exact path="/" component={() => null} />
                 {this.flashCardGroups.map(fcg => <Route key={fcg.route} path={fcg.route} component={this.createStudyFlashCardGroupComponent(fcg)} />)}
+                <Route path="/guitar-notes" component={GuitarNotes.GuitarNotesComponent} />
                 {this.state.currentComponentOverride ? React.createElement(this.state.currentComponentOverride) : null}
               </div>
             </div>
@@ -179,7 +208,6 @@ class App extends React.Component<{}, IAppState> {
 
   private groupedFlashCardGroups: { title: string; flashCardGroups: FlashCardGroup[]; }[];
   private flashCardGroups: FlashCardGroup[];
-  private flashCards: FlashCard[];
 
   private changeQuiz(quizIndex: number) {
     this.setState({ currentFlashCardGroupIndex: quizIndex, currentComponentOverride: null });

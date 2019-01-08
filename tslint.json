@@ -13,7 +13,8 @@
     "comment-format": false,
     "no-bitwise": false,
     "jsx-boolean-value": false,
-    "variable-name": [true, "allow-leading-underscore"]
+    "variable-name": [true, "allow-leading-underscore"],
+    "no-empty-interface": false
   },
   "linterOptions": {
     "exclude": [
