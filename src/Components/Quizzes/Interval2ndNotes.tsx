@@ -43,16 +43,19 @@ const intervals = [
 ];
 const signs = ["+", "-"];
 
-export interface IIntervalNotesFlashCardMultiSelectProps {
-  flashCards: FlashCard[];
-  selectedFlashCardIndices: number[];
-  onChange?: (newValue: number[]) => void;
-}
-export interface IIntervalNotesFlashCardMultiSelectState {
+interface IConfigData {
   enabledRootNotes: Pitch[];
   enabledIntervals: string[];
   enabledSigns: string[];
 }
+
+export interface IIntervalNotesFlashCardMultiSelectProps {
+  flashCards: FlashCard[];
+  configData: IConfigData;
+  selectedFlashCardIndices: number[];
+  onChange?: (newValue: number[], newConfigData: any) => void;
+}
+export interface IIntervalNotesFlashCardMultiSelectState {}
 export class IntervalNotesFlashCardMultiSelect extends React.Component<IIntervalNotesFlashCardMultiSelectProps, IIntervalNotesFlashCardMultiSelectState> {
   public constructor(props: IIntervalNotesFlashCardMultiSelectProps) {
     super(props);
@@ -66,8 +69,8 @@ export class IntervalNotesFlashCardMultiSelect extends React.Component<IInterval
   public render(): JSX.Element {
     const rootNoteCheckboxTableRows = rootNotes
       .map((rootNote, i) => {
-        const isChecked = this.state.enabledRootNotes.indexOf(rootNote) >= 0;
-        const isEnabled = !isChecked || (this.state.enabledRootNotes.length > 1);
+        const isChecked = this.props.configData.enabledRootNotes.indexOf(rootNote) >= 0;
+        const isEnabled = !isChecked || (this.props.configData.enabledRootNotes.length > 1);
 
         return (
           <TableRow key={i}>
@@ -92,8 +95,8 @@ export class IntervalNotesFlashCardMultiSelect extends React.Component<IInterval
     
     const intervalCheckboxTableRows = intervals
       .map((interval, i) => {
-        const isChecked = this.state.enabledIntervals.indexOf(interval) >= 0;
-        const isEnabled = !isChecked || (this.state.enabledIntervals.length > 1);
+        const isChecked = this.props.configData.enabledIntervals.indexOf(interval) >= 0;
+        const isEnabled = !isChecked || (this.props.configData.enabledIntervals.length > 1);
 
         return (
           <TableRow key={i}>
@@ -118,8 +121,8 @@ export class IntervalNotesFlashCardMultiSelect extends React.Component<IInterval
     
     const signCheckboxTableRows = signs
       .map((sign, i) => {
-        const isChecked = this.state.enabledSigns.indexOf(sign) >= 0;
-        const isEnabled = !isChecked || (this.state.enabledSigns.length > 1);
+        const isChecked = this.props.configData.enabledSigns.indexOf(sign) >= 0;
+        const isEnabled = !isChecked || (this.props.configData.enabledSigns.length > 1);
 
         return (
           <TableRow key={i}>
@@ -153,47 +156,59 @@ export class IntervalNotesFlashCardMultiSelect extends React.Component<IInterval
 
   private toggleRootNoteEnabled(rootNote: Pitch) {
     const newEnabledRootNotes = Utils.toggleArrayElement(
-      this.state.enabledRootNotes,
+      this.props.configData.enabledRootNotes,
       rootNote
     );
     
     if (newEnabledRootNotes.length > 0) {
-      this.setState({ enabledRootNotes: newEnabledRootNotes });
-      this.onChange(newEnabledRootNotes, this.state.enabledIntervals, this.state.enabledSigns);
+      const newConfigData: IConfigData = {
+        enabledRootNotes: newEnabledRootNotes,
+        enabledIntervals: this.props.configData.enabledIntervals,
+        enabledSigns: this.props.configData.enabledSigns
+      };
+      this.onChange(newConfigData);
     }
   }
   private toggleIntervalEnabled(interval: string) {
     const newEnabledIntervals = Utils.toggleArrayElement(
-      this.state.enabledIntervals,
+      this.props.configData.enabledIntervals,
       interval
     );
     
     if (newEnabledIntervals.length > 0) {
-      this.setState({ enabledIntervals: newEnabledIntervals });
-      this.onChange(this.state.enabledRootNotes, newEnabledIntervals, this.state.enabledSigns);
+      const newConfigData: IConfigData = {
+        enabledRootNotes: this.props.configData.enabledRootNotes,
+        enabledIntervals: newEnabledIntervals,
+        enabledSigns: this.props.configData.enabledSigns
+      };
+      this.onChange(newConfigData);
     }
   }
   private toggleSignEnabled(sign: string) {
     const newEnabledSigns = Utils.toggleArrayElement(
-      this.state.enabledSigns,
+      this.props.configData.enabledSigns,
       sign
     );
     
     if (newEnabledSigns.length > 0) {
-      this.setState({ enabledSigns: newEnabledSigns });
-      this.onChange(this.state.enabledRootNotes, this.state.enabledIntervals, newEnabledSigns);
+      const newConfigData: IConfigData = {
+        enabledRootNotes: this.props.configData.enabledRootNotes,
+        enabledIntervals: this.props.configData.enabledIntervals,
+        enabledSigns: newEnabledSigns
+      };
+      this.onChange(newConfigData);
     }
   }
-  private onChange(enabledRootNotes: Pitch[], enabledIntervals: string[], enabledSigns: string[]) {
+  private onChange(newConfigData: IConfigData) {
     if (!this.props.onChange) { return; }
 
     const newEnabledFlashCardIndices = Utils.flattenArrays<boolean>(rootNotes
       .map(rootNote => intervals
         .map(interval => signs
           .map(sign =>
-            Utils.arrayContains(enabledRootNotes, rootNote) &&
-            Utils.arrayContains(enabledIntervals, interval) &&
-            Utils.arrayContains(enabledSigns, sign)
+            Utils.arrayContains(newConfigData.enabledRootNotes, rootNote) &&
+            Utils.arrayContains(newConfigData.enabledIntervals, interval) &&
+            Utils.arrayContains(newConfigData.enabledSigns, sign)
           )
         )
       )
@@ -201,7 +216,7 @@ export class IntervalNotesFlashCardMultiSelect extends React.Component<IInterval
     .map((x, i) => x ? i : -1)
     .filter(i => i >= 0);
 
-    this.props.onChange(newEnabledFlashCardIndices);
+    this.props.onChange(newEnabledFlashCardIndices, newConfigData);
   }
 }
 
@@ -232,21 +247,30 @@ export function createFlashCardGroup(): FlashCardGroup {
   );
   const renderFlashCardMultiSelect = (
     selectedFlashCardIndices: number[],
-    onChange: (newValue: number[]) => void
+    configData: any,
+    onChange: (newValue: number[], newConfigData: any) => void
   ): JSX.Element => {
     return (
     <IntervalNotesFlashCardMultiSelect
       flashCards={flashCards}
+      configData={configData}
       selectedFlashCardIndices={selectedFlashCardIndices}
       onChange={onChange}
     />
     );
+  };
+
+  const initialConfigData: IConfigData = {
+    enabledRootNotes: rootNotes.slice(),
+    enabledIntervals: intervals.slice(),
+    enabledSigns: signs.slice()
   };
   
   const group = new FlashCardGroup(
     "Interval 2nd Notes",
     flashCards
   );
+  group.initialConfigData = initialConfigData;
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   group.enableInvertFlashCards = false;
   return group;

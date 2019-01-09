@@ -9,8 +9,9 @@ import * as Utils from "../Utils";
 
 export interface IDefaultFlashCardMultiSelectProps {
   flashCards: FlashCard[];
+  configData: any;
   selectedFlashCardIndices: number[];
-  onChange?: (newValue: number[]) => void;
+  onChange?: (newValue: number[], newConfigData: any) => void;
 }
 export class DefaultFlashCardMultiSelect extends React.Component<IDefaultFlashCardMultiSelectProps, {}> {
   public render(): JSX.Element {
@@ -54,7 +55,7 @@ export class DefaultFlashCardMultiSelect extends React.Component<IDefaultFlashCa
     );
 
     if (newEnabledFlashCardIndices.length > 0) {
-      this.props.onChange(newEnabledFlashCardIndices);
+      this.props.onChange(newEnabledFlashCardIndices, this.props.configData);
     }
   }
 }

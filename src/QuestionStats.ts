@@ -1,5 +1,6 @@
-export class QuestionStats<T> {
+export class QuestionStats {
   public constructor(
+    public questionId: any,
     public numCorrectGuesses: number,
     public numIncorrectGuesses: number
   ) {}

@@ -6,6 +6,7 @@ import * as FlashCardUtils from "./Utils";
 import { GuitarFretboard } from '../GuitarFretboard';
 import { FlashCard } from '../../FlashCard';
 import { FlashCardGroup } from 'src/FlashCardGroup';
+import { StudyAlgorithm, LeitnerStudyAlgorithm, AnswerDifficulty } from 'src/StudyAlgorithm';
 
 const stringNotes = [
   ["E", "F", "F#/Gb", "G", "G#/Ab", "A", "A#/Bb", "B", "C", "C#/Db", "D", "D#/Eb"], // low E string
@@ -15,15 +16,26 @@ const stringNotes = [
   ["B", "C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb", "G", "G#/Ab", "A", "A#/Bb"], // B string
   ["E", "F", "F#/Gb", "G", "G#/Ab", "A", "A#/Bb", "B", "C", "C#/Db", "D", "D#/Eb"], // high E string
 ];
+const allQuestions = Utils.flattenArrays<IQuestionId>(stringNotes
+  .map((notes, stringIndex) => notes
+    .map((_, fretNumber) => ({
+      stringIndex: stringIndex,
+      fretNumber: fretNumber
+    }))
+  )
+);
+
+interface IConfigData {
+  maxFretString: string
+};
 
 export interface IGuitarNotesFlashCardMultiSelectProps {
   flashCards: FlashCard[];
+  configData: IConfigData;
   selectedFlashCardIndices: number[];
-  onChange?: (newValue: number[]) => void;
+  onChange?: (newValue: number[], newConfigData: any) => void;
 }
-export interface IGuitarNotesFlashCardMultiSelectState {
-  maxFretString: string;
-}
+export interface IGuitarNotesFlashCardMultiSelectState {}
 export class GuitarNotesFlashCardMultiSelect extends React.Component<IGuitarNotesFlashCardMultiSelectProps, IGuitarNotesFlashCardMultiSelectState> {
   public constructor(props: IGuitarNotesFlashCardMultiSelectProps) {
     super(props);
@@ -36,7 +48,7 @@ export class GuitarNotesFlashCardMultiSelect extends React.Component<IGuitarNote
     return (
       <TextField
         label="Max. Fret"
-        value={this.state.maxFretString}
+        value={this.props.configData.maxFretString}
         onChange={event => this.onMaxFretStringChange(event.target.value)}
         type="number"
         InputLabelProps={{
@@ -48,8 +60,6 @@ export class GuitarNotesFlashCardMultiSelect extends React.Component<IGuitarNote
   }
   
   private onMaxFretStringChange(newValue: string) {
-    this.setState({ maxFretString: newValue });
-    
     if (!this.props.onChange) { return; }
 
     const maxFret = parseInt(newValue, 10);
@@ -65,7 +75,10 @@ export class GuitarNotesFlashCardMultiSelect extends React.Component<IGuitarNote
       }
     }
 
-    this.props.onChange(enabledFlashCardIndices);
+    const newConfigData: IConfigData = {
+      maxFretString: maxFret.toString()
+    }
+    this.props.onChange(enabledFlashCardIndices, newConfigData);
   }
 }
 
@@ -73,16 +86,23 @@ export function createFlashCardGroup(): FlashCardGroup {
   const flashCards = createFlashCards();
   const renderFlashCardMultiSelect = (
     selectedFlashCardIndices: number[],
-    onChange: (newValue: number[]) => void
+    configData: any,
+    onChange: (newValue: number[], newConfigData: any) => void
   ): JSX.Element => {
     return <GuitarNotesFlashCardMultiSelect
       flashCards={flashCards}
+      configData={configData}
       selectedFlashCardIndices={selectedFlashCardIndices}
       onChange={onChange}
     />;
   };
 
+  const initialConfigData: IConfigData = {
+    maxFretString: "11"
+  };
+
   const group = new FlashCardGroup("Guitar Notes", flashCards);
+  group.initialConfigData = initialConfigData;
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   group.renderAnswerSelect = FlashCardUtils.renderNoteAnswerSelect;
   group.enableInvertFlashCards = false;
@@ -91,7 +111,6 @@ export function createFlashCardGroup(): FlashCardGroup {
 }
 
 export function createFlashCards(): FlashCard[] {
-  
   return Utils.flattenArrays(stringNotes
     .map((notes, stringIndex) => notes
       .map((_, fretNumber) => new FlashCard(
@@ -108,25 +127,34 @@ export function createFlashCards(): FlashCard[] {
   );
 }
 
+interface IQuestionId {
+  stringIndex: number;
+  fretNumber: number;
+};
+
 export interface IGuitarNotesProps {}
 export interface IGuitarNotesState {
   maxFretNumber: number;
   currentStringIndex: number;
   currentFretNumber: number;
+  haveGottenCurrentFlashCardWrong: boolean;
   isShowingAnswer: boolean;
   isShowingConfiguration: boolean;
-  // stats
 }
 export class GuitarNotesComponent extends React.Component<IGuitarNotesProps, IGuitarNotesState> {
   public constructor(props: IGuitarNotesProps) {
     super(props);
 
+    this.studyAlgorithm.reset(allQuestions.map((_, i) => i));
+
     const maxFretNumber = 11;
     this.state = Object.assign({
       maxFretNumber: maxFretNumber,
+      haveGottenCurrentFlashCardWrong: false,
       isShowingAnswer: false,
       isShowingConfiguration: false
     }, this.getNextNote(maxFretNumber));
+
   }
   public render(): JSX.Element {
     const answers = ["A", "A#/Bb", "B", "C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb", "G", "G#/Ab"];
@@ -212,14 +240,28 @@ export class GuitarNotesComponent extends React.Component<IGuitarNotesProps, IGu
     );
   }
   
+  private studyAlgorithm: StudyAlgorithm = new LeitnerStudyAlgorithm(5);
+  
   private getNextNote(maxFretNumber: number): { currentStringIndex: number, currentFretNumber: number } {
+    const nextQuestionId = this.studyAlgorithm.getNextQuestionId();
+    const nextQuestion = allQuestions[nextQuestionId];
     return {
-      currentStringIndex: Utils.randomInt(0, stringNotes.length - 1),
-      currentFretNumber: Utils.randomInt(0, maxFretNumber)
+      currentStringIndex: nextQuestion.stringIndex,
+      currentFretNumber: nextQuestion.fretNumber
     };
   }
+  private getEnabledQuestionIds(maxFretNumber: number): Array<number> {
+    return allQuestions
+      .filter(q => q.fretNumber <= maxFretNumber)
+      .map((_, i) => i);
+  }
   private moveToNextQuestion() {
-    const newState = Object.assign({ isShowingAnswer: false }, this.getNextNote(this.state.maxFretNumber));
+    const newState = Object.assign(
+      {
+        isShowingAnswer: false, haveGottenCurrentFlashCardWrong: false
+      },
+      this.getNextNote(this.state.maxFretNumber)
+    );
     this.setState(newState);
   }
   private toggleShowAnswer() {
@@ -246,11 +288,16 @@ export class GuitarNotesComponent extends React.Component<IGuitarNotesProps, IGu
   }
   private onAnswerSelected(answer: string) {
     const correctAnswer = stringNotes[this.state.currentStringIndex][this.state.currentFretNumber];
+    const isCorrect = answer === correctAnswer;
 
-    if (answer === correctAnswer) {
+    if (!this.state.haveGottenCurrentFlashCardWrong) {
+      this.studyAlgorithm.onAnswer(isCorrect ? AnswerDifficulty.Easy : AnswerDifficulty.Incorrect);
+    }
+
+    if (isCorrect) {
       this.moveToNextQuestion();
     } else {
-
+      this.setState({ haveGottenCurrentFlashCardWrong: true });
     }
   }
 }

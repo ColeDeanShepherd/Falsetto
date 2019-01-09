@@ -1,9 +1,8 @@
 # To-Do
 ## High-Priority
-* Make sure I'm using selectedFlashCardIndices in all flash card multi selects.
 * Fix inverted flash cards.
 * Better configure screen for sheet music notes.
-* Test in shitty browsers.
+* Test everything in shitty browsers.
 ## Low-Priority
 * Cut off old sounds when switching flash cards.
 * Add support for dynamically generated flash card decks

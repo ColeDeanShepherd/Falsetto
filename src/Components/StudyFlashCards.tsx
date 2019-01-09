@@ -7,19 +7,28 @@ import * as Utils from '../Utils';
 import { FlashCard, invertFlashCards } from "../FlashCard";
 import { renderFlashCardSide } from "./FlashCard";
 import { DefaultFlashCardMultiSelect } from './DefaultFlashCardMultiSelect';
-import { StudyAlgorithm, RandomStudyAlgorithm, AnswerDifficulty, isAnswerDifficultyCorrect, LeitnerStudyAlgorithm } from 'src/StudyAlgorithm';
-import { CSSProperties } from 'jss/css';
+import { StudyAlgorithm, AnswerDifficulty, isAnswerDifficultyCorrect, LeitnerStudyAlgorithm } from 'src/StudyAlgorithm';
 
 export interface IStudyFlashCardsProps {
   title: string;
   flashCards: FlashCard[];
-  renderFlashCardMultiSelect?: (selectedFlashCardIndices: number[], onChange: (newValue: number[]) => void) => JSX.Element;
-  renderAnswerSelect?: (flashCards: FlashCard[], flashCard: FlashCard, onAnswer: (answerDifficulty: AnswerDifficulty) => void) => JSX.Element;
+  initialConfigData: any;
+  renderFlashCardMultiSelect?: (
+    selectedFlashCardIndices: number[],
+    configData: any,
+    onChange: (newValue: number[], newConfigData: any) => void
+  ) => JSX.Element;
+  renderAnswerSelect?: (
+    flashCards: FlashCard[],
+    flashCard: FlashCard,
+    onAnswer: (answerDifficulty: AnswerDifficulty) => void
+  ) => JSX.Element;
   enableInvertFlashCards?: boolean;
 }
 export interface IStudyFlashCardsState {
   currentFlashCardIndex: number;
   haveGottenCurrentFlashCardWrong: boolean;
+  configData: any;
   enabledFlashCardIndices: number[];
   showConfiguration: boolean;
   showDetailedStats: boolean;
@@ -37,7 +46,8 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
         showDetailedStats: false,
         isShowingBackSide: false,
         invertFlashCards: false,
-        invertedFlashCards: []
+        invertedFlashCards: [],
+        configData: props.initialConfigData
       },
       this.getInitialStateForFlashCards(this.props.flashCards)
     );
@@ -134,21 +144,24 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
     const onEnabledFlashCardIndicesChange = this.onEnabledFlashCardIndicesChange.bind(this);
 
     return this.props.renderFlashCardMultiSelect
-      ? this.props.renderFlashCardMultiSelect(this.state.enabledFlashCardIndices, onEnabledFlashCardIndicesChange)
+      ? this.props.renderFlashCardMultiSelect(
+        this.state.enabledFlashCardIndices, this.state.configData, onEnabledFlashCardIndicesChange
+      )
       : <DefaultFlashCardMultiSelect
           flashCards={flashCards}
+          configData={this.state.configData}
           selectedFlashCardIndices={this.state.enabledFlashCardIndices}
           onChange={onEnabledFlashCardIndicesChange}
         />;
   }
   
   private getInitialStateForFlashCards(flashCards: FlashCard[]) {
-    this.studyAlgorithm.reset(this.props.flashCards);
+    this.studyAlgorithm.reset(this.props.flashCards.map((_, i) => i));
 
     return {
-      currentFlashCardIndex: this.studyAlgorithm.getNextFlashCardIndex(),
+      currentFlashCardIndex: this.studyAlgorithm.getNextQuestionId(),
       haveGottenCurrentFlashCardWrong: false,
-      enabledFlashCardIndices: this.studyAlgorithm.enabledFlashCardIndices
+      enabledFlashCardIndices: this.studyAlgorithm.enabledQuestionIds
     };
   }
 
@@ -167,10 +180,10 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
   private toggleConfiguration() {
     this.setState({ showConfiguration: !this.state.showConfiguration });
   }
-  private onEnabledFlashCardIndicesChange(newValue: number[]) {
-    this.studyAlgorithm.enabledFlashCardIndices = newValue;
+  private onEnabledFlashCardIndicesChange(newValue: number[], newConfigData: any) {
+    this.studyAlgorithm.enabledQuestionIds = newValue;
 
-    const stateDelta: any = { enabledFlashCardIndices: newValue };
+    const stateDelta: any = { enabledFlashCardIndices: newValue, configData: newConfigData };
     const onStateChanged = !Utils.arrayContains(newValue, this.state.currentFlashCardIndex)
       ? () => this.moveToNextFlashCard()
       : undefined;
@@ -200,7 +213,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
   }
   private moveToNextFlashCard() {
     this.setState({
-      currentFlashCardIndex: this.studyAlgorithm.getNextFlashCardIndex(),
+      currentFlashCardIndex: this.studyAlgorithm.getNextQuestionId(),
       haveGottenCurrentFlashCardWrong: false,
       isShowingBackSide: false
     });

@@ -65,15 +65,18 @@ const chords = [
 
 // TODO: instead of generating all flash cards ahead of time, dynamically generate each one
 
-export interface IChordNotesFlashCardMultiSelectProps {
-  flashCards: FlashCard[];
-  selectedFlashCardIndices: number[];
-  onChange?: (newValue: number[]) => void;
-}
-export interface IChordNotesFlashCardMultiSelectState {
+interface IConfigData {
   enabledChordTypes: string[];
   enabledRootPitches: Pitch[];
 }
+
+export interface IChordNotesFlashCardMultiSelectProps {
+  flashCards: FlashCard[];
+  configData: IConfigData;
+  selectedFlashCardIndices: number[];
+  onChange?: (newValue: number[], newConfigData: any) => void;
+}
+export interface IChordNotesFlashCardMultiSelectState {}
 export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesFlashCardMultiSelectProps, IChordNotesFlashCardMultiSelectState> {
   public constructor(props: IChordNotesFlashCardMultiSelectProps) {
     super(props);
@@ -86,8 +89,8 @@ export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesF
   public render(): JSX.Element {
     const rootPitchCheckboxTableRows = rootPitches
       .map((rootPitch, i) => {
-        const isChecked = this.state.enabledRootPitches.indexOf(rootPitch) >= 0;
-        const isEnabled = !isChecked || (this.state.enabledRootPitches.length > 1);
+        const isChecked = this.props.configData.enabledRootPitches.indexOf(rootPitch) >= 0;
+        const isEnabled = !isChecked || (this.props.configData.enabledRootPitches.length > 1);
 
         return (
           <TableRow key={i}>
@@ -112,8 +115,8 @@ export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesF
 
     const chordTypeCheckboxTableRows = chords
       .map((chord, i) => {
-        const isChecked = this.state.enabledChordTypes.indexOf(chord.type) >= 0;
-        const isEnabled = !isChecked || (this.state.enabledChordTypes.length > 1);
+        const isChecked = this.props.configData.enabledChordTypes.indexOf(chord.type) >= 0;
+        const isEnabled = !isChecked || (this.props.configData.enabledChordTypes.length > 1);
 
         return (
           <TableRow key={i}>
@@ -146,27 +149,33 @@ export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesF
   
   private toggleRootPitchEnabled(rootPitch: Pitch) {
     const newEnabledRootPitches = Utils.toggleArrayElement(
-      this.state.enabledRootPitches,
+      this.props.configData.enabledRootPitches,
       rootPitch
     );
     
     if (newEnabledRootPitches.length > 0) {
-      this.setState({ enabledRootPitches: newEnabledRootPitches });
-      this.onChange(newEnabledRootPitches, this.state.enabledChordTypes);
+      const newConfigData: IConfigData = {
+        enabledRootPitches: newEnabledRootPitches,
+        enabledChordTypes: this.props.configData.enabledChordTypes
+      };
+      this.onChange(newConfigData);
     }
   }
   private toggleChordEnabled(chord: string) {
     const newEnabledChords = Utils.toggleArrayElement(
-      this.state.enabledChordTypes,
+      this.props.configData.enabledChordTypes,
       chord
     );
     
     if (newEnabledChords.length > 0) {
-      this.setState({ enabledChordTypes: newEnabledChords });
-      this.onChange(this.state.enabledRootPitches, newEnabledChords);
+      const newConfigData: IConfigData = {
+        enabledRootPitches: this.props.configData.enabledRootPitches,
+        enabledChordTypes: newEnabledChords
+      };
+      this.onChange(newConfigData);
     }
   }
-  private onChange(enabledRootPitches: Array<Pitch>, enabledChordTypes: string[]) {
+  private onChange(newConfigData: IConfigData) {
     if (!this.props.onChange) { return; }
 
     const newEnabledFlashCardIndices = new Array<number>();
@@ -177,8 +186,8 @@ export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesF
       for (const chord of chords) {
         const chordType = chord.type;
         if (
-          Utils.arrayContains(enabledRootPitches, rootPitch) &&
-          Utils.arrayContains(enabledChordTypes, chordType)
+          Utils.arrayContains(newConfigData.enabledRootPitches, rootPitch) &&
+          Utils.arrayContains(newConfigData.enabledChordTypes, chordType)
         ) {
           newEnabledFlashCardIndices.push(i);
         }
@@ -187,7 +196,7 @@ export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesF
       }
     }
 
-    this.props.onChange(newEnabledFlashCardIndices);
+    this.props.onChange(newEnabledFlashCardIndices, newConfigData);
   }
 }
 
@@ -216,21 +225,29 @@ export function createFlashCardGroup(): FlashCardGroup {
 
   const renderFlashCardMultiSelect = (
     selectedFlashCardIndices: number[],
-    onChange: (newValue: number[]) => void
+    configData: any,
+    onChange: (newValue: number[], newConfigData: any) => void
   ): JSX.Element => {
     return (
     <ChordNotesFlashCardMultiSelect
       flashCards={flashCards}
+      configData={configData}
       selectedFlashCardIndices={selectedFlashCardIndices}
       onChange={onChange}
     />
     );
+  };
+
+  const initialConfigData: IConfigData = {
+    enabledRootPitches: rootPitches.slice(),
+    enabledChordTypes: chords.map(chord => chord.type)
   };
   
   const group = new FlashCardGroup(
     "Sheet Music Chords",
     flashCards
   );
+  group.initialConfigData = initialConfigData;
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   group.enableInvertFlashCards = false;
   return group;

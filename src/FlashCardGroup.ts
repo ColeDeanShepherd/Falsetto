@@ -2,9 +2,11 @@ import { FlashCard } from "./FlashCard";
 import { AnswerDifficulty } from './StudyAlgorithm';
 
 export class FlashCardGroup {
+  public initialConfigData: any;
   public renderFlashCardMultiSelect?: (
     selectedFlashCardIndices: number[],
-    onChange: (newValue: number[]) => void
+    configData: any,
+    onChange: (newValue: number[], newConfigData: any) => void
   ) => JSX.Element;
   public renderAnswerSelect?: (
     flashCards: FlashCard[],

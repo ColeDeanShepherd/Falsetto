@@ -1,9 +1,9 @@
 import * as Utils from "./Utils";
 import { QuestionStats } from "./QuestionStats";
 
-export class QuizStats<T> {
+export class QuizStats {
   public constructor(
-    public questionStats: Array<QuestionStats<T>>
+    public questionStats: Array<QuestionStats>
   ) {}
   
   public get numCorrectGuesses(): number {

@@ -13,7 +13,7 @@ export interface IQuizProps {
 }
 export interface IQuizState {
   currentQuestionIndex: number;
-  quizStats: QuizStats<string>;
+  quizStats: QuizStats;
   enabledQuestionIndices: number[];
   showDetailedStats: boolean;
   isInStudyMode: boolean;
@@ -23,8 +23,8 @@ export class Quiz extends React.Component<IQuizProps, IQuizState> {
   constructor(props: IQuizProps) {
     super(props);
 
-    const quizStats = new QuizStats<string>(
-      this.props.quiz.questionRenderFuncs.map(x => new QuestionStats<string>(0, 0))
+    const quizStats = new QuizStats(
+      this.props.quiz.questionRenderFuncs.map((x, i) => new QuestionStats(i, 0, 0))
     );
     const enabledQuestionIndices = this.props.quiz.questionRenderFuncs.map((_, i) => i)
 
@@ -94,7 +94,7 @@ export class Quiz extends React.Component<IQuizProps, IQuizState> {
   
   private getNextQuestionIndex(
     quiz: QuizModel,
-    quizStats: QuizStats<string>,
+    quizStats: QuizStats,
     enabledQuestionIndices: number[],
     currentQuestionIndex: number
   ): number {

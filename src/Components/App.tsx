@@ -54,7 +54,7 @@ class App extends React.Component<{}, IAppState> {
         title: "Notes",
         flashCardGroups: [
           PianoNotes.createFlashCardGroup(),
-          //GuitarNotes.createFlashCardGroup(),
+          GuitarNotes.createFlashCardGroup(),
           new FlashCardGroup("Note Durations", NoteDurations.createFlashCards()),
           new FlashCardGroup("Sheet Music Notes", SheetMusicNotes.createFlashCards())
         ]
@@ -196,7 +196,6 @@ class App extends React.Component<{}, IAppState> {
               <div className="right-pane">
                 <Route exact path="/" component={() => null} />
                 {this.flashCardGroups.map(fcg => <Route key={fcg.route} path={fcg.route} component={this.createStudyFlashCardGroupComponent(fcg)} />)}
-                <Route path="/guitar-notes" component={GuitarNotes.GuitarNotesComponent} />
                 {this.state.currentComponentOverride ? React.createElement(this.state.currentComponentOverride) : null}
               </div>
             </div>
@@ -221,6 +220,7 @@ class App extends React.Component<{}, IAppState> {
       key={currentFlashCardGroup.route}
       title={currentFlashCardGroup.name}
       flashCards={currentFlashCardGroup.flashCards}
+      initialConfigData={currentFlashCardGroup.initialConfigData}
       renderFlashCardMultiSelect={currentFlashCardGroup.renderFlashCardMultiSelect}
       renderAnswerSelect={currentFlashCardGroup.renderAnswerSelect}
       enableInvertFlashCards={currentFlashCardGroup.enableInvertFlashCards} />;

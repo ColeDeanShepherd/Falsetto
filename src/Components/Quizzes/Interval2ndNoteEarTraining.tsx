@@ -8,7 +8,13 @@ import { Pitch, ambiguousPitchStrings } from 'src/Pitch';
 import { VerticalDirection } from 'src/VerticalDirection';
 import { Interval, intervalQualityStringToNumber } from 'src/Interval';
 import { playPitch } from "src/Components/Quizzes/PianoNotes";
-import { rootNotes, intervals, signs, IntervalEarTrainingFlashCardMultiSelect } from "src/Components/IntervalEarTrainingFlashCardMultiSelect";
+import {
+  IConfigData,
+  rootNotes,
+  intervals,
+  signs,
+  IntervalEarTrainingFlashCardMultiSelect
+} from "src/Components/IntervalEarTrainingFlashCardMultiSelect";
 
 export interface IFlashCardFrontSideProps {
   pitch1: Pitch;
@@ -57,21 +63,30 @@ export function createFlashCardGroup(): FlashCardGroup {
   );
   const renderFlashCardMultiSelect = (
     selectedFlashCardIndices: number[],
-    onChange: (newValue: number[]) => void
+    configData: any,
+    onChange: (newValue: number[], newConfigData: any) => void
   ): JSX.Element => {
     return (
     <IntervalEarTrainingFlashCardMultiSelect
       flashCards={flashCards}
+      configData={configData}
       selectedFlashCardIndices={selectedFlashCardIndices}
       onChange={onChange}
     />
     );
+  };
+
+  const initialConfigData: IConfigData = {
+    enabledRootNotes: rootNotes.slice(),
+    enabledIntervals: intervals.slice(),
+    enabledSigns: signs.slice()
   };
   
   const group = new FlashCardGroup(
     "Interval 2nd Note Ear Training",
     flashCards
   );
+  group.initialConfigData = initialConfigData;
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   group.enableInvertFlashCards = false;
   group.renderAnswerSelect = FlashCardUtils.renderStringAnswerSelect.bind(

@@ -149,16 +149,19 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
   }
 }
 
-export interface IChordNotesFlashCardMultiSelectProps {
-  flashCards: FlashCard[];
-  selectedFlashCardIndices: number[];
-  onChange?: (newValue: number[]) => void;
-}
-export interface IChordNotesFlashCardMultiSelectState {
+interface IConfigData {
   enabledScaleTypes: string[];
 }
-export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesFlashCardMultiSelectProps, IChordNotesFlashCardMultiSelectState> {
-  public constructor(props: IChordNotesFlashCardMultiSelectProps) {
+
+export interface IScaleNotesFlashCardMultiSelectProps {
+  flashCards: FlashCard[];
+  configData: IConfigData;
+  selectedFlashCardIndices: number[];
+  onChange?: (newValue: number[], newConfigData: any) => void;
+}
+export interface IScaleNotesFlashCardMultiSelectState {}
+export class ScaleNotesFlashCardMultiSelect extends React.Component<IScaleNotesFlashCardMultiSelectProps, IScaleNotesFlashCardMultiSelectState> {
+  public constructor(props: IScaleNotesFlashCardMultiSelectProps) {
     super(props);
 
     this.state = {
@@ -166,51 +169,53 @@ export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesF
     };
   }
   public render(): JSX.Element {
-    const chordTypeCheckboxTableRows = scales
-      .map((chord, i) => {
-        const isChecked = this.state.enabledScaleTypes.indexOf(chord.type) >= 0;
-        const isEnabled = !isChecked || (this.state.enabledScaleTypes.length > 1);
+    const scaleTypeCheckboxTableRows = scales
+      .map((scale, i) => {
+        const isChecked = this.props.configData.enabledScaleTypes.indexOf(scale.type) >= 0;
+        const isEnabled = !isChecked || (this.props.configData.enabledScaleTypes.length > 1);
 
         return (
           <TableRow key={i}>
-            <TableCell><Checkbox checked={isChecked} onChange={event => this.toggleChordEnabled(chord.type)} disabled={!isEnabled} /></TableCell>
-            <TableCell>{chord.type}</TableCell>
+            <TableCell><Checkbox checked={isChecked} onChange={event => this.toggleScaleEnabled(scale.type)} disabled={!isEnabled} /></TableCell>
+            <TableCell>{scale.type}</TableCell>
           </TableRow>
         );
       }, this);
-    const chordTypeCheckboxes = (
+    const scaleTypeCheckboxes = (
       <Table className="table">
         <TableHead>
           <TableRow>
             <TableCell />
-            <TableCell>Chord</TableCell>
+            <TableCell>Scale</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {chordTypeCheckboxTableRows}
+          {scaleTypeCheckboxTableRows}
         </TableBody>
       </Table>
     );
 
     return (
       <Grid container spacing={32}>
-        <Grid item xs={12}>{chordTypeCheckboxes}</Grid>
+        <Grid item xs={12}>{scaleTypeCheckboxes}</Grid>
       </Grid>
     );
   }
   
-  private toggleChordEnabled(chord: string) {
-    const newEnabledChords = Utils.toggleArrayElement(
-      this.state.enabledScaleTypes,
-      chord
+  private toggleScaleEnabled(scale: string) {
+    const newEnabledScaleTypes = Utils.toggleArrayElement(
+      this.props.configData.enabledScaleTypes,
+      scale
     );
     
-    if (newEnabledChords.length > 0) {
-      this.setState({ enabledScaleTypes: newEnabledChords });
-      this.onChange(newEnabledChords);
+    if (newEnabledScaleTypes.length > 0) {
+      const newConfigData: IConfigData = {
+        enabledScaleTypes: newEnabledScaleTypes
+      };
+      this.onChange(newConfigData);
     }
   }
-  private onChange(enabledChordTypes: string[]) {
+  private onChange(newConfigData: IConfigData) {
     if (!this.props.onChange) { return; }
 
     const newEnabledFlashCardIndices = new Array<number>();
@@ -218,9 +223,9 @@ export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesF
     let i = 0;
 
     for (const rootPitch of rootPitches) {
-      for (const chord of scales) {
-        const chordType = chord.type;
-        if (Utils.arrayContains(enabledChordTypes, chordType)) {
+      for (const scale of scales) {
+        const scaleType = scale.type;
+        if (Utils.arrayContains(newConfigData.enabledScaleTypes, scaleType)) {
           newEnabledFlashCardIndices.push(i);
         }
 
@@ -228,7 +233,7 @@ export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesF
       }
     }
 
-    this.props.onChange(newEnabledFlashCardIndices);
+    this.props.onChange(newEnabledFlashCardIndices, newConfigData);
   }
 }
 
@@ -238,8 +243,8 @@ export function createFlashCardGroup(): FlashCardGroup {
   const flashCards = new Array<FlashCard>();
 
   for (const rootPitch of rootPitches) {
-    for (const chord of scales) {
-      const pitches = Chord.fromPitchAndFormulaString(rootPitch, chord.formulaString)
+    for (const scale of scales) {
+      const pitches = Chord.fromPitchAndFormulaString(rootPitch, scale.formulaString)
         .pitches;
       
       const iCopy = i;
@@ -247,28 +252,35 @@ export function createFlashCardGroup(): FlashCardGroup {
 
       flashCards.push(new FlashCard(
         () => <FlashCardFrontSide key={iCopy} pitches={pitches} />,
-        chord.type
+        scale.type
       ));
     }
   }
 
   const renderFlashCardMultiSelect = (
     selectedFlashCardIndices: number[],
-    onChange: (newValue: number[]) => void
+    configData: any,
+    onChange: (newValue: number[], newConfigData: any) => void
   ): JSX.Element => {
     return (
-    <ChordNotesFlashCardMultiSelect
+    <ScaleNotesFlashCardMultiSelect
       flashCards={flashCards}
+      configData={configData}
       selectedFlashCardIndices={selectedFlashCardIndices}
       onChange={onChange}
     />
     );
+  };
+
+  const initialConfigData: IConfigData = {
+    enabledScaleTypes: scales.map(scale => scale.type)
   };
   
   const group = new FlashCardGroup(
     "Scale Ear Training",
     flashCards
   );
+  group.initialConfigData = initialConfigData;
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   group.enableInvertFlashCards = false;
   group.renderAnswerSelect = FlashCardUtils.renderStringAnswerSelect.bind(

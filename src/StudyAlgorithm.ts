@@ -1,5 +1,4 @@
 import * as Utils from "./Utils";
-import { FlashCard } from './FlashCard';
 import { QuizStats } from './QuizStats';
 import { QuestionStats } from './QuestionStats';
 
@@ -24,61 +23,65 @@ export function isAnswerDifficultyCorrect(answerDifficulty: AnswerDifficulty): b
 }
 
 export abstract class StudyAlgorithm {
-  public enabledFlashCardIndices: Array<number>;
-  public get currentFlashCardIndex(): number | undefined {
-    return this._currentFlashCardIndex;
+  public enabledQuestionIds: number[];
+  public get currentQuestionId(): number | undefined {
+    return this._currentQuestionId;
   }
-  public get quizStats(): QuizStats<string> {
+  public get quizStats(): QuizStats {
     return this._quizStats;
   }
 
-  public reset(flashCards: Array<FlashCard>) {
-    this.flashCards = flashCards;
-    this.enabledFlashCardIndices = this.flashCards.map((_, i) => i);
-    this._currentFlashCardIndex = undefined;
-    this._quizStats = new QuizStats<string>(
-      this.flashCards.map(_ => new QuestionStats<string>(0, 0))
+  public reset(questionIds: number[]) {
+    this.questionIds = questionIds;
+    this.enabledQuestionIds = questionIds.slice();
+    this._currentQuestionId = undefined;
+    this._quizStats = new QuizStats(
+      this.questionIds.map(id => new QuestionStats(id, 0, 0))
     );
   }
   public onAnswer(answerDifficulty: AnswerDifficulty): void {
-    Utils.precondition(this._currentFlashCardIndex !== undefined);
+    Utils.precondition(this._currentQuestionId !== undefined);
 
-    const questionStats = this._quizStats.questionStats[this._currentFlashCardIndex as number];
-
+    const questionStats = this._quizStats.questionStats.find(qs => qs.questionId === this._currentQuestionId);
+    if (!questionStats) {
+      Utils.assert(false);
+      return;
+    }
+    
     if (isAnswerDifficultyCorrect(answerDifficulty)) {
       questionStats.numCorrectGuesses++;
     } else {
       questionStats.numIncorrectGuesses++;
     }
   }
-  public abstract getNextFlashCardIndex(): number;
+  public abstract getNextQuestionId(): number;
 
-  protected flashCards: Array<FlashCard>;
-  protected _currentFlashCardIndex: number | undefined;
-  protected _quizStats: QuizStats<string>;
+  protected questionIds: number[];
+  protected _currentQuestionId: number | undefined;
+  protected _quizStats: QuizStats;
 }
 
 export class RandomStudyAlgorithm extends StudyAlgorithm {
   public onAnswer(answerDifficulty: AnswerDifficulty) {
     super.onAnswer(answerDifficulty);
   }
-  public getNextFlashCardIndex(): number {
-    Utils.precondition(this.enabledFlashCardIndices.length > 0);
+  public getNextQuestionId(): number {
+    Utils.precondition(this.enabledQuestionIds.length > 0);
 
-    if (this.enabledFlashCardIndices.length === 1) {
-      const flashCardIndex = this.enabledFlashCardIndices[0];
+    if (this.enabledQuestionIds.length === 1) {
+      const questionId = this.enabledQuestionIds[0];
 
-      this._currentFlashCardIndex = flashCardIndex;
-      return flashCardIndex;
+      this._currentQuestionId = questionId;
+      return questionId;
     }
     
-    let nextFlashCardIndex: number;
+    let nextQuestionId: number;
     do {
-      nextFlashCardIndex = Utils.randomElement(this.enabledFlashCardIndices);
-    } while(nextFlashCardIndex === this._currentFlashCardIndex);
+      nextQuestionId = Utils.randomElement(this.enabledQuestionIds);
+    } while(nextQuestionId === this._currentQuestionId);
 
-    this._currentFlashCardIndex = nextFlashCardIndex;
-    return nextFlashCardIndex;
+    this._currentQuestionId = nextQuestionId;
+    return nextQuestionId;
   }
 }
 
@@ -87,67 +90,67 @@ export class LeitnerStudyAlgorithm extends StudyAlgorithm {
     Utils.invariant(Number.isInteger(numTiers) && (numTiers > 0));
     super();
 
-    this.tieredFlashCardIndices = new Array<Array<number>>(numTiers);
-    for (let i = 0; i < this.tieredFlashCardIndices.length; i++) {
-      this.tieredFlashCardIndices[i] = new Array<number>();
+    this.tieredQuestionIds = new Array<Array<number>>(numTiers);
+    for (let i = 0; i < this.tieredQuestionIds.length; i++) {
+      this.tieredQuestionIds[i] = new Array<number>();
     }
   }
-  public reset(flashCards: Array<FlashCard>) {
-    super.reset(flashCards);
+  public reset(questionIds: number[]) {
+    super.reset(questionIds);
     
-    this.tieredFlashCardIndices[0] = this.enabledFlashCardIndices.slice();
-    for (let i = 1; i < this.tieredFlashCardIndices.length; i++) {
-      this.tieredFlashCardIndices[i] = new Array<number>();
+    this.tieredQuestionIds[0] = this.enabledQuestionIds.slice();
+    for (let i = 1; i < this.tieredQuestionIds.length; i++) {
+      this.tieredQuestionIds[i] = new Array<number>();
     }
   }
   public onAnswer(answerDifficulty: AnswerDifficulty) {
-    Utils.precondition(this.currentFlashCardIndex !== undefined);
+    Utils.precondition(this.currentQuestionId !== undefined);
 
     super.onAnswer(answerDifficulty);
 
-    const oldTierIndex = this.getTierIndex(this.currentFlashCardIndex as number);
+    const oldTierIndex = this.getTierIndex(this.currentQuestionId as number);
     const newTierIndex = isAnswerDifficultyCorrect(answerDifficulty)
-      ? Math.min(oldTierIndex + 1, this.tieredFlashCardIndices.length - 1)
+      ? Math.min(oldTierIndex + 1, this.tieredQuestionIds.length - 1)
       : 0;
     
     if (newTierIndex !== oldTierIndex) {
       const removedFromOldTier = Utils.tryRemoveArrayElement(
-        this.tieredFlashCardIndices[oldTierIndex],
-        this.currentFlashCardIndex as number
+        this.tieredQuestionIds[oldTierIndex],
+        this.currentQuestionId as number
       );
       Utils.assert(removedFromOldTier);
 
-      this.tieredFlashCardIndices[newTierIndex].push(this.currentFlashCardIndex as number);
+      this.tieredQuestionIds[newTierIndex].push(this.currentQuestionId as number);
     }
   }
-  public getNextFlashCardIndex(): number {
-    Utils.precondition(this.enabledFlashCardIndices.length > 0);
+  public getNextQuestionId(): number {
+    Utils.precondition(this.enabledQuestionIds.length > 0);
 
-    if (this.enabledFlashCardIndices.length === 1) {
-      const flashCardIndex = this.enabledFlashCardIndices[0];
+    if (this.enabledQuestionIds.length === 1) {
+      const questionId = this.enabledQuestionIds[0];
 
-      this._currentFlashCardIndex = flashCardIndex;
-      return flashCardIndex;
+      this._currentQuestionId = questionId;
+      return questionId;
     }
 
-    const tierIndex = this.getLowestTierWithNewEnabledFlashCard();
-    const enabledFlashCardIndicesInTier = this.tieredFlashCardIndices[tierIndex]
-      .filter(i => Utils.arrayContains(this.enabledFlashCardIndices, i));
+    const tierIndex = this.getLowestTierWithNewEnabledQuestion();
+    const enabledQuestionIdsInTier = this.tieredQuestionIds[tierIndex]
+      .filter(id => Utils.arrayContains(this.enabledQuestionIds, id));
 
-    let nextFlashCardIndex: number;
+    let nextQuestionId: number;
     do {
-      nextFlashCardIndex = Utils.randomElement(enabledFlashCardIndicesInTier);
-    } while(nextFlashCardIndex === this._currentFlashCardIndex);
+      nextQuestionId = Utils.randomElement(enabledQuestionIdsInTier);
+    } while(nextQuestionId === this._currentQuestionId);
 
-    this._currentFlashCardIndex = nextFlashCardIndex;
-    return nextFlashCardIndex;
+    this._currentQuestionId = nextQuestionId;
+    return nextQuestionId;
   }
 
-  private tieredFlashCardIndices: Array<Array<number>>;
+  private tieredQuestionIds: Array<Array<number>>;
 
-  private getTierIndex(flashCardIndex: number): number {
-    for (let tierIndex = 0; tierIndex < this.tieredFlashCardIndices.length; tierIndex++) {
-      if (Utils.arrayContains(this.tieredFlashCardIndices[tierIndex], flashCardIndex)) {
+  private getTierIndex(questionId: number): number {
+    for (let tierIndex = 0; tierIndex < this.tieredQuestionIds.length; tierIndex++) {
+      if (Utils.arrayContains(this.tieredQuestionIds[tierIndex], questionId)) {
         return tierIndex;
       }
     }
@@ -155,10 +158,10 @@ export class LeitnerStudyAlgorithm extends StudyAlgorithm {
     Utils.assert(false);
     return -1;
   }
-  private getLowestTierWithNewEnabledFlashCard(): number {
-    for (let tierIndex = 0; tierIndex < this.tieredFlashCardIndices.length; tierIndex++) {
-      if (this.tieredFlashCardIndices[tierIndex].some(i =>
-        (i !== this._currentFlashCardIndex) && Utils.arrayContains(this.enabledFlashCardIndices, i))
+  private getLowestTierWithNewEnabledQuestion(): number {
+    for (let tierIndex = 0; tierIndex < this.tieredQuestionIds.length; tierIndex++) {
+      if (this.tieredQuestionIds[tierIndex].some(id =>
+        (id !== this._currentQuestionId) && Utils.arrayContains(this.enabledQuestionIds, id))
       ) {
         return tierIndex;
       }

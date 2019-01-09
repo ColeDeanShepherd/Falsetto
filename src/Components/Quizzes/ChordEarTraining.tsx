@@ -81,14 +81,17 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
   }
 }
 
-export interface IChordNotesFlashCardMultiSelectProps {
-  flashCards: FlashCard[];
-  selectedFlashCardIndices: number[];
-  onChange?: (newValue: number[]) => void;
-}
-export interface IChordNotesFlashCardMultiSelectState {
+interface IConfigData {
   enabledChordTypes: string[];
 }
+
+export interface IChordNotesFlashCardMultiSelectProps {
+  flashCards: FlashCard[];
+  configData: IConfigData;
+  selectedFlashCardIndices: number[];
+  onChange?: (newValue: number[], newConfigData: any) => void;
+}
+export interface IChordNotesFlashCardMultiSelectState {}
 export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesFlashCardMultiSelectProps, IChordNotesFlashCardMultiSelectState> {
   public constructor(props: IChordNotesFlashCardMultiSelectProps) {
     super(props);
@@ -100,8 +103,8 @@ export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesF
   public render(): JSX.Element {
     const chordTypeCheckboxTableRows = chords
       .map((chord, i) => {
-        const isChecked = this.state.enabledChordTypes.indexOf(chord.type) >= 0;
-        const isEnabled = !isChecked || (this.state.enabledChordTypes.length > 1);
+        const isChecked = this.props.configData.enabledChordTypes.indexOf(chord.type) >= 0;
+        const isEnabled = !isChecked || (this.props.configData.enabledChordTypes.length > 1);
 
         return (
           <TableRow key={i}>
@@ -132,17 +135,19 @@ export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesF
   }
   
   private toggleChordEnabled(chord: string) {
-    const newEnabledScaleTypes = Utils.toggleArrayElement(
-      this.state.enabledChordTypes,
+    const newEnabledChordTypes = Utils.toggleArrayElement(
+      this.props.configData.enabledChordTypes,
       chord
     );
     
-    if (newEnabledScaleTypes.length > 0) {
-      this.setState({ enabledChordTypes: newEnabledScaleTypes });
-      this.onChange(newEnabledScaleTypes);
+    if (newEnabledChordTypes.length > 0) {
+      const newConfigData: IConfigData = {
+        enabledChordTypes: newEnabledChordTypes
+      };
+      this.onChange(newConfigData);
     }
   }
-  private onChange(enabledChordTypes: string[]) {
+  private onChange(configData: IConfigData) {
     if (!this.props.onChange) { return; }
 
     const newEnabledFlashCardIndices = new Array<number>();
@@ -152,7 +157,7 @@ export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesF
     for (const rootPitch of rootPitches) {
       for (const chord of chords) {
         const chordType = chord.type;
-        if (Utils.arrayContains(enabledChordTypes, chordType)) {
+        if (Utils.arrayContains(configData.enabledChordTypes, chordType)) {
           newEnabledFlashCardIndices.push(i);
         }
 
@@ -160,7 +165,7 @@ export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesF
       }
     }
 
-    this.props.onChange(newEnabledFlashCardIndices);
+    this.props.onChange(newEnabledFlashCardIndices, configData);
   }
 }
 
@@ -186,21 +191,28 @@ export function createFlashCardGroup(): FlashCardGroup {
 
   const renderFlashCardMultiSelect = (
     selectedFlashCardIndices: number[],
-    onChange: (newValue: number[]) => void
+    configData: any,
+    onChange: (newValue: number[], newConfigData: any) => void
   ): JSX.Element => {
     return (
     <ChordNotesFlashCardMultiSelect
       flashCards={flashCards}
+      configData={configData}
       selectedFlashCardIndices={selectedFlashCardIndices}
       onChange={onChange}
     />
     );
+  };
+
+  const initialConfigData: IConfigData = {
+    enabledChordTypes: chords.map(c => c.type)
   };
   
   const group = new FlashCardGroup(
     "Chord Ear Training",
     flashCards
   );
+  group.initialConfigData = initialConfigData;
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   group.enableInvertFlashCards = false;
   group.renderAnswerSelect = FlashCardUtils.renderStringAnswerSelect.bind(
