@@ -1,9 +1,6 @@
 # To-Do
 ## High-Priority
-* Better configure screen for sheet music notes.
-* 
 * Fix inverted flash cards.
-* Implement getInitialStateForFlashCards when inverted.
 * Test everything in shitty browsers.
 * Try to retain selected flash cards when inverting.
 ## Low-Priority

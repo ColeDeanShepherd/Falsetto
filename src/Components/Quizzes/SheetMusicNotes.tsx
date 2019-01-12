@@ -1,83 +1,153 @@
 import * as React from 'react';
-import { Card, CardContent, Typography, Button } from '@material-ui/core';
+import { Card, CardContent, Typography, Button, Checkbox } from '@material-ui/core';
 import * as Vex from 'vexflow';
 
 import * as Utils from '../../Utils';
+import * as FlashCardUtils from "./Utils";
 import { VexFlowComponent } from "../VexFlowComponent";
 import { PitchLetter } from "../../PitchLetter";
 import { FlashCard } from 'src/FlashCard';
 import { renderFlashCardSide } from "../FlashCard";
 import { Pitch } from 'src/Pitch';
 import { FlashCardGroup } from 'src/FlashCardGroup';
+import { AnswerDifficulty } from 'src/StudyAlgorithm';
+
+const clefs = [
+  {
+    name: "treble",
+    bottomLinePitch: new Pitch(PitchLetter.E, 0, 4)
+  },
+  {
+    name: "bass",
+    bottomLinePitch: new Pitch(PitchLetter.G, 0, 2)
+  }
+];
 
 export function createFlashCardGroup(): FlashCardGroup {
-  const flashCardGroup = new FlashCardGroup("Sheet Music Notes", createFlashCards());
+  const flashCards = createFlashCards();
+  const initialConfigData: IConfigData = {
+    isTrebleClefEnabled: true,
+    isBassClefEnabled: true,
+    areAccidentalsEnabled: false
+  };
+  const renderFlashCardMultiSelect = (
+    selectedFlashCardIndices: number[],
+    configData: any,
+    onChange: (newValue: number[], newConfigData: any) => void
+  ): JSX.Element => {
+    return <SheetMusicNotesFlashCardMultiSelect
+      flashCards={flashCards}
+      configData={configData}
+      selectedFlashCardIndices={selectedFlashCardIndices}
+      onChange={onChange}
+    />;
+  }
+
+  const flashCardGroup = new FlashCardGroup("Sheet Music Notes", flashCards);
   flashCardGroup.enableInvertFlashCards = false;
+  flashCardGroup.initialSelectedFlashCardIndices = getEnabledQuestionIds(initialConfigData);
+  flashCardGroup.initialConfigData = initialConfigData;
+  flashCardGroup.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
+  flashCardGroup.renderAnswerSelect = renderNoteAnswerSelect;
 
   return flashCardGroup;
 }
 export function createFlashCards(): FlashCard[] {
-  const clefs = [
-    {
-      name: "treble",
-      bottomLinePitch: new Pitch(PitchLetter.E, 0, 4)
-    },
-    {
-      name: "bass",
-      bottomLinePitch: new Pitch(PitchLetter.G, 0, 2)
+  return allPitchesMap((clef, pitch) => {
+    const pitchAccidentalString = pitch.getAccidentalString();
+    const vexFlowPitchString = pitch.toVexFlowString();
+    
+    const isTrebleNote = (clef === "treble");
+    const trebleNotes = [
+      new Vex.Flow.StaveNote({
+        clef: "treble",
+        keys: isTrebleNote ? [vexFlowPitchString] : ["b/4"],
+        duration: isTrebleNote ? "w" : "wr"
+      })
+    ];
+    const bassNotes = [
+      new Vex.Flow.StaveNote({
+        clef: "bass",
+        keys: !isTrebleNote ? [vexFlowPitchString] : ["d/3"],
+        duration: !isTrebleNote ? "w" : "wr"
+      })
+    ];
+
+    if (pitch.signedAccidental !== 0) {
+      if (isTrebleNote) {
+        for (const note of trebleNotes) {
+          note.addAccidental(0, new Vex.Flow.Accidental(pitchAccidentalString));
+        }
+      } else {
+        for (const note of bassNotes) {
+          note.addAccidental(0, new Vex.Flow.Accidental(pitchAccidentalString));
+        }
+      }
     }
-  ];
-  return Utils.flattenArrays(
-    clefs.map(clef => Utils.range(0, 20)
-      .map(i => Utils.range(-1, 1)
-        .map(signedAccidental => {
-          const pitch = Pitch.addPitchLetters(clef.bottomLinePitch, -6 + i);
-          pitch.signedAccidental = signedAccidental;
 
-          const pitchAccidentalString = pitch.getAccidentalString();
-          const vexFlowPitchString = pitch.toVexFlowString();
-          
-          const isTrebleNote = (clef.name === "treble");
-          const trebleNotes = [
-            new Vex.Flow.StaveNote({
-              clef: "treble",
-              keys: isTrebleNote ? [vexFlowPitchString] : ["b/4"],
-              duration: isTrebleNote ? "w" : "wr"
-            })
-          ];
-          const bassNotes = [
-            new Vex.Flow.StaveNote({
-              clef: "bass",
-              keys: !isTrebleNote ? [vexFlowPitchString] : ["d/3"],
-              duration: !isTrebleNote ? "w" : "wr"
-            })
-          ];
+    return new FlashCard(
+      () => (  
+        <SheetMusicSingleNote
+          width={150} height={200}
+          trebleNotes={trebleNotes}
+          bassNotes={bassNotes}
+        />
+      ),
+      `${PitchLetter[pitch.letter]}${pitchAccidentalString}`
+    );
+  });
+}
+export function allPitchesMap<TResult>(mapFn: (clef: string, pitch: Pitch, index: number) => TResult): Array<TResult> {
+  const result = new Array<TResult>();
 
-          if (signedAccidental !== 0) {
-            if (isTrebleNote) {
-              for (const note of trebleNotes) {
-                note.addAccidental(0, new Vex.Flow.Accidental(pitchAccidentalString));
-              }
-            } else {
-              for (const note of bassNotes) {
-                note.addAccidental(0, new Vex.Flow.Accidental(pitchAccidentalString));
-              }
-            }
-          }
+  let i = 0;
+  clefs.forEach(clef => {
+    Utils.range(0, 20).forEach(pitchLetterOffset => {
+      Utils.range(-1, 1).forEach(signedAccidental => {
+        const pitch = Pitch.addPitchLetters(clef.bottomLinePitch, -6 + pitchLetterOffset);
+        pitch.signedAccidental = signedAccidental;
+        
+        result.push(mapFn(clef.name, pitch, i));
+        i++;
+      })
+    });
+  });
 
-          return new FlashCard(
-            () => (  
-              <SheetMusicSingleNote
-                width={150} height={200}
-                trebleNotes={trebleNotes}
-                bassNotes={bassNotes}
-              />
-            ),
-            `${PitchLetter[pitch.letter]}${pitchAccidentalString}`
-          );
-        })
-      )
-    )
+  return result;
+}
+function getEnabledQuestionIds(configData: IConfigData): Array<number> {
+  return allPitchesMap((clef, pitch, i) => {
+    if (!configData.isTrebleClefEnabled && (clef === "treble")) {
+      return -1;
+    }
+    
+    if (!configData.isBassClefEnabled && (clef === "bass")) {
+      return -1;
+    }
+
+    if (!configData.areAccidentalsEnabled && (pitch.signedAccidental !== 0)) {
+      return -1;
+    }
+
+    return i;
+  })
+    .filter(i => i >= 0);
+}
+export function renderNoteAnswerSelect(
+  flashCards: FlashCard[],
+  areFlashCardsInverted: boolean,
+  flashCard: FlashCard,
+  onAnswer: (answerDifficulty: AnswerDifficulty) => void
+): JSX.Element {
+  const sharpNotes = ["C#", "D#", "E#", "F#", "G#", "A#", "B#"];
+  const naturalNotes = ["C", "D", "E", "F", "G", "A", "B"];
+  const flatNotes = ["Cb", "Db", "Eb", "Fb", "Gb", "Ab", "Bb"];
+  return (
+    <div>
+      {FlashCardUtils.renderStringAnswerSelect(sharpNotes, flashCards, areFlashCardsInverted, flashCard, onAnswer)}
+      {FlashCardUtils.renderStringAnswerSelect(naturalNotes, flashCards, areFlashCardsInverted, flashCard, onAnswer)}
+      {FlashCardUtils.renderStringAnswerSelect(flatNotes, flashCards, areFlashCardsInverted, flashCard, onAnswer)}
+    </div>
   );
 }
 
@@ -139,6 +209,86 @@ export class SheetMusicSingleNote extends React.Component<ISheetMusicSingleNoteP
     
     voiceTreble.draw(context);
     voiceBass.draw(context);
+  }
+}
+
+interface IConfigData {
+  isTrebleClefEnabled: boolean,
+  isBassClefEnabled: boolean,
+  areAccidentalsEnabled: boolean
+};
+
+export interface ISheetMusicNotesFlashCardMultiSelectProps {
+  flashCards: FlashCard[];
+  configData: IConfigData;
+  selectedFlashCardIndices: number[];
+  onChange?: (newValue: number[], newConfigData: any) => void;
+}
+export interface ISheetMusicNotesFlashCardMultiSelectState {}
+export class SheetMusicNotesFlashCardMultiSelect extends React.Component<ISheetMusicNotesFlashCardMultiSelectProps, ISheetMusicNotesFlashCardMultiSelectState> {
+  public render(): JSX.Element {
+    const onIsTrebleClefEnabledChange = this.onIsTrebleClefEnabledChange.bind(this);
+    const onIsBassClefEnabledChange = this.onIsBassClefEnabledChange.bind(this);
+    const onAreAccidentalsEnabledChange = this.onAreAccidentalsEnabledChange.bind(this);
+
+    return (
+      <div>
+        <div>
+          <Typography>Treble Clef</Typography>
+          <Checkbox
+            checked={this.props.configData.isTrebleClefEnabled}
+            onChange={onIsTrebleClefEnabledChange}
+            disabled={!this.props.configData.isBassClefEnabled}
+          />
+        </div>
+        <div>
+          <Typography>Bass Clef</Typography>
+          <Checkbox
+            checked={this.props.configData.isBassClefEnabled}
+            onChange={onIsBassClefEnabledChange}
+            disabled={!this.props.configData.isTrebleClefEnabled}
+          />
+        </div>
+        <div>
+          <Typography>Accidentals</Typography>
+          <Checkbox
+            checked={this.props.configData.areAccidentalsEnabled}
+            onChange={onAreAccidentalsEnabledChange}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  private onIsTrebleClefEnabledChange(event: React.ChangeEvent, checked: boolean) {
+    if (!this.props.onChange) { return; }
+
+    const newConfigData: IConfigData = {
+      isTrebleClefEnabled: checked,
+      isBassClefEnabled: this.props.configData.isBassClefEnabled,
+      areAccidentalsEnabled: this.props.configData.areAccidentalsEnabled
+    };
+    this.props.onChange(getEnabledQuestionIds(newConfigData), newConfigData);
+  }
+  private onIsBassClefEnabledChange(event: React.ChangeEvent, checked: boolean) {
+    if (!this.props.onChange) { return; }
+
+    const newConfigData: IConfigData = {
+      isTrebleClefEnabled: this.props.configData.isTrebleClefEnabled,
+      isBassClefEnabled: checked,
+      areAccidentalsEnabled: this.props.configData.areAccidentalsEnabled
+    };
+    this.props.onChange(getEnabledQuestionIds(newConfigData), newConfigData);
+  }
+  private onAreAccidentalsEnabledChange(event: React.ChangeEvent, checked: boolean) {
+    if (!this.props.onChange) { return; }
+
+    const newConfigData: IConfigData = {
+      isTrebleClefEnabled: this.props.configData.isTrebleClefEnabled,
+      isBassClefEnabled: this.props.configData.isBassClefEnabled,
+      areAccidentalsEnabled: checked
+    };
+    this.props.onChange(getEnabledQuestionIds(newConfigData), newConfigData);
   }
 }
 

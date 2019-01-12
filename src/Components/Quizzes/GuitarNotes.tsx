@@ -37,13 +37,6 @@ export interface IGuitarNotesFlashCardMultiSelectProps {
 }
 export interface IGuitarNotesFlashCardMultiSelectState {}
 export class GuitarNotesFlashCardMultiSelect extends React.Component<IGuitarNotesFlashCardMultiSelectProps, IGuitarNotesFlashCardMultiSelectState> {
-  public constructor(props: IGuitarNotesFlashCardMultiSelectProps) {
-    super(props);
-
-    this.state = {
-      maxFretString: "11"
-    };
-  }
   public render(): JSX.Element {
     return (
       <TextField
