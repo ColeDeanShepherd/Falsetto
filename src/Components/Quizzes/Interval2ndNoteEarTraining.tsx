@@ -7,7 +7,7 @@ import { FlashCardGroup } from 'src/FlashCardGroup';
 import { Pitch, ambiguousPitchStrings } from 'src/Pitch';
 import { VerticalDirection } from 'src/VerticalDirection';
 import { Interval, intervalQualityStringToNumber } from 'src/Interval';
-import { playPitch } from "src/Components/Quizzes/PianoNotes";
+import { playPitch } from 'src/Piano';
 import {
   IConfigData,
   rootNotes,
@@ -91,8 +91,7 @@ export function createFlashCardGroup(): FlashCardGroup {
   group.enableInvertFlashCards = false;
   group.renderAnswerSelect = FlashCardUtils.renderStringAnswerSelect.bind(
     null,
-    ambiguousPitchStrings,
-    true
+    ambiguousPitchStrings
   );
   
   return group;

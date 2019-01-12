@@ -8,7 +8,14 @@ import { PitchLetter } from "../../PitchLetter";
 import { FlashCard } from 'src/FlashCard';
 import { renderFlashCardSide } from "../FlashCard";
 import { Pitch } from 'src/Pitch';
+import { FlashCardGroup } from 'src/FlashCardGroup';
 
+export function createFlashCardGroup(): FlashCardGroup {
+  const flashCardGroup = new FlashCardGroup("Sheet Music Notes", createFlashCards());
+  flashCardGroup.enableInvertFlashCards = false;
+
+  return flashCardGroup;
+}
 export function createFlashCards(): FlashCard[] {
   const clefs = [
     {

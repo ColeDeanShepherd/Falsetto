@@ -55,8 +55,8 @@ class App extends React.Component<{}, IAppState> {
         flashCardGroups: [
           PianoNotes.createFlashCardGroup(),
           GuitarNotes.createFlashCardGroup(),
-          new FlashCardGroup("Note Durations", NoteDurations.createFlashCards()),
-          new FlashCardGroup("Sheet Music Notes", SheetMusicNotes.createFlashCards())
+          NoteDurations.createFlashCardGroup(),
+          SheetMusicNotes.createFlashCardGroup()
         ]
       },
       {
@@ -145,7 +145,7 @@ class App extends React.Component<{}, IAppState> {
                     <p>Notes</p>
                     {renderFlashCardGroupLink(PianoNotes.createFlashCardGroup())}
                     {renderFlashCardGroupLink(GuitarNotes.createFlashCardGroup())}
-                    {renderFlashCardGroupLink(new FlashCardGroup("Note Durations", NoteDurations.createFlashCards()))}
+                    {renderFlashCardGroupLink(NoteDurations.createFlashCardGroup())}
                     {renderFlashCardGroupLink(new FlashCardGroup("Sheet Music Notes", SheetMusicNotes.createFlashCards()))}
                   </div>
                   <div>
@@ -220,6 +220,7 @@ class App extends React.Component<{}, IAppState> {
       key={currentFlashCardGroup.route}
       title={currentFlashCardGroup.name}
       flashCards={currentFlashCardGroup.flashCards}
+      initialSelectedFlashCardIndices={currentFlashCardGroup.initialSelectedFlashCardIndices}
       initialConfigData={currentFlashCardGroup.initialConfigData}
       renderFlashCardMultiSelect={currentFlashCardGroup.renderFlashCardMultiSelect}
       renderAnswerSelect={currentFlashCardGroup.renderAnswerSelect}

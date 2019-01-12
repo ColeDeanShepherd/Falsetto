@@ -10,29 +10,58 @@ export class FlashCard {
   ) {}
 }
 
-export function invertFlashCards(flashCards: Array<FlashCard>): Array<FlashCard> {
-  const frontSides = flashCards.map(flashCard => flashCard.frontSide);
-  const distinctBackSides = Utils.uniq(flashCards.map(flashCard => flashCard.backSide));
-  return distinctBackSides
-    .map(backSide => {
-      const frontSideRenderFuncs = frontSides
-        .filter((_, i) => backSide === flashCards[i].backSide)
-        .map(frontSide => {
-          if (typeof(frontSide) === 'string') {
-            return () => React.createElement("span", null, frontSide);
-          } else {
-            return frontSide;
-          }
-        });
-      const renderFunc = () => React.createElement(
-        "span",
-        null,
-        Utils.arrayJoin(frontSideRenderFuncs.map(rf => rf()), React.createElement("span", null, ", "))
-      );
+export function invertFlashCards(
+  flashCards: Array<FlashCard>,
+  enabledFlashCardIndices: Array<number> | undefined
+): ({
+  invertedFlashCards: Array<FlashCard>,
+  invertedEnabledFlashCardIndices: Array<number> | undefined
+}) {
+  const oldFrontSides = flashCards.map(flashCard => flashCard.frontSide);
+  const distinctOldBackSides = Utils.uniq(flashCards.map(flashCard => flashCard.backSide));
 
-      return new FlashCard(
-        backSide,
-        renderFunc, 
-      );
-    });
+  const result = {
+    invertedFlashCards: new Array<FlashCard>(),
+    invertedEnabledFlashCardIndices: enabledFlashCardIndices ? new Array<number>() : undefined
+  };
+
+  for (const oldBackSide of distinctOldBackSides) {
+    const matchingOldFrontSideIndices = oldFrontSides
+      .map((_, i) => (flashCards[i].backSide === oldBackSide) ? i : -1)
+      .filter(i => i >= 0);
+    const matchingOldFrontSides = matchingOldFrontSideIndices
+      .map(i => oldFrontSides[i]);
+    
+    // invert and add the new flash card
+    const newBackSideRenderFuncs = matchingOldFrontSides
+      .map(frontSide => {
+        if (typeof(frontSide) === 'string') {
+          return () => React.createElement("span", null, frontSide);
+        } else {
+          return frontSide;
+        }
+      });
+    const newBackSideRenderFunc = () => React.createElement(
+      "span",
+      null,
+      Utils.arrayJoin(newBackSideRenderFuncs.map(rf => rf()), React.createElement("span", null, ", "))
+    );
+
+    result.invertedFlashCards.push(
+      new FlashCard(
+        oldBackSide,
+        newBackSideRenderFunc, 
+      )
+    );
+
+    // add new enabled flash card indices
+    if (enabledFlashCardIndices && result.invertedEnabledFlashCardIndices) {
+      if (matchingOldFrontSideIndices.some(i => Utils.arrayContains(enabledFlashCardIndices, i))) {
+        const newInvertedFlashCardIndex = result.invertedFlashCards.length - 1;
+        result.invertedEnabledFlashCardIndices.push(newInvertedFlashCardIndex);
+      }
+    }
+  }
+
+  return result;
 }

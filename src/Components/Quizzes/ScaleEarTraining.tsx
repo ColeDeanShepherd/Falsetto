@@ -8,7 +8,7 @@ import { FlashCardGroup } from 'src/FlashCardGroup';
 import { Pitch, pitchRange } from 'src/Pitch';
 import { PitchLetter } from 'src/PitchLetter';
 import { Chord } from 'src/Chord';
-import { playPitch } from './PianoNotes';
+import { playPitch } from 'src/Piano';
 
 const minPitch = new Pitch(PitchLetter.C, -1, 2);
 const maxPitch = new Pitch(PitchLetter.C, 1, 6);
@@ -285,8 +285,7 @@ export function createFlashCardGroup(): FlashCardGroup {
   group.enableInvertFlashCards = false;
   group.renderAnswerSelect = FlashCardUtils.renderStringAnswerSelect.bind(
     null,
-    scales.map(c => c.type),
-    true
+    scales.map(c => c.type)
   );
 
   return group;

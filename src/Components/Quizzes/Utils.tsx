@@ -8,20 +8,27 @@ import { AnswerDifficulty } from 'src/StudyAlgorithm';
 
 export function renderNoteAnswerSelect(
   flashCards: FlashCard[],
+  areFlashCardsInverted: boolean,
   flashCard: FlashCard,
   onAnswer: (answerDifficulty: AnswerDifficulty) => void
 ): JSX.Element {
-  const notes = ["A", "A#/Bb", "B", "C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb", "G", "G#/Ab"];
-  return renderStringAnswerSelect(notes, true, flashCards, flashCard, onAnswer);
+  const naturalNotes = ["C", "D", "E", "F", "G", "A", "B"];
+  const accidentalNotes = ["C#/Db", "D#/Eb", "F#/Gb", "G#/Ab", "A#/Bb"];
+  return (
+    <div>
+      {renderStringAnswerSelect(accidentalNotes, flashCards, areFlashCardsInverted, flashCard, onAnswer)}
+      {renderStringAnswerSelect(naturalNotes, flashCards, areFlashCardsInverted, flashCard, onAnswer)}
+    </div>
+  );
 }
 export function renderStringAnswerSelect(
   answers: string[],
-  areAnswersOnBackSide: boolean,
   flashCards: FlashCard[],
+  areFlashCardsInverted: boolean,
   flashCard: FlashCard,
   onAnswer: (answerDifficulty: AnswerDifficulty) => void
 ): JSX.Element {
-  const flashCardSide = !areAnswersOnBackSide ? flashCard.frontSide : flashCard.backSide;
+  const flashCardSide = flashCard.backSide;
 
   return (
     <div>
@@ -38,15 +45,15 @@ export function renderStringAnswerSelect(
   );
 }
 export function renderDistinctFlashCardSideAnswerSelect(
-  areAnswersOnBackSide: boolean,
   flashCards: FlashCard[],
+  areFlashCardsInverted: boolean,
   flashCard: FlashCard,
   onAnswer: (answerDifficulty: AnswerDifficulty) => void
 ) {
   const distinctFlashCardSides = Utils.uniq(
-    flashCards.map(fc => !areAnswersOnBackSide ? fc.frontSide : fc.backSide)
+    flashCards.map(fc => fc.backSide)
   );
-  const flashCardSide = !areAnswersOnBackSide ? flashCard.frontSide : flashCard.backSide;
+  const flashCardSide = flashCard.backSide;
 
   return (
     <div>

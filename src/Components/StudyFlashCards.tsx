@@ -12,6 +12,7 @@ import { StudyAlgorithm, AnswerDifficulty, isAnswerDifficultyCorrect, LeitnerStu
 export interface IStudyFlashCardsProps {
   title: string;
   flashCards: FlashCard[];
+  initialSelectedFlashCardIndices?: number[];
   initialConfigData: any;
   renderFlashCardMultiSelect?: (
     selectedFlashCardIndices: number[],
@@ -20,6 +21,7 @@ export interface IStudyFlashCardsProps {
   ) => JSX.Element;
   renderAnswerSelect?: (
     flashCards: FlashCard[],
+    areFlashCardsInverted: boolean,
     flashCard: FlashCard,
     onAnswer: (answerDifficulty: AnswerDifficulty) => void
   ) => JSX.Element;
@@ -49,7 +51,10 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
         invertedFlashCards: [],
         configData: props.initialConfigData
       },
-      this.getInitialStateForFlashCards(this.props.flashCards)
+      this.getInitialStateForFlashCards(
+        this.props.flashCards,
+        this.props.initialSelectedFlashCardIndices
+      )
     );
   }
 
@@ -92,7 +97,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
             {this.props.title}{this.state.invertFlashCards ? " (Inverted)" : ""}
           </Typography>
 
-          <Button variant="contained" onClick={event => this.toggleConfiguration()}>Configuration</Button>
+          <Button variant="contained" onClick={event => this.toggleConfiguration()}>{!this.state.showConfiguration ? "Show" : "Hide"} Configuration</Button>
           {this.state.showConfiguration ? (
             <div>
               {this.props.enableInvertFlashCards ? <div><Checkbox checked={this.state.invertFlashCards} onChange={event => this.toggleInvertFlashCards()} /> Invert Flash Cards</div> : null}
@@ -114,7 +119,9 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
             {!this.state.isShowingBackSide ? renderedFlashCardFrontSide : renderedFlashCardBackSide}
           </div>
 
-          <div style={{marginBottom: "1em"}}>
+          {renderAnswerSelect(flashCards, this.state.invertFlashCards, currentFlashCard, boundOnAnswer)}
+
+          <div style={{marginTop: "1em"}}>
             <Button
               onClick={event => this.flipFlashCard()}
               variant="contained"
@@ -128,8 +135,6 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
               Skip
             </Button>
           </div>
-
-          {renderAnswerSelect(flashCards, currentFlashCard, boundOnAnswer)}
         </CardContent>
       </Card>
     );
@@ -137,7 +142,12 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
 
   private studyAlgorithm: StudyAlgorithm = new LeitnerStudyAlgorithm(5);
 
-  private defaultRenderAnswerSelect (flashCards: FlashCard[], flashCard: FlashCard, onAnswer: (answerDifficulty: AnswerDifficulty) => void): JSX.Element | null {
+  private defaultRenderAnswerSelect (
+    flashCards: FlashCard[],
+    areFlashCardsInverted: boolean,
+    flashCard: FlashCard,
+    onAnswer: (answerDifficulty: AnswerDifficulty) => void
+  ): JSX.Element | null {
     return null;
   };
   private renderFlashCardMultiSelect(flashCards: FlashCard[]): JSX.Element {
@@ -155,9 +165,16 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
         />;
   }
   
-  private getInitialStateForFlashCards(flashCards: FlashCard[]) {
-    this.studyAlgorithm.reset(this.props.flashCards.map((_, i) => i));
+  private getInitialStateForFlashCards(
+    flashCards: FlashCard[],
+    enabledQuestionIds: Array<number> | undefined
+  ) {
+    this.studyAlgorithm.reset(flashCards.map((_, i) => i));
 
+    if (enabledQuestionIds) {
+      this.studyAlgorithm.enabledQuestionIds = enabledQuestionIds;
+    }
+    
     return {
       currentFlashCardIndex: this.studyAlgorithm.getNextQuestionId(),
       haveGottenCurrentFlashCardWrong: false,
@@ -192,18 +209,24 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
   }
   private toggleInvertFlashCards() {
     const newInvertFlashCards = !this.state.invertFlashCards;
-    const newInvertedFlashCards = newInvertFlashCards
-      ? invertFlashCards(this.props.flashCards)
-      : [];
-    const newFlashCards = !newInvertFlashCards
-      ? this.props.flashCards
-      : newInvertedFlashCards;
+    let newFlashCards: Array<FlashCard>;
+    let newEnabledQuestionIds: Array<number> | undefined;
+
+    if (!newInvertFlashCards) {
+      newFlashCards = this.props.flashCards;
+      newEnabledQuestionIds = this.props.initialSelectedFlashCardIndices;
+    } else {
+      const inversion = invertFlashCards(this.props.flashCards, this.state.enabledFlashCardIndices);
+      newFlashCards = inversion.invertedFlashCards;
+      newEnabledQuestionIds = inversion.invertedEnabledFlashCardIndices;
+    }
+
     this.setState(Object.assign(
       {
         invertFlashCards: newInvertFlashCards,
-        invertedFlashCards: newInvertedFlashCards
+        invertedFlashCards: newFlashCards
       },
-      this.getInitialStateForFlashCards(newFlashCards)
+      this.getInitialStateForFlashCards(newFlashCards, newEnabledQuestionIds)
     ));
   }
 
