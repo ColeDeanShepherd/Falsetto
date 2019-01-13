@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import { Paper, AppBar, Typography, Toolbar } from '@material-ui/core';
+import { Paper, AppBar, Typography, Toolbar, Button } from '@material-ui/core';
 import * as Utils from "../Utils";
 
 import "./App.css";
@@ -40,6 +40,7 @@ import { FlashCard } from 'src/FlashCard';
 import { FlashCardGroup } from 'src/FlashCardGroup';
 import { StudyFlashCards } from './StudyFlashCards';
 import * as Overview from "./Quizzes/TheJazzPianoSite/TheBasics/Overview"
+import { AboutPage } from './AboutPage';
 
 export interface IAppState {
   currentFlashCardGroupIndex: number;
@@ -62,10 +63,10 @@ class App extends React.Component<{}, IAppState> {
       {
         title: "Intervals",
         flashCardGroups: [
-          new FlashCardGroup("Interval Quality Symbols To Qualities", IntervalQualitySymbolsToQualities.createFlashCards()),
-          new FlashCardGroup("Generic Intervals To Interval Qualities", GenericIntervalsToIntervalQualities.createFlashCards()),
-          new FlashCardGroup("Interval Names To Half Steps", IntervalNamesToHalfSteps.createFlashCards()),
-          new FlashCardGroup("Intervals To Consonance Dissonance", IntervalsToConsonanceDissonance.createFlashCards()),
+          IntervalQualitySymbolsToQualities.createFlashCardGroup(),
+          GenericIntervalsToIntervalQualities.createFlashCardGroup(),
+          IntervalNamesToHalfSteps.createFlashCardGroup(),
+          IntervalsToConsonanceDissonance.createFlashCardGroup(),
           Interval2ndNotes.createFlashCardGroup(),
           IntervalNotes.createFlashCardGroup(),
           SheetMusicIntervalRecognition.createFlashCardGroup(),
@@ -76,31 +77,31 @@ class App extends React.Component<{}, IAppState> {
       {
         title: "Scales",
         flashCardGroups: [
-          new FlashCardGroup("Scale Degree Names", ScaleDegreeNames.createFlashCards()),
-          new FlashCardGroup("Scale Notes", ScaleNotes.createFlashCards()),
-          new FlashCardGroup("Scale Degree Modes", ScaleDegreeModes.createFlashCards()),
-          new FlashCardGroup("Scale Chords", ScaleChords.createFlashCards()),
-          new FlashCardGroup("Scale Families", ScaleFamilies.createFlashCards()),
-          new FlashCardGroup("Scale Characteristics", ScaleCharacteristics.createFlashCards()),
+          ScaleDegreeNames.createFlashCardGroup(),
+          ScaleNotes.createFlashCardGroup(),
+          ScaleDegreeModes.createFlashCardGroup(),
+          ScaleChords.createFlashCardGroup(),
+          ScaleFamilies.createFlashCardGroup(),
+          ScaleCharacteristics.createFlashCardGroup(),
           ScaleEarTraining.createFlashCardGroup()
         ]
       },
       {
         title: "Keys",
         flashCardGroups: [
-          new FlashCardGroup("Key Accidental Counts", KeyAccidentalCounts.createFlashCards()),
-          new FlashCardGroup("Key Accidental Notes", KeyAccidentalNotes.createFlashCards())
+          KeyAccidentalCounts.createFlashCardGroup(),
+          KeyAccidentalNotes.createFlashCardGroup()
         ]
       },
       {
         title: "Chords",
         flashCardGroups: [
-          new FlashCardGroup("Chord Family Definitions", ChordFamilyDefinitions.createFlashCards()),
-          new FlashCardGroup("Chord Families", ChordFamilies.createFlashCards()),
-          new FlashCardGroup("Chord Notes", ChordNotes.createFlashCards()),
-          new FlashCardGroup("Available Chord Tensions", AvailableChordTensions.createFlashCards()),
-          new FlashCardGroup("Diatonic Triads", DiatonicTriads.createFlashCards()),
-          new FlashCardGroup("Diatonic Seventh Chords", DiatonicSeventhChords.createFlashCards()),
+          ChordFamilyDefinitions.createFlashCardGroup(),
+          ChordFamilies.createFlashCardGroup(),
+          ChordNotes.createFlashCardGroup(),
+          AvailableChordTensions.createFlashCardGroup(),
+          DiatonicTriads.createFlashCardGroup(),
+          DiatonicSeventhChords.createFlashCardGroup(),
           SheetMusicChordRecognition.createFlashCardGroup(),
           ChordEarTraining.createFlashCardGroup(),
           RandomChordGenerator.createFlashCardGroup()
@@ -134,8 +135,9 @@ class App extends React.Component<{}, IAppState> {
             <AppBar position="static" className="top-pane">
               <Toolbar>
                 <Typography variant="h6" color="inherit">
-                  Ritornello
+                  <Link to="/">Ritornello</Link>
                 </Typography>
+                <Link to="/about">About</Link>
               </Toolbar>
             </AppBar>
             <div className="bottom-pane horizontal-panes">
@@ -146,14 +148,14 @@ class App extends React.Component<{}, IAppState> {
                     {renderFlashCardGroupLink(PianoNotes.createFlashCardGroup())}
                     {renderFlashCardGroupLink(GuitarNotes.createFlashCardGroup())}
                     {renderFlashCardGroupLink(NoteDurations.createFlashCardGroup())}
-                    {renderFlashCardGroupLink(new FlashCardGroup("Sheet Music Notes", SheetMusicNotes.createFlashCards()))}
+                    {renderFlashCardGroupLink(SheetMusicNotes.createFlashCardGroup())}
                   </div>
                   <div>
                     <p>Intervals</p>
-                    {renderFlashCardGroupLink(new FlashCardGroup("Interval Quality Symbols To Qualities", IntervalQualitySymbolsToQualities.createFlashCards()))}
-                    {renderFlashCardGroupLink(new FlashCardGroup("Generic Intervals To Interval Qualities", GenericIntervalsToIntervalQualities.createFlashCards()))}
-                    {renderFlashCardGroupLink(new FlashCardGroup("Interval Names To Half Steps", IntervalNamesToHalfSteps.createFlashCards()))}
-                    {renderFlashCardGroupLink(new FlashCardGroup("Intervals To Consonance Dissonance", IntervalsToConsonanceDissonance.createFlashCards()))}
+                    {renderFlashCardGroupLink(IntervalQualitySymbolsToQualities.createFlashCardGroup())}
+                    {renderFlashCardGroupLink(GenericIntervalsToIntervalQualities.createFlashCardGroup())}
+                    {renderFlashCardGroupLink(IntervalNamesToHalfSteps.createFlashCardGroup())}
+                    {renderFlashCardGroupLink(IntervalsToConsonanceDissonance.createFlashCardGroup())}
                     {renderFlashCardGroupLink(Interval2ndNotes.createFlashCardGroup())}
                     {renderFlashCardGroupLink(IntervalNotes.createFlashCardGroup())}
                     {renderFlashCardGroupLink(SheetMusicIntervalRecognition.createFlashCardGroup())}
@@ -162,27 +164,27 @@ class App extends React.Component<{}, IAppState> {
                   </div>
                   <div>
                     <p>Scales</p>
-                    {renderFlashCardGroupLink(new FlashCardGroup("Scale Degree Names", ScaleDegreeNames.createFlashCards()))}
-                    {renderFlashCardGroupLink(new FlashCardGroup("Scale Notes", ScaleNotes.createFlashCards()))}
-                    {renderFlashCardGroupLink(new FlashCardGroup("Scale Degree Modes", ScaleDegreeModes.createFlashCards()))}
-                    {renderFlashCardGroupLink(new FlashCardGroup("Scale Chords", ScaleChords.createFlashCards()))}
-                    {renderFlashCardGroupLink(new FlashCardGroup("Scale Families", ScaleFamilies.createFlashCards()))}
-                    {renderFlashCardGroupLink(new FlashCardGroup("Scale Characteristics", ScaleCharacteristics.createFlashCards()))}
+                    {renderFlashCardGroupLink(ScaleDegreeNames.createFlashCardGroup())}
+                    {renderFlashCardGroupLink(ScaleNotes.createFlashCardGroup())}
+                    {renderFlashCardGroupLink(ScaleDegreeModes.createFlashCardGroup())}
+                    {renderFlashCardGroupLink(ScaleChords.createFlashCardGroup())}
+                    {renderFlashCardGroupLink(ScaleFamilies.createFlashCardGroup())}
+                    {renderFlashCardGroupLink(ScaleCharacteristics.createFlashCardGroup())}
                     {renderFlashCardGroupLink(ScaleEarTraining.createFlashCardGroup())}
                   </div>
                   <div>
                     <p>Keys</p>
-                    {renderFlashCardGroupLink(new FlashCardGroup("Key Accidental Counts", KeyAccidentalCounts.createFlashCards()))}
-                    {renderFlashCardGroupLink(new FlashCardGroup("Key Accidental Notes", KeyAccidentalNotes.createFlashCards()))}
+                    {renderFlashCardGroupLink(KeyAccidentalCounts.createFlashCardGroup())}
+                    {renderFlashCardGroupLink(KeyAccidentalNotes.createFlashCardGroup())}
                   </div>
                   <div>
                     <p>Chords</p>
-                    {renderFlashCardGroupLink(new FlashCardGroup("Chord Family Definitions", ChordFamilyDefinitions.createFlashCards()))}
-                    {renderFlashCardGroupLink(new FlashCardGroup("Chord Families", ChordFamilies.createFlashCards()))}
-                    {renderFlashCardGroupLink(new FlashCardGroup("Chord Notes", ChordNotes.createFlashCards()))}
-                    {renderFlashCardGroupLink(new FlashCardGroup("Available Chord Tensions", AvailableChordTensions.createFlashCards()))}
-                    {renderFlashCardGroupLink(new FlashCardGroup("Diatonic Triads", DiatonicTriads.createFlashCards()))}
-                    {renderFlashCardGroupLink(new FlashCardGroup("Diatonic Seventh Chords", DiatonicSeventhChords.createFlashCards()))}
+                    {renderFlashCardGroupLink(ChordFamilyDefinitions.createFlashCardGroup())}
+                    {renderFlashCardGroupLink(ChordFamilies.createFlashCardGroup())}
+                    {renderFlashCardGroupLink(ChordNotes.createFlashCardGroup())}
+                    {renderFlashCardGroupLink(AvailableChordTensions.createFlashCardGroup())}
+                    {renderFlashCardGroupLink(DiatonicTriads.createFlashCardGroup())}
+                    {renderFlashCardGroupLink(DiatonicSeventhChords.createFlashCardGroup())}
                     {renderFlashCardGroupLink(SheetMusicChordRecognition.createFlashCardGroup())}
                     {renderFlashCardGroupLink(ChordEarTraining.createFlashCardGroup())}
                     {renderFlashCardGroupLink(RandomChordGenerator.createFlashCardGroup())}
@@ -195,6 +197,7 @@ class App extends React.Component<{}, IAppState> {
               </Paper>
               <div className="right-pane">
                 <Route exact path="/" component={() => null} />
+                <Route path="/about" component={AboutPage} />
                 {this.flashCardGroups.map(fcg => <Route key={fcg.route} path={fcg.route} component={this.createStudyFlashCardGroupComponent(fcg)} />)}
                 {this.state.currentComponentOverride ? React.createElement(this.state.currentComponentOverride) : null}
               </div>

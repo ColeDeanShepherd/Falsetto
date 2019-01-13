@@ -1,4 +1,4 @@
-
+import * as FlashCardUtils from "src/Components/Quizzes/Utils";
 import { createFlashCards as createMajorDiatonicSeventhChordsFlashCards } from "./MajorDiatonicSeventhChords";
 import { createFlashCards as createNaturalMinorDiatonicSeventhChordsFlashCards } from "./NaturalMinorDiatonicSeventhChords";
 import { createFlashCards as createMelodicMinorDiatonicSeventhChordsFlashCards } from "./MelodicMinorDiatonicSeventhChords";
@@ -6,7 +6,15 @@ import { createFlashCards as createHarmonicMinorDiatonicSeventhChordsFlashCards 
 import { createFlashCards as createHarmonicMajorDiatonicSeventhChordsFlashCards } from "./HarmonicMajorDiatonicSeventhChords";
 import { createFlashCards as createDoubleHarmonicMajorDiatonicSeventhChordsFlashCards } from "./DoubleHarmonicMajorDiatonicSeventhChords";
 import { FlashCard } from "../../FlashCard";
+import { FlashCardGroup } from 'src/FlashCardGroup';
 
+export function createFlashCardGroup(): FlashCardGroup {
+  const flashCards = createFlashCards();
+  const flashCardGroup = new FlashCardGroup("Diatonic Seventh Chords", flashCards);
+  flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+
+  return flashCardGroup;
+}
 export function createFlashCards(): FlashCard[] {
   return new Array<FlashCard>()
     .concat(createMajorDiatonicSeventhChordsFlashCards())

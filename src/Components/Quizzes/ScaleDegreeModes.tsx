@@ -1,6 +1,14 @@
 import { Quiz } from "../../Quiz";
 import { createTextMultipleChoiceQuiz } from "../Quiz";
 import { FlashCard } from "../../FlashCard";
+import { FlashCardGroup } from 'src/FlashCardGroup';
+
+export function createFlashCardGroup(): FlashCardGroup {
+  const flashCards = createFlashCards();
+  const flashCardGroup = new FlashCardGroup("Scale Degree Modes", flashCards);
+
+  return flashCardGroup;
+}
 
 export function createFlashCards(): FlashCard[] {
   return [

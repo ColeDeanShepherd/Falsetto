@@ -1,6 +1,16 @@
+import * as FlashCardUtils from "src/Components/Quizzes/Utils";
 import { Quiz } from "../../Quiz";
 import { createTextMultipleChoiceQuiz } from "../Quiz";
 import { FlashCard } from "../../FlashCard";
+import { FlashCardGroup } from 'src/FlashCardGroup';
+
+export function createFlashCardGroup(): FlashCardGroup {
+  const flashCards = createFlashCards();
+  const flashCardGroup = new FlashCardGroup("Generic Intervals To Interval Qualities", flashCards);
+  flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+
+  return flashCardGroup;
+}
 
 export function createFlashCards(): FlashCard[] {
   return [

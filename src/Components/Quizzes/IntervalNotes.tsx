@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid } from '@material-ui/core';
 
 import * as Utils from '../../Utils';
+import * as FlashCardUtils from "src/Components/Quizzes/Utils";
 import { FlashCard } from 'src/FlashCard';
 import { FlashCardGroup } from 'src/FlashCardGroup';
 import { Pitch } from 'src/Pitch';
@@ -273,5 +274,7 @@ export function createFlashCardGroup(): FlashCardGroup {
   group.initialConfigData = initialConfigData;
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   group.enableInvertFlashCards = false;
+  group.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+
   return group;
 }

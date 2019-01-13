@@ -1,4 +1,12 @@
 import { FlashCard } from "../../FlashCard";
+import { FlashCardGroup } from 'src/FlashCardGroup';
+
+export function createFlashCardGroup(): FlashCardGroup {
+  const flashCards = createFlashCards();
+  const flashCardGroup = new FlashCardGroup("Miscellaneous", flashCards);
+
+  return flashCardGroup;
+}
 
 export function createFlashCards(): FlashCard[] {
   return [

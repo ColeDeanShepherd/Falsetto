@@ -76,9 +76,6 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
       : 1;
     
     const boundOnAnswer = this.onAnswer.bind(this);
-    const renderAnswerSelect = (this.props.renderAnswerSelect)
-      ? this.props.renderAnswerSelect
-      : this.defaultRenderAnswerSelect.bind(this);
     
     const flashCardContainerStyle: any = {
       fontSize: "2em",
@@ -119,7 +116,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
             {!this.state.isShowingBackSide ? renderedFlashCardFrontSide : renderedFlashCardBackSide}
           </div>
 
-          {renderAnswerSelect(flashCards, this.state.invertFlashCards, currentFlashCard, boundOnAnswer)}
+          {this.props.renderAnswerSelect ? this.props.renderAnswerSelect(flashCards, this.state.invertFlashCards, currentFlashCard, boundOnAnswer) : null}
 
           <div style={{marginTop: "1em"}}>
             <Button
@@ -132,7 +129,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
               onClick={event => this.moveToNextFlashCard()}
               variant="contained"
             >
-              Skip
+              {!this.props.renderAnswerSelect ? "Next" : "Skip"}
             </Button>
           </div>
         </CardContent>
@@ -142,14 +139,6 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
 
   private studyAlgorithm: StudyAlgorithm = new LeitnerStudyAlgorithm(5);
 
-  private defaultRenderAnswerSelect (
-    flashCards: FlashCard[],
-    areFlashCardsInverted: boolean,
-    flashCard: FlashCard,
-    onAnswer: (answerDifficulty: AnswerDifficulty) => void
-  ): JSX.Element | null {
-    return null;
-  };
   private renderFlashCardMultiSelect(flashCards: FlashCard[]): JSX.Element {
     const onEnabledFlashCardIndicesChange = this.onEnabledFlashCardIndicesChange.bind(this);
 
