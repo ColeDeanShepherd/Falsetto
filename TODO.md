@@ -9,12 +9,7 @@
   * Add "allow accidentals"
   * Add answer buttons
 * Add harmonic intervals to Interval Ear Training
-* Add sensible defaults to Scale Notes.
-* Add sensible defaults to Scale Degree Modes.
-* Add sensible defaults to Scale Chords.
-* Add sensible defaults to Scale Families.
-* Add sensible defaults to Scale Characteristics.
-* Add sensible defaults to Scale Ear Training.
+* Fix scale ear training (and other scale exercises) configuration.
 * Improve audio latency.
 * Hide buttons for disabled flash cards?
 * Improve answer buttons on "Key Accidental Counts"

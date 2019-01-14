@@ -47,57 +47,10 @@ const scales = [
     formulaString: "1 2 b3 4 5 6 7"
   },
   {
-    type: "Dorian b2",
-    formulaString: "1 b2 b3 4 5 6 b7"
-  },
-  {
-    type: "Lydian Aug.",
-    formulaString: "1 2 3 #4 #5 6 7"
-  },
-  {
-    type: "Mixolydian #11",
-    formulaString: "1 2 3 #4 5 6 b7"
-  },
-  {
-    type: "Mixolydian b6",
-    formulaString: "1 2 3 4 5 b6 b7"
-  },
-  {
-    type: "Locrian Nat. 9",
-    formulaString: "1 2 b3 4 b5 b6 b7"
-  },
-  {
-    type: "Altered Dominant",
-    formulaString: "1 b2 b3 b4 b5 b6 b7"
-  },
-  {
     type: "Harmonic Minor",
     formulaString: "1 2 b3 4 5 b6 7"
   },
-  {
-    type: "Locrian Nat. 6",
-    formulaString: "1 b2 b3 4 b5 6 b7"
-  },
-  {
-    type: "Ionian Aug.",
-    formulaString: "1 2 3 4 #5 6 7"
-  },
-  {
-    type: "Dorian #11",
-    formulaString: "1 2 b3 #4 5 6 b7"
-  },
-  {
-    type: "Phrygian Major",
-    formulaString: "1 b2 3 4 5 b6 b7"
-  },
-  {
-    type: "Lydian #9",
-    formulaString: "1 #2 3 #4 5 6 7"
-  },
-  {
-    type: "Altered Dominant bb7",
-    formulaString: "1 b2 b3 b4 b5 b6 bb7"
-  },
+
   {
     type: "Tonic Diminished",
     formulaString: "1 2 b3 4 b5 b6 bb7 7"
@@ -129,7 +82,56 @@ const scales = [
   {
     type: "Minor Blues",
     formulaString: "1 b3 4 b5 5 b7"
-  }  
+  },
+
+  {
+    type: "Dorian b2",
+    formulaString: "1 b2 b3 4 5 6 b7"
+  },
+  {
+    type: "Lydian Aug.",
+    formulaString: "1 2 3 #4 #5 6 7"
+  },
+  {
+    type: "Mixolydian #11",
+    formulaString: "1 2 3 #4 5 6 b7"
+  },
+  {
+    type: "Mixolydian b6",
+    formulaString: "1 2 3 4 5 b6 b7"
+  },
+  {
+    type: "Locrian Nat. 9",
+    formulaString: "1 2 b3 4 b5 b6 b7"
+  },
+  {
+    type: "Altered Dominant",
+    formulaString: "1 b2 b3 b4 b5 b6 b7"
+  },
+  {
+    type: "Locrian Nat. 6",
+    formulaString: "1 b2 b3 4 b5 6 b7"
+  },
+  {
+    type: "Ionian Aug.",
+    formulaString: "1 2 3 4 #5 6 7"
+  },
+  {
+    type: "Dorian #11",
+    formulaString: "1 2 b3 #4 5 6 b7"
+  },
+  {
+    type: "Phrygian Major",
+    formulaString: "1 b2 3 4 5 b6 b7"
+  },
+  {
+    type: "Lydian #9",
+    formulaString: "1 #2 3 #4 5 6 7"
+  },
+  {
+    type: "Altered Dominant bb7",
+    formulaString: "1 b2 b3 b4 b5 b6 bb7"
+  }
 ];
 
 // TODO: instead of generating all flash cards ahead of time, dynamically generate each one
@@ -273,7 +275,9 @@ export function createFlashCardGroup(): FlashCardGroup {
   };
 
   const initialConfigData: IConfigData = {
-    enabledScaleTypes: scales.map(scale => scale.type)
+    enabledScaleTypes: scales
+      .filter((_, scaleIndex) => scaleIndex <= 8)
+      .map(scale => scale.type)
   };
   
   const group = new FlashCardGroup(

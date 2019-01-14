@@ -1,11 +1,11 @@
-import { Quiz } from "../../Quiz";
-import { createTextMultipleChoiceQuiz } from "../Quiz";
+import * as Utils from "src/Utils";
 import { FlashCard } from "../../FlashCard";
 import { FlashCardGroup } from 'src/FlashCardGroup';
 
 export function createFlashCardGroup(): FlashCardGroup {
   const flashCards = createFlashCards();
   const flashCardGroup = new FlashCardGroup("Scale Degree Modes", flashCards);
+  flashCardGroup.initialSelectedFlashCardIndices = Utils.range(0, 6);
 
   return flashCardGroup;
 }
@@ -41,33 +41,4 @@ export function createFlashCards(): FlashCard[] {
     new FlashCard("Double Harmonic Major Degree 6 Mode", "Ionian ♯5 ♯2"),
     new FlashCard("Double Harmonic Major Degree 7 Mode", "Locrian ♭♭3 ♭♭7 "),
   ];
-}
-export function createQuiz(): Quiz {
-  const scaleDegrees = ["1", "2", "3", "4", "5", "6", "7"];
-  const scaleDegreeModes = [
-    "Ionian",
-    "Dorian",
-    "Phrygian",
-    "Lydian",
-    "Mixolydian",
-    "Aeolian",
-    "Locrian"
-  ];
-  const answers = [
-    "Ionian",
-    "Dorian",
-    "Phrygian",
-    "Lydian",
-    "Mixolydian",
-    "Aeolian",
-    "Locrian"
-  ];
-  
-  return createTextMultipleChoiceQuiz(
-    "Major Scale Degree Modes",
-    scaleDegrees,
-    scaleDegreeModes,
-    answers,
-    false
-  );
 }

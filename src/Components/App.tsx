@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
 import { Paper, AppBar, Typography, Toolbar, Button } from '@material-ui/core';
 import * as Utils from "../Utils";
 
@@ -42,11 +42,7 @@ import { StudyFlashCards } from './StudyFlashCards';
 import * as Overview from "./Quizzes/TheJazzPianoSite/TheBasics/Overview"
 import { AboutPage } from './AboutPage';
 
-export interface IAppState {
-  currentFlashCardGroupIndex: number;
-  currentComponentOverride: any;
-}
-class App extends React.Component<{}, IAppState> {
+class App extends React.Component<{}, {}> {
   public constructor(props: {}) {
     super(props);
 
@@ -116,16 +112,11 @@ class App extends React.Component<{}, IAppState> {
     ];
 
     this.flashCardGroups = Utils.flattenArrays<FlashCardGroup>(this.groupedFlashCardGroups.map(g => g.flashCardGroups));
-
-    this.state = {
-      currentFlashCardGroupIndex: 0,
-      currentComponentOverride: null
-    };
   }
 
   public render(): JSX.Element {
     const renderFlashCardGroupLink = (flashCardGroup: FlashCardGroup) => (
-      <Link to={flashCardGroup.route}>{flashCardGroup.name}</Link>
+      <NavLink to={flashCardGroup.route} className="nav-link">{flashCardGroup.name}</NavLink>
     );
 
     return (
@@ -133,16 +124,16 @@ class App extends React.Component<{}, IAppState> {
         <div>
           <div className="app">
             <AppBar position="static" className="top-pane">
-              <Toolbar>
+              <Toolbar className="nav top-nav">
                 <Typography variant="h6" color="inherit">
-                  <Link to="/">Ritornello</Link>
+                  <NavLink to="/" className="nav-link" activeClassName="">Ritornello</NavLink>
                 </Typography>
-                <Link to="/about">About</Link>
+                <NavLink to="/about" className="nav-link">About</NavLink>
               </Toolbar>
             </AppBar>
             <div className="bottom-pane horizontal-panes">
               <Paper className="left-pane">
-                <div className="left-nav">
+                <div className="nav left-nav">
                   <div>
                     <p>Notes</p>
                     {renderFlashCardGroupLink(PianoNotes.createFlashCardGroup())}
@@ -199,7 +190,6 @@ class App extends React.Component<{}, IAppState> {
                 <Route exact path="/" component={() => null} />
                 <Route path="/about" component={AboutPage} />
                 {this.flashCardGroups.map(fcg => <Route key={fcg.route} path={fcg.route} component={this.createStudyFlashCardGroupComponent(fcg)} />)}
-                {this.state.currentComponentOverride ? React.createElement(this.state.currentComponentOverride) : null}
               </div>
             </div>
           </div>
@@ -210,13 +200,6 @@ class App extends React.Component<{}, IAppState> {
 
   private groupedFlashCardGroups: { title: string; flashCardGroups: FlashCardGroup[]; }[];
   private flashCardGroups: FlashCardGroup[];
-
-  private changeQuiz(quizIndex: number) {
-    this.setState({ currentFlashCardGroupIndex: quizIndex, currentComponentOverride: null });
-  }
-  private setComponentOverride(component: any) {
-    this.setState({ currentComponentOverride: component });
-  }
   
   private createStudyFlashCardGroupComponent(currentFlashCardGroup: FlashCardGroup): () => JSX.Element {
     return () => <StudyFlashCards

@@ -1,5 +1,3 @@
-import { Quiz } from "../../Quiz";
-import { createTextMultipleChoiceQuiz } from "../Quiz";
 import { FlashCard } from "../../FlashCard";
 
 export function createFlashCards(): FlashCard[] {
@@ -12,30 +10,4 @@ export function createFlashCards(): FlashCard[] {
     new FlashCard("Natural Minor 6 Chord Type", "major"),
     new FlashCard("Natural Minor 7 Chord Type", "major"),
   ];
-}
-export function createQuiz(): Quiz {
-  const chordRoots = ["1", "2", "3", "4", "5", "6", "7"];
-  const chordTypes = [
-    "minor",
-    "diminished",
-    "major",
-    "minor",
-    "minor",
-    "major",
-    "major"
-  ];
-  const answers = [
-    "major",
-    "minor",
-    "diminished",
-    "augmented"
-  ];
-
-  return createTextMultipleChoiceQuiz(
-    "Natural Minor Diatonic Triads",
-    chordRoots,
-    chordTypes,
-    answers,
-    false
-  );
 }

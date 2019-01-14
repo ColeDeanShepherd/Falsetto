@@ -1,5 +1,4 @@
-import * as FlashCardUtils from "src/Components/Quizzes/Utils";import { Quiz } from "../../Quiz";
-import { createTextMultipleChoiceQuiz } from "../Quiz";
+import * as FlashCardUtils from "src/Components/Quizzes/Utils";
 import { FlashCard } from "../../FlashCard";
 import { FlashCardGroup } from 'src/FlashCardGroup';
 
@@ -22,34 +21,4 @@ export function createFlashCards(): FlashCard[] {
     new FlashCard("7 (in major)", "Leading Tone"),
     new FlashCard("7 (in minor)", "Subtonic"),
   ];
-}
-export function createQuiz(): Quiz {
-  const chordNotes = [
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7 (in major)",
-    "7 (in minor)"
-  ];
-  const chordTypes = [
-    "Tonic",
-    "Supertonic",
-    "Mediant",
-    "Subdominant",
-    "Dominant",
-    "Submediant",
-    "Leading Tone",
-    "Subtonic"
-  ];
-  
-  return createTextMultipleChoiceQuiz(
-    "Scale Degree Names",
-    chordNotes,
-    chordTypes,
-    chordTypes,
-    false
-  );
 }
