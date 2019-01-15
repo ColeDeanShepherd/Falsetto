@@ -1,3 +1,4 @@
+import * as Utils from "src/Utils";
 import * as FlashCardUtils from "src/Components/Quizzes/Utils";
 import { createFlashCards as createMajorDiatonicTriadsFlashCards } from "./MajorDiatonicTriads";
 import { createFlashCards as createNaturalMinorDiatonicTriadsFlashCards } from "./NaturalMinorDiatonicTriads";
@@ -11,6 +12,7 @@ import { FlashCardGroup } from 'src/FlashCardGroup';
 export function createFlashCardGroup(): FlashCardGroup {
   const flashCards = createFlashCards();
   const flashCardGroup = new FlashCardGroup("Diatonic Triads", flashCards);
+  flashCardGroup.initialSelectedFlashCardIndices = Utils.range(0, 13);
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
 
   return flashCardGroup;
