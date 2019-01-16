@@ -12,6 +12,7 @@ import { FlashCardGroup } from 'src/FlashCardGroup';
 export function createFlashCardGroup(): FlashCardGroup {
   const flashCards = createFlashCards();
   const flashCardGroup = new FlashCardGroup("Diatonic Triads", flashCards);
+  flashCardGroup.enableInvertFlashCards = false;
   flashCardGroup.initialSelectedFlashCardIndices = Utils.range(0, 13);
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
 

@@ -85,6 +85,25 @@ interface IConfigData {
   enabledChordTypes: string[];
 }
 
+export function configDataToEnabledQuestionIds(configData: IConfigData): Array<number> {
+  const newEnabledFlashCardIndices = new Array<number>();
+
+  let i = 0;
+
+  for (const rootPitch of rootPitches) {
+    for (const chord of chords) {
+      const chordType = chord.type;
+      if (Utils.arrayContains(configData.enabledChordTypes, chordType)) {
+        newEnabledFlashCardIndices.push(i);
+      }
+
+      i++;
+    }
+  }
+
+  return newEnabledFlashCardIndices;
+}
+
 export interface IChordNotesFlashCardMultiSelectProps {
   flashCards: FlashCard[];
   configData: IConfigData;
@@ -147,25 +166,11 @@ export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesF
       this.onChange(newConfigData);
     }
   }
-  private onChange(configData: IConfigData) {
+  private onChange(newConfigData: IConfigData) {
     if (!this.props.onChange) { return; }
 
-    const newEnabledFlashCardIndices = new Array<number>();
-
-    let i = 0;
-
-    for (const rootPitch of rootPitches) {
-      for (const chord of chords) {
-        const chordType = chord.type;
-        if (Utils.arrayContains(configData.enabledChordTypes, chordType)) {
-          newEnabledFlashCardIndices.push(i);
-        }
-
-        i++;
-      }
-    }
-
-    this.props.onChange(newEnabledFlashCardIndices, configData);
+    const newEnabledFlashCardIndices = configDataToEnabledQuestionIds(newConfigData);
+    this.props.onChange(newEnabledFlashCardIndices, newConfigData);
   }
 }
 
@@ -212,6 +217,7 @@ export function createFlashCardGroup(): FlashCardGroup {
     "Chord Ear Training",
     flashCards
   );
+  group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
   group.initialConfigData = initialConfigData;
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   group.enableInvertFlashCards = false;

@@ -26,8 +26,21 @@ const allQuestions = Utils.flattenArrays<IQuestionId>(stringNotes
 );
 
 interface IConfigData {
-  maxFretString: string
+  maxFret: number
 };
+
+export function configDataToEnabledQuestionIds(configData: IConfigData): Array<number> {
+  const notesPerString = stringNotes[0].length;
+
+  const enabledFlashCardIndices = new Array<number>();
+  for (let stringIndex = 0; stringIndex < stringNotes.length; stringIndex++) {
+    for (let fretNumber = 0; fretNumber <= configData.maxFret; fretNumber++) {
+      enabledFlashCardIndices.push((notesPerString * stringIndex) + fretNumber);
+    }
+  }
+
+  return enabledFlashCardIndices;
+}
 
 export interface IGuitarNotesFlashCardMultiSelectProps {
   flashCards: FlashCard[];
@@ -41,7 +54,7 @@ export class GuitarNotesFlashCardMultiSelect extends React.Component<IGuitarNote
     return (
       <TextField
         label="Max. Fret"
-        value={this.props.configData.maxFretString}
+        value={this.props.configData.maxFret}
         onChange={event => this.onMaxFretStringChange(event.target.value)}
         type="number"
         InputLabelProps={{
@@ -54,24 +67,17 @@ export class GuitarNotesFlashCardMultiSelect extends React.Component<IGuitarNote
   
   private onMaxFretStringChange(newValue: string) {
     if (!this.props.onChange) { return; }
-
+    
     const maxFret = parseInt(newValue, 10);
     if (isNaN(maxFret)) { return; }
 
     const clampedMaxFret = Utils.clamp(maxFret, 0, 11);
-    const notesPerString = stringNotes[0].length;
-
-    const enabledFlashCardIndices = new Array<number>();
-    for (let stringIndex = 0; stringIndex < stringNotes.length; stringIndex++) {
-      for (let fretNumber = 0; fretNumber <= clampedMaxFret; fretNumber++) {
-        enabledFlashCardIndices.push((notesPerString * stringIndex) + fretNumber);
-      }
-    }
 
     const newConfigData: IConfigData = {
-      maxFretString: maxFret.toString()
+      maxFret: clampedMaxFret
     }
-    this.props.onChange(enabledFlashCardIndices, newConfigData);
+    const newEnabledFlashCardIndices = configDataToEnabledQuestionIds(newConfigData);
+    this.props.onChange(newEnabledFlashCardIndices, newConfigData);
   }
 }
 
@@ -91,10 +97,11 @@ export function createFlashCardGroup(): FlashCardGroup {
   };
 
   const initialConfigData: IConfigData = {
-    maxFretString: "11"
+    maxFret: 11
   };
 
   const group = new FlashCardGroup("Guitar Notes", flashCards);
+  group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
   group.initialConfigData = initialConfigData;
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   group.renderAnswerSelect = FlashCardUtils.renderNoteAnswerSelect;

@@ -42,6 +42,10 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
   public constructor(props: IStudyFlashCardsProps) {
     super(props);
 
+    if (this.props.initialConfigData && !this.props.initialSelectedFlashCardIndices) {
+      Utils.assert(false);
+    }
+
     this.state = Object.assign(
       {
         showConfiguration: false,

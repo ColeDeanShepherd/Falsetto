@@ -42,22 +42,3 @@ export function renderAnswerSelect(
     </div>
   );
 }
-export function renderAnswerSelectRow(
-  answers: Array<string>,
-  flashCard: FlashCard,
-  onAnswer: (answerDifficulty: AnswerDifficulty) => void
-) {
-  return (
-    <div>
-      {answers.map((a, i) => (
-        <Button
-          key={i}
-          variant="contained"
-          onClick={_ => onAnswer((a === flashCard.backSide) ? AnswerDifficulty.Easy : AnswerDifficulty.Incorrect)}
-          style={{ textTransform: "none" }}
-        >
-          {a}
-        </Button>))}
-    </div>
-  );
-}

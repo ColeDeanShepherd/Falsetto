@@ -155,6 +155,25 @@ interface IConfigData {
   enabledScaleTypes: string[];
 }
 
+export function configDataToEnabledQuestionIds(configData: IConfigData): Array<number> {
+  const newEnabledFlashCardIndices = new Array<number>();
+
+  let i = 0;
+
+  for (const rootPitch of rootPitches) {
+    for (const scale of scales) {
+      const scaleType = scale.type;
+      if (Utils.arrayContains(configData.enabledScaleTypes, scaleType)) {
+        newEnabledFlashCardIndices.push(i);
+      }
+
+      i++;
+    }
+  }
+
+  return newEnabledFlashCardIndices;
+}
+
 export interface IScaleNotesFlashCardMultiSelectProps {
   flashCards: FlashCard[];
   configData: IConfigData;
@@ -220,21 +239,7 @@ export class ScaleNotesFlashCardMultiSelect extends React.Component<IScaleNotesF
   private onChange(newConfigData: IConfigData) {
     if (!this.props.onChange) { return; }
 
-    const newEnabledFlashCardIndices = new Array<number>();
-
-    let i = 0;
-
-    for (const rootPitch of rootPitches) {
-      for (const scale of scales) {
-        const scaleType = scale.type;
-        if (Utils.arrayContains(newConfigData.enabledScaleTypes, scaleType)) {
-          newEnabledFlashCardIndices.push(i);
-        }
-
-        i++;
-      }
-    }
-
+    const newEnabledFlashCardIndices = configDataToEnabledQuestionIds(newConfigData);
     this.props.onChange(newEnabledFlashCardIndices, newConfigData);
   }
 }
@@ -284,6 +289,7 @@ export function createFlashCardGroup(): FlashCardGroup {
     "Scale Ear Training",
     flashCards
   );
+  group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
   group.initialConfigData = initialConfigData;
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   group.enableInvertFlashCards = false;

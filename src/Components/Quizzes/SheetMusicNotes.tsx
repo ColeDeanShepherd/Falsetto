@@ -45,7 +45,7 @@ export function createFlashCardGroup(): FlashCardGroup {
 
   const flashCardGroup = new FlashCardGroup("Sheet Music Notes", flashCards);
   flashCardGroup.enableInvertFlashCards = false;
-  flashCardGroup.initialSelectedFlashCardIndices = getEnabledQuestionIds(initialConfigData);
+  flashCardGroup.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
   flashCardGroup.initialConfigData = initialConfigData;
   flashCardGroup.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardGroup.renderAnswerSelect = renderNoteAnswerSelect;
@@ -115,7 +115,7 @@ export function allPitchesMap<TResult>(mapFn: (clef: string, pitch: Pitch, index
 
   return result;
 }
-function getEnabledQuestionIds(configData: IConfigData): Array<number> {
+function configDataToEnabledQuestionIds(configData: IConfigData): Array<number> {
   return allPitchesMap((clef, pitch, i) => {
     if (!configData.isTrebleClefEnabled && (clef === "treble")) {
       return -1;
@@ -268,7 +268,8 @@ export class SheetMusicNotesFlashCardMultiSelect extends React.Component<ISheetM
       isBassClefEnabled: this.props.configData.isBassClefEnabled,
       areAccidentalsEnabled: this.props.configData.areAccidentalsEnabled
     };
-    this.props.onChange(getEnabledQuestionIds(newConfigData), newConfigData);
+    const newEnabledFlashCardIndices = configDataToEnabledQuestionIds(newConfigData);
+    this.props.onChange(newEnabledFlashCardIndices, newConfigData);
   }
   private onIsBassClefEnabledChange(event: React.ChangeEvent, checked: boolean) {
     if (!this.props.onChange) { return; }
@@ -278,7 +279,8 @@ export class SheetMusicNotesFlashCardMultiSelect extends React.Component<ISheetM
       isBassClefEnabled: checked,
       areAccidentalsEnabled: this.props.configData.areAccidentalsEnabled
     };
-    this.props.onChange(getEnabledQuestionIds(newConfigData), newConfigData);
+    const newEnabledFlashCardIndices = configDataToEnabledQuestionIds(newConfigData);
+    this.props.onChange(newEnabledFlashCardIndices, newConfigData);
   }
   private onAreAccidentalsEnabledChange(event: React.ChangeEvent, checked: boolean) {
     if (!this.props.onChange) { return; }
@@ -288,7 +290,8 @@ export class SheetMusicNotesFlashCardMultiSelect extends React.Component<ISheetM
       isBassClefEnabled: this.props.configData.isBassClefEnabled,
       areAccidentalsEnabled: checked
     };
-    this.props.onChange(getEnabledQuestionIds(newConfigData), newConfigData);
+    const newEnabledFlashCardIndices = configDataToEnabledQuestionIds(newConfigData);
+    this.props.onChange(newEnabledFlashCardIndices, newConfigData);
   }
 }
 

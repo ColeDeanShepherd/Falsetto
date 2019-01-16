@@ -13,7 +13,8 @@ import {
   rootNotes,
   intervals,
   signs,
-  IntervalEarTrainingFlashCardMultiSelect
+  IntervalEarTrainingFlashCardMultiSelect,
+  configDataToEnabledQuestionIds
 } from "src/Components/IntervalEarTrainingFlashCardMultiSelect";
 
 export interface IFlashCardFrontSideProps {
@@ -88,6 +89,7 @@ export function createFlashCardGroup(): FlashCardGroup {
     "Interval Ear Training",
     flashCards
   );
+  group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
   group.initialConfigData = initialConfigData;
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   group.enableInvertFlashCards = false;

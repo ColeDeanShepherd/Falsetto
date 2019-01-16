@@ -63,11 +63,31 @@ const chords = [
   }
 ];
 
-// TODO: instead of generating all flash cards ahead of time, dynamically generate each one
-
 interface IConfigData {
   enabledChordTypes: string[];
   enabledRootPitches: Pitch[];
+}
+
+export function configDataToEnabledQuestionIds(configData: IConfigData): Array<number> {
+  const newEnabledFlashCardIndices = new Array<number>();
+
+  let i = 0;
+
+  for (const rootPitch of rootPitches) {
+    for (const chord of chords) {
+      const chordType = chord.type;
+      if (
+        Utils.arrayContains(configData.enabledRootPitches, rootPitch) &&
+        Utils.arrayContains(configData.enabledChordTypes, chordType)
+      ) {
+        newEnabledFlashCardIndices.push(i);
+      }
+
+      i++;
+    }
+  }
+
+  return newEnabledFlashCardIndices;
 }
 
 export interface IChordNotesFlashCardMultiSelectProps {
@@ -178,24 +198,7 @@ export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesF
   private onChange(newConfigData: IConfigData) {
     if (!this.props.onChange) { return; }
 
-    const newEnabledFlashCardIndices = new Array<number>();
-
-    let i = 0;
-
-    for (const rootPitch of rootPitches) {
-      for (const chord of chords) {
-        const chordType = chord.type;
-        if (
-          Utils.arrayContains(newConfigData.enabledRootPitches, rootPitch) &&
-          Utils.arrayContains(newConfigData.enabledChordTypes, chordType)
-        ) {
-          newEnabledFlashCardIndices.push(i);
-        }
-
-        i++;
-      }
-    }
-
+    const newEnabledFlashCardIndices = configDataToEnabledQuestionIds(newConfigData);
     this.props.onChange(newEnabledFlashCardIndices, newConfigData);
   }
 }
@@ -246,6 +249,7 @@ export function createFlashCardGroup(): FlashCardGroup {
     "Sheet Music Chords",
     flashCards
   );
+  group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
   group.initialConfigData = initialConfigData;
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   group.enableInvertFlashCards = false;

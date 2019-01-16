@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as Vex from 'vexflow';
 
 import * as Utils from "src/Utils";
+import * as FlashCardUtils from "src/Components/Quizzes/Utils";
 import { FlashCard } from "../../FlashCard";
 import { VexFlowComponent } from "../VexFlowComponent";
 import { FlashCardGroup } from 'src/FlashCardGroup';
@@ -12,6 +13,7 @@ const height = 100;
 export function createFlashCardGroup(): FlashCardGroup {
   const flashCardGroup = new FlashCardGroup("Note Durations", createFlashCards());
   flashCardGroup.initialSelectedFlashCardIndices = Utils.range(0, 4);
+  flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
 
   return flashCardGroup;
 }

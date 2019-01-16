@@ -1,7 +1,6 @@
 # To-Do
 ## High-Priority
-* Fix inverted flash cards.
-* Fix scale ear training (and other scale exercises) configuration.
+* Test all exercises using configDataToEnabledQuestionIds
 * Add answers to Interval 2nd Notes.
 * Sheet Music Intervals
   * Make generated intervals more sane.

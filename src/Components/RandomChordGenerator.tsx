@@ -118,6 +118,18 @@ interface IConfigData {
   enabledChordTypes: string[];
 }
 
+export function configDataToEnabledQuestionIds(configData: IConfigData): Array<number> {
+  return Utils.flattenArrays<boolean>(chordRoots
+    .map(chordRoot => chordTypes
+      .map(chordType =>
+        Utils.arrayContains(configData.enabledChordRoots, chordRoot) &&
+        Utils.arrayContains(configData.enabledChordTypes, chordType.name))
+    )
+  )
+    .map((x, i) => x ? i : -1)
+    .filter(i => i >= 0);
+}
+
 export interface IRandomChordGeneratorFlashCardMultiSelectProps {
   flashCards: FlashCard[];
   configData: IConfigData;
@@ -126,14 +138,6 @@ export interface IRandomChordGeneratorFlashCardMultiSelectProps {
 }
 export interface IRandomChordGeneratorFlashCardMultiSelectState {}
 export class RandomChordGeneratorFlashCardMultiSelect extends React.Component<IRandomChordGeneratorFlashCardMultiSelectProps, IRandomChordGeneratorFlashCardMultiSelectState> {
-  public constructor(props: IRandomChordGeneratorFlashCardMultiSelectProps) {
-    super(props);
-
-    this.state = {
-      enabledChordRoots: chordRoots.slice(),
-      enabledChordTypes: chordTypes.map(ct => ct.name)
-    };
-  }
   public render(): JSX.Element {
     const chordRootCheckboxTableRows = chordRoots
       .map((chordRoot, i) => {
@@ -226,16 +230,7 @@ export class RandomChordGeneratorFlashCardMultiSelect extends React.Component<IR
   private onChange(newConfigData: IConfigData) {
     if (!this.props.onChange) { return; }
 
-    const newEnabledFlashCardIndices = Utils.flattenArrays<boolean>(chordRoots
-      .map(chordRoot => chordTypes
-        .map(chordType =>
-          Utils.arrayContains(newConfigData.enabledChordRoots, chordRoot) &&
-          Utils.arrayContains(newConfigData.enabledChordTypes, chordType.name))
-      )
-    )
-    .map((x, i) => x ? i : -1)
-    .filter(i => i >= 0);
-
+    const newEnabledFlashCardIndices = configDataToEnabledQuestionIds(newConfigData);
     this.props.onChange(newEnabledFlashCardIndices, newConfigData);
   }
 }
@@ -274,6 +269,7 @@ export function createFlashCardGroup(): FlashCardGroup {
     flashCards
   );
   group.enableInvertFlashCards = false;
+  group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
   group.initialConfigData = initialConfigData;
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   return group;

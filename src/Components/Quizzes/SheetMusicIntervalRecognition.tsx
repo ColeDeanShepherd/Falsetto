@@ -33,6 +33,27 @@ interface IConfigData {
   enabledIntervals: string[]
 };
 
+export function configDataToEnabledQuestionIds(configData: IConfigData): Array<number> {
+  const newEnabledFlashCardIndices = new Array<number>();
+
+  let i = 0;
+
+  for (let note1Index = 0; note1Index < notes.length; note1Index++) {
+    for (let note2Index = note1Index + 1; note2Index < notes.length; note2Index++) {
+      const pitches = [notes[note1Index], notes[note2Index]];
+      const interval = Pitch.getInterval(pitches[0], pitches[1]);
+
+      if (Utils.arrayContains(configData.enabledIntervals, interval.toString())) {
+        newEnabledFlashCardIndices.push(note1Index);
+      }
+
+      i++;
+    }
+  }
+
+  return newEnabledFlashCardIndices;
+}
+
 export interface IIntervalNotesFlashCardMultiSelectProps {
   flashCards: FlashCard[];
   configData: IConfigData;
@@ -94,23 +115,7 @@ export class IntervalNotesFlashCardMultiSelect extends React.Component<IInterval
   private onChange(newConfigData: IConfigData) {
     if (!this.props.onChange) { return; }
 
-    const newEnabledFlashCardIndices = new Array<number>();
-
-    let i = 0;
-
-    for (let note1Index = 0; note1Index < notes.length; note1Index++) {
-      for (let note2Index = note1Index + 1; note2Index < notes.length; note2Index++) {
-        const pitches = [notes[note1Index], notes[note2Index]];
-        const interval = Pitch.getInterval(pitches[0], pitches[1]);
-
-        if (Utils.arrayContains(newConfigData.enabledIntervals, interval.toString())) {
-          newEnabledFlashCardIndices.push(note1Index);
-        }
-
-        i++;
-      }
-    }
-
+    const newEnabledFlashCardIndices = configDataToEnabledQuestionIds(newConfigData);
     this.props.onChange(newEnabledFlashCardIndices, newConfigData);
   }
 }
@@ -161,6 +166,7 @@ export function createFlashCardGroup(): FlashCardGroup {
     "Sheet Music Intervals",
     flashCards
   );
+  group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
   group.initialConfigData = initialConfigData;
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   group.enableInvertFlashCards = false;

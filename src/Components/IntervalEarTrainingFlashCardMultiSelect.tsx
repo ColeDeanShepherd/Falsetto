@@ -47,6 +47,22 @@ export interface IConfigData {
   enabledSigns: string[];
 }
 
+export function configDataToEnabledQuestionIds(configData: IConfigData): Array<number> {
+  return Utils.flattenArrays<boolean>(rootNotes
+    .map(rootNote => intervals
+      .map(interval => signs
+        .map(sign =>
+          Utils.arrayContains(configData.enabledRootNotes, rootNote) &&
+          Utils.arrayContains(configData.enabledIntervals, interval) &&
+          Utils.arrayContains(configData.enabledSigns, sign)
+        )
+      )
+    )
+  )
+    .map((x, i) => x ? i : -1)
+    .filter(i => i >= 0);
+}
+
 export interface IIntervalEarTrainingFlashCardMultiSelectProps {
   flashCards: FlashCard[];
   configData: IConfigData;
@@ -170,23 +186,10 @@ export class IntervalEarTrainingFlashCardMultiSelect extends React.Component<IIn
       this.onChange(newConfigData);
     }
   }
-  private onChange(configData: IConfigData) {
+  private onChange(newConfigData: IConfigData) {
     if (!this.props.onChange) { return; }
 
-    const newEnabledFlashCardIndices = Utils.flattenArrays<boolean>(rootNotes
-      .map(rootNote => intervals
-        .map(interval => signs
-          .map(sign =>
-            Utils.arrayContains(configData.enabledRootNotes, rootNote) &&
-            Utils.arrayContains(configData.enabledIntervals, interval) &&
-            Utils.arrayContains(configData.enabledSigns, sign)
-          )
-        )
-      )
-    )
-    .map((x, i) => x ? i : -1)
-    .filter(i => i >= 0);
-
-    this.props.onChange(newEnabledFlashCardIndices, configData);
+    const newEnabledFlashCardIndices = configDataToEnabledQuestionIds(newConfigData);
+    this.props.onChange(newEnabledFlashCardIndices, newConfigData);
   }
 }
