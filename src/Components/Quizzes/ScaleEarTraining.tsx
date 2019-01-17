@@ -251,7 +251,9 @@ export function createFlashCardGroup(): FlashCardGroup {
 
   for (const rootPitch of rootPitches) {
     for (const scale of scales) {
-      const pitches = Chord.fromPitchAndFormulaString(rootPitch, scale.formulaString)
+      const formulaString = scale.formulaString + " 8";
+
+      const pitches = Chord.fromPitchAndFormulaString(rootPitch, formulaString)
         .pitches;
       
       const iCopy = i;
