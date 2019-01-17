@@ -2,12 +2,14 @@ import * as React from 'react';
 import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid } from '@material-ui/core';
 
 import * as Utils from '../../Utils';
+import * as FlashCardUtils from "src/Components/Quizzes/Utils";
 import { FlashCard } from 'src/FlashCard';
 import { FlashCardGroup } from 'src/FlashCardGroup';
 import { Pitch } from 'src/Pitch';
 import { PitchLetter } from 'src/PitchLetter';
 import { VerticalDirection } from 'src/VerticalDirection';
 import { Interval } from 'src/Interval';
+import { AnswerDifficulty } from 'src/StudyAlgorithm';
 
 const rootNotes = [
   new Pitch(PitchLetter.C, -1, 4),
@@ -41,22 +43,22 @@ const intervals = [
   "M7",
   "P8"
 ];
-const signs = ["+", "-"];
+const directions = ["↑", "↓"];
 
 interface IConfigData {
   enabledRootNotes: Pitch[];
   enabledIntervals: string[];
-  enabledSigns: string[];
+  enabledDirections: string[];
 }
 
 export function configDataToEnabledQuestionIds(configData: IConfigData): Array<number> {
   return Utils.flattenArrays<boolean>(rootNotes
     .map(rootNote => intervals
-      .map(interval => signs
-        .map(sign =>
+      .map(interval => directions
+        .map(direction =>
           Utils.arrayContains(configData.enabledRootNotes, rootNote) &&
           Utils.arrayContains(configData.enabledIntervals, interval) &&
-          Utils.arrayContains(configData.enabledSigns, sign)
+          Utils.arrayContains(configData.enabledDirections, direction)
         )
       )
     )
@@ -73,15 +75,6 @@ export interface IIntervalNotesFlashCardMultiSelectProps {
 }
 export interface IIntervalNotesFlashCardMultiSelectState {}
 export class IntervalNotesFlashCardMultiSelect extends React.Component<IIntervalNotesFlashCardMultiSelectProps, IIntervalNotesFlashCardMultiSelectState> {
-  public constructor(props: IIntervalNotesFlashCardMultiSelectProps) {
-    super(props);
-
-    this.state = {
-      enabledRootNotes: rootNotes.slice(),
-      enabledIntervals: intervals.slice(),
-      enabledSigns: signs.slice()
-    };
-  }
   public render(): JSX.Element {
     const rootNoteCheckboxTableRows = rootNotes
       .map((rootNote, i) => {
@@ -135,19 +128,19 @@ export class IntervalNotesFlashCardMultiSelect extends React.Component<IInterval
       </Table>
     );
     
-    const signCheckboxTableRows = signs
-      .map((sign, i) => {
-        const isChecked = this.props.configData.enabledSigns.indexOf(sign) >= 0;
-        const isEnabled = !isChecked || (this.props.configData.enabledSigns.length > 1);
+    const directionCheckboxTableRows = directions
+      .map((direction, i) => {
+        const isChecked = this.props.configData.enabledDirections.indexOf(direction) >= 0;
+        const isEnabled = !isChecked || (this.props.configData.enabledDirections.length > 1);
 
         return (
           <TableRow key={i}>
-            <TableCell><Checkbox checked={isChecked} onChange={event => this.toggleSignEnabled(sign)} disabled={!isEnabled} /></TableCell>
-            <TableCell>{sign}</TableCell>
+            <TableCell><Checkbox checked={isChecked} onChange={event => this.toggleSignsEnabled(direction)} disabled={!isEnabled} /></TableCell>
+            <TableCell>{direction}</TableCell>
           </TableRow>
         );
       }, this);
-    const signCheckboxes = (
+    const directionCheckboxes = (
       <Table className="table">
         <TableHead>
           <TableRow>
@@ -156,7 +149,7 @@ export class IntervalNotesFlashCardMultiSelect extends React.Component<IInterval
           </TableRow>
         </TableHead>
         <TableBody>
-          {signCheckboxTableRows}
+          {directionCheckboxTableRows}
         </TableBody>
       </Table>
     );
@@ -165,7 +158,7 @@ export class IntervalNotesFlashCardMultiSelect extends React.Component<IInterval
       <Grid container spacing={32}>
         <Grid item xs={4}>{rootNoteCheckboxes}</Grid>
         <Grid item xs={4}>{intervalCheckboxes}</Grid>
-        <Grid item xs={4}>{signCheckboxes}</Grid>
+        <Grid item xs={4}>{directionCheckboxes}</Grid>
       </Grid>
     );
   }
@@ -180,7 +173,7 @@ export class IntervalNotesFlashCardMultiSelect extends React.Component<IInterval
       const newConfigData: IConfigData = {
         enabledRootNotes: newEnabledRootNotes,
         enabledIntervals: this.props.configData.enabledIntervals,
-        enabledSigns: this.props.configData.enabledSigns
+        enabledDirections: this.props.configData.enabledDirections
       };
       this.onChange(newConfigData);
     }
@@ -195,22 +188,22 @@ export class IntervalNotesFlashCardMultiSelect extends React.Component<IInterval
       const newConfigData: IConfigData = {
         enabledRootNotes: this.props.configData.enabledRootNotes,
         enabledIntervals: newEnabledIntervals,
-        enabledSigns: this.props.configData.enabledSigns
+        enabledDirections: this.props.configData.enabledDirections
       };
       this.onChange(newConfigData);
     }
   }
-  private toggleSignEnabled(sign: string) {
-    const newEnabledSigns = Utils.toggleArrayElement(
-      this.props.configData.enabledSigns,
-      sign
+  private toggleSignsEnabled(direction: string) {
+    const newEnabledDirections = Utils.toggleArrayElement(
+      this.props.configData.enabledDirections,
+      direction
     );
     
-    if (newEnabledSigns.length > 0) {
+    if (newEnabledDirections.length > 0) {
       const newConfigData: IConfigData = {
         enabledRootNotes: this.props.configData.enabledRootNotes,
         enabledIntervals: this.props.configData.enabledIntervals,
-        enabledSigns: newEnabledSigns
+        enabledDirections: newEnabledDirections
       };
       this.onChange(newConfigData);
     }
@@ -223,11 +216,33 @@ export class IntervalNotesFlashCardMultiSelect extends React.Component<IInterval
   }
 }
 
+export function renderNoteAnswerSelect(
+  flashCards: FlashCard[],
+  areFlashCardsInverted: boolean,
+  flashCard: FlashCard,
+  onAnswer: (answerDifficulty: AnswerDifficulty) => void
+): JSX.Element {
+  const doubleSharpNotes = ["A##", "B##", "C##", "D##", "E##", "F##", "G##"];
+  const sharpNotes = ["A#", "B#", "C#", "D#", "E#", "F#", "G#"];
+  const naturalNotes = ["A", "B", "C", "D", "E", "F", "G"];
+  const flatNotes = ["Ab", "Bb", "Cb", "Db", "Eb", "Fb", "Gb"];
+  const doubleFlatNotes = ["Abb", "Bbb", "Cbb", "Dbb", "Ebb", "Fbb", "Gbb"];
+  return (
+    <div>
+      {FlashCardUtils.renderStringAnswerSelect(doubleSharpNotes, flashCards, areFlashCardsInverted, flashCard, onAnswer)}
+      {FlashCardUtils.renderStringAnswerSelect(sharpNotes, flashCards, areFlashCardsInverted, flashCard, onAnswer)}
+      {FlashCardUtils.renderStringAnswerSelect(naturalNotes, flashCards, areFlashCardsInverted, flashCard, onAnswer)}
+      {FlashCardUtils.renderStringAnswerSelect(flatNotes, flashCards, areFlashCardsInverted, flashCard, onAnswer)}
+      {FlashCardUtils.renderStringAnswerSelect(doubleFlatNotes, flashCards, areFlashCardsInverted, flashCard, onAnswer)}
+    </div>
+  );
+}
+
 export function createFlashCardGroup(): FlashCardGroup {
   const flashCards = Utils.flattenArrays<FlashCard>(rootNotes
     .map(rootNote => intervals
-      .map(interval => signs
-        .map(sign => {
+      .map(interval => directions
+        .map(direction => {
           const intervalQuality = interval[0];
           const intervalQualityNum = Utils.intervalQualityToNumber(intervalQuality);
 
@@ -236,12 +251,12 @@ export function createFlashCardGroup(): FlashCardGroup {
 
           const newPitch = Pitch.addInterval(
             rootNote,
-            (sign === "+") ? VerticalDirection.Up : VerticalDirection.Down,
+            (direction === "↑") ? VerticalDirection.Up : VerticalDirection.Down,
             new Interval(genericIntervalNum, intervalQualityNum)
           );
           
           return new FlashCard(
-            rootNote.toString(false) + " " + sign + " " + interval,
+            rootNote.toString(false) + " " + direction + " " + interval,
             newPitch.toString(false)
           );
         })
@@ -266,7 +281,7 @@ export function createFlashCardGroup(): FlashCardGroup {
   const initialConfigData: IConfigData = {
     enabledRootNotes: rootNotes.slice(),
     enabledIntervals: intervals.slice(),
-    enabledSigns: signs.slice()
+    enabledDirections: directions.slice()
   };
   
   const group = new FlashCardGroup(
@@ -277,5 +292,7 @@ export function createFlashCardGroup(): FlashCardGroup {
   group.initialConfigData = initialConfigData;
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   group.enableInvertFlashCards = false;
+  group.renderAnswerSelect = renderNoteAnswerSelect;
+
   return group;
 }

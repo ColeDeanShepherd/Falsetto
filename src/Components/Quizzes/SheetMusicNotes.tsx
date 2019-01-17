@@ -139,9 +139,9 @@ export function renderNoteAnswerSelect(
   flashCard: FlashCard,
   onAnswer: (answerDifficulty: AnswerDifficulty) => void
 ): JSX.Element {
-  const sharpNotes = ["C#", "D#", "E#", "F#", "G#", "A#", "B#"];
-  const naturalNotes = ["C", "D", "E", "F", "G", "A", "B"];
-  const flatNotes = ["Cb", "Db", "Eb", "Fb", "Gb", "Ab", "Bb"];
+  const sharpNotes = ["A#", "B#", "C#", "D#", "E#", "F#", "G#"];
+  const naturalNotes = ["A", "B", "C", "D", "E", "F", "G"];
+  const flatNotes = ["Ab", "Bb", "Cb", "Db", "Eb", "Fb", "Gb"];
   return (
     <div>
       {FlashCardUtils.renderStringAnswerSelect(sharpNotes, flashCards, areFlashCardsInverted, flashCard, onAnswer)}

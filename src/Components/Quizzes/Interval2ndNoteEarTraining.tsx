@@ -12,7 +12,7 @@ import {
   IConfigData,
   rootNotes,
   intervals,
-  signs,
+  directions,
   IntervalEarTrainingFlashCardMultiSelect,
   configDataToEnabledQuestionIds
 } from "src/Components/IntervalEarTrainingFlashCardMultiSelect";
@@ -37,8 +37,8 @@ export function createFlashCardGroup(): FlashCardGroup {
 
   const flashCards = Utils.flattenArrays<FlashCard>(rootNotes
     .map(rootPitch => intervals
-      .map(interval => signs
-        .map(sign => {
+      .map(interval => directions
+        .map(direction => {
           const intervalQuality = interval[0];
           const intervalQualityNum = intervalQualityStringToNumber(intervalQuality);
 
@@ -47,7 +47,7 @@ export function createFlashCardGroup(): FlashCardGroup {
 
           const newPitch = Pitch.addInterval(
             rootPitch,
-            (sign === "+") ? VerticalDirection.Up : VerticalDirection.Down,
+            (direction === "↑") ? VerticalDirection.Up : VerticalDirection.Down,
             new Interval(genericIntervalNum, intervalQualityNum)
           );
 
@@ -80,14 +80,14 @@ export function createFlashCardGroup(): FlashCardGroup {
   const initialConfigData: IConfigData = {
     enabledRootNotes: rootNotes.slice(),
     enabledIntervals: intervals.slice(),
-    enabledSigns: signs.slice()
+    enabledDirections: directions.slice()
   };
   
   const group = new FlashCardGroup(
     "Interval 2nd Note Ear Training",
     flashCards
   );
-  group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
+  group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(false, initialConfigData);
   group.initialConfigData = initialConfigData;
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   group.enableInvertFlashCards = false;

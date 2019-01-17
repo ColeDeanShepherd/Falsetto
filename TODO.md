@@ -1,12 +1,7 @@
 # To-Do
 ## High-Priority
 * Test all exercises using configDataToEnabledQuestionIds
-* Add answers to Interval 2nd Notes.
-* Sheet Music Intervals
-  * Make generated intervals more sane.
-  * Add "allow accidentals"
-  * Add answer buttons
-* Add harmonic intervals to Interval Ear Training
+* Add "allow accidentals" to sheet music interval recognition
 * Improve audio latency.
 * Hide buttons for disabled flash cards?
 * Improve answer buttons on "Key Accidental Counts"

@@ -39,22 +39,27 @@ export const intervals = [
   "M7",
   "P8"
 ];
-export const signs = ["+", "-"];
+export const directions = ["↑", "↓"];
+export const directionsWithHarmonic = directions.concat(["harmonic"]);
 
 export interface IConfigData {
   enabledRootNotes: Pitch[];
   enabledIntervals: string[];
-  enabledSigns: string[];
+  enabledDirections: string[];
 }
 
-export function configDataToEnabledQuestionIds(configData: IConfigData): Array<number> {
+export function configDataToEnabledQuestionIds(
+  enableHarmonicIntervals: boolean,
+  configData: IConfigData
+): Array<number> {
+  const directionsToUse = enableHarmonicIntervals ? directionsWithHarmonic : directions;
   return Utils.flattenArrays<boolean>(rootNotes
     .map(rootNote => intervals
-      .map(interval => signs
-        .map(sign =>
+      .map(interval => directionsToUse
+        .map(direction =>
           Utils.arrayContains(configData.enabledRootNotes, rootNote) &&
           Utils.arrayContains(configData.enabledIntervals, interval) &&
-          Utils.arrayContains(configData.enabledSigns, sign)
+          Utils.arrayContains(configData.enabledDirections, direction)
         )
       )
     )
@@ -68,6 +73,7 @@ export interface IIntervalEarTrainingFlashCardMultiSelectProps {
   configData: IConfigData;
   selectedFlashCardIndices: number[];
   onChange?: (newValue: number[], newConfigData: any) => void;
+  enableHarmonicIntervals?: boolean;
 }
 export interface IIntervalEarTrainingFlashCardMultiSelectState {}
 export class IntervalEarTrainingFlashCardMultiSelect extends React.Component<IIntervalEarTrainingFlashCardMultiSelectProps, IIntervalEarTrainingFlashCardMultiSelectState> {
@@ -77,7 +83,7 @@ export class IntervalEarTrainingFlashCardMultiSelect extends React.Component<IIn
     this.state = {
       enabledRootNotes: rootNotes.slice(),
       enabledIntervals: intervals.slice(),
-      enabledSigns: signs.slice()
+      enabledDirections: this.directionsSource.slice()
     };
   }
   public render(): JSX.Element {
@@ -107,19 +113,19 @@ export class IntervalEarTrainingFlashCardMultiSelect extends React.Component<IIn
       </Table>
     );
     
-    const signCheckboxTableRows = signs
-      .map((sign, i) => {
-        const isChecked = this.props.configData.enabledSigns.indexOf(sign) >= 0;
-        const isEnabled = !isChecked || (this.props.configData.enabledSigns.length > 1);
+    const directionCheckboxTableRows = this.directionsSource
+      .map((direction, i) => {
+        const isChecked = this.props.configData.enabledDirections.indexOf(direction) >= 0;
+        const isEnabled = !isChecked || (this.props.configData.enabledDirections.length > 1);
 
         return (
           <TableRow key={i}>
-            <TableCell><Checkbox checked={isChecked} onChange={event => this.toggleSignEnabled(sign)} disabled={!isEnabled} /></TableCell>
-            <TableCell>{sign}</TableCell>
+            <TableCell><Checkbox checked={isChecked} onChange={event => this.toggleDirectionEnabled(direction)} disabled={!isEnabled} /></TableCell>
+            <TableCell>{direction}</TableCell>
           </TableRow>
         );
       }, this);
-    const signCheckboxes = (
+    const directionCheckboxes = (
       <Table className="table">
         <TableHead>
           <TableRow>
@@ -128,7 +134,7 @@ export class IntervalEarTrainingFlashCardMultiSelect extends React.Component<IIn
           </TableRow>
         </TableHead>
         <TableBody>
-          {signCheckboxTableRows}
+          {directionCheckboxTableRows}
         </TableBody>
       </Table>
     );
@@ -136,25 +142,13 @@ export class IntervalEarTrainingFlashCardMultiSelect extends React.Component<IIn
     return (
       <Grid container spacing={32}>
         <Grid item xs={6}>{intervalCheckboxes}</Grid>
-        <Grid item xs={6}>{signCheckboxes}</Grid>
+        <Grid item xs={6}>{directionCheckboxes}</Grid>
       </Grid>
     );
   }
 
-  private toggleRootNoteEnabled(rootNote: Pitch) {
-    const newEnabledRootNotes = Utils.toggleArrayElement(
-      this.props.configData.enabledRootNotes,
-      rootNote
-    );
-    
-    if (newEnabledRootNotes.length > 0) {
-      const newConfigData: IConfigData = {
-        enabledRootNotes: newEnabledRootNotes,
-        enabledIntervals: this.props.configData.enabledIntervals,
-        enabledSigns: this.props.configData.enabledSigns
-      };
-      this.onChange(newConfigData);
-    }
+  private get directionsSource(): Array<string> {
+    return !this.props.enableHarmonicIntervals ? directions : directionsWithHarmonic;
   }
   private toggleIntervalEnabled(interval: string) {
     const newEnabledIntervals = Utils.toggleArrayElement(
@@ -166,22 +160,22 @@ export class IntervalEarTrainingFlashCardMultiSelect extends React.Component<IIn
       const newConfigData: IConfigData = {
         enabledRootNotes: this.props.configData.enabledRootNotes,
         enabledIntervals: newEnabledIntervals,
-        enabledSigns: this.props.configData.enabledSigns
+        enabledDirections: this.props.configData.enabledDirections
       };
       this.onChange(newConfigData);
     }
   }
-  private toggleSignEnabled(sign: string) {
-    const newEnabledSigns = Utils.toggleArrayElement(
-      this.props.configData.enabledSigns,
-      sign
+  private toggleDirectionEnabled(direction: string) {
+    const newEnabledDirections = Utils.toggleArrayElement(
+      this.props.configData.enabledDirections,
+      direction
     );
     
-    if (newEnabledSigns.length > 0) {
+    if (newEnabledDirections.length > 0) {
       const newConfigData: IConfigData = {
         enabledRootNotes: this.props.configData.enabledRootNotes,
         enabledIntervals: this.props.configData.enabledIntervals,
-        enabledSigns: newEnabledSigns
+        enabledDirections: newEnabledDirections
       };
       this.onChange(newConfigData);
     }
@@ -189,7 +183,8 @@ export class IntervalEarTrainingFlashCardMultiSelect extends React.Component<IIn
   private onChange(newConfigData: IConfigData) {
     if (!this.props.onChange) { return; }
 
-    const newEnabledFlashCardIndices = configDataToEnabledQuestionIds(newConfigData);
+    const enableHarmonicIntervals = this.props.enableHarmonicIntervals === true;
+    const newEnabledFlashCardIndices = configDataToEnabledQuestionIds(enableHarmonicIntervals, newConfigData);
     this.props.onChange(newEnabledFlashCardIndices, newConfigData);
   }
 }

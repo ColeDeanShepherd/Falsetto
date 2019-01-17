@@ -2,11 +2,13 @@ import * as React from 'react';
 import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid } from '@material-ui/core';
 
 import * as Utils from '../../Utils';
+import * as FlashCardUtils from "src/Components/Quizzes/Utils";
 import { FlashCard } from 'src/FlashCard';
 import { FlashCardGroup } from 'src/FlashCardGroup';
 import { Pitch, pitchRange } from 'src/Pitch';
 import { PitchLetter } from 'src/PitchLetter';
 import { SheetMusicChord } from './SheetMusicChords';
+import { Interval } from 'src/Interval';
 
 const minPitch = new Pitch(PitchLetter.C, -1, 2);
 const maxPitch = new Pitch(PitchLetter.C, 1, 6);
@@ -27,8 +29,6 @@ const intervals = [
   "P8"
 ];
 
-// TODO: instead of generating all flash cards ahead of time, dynamically generate each one
-
 interface IConfigData {
   enabledIntervals: string[]
 };
@@ -38,35 +38,25 @@ export function configDataToEnabledQuestionIds(configData: IConfigData): Array<n
 
   let i = 0;
 
-  for (let note1Index = 0; note1Index < notes.length; note1Index++) {
-    for (let note2Index = note1Index + 1; note2Index < notes.length; note2Index++) {
-      const pitches = [notes[note1Index], notes[note2Index]];
-      const interval = Pitch.getInterval(pitches[0], pitches[1]);
-
-      if (Utils.arrayContains(configData.enabledIntervals, interval.toString())) {
-        newEnabledFlashCardIndices.push(note1Index);
-      }
-
-      i++;
+  forEachInterval((pitches, interval) => {
+    if (Utils.arrayContains(configData.enabledIntervals, interval.toString())) {
+      newEnabledFlashCardIndices.push(i);
     }
-  }
+
+    i++;
+  });
 
   return newEnabledFlashCardIndices;
 }
 
-export interface IIntervalNotesFlashCardMultiSelectProps {
+export interface IIntervalsFlashCardMultiSelectProps {
   flashCards: FlashCard[];
   configData: IConfigData;
   selectedFlashCardIndices: number[];
   onChange?: (newValue: number[], newConfigData: any) => void;
 }
-export interface IIntervalNotesFlashCardMultiSelectState {}
-export class IntervalNotesFlashCardMultiSelect extends React.Component<IIntervalNotesFlashCardMultiSelectProps, IIntervalNotesFlashCardMultiSelectState> {
-  public constructor(props: IIntervalNotesFlashCardMultiSelectProps) {
-    super(props);
-
-    this.state = {};
-  }
+export interface IIntervalsFlashCardMultiSelectState {}
+export class IntervalsFlashCardMultiSelect extends React.Component<IIntervalsFlashCardMultiSelectProps, IIntervalsFlashCardMultiSelectState> {
   public render(): JSX.Element {
     const intervalCheckboxTableRows = intervals
       .map((interval, i) => {
@@ -120,28 +110,35 @@ export class IntervalNotesFlashCardMultiSelect extends React.Component<IInterval
   }
 }
 
+function forEachInterval(fn: (pitches: Array<Pitch>, interval: Interval) => void) {
+  for (let note1Index = 0; note1Index < notes.length; note1Index++) {
+    for (let note2Index = note1Index + 1; note2Index < notes.length; note2Index++) {
+      const pitches = [notes[note1Index], notes[note2Index]];
+      const interval = Pitch.getInterval(pitches[0], pitches[1]);
+
+      if (Utils.arrayContains(intervals, interval.toString())) {
+        fn(pitches, interval);
+      }
+    }
+  }
+}
+
 export function createFlashCardGroup(): FlashCardGroup {
   const flashCards = new Array<FlashCard>();
 
-  for (let i = 0; i < notes.length; i++) {
-    for (let j = i + 1; j < notes.length; j++) {
-      const pitches = [notes[i], notes[j]];
-      const interval = Pitch.getInterval(pitches[0], pitches[1]);
-      if (interval.type > 8) { continue; }
-
-      flashCards.push(new FlashCard(
-        () => (
-          <div>
-            <SheetMusicChord
-              width={300} height={200}
-              pitches={pitches}
-            />
-          </div>
-        ),
-        interval.toString()
-      ));
-    }
-  }
+  forEachInterval((pitches, interval) => {
+    flashCards.push(new FlashCard(
+      () => (
+        <div>
+          <SheetMusicChord
+            width={300} height={200}
+            pitches={pitches}
+          />
+        </div>
+      ),
+      interval.toString()
+    ));
+  });
 
   const renderFlashCardMultiSelect = (
     selectedFlashCardIndices: number[],
@@ -149,7 +146,7 @@ export function createFlashCardGroup(): FlashCardGroup {
     onChange: (newValue: number[], newConfigData: any) => void
   ): JSX.Element => {
     return (
-    <IntervalNotesFlashCardMultiSelect
+    <IntervalsFlashCardMultiSelect
       flashCards={flashCards}
       configData={configData}
       selectedFlashCardIndices={selectedFlashCardIndices}
@@ -168,7 +165,9 @@ export function createFlashCardGroup(): FlashCardGroup {
   );
   group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
   group.initialConfigData = initialConfigData;
-  group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   group.enableInvertFlashCards = false;
+  group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
+  group.renderAnswerSelect = FlashCardUtils.renderStringAnswerSelect.bind(null, intervals)
+
   return group;
 }

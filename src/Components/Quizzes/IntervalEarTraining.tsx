@@ -12,7 +12,7 @@ import {
   IConfigData,
   rootNotes,
   intervals,
-  signs,
+  directionsWithHarmonic as directions,
   IntervalEarTrainingFlashCardMultiSelect,
   configDataToEnabledQuestionIds
 } from "src/Components/IntervalEarTrainingFlashCardMultiSelect";
@@ -20,11 +20,17 @@ import {
 export interface IFlashCardFrontSideProps {
   pitch1: Pitch;
   pitch2: Pitch;
+  isHarmonicInterval: boolean;
 }
 export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps, {}> {
   public componentDidMount() {
     playPitch(this.props.pitch1);
-    setTimeout(() => playPitch(this.props.pitch2), 1000);
+
+    if (this.props.isHarmonicInterval) {
+      playPitch(this.props.pitch2);
+    } else {
+      setTimeout(() => playPitch(this.props.pitch2), 1000);
+    }
   }
 
   public render(): JSX.Element {
@@ -37,8 +43,8 @@ export function createFlashCardGroup(): FlashCardGroup {
 
   const flashCards = Utils.flattenArrays<FlashCard>(rootNotes
     .map(rootPitch => intervals
-      .map(intervalStr => signs
-        .map(sign => {
+      .map(intervalStr => directions
+        .map(direction => {
           const intervalQuality = intervalStr[0];
           const intervalQualityNum = intervalQualityStringToNumber(intervalQuality);
 
@@ -49,15 +55,17 @@ export function createFlashCardGroup(): FlashCardGroup {
 
           const newPitch = Pitch.addInterval(
             rootPitch,
-            (sign === "+") ? VerticalDirection.Up : VerticalDirection.Down,
+            (direction !== "↓") ? VerticalDirection.Up : VerticalDirection.Down,
             interval
           );
+
+          const isHarmonicInterval = direction === "harmonic";
 
           const iCopy = i;
           i++;
           
           return new FlashCard(
-            () => <FlashCardFrontSide key={iCopy} pitch1={rootPitch} pitch2={newPitch} />,
+            () => <FlashCardFrontSide key={iCopy} pitch1={rootPitch} pitch2={newPitch} isHarmonicInterval={isHarmonicInterval} />,
             interval.toString()
           );
         })
@@ -75,6 +83,7 @@ export function createFlashCardGroup(): FlashCardGroup {
       configData={configData}
       selectedFlashCardIndices={selectedFlashCardIndices}
       onChange={onChange}
+      enableHarmonicIntervals={true}
     />
     );
   };
@@ -82,14 +91,14 @@ export function createFlashCardGroup(): FlashCardGroup {
   const initialConfigData: IConfigData = {
     enabledRootNotes: rootNotes.slice(),
     enabledIntervals: intervals.slice(),
-    enabledSigns: signs.slice()
+    enabledDirections: directions.slice()
   };
   
   const group = new FlashCardGroup(
     "Interval Ear Training",
     flashCards
   );
-  group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
+  group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(true, initialConfigData);
   group.initialConfigData = initialConfigData;
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   group.enableInvertFlashCards = false;
