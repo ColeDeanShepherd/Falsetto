@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid } from '@material-ui/core';
+import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid, Typography } from '@material-ui/core';
 
 import * as Utils from '../../Utils';
 import * as FlashCardUtils from "src/Components/Quizzes/Utils";
@@ -30,7 +30,8 @@ const intervals = [
 ];
 
 interface IConfigData {
-  enabledIntervals: string[]
+  enabledIntervals: string[];
+  allowAccidentals: boolean;
 };
 
 export function configDataToEnabledQuestionIds(configData: IConfigData): Array<number> {
@@ -39,7 +40,10 @@ export function configDataToEnabledQuestionIds(configData: IConfigData): Array<n
   let i = 0;
 
   forEachInterval((pitches, interval) => {
-    if (Utils.arrayContains(configData.enabledIntervals, interval.toString())) {
+    if (
+      Utils.arrayContains(configData.enabledIntervals, interval.toString()) &&
+      (configData.allowAccidentals || pitches.every(p => p.isNatural))
+    ) {
       newEnabledFlashCardIndices.push(i);
     }
 
@@ -58,6 +62,8 @@ export interface IIntervalsFlashCardMultiSelectProps {
 export interface IIntervalsFlashCardMultiSelectState {}
 export class IntervalsFlashCardMultiSelect extends React.Component<IIntervalsFlashCardMultiSelectProps, IIntervalsFlashCardMultiSelectState> {
   public render(): JSX.Element {
+    const onAllowAccidentalsChange = this.onAllowAccidentalsChange.bind(this);
+
     const intervalCheckboxTableRows = intervals
       .map((interval, i) => {
         const isChecked = this.props.configData.enabledIntervals.indexOf(interval) >= 0;
@@ -85,9 +91,16 @@ export class IntervalsFlashCardMultiSelect extends React.Component<IIntervalsFla
     );
 
     return (
-      <Grid container spacing={32}>
-        <Grid item xs={12}>{intervalCheckboxes}</Grid>
-      </Grid>
+      <div>
+        <div style={{marginTop: "1em"}}>
+          <Checkbox
+            checked={this.props.configData.allowAccidentals}
+            onChange={onAllowAccidentalsChange}
+          />
+          Allow Accidentals
+        </div>
+        <div>{intervalCheckboxes}</div>
+      </div>
     );
   }
 
@@ -98,9 +111,21 @@ export class IntervalsFlashCardMultiSelect extends React.Component<IIntervalsFla
     );
     
     if (newEnabledIntervals.length > 0) {
-      const newConfigData = { enabledIntervals: newEnabledIntervals };
+      const newConfigData: IConfigData = {
+        enabledIntervals: newEnabledIntervals,
+        allowAccidentals: this.props.configData.allowAccidentals
+      };
       this.onChange(newConfigData);
     }
+  }
+  private onAllowAccidentalsChange(event: React.ChangeEvent, checked: boolean) {
+    if (!this.props.onChange) { return; }
+
+    const newConfigData: IConfigData = {
+      enabledIntervals: this.props.configData.enabledIntervals,
+      allowAccidentals: checked
+    };
+    this.onChange(newConfigData);
   }
   private onChange(newConfigData: IConfigData) {
     if (!this.props.onChange) { return; }
@@ -156,7 +181,8 @@ export function createFlashCardGroup(): FlashCardGroup {
   };
 
   const initialConfigData: IConfigData = {
-    enabledIntervals: intervals.slice()
+    enabledIntervals: intervals.slice(),
+    allowAccidentals: true
   };
   
   const group = new FlashCardGroup(

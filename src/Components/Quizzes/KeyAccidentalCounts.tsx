@@ -1,11 +1,33 @@
+import * as React from 'react';
+
 import * as FlashCardUtils from "src/Components/Quizzes/Utils";
 import { FlashCard } from 'src/FlashCard';
 import { FlashCardGroup } from 'src/FlashCardGroup';
+import { AnswerDifficulty } from 'src/StudyAlgorithm';
+
+export function renderAnswerSelect(
+  flashCards: FlashCard[],
+  areFlashCardsInverted: boolean,
+  flashCard: FlashCard,
+  onAnswer: (answerDifficulty: AnswerDifficulty) => void
+): JSX.Element {
+  const row0 = ["0 sharps/flats"];
+  const row1 = ["1 sharp", "2 sharps", "3 sharps", "4 sharps", "5 sharps", "6 sharps", "7 sharps"];
+  const row2 = ["1 flat", "2 flats", "3 flats", "4 flats", "5 flats", "6 flats", "7 flats"];
+
+  return (
+    <div>
+      {FlashCardUtils.renderStringAnswerSelect(row0, flashCards, areFlashCardsInverted, flashCard, onAnswer)}
+      {FlashCardUtils.renderStringAnswerSelect(row1, flashCards, areFlashCardsInverted, flashCard, onAnswer)}
+      {FlashCardUtils.renderStringAnswerSelect(row2, flashCards, areFlashCardsInverted, flashCard, onAnswer)}
+    </div>
+  );
+}
 
 export function createFlashCardGroup(): FlashCardGroup {
   const flashCards = createFlashCards();
   const flashCardGroup = new FlashCardGroup("Key Accidental Counts", flashCards);
-  flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+  flashCardGroup.renderAnswerSelect = renderAnswerSelect;
 
   return flashCardGroup;
 }

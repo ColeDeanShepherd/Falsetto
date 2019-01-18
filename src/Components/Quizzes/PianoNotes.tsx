@@ -5,7 +5,6 @@ import { PianoKeyboard } from '../PianoKeyboard';
 import { FlashCard } from 'src/FlashCard';
 import { FlashCardGroup } from 'src/FlashCardGroup';
 import { AnswerDifficulty } from 'src/StudyAlgorithm';
-import { Button } from '@material-ui/core';
 
 const notes = ["C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb", "G", "G#/Ab", "A", "A#/Bb", "B"];
 

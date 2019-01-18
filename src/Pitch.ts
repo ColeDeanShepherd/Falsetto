@@ -142,6 +142,10 @@ export class Pitch {
   public get lineOrSpaceOnStaffNumber(): number {
     return (7 * this.octaveNumber) + Utils.mod(this.letter - 2, 7);
   }
+  public get isNatural(): boolean {
+    return this.signedAccidental === 0;
+  }
+  
   public equals(pitch: Pitch): boolean {
     return (
       (this.letter === pitch.letter) &&

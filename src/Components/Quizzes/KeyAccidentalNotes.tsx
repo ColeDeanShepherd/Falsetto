@@ -1,11 +1,33 @@
+import * as React from 'react';
+
 import * as FlashCardUtils from "src/Components/Quizzes/Utils";
 import { FlashCard } from 'src/FlashCard';
 import { FlashCardGroup } from 'src/FlashCardGroup';
+import { AnswerDifficulty } from 'src/StudyAlgorithm';
+
+export function renderAnswerSelect(
+  flashCards: FlashCard[],
+  areFlashCardsInverted: boolean,
+  flashCard: FlashCard,
+  onAnswer: (answerDifficulty: AnswerDifficulty) => void
+): JSX.Element {
+  const row0 = ["none"];
+  const row1 = ["F♯", "F♯, C♯", "F♯, C♯, G♯", "F♯, C♯, G♯, D♯", "F♯, C♯, G♯, D♯, A♯", "F♯, C♯, G♯, D♯, A♯, E♯", "F♯, C♯, G♯, D♯, A♯, E♯, B♯"];
+  const row2 = ["B♭", "B♭, E♭", "B♭, E♭, A♭", "B♭, E♭, A♭, D♭", "B♭, E♭, A♭, D♭, G♭", "B♭, E♭, A♭, D♭, G♭, C♭", "B♭, E♭, A♭, D♭, G♭, C♭, F♭"];
+
+  return (
+    <div>
+      {FlashCardUtils.renderStringAnswerSelect(row0, flashCards, areFlashCardsInverted, flashCard, onAnswer)}
+      {FlashCardUtils.renderStringAnswerSelect(row1, flashCards, areFlashCardsInverted, flashCard, onAnswer)}
+      {FlashCardUtils.renderStringAnswerSelect(row2, flashCards, areFlashCardsInverted, flashCard, onAnswer)}
+    </div>
+  );
+}
 
 export function createFlashCardGroup(): FlashCardGroup {
   const flashCards = createFlashCards();
   const flashCardGroup = new FlashCardGroup("Key Accidental Notes", flashCards);
-  flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+  flashCardGroup.renderAnswerSelect = renderAnswerSelect;
 
   return flashCardGroup;
 }
