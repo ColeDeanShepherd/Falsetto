@@ -94,11 +94,14 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
     return (
       <Card>
         <CardContent>
-          <Typography gutterBottom={true} variant="h5" component="h2">
-            {this.props.title}{this.state.invertFlashCards ? " (Inverted)" : ""}
-          </Typography>
+          <div style={{display: "flex"}}>
+            <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
+              {this.props.title}{this.state.invertFlashCards ? " (Inverted)" : ""}
+            </Typography>
+            
+            <Button variant="contained" onClick={event => this.toggleConfiguration()}>{!this.state.showConfiguration ? "Show" : "Hide"} Configuration</Button>
+          </div>
 
-          <Button variant="contained" onClick={event => this.toggleConfiguration()}>{!this.state.showConfiguration ? "Show" : "Hide"} Configuration</Button>
           {this.state.showConfiguration ? (
             <div>
               {this.props.enableInvertFlashCards ? <div><Checkbox checked={this.state.invertFlashCards} onChange={event => this.toggleInvertFlashCards()} /> Invert Flash Cards</div> : null}
@@ -125,21 +128,23 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
             {!this.state.isShowingBackSide ? renderedFlashCardFrontSide : renderedFlashCardBackSide}
           </div>
 
-          {this.props.renderAnswerSelect ? this.props.renderAnswerSelect(flashCards, this.state.invertFlashCards, currentFlashCard, boundOnAnswer) : null}
+          <div style={{textAlign: "center"}}>
+            {this.props.renderAnswerSelect ? this.props.renderAnswerSelect(flashCards, this.state.invertFlashCards, currentFlashCard, boundOnAnswer) : null}
 
-          <div style={{marginTop: "1em"}}>
-            <Button
-              onClick={event => this.flipFlashCard()}
-              variant="contained"
-            >
-              Flip to {this.state.isShowingBackSide ? "Front" : "Back"}
-            </Button>
-            <Button
-              onClick={event => this.moveToNextFlashCard()}
-              variant="contained"
-            >
-              {!this.props.renderAnswerSelect ? "Next" : "Skip"}
-            </Button>
+            <div style={{marginTop: "1em"}}>
+              <Button
+                onClick={event => this.flipFlashCard()}
+                variant="contained"
+              >
+                Flip to {this.state.isShowingBackSide ? "Front" : "Back"}
+              </Button>
+              <Button
+                onClick={event => this.moveToNextFlashCard()}
+                variant="contained"
+              >
+                {!this.props.renderAnswerSelect ? "Next" : "Skip"}
+              </Button>
+            </div>
           </div>
         </CardContent>
       </Card>

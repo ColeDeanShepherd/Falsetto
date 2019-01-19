@@ -1,4 +1,5 @@
 import * as Utils from "../../Utils";
+import * as FlashCardUtils from "./Utils";
 import { FlashCard } from "../../FlashCard";
 import { FlashCardGroup } from 'src/FlashCardGroup';
 
@@ -6,6 +7,7 @@ export function createFlashCardGroup(): FlashCardGroup {
   const flashCards = createFlashCards();
   const flashCardGroup = new FlashCardGroup("Scale Families", flashCards);
   flashCardGroup.initialSelectedFlashCardIndices = Utils.range(0, 8);
+  flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
 
   return flashCardGroup;
 }

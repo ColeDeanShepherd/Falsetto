@@ -1,12 +1,19 @@
 # To-Do
-## High-Priority
-* Hide buttons for disabled flash cards?
+## High Priority
+* Fix random crashes in sheet music chords exercise.
 * Add "replay" button for ear training exercises.
-* Cut off old sounds when switching flash cards.
 * Improve audio latency.
 * Test everything in shitty browsers.
   * Test all exercises using configDataToEnabledQuestionIds
-## Low-Priority
+## Medium Priority
+* Hide buttons for disabled flash cards?
+  * Need to pass enabled flash cards into render answer functions.
+  * Need to modify custom render answer functions too.
+* Cut off old sounds when switching flash cards.
+* Add "more info" links to exercises?
+## Low Priority
+* Use actual flat symbols instead of 'b'
+* Improve button styling.
 * Use proper symbols.
 * Chord intervals.
 * Chord Symbols

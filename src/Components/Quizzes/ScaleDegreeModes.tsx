@@ -1,4 +1,5 @@
 import * as Utils from "src/Utils";
+import * as FlashCardUtils from "src/Components/Quizzes/Utils";
 import { FlashCard } from "../../FlashCard";
 import { FlashCardGroup } from 'src/FlashCardGroup';
 
@@ -6,6 +7,7 @@ export function createFlashCardGroup(): FlashCardGroup {
   const flashCards = createFlashCards();
   const flashCardGroup = new FlashCardGroup("Scale Degree Modes", flashCards);
   flashCardGroup.initialSelectedFlashCardIndices = Utils.range(0, 6);
+  flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
 
   return flashCardGroup;
 }

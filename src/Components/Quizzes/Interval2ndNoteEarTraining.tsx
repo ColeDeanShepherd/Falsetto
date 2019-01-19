@@ -91,10 +91,7 @@ export function createFlashCardGroup(): FlashCardGroup {
   group.initialConfigData = initialConfigData;
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   group.enableInvertFlashCards = false;
-  group.renderAnswerSelect = FlashCardUtils.renderStringAnswerSelect.bind(
-    null,
-    ambiguousPitchStrings
-  );
+  group.renderAnswerSelect = FlashCardUtils.renderNoteAnswerSelect;
   
   return group;
 }

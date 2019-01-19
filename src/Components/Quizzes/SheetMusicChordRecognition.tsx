@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid } from '@material-ui/core';
 
 import * as Utils from '../../Utils';
+import * as FlashCardUtils from "src/Components/Quizzes/Utils";
 import { FlashCard } from 'src/FlashCard';
 import { FlashCardGroup } from 'src/FlashCardGroup';
 import { Pitch, pitchRange } from 'src/Pitch';
@@ -13,6 +14,10 @@ const minPitch = new Pitch(PitchLetter.C, -1, 2);
 const maxPitch = new Pitch(PitchLetter.C, 1, 6);
 const rootPitches = pitchRange(minPitch, maxPitch, -1, 1);
 const chords = [
+  {
+    type: "power",
+    formulaString: "1 5"
+  },
   {
     type: "major",
     formulaString: "1 3 5"
@@ -38,7 +43,7 @@ const chords = [
     formulaString: "1 4 5"
   },
   {
-    type: "major 7",
+    type: "Maj7",
     formulaString: "1 3 5 7"
   },
   {
@@ -46,19 +51,19 @@ const chords = [
     formulaString: "1 3 5 b7"
   },
   {
-    type: "minor 7",
+    type: "m7",
     formulaString: "1 b3 5 b7"
   },
   {
-    type: "minor/major 7",
+    type: "mMaj7",
     formulaString: "1 b3 5 7"
   },
   {
-    type: "half-diminished 7",
+    type: "m7b5",
     formulaString: "1 b3 b5 b7"
   },
   {
-    type: "diminished 7",
+    type: "dim7",
     formulaString: "1 b3 b5 bb7"
   }
 ];
@@ -253,5 +258,7 @@ export function createFlashCardGroup(): FlashCardGroup {
   group.initialConfigData = initialConfigData;
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   group.enableInvertFlashCards = false;
+  group.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+
   return group;
 }
