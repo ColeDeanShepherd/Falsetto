@@ -104,13 +104,13 @@ class App extends React.Component<{}, {}> {
           ChordEarTraining.createFlashCardGroup(),
           RandomChordGenerator.createFlashCardGroup()
         ]
-      }/*,
+      },
       {
         title: "The Jazz Piano Site",
         flashCardGroups: [
           new FlashCardGroup("Overview", Overview.createFlashCards())
         ]
-      }*/
+      }
     ];
 
     this.flashCardGroups = Utils.flattenArrays<FlashCardGroup>(this.groupedFlashCardGroups.map(g => g.flashCardGroups));
@@ -180,10 +180,6 @@ class App extends React.Component<{}, {}> {
                     {renderFlashCardGroupLink(SheetMusicChordRecognition.createFlashCardGroup())}
                     {renderFlashCardGroupLink(ChordEarTraining.createFlashCardGroup())}
                     {renderFlashCardGroupLink(RandomChordGenerator.createFlashCardGroup())}
-                  </div>
-                  <div>
-                    <p>The Jazz Piano Site</p>
-                    {renderFlashCardGroupLink(new FlashCardGroup("Overview", Overview.createFlashCards()))}
                   </div>
                 </div>
               </Paper>
