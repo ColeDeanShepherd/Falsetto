@@ -1,8 +1,13 @@
 # To-Do
 ## High Priority
+* Add support for small screens.
+* Make Scale Chords less cryptic.
 ## Medium Priority
 * Add "more info" links to exercises?
+* Make sequential sounds cut each other off?
+* Post to musictheory subreddit.
 ## Low Priority
+* Change "Flip to back" terminology?
 * Use actual flat symbols instead of 'b'
 * Improve button styling.
 * Use proper symbols.
