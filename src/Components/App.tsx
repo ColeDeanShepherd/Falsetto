@@ -41,6 +41,8 @@ import { FlashCardGroup } from 'src/FlashCardGroup';
 import { StudyFlashCards } from './StudyFlashCards';
 import * as Overview from "./Quizzes/TheJazzPianoSite/TheBasics/Overview"
 import { AboutPage } from './AboutPage';
+import DocumentTitle from 'react-document-title';
+import { HomePage } from './HomePage';
 
 class App extends React.Component<{}, {}> {
   public constructor(props: {}) {
@@ -126,9 +128,8 @@ class App extends React.Component<{}, {}> {
             <AppBar position="static" className="top-pane">
               <Toolbar className="nav top-nav">
                 <Typography variant="h6" color="inherit">
-                  <NavLink to="/" className="nav-link" activeClassName="">Ritornello</NavLink>
+                  <NavLink to="/" className="nav-link" activeClassName="">Falsetto</NavLink>
                 </Typography>
-                <NavLink to="/about" className="nav-link">About</NavLink>
               </Toolbar>
             </AppBar>
             <div className="bottom-pane horizontal-panes">
@@ -187,8 +188,8 @@ class App extends React.Component<{}, {}> {
                 </div>
               </Paper>
               <div className="right-pane">
-                <Route exact path="/" component={() => null} />
-                <Route path="/about" component={AboutPage} />
+                <Route exact path="/" component={() => <DocumentTitle title="Falsetto"><HomePage /></DocumentTitle>} />
+                <Route path="/about" component={() => <DocumentTitle title="About - Falsetto"><AboutPage /></DocumentTitle>} />
                 {this.flashCardGroups.map(fcg => <Route key={fcg.route} path={fcg.route} component={this.createStudyFlashCardGroupComponent(fcg)} />)}
               </div>
             </div>
@@ -202,15 +203,19 @@ class App extends React.Component<{}, {}> {
   private flashCardGroups: FlashCardGroup[];
   
   private createStudyFlashCardGroupComponent(currentFlashCardGroup: FlashCardGroup): () => JSX.Element {
-    return () => <StudyFlashCards
-      key={currentFlashCardGroup.route}
-      title={currentFlashCardGroup.name}
-      flashCards={currentFlashCardGroup.flashCards}
-      initialSelectedFlashCardIndices={currentFlashCardGroup.initialSelectedFlashCardIndices}
-      initialConfigData={currentFlashCardGroup.initialConfigData}
-      renderFlashCardMultiSelect={currentFlashCardGroup.renderFlashCardMultiSelect}
-      renderAnswerSelect={currentFlashCardGroup.renderAnswerSelect}
-      enableInvertFlashCards={currentFlashCardGroup.enableInvertFlashCards} />;
+    return () => (
+      <DocumentTitle title={currentFlashCardGroup.name + " - Falsetto"}>
+        <StudyFlashCards
+        key={currentFlashCardGroup.route}
+        title={currentFlashCardGroup.name}
+        flashCards={currentFlashCardGroup.flashCards}
+        initialSelectedFlashCardIndices={currentFlashCardGroup.initialSelectedFlashCardIndices}
+        initialConfigData={currentFlashCardGroup.initialConfigData}
+        renderFlashCardMultiSelect={currentFlashCardGroup.renderFlashCardMultiSelect}
+        renderAnswerSelect={currentFlashCardGroup.renderAnswerSelect}
+        enableInvertFlashCards={currentFlashCardGroup.enableInvertFlashCards} />
+      </DocumentTitle>
+    );
   }
 }
 

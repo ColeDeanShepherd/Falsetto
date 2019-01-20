@@ -11,6 +11,7 @@ export class FlashCardGroup {
   ) => JSX.Element;
   public renderAnswerSelect?: (
     flashCards: FlashCard[],
+    enabledFlashCardIndices: number[],
     areFlashCardsInverted: boolean,
     flashCard: FlashCard,
     onAnswer: (answerDifficulty: AnswerDifficulty) => void

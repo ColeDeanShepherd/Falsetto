@@ -7,6 +7,7 @@ import { AnswerDifficulty } from 'src/StudyAlgorithm';
 
 export function renderAnswerSelect(
   flashCards: FlashCard[],
+  enabledFlashCardIndices: number[],
   areFlashCardsInverted: boolean,
   flashCard: FlashCard,
   onAnswer: (answerDifficulty: AnswerDifficulty) => void
@@ -17,9 +18,9 @@ export function renderAnswerSelect(
 
   return (
     <div>
-      {FlashCardUtils.renderStringAnswerSelect(row0, flashCards, areFlashCardsInverted, flashCard, onAnswer)}
-      {FlashCardUtils.renderStringAnswerSelect(row1, flashCards, areFlashCardsInverted, flashCard, onAnswer)}
-      {FlashCardUtils.renderStringAnswerSelect(row2, flashCards, areFlashCardsInverted, flashCard, onAnswer)}
+      {FlashCardUtils.renderStringAnswerSelect(row0, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCard, onAnswer)}
+      {FlashCardUtils.renderStringAnswerSelect(row1, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCard, onAnswer)}
+      {FlashCardUtils.renderStringAnswerSelect(row2, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCard, onAnswer)}
     </div>
   );
 }

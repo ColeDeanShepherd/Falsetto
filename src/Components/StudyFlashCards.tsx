@@ -21,6 +21,7 @@ export interface IStudyFlashCardsProps {
   ) => JSX.Element;
   renderAnswerSelect?: (
     flashCards: FlashCard[],
+    enabledFlashCardIndices: number[],
     areFlashCardsInverted: boolean,
     flashCard: FlashCard,
     onAnswer: (answerDifficulty: AnswerDifficulty) => void
@@ -129,7 +130,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
           </div>
 
           <div style={{textAlign: "center"}}>
-            {this.props.renderAnswerSelect ? this.props.renderAnswerSelect(flashCards, this.state.invertFlashCards, currentFlashCard, boundOnAnswer) : null}
+            {this.props.renderAnswerSelect ? this.props.renderAnswerSelect(flashCards, this.state.enabledFlashCardIndices, this.state.invertFlashCards, currentFlashCard, boundOnAnswer) : null}
 
             <div style={{marginTop: "1em"}}>
               <Button

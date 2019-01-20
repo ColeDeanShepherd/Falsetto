@@ -4,10 +4,10 @@ import * as Utils from '../../Utils';
 import * as FlashCardUtils from "./Utils";
 import { FlashCard } from 'src/FlashCard';
 import { FlashCardGroup } from 'src/FlashCardGroup';
-import { Pitch, ambiguousPitchStrings } from 'src/Pitch';
+import { Pitch } from 'src/Pitch';
 import { VerticalDirection } from 'src/VerticalDirection';
 import { Interval, intervalQualityStringToNumber } from 'src/Interval';
-import { playPitch } from 'src/Piano';
+import { playPitchesSequentially } from 'src/Piano';
 import {
   IConfigData,
   rootNotes,
@@ -16,6 +16,7 @@ import {
   IntervalEarTrainingFlashCardMultiSelect,
   configDataToEnabledQuestionIds
 } from "src/Components/IntervalEarTrainingFlashCardMultiSelect";
+import { Button } from '@material-ui/core';
 
 export interface IFlashCardFrontSideProps {
   pitch1: Pitch;
@@ -23,12 +24,25 @@ export interface IFlashCardFrontSideProps {
 }
 export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps, {}> {
   public componentDidMount() {
-    playPitch(this.props.pitch1);
-    setTimeout(() => playPitch(this.props.pitch2), 1000);
+    this.playAudio();
   }
 
   public render(): JSX.Element {
-    return <span>{this.props.pitch1.toOneAccidentalAmbiguousString(false) + ", _"}</span>;
+    return (
+      <div>
+        <div>{this.props.pitch1.toOneAccidentalAmbiguousString(false) + ", _"}</div>
+        <Button
+          onClick={event => this.playAudio()}
+          variant="contained"
+        >
+          Replay
+        </Button>
+      </div>
+    );
+  }
+
+  private playAudio() {
+    playPitchesSequentially([this.props.pitch1, this.props.pitch2], 500);
   }
 }
 

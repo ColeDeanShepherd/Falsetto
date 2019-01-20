@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid } from '@material-ui/core';
+import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid, Button } from '@material-ui/core';
 
 import * as Utils from '../../Utils';
 import * as FlashCardUtils from "./Utils";
@@ -8,7 +8,7 @@ import { FlashCardGroup } from 'src/FlashCardGroup';
 import { Pitch, pitchRange } from 'src/Pitch';
 import { PitchLetter } from 'src/PitchLetter';
 import { Chord } from 'src/Chord';
-import { playPitch } from 'src/Piano';
+import { playPitches } from 'src/Piano';
 
 const minPitch = new Pitch(PitchLetter.C, -1, 2);
 const maxPitch = new Pitch(PitchLetter.C, 1, 6);
@@ -64,20 +64,30 @@ const chords = [
   }
 ];
 
-// TODO: instead of generating all flash cards ahead of time, dynamically generate each one
-
 export interface IFlashCardFrontSideProps {
   pitches: Array<Pitch>;
 }
 export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps, {}> {
   public componentDidMount() {
-    for (const pitch of this.props.pitches) {
-      playPitch(pitch);
-    }
+    this.playAudio();
   }
 
   public render(): JSX.Element {
-    return <span>sound is playing</span>;
+    return (
+      <div>
+        <div>sound is playing</div>
+        <Button
+          onClick={event => this.playAudio()}
+          variant="contained"
+        >
+          Replay
+        </Button>
+      </div>
+    );
+  }
+
+  private playAudio(): void {
+    playPitches(this.props.pitches);
   }
 }
 
@@ -221,10 +231,7 @@ export function createFlashCardGroup(): FlashCardGroup {
   group.initialConfigData = initialConfigData;
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   group.enableInvertFlashCards = false;
-  group.renderAnswerSelect = FlashCardUtils.renderStringAnswerSelect.bind(
-    null,
-    chords.map(c => c.type)
-  );
+  group.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
 
   return group;
 }

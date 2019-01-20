@@ -1,3 +1,5 @@
+import { Howl } from "howler";
+
 import { Pitch } from './Pitch';
 
 export const pianoAudioFilePathsByMidiNumber = new Array<[number, string]>();
@@ -90,15 +92,97 @@ pianoAudioFilePathsByMidiNumber.push([106, "audio/piano/As7.mp3"]);
 pianoAudioFilePathsByMidiNumber.push([107, "audio/piano/B7.mp3"]);
 pianoAudioFilePathsByMidiNumber.push([108, "audio/piano/C8.mp3"]);
 
-export function playPitch(pitch: Pitch) {
+export function getPitchAudioFilePath(pitch: Pitch): string | null {
   const kvp = pianoAudioFilePathsByMidiNumber
     .find(x => x[0] === pitch.midiNumber);
-  if (!kvp) { return; }
+  if (!kvp) { return null; }
 
-  const audio = new Audio(kvp[1]);
-  if (!audio.error) {
-    audio.play();
-  } else {
-    alert(audio.error);
-  }
+  return kvp[1];
+}
+export function playPitches(pitches: Array<Pitch>) {
+  const soundFilePaths = pitches
+    .map(getPitchAudioFilePath)
+    .filter(fp => fp !== null)
+    .map(fp => fp as string);
+  
+  const loadedSounds = new Array<Howl>();
+  let loadedSoundCount = 0;
+
+  const playSounds = () => {
+    for (const loadedSound of loadedSounds) {
+      loadedSound.play();
+    }
+  };
+
+  const sounds = soundFilePaths
+    .map(filePath => new Howl({
+      src: filePath,
+      onload: function(this: Howl) {
+        loadedSounds.push(this);
+        loadedSoundCount++;
+  
+        if (loadedSoundCount === sounds.length) {
+          playSounds();
+        }
+      },
+      onloaderror: () => {
+        loadedSoundCount++;
+  
+        if (loadedSoundCount === sounds.length) {
+          playSounds();
+        }
+      }
+    }));
+}
+
+// returns: a cancellation function
+export function playPitchesSequentially(pitches: Array<Pitch>, delayInMs: number): () => void {
+  let isCancelled = false;
+
+  const playSounds = () => {
+    for (let i = 0; i < loadedSounds.length; i++) {
+      const loadedSound = loadedSounds[i];
+
+      if (loadedSound) {
+        setTimeout(() => {
+          if (!isCancelled) {
+            loadedSound.play();
+          }
+        }, delayInMs * i);
+      }
+    }
+  };
+
+  const soundFilePaths = pitches
+    .map(getPitchAudioFilePath);
+  
+  const soundCount = soundFilePaths.length;
+  let loadedSoundCount = 0;
+  const loadedSounds = soundFilePaths
+    .map(filePath => {
+      if (filePath) {
+        return new Howl({
+          src: filePath,
+          onload: function(this: Howl) {
+            loadedSoundCount++;
+      
+            if (loadedSoundCount === soundCount) {
+              playSounds();
+            }
+          },
+          onloaderror: () => {
+            loadedSoundCount++;
+      
+            if (loadedSoundCount === soundCount) {
+              playSounds();
+            }
+          }
+        });
+      } else {
+        loadedSoundCount++;
+        return null;
+      }
+    });
+  
+  return () => isCancelled = true;
 }

@@ -193,7 +193,7 @@ export function createFlashCardGroup(): FlashCardGroup {
   group.initialConfigData = initialConfigData;
   group.enableInvertFlashCards = false;
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
-  group.renderAnswerSelect = FlashCardUtils.renderStringAnswerSelect.bind(null, intervals)
+  group.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
 
   return group;
 }

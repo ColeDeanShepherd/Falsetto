@@ -10,9 +10,32 @@ import { PitchLetter } from 'src/PitchLetter';
 import { SheetMusicChord } from 'src/Components/Quizzes/SheetMusicChords';
 import { Chord } from 'src/Chord';
 
+const allowedPitches = [
+  new Pitch(PitchLetter.C, -1, 0),
+  new Pitch(PitchLetter.C, 0, 0),
+  new Pitch(PitchLetter.C, 1, 0),
+  new Pitch(PitchLetter.D, -1, 0),
+  new Pitch(PitchLetter.D, 0, 0),
+  new Pitch(PitchLetter.E, -1, 0),
+  new Pitch(PitchLetter.E, 0, 0),
+  new Pitch(PitchLetter.F, 0, 0),
+  new Pitch(PitchLetter.F, 1, 0),
+  new Pitch(PitchLetter.G, -1, 0),
+  new Pitch(PitchLetter.G, 0, 0),
+  new Pitch(PitchLetter.A, -1, 0),
+  new Pitch(PitchLetter.A, 0, 0),
+  new Pitch(PitchLetter.B, -1, 0),
+  new Pitch(PitchLetter.B, 0, 0)
+];
 const minPitch = new Pitch(PitchLetter.C, -1, 2);
 const maxPitch = new Pitch(PitchLetter.C, 1, 6);
-const rootPitches = pitchRange(minPitch, maxPitch, -1, 1);
+const rootPitches = pitchRange(minPitch, maxPitch, -1, 1)
+  .filter(pitch =>
+    allowedPitches.some(allowedPitch =>
+      (pitch.letter === allowedPitch.letter) &&
+      (pitch.signedAccidental === allowedPitch.signedAccidental)
+    )
+  );
 const chords = [
   {
     type: "power",
@@ -85,7 +108,13 @@ export function configDataToEnabledQuestionIds(configData: IConfigData): Array<n
         Utils.arrayContains(configData.enabledRootPitches, rootPitch) &&
         Utils.arrayContains(configData.enabledChordTypes, chordType)
       ) {
-        newEnabledFlashCardIndices.push(i);
+        const pitches = Chord.fromPitchAndFormulaString(rootPitch, chord.formulaString)
+          .pitches;
+        
+        // VexFlow doesn't allow triple sharps/flats
+        if (pitches.every(pitch => Math.abs(pitch.signedAccidental) < 3)) {
+          newEnabledFlashCardIndices.push(i);
+        }
       }
 
       i++;

@@ -30,14 +30,15 @@ export function createFlashCards(): FlashCard[] {
 }
 export function renderAnswerSelect(
   flashCards: FlashCard[],
+  enabledFlashCardIndices: number[],
   areFlashCardsInverted: boolean,
   flashCard: FlashCard,
   onAnswer: (answerDifficulty: AnswerDifficulty) => void
 ) {
   return (
     <div>
-      {!areFlashCardsInverted ? FlashCardUtils.renderNoteAnswerSelect(flashCards, areFlashCardsInverted, flashCard, onAnswer) : null}
-      {areFlashCardsInverted ? FlashCardUtils.renderDistinctFlashCardSideAnswerSelect(flashCards, areFlashCardsInverted, flashCard, onAnswer) : null}
+      {!areFlashCardsInverted ? FlashCardUtils.renderNoteAnswerSelect(flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCard, onAnswer) : null}
+      {areFlashCardsInverted ? FlashCardUtils.renderDistinctFlashCardSideAnswerSelect(flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCard, onAnswer) : null}
     </div>
   );
 }

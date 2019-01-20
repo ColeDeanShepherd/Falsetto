@@ -135,6 +135,7 @@ function configDataToEnabledQuestionIds(configData: IConfigData): Array<number> 
 }
 export function renderNoteAnswerSelect(
   flashCards: FlashCard[],
+  enabledFlashCardIndices: number[],
   areFlashCardsInverted: boolean,
   flashCard: FlashCard,
   onAnswer: (answerDifficulty: AnswerDifficulty) => void
@@ -144,9 +145,9 @@ export function renderNoteAnswerSelect(
   const flatNotes = ["Ab", "Bb", "Cb", "Db", "Eb", "Fb", "Gb"];
   return (
     <div>
-      {FlashCardUtils.renderStringAnswerSelect(sharpNotes, flashCards, areFlashCardsInverted, flashCard, onAnswer)}
-      {FlashCardUtils.renderStringAnswerSelect(naturalNotes, flashCards, areFlashCardsInverted, flashCard, onAnswer)}
-      {FlashCardUtils.renderStringAnswerSelect(flatNotes, flashCards, areFlashCardsInverted, flashCard, onAnswer)}
+      {FlashCardUtils.renderStringAnswerSelect(sharpNotes, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCard, onAnswer)}
+      {FlashCardUtils.renderStringAnswerSelect(naturalNotes, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCard, onAnswer)}
+      {FlashCardUtils.renderStringAnswerSelect(flatNotes, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCard, onAnswer)}
     </div>
   );
 }

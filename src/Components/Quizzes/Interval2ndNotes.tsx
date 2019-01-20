@@ -218,6 +218,7 @@ export class IntervalNotesFlashCardMultiSelect extends React.Component<IInterval
 
 export function renderNoteAnswerSelect(
   flashCards: FlashCard[],
+  enabledFlashCardIndices: number[],
   areFlashCardsInverted: boolean,
   flashCard: FlashCard,
   onAnswer: (answerDifficulty: AnswerDifficulty) => void
@@ -227,13 +228,14 @@ export function renderNoteAnswerSelect(
   const naturalNotes = ["A", "B", "C", "D", "E", "F", "G"];
   const flatNotes = ["Ab", "Bb", "Cb", "Db", "Eb", "Fb", "Gb"];
   const doubleFlatNotes = ["Abb", "Bbb", "Cbb", "Dbb", "Ebb", "Fbb", "Gbb"];
+
   return (
     <div>
-      {FlashCardUtils.renderStringAnswerSelect(doubleSharpNotes, flashCards, areFlashCardsInverted, flashCard, onAnswer)}
-      {FlashCardUtils.renderStringAnswerSelect(sharpNotes, flashCards, areFlashCardsInverted, flashCard, onAnswer)}
-      {FlashCardUtils.renderStringAnswerSelect(naturalNotes, flashCards, areFlashCardsInverted, flashCard, onAnswer)}
-      {FlashCardUtils.renderStringAnswerSelect(flatNotes, flashCards, areFlashCardsInverted, flashCard, onAnswer)}
-      {FlashCardUtils.renderStringAnswerSelect(doubleFlatNotes, flashCards, areFlashCardsInverted, flashCard, onAnswer)}
+      {FlashCardUtils.renderStringAnswerSelect(doubleSharpNotes, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCard, onAnswer)}
+      {FlashCardUtils.renderStringAnswerSelect(sharpNotes, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCard, onAnswer)}
+      {FlashCardUtils.renderStringAnswerSelect(naturalNotes, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCard, onAnswer)}
+      {FlashCardUtils.renderStringAnswerSelect(flatNotes, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCard, onAnswer)}
+      {FlashCardUtils.renderStringAnswerSelect(doubleFlatNotes, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCard, onAnswer)}
     </div>
   );
 }

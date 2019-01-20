@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid } from '@material-ui/core';
+import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid, Button } from '@material-ui/core';
 
 import * as Utils from '../../Utils';
 import * as FlashCardUtils from "./Utils";
@@ -8,7 +8,7 @@ import { FlashCardGroup } from 'src/FlashCardGroup';
 import { Pitch, pitchRange } from 'src/Pitch';
 import { PitchLetter } from 'src/PitchLetter';
 import { Chord } from 'src/Chord';
-import { playPitch } from 'src/Piano';
+import { playPitchesSequentially } from 'src/Piano';
 
 const minPitch = new Pitch(PitchLetter.C, -1, 2);
 const maxPitch = new Pitch(PitchLetter.C, 1, 6);
@@ -141,13 +141,37 @@ export interface IFlashCardFrontSideProps {
 }
 export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps, {}> {
   public componentDidMount() {
-    for (let i = 0; i < this.props.pitches.length; i++) {
-      setTimeout(() => playPitch(this.props.pitches[i]), 500 * i);
+    this.playAudio();
+  }
+  public componentWillUnmount() {
+    if (this.playAudioCancelFn) {
+      this.playAudioCancelFn();
     }
   }
 
   public render(): JSX.Element {
-    return <span>sound is playing</span>;
+    return (
+      <div>
+        <div>sound is playing</div>
+        <Button
+          onClick={event => this.playAudio()}
+          variant="contained"
+        >
+          Replay
+        </Button>
+      </div>
+    );
+  }
+
+  private playAudioCancelFn: (() => void) | null;
+
+  private playAudio(): void {
+    if (this.playAudioCancelFn) {
+      this.playAudioCancelFn();
+      this.playAudioCancelFn = null;
+    }
+
+    this.playAudioCancelFn = playPitchesSequentially(this.props.pitches, 500);
   }
 }
 
@@ -295,10 +319,7 @@ export function createFlashCardGroup(): FlashCardGroup {
   group.initialConfigData = initialConfigData;
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   group.enableInvertFlashCards = false;
-  group.renderAnswerSelect = FlashCardUtils.renderStringAnswerSelect.bind(
-    null,
-    scales.map(c => c.type)
-  );
+  group.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
 
   return group;
 }

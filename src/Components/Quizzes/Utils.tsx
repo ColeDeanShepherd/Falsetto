@@ -8,6 +8,7 @@ import { AnswerDifficulty } from 'src/StudyAlgorithm';
 
 export function renderNoteAnswerSelect(
   flashCards: FlashCard[],
+  enabledFlashCardIndices: number[],
   areFlashCardsInverted: boolean,
   flashCard: FlashCard,
   onAnswer: (answerDifficulty: AnswerDifficulty) => void
@@ -16,14 +17,15 @@ export function renderNoteAnswerSelect(
   const accidentalNotes = ["A#/Bb", "C#/Db", "D#/Eb", "F#/Gb", "G#/Ab"];
   return (
     <div>
-      {renderStringAnswerSelect(accidentalNotes, flashCards, areFlashCardsInverted, flashCard, onAnswer)}
-      {renderStringAnswerSelect(naturalNotes, flashCards, areFlashCardsInverted, flashCard, onAnswer)}
+      {renderStringAnswerSelect(accidentalNotes, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCard, onAnswer)}
+      {renderStringAnswerSelect(naturalNotes, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCard, onAnswer)}
     </div>
   );
 }
 export function renderStringAnswerSelect(
   answers: string[],
   flashCards: FlashCard[],
+  enabledFlashCardIndices: number[],
   areFlashCardsInverted: boolean,
   flashCard: FlashCard,
   onAnswer: (answerDifficulty: AnswerDifficulty) => void
@@ -46,12 +48,15 @@ export function renderStringAnswerSelect(
 }
 export function renderDistinctFlashCardSideAnswerSelect(
   flashCards: FlashCard[],
+  enabledFlashCardIndices: number[],
   areFlashCardsInverted: boolean,
   flashCard: FlashCard,
   onAnswer: (answerDifficulty: AnswerDifficulty) => void
 ) {
   const distinctFlashCardSides = Utils.uniq(
-    flashCards.map(fc => fc.backSide)
+    flashCards
+      .filter((_, i) => Utils.arrayContains(enabledFlashCardIndices, i))
+      .map(fc => fc.backSide)
   );
   const flashCardSide = flashCard.backSide;
 

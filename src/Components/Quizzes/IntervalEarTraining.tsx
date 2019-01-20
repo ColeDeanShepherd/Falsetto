@@ -7,7 +7,7 @@ import { FlashCardGroup } from 'src/FlashCardGroup';
 import { Pitch } from 'src/Pitch';
 import { VerticalDirection } from 'src/VerticalDirection';
 import { Interval, intervalQualityStringToNumber } from 'src/Interval';
-import { playPitch } from 'src/Piano';
+import { playPitches, playPitchesSequentially } from 'src/Piano';
 import {
   IConfigData,
   rootNotes,
@@ -16,6 +16,7 @@ import {
   IntervalEarTrainingFlashCardMultiSelect,
   configDataToEnabledQuestionIds
 } from "src/Components/IntervalEarTrainingFlashCardMultiSelect";
+import { Button } from '@material-ui/core';
 
 export interface IFlashCardFrontSideProps {
   pitch1: Pitch;
@@ -24,17 +25,29 @@ export interface IFlashCardFrontSideProps {
 }
 export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps, {}> {
   public componentDidMount() {
-    playPitch(this.props.pitch1);
-
-    if (this.props.isHarmonicInterval) {
-      playPitch(this.props.pitch2);
-    } else {
-      setTimeout(() => playPitch(this.props.pitch2), 1000);
-    }
+    this.playAudio();
   }
 
   public render(): JSX.Element {
-    return <span>sound is playing</span>;
+    return (
+      <div>
+        <div>sound is playing</div>
+        <Button
+          onClick={event => this.playAudio()}
+          variant="contained"
+        >
+          Replay
+        </Button>
+      </div>
+    );
+  }
+
+  private playAudio(): void {
+    if (this.props.isHarmonicInterval) {
+      playPitches([this.props.pitch1, this.props.pitch2]);
+    } else {
+      playPitchesSequentially([this.props.pitch1, this.props.pitch2], 500);
+    }
   }
 }
 
@@ -102,7 +115,7 @@ export function createFlashCardGroup(): FlashCardGroup {
   group.initialConfigData = initialConfigData;
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   group.enableInvertFlashCards = false;
-  group.renderAnswerSelect = FlashCardUtils.renderStringAnswerSelect.bind(null, intervals);
+  group.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
 
   return group;
 }
