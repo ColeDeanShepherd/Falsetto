@@ -36,7 +36,6 @@ import * as SheetMusicIntervalRecognition from "./Quizzes/SheetMusicIntervalReco
 import * as SheetMusicChordRecognition from "./Quizzes/SheetMusicChordRecognition";
 import * as ChordEarTraining from "./Quizzes/ChordEarTraining";
 import * as ScaleEarTraining from "./Quizzes/ScaleEarTraining";
-import { FlashCard } from 'src/FlashCard';
 import { FlashCardGroup } from 'src/FlashCardGroup';
 import { StudyFlashCards } from './StudyFlashCards';
 import * as Overview from "./Quizzes/TheJazzPianoSite/TheBasics/Overview"
@@ -44,7 +43,10 @@ import { AboutPage } from './AboutPage';
 import DocumentTitle from 'react-document-title';
 import { HomePage } from './HomePage';
 
-class App extends React.Component<{}, {}> {
+interface IAppState {
+  isMenuVisibleOnMobile: boolean;
+}
+class App extends React.Component<{}, IAppState> {
   public constructor(props: {}) {
     super(props);
 
@@ -114,11 +116,15 @@ class App extends React.Component<{}, {}> {
     ];
 
     this.flashCardGroups = Utils.flattenArrays<FlashCardGroup>(this.groupedFlashCardGroups.map(g => g.flashCardGroups));
+
+    this.state = {
+      isMenuVisibleOnMobile: false
+    };
   }
 
   public render(): JSX.Element {
     const renderFlashCardGroupLink = (flashCardGroup: FlashCardGroup) => (
-      <NavLink to={flashCardGroup.route} className="nav-link">{flashCardGroup.name}</NavLink>
+      <NavLink to={flashCardGroup.route} onClick={event => this.onNavLinkClick()} className="nav-link">{flashCardGroup.name}</NavLink>
     );
 
     return (
@@ -128,15 +134,16 @@ class App extends React.Component<{}, {}> {
             <AppBar position="static" className="top-pane">
               <Toolbar className="nav top-nav">
                 <Typography variant="h6" color="inherit">
-                  <NavLink to="/" className="nav-link" activeClassName="">Falsetto</NavLink>
+                  <NavLink to="/" onClick={event => this.onNavLinkClick()} className="nav-link" activeClassName="">Falsetto</NavLink>
+                  <i onClick={event => this.toggleMenu()} className="cursor-pointer material-icons hide-on-desktop" style={{verticalAlign: "sub"}}>menu</i>
                 </Typography>
               </Toolbar>
             </AppBar>
             <div className="bottom-pane horizontal-panes">
-              <Paper className="left-pane">
+              <Paper className={"left-pane" + (!this.state.isMenuVisibleOnMobile ? " hide-on-mobile" : "")}>
                 <div className="nav left-nav">
                   <div>
-                    <p>Notes</p>
+                    <p style={{marginTop: 0}}>Notes</p>
                     {renderFlashCardGroupLink(PianoNotes.createFlashCardGroup())}
                     {renderFlashCardGroupLink(GuitarNotes.createFlashCardGroup())}
                     {renderFlashCardGroupLink(NoteDurations.createFlashCardGroup())}
@@ -212,6 +219,12 @@ class App extends React.Component<{}, {}> {
         enableInvertFlashCards={currentFlashCardGroup.enableInvertFlashCards} />
       </DocumentTitle>
     );
+  }
+  private toggleMenu() {
+    this.setState({ isMenuVisibleOnMobile: !this.state.isMenuVisibleOnMobile });
+  }
+  private onNavLinkClick() {
+    this.setState({ isMenuVisibleOnMobile: false });
   }
 }
 

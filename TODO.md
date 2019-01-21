@@ -1,6 +1,9 @@
 # To-Do
 ## High Priority
 * Add support for small screens.
+  * Top & left navs need to be expandable.
+  * Show configuration button should probably be on its own row. Or on the same row as stats.
+  * Answer buttons might need to be reworked.
 * Make Scale Chords less cryptic.
 ## Medium Priority
 * Add "more info" links to exercises?
