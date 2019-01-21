@@ -1,6 +1,8 @@
 import * as React from 'react';
-import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
+import { Router, Route, NavLink } from "react-router-dom";
 import { Paper, AppBar, Typography, Toolbar, Button } from '@material-ui/core';
+import { History, createBrowserHistory, Location, Action, UnregisterCallback } from "history";
+
 import * as Utils from "../Utils";
 
 import "./App.css";
@@ -43,12 +45,17 @@ import { AboutPage } from './AboutPage';
 import DocumentTitle from 'react-document-title';
 import { HomePage } from './HomePage';
 
+const googleAnalyticsTrackingId = "UA-72494315-5";
+
 interface IAppState {
   isMenuVisibleOnMobile: boolean;
 }
 class App extends React.Component<{}, IAppState> {
   public constructor(props: {}) {
     super(props);
+
+    this.history = createBrowserHistory();
+    this.unregisterHistoryListener = this.history.listen(this.historyListener.bind(this));
 
     this.groupedFlashCardGroups = [
       {
@@ -122,13 +129,18 @@ class App extends React.Component<{}, IAppState> {
     };
   }
 
+  public componentWillUnmount() {
+    if (this.unregisterHistoryListener) {
+      this.unregisterHistoryListener();
+    }
+  }
   public render(): JSX.Element {
     const renderFlashCardGroupLink = (flashCardGroup: FlashCardGroup) => (
       <NavLink to={flashCardGroup.route} onClick={event => this.onNavLinkClick()} className="nav-link">{flashCardGroup.name}</NavLink>
     );
 
     return (
-      <Router>
+      <Router history={this.history}>
         <div>
           <div className="app">
             <AppBar position="static" className="top-pane">
@@ -202,9 +214,18 @@ class App extends React.Component<{}, IAppState> {
     );
   }
 
+  private history: History<any>;
+  private unregisterHistoryListener: UnregisterCallback;
   private groupedFlashCardGroups: { title: string; flashCardGroups: FlashCardGroup[]; }[];
   private flashCardGroups: FlashCardGroup[];
   
+  private historyListener(location: Location<any>, action: Action) {
+    const gtag: any = (window as any).gtag;
+    gtag('config', googleAnalyticsTrackingId, {
+      'page_title' : document.title,
+      'page_path': location.pathname + location.search
+    });    
+  }
   private createStudyFlashCardGroupComponent(currentFlashCardGroup: FlashCardGroup): () => JSX.Element {
     return () => (
       <DocumentTitle title={currentFlashCardGroup.name + " - Falsetto"}>
