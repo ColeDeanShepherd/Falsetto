@@ -271,7 +271,7 @@ export function createFlashCardGroup(): FlashCardGroup {
   };
   
   const group = new FlashCardGroup(
-    "Interval Notes",
+    "Notes To Intervals",
     flashCards
   );
   group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);

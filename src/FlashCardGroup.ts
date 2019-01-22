@@ -17,9 +17,10 @@ export class FlashCardGroup {
     onAnswer: (answerDifficulty: AnswerDifficulty) => void
   ) => JSX.Element;
   public enableInvertFlashCards: boolean = true;
+  public moreInfoUri: string;
 
   public get route(): string {
-    return "/" + this.name.toLowerCase().replace(/ /g, "-");
+    return "/" + this.name.toLowerCase().replace(/( )|(\/)|(\\)/g, "-");
   }
   
   public constructor(

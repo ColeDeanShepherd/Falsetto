@@ -6,6 +6,7 @@ export function createFlashCardGroup(): FlashCardGroup {
   const flashCards = createFlashCards();
   const flashCardGroup = new FlashCardGroup("Scale Degree Names", flashCards);
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+  flashCardGroup.moreInfoUri = "http://musictheoryblog.blogspot.com/2007/01/scale-degrees.html";
 
   return flashCardGroup;
 }

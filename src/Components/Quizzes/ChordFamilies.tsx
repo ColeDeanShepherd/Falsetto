@@ -5,8 +5,9 @@ import { FlashCardGroup } from 'src/FlashCardGroup';
 
 export function createFlashCardGroup(): FlashCardGroup {
   const flashCards = createFlashCards();
-  const flashCardGroup = new FlashCardGroup("Chord Families", flashCards);
+  const flashCardGroup = new FlashCardGroup("Chord Harmonic Functions", flashCards);
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+  flashCardGroup.moreInfoUri = "https://davidkulma.com/musictheory/harmonicfunction";
 
   return flashCardGroup;
 }

@@ -29,6 +29,7 @@ export function createFlashCardGroup(): FlashCardGroup {
   const flashCards = createFlashCards();
   const flashCardGroup = new FlashCardGroup("Key Accidental Notes", flashCards);
   flashCardGroup.renderAnswerSelect = renderAnswerSelect;
+  flashCardGroup.moreInfoUri = "http://myguitarpal.com/the-order-of-sharps-and-flats/";
 
   return flashCardGroup;
 }

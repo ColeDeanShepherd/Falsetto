@@ -4,8 +4,9 @@ import { FlashCardGroup } from 'src/FlashCardGroup';
 
 export function createFlashCardGroup(): FlashCardGroup {
   const flashCards = createFlashCards();
-  const flashCardGroup = new FlashCardGroup("Interval Quality Symbols To Qualities", flashCards);
+  const flashCardGroup = new FlashCardGroup("Interval Quality Symbols", flashCards);
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+  flashCardGroup.moreInfoUri = "https://method-behind-the-music.com/theory/intervals/";
 
   return flashCardGroup;
 }

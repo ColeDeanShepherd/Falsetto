@@ -6,6 +6,7 @@ export function createFlashCardGroup(): FlashCardGroup {
   const flashCards = createFlashCards();
   const flashCardGroup = new FlashCardGroup("Available Chord Tensions", flashCards);
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+  flashCardGroup.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/jazz-chords/extensions-alterations/";
 
   return flashCardGroup;
 }

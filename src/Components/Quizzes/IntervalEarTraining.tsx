@@ -116,6 +116,7 @@ export function createFlashCardGroup(): FlashCardGroup {
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   group.enableInvertFlashCards = false;
   group.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+  group.moreInfoUri = "https://www.youtube.com/watch?v=_aDCO3h_xik";
 
   return group;
 }

@@ -15,6 +15,7 @@ export function createFlashCardGroup(): FlashCardGroup {
   flashCardGroup.enableInvertFlashCards = false;
   flashCardGroup.initialSelectedFlashCardIndices = Utils.range(0, 13);
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+  flashCardGroup.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/the-basics/keys/";
 
   return flashCardGroup;
 }

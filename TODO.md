@@ -5,6 +5,7 @@
 * Make sequential sounds cut each other off?
 * Post to musictheory subreddit.
 * Stop sending anaytics events in test.
+* Guitar Scale Shapes
 ## Low Priority
 * Change "Flip to back" terminology?
 * Use actual flat symbols instead of 'b'

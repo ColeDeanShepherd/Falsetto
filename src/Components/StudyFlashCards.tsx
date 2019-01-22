@@ -27,6 +27,7 @@ export interface IStudyFlashCardsProps {
     onAnswer: (answerDifficulty: AnswerDifficulty) => void
   ) => JSX.Element;
   enableInvertFlashCards?: boolean;
+  moreInfoUri?: string;
 }
 export interface IStudyFlashCardsState {
   currentFlashCardIndex: number;
@@ -110,6 +111,8 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
               {this.renderFlashCardMultiSelect(flashCards)}
             </div>
           ) : null}
+
+          {this.props.moreInfoUri ? <a href={this.props.moreInfoUri} target="_blank">To learn more, click here.</a> : null}
 
           {this.props.renderAnswerSelect
             ? (

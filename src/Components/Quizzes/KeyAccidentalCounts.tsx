@@ -29,6 +29,7 @@ export function createFlashCardGroup(): FlashCardGroup {
   const flashCards = createFlashCards();
   const flashCardGroup = new FlashCardGroup("Key Accidental Counts", flashCards);
   flashCardGroup.renderAnswerSelect = renderAnswerSelect;
+  flashCardGroup.moreInfoUri = "https://www.musicnotes.com/now/tips/circle-of-fifths-guide/";
 
   return flashCardGroup;
 }

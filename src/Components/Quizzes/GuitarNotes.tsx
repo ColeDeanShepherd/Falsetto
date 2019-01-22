@@ -106,6 +106,7 @@ export function createFlashCardGroup(): FlashCardGroup {
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   group.renderAnswerSelect = FlashCardUtils.renderNoteAnswerSelect;
   group.enableInvertFlashCards = false;
+  group.moreInfoUri = "https://medium.com/@aslushnikov/memorizing-fretboard-a9f4f28dbf03";
 
   return group;
 }

@@ -8,6 +8,7 @@ export function createFlashCardGroup(): FlashCardGroup {
   const flashCardGroup = new FlashCardGroup("Scale Chords", flashCards);
   flashCardGroup.initialSelectedFlashCardIndices = Utils.range(0, 8);
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+  flashCardGroup.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/jazz-scales/chord-scale-system/";
 
   return flashCardGroup;
 }

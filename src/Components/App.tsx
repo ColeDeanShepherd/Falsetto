@@ -164,7 +164,6 @@ class App extends React.Component<{}, IAppState> {
                   <div>
                     <p>Intervals</p>
                     {renderFlashCardGroupLink(IntervalQualitySymbolsToQualities.createFlashCardGroup())}
-                    {renderFlashCardGroupLink(GenericIntervalsToIntervalQualities.createFlashCardGroup())}
                     {renderFlashCardGroupLink(IntervalNamesToHalfSteps.createFlashCardGroup())}
                     {renderFlashCardGroupLink(IntervalsToConsonanceDissonance.createFlashCardGroup())}
                     {renderFlashCardGroupLink(Interval2ndNotes.createFlashCardGroup())}
@@ -179,8 +178,6 @@ class App extends React.Component<{}, IAppState> {
                     {renderFlashCardGroupLink(ScaleNotes.createFlashCardGroup())}
                     {renderFlashCardGroupLink(ScaleDegreeModes.createFlashCardGroup())}
                     {renderFlashCardGroupLink(ScaleChords.createFlashCardGroup())}
-                    {renderFlashCardGroupLink(ScaleFamilies.createFlashCardGroup())}
-                    {renderFlashCardGroupLink(ScaleCharacteristics.createFlashCardGroup())}
                     {renderFlashCardGroupLink(ScaleEarTraining.createFlashCardGroup())}
                   </div>
                   <div>
@@ -190,7 +187,6 @@ class App extends React.Component<{}, IAppState> {
                   </div>
                   <div>
                     <p>Chords</p>
-                    {renderFlashCardGroupLink(ChordFamilyDefinitions.createFlashCardGroup())}
                     {renderFlashCardGroupLink(ChordFamilies.createFlashCardGroup())}
                     {renderFlashCardGroupLink(ChordNotes.createFlashCardGroup())}
                     {renderFlashCardGroupLink(AvailableChordTensions.createFlashCardGroup())}
@@ -237,6 +233,7 @@ class App extends React.Component<{}, IAppState> {
         initialConfigData={currentFlashCardGroup.initialConfigData}
         renderFlashCardMultiSelect={currentFlashCardGroup.renderFlashCardMultiSelect}
         renderAnswerSelect={currentFlashCardGroup.renderAnswerSelect}
+        moreInfoUri={currentFlashCardGroup.moreInfoUri}
         enableInvertFlashCards={currentFlashCardGroup.enableInvertFlashCards} />
       </DocumentTitle>
     );

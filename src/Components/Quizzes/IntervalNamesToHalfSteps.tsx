@@ -4,8 +4,9 @@ import { FlashCardGroup } from 'src/FlashCardGroup';
 
 export function createFlashCardGroup(): FlashCardGroup {
   const flashCards = createFlashCards();
-  const flashCardGroup = new FlashCardGroup("Interval Names To Half Steps", flashCards);
+  const flashCardGroup = new FlashCardGroup("Interval Semitones", flashCards);
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+  flashCardGroup.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/the-basics/chords-intervals/";
 
   return flashCardGroup;
 }

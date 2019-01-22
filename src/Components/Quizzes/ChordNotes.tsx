@@ -8,6 +8,7 @@ export function createFlashCardGroup(): FlashCardGroup {
   const flashCardGroup = new FlashCardGroup("Chord Notes", flashCards);
   flashCardGroup.initialSelectedFlashCardIndices = Utils.range(1, 16);
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+  flashCardGroup.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/jazz-chords/extensions-alterations/";
 
   return flashCardGroup;
 }

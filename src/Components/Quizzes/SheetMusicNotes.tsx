@@ -49,6 +49,7 @@ export function createFlashCardGroup(): FlashCardGroup {
   flashCardGroup.initialConfigData = initialConfigData;
   flashCardGroup.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardGroup.renderAnswerSelect = renderNoteAnswerSelect;
+  flashCardGroup.moreInfoUri = "https://www.joytunes.com/blog/music-fun/best-way-memorize-piano-notes/";
 
   return flashCardGroup;
 }

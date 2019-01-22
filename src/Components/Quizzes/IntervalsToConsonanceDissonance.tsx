@@ -4,8 +4,9 @@ import { FlashCardGroup } from 'src/FlashCardGroup';
 
 export function createFlashCardGroup(): FlashCardGroup {
   const flashCards = createFlashCards();
-  const flashCardGroup = new FlashCardGroup("Intervals To Consonance Dissonance", flashCards);
+  const flashCardGroup = new FlashCardGroup("Intervals Consonance/Dissonance", flashCards);
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+  flashCardGroup.moreInfoUri = "https://sites.google.com/site/nebironamsmusictheory/chords/1-01intervals";
 
   return flashCardGroup;
 }

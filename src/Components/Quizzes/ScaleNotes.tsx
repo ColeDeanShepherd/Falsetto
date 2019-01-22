@@ -8,6 +8,7 @@ export function createFlashCardGroup(): FlashCardGroup {
   const flashCardGroup = new FlashCardGroup("Scale Notes", flashCards);
   flashCardGroup.initialSelectedFlashCardIndices = Utils.range(0, 8);
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+  flashCardGroup.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/the-basics/modes";
 
   return flashCardGroup;
 }
