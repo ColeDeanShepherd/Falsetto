@@ -69,7 +69,7 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
         <CardContent>
           <div style={{display: "flex"}}>
             <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
-              Scale Viewer
+              {typeTitle} Viewer
             </Typography>
           </div>
         
