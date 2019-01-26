@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Router, Route, NavLink } from "react-router-dom";
+import { Router, Route, NavLink, Link } from "react-router-dom";
 import { Paper, AppBar, Typography, Toolbar, Button } from '@material-ui/core';
 import { History, createBrowserHistory, Location, Action, UnregisterCallback } from "history";
 
@@ -38,6 +38,7 @@ import * as SheetMusicIntervalRecognition from "./Quizzes/SheetMusicIntervalReco
 import * as SheetMusicChordRecognition from "./Quizzes/SheetMusicChordRecognition";
 import * as ChordEarTraining from "./Quizzes/ChordEarTraining";
 import * as ScaleEarTraining from "./Quizzes/ScaleEarTraining";
+import { ScaleViewer } from "./ScaleViewer";
 import { FlashCardGroup } from 'src/FlashCardGroup';
 import { StudyFlashCards } from './StudyFlashCards';
 import * as Overview from "./Quizzes/TheJazzPianoSite/TheBasics/Overview"
@@ -179,6 +180,7 @@ class App extends React.Component<{}, IAppState> {
                     {renderFlashCardGroupLink(ScaleDegreeModes.createFlashCardGroup())}
                     {renderFlashCardGroupLink(ScaleChords.createFlashCardGroup())}
                     {renderFlashCardGroupLink(ScaleEarTraining.createFlashCardGroup())}
+                    <NavLink to="scale-viewer" className="nav-link">Scale Viewer</NavLink>
                   </div>
                   <div>
                     <p>Keys</p>
@@ -202,6 +204,7 @@ class App extends React.Component<{}, IAppState> {
                 <Route exact path="/" component={() => <DocumentTitle title="Falsetto"><HomePage /></DocumentTitle>} />
                 <Route path="/about" component={() => <DocumentTitle title="About - Falsetto"><AboutPage /></DocumentTitle>} />
                 {this.flashCardGroups.map(fcg => <Route key={fcg.route} path={fcg.route} component={this.createStudyFlashCardGroupComponent(fcg)} />)}
+                <Route path="/scale-viewer" component={ScaleViewer} />
               </div>
             </div>
           </div>

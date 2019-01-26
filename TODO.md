@@ -1,7 +1,6 @@
 # To-Do
 ## High Priority
 ## Medium Priority
-* Add "more info" links to exercises?
 * Make sequential sounds cut each other off?
 * Post to musictheory subreddit.
 * Stop sending anaytics events in test.
