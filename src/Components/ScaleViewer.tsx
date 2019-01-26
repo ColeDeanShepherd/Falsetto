@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { PitchLetter } from 'src/PitchLetter';
-import { scales } from "src/Scale";
+import { scales as allScales } from "src/Scale";
 import { Pitch } from 'src/Pitch';
 import { Button, Card, CardContent, Typography } from '@material-ui/core';
 import { Chord } from 'src/Chord';
@@ -33,22 +33,29 @@ const validFlatKeyPitches = [
   new Pitch(PitchLetter.G, -1, 0)
 ];
 
+interface IScaleViewerProps {
+  scales?: Array<{ type: string, formulaString: string }>;
+  typeTitle?: string;
+}
 interface IScaleViewerState {
   rootPitch: Pitch;
   scale: { type: string, formulaString: string };
 }
 
-export class ScaleViewer extends React.Component<{}, IScaleViewerState> {
-  public constructor(props: {}) {
+export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewerState> {
+  public constructor(props: IScaleViewerProps) {
     super(props);
 
     this.state = {
       rootPitch: new Pitch(PitchLetter.C, 0, 0),
-      scale: scales[0]
+      scale: this.scales[0]
     };
   }
 
   public render(): JSX.Element {
+    const typeTitle = this.props.typeTitle
+      ? this.props.typeTitle
+      : "Scale";
     const pitchStrings = Chord.fromPitchAndFormulaString(
       this.state.rootPitch,
       this.state.scale.formulaString
@@ -77,10 +84,10 @@ export class ScaleViewer extends React.Component<{}, IScaleViewerState> {
             </div>
             
             <Typography gutterBottom={true} variant="h6" component="h4">
-              Scale
+              {typeTitle}
             </Typography>
             <div style={{padding: "1em 0"}}>
-              {scales.map(scale => {
+              {this.scales.map(scale => {
                 const style: any = { textTransform: "none" };
                 
                 const isPressed = scale.type === this.state.scale.type;
@@ -111,6 +118,11 @@ export class ScaleViewer extends React.Component<{}, IScaleViewerState> {
     );
   }
 
+  private get scales(): Array<{ type: string, formulaString: string }> {
+    return this.props.scales
+      ? this.props.scales
+      : allScales;
+  }
   private renderRootPitchRow(rootPitches: Array<Pitch | null>): JSX.Element {
     return (
       <div>

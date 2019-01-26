@@ -39,6 +39,7 @@ import * as SheetMusicChordRecognition from "./Quizzes/SheetMusicChordRecognitio
 import * as ChordEarTraining from "./Quizzes/ChordEarTraining";
 import * as ScaleEarTraining from "./Quizzes/ScaleEarTraining";
 import { ScaleViewer } from "./ScaleViewer";
+import { ChordViewer } from "./ChordViewer";
 import { FlashCardGroup } from 'src/FlashCardGroup';
 import { StudyFlashCards } from './StudyFlashCards';
 import * as Overview from "./Quizzes/TheJazzPianoSite/TheBasics/Overview"
@@ -197,6 +198,7 @@ class App extends React.Component<{}, IAppState> {
                     {renderFlashCardGroupLink(SheetMusicChordRecognition.createFlashCardGroup())}
                     {renderFlashCardGroupLink(ChordEarTraining.createFlashCardGroup())}
                     {renderFlashCardGroupLink(RandomChordGenerator.createFlashCardGroup())}
+                    <NavLink to="chord-viewer" className="nav-link">Chord Viewer</NavLink>
                   </div>
                 </div>
               </Paper>
@@ -205,6 +207,7 @@ class App extends React.Component<{}, IAppState> {
                 <Route path="/about" component={() => <DocumentTitle title="About - Falsetto"><AboutPage /></DocumentTitle>} />
                 {this.flashCardGroups.map(fcg => <Route key={fcg.route} path={fcg.route} component={this.createStudyFlashCardGroupComponent(fcg)} />)}
                 <Route path="/scale-viewer" component={ScaleViewer} />
+                <Route path="/chord-viewer" component={ChordViewer} />
               </div>
             </div>
           </div>
