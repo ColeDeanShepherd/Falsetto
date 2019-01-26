@@ -206,8 +206,8 @@ class App extends React.Component<{}, IAppState> {
                 <Route exact path="/" component={() => <DocumentTitle title="Falsetto"><HomePage /></DocumentTitle>} />
                 <Route path="/about" component={() => <DocumentTitle title="About - Falsetto"><AboutPage /></DocumentTitle>} />
                 {this.flashCardGroups.map(fcg => <Route key={fcg.route} path={fcg.route} component={this.createStudyFlashCardGroupComponent(fcg)} />)}
-                <Route path="/scale-viewer" component={ScaleViewer} />
-                <Route path="/chord-viewer" component={ChordViewer} />
+                <Route path="/scale-viewer" component={() => <DocumentTitle title={"Scale Viewer - Falsetto"}><ScaleViewer /></DocumentTitle>} />
+                <Route path="/chord-viewer" component={() => <DocumentTitle title={"Chord Viewer - Falsetto"}><ChordViewer /></DocumentTitle>} />
               </div>
             </div>
           </div>
