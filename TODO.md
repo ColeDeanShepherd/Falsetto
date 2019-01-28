@@ -1,10 +1,13 @@
 # To-Do
 ## High Priority
+* For each instrument (piano, guitar)
+  * Add intervals exercise
+  * Add chords exercise
+  * Add scales exercise
 ## Medium Priority
 * Make sequential sounds cut each other off?
 * Post to musictheory subreddit.
 * Stop sending anaytics events in test.
-* Guitar Scale Shapes
 ## Low Priority
 * Change "Flip to back" terminology?
 * Use actual flat symbols instead of 'b'

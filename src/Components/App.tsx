@@ -30,6 +30,7 @@ import * as SheetMusicNotes from "./Quizzes/SheetMusicNotes";
 import * as NoteDurations from "./Quizzes/NoteDurations";
 import * as KeyAccidentalCounts from "./Quizzes/KeyAccidentalCounts";
 import * as KeyAccidentalNotes from "./Quizzes/KeyAccidentalNotes";
+import * as KeySignatureIdentification from "./Quizzes/KeySignatureIdentification";
 import * as Interval2ndNotes from "./Quizzes/Interval2ndNotes";
 import * as IntervalNotes from "./Quizzes/IntervalNotes";
 import * as IntervalEarTraining from "./Quizzes/IntervalEarTraining";
@@ -99,7 +100,8 @@ class App extends React.Component<{}, IAppState> {
         title: "Keys",
         flashCardGroups: [
           KeyAccidentalCounts.createFlashCardGroup(),
-          KeyAccidentalNotes.createFlashCardGroup()
+          KeyAccidentalNotes.createFlashCardGroup(),
+          KeySignatureIdentification.createFlashCardGroup()
         ]
       },
       {
@@ -187,6 +189,7 @@ class App extends React.Component<{}, IAppState> {
                     <p>Keys</p>
                     {renderFlashCardGroupLink(KeyAccidentalCounts.createFlashCardGroup())}
                     {renderFlashCardGroupLink(KeyAccidentalNotes.createFlashCardGroup())}
+                    {renderFlashCardGroupLink(KeySignatureIdentification.createFlashCardGroup())}
                   </div>
                   <div>
                     <p>Chords</p>

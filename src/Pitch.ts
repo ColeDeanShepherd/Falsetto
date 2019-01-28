@@ -180,7 +180,12 @@ export class Pitch {
   }
   
   // TODO: add tests
-  public toVexFlowString(): string {
+  public toVexFlowString(includeOctaveNumber: boolean = true): string {
     return `${PitchLetter[this.letter].toLowerCase()}${this.getAccidentalString()}/${this.octaveNumber}`;
+  }
+  
+  // TODO: add tests
+  public toVexFlowKeySignatureString(): string {
+    return `${PitchLetter[this.letter]}${this.getAccidentalString()}`;
   }
 }
