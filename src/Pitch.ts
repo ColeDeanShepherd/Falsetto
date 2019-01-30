@@ -33,6 +33,20 @@ export function pitchRange(
   return possibleNotes;
 }
 
+export const arePitchOffsetsFromCWhiteKeys = [
+  true, // C
+  false, // C#/Db
+  true, // D
+  false, // D#/Eb
+  true, // E
+  true, // F
+  false, // F#/Gb
+  true, // G
+  false, // G#/Ab
+  true, // A
+  false, // A#/Bb
+  true, // B
+];
 export const ambiguousPitchStrings = [
   "C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb", "G", "G#/Ab", "A", "A#/Bb", "B"
 ];
@@ -144,6 +158,16 @@ export class Pitch {
   }
   public get isNatural(): boolean {
     return this.signedAccidental === 0;
+  }
+
+  // TODO: add tests
+  public get isWhiteKey(): boolean {
+    const positivePitchOffsetFromC = Utils.mod(this.midiNumber, 12);
+    return arePitchOffsetsFromCWhiteKeys[positivePitchOffsetFromC];
+  }
+  // TODO: add tests
+  public get isBlackKey(): boolean {
+    return !this.isWhiteKey;
   }
   
   public equals(pitch: Pitch): boolean {

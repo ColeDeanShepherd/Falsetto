@@ -5,6 +5,8 @@ import { PianoKeyboard } from '../PianoKeyboard';
 import { FlashCard } from 'src/FlashCard';
 import { FlashCardGroup } from 'src/FlashCardGroup';
 import { AnswerDifficulty } from 'src/StudyAlgorithm';
+import { Pitch } from 'src/Pitch';
+import { PitchLetter } from 'src/PitchLetter';
 
 const notes = ["C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb", "G", "G#/Ab", "A", "A#/Bb", "B"];
 
@@ -22,7 +24,9 @@ export function createFlashCards(): FlashCard[] {
       () => (
         <PianoKeyboard
           width={200} height={100}
-          noteIndex={i}
+          lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
+          highestPitch={new Pitch(PitchLetter.B, 0, 4)}
+          pressedPitches={[Pitch.createFromMidiNumber((new Pitch(PitchLetter.C, 0, 4)).midiNumber + i)]}
         />
       ),
       notes[i]

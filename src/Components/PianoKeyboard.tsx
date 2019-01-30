@@ -1,122 +1,157 @@
 import * as React from 'react';
 
 import * as Utils from "../Utils";
+import { Pitch } from 'src/Pitch';
+
+class PianoKeyboardMetrics {
+  public constructor(
+    public width: number,
+    public height: number,
+    public lowestPitch: Pitch,
+    public highestPitch: Pitch
+  ) {
+    Utils.invariant(this.lowestPitch.midiNumber <= this.highestPitch.midiNumber);
+
+    // Calculate key counts.
+    this.whiteKeyCount = 0;
+    this.blackKeyCount = 0;
+    for (let i = lowestPitch.midiNumber; i <= highestPitch.midiNumber; i++) {
+      if (Pitch.createFromMidiNumber(i).isWhiteKey) {
+        this.whiteKeyCount++;
+      } else {
+        this.blackKeyCount++;
+      }
+    }
+
+    // Calculate key widths.
+    const blackKeyWhiteKeyWidthRatio = 0.66;
+
+    if (this.whiteKeyCount > 0) {
+      let widthAsMultipleOfWhiteKeyWidth = this.whiteKeyCount;
+      if (this.lowestPitch.isBlackKey) {
+        widthAsMultipleOfWhiteKeyWidth += (blackKeyWhiteKeyWidthRatio / 2);
+      }
+      if (this.highestPitch.isBlackKey) {
+        widthAsMultipleOfWhiteKeyWidth += (blackKeyWhiteKeyWidthRatio / 2);
+      }
+  
+      this.whiteKeyWidth = width / widthAsMultipleOfWhiteKeyWidth;
+      this.blackKeyWidth = blackKeyWhiteKeyWidthRatio * this.whiteKeyWidth;
+    } else {
+      this.blackKeyWidth = width;
+      this.whiteKeyWidth = this.blackKeyWidth / blackKeyWhiteKeyWidthRatio;
+    }
+
+    // Calculate key heights.
+    const blackKeyWhiteKeyHeightRatio = 0.6;
+
+    this.whiteKeyHeight = height;
+    this.blackKeyHeight = blackKeyWhiteKeyHeightRatio * this.whiteKeyHeight;
+
+    // Calculate key left x's.
+    this.keyLeftXs = new Array<number>(this.keyCount);
+    let whiteKeyX = this.lowestPitch.isWhiteKey
+      ? 0
+      : (this.blackKeyWidth / 2);
+    
+    for (let i = 0; i < this.keyCount; i++) {
+      const midiNumber = this.lowestPitch.midiNumber + i;
+      const pitch = Pitch.createFromMidiNumber(midiNumber);
+
+      if (pitch.isWhiteKey) {
+        this.keyLeftXs[i] = whiteKeyX;
+        whiteKeyX += this.whiteKeyWidth;
+      } else {
+        const blackKeyX = whiteKeyX - (this.blackKeyWidth / 2);
+        this.keyLeftXs[i] = blackKeyX;
+      }
+    }
+  }
+  
+  public whiteKeyCount: number;
+  public blackKeyCount: number;
+
+  public whiteKeyWidth: number;
+  public whiteKeyHeight: number;
+
+  public blackKeyWidth: number;
+  public blackKeyHeight: number;
+
+  public keyLeftXs: Array<number>;
+
+  public get keyCount(): number {
+    return this.whiteKeyCount + this.blackKeyCount;
+  }
+}
 
 export interface IPianoKeyboardProps {
   width: number;
   height: number;
-  noteIndex: number;
+  lowestPitch: Pitch;
+  highestPitch: Pitch;
+  pressedPitches: Array<Pitch>;
 }
 export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
   public render(): JSX.Element {
-    const whiteKeyCount = 7;
-    const whiteKeyWidth = this.props.width / whiteKeyCount;
-    const whiteKeyHeight = this.props.height;
-    const getWhiteKeyX = (i: number) => i * whiteKeyWidth;
-    const whiteKeys = Utils.range(0, whiteKeyCount - 1)
-      .map(i => <rect key={i} x={getWhiteKeyX(i)} y={0} width={whiteKeyWidth} height={whiteKeyHeight} fill="white" stroke="black" strokeWidth="2"/>);
+    const metrics = this.getMetrics();
 
-    const blackKeyCount = 5;
-    const blackKeyWidth = 0.66 * whiteKeyWidth;
-    const blackKeyHeight = 0.6 * this.props.height;
-    const getBlackKeyX = (i: number) => {
-      const leftWhiteKeyI = (i <= 1) ? i : (i + 1);
-      const leftWhiteKeyX = getWhiteKeyX(leftWhiteKeyI);
-      const x = leftWhiteKeyX + whiteKeyWidth - (blackKeyWidth / 2);
-
-      return x;
-    };
-    const blackKeys = Utils.range(0, blackKeyCount - 1)
-      .map(i => {
-        return <rect key={i} x={getBlackKeyX(i)} y={0} width={blackKeyWidth} height={blackKeyHeight} fill="black" strokeWidth="0" />;
-      });
+    const whiteKeys = new Array<JSX.Element>();
+    const blackKeys = new Array<JSX.Element>();
     
-    const noteDotRadius = blackKeyWidth / 3;
-    const isBlackKey = (noteIndex: number) => {
-      switch (noteIndex) {
-        case 1:
-        case 3:
-        case 6:
-        case 8:
-        case 10:
-          return true;
-        default:
-          return false;
-      }
-    };
-    const getKeyX = (noteIndex: number) => {
-      if (!isBlackKey(noteIndex)) {
-        let whiteKeyIndex: number;
+    for (let i = 0; i < metrics.keyCount; i++) {
+      const midiNumber = metrics.lowestPitch.midiNumber + i;
+      const pitch = Pitch.createFromMidiNumber(midiNumber);
 
-        switch (noteIndex) {
-          case 0:
-            whiteKeyIndex = 0;
-            break;
-          case 2:
-            whiteKeyIndex = 1;
-            break;
-          case 4:
-            whiteKeyIndex = 2;
-            break;
-          case 5:
-            whiteKeyIndex = 3;
-            break;
-          case 7:
-            whiteKeyIndex = 4;
-            break;
-          case 9:
-            whiteKeyIndex = 5;
-            break;
-          case 11:
-            whiteKeyIndex = 6;
-            break;
-          default:
-            throw new Error(`Unknown note index: ${noteIndex}`);
-        }
-
-        return getWhiteKeyX(whiteKeyIndex);
+      if (pitch.isWhiteKey) {
+        whiteKeys.push(<rect
+          key={i}
+          x={metrics.keyLeftXs[i]} y={0}
+          width={metrics.whiteKeyWidth} height={metrics.whiteKeyHeight}
+          fill="white" stroke="black" strokeWidth="2"
+        />);
       } else {
-        let blackKeyIndex: number;
-
-        switch (noteIndex) {
-          case 1:
-            blackKeyIndex = 0;
-            break;
-          case 3:
-            blackKeyIndex = 1;
-            break;
-          case 6:
-            blackKeyIndex = 2;
-            break;
-          case 8:
-            blackKeyIndex = 3;
-            break;
-          case 10:
-            blackKeyIndex = 4;
-            break;
-          default:
-            throw new Error(`Unknown note index: ${noteIndex}`);
-        }
-
-        return getBlackKeyX(blackKeyIndex);
+        blackKeys.push(<rect
+          key={i}
+          x={metrics.keyLeftXs[i]} y={0}
+          width={metrics.blackKeyWidth} height={metrics.blackKeyHeight}
+          fill="black" strokeWidth="0"
+        />);
       }
-    };
-    const highlightedNoteX = !isBlackKey(this.props.noteIndex)
-      ? getKeyX(this.props.noteIndex) + (whiteKeyWidth / 2)
-      : getKeyX(this.props.noteIndex) + (blackKeyWidth / 2);
-    const highlightedNoteY = !isBlackKey(this.props.noteIndex)
-      ? (0.75 * whiteKeyHeight)
-      : (blackKeyHeight / 2);
-    const highlightedNote = <circle cx={highlightedNoteX} cy={highlightedNoteY} r={noteDotRadius} fill="red" strokeWidth="0" />;
+    }
+    
+    const noteDotRadius = metrics.blackKeyWidth / 3;
+
+    const noteHighlights = this.props.pressedPitches
+      .map(pressedPitch => {
+        const noteIndex = pressedPitch.midiNumber - metrics.lowestPitch.midiNumber;
+        const highlightedNoteX = pressedPitch.isWhiteKey
+          ? metrics.keyLeftXs[noteIndex] + (metrics.whiteKeyWidth / 2)
+          : metrics.keyLeftXs[noteIndex] + (metrics.blackKeyWidth / 2);
+        const highlightedNoteY = pressedPitch.isWhiteKey
+          ? (0.75 * metrics.whiteKeyHeight)
+          : (metrics.blackKeyHeight / 2);
+        return <circle
+          key={pressedPitch.toString(true)}
+          cx={highlightedNoteX} cy={highlightedNoteY}
+          r={noteDotRadius}
+          fill="red" strokeWidth="0"
+        />;
+      });
 
     return (
       <svg width={this.props.width} height={this.props.height} version="1.1" xmlns="http://www.w3.org/2000/svg">
         {whiteKeys}
         {blackKeys}
-        {highlightedNote}
+        {noteHighlights}
       </svg>
     );
   }
 
-  private dottedFretNumbers = [3, 5, 7, 9];
+
+  private getMetrics(): PianoKeyboardMetrics {
+    return new PianoKeyboardMetrics(
+      this.props.width, this.props.height,
+      this.props.lowestPitch, this.props.highestPitch
+    );
+  }
 }

@@ -26,6 +26,7 @@ import * as DiatonicSeventhChords from "./Quizzes/DiatonicSeventhChords";
 import * as RandomChordGenerator from "./RandomChordGenerator";
 import * as GuitarNotes from "./Quizzes/GuitarNotes";
 import * as PianoNotes from "./Quizzes/PianoNotes";
+import * as PianoScales from "./Quizzes/PianoScales";
 import * as SheetMusicNotes from "./Quizzes/SheetMusicNotes";
 import * as NoteDurations from "./Quizzes/NoteDurations";
 import * as KeyAccidentalCounts from "./Quizzes/KeyAccidentalCounts";
@@ -89,6 +90,7 @@ class App extends React.Component<{}, IAppState> {
         flashCardGroups: [
           ScaleDegreeNames.createFlashCardGroup(),
           ScaleNotes.createFlashCardGroup(),
+          PianoScales.createFlashCardGroup(),
           ScaleDegreeModes.createFlashCardGroup(),
           ScaleChords.createFlashCardGroup(),
           ScaleFamilies.createFlashCardGroup(),
@@ -180,6 +182,7 @@ class App extends React.Component<{}, IAppState> {
                     <p>Scales</p>
                     {renderFlashCardGroupLink(ScaleDegreeNames.createFlashCardGroup())}
                     {renderFlashCardGroupLink(ScaleNotes.createFlashCardGroup())}
+                    {renderFlashCardGroupLink(PianoScales.createFlashCardGroup())}
                     {renderFlashCardGroupLink(ScaleDegreeModes.createFlashCardGroup())}
                     {renderFlashCardGroupLink(ScaleChords.createFlashCardGroup())}
                     {renderFlashCardGroupLink(ScaleEarTraining.createFlashCardGroup())}
