@@ -174,6 +174,21 @@ export function toggleArrayElement<T>(array: T[], element: T): T[] {
 }
 
 // TODO: add tests
+export function toggleArrayElementCustomEquals<T>(array: T[], element: T, equalsFn: (a: T, b: T) => boolean): T[] {
+  const newArray = array.slice();
+  const i = newArray.findIndex(e => equalsFn(e, element));
+  const wasElementInArray = i >= 0;
+
+  if (!wasElementInArray) {
+    newArray.push(element);
+  } else {
+    newArray.splice(i, 1);
+  }
+
+  return newArray;
+}
+
+// TODO: add tests
 export function tryRemoveArrayElement<T>(array: T[], element: T): boolean {
   const i = array.indexOf(element);
   const wasElementInArray = i >= 0;

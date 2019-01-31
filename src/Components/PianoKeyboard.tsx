@@ -90,6 +90,7 @@ export interface IPianoKeyboardProps {
   lowestPitch: Pitch;
   highestPitch: Pitch;
   pressedPitches: Array<Pitch>;
+  onKeyPress?: (keyPitch: Pitch) => void;
 }
 export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
   public render(): JSX.Element {
@@ -108,6 +109,7 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
           x={metrics.keyLeftXs[i]} y={0}
           width={metrics.whiteKeyWidth} height={metrics.whiteKeyHeight}
           fill="white" stroke="black" strokeWidth="2"
+          onClick={event => this.props.onKeyPress ? this.props.onKeyPress(pitch) : null}
         />);
       } else {
         blackKeys.push(<rect
@@ -115,6 +117,7 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
           x={metrics.keyLeftXs[i]} y={0}
           width={metrics.blackKeyWidth} height={metrics.blackKeyHeight}
           fill="black" strokeWidth="0"
+          onClick={event => this.props.onKeyPress ? this.props.onKeyPress(pitch) : null}
         />);
       }
     }

@@ -264,6 +264,57 @@ export class PianoScalesAnswerSelect extends React.Component<IPianoScalesAnswerS
   }
 }
 
+export interface IPianoKeysAnswerSelectProps {
+  correctAnswer: string;
+  onAnswer: (answerDifficulty: AnswerDifficulty) => void;
+}
+export interface IPianoKeysAnswerSelectState {
+  selectedPitches: Array<Pitch>;
+}
+export class PianoKeysAnswerSelect extends React.Component<IPianoKeysAnswerSelectProps, IPianoKeysAnswerSelectState> {
+  public constructor(props: IPianoKeysAnswerSelectProps) {
+    super(props);
+    
+    this.state = {
+      selectedPitches: []
+    };
+  }
+  public render(): JSX.Element {
+    return (
+      <div>
+        <PianoKeyboard
+          width={400} height={100}
+          lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
+          highestPitch={new Pitch(PitchLetter.B, 0, 5)}
+          pressedPitches={this.state.selectedPitches}
+          onKeyPress={pitch => this.onPitchClick(pitch)}
+        />
+        
+        <div style={{padding: "1em 0"}}>
+          <Button
+            onClick={event => this.confirmAnswer()}
+            disabled={this.state.selectedPitches.length === 0}
+            variant="contained"
+          >
+            Confirm Answer
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  private onPitchClick(pitch: Pitch) {
+    const newSelectedPitches = Utils.toggleArrayElementCustomEquals(
+      this.state.selectedPitches,
+      pitch,
+      (p1, p2) => p1.equals(p2)
+    );
+    this.setState({ selectedPitches: newSelectedPitches });
+  }
+  private confirmAnswer() {
+  }
+}
+
 export function createFlashCardGroup(): FlashCardGroup {
   const flashCards = createFlashCards();
 
@@ -331,5 +382,6 @@ export function renderAnswerSelect(
   onAnswer: (answerDifficulty: AnswerDifficulty) => void
 ) {
   const correctAnswer = flashCard.backSide as string;
+  //return <PianoKeysAnswerSelect key={correctAnswer} correctAnswer={correctAnswer} onAnswer={onAnswer} />;
   return <PianoScalesAnswerSelect key={correctAnswer} correctAnswer={correctAnswer} onAnswer={onAnswer} />;
 }
