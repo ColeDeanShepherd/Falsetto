@@ -4,33 +4,34 @@ import { scales as allScales } from "src/Scale";
 import { Pitch } from 'src/Pitch';
 import { Button, Card, CardContent, Typography } from '@material-ui/core';
 import { Chord } from 'src/Chord';
+import { PianoKeyboard } from './PianoKeyboard';
 
 const validSharpKeyPitches = [
   null,
   null,
-  new Pitch(PitchLetter.C, 1, 0),
-  new Pitch(PitchLetter.D, 1, 0),
+  new Pitch(PitchLetter.C, 1, 4),
+  new Pitch(PitchLetter.D, 1, 4),
   null,
-  new Pitch(PitchLetter.F, 1, 0),
+  new Pitch(PitchLetter.F, 1, 4),
   null
 ];
 const validNaturalKeyPitches = [
-  new Pitch(PitchLetter.A, 0, 0),
-  new Pitch(PitchLetter.B, 0, 0),
-  new Pitch(PitchLetter.C, 0, 0),
-  new Pitch(PitchLetter.D, 0, 0),
-  new Pitch(PitchLetter.E, 0, 0),
-  new Pitch(PitchLetter.F, 0, 0),
-  new Pitch(PitchLetter.G, 0, 0)
+  new Pitch(PitchLetter.A, 0, 4),
+  new Pitch(PitchLetter.B, 0, 4),
+  new Pitch(PitchLetter.C, 0, 4),
+  new Pitch(PitchLetter.D, 0, 4),
+  new Pitch(PitchLetter.E, 0, 4),
+  new Pitch(PitchLetter.F, 0, 4),
+  new Pitch(PitchLetter.G, 0, 4)
 ];
 const validFlatKeyPitches = [
-  new Pitch(PitchLetter.A, -1, 0),
-  new Pitch(PitchLetter.B, -1, 0),
-  new Pitch(PitchLetter.C, -1, 0),
-  new Pitch(PitchLetter.D, -1, 0),
+  new Pitch(PitchLetter.A, -1, 4),
+  new Pitch(PitchLetter.B, -1, 4),
+  new Pitch(PitchLetter.C, -1, 4),
+  new Pitch(PitchLetter.D, -1, 4),
   null,
   null,
-  new Pitch(PitchLetter.G, -1, 0)
+  new Pitch(PitchLetter.G, -1, 4)
 ];
 
 interface IScaleViewerProps {
@@ -47,7 +48,7 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
     super(props);
 
     this.state = {
-      rootPitch: new Pitch(PitchLetter.C, 0, 0),
+      rootPitch: new Pitch(PitchLetter.C, 0, 4),
       scale: this.scales[0]
     };
   }
@@ -56,11 +57,12 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
     const typeTitle = this.props.typeTitle
       ? this.props.typeTitle
       : "Scale";
-    const pitchStrings = Chord.fromPitchAndFormulaString(
+    const pitches = Chord.fromPitchAndFormulaString(
       this.state.rootPitch,
       this.state.scale.formulaString
     )
-      .pitches
+      .pitches;
+    const pitchStrings = pitches
       .map(pitch => pitch.toString(false));
     const pitchesString = pitchStrings.join(", ");
 
@@ -112,6 +114,13 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
               <p>{pitchesString}</p>
               <p>{this.state.scale.formulaString}</p>
             </div>
+
+            <PianoKeyboard
+              width={400} height={100}
+              lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
+              highestPitch={new Pitch(PitchLetter.B, 0, 5)}
+              pressedPitches={pitches}
+            />
           </div>
         </CardContent>
       </Card>
