@@ -2,7 +2,6 @@
 ## High Priority
 * Enable inversion for piano scales exercise.
 * Finish answer buttons to piano scales exercise.
-* Add chord root config to piano scales exercise.
 * For each instrument (piano, guitar)
   * Add intervals exercise
   * Add chords exercise (piano done)

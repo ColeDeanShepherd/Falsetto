@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 import * as Utils from "src/Utils";
-import * as FlashCardUtils from "./Utils";
 import { scales } from "src/Scale";
 import { PianoKeyboard } from '../PianoKeyboard';
 import { FlashCard } from 'src/FlashCard';
@@ -15,6 +14,7 @@ import { Chord } from 'src/Chord';
 const rootPitchStrs = ["Ab", "A", "Bb", "B/Cb", "C", "C#/Db", "D", "Eb", "E", "F", "F#/Gb", "G"];
 
 interface IConfigData {
+  enabledRootPitches: string[];
   enabledScaleTypes: string[];
 }
 
@@ -23,10 +23,13 @@ export function configDataToEnabledQuestionIds(configData: IConfigData): Array<n
 
   let i = 0;
 
-  for (const rootPitch of rootPitchStrs) {
+  for (const rootPitchStr of rootPitchStrs) {
     for (const scale of scales) {
       const scaleType = scale.type;
-      if (Utils.arrayContains(configData.enabledScaleTypes, scaleType)) {
+      if (
+        Utils.arrayContains(configData.enabledRootPitches, rootPitchStr) &&
+        Utils.arrayContains(configData.enabledScaleTypes, scaleType)
+      ) {
         newEnabledFlashCardIndices.push(i);
       }
 
@@ -45,14 +48,33 @@ export interface IPianoScalesFlashCardMultiSelectProps {
 
 export interface IPianoScalesFlashCardMultiSelectState {}
 export class PianoScalesFlashCardMultiSelect extends React.Component<IPianoScalesFlashCardMultiSelectProps, IPianoScalesFlashCardMultiSelectState> {
-  public constructor(props: IPianoScalesFlashCardMultiSelectProps) {
-    super(props);
-
-    this.state = {
-      enabledScaleTypes: scales.map(c => c.type)
-    };
-  }
   public render(): JSX.Element {
+    const rootPitchCheckboxTableRows = rootPitchStrs
+      .map((rootPitch, i) => {
+        const isChecked = this.props.configData.enabledRootPitches.indexOf(rootPitch) >= 0;
+        const isEnabled = !isChecked || (this.props.configData.enabledRootPitches.length > 1);
+
+        return (
+          <TableRow key={i}>
+            <TableCell><Checkbox checked={isChecked} onChange={event => this.toggleRootPitchEnabled(rootPitch)} disabled={!isEnabled} /></TableCell>
+            <TableCell>{rootPitch}</TableCell>
+          </TableRow>
+        );
+      }, this);
+    const rootPitchCheckboxes = (
+      <Table className="table">
+        <TableHead>
+          <TableRow>
+            <TableCell />
+            <TableCell>Root Pitch</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rootPitchCheckboxTableRows}
+        </TableBody>
+      </Table>
+    );
+
     const scaleTypeCheckboxTableRows = scales
       .map((scale, i) => {
         const isChecked = this.props.configData.enabledScaleTypes.indexOf(scale.type) >= 0;
@@ -81,11 +103,26 @@ export class PianoScalesFlashCardMultiSelect extends React.Component<IPianoScale
 
     return (
       <Grid container spacing={32}>
-        <Grid item xs={12}>{scaleTypeCheckboxes}</Grid>
+        <Grid item xs={6}>{rootPitchCheckboxes}</Grid>
+        <Grid item xs={6}>{scaleTypeCheckboxes}</Grid>
       </Grid>
     );
   }
   
+  private toggleRootPitchEnabled(rootPitch: string) {
+    const newEnabledRootPitches = Utils.toggleArrayElement(
+      this.props.configData.enabledRootPitches,
+      rootPitch
+    );
+    
+    if (newEnabledRootPitches.length > 0) {
+      const newConfigData: IConfigData = {
+        enabledRootPitches: newEnabledRootPitches,
+        enabledScaleTypes: this.props.configData.enabledScaleTypes
+      };
+      this.onChange(newConfigData);
+    }
+  }
   private toggleScaleEnabled(scale: string) {
     const newEnabledScaleTypes = Utils.toggleArrayElement(
       this.props.configData.enabledScaleTypes,
@@ -94,6 +131,7 @@ export class PianoScalesFlashCardMultiSelect extends React.Component<IPianoScale
     
     if (newEnabledScaleTypes.length > 0) {
       const newConfigData: IConfigData = {
+        enabledRootPitches: this.props.configData.enabledRootPitches,
         enabledScaleTypes: newEnabledScaleTypes
       };
       this.onChange(newConfigData);
@@ -126,6 +164,7 @@ export function createFlashCardGroup(): FlashCardGroup {
   };
 
   const initialConfigData: IConfigData = {
+    enabledRootPitches: rootPitchStrs.slice(),
     enabledScaleTypes: scales
       .filter((_, scaleIndex) => scaleIndex <= 8)
       .map(scale => scale.type)
@@ -144,7 +183,8 @@ export function createFlashCards(): FlashCard[] {
   return Utils.flattenArrays<FlashCard>(
     rootPitchStrs.map((rootPitchStr, i) =>
       scales.map(scale => {
-        const rootPitch = Pitch.createFromMidiNumber((new Pitch(PitchLetter.C, 0, 4)).midiNumber + i);
+        const halfStepsFromC = Utils.mod(i - 4, 12);
+        const rootPitch = Pitch.createFromMidiNumber((new Pitch(PitchLetter.C, 0, 4)).midiNumber + halfStepsFromC);
         const formulaString = scale.formulaString + " 8";
         const pitches = Chord.fromPitchAndFormulaString(rootPitch, formulaString)
           .pitches;
