@@ -153,6 +153,9 @@ export class Pitch {
     const pitchLetterMidiNoteNumberOffset = getPitchLetterMidiNoteNumberOffset(this.letter);
     return (12 * (this.octaveNumber + 1)) + pitchLetterMidiNoteNumberOffset + this.signedAccidental;
   }
+  public get midiNumberNoOctave(): number {
+    return Utils.mod(this.midiNumber, 12);
+  }
   public get lineOrSpaceOnStaffNumber(): number {
     return (7 * this.octaveNumber) + Utils.mod(this.letter - 2, 7);
   }

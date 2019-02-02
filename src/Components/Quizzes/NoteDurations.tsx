@@ -19,7 +19,7 @@ export function createFlashCardGroup(): FlashCardGroup {
 }
 export function createFlashCards(): FlashCard[] {
   return [
-    new FlashCard(
+    FlashCard.fromRenderFns(
       () => (
         <VexFlowComponent
           width={width} height={height}
@@ -28,7 +28,7 @@ export function createFlashCards(): FlashCard[] {
       ),
       "Whole Note = 4 beats"
     ),
-    new FlashCard(
+    FlashCard.fromRenderFns(
       () => (
         <VexFlowComponent
           width={width} height={height}
@@ -37,7 +37,7 @@ export function createFlashCards(): FlashCard[] {
       ),
       "Half Note = 2 beats"
     ),
-    new FlashCard(
+    FlashCard.fromRenderFns(
       () => (
         <VexFlowComponent
           width={width} height={height}
@@ -46,7 +46,7 @@ export function createFlashCards(): FlashCard[] {
       ),
       "Quarter Note = 1 beat"
     ),
-    new FlashCard(
+    FlashCard.fromRenderFns(
       () => (
         <VexFlowComponent
           width={width} height={height}
@@ -55,7 +55,7 @@ export function createFlashCards(): FlashCard[] {
       ),
       "Eighth Note = 1/2 beats"
     ),
-    new FlashCard(
+    FlashCard.fromRenderFns(
       () => (
         <VexFlowComponent
           width={width} height={height}
@@ -64,7 +64,7 @@ export function createFlashCards(): FlashCard[] {
       ),
       "Sixteenth Note = 1/4 beats"
     ),
-    new FlashCard(
+    FlashCard.fromRenderFns(
       () => (
         <VexFlowComponent
           width={width} height={height}
@@ -73,7 +73,7 @@ export function createFlashCards(): FlashCard[] {
       ),
       "32nd Note = 1/8 beats"
     ),
-    new FlashCard(
+    FlashCard.fromRenderFns(
       () => (
         <VexFlowComponent
           width={width} height={height}
@@ -82,7 +82,7 @@ export function createFlashCards(): FlashCard[] {
       ),
       "64th Note = 1/16 beats"
     ),
-    new FlashCard(
+    FlashCard.fromRenderFns(
       () => (
         <VexFlowComponent
           width={width} height={height}

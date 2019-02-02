@@ -1,9 +1,24 @@
 import * as React from 'react';
 import * as Utils from "./Utils";
 
-export type FlashCardSide = string | (() => JSX.Element);
+export class FlashCardSide {
+  public constructor(
+    public renderFn: string | (() => JSX.Element),
+    public data: any = null
+  ) {}
+}
 
 export class FlashCard {
+  public static fromRenderFns(
+    frontSideRenderFn: string | (() => JSX.Element),
+    backSideRenderFn: string | (() => JSX.Element)
+  ): FlashCard {
+    return new FlashCard(
+      new FlashCardSide(frontSideRenderFn),
+      new FlashCardSide(backSideRenderFn)
+    );
+  }
+
   public constructor(
     public frontSide: FlashCardSide,
     public backSide: FlashCardSide
@@ -33,18 +48,21 @@ export function invertFlashCards(
       .map(i => oldFrontSides[i]);
     
     // invert and add the new flash card
-    const newBackSideRenderFuncs = matchingOldFrontSides
+    const newBackSideRenderFns = matchingOldFrontSides
       .map(frontSide => {
-        if (typeof(frontSide) === 'string') {
+        if (typeof(frontSide.renderFn) === 'string') {
           return () => React.createElement("span", null, frontSide);
         } else {
-          return frontSide;
+          return frontSide.renderFn;
         }
       });
-    const newBackSideRenderFunc = () => React.createElement(
-      "span",
-      null,
-      Utils.arrayJoin(newBackSideRenderFuncs.map(rf => rf()), React.createElement("span", null, ", "))
+    const newBackSideRenderFunc = new FlashCardSide(
+      () => React.createElement(
+        "span",
+        null,
+        Utils.arrayJoin(newBackSideRenderFns.map(rf => rf()), React.createElement("span", null, ", "))
+      ),
+      matchingOldFrontSides.map(fs => fs.data)
     );
 
     result.invertedFlashCards.push(

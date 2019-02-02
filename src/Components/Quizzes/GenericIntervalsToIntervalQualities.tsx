@@ -12,13 +12,13 @@ export function createFlashCardGroup(): FlashCardGroup {
 
 export function createFlashCards(): FlashCard[] {
   return [
-    new FlashCard("1st", "perfect"),
-    new FlashCard("2nd", "imperfect"),
-    new FlashCard("3rd", "imperfect"),
-    new FlashCard("4th", "perfect"),
-    new FlashCard("5th", "perfect"),
-    new FlashCard("6th", "imperfect"),
-    new FlashCard("7th", "imperfect"),
-    new FlashCard("8th", "perfect"),
+    FlashCard.fromRenderFns("1st", "perfect"),
+    FlashCard.fromRenderFns("2nd", "imperfect"),
+    FlashCard.fromRenderFns("3rd", "imperfect"),
+    FlashCard.fromRenderFns("4th", "perfect"),
+    FlashCard.fromRenderFns("5th", "perfect"),
+    FlashCard.fromRenderFns("6th", "imperfect"),
+    FlashCard.fromRenderFns("7th", "imperfect"),
+    FlashCard.fromRenderFns("8th", "perfect"),
   ];
 }

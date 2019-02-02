@@ -257,7 +257,7 @@ export function createFlashCardGroup(): FlashCardGroup {
             new Interval(genericIntervalNum, intervalQualityNum)
           );
           
-          return new FlashCard(
+          return FlashCard.fromRenderFns(
             rootNote.toString(false) + " " + direction + " " + interval,
             newPitch.toString(false)
           );

@@ -1,12 +1,72 @@
 import * as React from 'react';
 
 import * as Utils from "../Utils";
+import { Pitch } from 'src/Pitch';
+import { PitchLetter } from 'src/PitchLetter';
+
+export const STRING_COUNT = 6;
+
+export class GuitarTuning {
+  public constructor(public openStringPitches: Array<Pitch>) {
+    Utils.invariant(this.openStringPitches.length === STRING_COUNT);
+  }
+  public getNote(stringIndex: number, fretNumber: number): GuitarNote {
+    Utils.precondition((stringIndex >= 0) && (stringIndex < STRING_COUNT));
+
+    const pitch = Pitch.createFromMidiNumber(
+      this.openStringPitches[stringIndex].midiNumber + fretNumber
+    );
+    return new GuitarNote(pitch, stringIndex);
+  }
+}
+export const standardGuitarTuning = new GuitarTuning([
+  new Pitch(PitchLetter.E, 0, 2),
+  new Pitch(PitchLetter.A, 0, 2),
+  new Pitch(PitchLetter.D, 0, 3),
+  new Pitch(PitchLetter.G, 0, 3),
+  new Pitch(PitchLetter.B, 0, 3),
+  new Pitch(PitchLetter.E, 0, 4)
+]);
+
+export class GuitarNote {
+  public static allNotesOfPitches(
+    tuning: GuitarTuning,
+    pitches: Array<Pitch>,
+    maxFretNumber: number
+  ): Array<GuitarNote> {
+    Utils.precondition(maxFretNumber >= 0);
+
+    const fretNumbers = Utils.range(0, maxFretNumber);
+    return Utils.flattenArrays<GuitarNote>(
+      tuning.openStringPitches
+        .map((_, stringIndex) => fretNumbers
+          .map(fretNumber => new GuitarNote(
+            tuning.getNote(stringIndex, fretNumber).pitch,
+            stringIndex
+          ))
+          .filter(note => pitches.some(p => p.midiNumberNoOctave === note.pitch.midiNumberNoOctave))
+        )
+    );
+  }
+
+  public constructor(
+    public pitch: Pitch,
+    public stringIndex: number
+  ) {
+    Utils.invariant((stringIndex >= 0) && (stringIndex < STRING_COUNT));
+  }
+
+  // TODO: add tests
+  public getFretNumber(tuning: GuitarTuning): number {
+    const openStringPitch = tuning.openStringPitches[this.stringIndex];
+    return this.pitch.midiNumber - openStringPitch.midiNumber;
+  }
+}
 
 export interface IGuitarFretboardProps {
   width: number;
   height: number;
-  noteStringIndex: number,
-  noteFretNumber: number
+  pressedNotes: Array<GuitarNote>;
 }
 export class GuitarFretboard extends React.Component<IGuitarFretboardProps, {}> {
   public render(): JSX.Element {
@@ -44,12 +104,15 @@ export class GuitarFretboard extends React.Component<IGuitarFretboardProps, {}> 
         return <circle key={fretNumber} cx={x} cy={fretDotY} r={fretDotRadius} fill="black" strokeWidth="0" />;
       });
     
-    const highlightedNoteX = Math.max(
-      getFretSpaceCenterX(this.props.noteFretNumber),
-      nutWidth / 2
-    );
-    const highlightedNoteY = getStringY(this.props.noteStringIndex);
-    const highlightedNote = <circle cx={highlightedNoteX} cy={highlightedNoteY} r={fretDotRadius} fill="red" strokeWidth="0" />;
+    const noteHighlights = this.props.pressedNotes
+      .map((note, i) => {
+        const x = Math.max(
+          getFretSpaceCenterX(note.getFretNumber(standardGuitarTuning)),
+          nutWidth / 2
+        );
+        const y = getStringY(note.stringIndex);
+        return <circle key={i} cx={x} cy={y} r={fretDotRadius} fill="red" strokeWidth="0" />;
+      });
 
     return (
       <svg width={this.props.width} height={this.props.height} version="1.1" xmlns="http://www.w3.org/2000/svg">
@@ -57,7 +120,7 @@ export class GuitarFretboard extends React.Component<IGuitarFretboardProps, {}> 
         {strings}
         {frets}
         {fretDots}
-        {highlightedNote}
+        {noteHighlights}
       </svg>
     );
   }

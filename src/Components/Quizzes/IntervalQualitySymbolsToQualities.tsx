@@ -12,10 +12,10 @@ export function createFlashCardGroup(): FlashCardGroup {
 }
 export function createFlashCards(): FlashCard[] {
   return [
-    new FlashCard("m", "minor"),
-    new FlashCard("M", "major"),
-    new FlashCard("A", "augmented"),
-    new FlashCard("d", "diminished"),
-    new FlashCard("P", "perfect"),
+    FlashCard.fromRenderFns("m", "minor"),
+    FlashCard.fromRenderFns("M", "major"),
+    FlashCard.fromRenderFns("A", "augmented"),
+    FlashCard.fromRenderFns("d", "diminished"),
+    FlashCard.fromRenderFns("P", "perfect"),
   ];
 }

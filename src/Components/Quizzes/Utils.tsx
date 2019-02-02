@@ -30,7 +30,7 @@ export function renderStringAnswerSelect(
   flashCard: FlashCard,
   onAnswer: (answerDifficulty: AnswerDifficulty) => void
 ): JSX.Element {
-  const flashCardSide = flashCard.backSide;
+  const correctAnswer = flashCard.backSide.renderFn as string;
 
   return (
     <div>
@@ -38,7 +38,7 @@ export function renderStringAnswerSelect(
         <Button
           key={a}
           variant="contained"
-          onClick={_ => onAnswer((a === flashCardSide) ? AnswerDifficulty.Easy : AnswerDifficulty.Incorrect)}
+          onClick={_ => onAnswer((a === correctAnswer) ? AnswerDifficulty.Easy : AnswerDifficulty.Incorrect)}
           style={{ textTransform: "none" }}
         >
           {a}

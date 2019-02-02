@@ -12,14 +12,14 @@ export function createFlashCardGroup(): FlashCardGroup {
 }
 export function createFlashCards(): FlashCard[] {
   return [
-    new FlashCard("Maj7", "9, #11, 13"),
-    new FlashCard("m7", "9, 11, 13"),
-    new FlashCard("ø7", "9, 11, b13"),
-    new FlashCard("mMaj7", "9, 11, 13"),
-    new FlashCard("Maj+7", "9, #11"),
-    new FlashCard("o", "9, 11, b13, 7"),
-    new FlashCard("7", "b9, 9, #9, #11, b13, 13"),
-    new FlashCard("7sus", "b9, 9, #9, b11, b13, 13"),
-    new FlashCard("+7", "b9, 9, #9, #11, 13"),
+    FlashCard.fromRenderFns("Maj7", "9, #11, 13"),
+    FlashCard.fromRenderFns("m7", "9, 11, 13"),
+    FlashCard.fromRenderFns("ø7", "9, 11, b13"),
+    FlashCard.fromRenderFns("mMaj7", "9, 11, 13"),
+    FlashCard.fromRenderFns("Maj+7", "9, #11"),
+    FlashCard.fromRenderFns("o", "9, 11, b13, 7"),
+    FlashCard.fromRenderFns("7", "b9, 9, #9, #11, b13, 13"),
+    FlashCard.fromRenderFns("7sus", "b9, 9, #9, b11, b13, 13"),
+    FlashCard.fromRenderFns("+7", "b9, 9, #9, #11, 13"),
   ];
 }

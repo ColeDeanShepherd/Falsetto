@@ -15,30 +15,30 @@ export function createFlashCardGroup(): FlashCardGroup {
 
 export function createFlashCards(): FlashCard[] {
   return [
-    new FlashCard("power", "1 5"),
+    FlashCard.fromRenderFns("power", "1 5"),
 
-    new FlashCard("major", "1 3 5"),
-    new FlashCard("minor", "1 b3 5"),
-    new FlashCard("diminished", "1 b3 b5"),
-    new FlashCard("augmented", "1 3 #5"),
-    new FlashCard("sus2", "1 2 5"),
-    new FlashCard("sus4", "1 4 5"),
+    FlashCard.fromRenderFns("major", "1 3 5"),
+    FlashCard.fromRenderFns("minor", "1 b3 5"),
+    FlashCard.fromRenderFns("diminished", "1 b3 b5"),
+    FlashCard.fromRenderFns("augmented", "1 3 #5"),
+    FlashCard.fromRenderFns("sus2", "1 2 5"),
+    FlashCard.fromRenderFns("sus4", "1 4 5"),
     
-    new FlashCard("6", "1 3 5 6"),
-    new FlashCard("m6", "1 b3 5 6"),
+    FlashCard.fromRenderFns("6", "1 3 5 6"),
+    FlashCard.fromRenderFns("m6", "1 b3 5 6"),
     
-    new FlashCard("Maj7", "1 3 5 7"),
-    new FlashCard("7", "1 3 5 b7"),
-    new FlashCard("m7", "1 b3 5 b7"),
-    new FlashCard("mMaj7", "1 b3 5 7"),
-    new FlashCard("dim7", "1 b3 b5 bb7"),
-    new FlashCard("m7b5", "1 b3 b5 b7"),
-    new FlashCard("aug7", "1 3 #5 b7"),
-    new FlashCard("Maj7#5", "1 3 #5 7"),
+    FlashCard.fromRenderFns("Maj7", "1 3 5 7"),
+    FlashCard.fromRenderFns("7", "1 3 5 b7"),
+    FlashCard.fromRenderFns("m7", "1 b3 5 b7"),
+    FlashCard.fromRenderFns("mMaj7", "1 b3 5 7"),
+    FlashCard.fromRenderFns("dim7", "1 b3 b5 bb7"),
+    FlashCard.fromRenderFns("m7b5", "1 b3 b5 b7"),
+    FlashCard.fromRenderFns("aug7", "1 3 #5 b7"),
+    FlashCard.fromRenderFns("Maj7#5", "1 3 #5 7"),
 
-    new FlashCard("lydian", "1 #4 5"),
-    new FlashCard("sus4b5", "1 4 5b"),
-    new FlashCard("phrygian", "1 b2 5"),
-    new FlashCard("quartal", "1 4 b7")
+    FlashCard.fromRenderFns("lydian", "1 #4 5"),
+    FlashCard.fromRenderFns("sus4b5", "1 4 5b"),
+    FlashCard.fromRenderFns("phrygian", "1 b2 5"),
+    FlashCard.fromRenderFns("quartal", "1 4 b7")
   ];
 }

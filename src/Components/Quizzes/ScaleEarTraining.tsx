@@ -164,7 +164,7 @@ export function createFlashCardGroup(): FlashCardGroup {
       const iCopy = i;
       i++;
 
-      flashCards.push(new FlashCard(
+      flashCards.push(FlashCard.fromRenderFns(
         () => <FlashCardFrontSide key={iCopy} pitches={pitches} />,
         scale.type
       ));

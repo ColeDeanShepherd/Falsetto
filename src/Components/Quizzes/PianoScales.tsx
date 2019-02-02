@@ -3,7 +3,7 @@ import * as React from 'react';
 import * as Utils from "src/Utils";
 import { scales } from "src/Scale";
 import { PianoKeyboard } from '../PianoKeyboard';
-import { FlashCard } from 'src/FlashCard';
+import { FlashCard, FlashCardSide } from 'src/FlashCard';
 import { FlashCardGroup } from 'src/FlashCardGroup';
 import { AnswerDifficulty } from 'src/StudyAlgorithm';
 import { Pitch } from 'src/Pitch';
@@ -265,7 +265,7 @@ export class PianoScalesAnswerSelect extends React.Component<IPianoScalesAnswerS
 }
 
 export interface IPianoKeysAnswerSelectProps {
-  correctAnswer: string;
+  correctAnswer: Array<Pitch>;
   onAnswer: (answerDifficulty: AnswerDifficulty) => void;
 }
 export interface IPianoKeysAnswerSelectState {
@@ -312,6 +312,22 @@ export class PianoKeysAnswerSelect extends React.Component<IPianoKeysAnswerSelec
     this.setState({ selectedPitches: newSelectedPitches });
   }
   private confirmAnswer() {
+    const selectedPitchMidiNumbersNoOctave = Utils.uniq(
+      this.state.selectedPitches
+        .map(pitch => pitch.midiNumberNoOctave)
+    );
+    const correctAnswerMidiNumbersNoOctave = Utils.uniq(
+      this.props.correctAnswer
+        .map(pitch => pitch.midiNumberNoOctave)
+    );
+
+    const isCorrect = (selectedPitchMidiNumbersNoOctave.length === correctAnswerMidiNumbersNoOctave.length) &&
+      (selectedPitchMidiNumbersNoOctave.every(guess =>
+        correctAnswerMidiNumbersNoOctave.some(answer =>
+          guess === answer
+        )
+      ));
+    this.props.onAnswer(isCorrect ? AnswerDifficulty.Easy : AnswerDifficulty.Incorrect);
   }
 }
 
@@ -341,7 +357,7 @@ export function createFlashCardGroup(): FlashCardGroup {
   };
 
   const group = new FlashCardGroup("Piano Scales", flashCards);
-  group.enableInvertFlashCards = false;
+  group.enableInvertFlashCards = true;
   group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
   group.initialConfigData = initialConfigData;
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
@@ -360,15 +376,18 @@ export function createFlashCards(): FlashCard[] {
           .pitches;
 
         return new FlashCard(
-          () => (
-            <PianoKeyboard
-              width={400} height={100}
-              lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-              highestPitch={new Pitch(PitchLetter.B, 0, 5)}
-              pressedPitches={pitches}
-            />
+          new FlashCardSide(
+            () => (
+              <PianoKeyboard
+                width={400} height={100}
+                lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
+                highestPitch={new Pitch(PitchLetter.B, 0, 5)}
+                pressedPitches={pitches}
+              />
+            ),
+            pitches
           ),
-          rootPitchStr + " " + scale.type
+          new FlashCardSide(rootPitchStr + " " + scale.type)
         );
       })
     )
@@ -381,7 +400,12 @@ export function renderAnswerSelect(
   flashCard: FlashCard,
   onAnswer: (answerDifficulty: AnswerDifficulty) => void
 ) {
-  const correctAnswer = flashCard.backSide as string;
-  //return <PianoKeysAnswerSelect key={correctAnswer} correctAnswer={correctAnswer} onAnswer={onAnswer} />;
-  return <PianoScalesAnswerSelect key={correctAnswer} correctAnswer={correctAnswer} onAnswer={onAnswer} />;
+  if (!areFlashCardsInverted) {
+    const correctAnswer = flashCard.backSide.renderFn as string;
+    return <PianoScalesAnswerSelect key={correctAnswer} correctAnswer={correctAnswer} onAnswer={onAnswer} />;
+  } else {
+    const key = flashCard.frontSide.renderFn as string;
+    const correctAnswer = flashCard.backSide.data[0] as Array<Pitch>;
+    return <PianoKeysAnswerSelect key={key} correctAnswer={correctAnswer} onAnswer={onAnswer} />;
+  }
 }

@@ -77,7 +77,7 @@ export function createFlashCardGroup(): FlashCardGroup {
           const iCopy = i;
           i++;
           
-          return new FlashCard(
+          return FlashCard.fromRenderFns(
             () => <FlashCardFrontSide key={iCopy} pitch1={rootPitch} pitch2={newPitch} isHarmonicInterval={isHarmonicInterval} />,
             interval.toString()
           );

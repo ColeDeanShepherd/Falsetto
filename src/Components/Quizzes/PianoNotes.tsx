@@ -20,7 +20,7 @@ export function createFlashCardGroup(): FlashCardGroup {
 }
 export function createFlashCards(): FlashCard[] {
   return notes
-    .map((_, i) => new FlashCard(
+    .map((_, i) => FlashCard.fromRenderFns(
       () => (
         <PianoKeyboard
           width={200} height={100}

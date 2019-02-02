@@ -84,7 +84,7 @@ export class SheetMusicKeySignature extends React.Component<ISheetMusicKeySignat
 
 export function createFlashCardGroup(): FlashCardGroup {
   const flashCards = allowedPitches
-    .map((pitch, i) => new FlashCard(
+    .map((pitch, i) => FlashCard.fromRenderFns(
       () => <SheetMusicKeySignature
         width={300}
         height={200}

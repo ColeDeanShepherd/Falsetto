@@ -5,6 +5,7 @@ import { Pitch } from 'src/Pitch';
 import { Button, Card, CardContent, Typography } from '@material-ui/core';
 import { Chord } from 'src/Chord';
 import { PianoKeyboard } from './PianoKeyboard';
+import { GuitarFretboard, GuitarNote, standardGuitarTuning } from './GuitarFretboard';
 
 const validSharpKeyPitches = [
   null,
@@ -66,6 +67,12 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
       .map(pitch => pitch.toString(false));
     const pitchesString = pitchStrings.join(", ");
 
+    const guitarNotes = GuitarNote.allNotesOfPitches(
+      standardGuitarTuning,
+      pitches,
+      11
+    );
+
     return (
       <Card>
         <CardContent>
@@ -115,12 +122,21 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
               <p>{this.state.scale.formulaString}</p>
             </div>
 
-            <PianoKeyboard
-              width={400} height={100}
-              lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-              highestPitch={new Pitch(PitchLetter.B, 0, 5)}
-              pressedPitches={pitches}
-            />
+            <div>
+              <PianoKeyboard
+                width={400} height={100}
+                lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
+                highestPitch={new Pitch(PitchLetter.B, 0, 5)}
+                pressedPitches={pitches}
+              />
+            </div>
+
+            <div style={{marginTop: "1em"}}>
+              <GuitarFretboard
+                width={400} height={100}
+                pressedNotes={guitarNotes}
+              />
+            </div>
           </div>
         </CardContent>
       </Card>

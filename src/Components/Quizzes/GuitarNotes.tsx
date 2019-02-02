@@ -3,37 +3,20 @@ import { TextField, Button, Card, CardContent, Typography } from '@material-ui/c
 
 import * as Utils from '../../Utils';
 import * as FlashCardUtils from "./Utils";
-import { GuitarFretboard } from '../GuitarFretboard';
+import { GuitarFretboard, STRING_COUNT, GuitarNote, standardGuitarTuning } from '../GuitarFretboard';
 import { FlashCard } from '../../FlashCard';
 import { FlashCardGroup } from 'src/FlashCardGroup';
 import { StudyAlgorithm, LeitnerStudyAlgorithm, AnswerDifficulty } from 'src/StudyAlgorithm';
-
-const stringNotes = [
-  ["E", "F", "F#/Gb", "G", "G#/Ab", "A", "A#/Bb", "B", "C", "C#/Db", "D", "D#/Eb"], // low E string
-  ["A", "A#/Bb", "B", "C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb", "G", "G#/Ab"], // A string
-  ["D", "D#/Eb", "E", "F", "F#/Gb", "G", "G#/Ab", "A", "A#/Bb", "B", "C", "C#/Db"], // D string
-  ["G", "G#/Ab", "A", "A#/Bb", "B", "C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb"], // G string
-  ["B", "C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb", "G", "G#/Ab", "A", "A#/Bb"], // B string
-  ["E", "F", "F#/Gb", "G", "G#/Ab", "A", "A#/Bb", "B", "C", "C#/Db", "D", "D#/Eb"], // high E string
-];
-const allQuestions = Utils.flattenArrays<IQuestionId>(stringNotes
-  .map((notes, stringIndex) => notes
-    .map((_, fretNumber) => ({
-      stringIndex: stringIndex,
-      fretNumber: fretNumber
-    }))
-  )
-);
 
 interface IConfigData {
   maxFret: number
 };
 
 export function configDataToEnabledQuestionIds(configData: IConfigData): Array<number> {
-  const notesPerString = stringNotes[0].length;
+  const notesPerString = 12;
 
   const enabledFlashCardIndices = new Array<number>();
-  for (let stringIndex = 0; stringIndex < stringNotes.length; stringIndex++) {
+  for (let stringIndex = 0; stringIndex < STRING_COUNT; stringIndex++) {
     for (let fretNumber = 0; fretNumber <= configData.maxFret; fretNumber++) {
       enabledFlashCardIndices.push((notesPerString * stringIndex) + fretNumber);
     }
@@ -112,193 +95,25 @@ export function createFlashCardGroup(): FlashCardGroup {
 }
 
 export function createFlashCards(): FlashCard[] {
-  return Utils.flattenArrays(stringNotes
-    .map((notes, stringIndex) => notes
-      .map((_, fretNumber) => new FlashCard(
-        () => (
-          <GuitarFretboard
-            width={300} height={100}
-            noteStringIndex={stringIndex}
-            noteFretNumber={fretNumber}
-          />
-        ),
-        stringNotes[stringIndex][fretNumber]
-      ))
+  const MAX_FRET_NUMBER = 11;
+
+  return Utils.flattenArrays(Utils.range(0, STRING_COUNT - 1)
+    .map(stringIndex => Utils.range(0, MAX_FRET_NUMBER)
+      .map(fretNumber => {
+        const guitarNote = standardGuitarTuning.getNote(
+          stringIndex, fretNumber
+        );
+
+        return FlashCard.fromRenderFns(
+          () => (
+            <GuitarFretboard
+              width={300} height={100}
+              pressedNotes={[guitarNote]}
+            />
+          ),
+          guitarNote.pitch.toOneAccidentalAmbiguousString(false)
+        );
+      })
     )
   );
-}
-
-interface IQuestionId {
-  stringIndex: number;
-  fretNumber: number;
-};
-
-export interface IGuitarNotesProps {}
-export interface IGuitarNotesState {
-  maxFretNumber: number;
-  currentStringIndex: number;
-  currentFretNumber: number;
-  haveGottenCurrentFlashCardWrong: boolean;
-  isShowingAnswer: boolean;
-  isShowingConfiguration: boolean;
-}
-export class GuitarNotesComponent extends React.Component<IGuitarNotesProps, IGuitarNotesState> {
-  public constructor(props: IGuitarNotesProps) {
-    super(props);
-
-    this.studyAlgorithm.reset(allQuestions.map((_, i) => i));
-
-    const maxFretNumber = 11;
-    this.state = Object.assign({
-      maxFretNumber: maxFretNumber,
-      haveGottenCurrentFlashCardWrong: false,
-      isShowingAnswer: false,
-      isShowingConfiguration: false
-    }, this.getNextNote(maxFretNumber));
-
-  }
-  public render(): JSX.Element {
-    const answers = ["A", "A#/Bb", "B", "C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb", "G", "G#/Ab"];
-    const correctAnswer = stringNotes[this.state.currentStringIndex][this.state.currentFretNumber];
-
-    const flashCardContainerStyle: any = {
-      fontSize: "2em",
-      textAlign: "center",
-      padding: "1em 0",
-      height: "240px",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center"
-    };
-
-    return (
-      <Card>
-        <CardContent>
-          <Typography gutterBottom={true} variant="h5" component="h2">
-            Guitar Notes
-          </Typography>
-          
-          <Button variant="contained" onClick={event => this.toggleShowConfiguration()}>Configuration</Button>
-          {this.state.isShowingConfiguration ? (
-            <div>
-              <TextField
-                label="Max. Fret"
-                type="number"
-                value={this.state.maxFretNumber}
-                onChange={event => this.onMaxFretStringChange(event.target.value)}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                margin="normal"
-              />
-            </div>
-          ) : null}
-
-          <div
-            style={flashCardContainerStyle}
-          >
-            {!this.state.isShowingAnswer
-              ? (
-                <GuitarFretboard
-                  width={300} height={100}
-                  noteStringIndex={this.state.currentStringIndex}
-                  noteFretNumber={this.state.currentFretNumber}
-                />
-              ) : (
-                <span>{correctAnswer}</span>
-              )
-            }
-          </div>
-
-          <div style={{marginBottom: "1em"}}>
-            <Button
-              onClick={event => this.toggleShowAnswer()}
-              variant="contained"
-            >
-              Show {!this.state.isShowingAnswer ? "Answer" : "Question"}
-            </Button>
-            <Button
-              onClick={event => this.moveToNextQuestion()}
-              variant="contained"
-            >
-              Skip
-            </Button>
-          </div>
-
-          <div>
-            {answers.map(a => (
-              <Button
-                key={a}
-                variant="contained"
-                onClick={event => this.onAnswerSelected(a)}
-                style={{ textTransform: "none" }}
-              >
-                {a}
-              </Button>))}
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
-  
-  private studyAlgorithm: StudyAlgorithm = new LeitnerStudyAlgorithm(5);
-  
-  private getNextNote(maxFretNumber: number): { currentStringIndex: number, currentFretNumber: number } {
-    const nextQuestionId = this.studyAlgorithm.getNextQuestionId();
-    const nextQuestion = allQuestions[nextQuestionId];
-    return {
-      currentStringIndex: nextQuestion.stringIndex,
-      currentFretNumber: nextQuestion.fretNumber
-    };
-  }
-  private getEnabledQuestionIds(maxFretNumber: number): Array<number> {
-    return allQuestions
-      .filter(q => q.fretNumber <= maxFretNumber)
-      .map((_, i) => i);
-  }
-  private moveToNextQuestion() {
-    const newState = Object.assign(
-      {
-        isShowingAnswer: false, haveGottenCurrentFlashCardWrong: false
-      },
-      this.getNextNote(this.state.maxFretNumber)
-    );
-    this.setState(newState);
-  }
-  private toggleShowAnswer() {
-    const newValue = !this.state.isShowingAnswer;
-    this.setState({ isShowingAnswer: newValue });
-  }
-  private toggleShowConfiguration() {
-    this.setState({ isShowingConfiguration: !this.state.isShowingConfiguration });
-  }
-
-  // handlers
-  private onMaxFretStringChange(newValueString: string) {
-    const newMaxFretNumber = parseInt(newValueString, 10);
-    if (isNaN(newMaxFretNumber) || (newMaxFretNumber < 0) || (newMaxFretNumber > 11)) { return; }
-    
-    let newState = { maxFretNumber: newMaxFretNumber };
-
-    const isCurrentNoteValid = this.state.currentFretNumber <= newMaxFretNumber;
-    if (!isCurrentNoteValid) {
-      newState = Object.assign(newState, this.getNextNote(newMaxFretNumber));
-    }
-
-    this.setState(newState);
-  }
-  private onAnswerSelected(answer: string) {
-    const correctAnswer = stringNotes[this.state.currentStringIndex][this.state.currentFretNumber];
-    const isCorrect = answer === correctAnswer;
-
-    if (!this.state.haveGottenCurrentFlashCardWrong) {
-      this.studyAlgorithm.onAnswer(isCorrect ? AnswerDifficulty.Easy : AnswerDifficulty.Incorrect);
-    }
-
-    if (isCorrect) {
-      this.moveToNextQuestion();
-    } else {
-      this.setState({ haveGottenCurrentFlashCardWrong: true });
-    }
-  }
 }

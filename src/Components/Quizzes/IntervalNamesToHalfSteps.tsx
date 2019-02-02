@@ -13,18 +13,18 @@ export function createFlashCardGroup(): FlashCardGroup {
 
 export function createFlashCards(): FlashCard[] {
   return [
-    new FlashCard("Unison", "0"),
-    new FlashCard("m2", "1"),
-    new FlashCard("M2", "2"),
-    new FlashCard("m3", "3"),
-    new FlashCard("M3", "4"),
-    new FlashCard("P4", "5"),
-    new FlashCard("A4/d5", "6"),
-    new FlashCard("P5", "7"),
-    new FlashCard("m6", "8"),
-    new FlashCard("M6", "9"),
-    new FlashCard("m7", "10"),
-    new FlashCard("M7", "11"),
-    new FlashCard("P8", "12"),
+    FlashCard.fromRenderFns("Unison", "0"),
+    FlashCard.fromRenderFns("m2", "1"),
+    FlashCard.fromRenderFns("M2", "2"),
+    FlashCard.fromRenderFns("m3", "3"),
+    FlashCard.fromRenderFns("M3", "4"),
+    FlashCard.fromRenderFns("P4", "5"),
+    FlashCard.fromRenderFns("A4/d5", "6"),
+    FlashCard.fromRenderFns("P5", "7"),
+    FlashCard.fromRenderFns("m6", "8"),
+    FlashCard.fromRenderFns("M6", "9"),
+    FlashCard.fromRenderFns("m7", "10"),
+    FlashCard.fromRenderFns("M7", "11"),
+    FlashCard.fromRenderFns("P8", "12"),
   ];
 }

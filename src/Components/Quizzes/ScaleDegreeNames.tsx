@@ -13,13 +13,13 @@ export function createFlashCardGroup(): FlashCardGroup {
 
 export function createFlashCards(): FlashCard[] {
   return [
-    new FlashCard("1", "Tonic"),
-    new FlashCard("2", "Supertonic"),
-    new FlashCard("3", "Mediant"),
-    new FlashCard("4", "Subdominant"),
-    new FlashCard("5", "Dominant"),
-    new FlashCard("6", "Submediant"),
-    new FlashCard("7 (in major)", "Leading Tone"),
-    new FlashCard("7 (in minor)", "Subtonic"),
+    FlashCard.fromRenderFns("1", "Tonic"),
+    FlashCard.fromRenderFns("2", "Supertonic"),
+    FlashCard.fromRenderFns("3", "Mediant"),
+    FlashCard.fromRenderFns("4", "Subdominant"),
+    FlashCard.fromRenderFns("5", "Dominant"),
+    FlashCard.fromRenderFns("6", "Submediant"),
+    FlashCard.fromRenderFns("7 (in major)", "Leading Tone"),
+    FlashCard.fromRenderFns("7 (in minor)", "Subtonic"),
   ];
 }

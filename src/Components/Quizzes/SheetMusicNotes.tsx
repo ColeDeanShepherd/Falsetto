@@ -86,7 +86,7 @@ export function createFlashCards(): FlashCard[] {
       }
     }
 
-    return new FlashCard(
+    return FlashCard.fromRenderFns(
       () => (  
         <SheetMusicSingleNote
           width={150} height={200}
@@ -326,7 +326,7 @@ export class SheetMusicNotes extends React.Component<{}, ISheetMusicNotesState> 
     const currentNoteName = !this.state.trebleNotes[0].isRest()
       ? this.state.trebleNotes[0].getKeyProps()[0].key
       : this.state.bassNotes[0].getKeyProps()[0].key;
-    const flashCard = new FlashCard(
+    const flashCard = FlashCard.fromRenderFns(
       () => (
         <SheetMusicSingleNote
           width={300} height={200}

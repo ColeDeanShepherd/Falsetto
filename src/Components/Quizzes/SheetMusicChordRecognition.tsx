@@ -245,7 +245,7 @@ export function createFlashCardGroup(): FlashCardGroup {
       const pitches = Chord.fromPitchAndFormulaString(rootPitch, chord.formulaString)
         .pitches;
 
-      flashCards.push(new FlashCard(
+      flashCards.push(FlashCard.fromRenderFns(
         () => (
           <div>
             <SheetMusicChord
