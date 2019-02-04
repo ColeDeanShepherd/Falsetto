@@ -3,7 +3,7 @@ import { Button } from '@material-ui/core';
 
 import * as Utils from "src/Utils";
 import { FlashCard } from 'src/FlashCard';
-import { renderFlashCardSide } from "src/Components/FlashCard";
+import { renderFlashCardSide, callFlashCardSideRenderFn } from "src/Components/FlashCard";
 import { AnswerDifficulty } from 'src/StudyAlgorithm';
 
 export function renderNoteAnswerSelect(
@@ -53,23 +53,23 @@ export function renderDistinctFlashCardSideAnswerSelect(
   flashCard: FlashCard,
   onAnswer: (answerDifficulty: AnswerDifficulty) => void
 ) {
-  const distinctFlashCardSides = Utils.uniq(
+  const distinctFlashCardSideRenderFns = Utils.uniq(
     flashCards
       .filter((_, i) => Utils.arrayContains(enabledFlashCardIndices, i))
-      .map(fc => fc.backSide)
+      .map(fc => fc.backSide.renderFn)
   );
-  const flashCardSide = flashCard.backSide;
+  const flashCardSideRenderFn = flashCard.backSide.renderFn;
 
   return (
     <div>
-      {distinctFlashCardSides.map((fcs, i) => (
+      {distinctFlashCardSideRenderFns.map((fcs, i) => (
         <Button
           key={i}
           variant="contained"
-          onClick={_ => onAnswer((fcs === flashCardSide) ? AnswerDifficulty.Easy : AnswerDifficulty.Incorrect)}
+          onClick={_ => onAnswer((fcs === flashCardSideRenderFn) ? AnswerDifficulty.Easy : AnswerDifficulty.Incorrect)}
           style={{ textTransform: "none" }}
         >
-          {renderFlashCardSide(fcs)}
+          {callFlashCardSideRenderFn(fcs)}
         </Button>))}
     </div>
   );
