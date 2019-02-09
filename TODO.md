@@ -4,7 +4,7 @@
   * Add intervals exercise
   * Add chords exercise
   * Add scales exercise (piano done)
-* Add guitar to scale viewer.
+* Enable inversion on guitar scale viewer.
 ## Medium Priority
 * Make sequential sounds cut each other off?
 * Post to musictheory subreddit.

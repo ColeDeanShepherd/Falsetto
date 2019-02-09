@@ -27,6 +27,7 @@ import * as RandomChordGenerator from "./RandomChordGenerator";
 import * as GuitarNotes from "./Quizzes/GuitarNotes";
 import * as PianoNotes from "./Quizzes/PianoNotes";
 import * as PianoScales from "./Quizzes/PianoScales";
+import * as GuitarScales from "./Quizzes/GuitarScales";
 import * as SheetMusicNotes from "./Quizzes/SheetMusicNotes";
 import * as NoteDurations from "./Quizzes/NoteDurations";
 import * as KeyAccidentalCounts from "./Quizzes/KeyAccidentalCounts";
@@ -91,6 +92,7 @@ class App extends React.Component<{}, IAppState> {
           ScaleDegreeNames.createFlashCardGroup(),
           ScaleNotes.createFlashCardGroup(),
           PianoScales.createFlashCardGroup(),
+          GuitarScales.createFlashCardGroup(),
           ScaleDegreeModes.createFlashCardGroup(),
           ScaleChords.createFlashCardGroup(),
           ScaleFamilies.createFlashCardGroup(),
@@ -183,6 +185,7 @@ class App extends React.Component<{}, IAppState> {
                     {renderFlashCardGroupLink(ScaleDegreeNames.createFlashCardGroup())}
                     {renderFlashCardGroupLink(ScaleNotes.createFlashCardGroup())}
                     {renderFlashCardGroupLink(PianoScales.createFlashCardGroup())}
+                    {renderFlashCardGroupLink(GuitarScales.createFlashCardGroup())}
                     {renderFlashCardGroupLink(ScaleDegreeModes.createFlashCardGroup())}
                     {renderFlashCardGroupLink(ScaleChords.createFlashCardGroup())}
                     {renderFlashCardGroupLink(ScaleEarTraining.createFlashCardGroup())}

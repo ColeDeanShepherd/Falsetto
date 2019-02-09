@@ -63,56 +63,87 @@ export class GuitarNote {
   }
 }
 
+export class GuitarFretboardMetrics {
+  public constructor(
+    public width: number,
+    public height: number
+  ) {
+    this.stringSpacing = (this.height - this.stringWidth) / (this.stringCount - 1);
+    this.fretSpacing = (this.width - this.nutWidth) / this.fretCount;
+    
+    this.nutX = this.nutWidth / 2;
+
+    this.stringsLeft = this.nutWidth;
+
+    this.fretDotRadius = this.fretSpacing / 4;
+    this.fretDotY = this.height / 2;
+  }
+
+  public stringCount: number = 6;
+  public fretCount: number = 11;
+  public nutWidth: number = 8;
+  public stringWidth: number = 4;
+  public fretWidth: number = 4;
+
+  public stringSpacing: number;
+  public fretSpacing: number;
+
+  public nutX: number;
+
+  public stringsLeft: number;
+
+  public fretDotRadius: number;
+  public fretDotY: number;
+
+  public getStringY(stringIndex: number): number {
+    return this.height - (this.stringWidth / 2) - (stringIndex * this.stringSpacing);
+  }
+  public getFretSpaceCenterX(fretNumber: number): number {
+    return this.stringsLeft + ((fretNumber - 1) * this.fretSpacing) + (this.fretSpacing / 2);
+  }
+  public getNoteX(fretNumber: number) {
+    return Math.max(
+      this.getFretSpaceCenterX(fretNumber),
+      this.nutWidth / 2
+    );
+  }
+}
+
 export interface IGuitarFretboardProps {
   width: number;
   height: number;
   pressedNotes: Array<GuitarNote>;
+  renderExtrasFn?: (metrics: GuitarFretboardMetrics) => JSX.Element;
 }
 export class GuitarFretboard extends React.Component<IGuitarFretboardProps, {}> {
   public render(): JSX.Element {
-    const stringCount = 6;
-    const fretCount = 11;
-    const nutWidth = 8;
-    const stringWidth = 4;
-    const fretWidth = 4;
-    const stringSpacing = (this.props.height - stringWidth) / (stringCount - 1);
-    const fretSpacing = (this.props.width - nutWidth) / fretCount;
+    const metrics = new GuitarFretboardMetrics(this.props.width, this.props.height);
 
-    const nutX = nutWidth / 2;
-    const nut = <line x1={nutX} x2={nutX} y1={0} y2={this.props.height} stroke="black" strokeWidth={nutWidth} />;
-
-    const getStringY = (stringIndex: number) => this.props.height - (stringWidth / 2) - (stringIndex * stringSpacing);
-    const stringsLeft = nutWidth;
-    const strings = Utils.range(0, stringCount - 1)
+    const nut = <line x1={metrics.nutX} x2={metrics.nutX} y1={0} y2={this.props.height} stroke="black" strokeWidth={metrics.nutWidth} />;
+    const strings = Utils.range(0, metrics.stringCount - 1)
       .map(i => {
-        const y = getStringY(i);
-        return <line key={i} x1={stringsLeft} x2={this.props.width} y1={y} y2={y} stroke="black" strokeWidth={stringWidth} />;
+        const y = metrics.getStringY(i);
+        return <line key={i} x1={metrics.stringsLeft} x2={this.props.width} y1={y} y2={y} stroke="black" strokeWidth={metrics.stringWidth} />;
       });
-    
-    const frets = Utils.range(1, fretCount)
+    const frets = Utils.range(1, metrics.fretCount)
       .map(i => {
-        const x = stringsLeft + (i * fretSpacing);
-        return <line key={i} x1={x} x2={x} y1={0} y2={this.props.height} stroke="black" strokeWidth={fretWidth} />;
+        const x = metrics.stringsLeft + (i * metrics.fretSpacing);
+        return <line key={i} x1={x} x2={x} y1={0} y2={this.props.height} stroke="black" strokeWidth={metrics.fretWidth} />;
       });
-    
-    const getFretSpaceCenterX = (fretNumber: number) => stringsLeft + ((fretNumber - 1) * fretSpacing) + (fretSpacing / 2);
-    const fretDotRadius = fretSpacing / 4;
-    const fretDotY = this.props.height / 2;
     const fretDots = this.dottedFretNumbers
       .map(fretNumber => {
-        const x = getFretSpaceCenterX(fretNumber);
-        return <circle key={fretNumber} cx={x} cy={fretDotY} r={fretDotRadius} fill="black" strokeWidth="0" />;
+        const x = metrics.getFretSpaceCenterX(fretNumber);
+        return <circle key={fretNumber} cx={x} cy={metrics.fretDotY} r={metrics.fretDotRadius} fill="black" strokeWidth="0" />;
       });
-    
     const noteHighlights = this.props.pressedNotes
       .map((note, i) => {
-        const x = Math.max(
-          getFretSpaceCenterX(note.getFretNumber(standardGuitarTuning)),
-          nutWidth / 2
-        );
-        const y = getStringY(note.stringIndex);
-        return <circle key={i} cx={x} cy={y} r={fretDotRadius} fill="red" strokeWidth="0" />;
+        const x = metrics.getNoteX(note.getFretNumber(standardGuitarTuning));
+        const y = metrics.getStringY(note.stringIndex);
+        return <circle key={i} cx={x} cy={y} r={metrics.fretDotRadius} fill="red" strokeWidth="0" />;
       });
+    const extraElements = this.props.renderExtrasFn
+      ? this.props.renderExtrasFn(metrics)
+      : null;
 
     return (
       <svg width={this.props.width} height={this.props.height} version="1.1" xmlns="http://www.w3.org/2000/svg">
@@ -121,6 +152,7 @@ export class GuitarFretboard extends React.Component<IGuitarFretboardProps, {}> 
         {frets}
         {fretDots}
         {noteHighlights}
+        {extraElements}
       </svg>
     );
   }
