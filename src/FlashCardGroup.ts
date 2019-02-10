@@ -1,5 +1,5 @@
 import { FlashCard } from "./FlashCard";
-import { AnswerDifficulty } from './StudyAlgorithm';
+import { AnswerDifficulty, StudyAlgorithm } from './StudyAlgorithm';
 
 export class FlashCardGroup {
   public initialSelectedFlashCardIndices: number[] | undefined;
@@ -18,6 +18,7 @@ export class FlashCardGroup {
   ) => JSX.Element;
   public enableInvertFlashCards: boolean = true;
   public moreInfoUri: string;
+  public customNextFlashCardIdFilter?: (studyAlgorithm: StudyAlgorithm, enabledFlashCardIds: number[]) => number[];
 
   public get route(): string {
     return "/" + this.name.toLowerCase().replace(/( )|(\/)|(\\)/g, "-");

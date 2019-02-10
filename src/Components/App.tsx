@@ -37,6 +37,7 @@ import * as Interval2ndNotes from "./Quizzes/Interval2ndNotes";
 import * as IntervalNotes from "./Quizzes/IntervalNotes";
 import * as IntervalEarTraining from "./Quizzes/IntervalEarTraining";
 import * as Interval2ndNoteEarTraining from "./Quizzes/Interval2ndNoteEarTraining";
+import * as Interval2ndNoteEarTrainingPiano from "./Quizzes/Interval2ndNoteEarTrainingPiano";
 import * as SheetMusicIntervalRecognition from "./Quizzes/SheetMusicIntervalRecognition";
 import * as SheetMusicChordRecognition from "./Quizzes/SheetMusicChordRecognition";
 import * as ChordEarTraining from "./Quizzes/ChordEarTraining";
@@ -84,6 +85,7 @@ class App extends React.Component<{}, IAppState> {
           SheetMusicIntervalRecognition.createFlashCardGroup(),
           IntervalEarTraining.createFlashCardGroup(),
           Interval2ndNoteEarTraining.createFlashCardGroup(),
+          Interval2ndNoteEarTrainingPiano.createFlashCardGroup()
         ]
       },
       {
@@ -179,6 +181,7 @@ class App extends React.Component<{}, IAppState> {
                     {renderFlashCardGroupLink(SheetMusicIntervalRecognition.createFlashCardGroup())}
                     {renderFlashCardGroupLink(IntervalEarTraining.createFlashCardGroup())}
                     {renderFlashCardGroupLink(Interval2ndNoteEarTraining.createFlashCardGroup())}
+                    {renderFlashCardGroupLink(Interval2ndNoteEarTrainingPiano.createFlashCardGroup())}
                   </div>
                   <div>
                     <p>Scales</p>
@@ -241,15 +244,17 @@ class App extends React.Component<{}, IAppState> {
     return () => (
       <DocumentTitle title={currentFlashCardGroup.name + " - Falsetto"}>
         <StudyFlashCards
-        key={currentFlashCardGroup.route}
-        title={currentFlashCardGroup.name}
-        flashCards={currentFlashCardGroup.flashCards}
-        initialSelectedFlashCardIndices={currentFlashCardGroup.initialSelectedFlashCardIndices}
-        initialConfigData={currentFlashCardGroup.initialConfigData}
-        renderFlashCardMultiSelect={currentFlashCardGroup.renderFlashCardMultiSelect}
-        renderAnswerSelect={currentFlashCardGroup.renderAnswerSelect}
-        moreInfoUri={currentFlashCardGroup.moreInfoUri}
-        enableInvertFlashCards={currentFlashCardGroup.enableInvertFlashCards} />
+          key={currentFlashCardGroup.route}
+          title={currentFlashCardGroup.name}
+          flashCards={currentFlashCardGroup.flashCards}
+          initialSelectedFlashCardIndices={currentFlashCardGroup.initialSelectedFlashCardIndices}
+          initialConfigData={currentFlashCardGroup.initialConfigData}
+          renderFlashCardMultiSelect={currentFlashCardGroup.renderFlashCardMultiSelect}
+          renderAnswerSelect={currentFlashCardGroup.renderAnswerSelect}
+          moreInfoUri={currentFlashCardGroup.moreInfoUri}
+          enableInvertFlashCards={currentFlashCardGroup.enableInvertFlashCards}
+          customNextFlashCardIdFilter={currentFlashCardGroup.customNextFlashCardIdFilter}
+        />
       </DocumentTitle>
     );
   }

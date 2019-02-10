@@ -9,6 +9,7 @@
 * Make sequential sounds cut each other off?
 * Post to musictheory subreddit.
 * Stop sending anaytics events in test.
+* Make note highlights clickable
 ## Low Priority
 * Change "Flip to back" terminology?
 * Use actual flat symbols instead of 'b'

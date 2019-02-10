@@ -10,6 +10,7 @@ import { Pitch } from 'src/Pitch';
 import { PitchLetter } from 'src/PitchLetter';
 import { TableRow, TableCell, Table, TableHead, TableBody, Grid, Checkbox, Button, Typography } from '@material-ui/core';
 import { Chord } from 'src/Chord';
+import { PianoKeysAnswerSelect } from "src/Components/PianoKeysAnswerSelect";
 
 const rootPitchStrs = ["Ab", "A", "Bb", "B/Cb", "C", "C#/Db", "D", "Eb", "E", "F", "F#/Gb", "G"];
 
@@ -260,73 +261,6 @@ export class PianoScalesAnswerSelect extends React.Component<IPianoScalesAnswerS
   private confirmAnswer() {
     const selectedAnswer = this.state.selectedRootPitch + " " + this.state.selectedScaleType;
     const isCorrect = selectedAnswer === this.props.correctAnswer;
-    this.props.onAnswer(isCorrect ? AnswerDifficulty.Easy : AnswerDifficulty.Incorrect);
-  }
-}
-
-export interface IPianoKeysAnswerSelectProps {
-  correctAnswer: Array<Pitch>;
-  onAnswer: (answerDifficulty: AnswerDifficulty) => void;
-}
-export interface IPianoKeysAnswerSelectState {
-  selectedPitches: Array<Pitch>;
-}
-export class PianoKeysAnswerSelect extends React.Component<IPianoKeysAnswerSelectProps, IPianoKeysAnswerSelectState> {
-  public constructor(props: IPianoKeysAnswerSelectProps) {
-    super(props);
-    
-    this.state = {
-      selectedPitches: []
-    };
-  }
-  public render(): JSX.Element {
-    return (
-      <div>
-        <PianoKeyboard
-          width={400} height={100}
-          lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-          highestPitch={new Pitch(PitchLetter.B, 0, 5)}
-          pressedPitches={this.state.selectedPitches}
-          onKeyPress={pitch => this.onPitchClick(pitch)}
-        />
-        
-        <div style={{padding: "1em 0"}}>
-          <Button
-            onClick={event => this.confirmAnswer()}
-            disabled={this.state.selectedPitches.length === 0}
-            variant="contained"
-          >
-            Confirm Answer
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
-  private onPitchClick(pitch: Pitch) {
-    const newSelectedPitches = Utils.toggleArrayElementCustomEquals(
-      this.state.selectedPitches,
-      pitch,
-      (p1, p2) => p1.equals(p2)
-    );
-    this.setState({ selectedPitches: newSelectedPitches });
-  }
-  private confirmAnswer() {
-    const selectedPitchMidiNumbersNoOctave = Utils.uniq(
-      this.state.selectedPitches
-        .map(pitch => pitch.midiNumberNoOctave)
-    );
-    const correctAnswerMidiNumbersNoOctave = Utils.uniq(
-      this.props.correctAnswer
-        .map(pitch => pitch.midiNumberNoOctave)
-    );
-
-    const isCorrect = (selectedPitchMidiNumbersNoOctave.length === correctAnswerMidiNumbersNoOctave.length) &&
-      (selectedPitchMidiNumbersNoOctave.every(guess =>
-        correctAnswerMidiNumbersNoOctave.some(answer =>
-          guess === answer
-        )
-      ));
     this.props.onAnswer(isCorrect ? AnswerDifficulty.Easy : AnswerDifficulty.Incorrect);
   }
 }

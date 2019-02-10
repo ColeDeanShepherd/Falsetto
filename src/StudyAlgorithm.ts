@@ -24,6 +24,8 @@ export function isAnswerDifficultyCorrect(answerDifficulty: AnswerDifficulty): b
 
 export abstract class StudyAlgorithm {
   public enabledQuestionIds: number[];
+  public customNextQuestionIdFilter?: (studyAlgorithm: StudyAlgorithm, enabledQuestionIds: number[]) => number[];
+
   public get currentQuestionId(): number | undefined {
     return this._currentQuestionId;
   }
@@ -54,7 +56,17 @@ export abstract class StudyAlgorithm {
       questionStats.numIncorrectGuesses++;
     }
   }
-  public abstract getNextQuestionId(): number;
+  public getNextQuestionId(): number {
+    const enabledQuestionIds = this.customNextQuestionIdFilter
+      ? this.customNextQuestionIdFilter(this, this.enabledQuestionIds)
+      : this.enabledQuestionIds;
+      
+    Utils.assert(enabledQuestionIds.length > 0);
+
+    return this.getNextQuestionIdInternal(enabledQuestionIds);
+  }
+
+  protected abstract getNextQuestionIdInternal(enabledQuestionIds: number[]): number;
 
   protected questionIds: number[];
   protected _currentQuestionId: number | undefined;
@@ -65,11 +77,9 @@ export class RandomStudyAlgorithm extends StudyAlgorithm {
   public onAnswer(answerDifficulty: AnswerDifficulty) {
     super.onAnswer(answerDifficulty);
   }
-  public getNextQuestionId(): number {
-    Utils.precondition(this.enabledQuestionIds.length > 0);
-
-    if (this.enabledQuestionIds.length === 1) {
-      const questionId = this.enabledQuestionIds[0];
+  public getNextQuestionIdInternal(enabledQuestionIds: number[]): number {
+    if (enabledQuestionIds.length === 1) {
+      const questionId = enabledQuestionIds[0];
 
       this._currentQuestionId = questionId;
       return questionId;
@@ -77,7 +87,7 @@ export class RandomStudyAlgorithm extends StudyAlgorithm {
     
     let nextQuestionId: number;
     do {
-      nextQuestionId = Utils.randomElement(this.enabledQuestionIds);
+      nextQuestionId = Utils.randomElement(enabledQuestionIds);
     } while(nextQuestionId === this._currentQuestionId);
 
     this._currentQuestionId = nextQuestionId;
@@ -123,11 +133,9 @@ export class LeitnerStudyAlgorithm extends StudyAlgorithm {
       this.tieredQuestionIds[newTierIndex].push(this.currentQuestionId as number);
     }
   }
-  public getNextQuestionId(): number {
-    Utils.precondition(this.enabledQuestionIds.length > 0);
-
-    if (this.enabledQuestionIds.length === 1) {
-      const questionId = this.enabledQuestionIds[0];
+  public getNextQuestionIdInternal(enabledQuestionIds: number[]): number {
+    if (enabledQuestionIds.length === 1) {
+      const questionId = enabledQuestionIds[0];
 
       this._currentQuestionId = questionId;
       return questionId;
@@ -135,7 +143,7 @@ export class LeitnerStudyAlgorithm extends StudyAlgorithm {
 
     const tierIndex = this.getLowestTierWithNewEnabledQuestion();
     const enabledQuestionIdsInTier = this.tieredQuestionIds[tierIndex]
-      .filter(id => Utils.arrayContains(this.enabledQuestionIds, id));
+      .filter(id => Utils.arrayContains(enabledQuestionIds, id));
 
     let nextQuestionId: number;
     do {

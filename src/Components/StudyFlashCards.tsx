@@ -28,6 +28,7 @@ export interface IStudyFlashCardsProps {
   ) => JSX.Element;
   enableInvertFlashCards?: boolean;
   moreInfoUri?: string;
+  customNextFlashCardIdFilter?: (studyAlgorithm: StudyAlgorithm, enabledFlashCardIds: number[]) => number[];
 }
 export interface IStudyFlashCardsState {
   currentFlashCardIndex: number;
@@ -47,6 +48,8 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
     if (this.props.initialConfigData && !this.props.initialSelectedFlashCardIndices) {
       Utils.assert(false);
     }
+
+    this.studyAlgorithm.customNextQuestionIdFilter = this.props.customNextFlashCardIdFilter;
 
     this.state = Object.assign(
       {
