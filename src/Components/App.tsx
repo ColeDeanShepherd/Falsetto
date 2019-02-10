@@ -39,6 +39,7 @@ import * as IntervalEarTraining from "./Quizzes/IntervalEarTraining";
 import * as Interval2ndNoteEarTraining from "./Quizzes/Interval2ndNoteEarTraining";
 import * as Interval2ndNoteEarTrainingPiano from "./Quizzes/Interval2ndNoteEarTrainingPiano";
 import * as SheetMusicIntervalRecognition from "./Quizzes/SheetMusicIntervalRecognition";
+import * as PianoIntervals from "./Quizzes/PianoIntervals";
 import * as SheetMusicChordRecognition from "./Quizzes/SheetMusicChordRecognition";
 import * as ChordEarTraining from "./Quizzes/ChordEarTraining";
 import * as ScaleEarTraining from "./Quizzes/ScaleEarTraining";
@@ -83,6 +84,7 @@ class App extends React.Component<{}, IAppState> {
           Interval2ndNotes.createFlashCardGroup(),
           IntervalNotes.createFlashCardGroup(),
           SheetMusicIntervalRecognition.createFlashCardGroup(),
+          PianoIntervals.createFlashCardGroup(),
           IntervalEarTraining.createFlashCardGroup(),
           Interval2ndNoteEarTraining.createFlashCardGroup(),
           Interval2ndNoteEarTrainingPiano.createFlashCardGroup()
@@ -179,6 +181,7 @@ class App extends React.Component<{}, IAppState> {
                     {renderFlashCardGroupLink(Interval2ndNotes.createFlashCardGroup())}
                     {renderFlashCardGroupLink(IntervalNotes.createFlashCardGroup())}
                     {renderFlashCardGroupLink(SheetMusicIntervalRecognition.createFlashCardGroup())}
+                    {renderFlashCardGroupLink(PianoIntervals.createFlashCardGroup())}
                     {renderFlashCardGroupLink(IntervalEarTraining.createFlashCardGroup())}
                     {renderFlashCardGroupLink(Interval2ndNoteEarTraining.createFlashCardGroup())}
                     {renderFlashCardGroupLink(Interval2ndNoteEarTrainingPiano.createFlashCardGroup())}

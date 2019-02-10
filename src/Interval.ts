@@ -1,44 +1,21 @@
 import * as Utils from "./Utils";
 
 export class Interval {
+  public static getSimpleIntervalType(intervalType: number): number {
+    return 1 + Utils.mod((intervalType - 1), 7);
+  }
+
   public constructor(public type: number, public quality: number) {
     Utils.invariant(Number.isInteger(type) && (type > 0));
     Utils.invariant(Number.isInteger(quality));
   }
 
   public get simpleIntervalType(): number {
-    return 1 + Utils.mod((this.type - 1), 7);
+    return Interval.getSimpleIntervalType(this.type);
   }
   public get halfSteps(): number {
     const octaveCount = Math.floor(this.type / 8);
-    const simpleIntervalType = 1 + Utils.mod((this.type - 1), 7);
-
-    let simpleIntervalHalfSteps: number;
-    switch (simpleIntervalType) {
-      case 1:
-        simpleIntervalHalfSteps = 0;
-        break;
-      case 2:
-        simpleIntervalHalfSteps = 2;
-        break;
-      case 3:
-        simpleIntervalHalfSteps = 4;
-        break;
-      case 4:
-        simpleIntervalHalfSteps = 5;
-        break;
-      case 5:
-        simpleIntervalHalfSteps = 7;
-        break;
-      case 6:
-        simpleIntervalHalfSteps = 9;
-        break;
-      case 7:
-        simpleIntervalHalfSteps = 11;
-        break;
-      default:
-        throw new Error(`Invalid simple interval type: ${simpleIntervalType}`);
-    }
+    const simpleIntervalHalfSteps = Interval.getSimpleIntervalTypeHalfSteps(this.simpleIntervalType);
 
     return (12 * octaveCount) + simpleIntervalHalfSteps + this.quality;
   }
@@ -72,6 +49,29 @@ export class Interval {
 
   public toString(): string {
     return `${this.qualityString}${this.type}`;
+  }
+
+  private static getSimpleIntervalTypeHalfSteps(simpleIntervalType: number): number {
+    Utils.precondition((simpleIntervalType >= 1) && (simpleIntervalType <= 7));
+
+    switch (simpleIntervalType) {
+      case 1:
+        return 0;
+      case 2:
+        return 2;
+      case 3:
+        return 4;
+      case 4:
+        return 5;
+      case 5:
+        return 7;
+      case 6:
+        return 9;
+      case 7:
+        return 11;
+      default:
+        throw new Error(`Invalid simple interval type: ${simpleIntervalType}`);
+    }
   }
 }
 

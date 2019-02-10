@@ -116,13 +116,12 @@ export class Pitch {
     }
 
     const intervalType = higherPitch.lineOrSpaceOnStaffNumber - lowerPitch.lineOrSpaceOnStaffNumber + 1;
-    const guessedPitch = Pitch.createFromLineOrSpaceOnStaffNumber(
-      lowerPitch.lineOrSpaceOnStaffNumber + intervalType - 1,
-      lowerPitch.signedAccidental
-    );
-    const higherPitchOffsetFromGuessedPitch = higherPitch.midiNumber - guessedPitch.midiNumber;
+    const interval = new Interval(intervalType, 0);
 
-    return new Interval(intervalType, higherPitchOffsetFromGuessedPitch);
+    const halfSteps = (higherPitch.midiNumber - lowerPitch.midiNumber);
+    interval.quality = halfSteps - interval.halfSteps;
+    
+    return interval;
   }
   public static addInterval(
     pitch: Pitch,
