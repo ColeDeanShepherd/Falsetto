@@ -5,7 +5,7 @@ import { Pitch } from 'src/Pitch';
 import { Button, Card, CardContent, Typography } from '@material-ui/core';
 import { Chord } from 'src/Chord';
 import { PianoKeyboard } from './PianoKeyboard';
-import { GuitarFretboard, GuitarNote, standardGuitarTuning } from './GuitarFretboard';
+import { GuitarFretboard, GuitarNote, standardGuitarTuning, GuitarFretboardMetrics } from './GuitarFretboard';
 
 const validSharpKeyPitches = [
   null,
@@ -73,6 +73,23 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
       11
     );
 
+    const renderExtras = (metrics: GuitarFretboardMetrics) => {
+      const rootPitchGuitarNotes = GuitarNote.allNotesOfPitches(
+        standardGuitarTuning,
+        [this.state.rootPitch],
+        11
+      );
+
+      const rootPitchFretDots = rootPitchGuitarNotes
+        .map((guitarNote, noteIndex) => {
+          const x = metrics.getNoteX(guitarNote.getFretNumber(standardGuitarTuning));
+          const y = metrics.getStringY(guitarNote.stringIndex);
+          return <circle key={noteIndex} cx={x} cy={y} r={metrics.fretDotRadius} fill="green" strokeWidth="0" />;
+        });
+      
+      return <g>{rootPitchFretDots}</g>;
+    };
+
     return (
       <Card>
         <CardContent>
@@ -135,6 +152,7 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
               <GuitarFretboard
                 width={400} height={100}
                 pressedNotes={guitarNotes}
+                renderExtrasFn={renderExtras}
               />
             </div>
           </div>

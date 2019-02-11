@@ -27,7 +27,9 @@ import * as RandomChordGenerator from "./RandomChordGenerator";
 import * as GuitarNotes from "./Quizzes/GuitarNotes";
 import * as PianoNotes from "./Quizzes/PianoNotes";
 import * as PianoScales from "./Quizzes/PianoScales";
+import * as PianoChords from "./Quizzes/PianoChords";
 import * as GuitarScales from "./Quizzes/GuitarScales";
+import * as GuitarChords from "./Quizzes/GuitarChords";
 import * as SheetMusicNotes from "./Quizzes/SheetMusicNotes";
 import * as NoteDurations from "./Quizzes/NoteDurations";
 import * as KeyAccidentalCounts from "./Quizzes/KeyAccidentalCounts";
@@ -122,6 +124,8 @@ class App extends React.Component<{}, IAppState> {
           DiatonicTriads.createFlashCardGroup(),
           DiatonicSeventhChords.createFlashCardGroup(),
           SheetMusicChordRecognition.createFlashCardGroup(),
+          PianoChords.createFlashCardGroup(),
+          GuitarChords.createFlashCardGroup(),
           ChordEarTraining.createFlashCardGroup(),
           RandomChordGenerator.createFlashCardGroup()
         ]
@@ -211,6 +215,8 @@ class App extends React.Component<{}, IAppState> {
                     {renderFlashCardGroupLink(DiatonicTriads.createFlashCardGroup())}
                     {renderFlashCardGroupLink(DiatonicSeventhChords.createFlashCardGroup())}
                     {renderFlashCardGroupLink(SheetMusicChordRecognition.createFlashCardGroup())}
+                    {renderFlashCardGroupLink(PianoChords.createFlashCardGroup())}
+                    {renderFlashCardGroupLink(GuitarChords.createFlashCardGroup())}
                     {renderFlashCardGroupLink(ChordEarTraining.createFlashCardGroup())}
                     {renderFlashCardGroupLink(RandomChordGenerator.createFlashCardGroup())}
                     <NavLink to="chord-viewer" className="nav-link">Chord Viewer</NavLink>

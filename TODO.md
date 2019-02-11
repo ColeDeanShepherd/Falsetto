@@ -1,10 +1,7 @@
 # To-Do
 ## High Priority
-* For each instrument (piano, guitar)
-  * Add intervals exercise
-  * Add chords exercise
-  * Add scales exercise (piano done)
 * Enable inversion on guitar scale viewer.
+  * Add intervals exercise (guitar)
 ## Medium Priority
 * Make sequential sounds cut each other off?
 * Post to musictheory subreddit.
