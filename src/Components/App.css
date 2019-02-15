@@ -3,6 +3,10 @@
   cursor: pointer;
 }
 
+.cursor-pointer-on-hover:hover {
+  cursor: pointer;
+}
+
 body {
   background-color: #EEEEEE;
 }

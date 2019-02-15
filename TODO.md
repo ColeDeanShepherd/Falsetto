@@ -1,12 +1,10 @@
 # To-Do
 ## High Priority
 * Enable inversion on guitar scale viewer.
-  * Add intervals exercise (guitar)
 ## Medium Priority
 * Make sequential sounds cut each other off?
 * Post to musictheory subreddit.
 * Stop sending anaytics events in test.
-* Make note highlights clickable
 ## Low Priority
 * Change "Flip to back" terminology?
 * Use actual flat symbols instead of 'b'
