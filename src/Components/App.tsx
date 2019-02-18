@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Router, Route, NavLink, Link } from "react-router-dom";
-import { Paper, AppBar, Typography, Toolbar, Button } from '@material-ui/core';
+import { Router, Route, NavLink } from "react-router-dom";
+import { Paper, AppBar, Typography, Toolbar } from '@material-ui/core';
 import { History, createBrowserHistory, Location, Action, UnregisterCallback } from "history";
 
 import * as Utils from "../Utils";
@@ -48,6 +48,7 @@ import * as ChordEarTraining from "./Quizzes/ChordEarTraining";
 import * as ScaleEarTraining from "./Quizzes/ScaleEarTraining";
 import { ScaleViewer } from "./ScaleViewer";
 import { ChordViewer } from "./ChordViewer";
+import { RhythymTapper } from "./RhythymTapper";
 import { FlashCardGroup } from 'src/FlashCardGroup';
 import { StudyFlashCards } from './StudyFlashCards';
 import * as Overview from "./Quizzes/TheJazzPianoSite/TheBasics/Overview"
@@ -173,6 +174,10 @@ class App extends React.Component<{}, IAppState> {
               <Paper className={"left-pane" + (!this.state.isMenuVisibleOnMobile ? " hide-on-mobile" : "")}>
                 <div className="nav left-nav">
                   <div>
+                    <p style={{marginTop: 0}}>Rhythyms</p>
+                    <NavLink to="rhythym-tapper" className="nav-link">Rhythym Tapper</NavLink>
+                  </div>
+                  <div>
                     <p style={{marginTop: 0}}>Notes</p>
                     {renderFlashCardGroupLink(PianoNotes.createFlashCardGroup())}
                     {renderFlashCardGroupLink(GuitarNotes.createFlashCardGroup())}
@@ -232,6 +237,7 @@ class App extends React.Component<{}, IAppState> {
                 {this.flashCardGroups.map(fcg => <Route key={fcg.route} path={fcg.route} component={this.createStudyFlashCardGroupComponent(fcg)} />)}
                 <Route path="/scale-viewer" component={() => <DocumentTitle title={"Scale Viewer - Falsetto"}><ScaleViewer /></DocumentTitle>} />
                 <Route path="/chord-viewer" component={() => <DocumentTitle title={"Chord Viewer - Falsetto"}><ChordViewer /></DocumentTitle>} />
+                <Route path="/rhythym-tapper" component={() => <DocumentTitle title={"Rhythym Tapper - Falsetto"}><RhythymTapper /></DocumentTitle>} />
               </div>
             </div>
           </div>

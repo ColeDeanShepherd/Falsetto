@@ -1,12 +1,11 @@
 import * as React from 'react';
-import { TextField, Button, Card, CardContent, Typography } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
 
 import * as Utils from '../../Utils';
 import * as FlashCardUtils from "./Utils";
-import { GuitarFretboard, STRING_COUNT, GuitarNote, standardGuitarTuning } from '../GuitarFretboard';
+import { GuitarFretboard, STRING_COUNT, standardGuitarTuning } from '../GuitarFretboard';
 import { FlashCard } from '../../FlashCard';
 import { FlashCardGroup } from 'src/FlashCardGroup';
-import { StudyAlgorithm, LeitnerStudyAlgorithm, AnswerDifficulty } from 'src/StudyAlgorithm';
 
 interface IConfigData {
   maxFret: number

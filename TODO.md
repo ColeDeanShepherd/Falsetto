@@ -1,6 +1,11 @@
 # To-Do
 ## High Priority
 * Enable inversion on guitar scale viewer.
+* Rhythym tapper
+* Scale degree ear trainer
+* Listen to chords in chord viewer
+* Listen to scales in scale viewer
+* Playable piano?
 ## Medium Priority
 * Make sequential sounds cut each other off?
 * Post to musictheory subreddit.
@@ -16,3 +21,5 @@
 * Add support for dynamically generated flash card decks
 * Share more code between interval recognition exercises.
 * Interval Type Changes When Lowering/Raising
+## Refactoring
+* Use a higher-level construct for checkbox configs.
