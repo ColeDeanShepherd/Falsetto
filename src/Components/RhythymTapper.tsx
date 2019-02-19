@@ -81,6 +81,20 @@ export class RhythymTapper extends React.Component<IRhythymTapperProps, IRhythym
           >
             Start
           </Button>
+          
+          <Button
+            onClick={event => this.tap()}
+            variant="contained"
+          >
+            Tap
+          </Button>
+
+          <Button
+            onClick={event => this.skipRhythym()}
+            variant="contained"
+          >
+            Skip
+          </Button>
         </CardContent>
       </Card>
     );
@@ -130,9 +144,26 @@ export class RhythymTapper extends React.Component<IRhythymTapperProps, IRhythym
       () => requestAnimationFrame(this.playUpdate.bind(this))
     );
   }
+  private skipRhythym() {
+    this.setState({
+      rhythymNotes: generateRandomRhythym(),
+      isPlaying: false
+    });
+  }
+  private tap() {
+    // the note we're tapping should probably be the note with
+    // the closest start time that we haven't already tapped
+    // need to keep track of what we've tapped
+    // need to find current tap time
+    // need to find current (if hasn't been tapped) & next note times
+    // need to find closer tap time? (maybe with threshold for next note)
+    // thresholds might be dependent on note duration
+  }
 
   // TODO: replace with high perf counter & request animation frame?
   private playUpdate() {
+    if (!this.state.isPlaying) { return; }
+
     const newPlayTimeInSeconds = (window.performance.now() - this.state.timeStartedPlaying) / 1000;
 
     if (this.getCurrentNoteIndex(newPlayTimeInSeconds) < this.state.rhythymNotes.length) {
@@ -146,14 +177,14 @@ export class RhythymTapper extends React.Component<IRhythymTapperProps, IRhythym
   }
 
   // TODO: add support for time signatures
-  private getMeasureDurationSeconds(): number {
+  private getMeasureDurationInSeconds(): number {
     // Assuming 4/4.
     const beatsPerSecond = this.state.beatsPerMinute / 60;
     const beatsPerMeasure = 4;
     return beatsPerMeasure / beatsPerSecond;
   }
   private getCurrentNoteIndex(playTimeInSeconds: number): number {
-    const currentTimeInMeasures = playTimeInSeconds / this.getMeasureDurationSeconds();
+    const currentTimeInMeasures = playTimeInSeconds / this.getMeasureDurationInSeconds();
 
     let timeInMeasures = 0;
     let noteIndex = 0;
@@ -168,6 +199,15 @@ export class RhythymTapper extends React.Component<IRhythymTapperProps, IRhythym
     }
 
     return noteIndex;
+  }
+  private getNoteStartTimeInSeconds(noteIndex: number): number {
+    let noteOffsetInMeasures = 0;
+
+    for (let i = 0; i < noteIndex; i++) {
+      noteOffsetInMeasures += this.state.rhythymNotes[i].duration.asReal;
+    }
+
+    return noteOffsetInMeasures * this.getMeasureDurationInSeconds();
   }
   private rhythymNotesToVexFlowNotes(rhythymNotes: Array<IRhythymNote>): Array<Vex.Flow.StaveNote> {
     return rhythymNotes

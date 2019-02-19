@@ -158,6 +158,13 @@ class App extends React.Component<{}, IAppState> {
       <NavLink to={flashCardGroup.route} onClick={event => this.onNavLinkClick()} className="nav-link">{flashCardGroup.name}</NavLink>
     );
 
+    /*
+    <div>
+      <p style={{marginTop: 0}}>Rhythyms</p>
+      <NavLink to="rhythym-tapper" className="nav-link">Rhythym Tapper</NavLink>
+    </div>
+    */
+   
     return (
       <Router history={this.history}>
         <div>
@@ -173,10 +180,6 @@ class App extends React.Component<{}, IAppState> {
             <div className="bottom-pane horizontal-panes">
               <Paper className={"left-pane" + (!this.state.isMenuVisibleOnMobile ? " hide-on-mobile" : "")}>
                 <div className="nav left-nav">
-                  <div>
-                    <p style={{marginTop: 0}}>Rhythyms</p>
-                    <NavLink to="rhythym-tapper" className="nav-link">Rhythym Tapper</NavLink>
-                  </div>
                   <div>
                     <p style={{marginTop: 0}}>Notes</p>
                     {renderFlashCardGroupLink(PianoNotes.createFlashCardGroup())}
