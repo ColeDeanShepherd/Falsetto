@@ -1,4 +1,4 @@
-import * as Utils from "src/Utils";
+import * as Utils from "./Utils";
 
 export class Rational {
   public constructor(

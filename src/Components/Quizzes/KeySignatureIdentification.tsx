@@ -1,12 +1,12 @@
 import * as React from 'react';
 import * as Vex from 'vexflow';
 
-import * as FlashCardUtils from "src/Components/Quizzes/Utils";
-import { FlashCard } from 'src/FlashCard';
-import { FlashCardGroup } from 'src/FlashCardGroup';
+import * as FlashCardUtils from "../../Components/Quizzes/Utils";
+import { FlashCard } from '../../FlashCard';
+import { FlashCardGroup } from '../../FlashCardGroup';
 import { VexFlowComponent } from '../VexFlowComponent';
-import { Pitch } from 'src/Pitch';
-import { PitchLetter } from 'src/PitchLetter';
+import { Pitch } from '../../Pitch';
+import { PitchLetter } from '../../PitchLetter';
 
 const allowedPitches = [
   new Pitch(PitchLetter.C, -1, 0),

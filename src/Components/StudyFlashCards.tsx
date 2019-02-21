@@ -7,7 +7,7 @@ import * as Utils from '../Utils';
 import { FlashCard, invertFlashCards } from "../FlashCard";
 import { renderFlashCardSide } from "./FlashCard";
 import { DefaultFlashCardMultiSelect } from './DefaultFlashCardMultiSelect';
-import { StudyAlgorithm, AnswerDifficulty, isAnswerDifficultyCorrect, LeitnerStudyAlgorithm } from 'src/StudyAlgorithm';
+import { StudyAlgorithm, AnswerDifficulty, isAnswerDifficultyCorrect, LeitnerStudyAlgorithm } from '../StudyAlgorithm';
 
 export interface IStudyFlashCardsProps {
   title: string;

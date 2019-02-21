@@ -27,7 +27,7 @@ export class VexFlowComponent extends React.Component<IVexFlowComponentProps, {}
     }
   }
   public componentDidUpdate(prevProps: IVexFlowComponentProps, prevState: {}, snapshot: any) {
-    if (this.props.vexFlowRender) {
+    if (this.vexFlowContext && this.props.vexFlowRender) {
       this.vexFlowContext.clear();
       this.props.vexFlowRender(this.vexFlowContext);
     }
@@ -38,5 +38,5 @@ export class VexFlowComponent extends React.Component<IVexFlowComponentProps, {}
   }
   
   private containerRef: React.Ref<HTMLDivElement>;
-  private vexFlowContext: Vex.IRenderContext;
+  private vexFlowContext: Vex.IRenderContext | null = null;
 }

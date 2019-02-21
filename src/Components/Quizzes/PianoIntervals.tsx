@@ -2,12 +2,12 @@ import * as React from 'react';
 import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody } from '@material-ui/core';
 
 import * as Utils from '../../Utils';
-import * as FlashCardUtils from "src/Components/Quizzes/Utils";
-import { FlashCard } from 'src/FlashCard';
-import { FlashCardGroup } from 'src/FlashCardGroup';
-import { Pitch } from 'src/Pitch';
-import { PitchLetter } from 'src/PitchLetter';
-import { Interval } from 'src/Interval';
+import * as FlashCardUtils from "../../Components/Quizzes/Utils";
+import { FlashCard } from '../../FlashCard';
+import { FlashCardGroup } from '../../FlashCardGroup';
+import { Pitch } from '../../Pitch';
+import { PitchLetter } from '../../PitchLetter';
+import { Interval } from '../../Interval';
 import { PianoKeyboard } from '../PianoKeyboard';
 
 const minPitch = new Pitch(PitchLetter.C, 0, 4);

@@ -17,7 +17,7 @@ export class FlashCardGroup {
     onAnswer: (answerDifficulty: AnswerDifficulty) => void
   ) => JSX.Element;
   public enableInvertFlashCards: boolean = true;
-  public moreInfoUri: string;
+  public moreInfoUri: string = "";
   public customNextFlashCardIdFilter?: (studyAlgorithm: StudyAlgorithm, enabledFlashCardIds: number[]) => number[];
 
   public get route(): string {

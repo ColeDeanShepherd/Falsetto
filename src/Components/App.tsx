@@ -49,12 +49,13 @@ import * as ScaleEarTraining from "./Quizzes/ScaleEarTraining";
 import { ScaleViewer } from "./ScaleViewer";
 import { ChordViewer } from "./ChordViewer";
 import { RhythymTapper } from "./RhythymTapper";
-import { FlashCardGroup } from 'src/FlashCardGroup';
+import { FlashCardGroup } from '../FlashCardGroup';
 import { StudyFlashCards } from './StudyFlashCards';
 import * as Overview from "./Quizzes/TheJazzPianoSite/TheBasics/Overview"
 import { AboutPage } from './AboutPage';
 import DocumentTitle from 'react-document-title';
 import { HomePage } from './HomePage';
+import { isProduction } from '../Config';
 
 const googleAnalyticsTrackingId = "UA-72494315-5";
 
@@ -255,11 +256,13 @@ class App extends React.Component<{}, IAppState> {
   private flashCardGroups: FlashCardGroup[];
   
   private historyListener(location: Location<any>, action: Action) {
-    const gtag: any = (window as any).gtag;
-    gtag('config', googleAnalyticsTrackingId, {
-      'page_title' : document.title,
-      'page_path': location.pathname + location.search
-    });    
+    if (isProduction()) {
+      const gtag: any = (window as any).gtag;
+      gtag('config', googleAnalyticsTrackingId, {
+        'page_title' : document.title,
+        'page_path': location.pathname + location.search
+      });
+    }
   }
   private createStudyFlashCardGroupComponent(currentFlashCardGroup: FlashCardGroup): () => JSX.Element {
     return () => (

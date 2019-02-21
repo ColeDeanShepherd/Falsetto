@@ -1,10 +1,10 @@
 import * as React from 'react';
 import * as Vex from 'vexflow';
 
-import * as Utils from "src/Utils";
+import * as Utils from "../Utils";
 import { Button, Card, CardContent, Typography } from '@material-ui/core';
 import { VexFlowComponent } from './VexFlowComponent';
-import { Rational } from 'src/Rational';
+import { Rational } from '../Rational';
 
 const width = 800;
 const height = 100;
@@ -77,6 +77,8 @@ export class RhythymTapper extends React.Component<IRhythymTapperProps, IRhythym
 
           <Button
             onClick={event => this.startTappingRhythym()}
+            disableRipple={true}
+            disableFocusRipple={true}
             variant="contained"
           >
             Start
@@ -98,6 +100,24 @@ export class RhythymTapper extends React.Component<IRhythymTapperProps, IRhythym
         </CardContent>
       </Card>
     );
+  }
+
+  private keyDownListener: ((ev: KeyboardEvent) => any) | null = null;
+  public componentDidMount() {
+    this.keyDownListener = ev => {
+      if (!ev.repeat) {
+        this.tap();
+      }
+
+      ev.preventDefault();
+      ev.stopPropagation();
+    };
+    document.addEventListener("keydown", this.keyDownListener);
+  }
+  public componentWillUnmount() {
+    if (this.keyDownListener) {
+      document.removeEventListener("keydown", this.keyDownListener);
+    }
   }
 
   private get playTimeInSeconds(): number {
@@ -158,9 +178,9 @@ export class RhythymTapper extends React.Component<IRhythymTapperProps, IRhythym
     // need to find current (if hasn't been tapped) & next note times
     // need to find closer tap time? (maybe with threshold for next note)
     // thresholds might be dependent on note duration
+    console.log("tap");
   }
 
-  // TODO: replace with high perf counter & request animation frame?
   private playUpdate() {
     if (!this.state.isPlaying) { return; }
 

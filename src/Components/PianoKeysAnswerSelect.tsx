@@ -1,10 +1,10 @@
 import * as React from 'react';
 
-import * as Utils from "src/Utils";
-import { Pitch } from 'src/Pitch';
-import { AnswerDifficulty } from 'src/StudyAlgorithm';
+import * as Utils from "../Utils";
+import { Pitch } from '../Pitch';
+import { AnswerDifficulty } from '../StudyAlgorithm';
 import { PianoKeyboard } from './PianoKeyboard';
-import { PitchLetter } from 'src/PitchLetter';
+import { PitchLetter } from '../PitchLetter';
 import { Button } from '@material-ui/core';
 
 export interface IPianoKeysAnswerSelectProps {

@@ -6,11 +6,11 @@ import * as Utils from '../../Utils';
 import * as FlashCardUtils from "./Utils";
 import { VexFlowComponent } from "../VexFlowComponent";
 import { PitchLetter } from "../../PitchLetter";
-import { FlashCard } from 'src/FlashCard';
+import { FlashCard } from '../../FlashCard';
 import { renderFlashCardSide } from "../FlashCard";
-import { Pitch } from 'src/Pitch';
-import { FlashCardGroup } from 'src/FlashCardGroup';
-import { AnswerDifficulty } from 'src/StudyAlgorithm';
+import { Pitch } from '../../Pitch';
+import { FlashCardGroup } from '../../FlashCardGroup';
+import { AnswerDifficulty } from '../../StudyAlgorithm';
 
 const clefs = [
   {

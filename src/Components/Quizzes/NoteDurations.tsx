@@ -1,11 +1,11 @@
 import * as React from 'react';
 import * as Vex from 'vexflow';
 
-import * as Utils from "src/Utils";
-import * as FlashCardUtils from "src/Components/Quizzes/Utils";
+import * as Utils from "../../Utils";
+import * as FlashCardUtils from "../../Components/Quizzes/Utils";
 import { FlashCard } from "../../FlashCard";
 import { VexFlowComponent } from "../VexFlowComponent";
-import { FlashCardGroup } from 'src/FlashCardGroup';
+import { FlashCardGroup } from '../../FlashCardGroup';
 
 const width = 100;
 const height = 100;
@@ -23,7 +23,7 @@ export function createFlashCards(): FlashCard[] {
       () => (
         <VexFlowComponent
           width={width} height={height}
-          vexFlowRender={vexFlowRender.bind(null, "w", null)}
+          vexFlowRender={vexFlowRender.bind(null, "w", [""])}
         />
       ),
       "Whole Note - 4 beats"
@@ -95,7 +95,7 @@ export function createFlashCards(): FlashCard[] {
       () => (
         <VexFlowComponent
           width={width} height={height}
-          vexFlowRender={vexFlowRender.bind(null, "wr", null)}
+          vexFlowRender={vexFlowRender.bind(null, "wr", [""])}
         />
       ),
       "Whole Rest - 4 beats"

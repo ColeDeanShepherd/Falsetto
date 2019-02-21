@@ -3,13 +3,13 @@ import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid, Butto
 
 import * as Utils from '../../Utils';
 import * as FlashCardUtils from "./Utils";
-import { FlashCard } from 'src/FlashCard';
-import { FlashCardGroup } from 'src/FlashCardGroup';
-import { Pitch, pitchRange } from 'src/Pitch';
-import { PitchLetter } from 'src/PitchLetter';
-import { Chord } from 'src/Chord';
-import { playPitchesSequentially } from 'src/Piano';
-import { scales } from "src/Scale";
+import { FlashCard } from '../../FlashCard';
+import { FlashCardGroup } from '../../FlashCardGroup';
+import { Pitch, pitchRange } from '../../Pitch';
+import { PitchLetter } from '../../PitchLetter';
+import { Chord } from '../../Chord';
+import { playPitchesSequentially } from '../../Piano';
+import { scales } from "../../Scale";
 
 const minPitch = new Pitch(PitchLetter.C, -1, 2);
 const maxPitch = new Pitch(PitchLetter.C, 1, 6);
@@ -44,7 +44,7 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
     );
   }
 
-  private playAudioCancelFn: (() => void) | null;
+  private playAudioCancelFn: (() => void) | null = null;
 
   private playAudio(): void {
     if (this.playAudioCancelFn) {

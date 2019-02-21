@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import * as Utils from "../Utils";
-import { Pitch } from 'src/Pitch';
+import { Pitch } from '../Pitch';
 
 class PianoKeyboardMetrics {
   public constructor(

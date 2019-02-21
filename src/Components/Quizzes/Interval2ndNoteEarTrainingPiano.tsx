@@ -2,20 +2,20 @@ import * as React from 'react';
 
 import * as Utils from '../../Utils';
 import * as FlashCardUtils from "./Utils";
-import { FlashCard, FlashCardSide } from 'src/FlashCard';
-import { FlashCardGroup } from 'src/FlashCardGroup';
-import { Pitch } from 'src/Pitch';
-import { VerticalDirection } from 'src/VerticalDirection';
-import { Interval, intervalQualityStringToNumber } from 'src/Interval';
-import { playPitchesSequentially } from 'src/Piano';
+import { FlashCard, FlashCardSide } from '../../FlashCard';
+import { FlashCardGroup } from '../../FlashCardGroup';
+import { Pitch } from '../../Pitch';
+import { VerticalDirection } from '../../VerticalDirection';
+import { Interval, intervalQualityStringToNumber } from '../../Interval';
+import { playPitchesSequentially } from '../../Piano';
 import {
   intervals,
   directions
-} from "src/Components/IntervalEarTrainingFlashCardMultiSelect";
+} from "../../Components/IntervalEarTrainingFlashCardMultiSelect";
 import { Button, TableRow, TableCell, Checkbox, Table, TableHead, TableBody, Grid } from '@material-ui/core';
 import { PianoKeyboard } from '../PianoKeyboard';
-import { PitchLetter } from 'src/PitchLetter';
-import { AnswerDifficulty } from 'src/StudyAlgorithm';
+import { PitchLetter } from '../../PitchLetter';
+import { AnswerDifficulty } from '../../StudyAlgorithm';
 import { PianoKeysAnswerSelect } from '../PianoKeysAnswerSelect';
 
 const minPitch = new Pitch(PitchLetter.C, 0, 4);

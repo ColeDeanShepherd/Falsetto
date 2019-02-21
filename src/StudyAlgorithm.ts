@@ -23,7 +23,7 @@ export function isAnswerDifficultyCorrect(answerDifficulty: AnswerDifficulty): b
 }
 
 export abstract class StudyAlgorithm {
-  public enabledQuestionIds: number[];
+  public enabledQuestionIds: number[] = [];
   public customNextQuestionIdFilter?: (studyAlgorithm: StudyAlgorithm, enabledQuestionIds: number[]) => number[];
 
   public get currentQuestionId(): number | undefined {
@@ -68,9 +68,9 @@ export abstract class StudyAlgorithm {
 
   protected abstract getNextQuestionIdInternal(enabledQuestionIds: number[]): number;
 
-  protected questionIds: number[];
+  protected questionIds: number[] = [];
   protected _currentQuestionId: number | undefined;
-  protected _quizStats: QuizStats;
+  protected _quizStats: QuizStats = new QuizStats([]);
 }
 
 export class RandomStudyAlgorithm extends StudyAlgorithm {

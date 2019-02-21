@@ -1,6 +1,6 @@
-import * as FlashCardUtils from "src/Components/Quizzes/Utils";
+import * as FlashCardUtils from "../../Components/Quizzes/Utils";
 import { FlashCard } from "../../FlashCard";
-import { FlashCardGroup } from 'src/FlashCardGroup';
+import { FlashCardGroup } from '../../FlashCardGroup';
 
 export function createFlashCardGroup(): FlashCardGroup {
   const flashCards = createFlashCards();

@@ -3,12 +3,12 @@ import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid, Butto
 
 import * as Utils from '../../Utils';
 import * as FlashCardUtils from "./Utils";
-import { FlashCard } from 'src/FlashCard';
-import { FlashCardGroup } from 'src/FlashCardGroup';
-import { Pitch, pitchRange } from 'src/Pitch';
-import { PitchLetter } from 'src/PitchLetter';
-import { Chord } from 'src/Chord';
-import { playPitches } from 'src/Piano';
+import { FlashCard } from '../../FlashCard';
+import { FlashCardGroup } from '../../FlashCardGroup';
+import { Pitch, pitchRange } from '../../Pitch';
+import { PitchLetter } from '../../PitchLetter';
+import { Chord } from '../../Chord';
+import { playPitches } from '../../Piano';
 
 const minPitch = new Pitch(PitchLetter.C, -1, 2);
 const maxPitch = new Pitch(PitchLetter.C, 1, 6);

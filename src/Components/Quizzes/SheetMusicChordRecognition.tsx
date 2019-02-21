@@ -2,13 +2,13 @@ import * as React from 'react';
 import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid } from '@material-ui/core';
 
 import * as Utils from '../../Utils';
-import * as FlashCardUtils from "src/Components/Quizzes/Utils";
-import { FlashCard } from 'src/FlashCard';
-import { FlashCardGroup } from 'src/FlashCardGroup';
-import { Pitch, pitchRange } from 'src/Pitch';
-import { PitchLetter } from 'src/PitchLetter';
-import { SheetMusicChord } from 'src/Components/Quizzes/SheetMusicChords';
-import { Chord } from 'src/Chord';
+import * as FlashCardUtils from "../../Components/Quizzes/Utils";
+import { FlashCard } from '../../FlashCard';
+import { FlashCardGroup } from '../../FlashCardGroup';
+import { Pitch, pitchRange } from '../../Pitch';
+import { PitchLetter } from '../../PitchLetter';
+import { SheetMusicChord } from '../../Components/Quizzes/SheetMusicChords';
+import { Chord } from '../../Chord';
 
 const allowedPitches = [
   new Pitch(PitchLetter.C, -1, 0),

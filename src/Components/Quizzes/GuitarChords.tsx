@@ -1,14 +1,14 @@
 import * as React from 'react';
 
-import * as Utils from "src/Utils";
+import * as Utils from "../../Utils";
 import { PianoKeyboard } from '../PianoKeyboard';
-import { FlashCard, FlashCardSide } from 'src/FlashCard';
-import { FlashCardGroup } from 'src/FlashCardGroup';
-import { AnswerDifficulty } from 'src/StudyAlgorithm';
-import { Pitch } from 'src/Pitch';
-import { PitchLetter } from 'src/PitchLetter';
+import { FlashCard, FlashCardSide } from '../../FlashCard';
+import { FlashCardGroup } from '../../FlashCardGroup';
+import { AnswerDifficulty } from '../../StudyAlgorithm';
+import { Pitch } from '../../Pitch';
+import { PitchLetter } from '../../PitchLetter';
 import { TableRow, TableCell, Table, TableHead, TableBody, Grid, Checkbox, Button, Typography } from '@material-ui/core';
-import { Chord, allChords } from 'src/Chord';
+import { Chord, allChords } from '../../Chord';
 import { GuitarFretboard, GuitarNote, standardGuitarTuning, GuitarFretboardMetrics } from '../GuitarFretboard';
 
 const scales = allChords;

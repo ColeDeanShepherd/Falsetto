@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { PitchLetter } from 'src/PitchLetter';
-import { scales as allScales } from "src/Scale";
-import { Pitch } from 'src/Pitch';
+import { PitchLetter } from '../PitchLetter';
+import { scales as allScales } from "../Scale";
+import { Pitch } from '../Pitch';
 import { Button, Card, CardContent, Typography } from '@material-ui/core';
-import { Chord } from 'src/Chord';
+import { Chord } from '../Chord';
 import { PianoKeyboard } from './PianoKeyboard';
 import { GuitarFretboard, GuitarNote, standardGuitarTuning, GuitarFretboardMetrics } from './GuitarFretboard';
 
