@@ -1,11 +1,11 @@
-import * as React from 'react';
-import { TextField } from '@material-ui/core';
+import * as React from "react";
+import { TextField } from "@material-ui/core";
 
-import * as Utils from '../../Utils';
+import * as Utils from "../../Utils";
 import * as FlashCardUtils from "./Utils";
-import { GuitarFretboard, STRING_COUNT, standardGuitarTuning } from '../GuitarFretboard';
-import { FlashCard } from '../../FlashCard';
-import { FlashCardGroup } from '../../FlashCardGroup';
+import { GuitarFretboard, STRING_COUNT, standardGuitarTuning } from "../GuitarFretboard";
+import { FlashCard } from "../../FlashCard";
+import { FlashCardGroup } from "../../FlashCardGroup";
 
 interface IConfigData {
   maxFret: number

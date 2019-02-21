@@ -1,12 +1,12 @@
-import * as React from 'react';
-import * as Vex from 'vexflow';
+import * as React from "react";
+import * as Vex from "vexflow";
 
 import * as FlashCardUtils from "../../Components/Quizzes/Utils";
-import { FlashCard } from '../../FlashCard';
-import { FlashCardGroup } from '../../FlashCardGroup';
-import { VexFlowComponent } from '../VexFlowComponent';
-import { Pitch } from '../../Pitch';
-import { PitchLetter } from '../../PitchLetter';
+import { FlashCard } from "../../FlashCard";
+import { FlashCardGroup } from "../../FlashCardGroup";
+import { VexFlowComponent } from "../VexFlowComponent";
+import { Pitch } from "../../Pitch";
+import { PitchLetter } from "../../PitchLetter";
 
 const allowedPitches = [
   new Pitch(PitchLetter.C, -1, 0),
@@ -62,11 +62,11 @@ export class SheetMusicKeySignature extends React.Component<ISheetMusicKeySignat
     const staveX = 20;
 
     const topStaff = new Vex.Flow.Stave(staveX, 0, staveLength);
-    topStaff.addClef('treble');
+    topStaff.addClef("treble");
     topStaff.addKeySignature(this.props.keySignature);
 
     const bottomStaff = new Vex.Flow.Stave(staveX, 80, staveLength);
-    bottomStaff.addClef('bass');
+    bottomStaff.addClef("bass");
     bottomStaff.addKeySignature(this.props.keySignature);
 
     const brace = new Vex.Flow.StaveConnector(topStaff, bottomStaff).setType(3);

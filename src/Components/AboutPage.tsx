@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { CardContent, Card, Typography } from '@material-ui/core';
+import * as React from "react";
+import { CardContent, Card, Typography } from "@material-ui/core";
 
 export class AboutPage extends React.Component<{}, {}> {
   public render(): JSX.Element {

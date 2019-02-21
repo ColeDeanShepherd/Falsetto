@@ -1,13 +1,13 @@
-import * as React from 'react';
+import * as React from "react";
 
-import * as Utils from '../../Utils';
+import * as Utils from "../../Utils";
 import * as FlashCardUtils from "./Utils";
-import { FlashCard } from '../../FlashCard';
-import { FlashCardGroup } from '../../FlashCardGroup';
-import { Pitch } from '../../Pitch';
-import { VerticalDirection } from '../../VerticalDirection';
-import { Interval, intervalQualityStringToNumber } from '../../Interval';
-import { playPitches, playPitchesSequentially } from '../../Piano';
+import { FlashCard } from "../../FlashCard";
+import { FlashCardGroup } from "../../FlashCardGroup";
+import { Pitch } from "../../Pitch";
+import { VerticalDirection } from "../../VerticalDirection";
+import { Interval, intervalQualityStringToNumber } from "../../Interval";
+import { playPitches, playPitchesSequentially } from "../../Piano";
 import {
   IConfigData,
   rootNotes,
@@ -16,7 +16,7 @@ import {
   IntervalEarTrainingFlashCardMultiSelect,
   configDataToEnabledQuestionIds
 } from "../../Components/IntervalEarTrainingFlashCardMultiSelect";
-import { Button } from '@material-ui/core';
+import { Button } from "@material-ui/core";
 
 export interface IFlashCardFrontSideProps {
   pitch1: Pitch;

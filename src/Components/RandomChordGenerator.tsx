@@ -1,26 +1,26 @@
-import * as React from 'react';
-import { Card, CardContent, Typography, Button, Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid } from '@material-ui/core';
+import * as React from "react";
+import { Card, CardContent, Typography, Button, Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid } from "@material-ui/core";
 
-import * as Utils from '../Utils';
-import { FlashCard } from '../FlashCard';
-import { FlashCardGroup } from '../FlashCardGroup';
+import * as Utils from "../Utils";
+import { FlashCard } from "../FlashCard";
+import { FlashCardGroup } from "../FlashCardGroup";
 
 const chordRoots = [
-  'Cb',
-  'C',
-  'C#',
-  'Db',
-  'D',
-  'Eb',
-  'E',
-  'F',
-  'F#',
-  'Gb',
-  'G',
-  'Ab',
-  'A',
-  'Bb',
-  'B'
+  "Cb",
+  "C",
+  "C#",
+  "Db",
+  "D",
+  "Eb",
+  "E",
+  "F",
+  "F#",
+  "Gb",
+  "G",
+  "Ab",
+  "A",
+  "Bb",
+  "B"
 ];
 const chordTypes = [
   {

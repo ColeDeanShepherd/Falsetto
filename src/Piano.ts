@@ -1,6 +1,6 @@
 import { Howl } from "howler";
 
-import { Pitch } from './Pitch';
+import { Pitch } from "./Pitch";
 
 export const pianoAudioFilePathsByMidiNumber = new Array<[number, string]>();
 pianoAudioFilePathsByMidiNumber.push([21, "audio/piano/A0.mp3"]);

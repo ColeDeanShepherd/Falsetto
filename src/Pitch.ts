@@ -1,7 +1,7 @@
-import { PitchLetter, getPitchLetterMidiNoteNumberOffset } from './PitchLetter';
-import * as Utils from './Utils';
+import { PitchLetter, getPitchLetterMidiNoteNumberOffset } from "./PitchLetter";
+import * as Utils from "./Utils";
 import { VerticalDirection } from "./VerticalDirection";
-import { Interval } from './Interval';
+import { Interval } from "./Interval";
 
 export function pitchRange(
   minPitch: Pitch, maxPitch: Pitch,

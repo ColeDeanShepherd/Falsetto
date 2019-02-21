@@ -2,7 +2,7 @@ export function identity<T>(value: T): T {
   return value;
 }
 
-// TODO: don't run asserts in prod?
+// TODO: don"t run asserts in prod?
 // TODO: add tests
 export function assert(condition: boolean) {
   if (!condition) {

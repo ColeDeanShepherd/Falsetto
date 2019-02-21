@@ -1,14 +1,14 @@
-import * as React from 'react';
+import * as React from "react";
 import { Router, Route, NavLink } from "react-router-dom";
-import { Paper, AppBar, Typography, Toolbar } from '@material-ui/core';
+import { Paper, AppBar, Typography, Toolbar } from "@material-ui/core";
 import { History, createBrowserHistory, Location, Action, UnregisterCallback } from "history";
 
 import * as Utils from "../Utils";
 
 import "./App.css";
 
-import * as IntervalNamesToHalfSteps from './Quizzes/IntervalNamesToHalfSteps';
-import * as IntervalQualitySymbolsToQualities from './Quizzes/IntervalQualitySymbolsToQualities';
+import * as IntervalNamesToHalfSteps from "./Quizzes/IntervalNamesToHalfSteps";
+import * as IntervalQualitySymbolsToQualities from "./Quizzes/IntervalQualitySymbolsToQualities";
 import * as GenericIntervalsToIntervalQualities from "./Quizzes/GenericIntervalsToIntervalQualities";
 import * as IntervalsToConsonanceDissonance from "./Quizzes/IntervalsToConsonanceDissonance";
 import * as ScaleDegreeModes from "./Quizzes/ScaleDegreeModes";
@@ -49,13 +49,13 @@ import * as ScaleEarTraining from "./Quizzes/ScaleEarTraining";
 import { ScaleViewer } from "./ScaleViewer";
 import { ChordViewer } from "./ChordViewer";
 import { RhythymTapper } from "./RhythymTapper";
-import { FlashCardGroup } from '../FlashCardGroup';
-import { StudyFlashCards } from './StudyFlashCards';
+import { FlashCardGroup } from "../FlashCardGroup";
+import { StudyFlashCards } from "./StudyFlashCards";
 import * as Overview from "./Quizzes/TheJazzPianoSite/TheBasics/Overview"
-import { AboutPage } from './AboutPage';
-import DocumentTitle from 'react-document-title';
-import { HomePage } from './HomePage';
-import { isProduction } from '../Config';
+import { AboutPage } from "./AboutPage";
+import DocumentTitle from "react-document-title";
+import { HomePage } from "./HomePage";
+import { isProduction } from "../Config";
 
 const googleAnalyticsTrackingId = "UA-72494315-5";
 
@@ -258,9 +258,9 @@ class App extends React.Component<{}, IAppState> {
   private historyListener(location: Location<any>, action: Action) {
     if (isProduction()) {
       const gtag: any = (window as any).gtag;
-      gtag('config', googleAnalyticsTrackingId, {
-        'page_title' : document.title,
-        'page_path': location.pathname + location.search
+      gtag("config", googleAnalyticsTrackingId, {
+        "page_title" : document.title,
+        "page_path": location.pathname + location.search
       });
     }
   }

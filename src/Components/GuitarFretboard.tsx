@@ -1,8 +1,8 @@
-import * as React from 'react';
+import * as React from "react";
 
 import * as Utils from "../Utils";
-import { Pitch } from '../Pitch';
-import { PitchLetter } from '../PitchLetter';
+import { Pitch } from "../Pitch";
+import { PitchLetter } from "../PitchLetter";
 
 export const STRING_COUNT = 6;
 

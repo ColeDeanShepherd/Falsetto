@@ -1,7 +1,7 @@
-import * as React from 'react';
+import * as React from "react";
 import {
   Checkbox, Table, TableHead, TableBody, TableRow, TableCell
-} from '@material-ui/core';
+} from "@material-ui/core";
 
 import { FlashCard } from "../FlashCard";
 import { renderFlashCardSide } from "./FlashCard";

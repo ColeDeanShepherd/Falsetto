@@ -1,13 +1,13 @@
-import * as React from 'react';
+import * as React from "react";
 import {
   Button, Card, CardContent, Typography, Checkbox
-} from '@material-ui/core';
+} from "@material-ui/core";
 
-import * as Utils from '../Utils';
+import * as Utils from "../Utils";
 import { FlashCard, invertFlashCards } from "../FlashCard";
 import { renderFlashCardSide } from "./FlashCard";
-import { DefaultFlashCardMultiSelect } from './DefaultFlashCardMultiSelect';
-import { StudyAlgorithm, AnswerDifficulty, isAnswerDifficultyCorrect, LeitnerStudyAlgorithm } from '../StudyAlgorithm';
+import { DefaultFlashCardMultiSelect } from "./DefaultFlashCardMultiSelect";
+import { StudyAlgorithm, AnswerDifficulty, isAnswerDifficultyCorrect, LeitnerStudyAlgorithm } from "../StudyAlgorithm";
 
 export interface IStudyFlashCardsProps {
   title: string;

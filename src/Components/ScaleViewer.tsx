@@ -1,11 +1,11 @@
-import * as React from 'react';
-import { PitchLetter } from '../PitchLetter';
+import * as React from "react";
+import { PitchLetter } from "../PitchLetter";
 import { scales as allScales } from "../Scale";
-import { Pitch } from '../Pitch';
-import { Button, Card, CardContent, Typography } from '@material-ui/core';
-import { Chord } from '../Chord';
-import { PianoKeyboard } from './PianoKeyboard';
-import { GuitarFretboard, GuitarNote, standardGuitarTuning, GuitarFretboardMetrics } from './GuitarFretboard';
+import { Pitch } from "../Pitch";
+import { Button, Card, CardContent, Typography } from "@material-ui/core";
+import { Chord } from "../Chord";
+import { PianoKeyboard } from "./PianoKeyboard";
+import { GuitarFretboard, GuitarNote, standardGuitarTuning, GuitarFretboardMetrics } from "./GuitarFretboard";
 
 const validSharpKeyPitches = [
   null,

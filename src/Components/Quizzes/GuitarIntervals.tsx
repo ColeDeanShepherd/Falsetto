@@ -1,15 +1,15 @@
-import * as React from 'react';
-import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody } from '@material-ui/core';
+import * as React from "react";
+import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody } from "@material-ui/core";
 
-import * as Utils from '../../Utils';
+import * as Utils from "../../Utils";
 import * as FlashCardUtils from "../../Components/Quizzes/Utils";
-import { FlashCard } from '../../FlashCard';
-import { FlashCardGroup } from '../../FlashCardGroup';
-import { Pitch } from '../../Pitch';
-import { Interval } from '../../Interval';
-import { standardGuitarTuning, GuitarNote, GuitarFretboard, GuitarFretboardMetrics } from '../GuitarFretboard';
-import { VerticalDirection } from '../../VerticalDirection';
-import { AnswerDifficulty } from '../../StudyAlgorithm';
+import { FlashCard } from "../../FlashCard";
+import { FlashCardGroup } from "../../FlashCardGroup";
+import { Pitch } from "../../Pitch";
+import { Interval } from "../../Interval";
+import { standardGuitarTuning, GuitarNote, GuitarFretboard, GuitarFretboardMetrics } from "../GuitarFretboard";
+import { VerticalDirection } from "../../VerticalDirection";
+import { AnswerDifficulty } from "../../StudyAlgorithm";
 
 const intervals = [
   "m2",

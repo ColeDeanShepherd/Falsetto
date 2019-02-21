@@ -1,7 +1,7 @@
 import * as Utils from "./Utils";
 import { Pitch } from "./Pitch";
 import { Interval } from "./Interval";
-import { VerticalDirection } from './VerticalDirection';
+import { VerticalDirection } from "./VerticalDirection";
 
 export class Chord {
   public static fromPitchAndFormulaString(pitch: Pitch, formulaString: string): Chord {

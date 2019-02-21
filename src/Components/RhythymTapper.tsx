@@ -1,10 +1,10 @@
-import * as React from 'react';
-import * as Vex from 'vexflow';
+import * as React from "react";
+import * as Vex from "vexflow";
 
 import * as Utils from "../Utils";
-import { Button, Card, CardContent, Typography } from '@material-ui/core';
-import { VexFlowComponent } from './VexFlowComponent';
-import { Rational } from '../Rational';
+import { Button, Card, CardContent, Typography } from "@material-ui/core";
+import { VexFlowComponent } from "./VexFlowComponent";
+import { Rational } from "../Rational";
 
 const width = 800;
 const height = 100;
@@ -171,11 +171,11 @@ export class RhythymTapper extends React.Component<IRhythymTapperProps, IRhythym
     });
   }
   private tap() {
-    // the note we're tapping should probably be the note with
-    // the closest start time that we haven't already tapped
-    // need to keep track of what we've tapped
+    // the note we"re tapping should probably be the note with
+    // the closest start time that we haven"t already tapped
+    // need to keep track of what we"ve tapped
     // need to find current tap time
-    // need to find current (if hasn't been tapped) & next note times
+    // need to find current (if hasn"t been tapped) & next note times
     // need to find closer tap time? (maybe with threshold for next note)
     // thresholds might be dependent on note duration
     console.log("tap");

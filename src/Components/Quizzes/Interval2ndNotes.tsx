@@ -1,15 +1,15 @@
-import * as React from 'react';
-import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid } from '@material-ui/core';
+import * as React from "react";
+import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid } from "@material-ui/core";
 
-import * as Utils from '../../Utils';
+import * as Utils from "../../Utils";
 import * as FlashCardUtils from "../../Components/Quizzes/Utils";
-import { FlashCard } from '../../FlashCard';
-import { FlashCardGroup } from '../../FlashCardGroup';
-import { Pitch } from '../../Pitch';
-import { PitchLetter } from '../../PitchLetter';
-import { VerticalDirection } from '../../VerticalDirection';
-import { Interval } from '../../Interval';
-import { AnswerDifficulty } from '../../StudyAlgorithm';
+import { FlashCard } from "../../FlashCard";
+import { FlashCardGroup } from "../../FlashCardGroup";
+import { Pitch } from "../../Pitch";
+import { PitchLetter } from "../../PitchLetter";
+import { VerticalDirection } from "../../VerticalDirection";
+import { Interval } from "../../Interval";
+import { AnswerDifficulty } from "../../StudyAlgorithm";
 
 const rootNotes = [
   new Pitch(PitchLetter.C, -1, 4),

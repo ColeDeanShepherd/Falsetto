@@ -1,6 +1,6 @@
 import * as Utils from "./Utils";
-import { QuizStats } from './QuizStats';
-import { QuestionStats } from './QuestionStats';
+import { QuizStats } from "./QuizStats";
+import { QuestionStats } from "./QuestionStats";
 
 export enum AnswerDifficulty {
   Incorrect,

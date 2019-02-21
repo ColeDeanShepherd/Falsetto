@@ -1,11 +1,11 @@
-import * as React from 'react';
-import * as Vex from 'vexflow';
+import * as React from "react";
+import * as Vex from "vexflow";
 
 import * as Utils from "../../Utils";
 import * as FlashCardUtils from "../../Components/Quizzes/Utils";
 import { FlashCard } from "../../FlashCard";
 import { VexFlowComponent } from "../VexFlowComponent";
-import { FlashCardGroup } from '../../FlashCardGroup';
+import { FlashCardGroup } from "../../FlashCardGroup";
 
 const width = 100;
 const height = 100;

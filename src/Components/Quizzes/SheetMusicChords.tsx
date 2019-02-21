@@ -1,10 +1,10 @@
-import * as React from 'react';
-import * as Vex from 'vexflow';
+import * as React from "react";
+import * as Vex from "vexflow";
 
-import * as Utils from '../../Utils';
-import { Pitch } from '../../Pitch';
-import { PitchLetter } from '../../PitchLetter';
-import { VexFlowComponent } from '../VexFlowComponent';
+import * as Utils from "../../Utils";
+import { Pitch } from "../../Pitch";
+import { PitchLetter } from "../../PitchLetter";
+import { VexFlowComponent } from "../VexFlowComponent";
 
 export interface ISheetMusicChordProps {
   width: number;
@@ -27,11 +27,11 @@ export class SheetMusicChord extends React.Component<ISheetMusicChordProps, {}> 
     const staveX = 20;
 
     const topStaff = new Vex.Flow.Stave(staveX, 0, staveLength);
-    topStaff.addClef('treble');
+    topStaff.addClef("treble");
     //topStaff.addTimeSignature("4/4");
 
     const bottomStaff = new Vex.Flow.Stave(staveX, 80, staveLength);
-    bottomStaff.addClef('bass');
+    bottomStaff.addClef("bass");
     //bottomStaff.addTimeSignature("4/4");
 
     const brace = new Vex.Flow.StaveConnector(topStaff, bottomStaff).setType(3);

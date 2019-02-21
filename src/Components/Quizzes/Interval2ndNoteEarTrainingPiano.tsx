@@ -1,22 +1,22 @@
-import * as React from 'react';
+import * as React from "react";
 
-import * as Utils from '../../Utils';
+import * as Utils from "../../Utils";
 import * as FlashCardUtils from "./Utils";
-import { FlashCard, FlashCardSide } from '../../FlashCard';
-import { FlashCardGroup } from '../../FlashCardGroup';
-import { Pitch } from '../../Pitch';
-import { VerticalDirection } from '../../VerticalDirection';
-import { Interval, intervalQualityStringToNumber } from '../../Interval';
-import { playPitchesSequentially } from '../../Piano';
+import { FlashCard, FlashCardSide } from "../../FlashCard";
+import { FlashCardGroup } from "../../FlashCardGroup";
+import { Pitch } from "../../Pitch";
+import { VerticalDirection } from "../../VerticalDirection";
+import { Interval, intervalQualityStringToNumber } from "../../Interval";
+import { playPitchesSequentially } from "../../Piano";
 import {
   intervals,
   directions
 } from "../../Components/IntervalEarTrainingFlashCardMultiSelect";
-import { Button, TableRow, TableCell, Checkbox, Table, TableHead, TableBody, Grid } from '@material-ui/core';
-import { PianoKeyboard } from '../PianoKeyboard';
-import { PitchLetter } from '../../PitchLetter';
-import { AnswerDifficulty } from '../../StudyAlgorithm';
-import { PianoKeysAnswerSelect } from '../PianoKeysAnswerSelect';
+import { Button, TableRow, TableCell, Checkbox, Table, TableHead, TableBody, Grid } from "@material-ui/core";
+import { PianoKeyboard } from "../PianoKeyboard";
+import { PitchLetter } from "../../PitchLetter";
+import { AnswerDifficulty } from "../../StudyAlgorithm";
+import { PianoKeysAnswerSelect } from "../PianoKeysAnswerSelect";
 
 const minPitch = new Pitch(PitchLetter.C, 0, 4);
 const maxPitch = new Pitch(PitchLetter.B, 0, 5);

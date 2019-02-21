@@ -7,7 +7,7 @@ import { createFlashCards as createHarmonicMinorDiatonicTriadsFlashCards } from 
 import { createFlashCards as createHarmonicMajorDiatonicTriadsFlashCards } from "./HarmonicMajorDiatonicTriads";
 import { createFlashCards as createDoubleHarmonicMajorDiatonicTriadsFlashCards } from "./DoubleHarmonicMajorDiatonicTriads";
 import { FlashCard } from "../../FlashCard";
-import { FlashCardGroup } from '../../FlashCardGroup';
+import { FlashCardGroup } from "../../FlashCardGroup";
 
 export function createFlashCardGroup(): FlashCardGroup {
   const flashCards = createFlashCards();

@@ -1,16 +1,16 @@
-import * as React from 'react';
-import { Card, CardContent, Typography, Button, Checkbox } from '@material-ui/core';
-import * as Vex from 'vexflow';
+import * as React from "react";
+import { Card, CardContent, Typography, Button, Checkbox } from "@material-ui/core";
+import * as Vex from "vexflow";
 
-import * as Utils from '../../Utils';
+import * as Utils from "../../Utils";
 import * as FlashCardUtils from "./Utils";
 import { VexFlowComponent } from "../VexFlowComponent";
 import { PitchLetter } from "../../PitchLetter";
-import { FlashCard } from '../../FlashCard';
+import { FlashCard } from "../../FlashCard";
 import { renderFlashCardSide } from "../FlashCard";
-import { Pitch } from '../../Pitch';
-import { FlashCardGroup } from '../../FlashCardGroup';
-import { AnswerDifficulty } from '../../StudyAlgorithm';
+import { Pitch } from "../../Pitch";
+import { FlashCardGroup } from "../../FlashCardGroup";
+import { AnswerDifficulty } from "../../StudyAlgorithm";
 
 const clefs = [
   {
@@ -173,11 +173,11 @@ export class SheetMusicSingleNote extends React.Component<ISheetMusicSingleNoteP
     const staveX = 20;
 
     const topStaff = new Vex.Flow.Stave(staveX, 0, staveLength);
-    topStaff.addClef('treble');
+    topStaff.addClef("treble");
     //topStaff.addTimeSignature("4/4");
 
     const bottomStaff = new Vex.Flow.Stave(staveX, 80, staveLength);
-    bottomStaff.addClef('bass');
+    bottomStaff.addClef("bass");
     //bottomStaff.addTimeSignature("4/4");
 
     const brace = new Vex.Flow.StaveConnector(topStaff, bottomStaff).setType(3);

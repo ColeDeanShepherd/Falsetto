@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from "react";
 import { Checkbox, Button } from "@material-ui/core";
 
 import * as Utils from "../Utils";

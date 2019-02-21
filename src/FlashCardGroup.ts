@@ -1,5 +1,5 @@
 import { FlashCard } from "./FlashCard";
-import { AnswerDifficulty, StudyAlgorithm } from './StudyAlgorithm';
+import { AnswerDifficulty, StudyAlgorithm } from "./StudyAlgorithm";
 
 export class FlashCardGroup {
   public initialSelectedFlashCardIndices: number[] | undefined;

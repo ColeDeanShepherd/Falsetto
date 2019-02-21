@@ -1,7 +1,7 @@
-import * as React from 'react';
+import * as React from "react";
 
 import * as Utils from "../Utils";
-import { Pitch } from '../Pitch';
+import { Pitch } from "../Pitch";
 
 class PianoKeyboardMetrics {
   public constructor(
@@ -48,7 +48,7 @@ class PianoKeyboardMetrics {
     this.whiteKeyHeight = height;
     this.blackKeyHeight = blackKeyWhiteKeyHeightRatio * this.whiteKeyHeight;
 
-    // Calculate key left x's.
+    // Calculate key left x"s.
     this.keyLeftXs = new Array<number>(this.keyCount);
     let whiteKeyX = this.lowestPitch.isWhiteKey
       ? 0

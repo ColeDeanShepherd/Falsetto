@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from "react";
 import * as Utils from "./Utils";
 
 export class FlashCardSide {
@@ -50,7 +50,7 @@ export function invertFlashCards(
     // invert and add the new flash card
     const newBackSideRenderFns = matchingOldFrontSides
       .map(frontSide => {
-        if (typeof(frontSide.renderFn) === 'string') {
+        if (typeof(frontSide.renderFn) === "string") {
           return () => React.createElement("span", null, frontSide);
         } else {
           return frontSide.renderFn;

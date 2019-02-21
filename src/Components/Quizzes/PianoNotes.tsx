@@ -1,12 +1,12 @@
-import * as React from 'react';
+import * as React from "react";
 
 import * as FlashCardUtils from "./Utils";
-import { PianoKeyboard } from '../PianoKeyboard';
-import { FlashCard } from '../../FlashCard';
-import { FlashCardGroup } from '../../FlashCardGroup';
-import { AnswerDifficulty } from '../../StudyAlgorithm';
-import { Pitch } from '../../Pitch';
-import { PitchLetter } from '../../PitchLetter';
+import { PianoKeyboard } from "../PianoKeyboard";
+import { FlashCard } from "../../FlashCard";
+import { FlashCardGroup } from "../../FlashCardGroup";
+import { AnswerDifficulty } from "../../StudyAlgorithm";
+import { Pitch } from "../../Pitch";
+import { PitchLetter } from "../../PitchLetter";
 
 const notes = ["C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb", "G", "G#/Ab", "A", "A#/Bb", "B"];
 

@@ -1,5 +1,5 @@
-import * as React from 'react';
-import * as Vex from 'vexflow';
+import * as React from "react";
+import * as Vex from "vexflow";
 
 export interface IVexFlowComponentProps {
   width: number;

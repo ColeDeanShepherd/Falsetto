@@ -1,14 +1,14 @@
-import * as React from 'react';
-import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid, Button } from '@material-ui/core';
+import * as React from "react";
+import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid, Button } from "@material-ui/core";
 
-import * as Utils from '../../Utils';
+import * as Utils from "../../Utils";
 import * as FlashCardUtils from "./Utils";
-import { FlashCard } from '../../FlashCard';
-import { FlashCardGroup } from '../../FlashCardGroup';
-import { Pitch, pitchRange } from '../../Pitch';
-import { PitchLetter } from '../../PitchLetter';
-import { Chord } from '../../Chord';
-import { playPitchesSequentially } from '../../Piano';
+import { FlashCard } from "../../FlashCard";
+import { FlashCardGroup } from "../../FlashCardGroup";
+import { Pitch, pitchRange } from "../../Pitch";
+import { PitchLetter } from "../../PitchLetter";
+import { Chord } from "../../Chord";
+import { playPitchesSequentially } from "../../Piano";
 import { scales } from "../../Scale";
 
 const minPitch = new Pitch(PitchLetter.C, -1, 2);

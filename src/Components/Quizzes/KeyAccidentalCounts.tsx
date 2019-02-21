@@ -1,9 +1,9 @@
-import * as React from 'react';
+import * as React from "react";
 
 import * as FlashCardUtils from "../../Components/Quizzes/Utils";
-import { FlashCard } from '../../FlashCard';
-import { FlashCardGroup } from '../../FlashCardGroup';
-import { AnswerDifficulty } from '../../StudyAlgorithm';
+import { FlashCard } from "../../FlashCard";
+import { FlashCardGroup } from "../../FlashCardGroup";
+import { AnswerDifficulty } from "../../StudyAlgorithm";
 
 export function renderAnswerSelect(
   flashCards: FlashCard[],
