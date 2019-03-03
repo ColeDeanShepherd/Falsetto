@@ -19,6 +19,14 @@ body {
   padding: 1em;
 }
 
+a,
+a:visited {
+  display: block;
+  color: #0645ad;
+  text-decoration: none;
+  display: block;
+}
+
 .top-nav a {
   padding-right: 1.5em;
 }

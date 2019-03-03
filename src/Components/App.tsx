@@ -63,6 +63,8 @@ interface IAppState {
   isMenuVisibleOnMobile: boolean;
 }
 class App extends React.Component<{}, IAppState> {
+  public static instance: App;
+
   public constructor(props: {}) {
     super(props);
 
@@ -147,6 +149,8 @@ class App extends React.Component<{}, IAppState> {
     this.state = {
       isMenuVisibleOnMobile: false
     };
+
+    App.instance = this;
   }
 
   public componentWillUnmount() {
@@ -155,9 +159,7 @@ class App extends React.Component<{}, IAppState> {
     }
   }
   public render(): JSX.Element {
-    const renderFlashCardGroupLink = (flashCardGroup: FlashCardGroup) => (
-      <NavLink to={flashCardGroup.route} onClick={event => this.onNavLinkClick()} className="nav-link">{flashCardGroup.name}</NavLink>
-    );
+    const renderFlashCardGroupLink = this.renderFlashCardGroupLink.bind(this);
 
     /*
     <div>
@@ -173,8 +175,16 @@ class App extends React.Component<{}, IAppState> {
             <AppBar position="static" className="top-pane">
               <Toolbar className="nav top-nav">
                 <Typography variant="h6" color="inherit">
-                  <NavLink to="/" onClick={event => this.onNavLinkClick()} className="nav-link" activeClassName="">Falsetto</NavLink>
-                  <i onClick={event => this.toggleMenu()} className="cursor-pointer material-icons hide-on-desktop" style={{verticalAlign: "sub"}}>menu</i>
+                  <NavLink to="/" onClick={event => this.onNavLinkClick()} className="nav-link" activeClassName="" style={{ display: "inline-block" }}>Falsetto</NavLink>
+                  <a
+                    href="https://docs.google.com/forms/d/e/1FAIpQLSfHT8tJTdmW_hCjxMPUf14wchM6GBPQAaq8PSMW05C01gBW4g/viewform"
+                    target="_blank"
+                    className="nav-link"
+                    style={{ fontSize: "1.1rem", fontWeight: "normal", display: "inline-block" }}
+                  >
+                    Contact
+                  </a>
+                  <i onClick={event => this.toggleMenu()} className="cursor-pointer material-icons hide-on-desktop" style={{ verticalAlign: "sub", display: "inline-block"}}>menu</i>
                 </Typography>
               </Toolbar>
             </AppBar>
@@ -230,8 +240,8 @@ class App extends React.Component<{}, IAppState> {
                     {renderFlashCardGroupLink(PianoChords.createFlashCardGroup())}
                     {renderFlashCardGroupLink(GuitarChords.createFlashCardGroup())}
                     {renderFlashCardGroupLink(ChordEarTraining.createFlashCardGroup())}
-                    {renderFlashCardGroupLink(RandomChordGenerator.createFlashCardGroup())}
                     <NavLink to="chord-viewer" className="nav-link">Chord Viewer</NavLink>
+                    {renderFlashCardGroupLink(RandomChordGenerator.createFlashCardGroup())}
                   </div>
                 </div>
               </Paper>
@@ -248,6 +258,16 @@ class App extends React.Component<{}, IAppState> {
         </div>
       </Router>
     );
+  }
+
+  public renderFlashCardGroupLink(flashCardGroup: FlashCardGroup): JSX.Element {
+    return <NavLink to={flashCardGroup.route} onClick={event => this.onNavLinkClick()} className="nav-link">{flashCardGroup.name}</NavLink>;
+  }
+  public toggleMenu() {
+    this.setState({ isMenuVisibleOnMobile: !this.state.isMenuVisibleOnMobile });
+  }
+  public setMenuIsVisibleOnMobile(value: boolean) {
+    this.setState({ isMenuVisibleOnMobile: value });
   }
 
   private history: History<any>;
@@ -281,9 +301,6 @@ class App extends React.Component<{}, IAppState> {
         />
       </DocumentTitle>
     );
-  }
-  private toggleMenu() {
-    this.setState({ isMenuVisibleOnMobile: !this.state.isMenuVisibleOnMobile });
   }
   private onNavLinkClick() {
     this.setState({ isMenuVisibleOnMobile: false });
