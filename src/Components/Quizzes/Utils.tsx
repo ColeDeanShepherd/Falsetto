@@ -61,6 +61,10 @@ export function renderDistinctFlashCardSideAnswerSelect(
   );
   const flashCardSideRenderFn = flashCard.backSide.renderFn;
 
+  // TODO: calculate
+  const maxButtonWidth = 300;
+  const maxButtonHeight = 300;
+
   return (
     <div>
       {distinctFlashCardSideRenderFns.map((fcs, i) => (
@@ -70,7 +74,7 @@ export function renderDistinctFlashCardSideAnswerSelect(
           onClick={_ => onAnswer((fcs === flashCardSideRenderFn) ? AnswerDifficulty.Easy : AnswerDifficulty.Incorrect)}
           style={{ textTransform: "none" }}
         >
-          {callFlashCardSideRenderFn(fcs)}
+          {callFlashCardSideRenderFn(maxButtonWidth, maxButtonHeight, fcs)}
         </Button>))}
     </div>
   );

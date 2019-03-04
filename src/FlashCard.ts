@@ -3,15 +3,15 @@ import * as Utils from "./Utils";
 
 export class FlashCardSide {
   public constructor(
-    public renderFn: string | (() => JSX.Element),
+    public renderFn: string | ((width: number, height: number) => JSX.Element),
     public data: any = null
   ) {}
 }
 
 export class FlashCard {
   public static fromRenderFns(
-    frontSideRenderFn: string | (() => JSX.Element),
-    backSideRenderFn: string | (() => JSX.Element)
+    frontSideRenderFn: string | ((width: number, height: number) => JSX.Element),
+    backSideRenderFn: string | ((width: number, height: number) => JSX.Element)
   ): FlashCard {
     return new FlashCard(
       new FlashCardSide(frontSideRenderFn),
@@ -60,7 +60,7 @@ export function invertFlashCards(
       () => React.createElement(
         "span",
         null,
-        Utils.arrayJoin(newBackSideRenderFns.map(rf => rf()), React.createElement("span", null, ", "))
+        (width: number, height: number) => Utils.arrayJoin(newBackSideRenderFns.map(rf => rf(width, height)), React.createElement("span", null, ", "))
       ),
       matchingOldFrontSides.map(fs => fs.data)
     );

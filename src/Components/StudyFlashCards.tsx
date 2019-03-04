@@ -40,10 +40,13 @@ export interface IStudyFlashCardsState {
   isShowingBackSide: boolean;
   invertFlashCards: boolean;
   invertedFlashCards: FlashCard[];
+  hasRendered: boolean;
 }
 export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStudyFlashCardsState> {
   public constructor(props: IStudyFlashCardsProps) {
     super(props);
+
+    this.flashCardContainerRef = React.createRef();
 
     if (this.props.initialConfigData && !this.props.initialSelectedFlashCardIndices) {
       Utils.assert(false);
@@ -58,7 +61,8 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
         isShowingBackSide: false,
         invertFlashCards: false,
         invertedFlashCards: [],
-        configData: props.initialConfigData
+        configData: props.initialConfigData,
+        hasRendered: false
       },
       this.getInitialStateForFlashCards(
         this.props.flashCards,
@@ -71,13 +75,31 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
     const flashCards = !this.state.invertFlashCards ? this.props.flashCards : this.state.invertedFlashCards;
     const questionStats = this.studyAlgorithm.quizStats.questionStats
       .map((qs, i) => {
-        const renderedFlashCard = renderFlashCardSide(flashCards[i].frontSide);
+        // TODO: calculate width & height
+        const width = 300;
+        const height = 300;
+        const renderedFlashCard = renderFlashCardSide(width, height, flashCards[i].frontSide);
         return <p key={i}>{renderedFlashCard} {qs.numCorrectGuesses} / {qs.numIncorrectGuesses}</p>;
       }, this);
     
     const currentFlashCard = flashCards[this.state.currentFlashCardIndex];
-    const renderedFlashCardFrontSide = renderFlashCardSide(currentFlashCard.frontSide);
-    const renderedFlashCardBackSide = renderFlashCardSide(currentFlashCard.backSide);
+
+    let renderedFlashCardSide: JSX.Element | null;
+    if (!this.flashCardContainerRef || !((this.flashCardContainerRef as any).current)) {
+      renderedFlashCardSide = null;
+    } else {
+      const containerElement = (this.flashCardContainerRef as any).current;
+      const width = containerElement.offsetWidth;
+      const height = containerElement.offsetHeight;
+
+      // TODO: figure out why width is wrong at first
+      // TODO: add resize listener
+      console.log(width, height);
+
+      renderedFlashCardSide = !this.state.isShowingBackSide
+        ? renderFlashCardSide(width, height, currentFlashCard.frontSide)
+        : renderFlashCardSide(width, height, currentFlashCard.backSide);
+    }
 
     const numGuesses = this.studyAlgorithm.quizStats.numCorrectGuesses + this.studyAlgorithm.quizStats.numIncorrectGuesses;
     const percentCorrect = (this.studyAlgorithm.quizStats.numIncorrectGuesses !== 0)
@@ -130,9 +152,10 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
           {this.state.showDetailedStats ? questionStats : null}
 
           <div
+            ref={this.flashCardContainerRef}
             style={flashCardContainerStyle}
           >
-            {!this.state.isShowingBackSide ? renderedFlashCardFrontSide : renderedFlashCardBackSide}
+            {renderedFlashCardSide}
           </div>
 
           <div style={{textAlign: "center"}}>
@@ -157,7 +180,11 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
       </Card>
     );
   }
+  public componentDidMount() {
+    this.setState({ hasRendered: true });
+  }
 
+  private flashCardContainerRef: React.Ref<HTMLDivElement>;
   private studyAlgorithm: StudyAlgorithm = new LeitnerStudyAlgorithm(5);
 
   private renderFlashCardMultiSelect(flashCards: FlashCard[]): JSX.Element {

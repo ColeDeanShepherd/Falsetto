@@ -15,6 +15,9 @@ export interface IDefaultFlashCardMultiSelectProps {
 }
 export class DefaultFlashCardMultiSelect extends React.Component<IDefaultFlashCardMultiSelectProps, {}> {
   public render(): JSX.Element {
+    // TODO: calculate
+    const flashCardSideWidth = 300;
+    const flashCardSideHeight = 300;
     const flashCardCheckboxTableRows = this.props.flashCards
       .map((fc, i) => {
         const isChecked = this.props.selectedFlashCardIndices.indexOf(i) >= 0;
@@ -23,8 +26,8 @@ export class DefaultFlashCardMultiSelect extends React.Component<IDefaultFlashCa
         return (
           <TableRow key={i}>
             <TableCell><Checkbox checked={isChecked} onChange={event => this.toggleFlashCardEnabled(i)} disabled={!isEnabled} /></TableCell>
-            <TableCell>{renderFlashCardSide(fc.frontSide)}</TableCell>
-            <TableCell>{renderFlashCardSide(fc.backSide)}</TableCell>
+            <TableCell>{renderFlashCardSide(flashCardSideWidth, flashCardSideHeight, fc.frontSide)}</TableCell>
+            <TableCell>{renderFlashCardSide(flashCardSideWidth, flashCardSideHeight, fc.backSide)}</TableCell>
           </TableRow >
         );
       }, this);
