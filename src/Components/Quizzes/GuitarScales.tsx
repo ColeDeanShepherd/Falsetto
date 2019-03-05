@@ -284,7 +284,7 @@ export class GuitarNotesAnswerSelect extends React.Component<IGuitarNotesAnswerS
     return (
       <div>
         <PianoKeyboard
-          width={400} height={100}
+          width={300} height={100}
           lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
           highestPitch={new Pitch(PitchLetter.B, 0, 5)}
           pressedPitches={this.state.selectedPitches}

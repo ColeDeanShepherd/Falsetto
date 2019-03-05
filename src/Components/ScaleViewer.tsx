@@ -1,4 +1,7 @@
 import * as React from "react";
+
+import * as Utils from "../Utils";
+import { Size2D } from "../Size2D";
 import { PitchLetter } from "../PitchLetter";
 import { scales as allScales } from "../Scale";
 import { Pitch } from "../Pitch";
@@ -6,6 +9,7 @@ import { Button, Card, CardContent, Typography } from "@material-ui/core";
 import { Chord } from "../Chord";
 import { PianoKeyboard } from "./PianoKeyboard";
 import { GuitarFretboard, GuitarNote, standardGuitarTuning, GuitarFretboardMetrics } from "./GuitarFretboard";
+import ResizeObserver from 'resize-observer-polyfill';
 
 const validSharpKeyPitches = [
   null,
@@ -48,6 +52,9 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
   public constructor(props: IScaleViewerProps) {
     super(props);
 
+    this.instrumentsContainerRef = React.createRef();
+    this.instrumentsContainerResizeObserver = null;
+
     this.state = {
       rootPitch: new Pitch(PitchLetter.C, 0, 4),
       scale: this.scales[0]
@@ -89,6 +96,19 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
       
       return <g>{rootPitchFretDots}</g>;
     };
+
+    let width = 0;
+    let height = 0;
+
+    if (this.instrumentsContainerRef && (this.instrumentsContainerRef as any).current) {
+      const containerElement = (this.instrumentsContainerRef as any).current;
+
+      width = containerElement.offsetWidth;
+      height = containerElement.offsetHeight;
+    }
+
+    const pianoSize = Utils.shrinkRectToFit(new Size2D(width, height), new Size2D(400, 100));
+    const guitarSize = pianoSize;
 
     return (
       <Card>
@@ -139,27 +159,46 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
               <p>{this.state.scale.formulaString}</p>
             </div>
 
-            <div>
-              <PianoKeyboard
-                width={400} height={100}
-                lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-                highestPitch={new Pitch(PitchLetter.B, 0, 5)}
-                pressedPitches={pitches}
-              />
-            </div>
+            <div ref={this.instrumentsContainerRef}>
+              <div>
+                <PianoKeyboard
+                  width={pianoSize.width} height={pianoSize.height}
+                  lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
+                  highestPitch={new Pitch(PitchLetter.B, 0, 5)}
+                  pressedPitches={pitches}
+                />
+              </div>
 
-            <div style={{marginTop: "1em"}}>
-              <GuitarFretboard
-                width={400} height={100}
-                pressedNotes={guitarNotes}
-                renderExtrasFn={renderExtras}
-              />
+              <div style={{marginTop: "1em"}}>
+                <GuitarFretboard
+                  width={guitarSize.width} height={guitarSize.height}
+                  pressedNotes={guitarNotes}
+                  renderExtrasFn={renderExtras}
+                />
+              </div>
             </div>
           </div>
         </CardContent>
       </Card>
     );
   }
+  public componentDidMount() {
+    this.instrumentsContainerResizeObserver = new ResizeObserver((entries, observer) => {
+      this.forceUpdate();
+    });
+    
+    this.instrumentsContainerResizeObserver.observe((this.instrumentsContainerRef as any).current);
+
+    this.forceUpdate();
+  }
+  public componentWillUnmount() {
+    if (this.instrumentsContainerResizeObserver) {
+      this.instrumentsContainerResizeObserver.disconnect();
+    }
+  }
+
+  private instrumentsContainerRef: React.Ref<HTMLDivElement>;
+  private instrumentsContainerResizeObserver: ResizeObserver | null;
 
   private get scales(): Array<{ type: string, formulaString: string }> {
     return this.props.scales

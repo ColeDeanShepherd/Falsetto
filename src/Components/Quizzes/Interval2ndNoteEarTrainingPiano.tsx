@@ -17,6 +17,7 @@ import { PianoKeyboard } from "../PianoKeyboard";
 import { PitchLetter } from "../../PitchLetter";
 import { AnswerDifficulty } from "../../StudyAlgorithm";
 import { PianoKeysAnswerSelect } from "../PianoKeysAnswerSelect";
+import { Size2D } from "../../Size2D";
 
 const minPitch = new Pitch(PitchLetter.C, 0, 4);
 const maxPitch = new Pitch(PitchLetter.B, 0, 5);
@@ -70,6 +71,8 @@ export function configDataToEnabledQuestionIds(
 }
 
 export interface IFlashCardFrontSideProps {
+  width: number;
+  height: number;
   pitch1: Pitch;
   pitch2: Pitch;
 }
@@ -79,11 +82,16 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
   }
 
   public render(): JSX.Element {
+    const size = Utils.shrinkRectToFit(
+      new Size2D(this.props.width, this.props.height),
+      new Size2D(400, 100)
+    );
+
     return (
       <div>
         <div>
           <PianoKeyboard
-            width={400} height={100}
+            width={size.width} height={size.height}
             lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
             highestPitch={new Pitch(PitchLetter.B, 0, 5)}
             pressedPitches={[this.props.pitch1]}
@@ -211,7 +219,7 @@ export function createFlashCardGroup(): FlashCardGroup {
   forEachInterval((interval, p1, p2, i) => {
     flashCards.push(
       new FlashCard(
-        new FlashCardSide(() => <FlashCardFrontSide key={i} pitch1={p1} pitch2={p2} />, p1),
+        new FlashCardSide((width, height) => <FlashCardFrontSide key={i} width={width} height={height} pitch1={p1} pitch2={p2} />, p1),
         new FlashCardSide(p2.toOneAccidentalAmbiguousString(false), p2)
       )
     );

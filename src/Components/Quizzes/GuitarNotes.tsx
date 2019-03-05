@@ -2,6 +2,7 @@ import * as React from "react";
 import { TextField } from "@material-ui/core";
 
 import * as Utils from "../../Utils";
+import { Size2D } from "../../Size2D";
 import * as FlashCardUtils from "./Utils";
 import { GuitarFretboard, STRING_COUNT, standardGuitarTuning } from "../GuitarFretboard";
 import { FlashCard } from "../../FlashCard";
@@ -104,12 +105,19 @@ export function createFlashCards(): FlashCard[] {
         );
 
         return FlashCard.fromRenderFns(
-          () => (
-            <GuitarFretboard
-              width={300} height={100}
-              pressedNotes={[guitarNote]}
-            />
-          ),
+          (width, height) => {
+            const size = Utils.shrinkRectToFit(
+              new Size2D(width, height),
+              new Size2D(400, 100)
+            );
+
+            return (
+              <GuitarFretboard
+                width={size.width} height={size.height}
+                pressedNotes={[guitarNote]}
+              />
+            );
+          },
           guitarNote.pitch.toOneAccidentalAmbiguousString(false)
         );
       })

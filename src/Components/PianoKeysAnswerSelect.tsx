@@ -1,11 +1,11 @@
 import * as React from "react";
+import { Button } from "@material-ui/core";
 
 import * as Utils from "../Utils";
 import { Pitch } from "../Pitch";
 import { AnswerDifficulty } from "../StudyAlgorithm";
 import { PianoKeyboard } from "./PianoKeyboard";
 import { PitchLetter } from "../PitchLetter";
-import { Button } from "@material-ui/core";
 
 export interface IPianoKeysAnswerSelectProps {
   correctAnswer: Array<Pitch>;

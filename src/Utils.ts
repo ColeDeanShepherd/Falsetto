@@ -1,3 +1,5 @@
+import { Size2D } from './Size2D';
+
 export function identity<T>(value: T): T {
   return value;
 }
@@ -255,4 +257,32 @@ export function takeCharsWhile(
   }
 
   return str.substring(startIndex, endIndexExclusive);
+}
+
+// TODO: add tests
+export function shrinkRectToFit(containerSize: Size2D, rectSize: Size2D): Size2D {
+  // try to reduce width and see if height fits
+  if (rectSize.width > containerSize.width) {
+    const scaleFactor = containerSize.width / rectSize.width;
+    const scaledWidth = containerSize.width;
+    const scaledHeight = scaleFactor * rectSize.height;
+
+    if (scaledHeight <= containerSize.height) {
+      return new Size2D(scaledWidth, scaledHeight);
+    }
+  }
+
+  // try to reduce height and see if width fits
+  if (rectSize.height > containerSize.height) {
+    const scaleFactor = containerSize.height / rectSize.height;
+    const scaledWidth = scaleFactor * rectSize.width;
+    const scaledHeight = containerSize.height;
+
+    if (scaledWidth <= containerSize.width) {
+      return new Size2D(scaledWidth, scaledHeight);
+    }
+  }
+  
+  // If we get here, the rect doesn't need to be resized.
+  return rectSize;
 }

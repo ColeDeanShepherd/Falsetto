@@ -10,6 +10,7 @@ import { Interval } from "../../Interval";
 import { standardGuitarTuning, GuitarNote, GuitarFretboard, GuitarFretboardMetrics } from "../GuitarFretboard";
 import { VerticalDirection } from "../../VerticalDirection";
 import { AnswerDifficulty } from "../../StudyAlgorithm";
+import { Size2D } from '../../Size2D';
 
 const intervals = [
   "m2",
@@ -202,15 +203,22 @@ export function createFlashCardGroup(): FlashCardGroup {
     };
 
     flashCards.push(FlashCard.fromRenderFns(
-      () => (
-        <div>
-          <GuitarFretboard
-            width={400} height={100}
-            pressedNotes={[]}
-            renderExtrasFn={renderExtras}
-          />
-        </div>
-      ),
+      (width, height) => {
+        const size = Utils.shrinkRectToFit(
+          new Size2D(width, height),
+          new Size2D(400, 100)
+        );
+
+        return (
+          <div>
+            <GuitarFretboard
+              width={size.width} height={size.height}
+              pressedNotes={[]}
+              renderExtrasFn={renderExtras}
+            />
+          </div>
+        );
+      },
       directionChar + " " + interval.toString()
     ));
   });

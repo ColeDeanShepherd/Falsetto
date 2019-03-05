@@ -153,7 +153,7 @@ export function createFlashCardGroup(): FlashCardGroup {
 
   forEachInterval((pitches, interval) => {
     flashCards.push(FlashCard.fromRenderFns(
-      () => (
+      (width, height) => (
         <div>
           <SheetMusicChord
             width={300} height={200}

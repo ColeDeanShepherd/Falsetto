@@ -11,6 +11,7 @@ import { PitchLetter } from "../../PitchLetter";
 import { TableRow, TableCell, Table, TableHead, TableBody, Grid, Checkbox, Button, Typography } from "@material-ui/core";
 import { Chord } from "../../Chord";
 import { PianoKeysAnswerSelect } from "../../Components/PianoKeysAnswerSelect";
+import { Size2D } from "../../Size2D";
 
 const rootPitchStrs = ["Ab", "A", "Bb", "B/Cb", "C", "C#/Db", "D", "Eb", "E", "F", "F#/Gb", "G"];
 
@@ -310,14 +311,18 @@ export function createFlashCards(): FlashCard[] {
 
         return new FlashCard(
           new FlashCardSide(
-            () => (
-              <PianoKeyboard
-                width={400} height={100}
-                lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-                highestPitch={new Pitch(PitchLetter.B, 0, 5)}
-                pressedPitches={pitches}
-              />
-            ),
+            (width, height) => {
+              const size = Utils.shrinkRectToFit(new Size2D(width, height), new Size2D(400, 100));
+
+              return (
+                <PianoKeyboard
+                  width={size.width} height={size.height}
+                  lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
+                  highestPitch={new Pitch(PitchLetter.B, 0, 5)}
+                  pressedPitches={pitches}
+                />
+              );
+            },
             pitches
           ),
           new FlashCardSide(rootPitchStr + " " + scale.type)

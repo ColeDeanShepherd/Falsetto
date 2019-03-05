@@ -246,7 +246,7 @@ export function createFlashCardGroup(): FlashCardGroup {
         .pitches;
 
       flashCards.push(FlashCard.fromRenderFns(
-        () => (
+        (width, height) => (
           <div>
             <SheetMusicChord
               width={300} height={200}

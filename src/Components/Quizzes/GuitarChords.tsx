@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import * as Utils from "../../Utils";
+import { Size2D } from "../../Size2D";
 import { PianoKeyboard } from "../PianoKeyboard";
 import { FlashCard, FlashCardSide } from "../../FlashCard";
 import { FlashCardGroup } from "../../FlashCardGroup";
@@ -401,13 +402,17 @@ export function createFlashCards(): FlashCard[] {
 
         return new FlashCard(
           new FlashCardSide(
-            () => (
-              <GuitarFretboard
-                width={400} height={100}
-                pressedNotes={guitarNotes}
-                renderExtrasFn={renderExtras}
-              />
-            ),
+            (width, height) => {
+              const size = Utils.shrinkRectToFit(new Size2D(width, height), new Size2D(400, 100));
+
+              return (
+                <GuitarFretboard
+                  width={size.width} height={size.height}
+                  pressedNotes={guitarNotes}
+                  renderExtrasFn={renderExtras}
+                />
+              )
+            },
             pitches
           ),
           new FlashCardSide(rootPitchStr + " " + scale.type)

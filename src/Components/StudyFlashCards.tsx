@@ -2,6 +2,7 @@ import * as React from "react";
 import {
   Button, Card, CardContent, Typography, Checkbox
 } from "@material-ui/core";
+import ResizeObserver from "resize-observer-polyfill";
 
 import * as Utils from "../Utils";
 import { FlashCard, invertFlashCards } from "../FlashCard";
@@ -40,13 +41,13 @@ export interface IStudyFlashCardsState {
   isShowingBackSide: boolean;
   invertFlashCards: boolean;
   invertedFlashCards: FlashCard[];
-  hasRendered: boolean;
 }
 export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStudyFlashCardsState> {
   public constructor(props: IStudyFlashCardsProps) {
     super(props);
 
     this.flashCardContainerRef = React.createRef();
+    this.flashCardContainerResizeObserver = null;
 
     if (this.props.initialConfigData && !this.props.initialSelectedFlashCardIndices) {
       Utils.assert(false);
@@ -61,8 +62,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
         isShowingBackSide: false,
         invertFlashCards: false,
         invertedFlashCards: [],
-        configData: props.initialConfigData,
-        hasRendered: false
+        configData: props.initialConfigData
       },
       this.getInitialStateForFlashCards(
         this.props.flashCards,
@@ -91,10 +91,6 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
       const containerElement = (this.flashCardContainerRef as any).current;
       const width = containerElement.offsetWidth;
       const height = containerElement.offsetHeight;
-
-      // TODO: figure out why width is wrong at first
-      // TODO: add resize listener
-      console.log(width, height);
 
       renderedFlashCardSide = !this.state.isShowingBackSide
         ? renderFlashCardSide(width, height, currentFlashCard.frontSide)
@@ -181,10 +177,22 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
     );
   }
   public componentDidMount() {
-    this.setState({ hasRendered: true });
+    this.flashCardContainerResizeObserver = new ResizeObserver((entries, observer) => {
+      this.forceUpdate();
+    });
+    
+    this.flashCardContainerResizeObserver.observe((this.flashCardContainerRef as any).current);
+
+    this.forceUpdate();
+  }
+  public componentWillUnmount() {
+    if (this.flashCardContainerResizeObserver) {
+      this.flashCardContainerResizeObserver.disconnect();
+    }
   }
 
   private flashCardContainerRef: React.Ref<HTMLDivElement>;
+  private flashCardContainerResizeObserver: ResizeObserver | null;
   private studyAlgorithm: StudyAlgorithm = new LeitnerStudyAlgorithm(5);
 
   private renderFlashCardMultiSelect(flashCards: FlashCard[]): JSX.Element {
