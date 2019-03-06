@@ -422,6 +422,7 @@ export function createFlashCards(): FlashCard[] {
   );
 }
 export function renderAnswerSelect(
+  width: number, height: number,
   flashCards: FlashCard[],
   enabledFlashCardIndices: number[],
   areFlashCardsInverted: boolean,

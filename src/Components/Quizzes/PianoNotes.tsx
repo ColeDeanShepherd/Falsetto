@@ -33,6 +33,7 @@ export function createFlashCards(): FlashCard[] {
     ));
 }
 export function renderAnswerSelect(
+  width: number, height: number,
   flashCards: FlashCard[],
   enabledFlashCardIndices: number[],
   areFlashCardsInverted: boolean,
@@ -41,8 +42,8 @@ export function renderAnswerSelect(
 ) {
   return (
     <div>
-      {!areFlashCardsInverted ? FlashCardUtils.renderNoteAnswerSelect(flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCard, onAnswer) : null}
-      {areFlashCardsInverted ? FlashCardUtils.renderDistinctFlashCardSideAnswerSelect(flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCard, onAnswer) : null}
+      {!areFlashCardsInverted ? FlashCardUtils.renderNoteAnswerSelect(width, height, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCard, onAnswer) : null}
+      {areFlashCardsInverted ? FlashCardUtils.renderDistinctFlashCardSideAnswerSelect(width, height, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCard, onAnswer) : null}
     </div>
   );
 }

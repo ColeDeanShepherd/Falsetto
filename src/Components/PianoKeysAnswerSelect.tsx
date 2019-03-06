@@ -8,6 +8,8 @@ import { PianoKeyboard } from "./PianoKeyboard";
 import { PitchLetter } from "../PitchLetter";
 
 export interface IPianoKeysAnswerSelectProps {
+  width: number;
+  height: number;
   correctAnswer: Array<Pitch>;
   maxNumPitches?: number;
   onAnswer: (answerDifficulty: AnswerDifficulty) => void;
@@ -27,7 +29,7 @@ export class PianoKeysAnswerSelect extends React.Component<IPianoKeysAnswerSelec
     return (
       <div>
         <PianoKeyboard
-          width={400} height={100}
+          width={this.props.width} height={this.props.height}
           lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
           highestPitch={new Pitch(PitchLetter.B, 0, 5)}
           pressedPitches={this.state.selectedPitches}

@@ -135,6 +135,7 @@ function forEachInterval(fn: (pitches: Array<GuitarNote>, interval: Interval) =>
 
 
 export function renderAnswerSelect(
+  width: number, height: number,
   flashCards: FlashCard[],
   enabledFlashCardIndices: number[],
   areFlashCardsInverted: boolean,
@@ -147,8 +148,8 @@ export function renderAnswerSelect(
     .map(i => "↓ " + i);
   return (
     <div>
-      {FlashCardUtils.renderStringAnswerSelect(ascendingIntervals, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCard, onAnswer)}
-      {FlashCardUtils.renderStringAnswerSelect(descendingIntervals, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCard, onAnswer)}
+      {FlashCardUtils.renderStringAnswerSelect(width, height, ascendingIntervals, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCard, onAnswer)}
+      {FlashCardUtils.renderStringAnswerSelect(width, height, descendingIntervals, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCard, onAnswer)}
     </div>
   );
 }

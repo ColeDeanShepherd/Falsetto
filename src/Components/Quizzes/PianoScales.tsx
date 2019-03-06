@@ -333,6 +333,7 @@ export function createFlashCards(): FlashCard[] {
   );
 }
 export function renderAnswerSelect(
+  width: number, height: number,
   flashCards: FlashCard[],
   enabledFlashCardIndices: number[],
   areFlashCardsInverted: boolean,
@@ -345,6 +346,6 @@ export function renderAnswerSelect(
   } else {
     const key = flashCard.frontSide.renderFn as string;
     const correctAnswer = flashCard.backSide.data[0] as Array<Pitch>;
-    return <PianoKeysAnswerSelect key={key} correctAnswer={correctAnswer} onAnswer={onAnswer} />;
+    return <PianoKeysAnswerSelect key={key} width={width} height={height} correctAnswer={correctAnswer} onAnswer={onAnswer} />;
   }
 }

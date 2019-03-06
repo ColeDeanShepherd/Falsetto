@@ -10,6 +10,7 @@ export class FlashCardGroup {
     onChange: (newValue: number[], newConfigData: any) => void
   ) => JSX.Element;
   public renderAnswerSelect?: (
+    width: number, height: number,
     flashCards: FlashCard[],
     enabledFlashCardIndices: number[],
     areFlashCardsInverted: boolean,

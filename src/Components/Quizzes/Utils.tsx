@@ -7,6 +7,7 @@ import { renderFlashCardSide, callFlashCardSideRenderFn } from "../../Components
 import { AnswerDifficulty } from "../../StudyAlgorithm";
 
 export function renderNoteAnswerSelect(
+  width: number, height: number,
   flashCards: FlashCard[],
   enabledFlashCardIndices: number[],
   areFlashCardsInverted: boolean,
@@ -17,12 +18,13 @@ export function renderNoteAnswerSelect(
   const accidentalNotes = ["A#/Bb", "C#/Db", "D#/Eb", "F#/Gb", "G#/Ab"];
   return (
     <div>
-      {renderStringAnswerSelect(accidentalNotes, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCard, onAnswer)}
-      {renderStringAnswerSelect(naturalNotes, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCard, onAnswer)}
+      {renderStringAnswerSelect(width, height, accidentalNotes, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCard, onAnswer)}
+      {renderStringAnswerSelect(width, height, naturalNotes, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCard, onAnswer)}
     </div>
   );
 }
 export function renderStringAnswerSelect(
+  width: number, height: number,
   answers: string[],
   flashCards: FlashCard[],
   enabledFlashCardIndices: number[],
@@ -48,6 +50,7 @@ export function renderStringAnswerSelect(
 }
 
 export function renderDistinctFlashCardSideAnswerSelect(
+  width: number, height: number,
   flashCards: FlashCard[],
   enabledFlashCardIndices: number[],
   areFlashCardsInverted: boolean,

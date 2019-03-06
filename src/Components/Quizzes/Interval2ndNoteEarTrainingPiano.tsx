@@ -1,7 +1,6 @@
 import * as React from "react";
 
 import * as Utils from "../../Utils";
-import * as FlashCardUtils from "./Utils";
 import { FlashCard, FlashCardSide } from "../../FlashCard";
 import { FlashCardGroup } from "../../FlashCardGroup";
 import { Pitch } from "../../Pitch";
@@ -176,6 +175,7 @@ export class FlashCardMultiSelect extends React.Component<IFlashCardMultiSelectP
 }
 
 export function renderAnswerSelect(
+  width: number, height: number,
   flashCards: FlashCard[],
   enabledFlashCardIndices: number[],
   areFlashCardsInverted: boolean,
@@ -184,7 +184,9 @@ export function renderAnswerSelect(
 ) {
   const key = flashCards.indexOf(flashCard);
   const correctAnswer = [flashCard.backSide.data as Pitch];
-  return <PianoKeysAnswerSelect key={key} correctAnswer={correctAnswer} onAnswer={onAnswer} maxNumPitches={1} />;
+  const size = Utils.shrinkRectToFit(new Size2D(width, height), new Size2D(400, 100));
+  
+  return <PianoKeysAnswerSelect key={key} width={size.width} height={size.height} correctAnswer={correctAnswer} onAnswer={onAnswer} maxNumPitches={1} />;
 }
 
 export function forEachInterval(callbackFn: (interval: string, pitch1: Pitch, pitch2: Pitch, index: number) => void) {

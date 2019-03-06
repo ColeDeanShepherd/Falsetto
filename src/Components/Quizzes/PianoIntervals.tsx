@@ -2,6 +2,7 @@ import * as React from "react";
 import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody } from "@material-ui/core";
 
 import * as Utils from "../../Utils";
+import { Size2D } from '../../Size2D';
 import * as FlashCardUtils from "../../Components/Quizzes/Utils";
 import { FlashCard } from "../../FlashCard";
 import { FlashCardGroup } from "../../FlashCardGroup";
@@ -160,16 +161,23 @@ export function createFlashCardGroup(): FlashCardGroup {
 
   forEachInterval((pitches, interval) => {
     flashCards.push(FlashCard.fromRenderFns(
-      () => (
-        <div>
-          <PianoKeyboard
-            width={400} height={100}
-            lowestPitch={minPitch}
-            highestPitch={maxPitch}
-            pressedPitches={pitches}
-          />
-        </div>
-      ),
+      (width, height) => {
+        const size = Utils.shrinkRectToFit(
+          new Size2D(width, height),
+          new Size2D(400, 100)
+        );
+        
+        return (
+          <div>
+            <PianoKeyboard
+              width={size.width} height={size.height}
+              lowestPitch={minPitch}
+              highestPitch={maxPitch}
+              pressedPitches={pitches}
+            />
+          </div>
+        );
+      },
       interval.toString()
     ));
   });

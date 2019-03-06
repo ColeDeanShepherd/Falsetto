@@ -21,6 +21,7 @@ export interface IStudyFlashCardsProps {
     onChange: (newValue: number[], newConfigData: any) => void
   ) => JSX.Element;
   renderAnswerSelect?: (
+    width: number, height: number,
     flashCards: FlashCard[],
     enabledFlashCardIndices: number[],
     areFlashCardsInverted: boolean,
@@ -85,16 +86,18 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
     const currentFlashCard = flashCards[this.state.currentFlashCardIndex];
 
     let renderedFlashCardSide: JSX.Element | null;
+    let containerWidth = 0;
+    let containerHeight = 0;
     if (!this.flashCardContainerRef || !((this.flashCardContainerRef as any).current)) {
       renderedFlashCardSide = null;
     } else {
       const containerElement = (this.flashCardContainerRef as any).current;
-      const width = containerElement.offsetWidth;
-      const height = containerElement.offsetHeight;
+      containerWidth = containerElement.offsetWidth;
+      containerHeight = containerElement.offsetHeight;
 
       renderedFlashCardSide = !this.state.isShowingBackSide
-        ? renderFlashCardSide(width, height, currentFlashCard.frontSide)
-        : renderFlashCardSide(width, height, currentFlashCard.backSide);
+        ? renderFlashCardSide(containerWidth, containerHeight, currentFlashCard.frontSide)
+        : renderFlashCardSide(containerWidth, containerHeight, currentFlashCard.backSide);
     }
 
     const numGuesses = this.studyAlgorithm.quizStats.numCorrectGuesses + this.studyAlgorithm.quizStats.numIncorrectGuesses;
@@ -162,7 +165,9 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
           </div>
 
           <div style={{textAlign: "center"}}>
-            {this.props.renderAnswerSelect ? this.props.renderAnswerSelect(flashCards, this.state.enabledFlashCardIndices, this.state.invertFlashCards, currentFlashCard, boundOnAnswer) : null}
+            {this.props.renderAnswerSelect ? (
+              this.props.renderAnswerSelect(containerWidth, containerHeight, flashCards, this.state.enabledFlashCardIndices, this.state.invertFlashCards, currentFlashCard, boundOnAnswer)
+             ) : null}
 
             <div style={{marginTop: "1em"}}>
               <Button
