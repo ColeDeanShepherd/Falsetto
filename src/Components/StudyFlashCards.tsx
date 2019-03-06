@@ -122,7 +122,14 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
               {this.props.title}{this.state.invertFlashCards ? " (Inverted)" : ""}
             </Typography>
             
-            <Button variant="contained" onClick={event => this.toggleConfiguration()}>{!this.state.showConfiguration ? "Show" : "Hide"} Configuration</Button>
+            <Button variant="contained" onClick={event => this.toggleConfiguration()}>
+              <i
+                className="cursor-pointer material-icons hide-on-desktop"
+                style={{ verticalAlign: "sub", display: "inline-block" }}
+              >
+                settings
+              </i>
+            </Button>
           </div>
 
           {this.state.showConfiguration ? (
