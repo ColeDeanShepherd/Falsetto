@@ -9,6 +9,7 @@ import { FlashCard, invertFlashCards } from "../FlashCard";
 import { renderFlashCardSide } from "./FlashCard";
 import { DefaultFlashCardMultiSelect } from "./DefaultFlashCardMultiSelect";
 import { StudyAlgorithm, AnswerDifficulty, isAnswerDifficultyCorrect, LeitnerStudyAlgorithm } from "../StudyAlgorithm";
+import App from './App';
 
 export interface IStudyFlashCardsProps {
   title: string;
@@ -127,7 +128,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
             
             <Button variant="contained" onClick={event => this.toggleConfiguration()}>
               <i
-                className="cursor-pointer material-icons hide-on-desktop"
+                className="cursor-pointer material-icons"
                 style={{ verticalAlign: "sub", display: "inline-block" }}
               >
                 settings
@@ -242,6 +243,14 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
   private onAnswer(answerDifficulty: AnswerDifficulty) {
     if (!this.state.haveGottenCurrentFlashCardWrong) {
       this.studyAlgorithm.onAnswer(answerDifficulty);
+
+      const eventId = (answerDifficulty !== AnswerDifficulty.Incorrect) ? "answer_correct" : "answer_incorrect";
+      const eventLabel = this.state.currentFlashCardIndex.toString();
+      const eventValue = undefined;
+      const eventCategory = this.props.title;
+      App.instance.trackCustomEvent(
+        eventId, eventLabel, eventValue, eventCategory
+      );
     }
 
     if (isAnswerDifficultyCorrect(answerDifficulty)) {

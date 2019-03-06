@@ -1,5 +1,7 @@
 # To-Do
 ## High Priority
+* Fix error with note durations.
+* Send errors to server somewhere?
 * Enable inversion on guitar scale viewer.
 * Rhythym tapper
 * Scale degree ear trainer

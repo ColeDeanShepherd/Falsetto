@@ -67,7 +67,7 @@ a:visited {
 /* Desktop */
 @media (min-width: 641px) {
   .hide-on-desktop {
-    display: none;
+    display: none !important;
   }
   
   .horizontal-panes {
