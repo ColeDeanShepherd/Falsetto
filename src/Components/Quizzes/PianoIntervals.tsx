@@ -10,6 +10,7 @@ import { Pitch } from "../../Pitch";
 import { PitchLetter } from "../../PitchLetter";
 import { Interval } from "../../Interval";
 import { PianoKeyboard } from "../PianoKeyboard";
+import { AnswerDifficulty } from '../../StudyAlgorithm';
 
 const minPitch = new Pitch(PitchLetter.C, 0, 4);
 const maxPitch = new Pitch(PitchLetter.B, 0, 5);
@@ -20,8 +21,7 @@ const intervals = [
   "m3",
   "M3",
   "P4",
-  "A4",
-  "d5",
+  "A4/d5",
   "P5",
   "m6",
   "M6",
@@ -40,9 +40,9 @@ export function configDataToEnabledQuestionIds(configData: IConfigData): Array<n
 
   let i = 0;
 
-  forEachInterval((pitches, interval) => {
+  forEachInterval((pitches, intervalString) => {
     if (
-      Utils.arrayContains(configData.enabledIntervals, interval.toString()) &&
+      Utils.arrayContains(configData.enabledIntervals, intervalString) &&
       (configData.allowAccidentals || pitches.every(p => p.isNatural))
     ) {
       newEnabledFlashCardIndices.push(i);
@@ -136,7 +136,7 @@ export class IntervalsFlashCardMultiSelect extends React.Component<IIntervalsFla
   }
 }
 
-function forEachInterval(fn: (pitches: Array<Pitch>, interval: Interval) => void) {
+function forEachInterval(fn: (pitches: Array<Pitch>, intervalString: string) => void) {
   const minPitchMidiNumber = minPitch.midiNumber;
   const maxPitchMidiNumber = maxPitch.midiNumber;
 
@@ -149,17 +149,32 @@ function forEachInterval(fn: (pitches: Array<Pitch>, interval: Interval) => void
       
       const lowPitch = Pitch.createFromMidiNumber(pitch1MidiNumber);
       const highPitch = Pitch.createFromMidiNumber(pitch2MidiNumber);
-      const interval = Pitch.getInterval(lowPitch, highPitch);
+      const intervalString = intervals[halfSteps - 1];
 
-      fn([lowPitch, highPitch], interval);
+      fn([lowPitch, highPitch], intervalString);
     }
   }
+}
+
+export function renderAnswerSelect(
+  width: number, height: number,
+  flashCards: FlashCard[],
+  enabledFlashCardIndices: number[],
+  areFlashCardsInverted: boolean,
+  flashCard: FlashCard,
+  onAnswer: (answerDifficulty: AnswerDifficulty) => void
+): JSX.Element {
+  return (
+    <div>
+      {FlashCardUtils.renderStringAnswerSelect(width, height, intervals, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCard, onAnswer)}
+    </div>
+  );
 }
 
 export function createFlashCardGroup(): FlashCardGroup {
   const flashCards = new Array<FlashCard>();
 
-  forEachInterval((pitches, interval) => {
+  forEachInterval((pitches, intervalString) => {
     flashCards.push(FlashCard.fromRenderFns(
       (width, height) => {
         const size = Utils.shrinkRectToFit(
@@ -178,7 +193,7 @@ export function createFlashCardGroup(): FlashCardGroup {
           </div>
         );
       },
-      interval.toString()
+      intervalString
     ));
   });
 
@@ -210,7 +225,7 @@ export function createFlashCardGroup(): FlashCardGroup {
   group.initialConfigData = initialConfigData;
   group.enableInvertFlashCards = false;
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
-  group.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+  group.renderAnswerSelect = renderAnswerSelect;
 
   return group;
 }

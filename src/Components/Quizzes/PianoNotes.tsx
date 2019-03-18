@@ -14,6 +14,7 @@ export function createFlashCardGroup(): FlashCardGroup {
   const flashCards = createFlashCards();
 
   const group = new FlashCardGroup("Piano Notes", flashCards);
+  group.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/the-basics/overview/";
   group.renderAnswerSelect = renderAnswerSelect;
 
   return group;

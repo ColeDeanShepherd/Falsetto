@@ -175,7 +175,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
                 onClick={event => this.flipFlashCard()}
                 variant="contained"
               >
-                Flip to {this.state.isShowingBackSide ? "Front" : "Back"}
+                Show {this.state.isShowingBackSide ? "Question" : "Answer"}
               </Button>
               <Button
                 onClick={event => this.moveToNextFlashCard()}

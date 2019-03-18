@@ -11,9 +11,10 @@ const width = 100;
 const height = 100;
 
 export function createFlashCardGroup(): FlashCardGroup {
-  const flashCardGroup = new FlashCardGroup("Note Durations", createFlashCards());
+  const flashCardGroup = new FlashCardGroup("Sheet Music Note Durations", createFlashCards());
   flashCardGroup.initialSelectedFlashCardIndices = Utils.range(0, 4).concat(Utils.range(8, 12));
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+  flashCardGroup.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/the-basics/overview/";
 
   return flashCardGroup;
 }
@@ -23,7 +24,7 @@ export function createFlashCards(): FlashCard[] {
       () => (
         <VexFlowComponent
           width={width} height={height}
-          vexFlowRender={vexFlowRender.bind(null, "w", [""])}
+          vexFlowRender={vexFlowRender.bind(null, "w", [])}
         />
       ),
       "Whole Note - 4 beats"
@@ -95,7 +96,7 @@ export function createFlashCards(): FlashCard[] {
       () => (
         <VexFlowComponent
           width={width} height={height}
-          vexFlowRender={vexFlowRender.bind(null, "wr", [""])}
+          vexFlowRender={vexFlowRender.bind(null, "wr", [])}
         />
       ),
       "Whole Rest - 4 beats"
@@ -183,18 +184,17 @@ function vexFlowRender(noteDurationString: string, restDurationStrings: string[]
 
   notes[0].setXShift(25);
 
-  if (restDurationStrings) {
-    for (const durationString of restDurationStrings) {
-      const restNote = new Vex.Flow.StaveNote({
-        clef: "treble",
-        keys: ["b/4"],
-        duration: durationString
-      });
+  for (const durationString of restDurationStrings) {
+    const restNote = new Vex.Flow.StaveNote({
+      clef: "treble",
+      keys: ["b/4"],
+      duration: durationString
+    });
 
-      notes.push(restNote);
+    notes.push(restNote);
 
-      restNote.setXShift(390);
-    }
+    // Move the rest out of view.
+    restNote.setXShift(390);
   }
   
   const voice = new Vex.Flow.Voice({num_beats: 4, beat_value: 4});

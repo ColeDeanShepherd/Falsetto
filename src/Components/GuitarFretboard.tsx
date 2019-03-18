@@ -147,12 +147,14 @@ export class GuitarFretboard extends React.Component<IGuitarFretboardProps, {}> 
 
     return (
       <svg width={this.props.width} height={this.props.height} version="1.1" xmlns="http://www.w3.org/2000/svg">
-        {nut}
-        {strings}
-        {frets}
-        {fretDots}
-        {noteHighlights}
-        {extraElements}
+        <g>
+          {nut}
+          {strings}
+          {frets}
+          {fretDots}
+          {noteHighlights}
+          {extraElements}
+        </g>
       </svg>
     );
   }

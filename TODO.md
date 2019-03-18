@@ -1,6 +1,7 @@
 # To-Do
 ## High Priority
-* Fix error with note durations.
+* Make embeddable versions of exercises to integrate with other websites.
+* Improve piano key highlights.
 * Send errors to server somewhere?
 * Enable inversion on guitar scale viewer.
 * Rhythym tapper
@@ -9,10 +10,12 @@
 * Listen to scales in scale viewer
 * Playable piano?
 ## Medium Priority
+* Add area of margin around guitar.
+* Show scale degree #'s in guitar scales.
+* Show scale degree #'s in piano scales.
 * Make sequential sounds cut each other off?
 * Post to musictheory subreddit.
 ## Low Priority
-* Change "Flip to back" terminology?
 * Use actual flat symbols instead of 'b'
 * Improve button styling.
 * Use proper symbols.
