@@ -10,7 +10,7 @@ import { Chord } from "../Chord";
 import { PianoKeyboard } from "./PianoKeyboard";
 import { GuitarFretboard, GuitarNote, standardGuitarTuning, GuitarFretboardMetrics } from "./GuitarFretboard";
 import ResizeObserver from 'resize-observer-polyfill';
-import { playPitchesSequentially } from '../Piano';
+import { playPitchesSequentially, playPitches } from '../Piano';
 
 const validSharpKeyPitches = [
   null,
@@ -43,6 +43,7 @@ const validFlatKeyPitches = [
 interface IScaleViewerProps {
   scales?: Array<{ type: string, formulaString: string }>;
   typeTitle?: string;
+  playSimultaneously?: boolean;
 }
 interface IScaleViewerState {
   rootPitch: Pitch;
@@ -273,16 +274,24 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
       this.playAudioCancelFn = null;
     }
 
-    const pitches = Chord.fromPitchAndFormulaString(
+    const playSimultaneously = (this.props.playSimultaneously !== undefined)
+      ? this.props.playSimultaneously
+      : false;
+
+    let pitches = Chord.fromPitchAndFormulaString(
       this.state.rootPitch,
       this.state.scale.formulaString
-    )
-      .pitches
-      .concat(new Pitch(
+    ).pitches;
+
+    if (playSimultaneously) {
+      playPitches(pitches);
+    } else {
+      pitches = pitches.concat(new Pitch(
         this.state.rootPitch.letter,
         this.state.rootPitch.signedAccidental,
         this.state.rootPitch.octaveNumber + 1
       ));
-    this.playAudioCancelFn = playPitchesSequentially(pitches, 500);
+      this.playAudioCancelFn = playPitchesSequentially(pitches, 500);
+    }
   }
 }

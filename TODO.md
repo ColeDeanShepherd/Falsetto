@@ -5,8 +5,6 @@
 * Enable inversion on guitar scale viewer.
 * Rhythym tapper
 * Scale degree ear trainer
-* Listen to chords in chord viewer
-* Listen to scales in scale viewer
 * Playable piano?
 ## Medium Priority
 * Add area of margin around guitar.

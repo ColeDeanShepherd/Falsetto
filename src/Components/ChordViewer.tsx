@@ -5,6 +5,6 @@ import { allChords } from "../Chord";
 
 export class ChordViewer extends React.Component<{}, {}> {
   public render(): JSX.Element {
-    return <ScaleViewer scales={allChords} typeTitle="Chord" />;
+    return <ScaleViewer scales={allChords} typeTitle="Chord" playSimultaneously={true} />;
   }
 }
