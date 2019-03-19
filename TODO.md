@@ -1,6 +1,7 @@
 # To-Do
 ## High Priority
 * Make embeddable versions of exercises to integrate with other websites.
+* Improve piano key highlights.
 * Send errors to server somewhere?
 * Enable inversion on guitar scale viewer.
 * Rhythym tapper
