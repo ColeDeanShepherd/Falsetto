@@ -10,6 +10,7 @@ import { Chord } from "../Chord";
 import { PianoKeyboard } from "./PianoKeyboard";
 import { GuitarFretboard, GuitarNote, standardGuitarTuning, GuitarFretboardMetrics } from "./GuitarFretboard";
 import ResizeObserver from 'resize-observer-polyfill';
+import { playPitchesSequentially } from '../Piano';
 
 const validSharpKeyPitches = [
   null,
@@ -159,6 +160,17 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
               <p>{this.state.scale.formulaString}</p>
             </div>
 
+            <div>
+              <p>
+                <Button
+                  onClick={event => this.onListenClick()}
+                  variant="contained"
+                >
+                  Listen
+                </Button>
+              </p>
+            </div>
+
             <div ref={this.instrumentsContainerRef}>
               <div>
                 <PianoKeyboard
@@ -240,9 +252,37 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
   }
 
   private onRootPitchClick(rootPitch: Pitch) {
-    this.setState({ rootPitch: rootPitch });
+    this.setState({ rootPitch: rootPitch }, this.onScaleChange.bind(this));
   }
   private onScaleClick(scale: { type: string, formulaString: string }) {
-    this.setState({ scale: scale });
+    this.setState({ scale: scale }, this.onScaleChange.bind(this));
+  }
+
+  private onScaleChange() {
+    if (this.playAudioCancelFn) {
+      this.playAudioCancelFn();
+      this.playAudioCancelFn = null;
+    }
+  }
+
+  private playAudioCancelFn: (() => void) | null = null;
+
+  private onListenClick() {
+    if (this.playAudioCancelFn) {
+      this.playAudioCancelFn();
+      this.playAudioCancelFn = null;
+    }
+
+    const pitches = Chord.fromPitchAndFormulaString(
+      this.state.rootPitch,
+      this.state.scale.formulaString
+    )
+      .pitches
+      .concat(new Pitch(
+        this.state.rootPitch.letter,
+        this.state.rootPitch.signedAccidental,
+        this.state.rootPitch.octaveNumber + 1
+      ));
+    this.playAudioCancelFn = playPitchesSequentially(pitches, 500);
   }
 }
