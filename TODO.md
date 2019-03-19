@@ -6,11 +6,11 @@
 * Rhythym tapper
 * Scale degree ear trainer
 * Playable piano?
-## Medium Priority
 * Add area of margin around guitar.
 * Show scale degree #'s in guitar scales.
 * Show scale degree #'s in piano scales.
 * Make sequential sounds cut each other off?
+## Medium Priority
 * Post to musictheory subreddit.
 ## Low Priority
 * Use actual flat symbols instead of 'b'
