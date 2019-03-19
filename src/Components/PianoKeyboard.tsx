@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import * as Utils from "../Utils";
+import { Rect } from "../Rect";
 import { Pitch } from "../Pitch";
 
 class PianoKeyboardMetrics {
@@ -82,6 +83,18 @@ class PianoKeyboardMetrics {
   public get keyCount(): number {
     return this.whiteKeyCount + this.blackKeyCount;
   }
+
+  public getKeyIndex(pitch: Pitch): number {
+    return pitch.midiNumber - this.lowestPitch.midiNumber;
+  }
+  public getKeyRect(pitch: Pitch): Rect {
+    var isWhite = pitch.isWhiteKey;
+    return new Rect(
+      isWhite ? this.whiteKeyWidth : this.blackKeyWidth,
+      isWhite ? this.whiteKeyHeight : this.blackKeyHeight,
+      this.keyLeftXs[this.getKeyIndex(pitch)], 0
+    );
+  }
 }
 
 export interface IPianoKeyboardProps {
@@ -98,10 +111,15 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
 
     const whiteKeys = new Array<JSX.Element>();
     const blackKeys = new Array<JSX.Element>();
+    const whiteKeyHighlights = new Array<JSX.Element>();
+    const blackKeyHighlights = new Array<JSX.Element>();
     
     for (let i = 0; i < metrics.keyCount; i++) {
       const midiNumber = metrics.lowestPitch.midiNumber + i;
       const pitch = Pitch.createFromMidiNumber(midiNumber);
+      
+      const isPressed = this.props.pressedPitches.some(pp => pp.equals(pitch));
+      const highlightRect = Rect.growAroundCenter(metrics.getKeyRect(pitch), - 6);
 
       if (pitch.isWhiteKey) {
         whiteKeys.push(<rect
@@ -111,6 +129,16 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
           fill="white" stroke="black" strokeWidth="2" className="cursor-pointer-on-hover"
           onClick={event => this.props.onKeyPress ? this.props.onKeyPress(pitch) : null}
         />);
+
+        if (isPressed) {
+          whiteKeyHighlights.push(<rect
+            key={pitch.toString(true)}
+            x={highlightRect.leftX} y={highlightRect.topY}
+            width={highlightRect.width} height={highlightRect.height}
+            fill="red" strokeWidth="0" className="cursor-pointer-on-hover"
+            onClick={event => this.props.onKeyPress ? this.props.onKeyPress(pitch) : null}
+          />);
+        }
       } else {
         blackKeys.push(<rect
           key={i}
@@ -119,34 +147,25 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
           fill="black" strokeWidth="0" className="cursor-pointer-on-hover"
           onClick={event => this.props.onKeyPress ? this.props.onKeyPress(pitch) : null}
         />);
+        
+        if (isPressed) {
+          blackKeyHighlights.push(<rect
+            key={pitch.toString(true)}
+            x={highlightRect.leftX} y={highlightRect.topY}
+            width={highlightRect.width} height={highlightRect.height}
+            fill="red" strokeWidth="0" className="cursor-pointer-on-hover"
+            onClick={event => this.props.onKeyPress ? this.props.onKeyPress(pitch) : null}
+          />);
+        }
       }
     }
-    
-    const noteDotRadius = metrics.blackKeyWidth / 3;
-
-    const noteHighlights = this.props.pressedPitches
-      .map(pressedPitch => {
-        const noteIndex = pressedPitch.midiNumber - metrics.lowestPitch.midiNumber;
-        const highlightedNoteX = pressedPitch.isWhiteKey
-          ? metrics.keyLeftXs[noteIndex] + (metrics.whiteKeyWidth / 2)
-          : metrics.keyLeftXs[noteIndex] + (metrics.blackKeyWidth / 2);
-        const highlightedNoteY = pressedPitch.isWhiteKey
-          ? (0.75 * metrics.whiteKeyHeight)
-          : (metrics.blackKeyHeight / 2);
-        return <circle
-          key={pressedPitch.toString(true)}
-          cx={highlightedNoteX} cy={highlightedNoteY}
-          r={noteDotRadius}
-          fill="red" strokeWidth="0" className="cursor-pointer-on-hover"
-          onClick={event => this.props.onKeyPress ? this.props.onKeyPress(pressedPitch) : null}
-        />;
-      });
 
     return (
       <svg width={this.props.width} height={this.props.height} version="1.1" xmlns="http://www.w3.org/2000/svg">
         {whiteKeys}
+        {whiteKeyHighlights}
         {blackKeys}
-        {noteHighlights}
+        {blackKeyHighlights}
       </svg>
     );
   }
