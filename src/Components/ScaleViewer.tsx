@@ -8,7 +8,7 @@ import { Pitch } from "../Pitch";
 import { Button, Card, CardContent, Typography } from "@material-ui/core";
 import { Chord } from "../Chord";
 import { PianoKeyboard } from "./PianoKeyboard";
-import { GuitarFretboard, GuitarNote, standardGuitarTuning, GuitarFretboardMetrics } from "./GuitarFretboard";
+import { GuitarFretboard, GuitarNote, standardGuitarTuning, GuitarFretboardMetrics, renderGuitarFretboardScaleExtras } from "./GuitarFretboard";
 import ResizeObserver from 'resize-observer-polyfill';
 import { playPitchesSequentially, playPitches } from '../Piano';
 
@@ -81,23 +81,6 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
       pitches,
       11
     );
-
-    const renderExtras = (metrics: GuitarFretboardMetrics) => {
-      const rootPitchGuitarNotes = GuitarNote.allNotesOfPitches(
-        standardGuitarTuning,
-        [this.state.rootPitch],
-        11
-      );
-
-      const rootPitchFretDots = rootPitchGuitarNotes
-        .map((guitarNote, noteIndex) => {
-          const x = metrics.getNoteX(guitarNote.getFretNumber(standardGuitarTuning));
-          const y = metrics.getStringY(guitarNote.stringIndex);
-          return <circle key={noteIndex} cx={x} cy={y} r={metrics.fretDotRadius} fill="green" strokeWidth="0" />;
-        });
-      
-      return <g>{rootPitchFretDots}</g>;
-    };
 
     let width = 0;
     let height = 0;
@@ -186,7 +169,7 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
                 <GuitarFretboard
                   width={guitarSize.width} height={guitarSize.height}
                   pressedNotes={guitarNotes}
-                  renderExtrasFn={renderExtras}
+                  renderExtrasFn={metrics => renderGuitarFretboardScaleExtras(metrics, pitches)}
                 />
               </div>
             </div>

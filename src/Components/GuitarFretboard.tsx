@@ -109,6 +109,39 @@ export class GuitarFretboardMetrics {
   }
 }
 
+export function renderGuitarFretboardScaleExtras(metrics: GuitarFretboardMetrics, pitches: Array<Pitch>): JSX.Element {
+  const guitarNotes = GuitarNote.allNotesOfPitches(
+    standardGuitarTuning,
+    pitches,
+    11
+  );
+
+  const rootPitchFretDots = guitarNotes
+    .map((guitarNote, noteIndex) => {
+      const scaleDegree = 1 + pitches.findIndex(p => p.midiNumberNoOctave === guitarNote.pitch.midiNumberNoOctave);
+
+      const x = metrics.getNoteX(guitarNote.getFretNumber(standardGuitarTuning));
+      const y = metrics.getStringY(guitarNote.stringIndex);
+      const fill = (scaleDegree === 1) ? "green" : "red";
+
+      const fontSize = 16;
+      const textStyle = {
+        fontSize: `${fontSize}px`
+      };
+      const textXOffset = -(0.3 * fontSize);
+      const textYOffset = 0.3 * fontSize;
+
+      return (
+        <g>
+          <circle key={noteIndex} cx={x} cy={y} r={metrics.fretDotRadius} fill={fill} strokeWidth="0" />
+          <text x={x + textXOffset} y={y + textYOffset} style={textStyle}>{scaleDegree}</text>
+        </g>
+      );
+    });
+  
+  return <g>{rootPitchFretDots}</g>;
+}
+
 export interface IGuitarFretboardProps {
   width: number;
   height: number;

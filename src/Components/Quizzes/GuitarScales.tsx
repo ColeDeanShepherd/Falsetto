@@ -11,7 +11,7 @@ import { Pitch } from "../../Pitch";
 import { PitchLetter } from "../../PitchLetter";
 import { TableRow, TableCell, Table, TableHead, TableBody, Grid, Checkbox, Button, Typography } from "@material-ui/core";
 import { Chord } from "../../Chord";
-import { GuitarFretboard, GuitarNote, standardGuitarTuning, GuitarFretboardMetrics } from "../GuitarFretboard";
+import { GuitarFretboard, renderGuitarFretboardScaleExtras } from "../GuitarFretboard";
 
 const rootPitchStrs = ["Ab", "A", "Bb", "B/Cb", "C", "C#/Db", "D", "Eb", "E", "F", "F#/Gb", "G"];
 
@@ -372,33 +372,11 @@ export function createFlashCards(): FlashCard[] {
     rootPitchStrs.map((rootPitchStr, i) => {
       const halfStepsFromC = Utils.mod(i - 4, 12);
       const rootPitch = Pitch.createFromMidiNumber((new Pitch(PitchLetter.C, 0, 4)).midiNumber + halfStepsFromC);
-
-      const renderExtras = (metrics: GuitarFretboardMetrics) => {
-        const rootPitchGuitarNotes = GuitarNote.allNotesOfPitches(
-          standardGuitarTuning,
-          [rootPitch],
-          11
-        );
-
-        const rootPitchFretDots = rootPitchGuitarNotes
-          .map((guitarNote, noteIndex) => {
-            const x = metrics.getNoteX(guitarNote.getFretNumber(standardGuitarTuning));
-            const y = metrics.getStringY(guitarNote.stringIndex);
-            return <circle key={noteIndex} cx={x} cy={y} r={metrics.fretDotRadius} fill="green" strokeWidth="0" />;
-          });
-        
-        return <g>{rootPitchFretDots}</g>;
-      };
       
       return scales.map(scale => {
         const formulaString = scale.formulaString + " 8";
         const pitches = Chord.fromPitchAndFormulaString(rootPitch, formulaString)
           .pitches;
-        const guitarNotes = GuitarNote.allNotesOfPitches(
-          standardGuitarTuning,
-          pitches,
-          11
-        );
 
         return new FlashCard(
           new FlashCardSide(
@@ -408,8 +386,8 @@ export function createFlashCards(): FlashCard[] {
               return (
                 <GuitarFretboard
                   width={size.width} height={size.height}
-                  pressedNotes={guitarNotes}
-                  renderExtrasFn={renderExtras}
+                  pressedNotes={[]}
+                  renderExtrasFn={metrics => renderGuitarFretboardScaleExtras(metrics, pitches)}
                 />
               );
             },

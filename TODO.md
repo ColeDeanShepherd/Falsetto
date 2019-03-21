@@ -7,7 +7,6 @@
 * Scale degree ear trainer
 * Playable piano?
 * Add area of margin around guitar.
-* Show scale degree #'s in guitar scales.
 * Show scale degree #'s in piano scales.
 * Make sequential sounds cut each other off?
 ## Medium Priority
