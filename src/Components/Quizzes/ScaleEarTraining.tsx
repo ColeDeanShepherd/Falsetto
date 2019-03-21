@@ -52,7 +52,8 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
       this.playAudioCancelFn = null;
     }
 
-    this.playAudioCancelFn = playPitchesSequentially(this.props.pitches, 500);
+    const cutOffSounds = true;
+    this.playAudioCancelFn = playPitchesSequentially(this.props.pitches, 500, cutOffSounds);
   }
 }
 

@@ -136,15 +136,26 @@ export function playPitches(pitches: Array<Pitch>) {
 }
 
 // returns: a cancellation function
-export function playPitchesSequentially(pitches: Array<Pitch>, delayInMs: number): () => void {
+export function playPitchesSequentially(pitches: Array<Pitch>, delayInMs: number, cutOffSounds: boolean = false): () => void {
   let isCancelled = false;
 
   const playSounds = () => {
     for (let i = 0; i < loadedSounds.length; i++) {
+      const iCopy = i; // for lambda
       const loadedSound = loadedSounds[i];
 
       if (loadedSound) {
         setTimeout(() => {
+          // stop the previous sound if necessary
+          if (cutOffSounds && (iCopy > 0)) {
+            const previousLoadedSound = loadedSounds[iCopy - 1];
+
+            if (previousLoadedSound) {
+              previousLoadedSound.fade(1, 0, 300);
+            }
+          }
+
+          // play the current sound
           if (!isCancelled) {
             loadedSound.play();
           }

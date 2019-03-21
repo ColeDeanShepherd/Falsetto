@@ -274,7 +274,8 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
         this.state.rootPitch.signedAccidental,
         this.state.rootPitch.octaveNumber + 1
       ));
-      this.playAudioCancelFn = playPitchesSequentially(pitches, 500);
+      const cutOffSounds = true;
+      this.playAudioCancelFn = playPitchesSequentially(pitches, 500, cutOffSounds);
     }
   }
 }

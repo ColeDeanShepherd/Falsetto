@@ -107,7 +107,8 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
   }
 
   private playAudio() {
-    playPitchesSequentially([this.props.pitch1, this.props.pitch2], 500);
+    const cutOffSounds = true;
+    playPitchesSequentially([this.props.pitch1, this.props.pitch2], 500, cutOffSounds);
   }
 }
 

@@ -46,7 +46,8 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
     if (this.props.isHarmonicInterval) {
       playPitches([this.props.pitch1, this.props.pitch2]);
     } else {
-      playPitchesSequentially([this.props.pitch1, this.props.pitch2], 500);
+      const cutOffSounds = true;
+      playPitchesSequentially([this.props.pitch1, this.props.pitch2], 500, cutOffSounds);
     }
   }
 }
