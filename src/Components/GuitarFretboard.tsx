@@ -150,18 +150,23 @@ export interface IGuitarFretboardProps {
 }
 export class GuitarFretboard extends React.Component<IGuitarFretboardProps, {}> {
   public render(): JSX.Element {
-    const metrics = new GuitarFretboardMetrics(this.props.width, this.props.height);
+    const margin = 10;
 
-    const nut = <line x1={metrics.nutX} x2={metrics.nutX} y1={0} y2={this.props.height} stroke="black" strokeWidth={metrics.nutWidth} />;
+    const metrics = new GuitarFretboardMetrics(
+      this.props.width - (2 * margin),
+      this.props.height - (2 * margin)
+    );
+
+    const nut = <line x1={metrics.nutX} x2={metrics.nutX} y1={0} y2={metrics.height} stroke="black" strokeWidth={metrics.nutWidth} />;
     const strings = Utils.range(0, metrics.stringCount - 1)
       .map(i => {
         const y = metrics.getStringY(i);
-        return <line key={i} x1={metrics.stringsLeft} x2={this.props.width} y1={y} y2={y} stroke="black" strokeWidth={metrics.stringWidth} />;
+        return <line key={i} x1={metrics.stringsLeft} x2={metrics.width} y1={y} y2={y} stroke="black" strokeWidth={metrics.stringWidth} />;
       });
     const frets = Utils.range(1, metrics.fretCount)
       .map(i => {
         const x = metrics.stringsLeft + (i * metrics.fretSpacing);
-        return <line key={i} x1={x} x2={x} y1={0} y2={this.props.height} stroke="black" strokeWidth={metrics.fretWidth} />;
+        return <line key={i} x1={x} x2={x} y1={0} y2={metrics.height} stroke="black" strokeWidth={metrics.fretWidth} />;
       });
     const fretDots = this.dottedFretNumbers
       .map(fretNumber => {
@@ -180,7 +185,7 @@ export class GuitarFretboard extends React.Component<IGuitarFretboardProps, {}> 
 
     return (
       <svg width={this.props.width} height={this.props.height} version="1.1" xmlns="http://www.w3.org/2000/svg">
-        <g>
+        <g transform={`translate(${margin},${margin})`}>
           {nut}
           {strings}
           {frets}

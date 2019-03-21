@@ -1,14 +1,14 @@
 # To-Do
 ## High Priority
+* Make sequential sounds cut each other off?
+
 * Make embeddable versions of exercises to integrate with other websites.
 * Send errors to server somewhere?
 * Enable inversion on guitar scale viewer.
 * Rhythym tapper
 * Scale degree ear trainer
 * Playable piano?
-* Add area of margin around guitar.
 * Show scale degree #'s in piano scales.
-* Make sequential sounds cut each other off?
 ## Medium Priority
 * Post to musictheory subreddit.
 ## Low Priority
