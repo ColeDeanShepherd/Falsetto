@@ -61,6 +61,11 @@ const googleAnalyticsTrackingId = "UA-72494315-5";
 
 const theme = createMuiTheme({
   overrides: {
+    MuiTableCell: {
+      root: {
+        padding: "4px"
+      }
+    },
     MuiButton: {
       root: {
         minWidth: 0,

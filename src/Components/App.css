@@ -19,6 +19,13 @@ body {
   padding: 1em;
 }
 
+hr {
+  border-top: none;
+  border-right: none;
+  border-bottom: 1px solid rgba(224, 224, 224, 1);
+  border-left: none;
+}
+
 a,
 a:visited {
   display: block;
