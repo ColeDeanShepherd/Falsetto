@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Router, Route, NavLink } from "react-router-dom";
-import { Paper, AppBar, Typography, Toolbar } from "@material-ui/core";
+import { Paper, AppBar, Typography, Toolbar, createMuiTheme, MuiThemeProvider } from "@material-ui/core";
 import { History, createBrowserHistory, Location, Action, UnregisterCallback } from "history";
 
 import * as Utils from "../Utils";
@@ -58,6 +58,17 @@ import { HomePage } from "./HomePage";
 import { isProduction } from "../Config";
 
 const googleAnalyticsTrackingId = "UA-72494315-5";
+
+const theme = createMuiTheme({
+  overrides: {
+    MuiButton: {
+      root: {
+        minWidth: 0,
+        padding: "6px 12px"
+      }
+    }
+  }
+});
 
 interface IAppState {
   isMenuVisibleOnMobile: boolean;
@@ -173,7 +184,7 @@ class App extends React.Component<{}, IAppState> {
    
     return (
       <Router history={this.history}>
-        <div>
+        <MuiThemeProvider theme={theme}>
           <div className="app">
             <AppBar position="static" className="top-pane">
               <Toolbar className="nav top-nav">
@@ -257,8 +268,8 @@ class App extends React.Component<{}, IAppState> {
                 <Route path="/rhythym-tapper" component={() => <DocumentTitle title={"Rhythym Tapper - Falsetto"}><RhythymTapper /></DocumentTitle>} />
               </div>
             </div>
-          </div>
-        </div>
+          </div> 
+        </MuiThemeProvider>
       </Router>
     );
   }
@@ -321,6 +332,7 @@ class App extends React.Component<{}, IAppState> {
           key={currentFlashCardGroup.route}
           title={currentFlashCardGroup.name}
           flashCards={currentFlashCardGroup.flashCards}
+          containerHeight={currentFlashCardGroup.containerHeight}
           initialSelectedFlashCardIndices={currentFlashCardGroup.initialSelectedFlashCardIndices}
           initialConfigData={currentFlashCardGroup.initialConfigData}
           renderFlashCardMultiSelect={currentFlashCardGroup.renderFlashCardMultiSelect}

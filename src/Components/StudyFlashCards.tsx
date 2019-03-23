@@ -14,6 +14,7 @@ import App from './App';
 export interface IStudyFlashCardsProps {
   title: string;
   flashCards: FlashCard[];
+  containerHeight: string;
   initialSelectedFlashCardIndices?: number[];
   initialConfigData: any;
   renderFlashCardMultiSelect?: (
@@ -112,7 +113,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
       fontSize: "2em",
       textAlign: "center",
       padding: "1em 0",
-      height: "240px",
+      height: this.props.containerHeight,
       display: "flex",
       justifyContent: "center",
       alignItems: "center"
@@ -148,7 +149,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
 
           {this.props.renderAnswerSelect
             ? (
-              <p>
+              <p style={{marginBottom: "0"}}>
                 <span style={{paddingRight: "2em"}}>{this.studyAlgorithm.quizStats.numCorrectGuesses} / {this.studyAlgorithm.quizStats.numIncorrectGuesses}</span>
                 <span style={{paddingRight: "2em"}}>{(100 * percentCorrect).toFixed(2)}%</span>
               </p>
