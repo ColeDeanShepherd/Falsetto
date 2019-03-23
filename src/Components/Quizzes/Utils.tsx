@@ -3,7 +3,7 @@ import { Button } from "@material-ui/core";
 
 import * as Utils from "../../Utils";
 import { FlashCard } from "../../FlashCard";
-import { renderFlashCardSide, callFlashCardSideRenderFn } from "../../Components/FlashCard";
+import { callFlashCardSideRenderFn } from "../../Components/FlashCard";
 import { AnswerDifficulty } from "../../StudyAlgorithm";
 
 export function renderNoteAnswerSelect(

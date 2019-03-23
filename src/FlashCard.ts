@@ -41,6 +41,8 @@ export function invertFlashCards(
   };
 
   for (const oldBackSide of distinctOldBackSides) {
+    const newFrontSide = oldBackSide;
+
     const matchingOldFrontSideIndices = oldFrontSides
       .map((_, i) => (flashCards[i].backSide === oldBackSide) ? i : -1)
       .filter(i => i >= 0);
@@ -48,28 +50,34 @@ export function invertFlashCards(
       .map(i => oldFrontSides[i]);
     
     // invert and add the new flash card
-    const newBackSideRenderFns = matchingOldFrontSides
+    const newBackSideChildRenderFns = matchingOldFrontSides
       .map(frontSide => {
         if (typeof(frontSide.renderFn) === "string") {
-          return () => React.createElement("span", null, frontSide);
+          return (width: number, height: number) => React.createElement("span", null, frontSide.renderFn);
         } else {
           return frontSide.renderFn;
         }
       });
-    const newBackSideRenderFunc = new FlashCardSide(
-      () => React.createElement(
+    const newBackSideRenderFn = (width: number, height: number) => {
+      const spanChildren = Utils.arrayJoin(
+        newBackSideChildRenderFns.map(rf => rf(width, height)),
+        React.createElement("span", null, ", ")
+      );
+
+      return React.createElement(
         "span",
         null,
-        (width: number, height: number) => Utils.arrayJoin(newBackSideRenderFns.map(rf => rf(width, height)), React.createElement("span", null, ", "))
-      ),
-      matchingOldFrontSides.map(fs => fs.data)
+        spanChildren
+      );
+    };
+    const newBackSideData = matchingOldFrontSides.map(fs => fs.data);
+    const newBackSide = new FlashCardSide(
+      newBackSideRenderFn,
+      newBackSideData
     );
 
     result.invertedFlashCards.push(
-      new FlashCard(
-        oldBackSide,
-        newBackSideRenderFunc, 
-      )
+      new FlashCard(newFrontSide, newBackSide)
     );
 
     // add new enabled flash card indices
