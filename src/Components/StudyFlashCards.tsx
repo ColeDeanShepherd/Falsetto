@@ -1,6 +1,6 @@
 import * as React from "react";
 import {
-  Button, Card, CardContent, Typography, Checkbox
+  Button, Card, CardContent, Typography, Checkbox, Paper
 } from "@material-ui/core";
 import ResizeObserver from "resize-observer-polyfill";
 
@@ -138,12 +138,11 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
           </div>
 
           {this.state.showConfiguration ? (
-            <div style={{marginBottom: "1em"}}>
-              <hr />
+            <Paper style={{marginBottom: "1em"}}>
               {this.props.enableInvertFlashCards ? <div><Checkbox checked={this.state.invertFlashCards} onChange={event => this.toggleInvertFlashCards()} /> Invert Flash Cards</div> : null}
               {false ? <p>{flashCards.length} Flash Cards</p> : null}
               {this.renderFlashCardMultiSelect(flashCards)}
-            </div>
+            </Paper>
           ) : null}
 
           {this.props.moreInfoUri ? <a href={this.props.moreInfoUri} target="_blank">To learn more, click here.</a> : null}
