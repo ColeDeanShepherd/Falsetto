@@ -50,6 +50,9 @@ export const arePitchOffsetsFromCWhiteKeys = [
 export const ambiguousPitchStrings = [
   "C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb", "G", "G#/Ab", "A", "A#/Bb", "B"
 ];
+export const ambiguousPitchStringsSymbols = [
+  "C", "C#/D♭", "D", "D#/E♭", "E", "F", "F#/G♭", "G", "G#/A♭", "A", "A#/B♭", "B"
+];
 
 export class Pitch {
   public static createFromMidiNumber(midiNumber: number): Pitch {
@@ -195,9 +198,11 @@ export class Pitch {
   }
 
   // TODO: add tests
-  public toOneAccidentalAmbiguousString(includeOctaveNumber: boolean = true): string {
+  public toOneAccidentalAmbiguousString(includeOctaveNumber: boolean = true, useFlatSymbol: boolean = false): string {
     const positivePitchOffsetFromC = Utils.mod(this.midiNumber, 12);
-    const ambiguousPitchString = ambiguousPitchStrings[positivePitchOffsetFromC];
+    const ambiguousPitchString = !useFlatSymbol
+      ? ambiguousPitchStrings[positivePitchOffsetFromC]
+      : ambiguousPitchStringsSymbols[positivePitchOffsetFromC];
     
     const octaveNumber = Math.floor(this.midiNumber / 12) - 1;
     const octaveNumberString = includeOctaveNumber ? octaveNumber.toString() : "";

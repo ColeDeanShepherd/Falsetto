@@ -15,7 +15,7 @@ export function renderNoteAnswerSelect(
   onAnswer: (answerDifficulty: AnswerDifficulty) => void
 ): JSX.Element {
   const naturalNotes = ["A", "B", "C", "D", "E", "F", "G"];
-  const accidentalNotes = ["A#/Bb", "C#/Db", "D#/Eb", "F#/Gb", "G#/Ab"];
+  const accidentalNotes = ["A#/B♭", "C#/D♭", "D#/E♭", "F#/G♭", "G#/A♭"];
   return (
     <div>
       {renderStringAnswerSelect(width, height, accidentalNotes, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCard, onAnswer)}

@@ -30,7 +30,7 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
   public render(): JSX.Element {
     return (
       <div>
-        <div>{this.props.pitch1.toOneAccidentalAmbiguousString(false) + ", _"}</div>
+        <div>{this.props.pitch1.toOneAccidentalAmbiguousString(false, true) + ", _"}</div>
         <Button
           onClick={event => this.playAudio()}
           variant="contained"
@@ -71,7 +71,7 @@ export function createFlashCardGroup(): FlashCardGroup {
           
           return FlashCard.fromRenderFns(
             () => <FlashCardFrontSide key={iCopy} pitch1={rootPitch} pitch2={newPitch} />,
-            newPitch.toOneAccidentalAmbiguousString(false)
+            newPitch.toOneAccidentalAmbiguousString(false, true)
           );
         })
       )

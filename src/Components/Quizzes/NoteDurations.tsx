@@ -8,12 +8,13 @@ import { VexFlowComponent } from "../VexFlowComponent";
 import { FlashCardGroup } from "../../FlashCardGroup";
 
 const width = 100;
-const height = 100;
+const height = 65;
 
 export function createFlashCardGroup(): FlashCardGroup {
   const flashCardGroup = new FlashCardGroup("Sheet Music Note Durations", createFlashCards());
   flashCardGroup.initialSelectedFlashCardIndices = Utils.range(0, 4).concat(Utils.range(8, 12));
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+  flashCardGroup.containerHeight = "80px";
   flashCardGroup.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/the-basics/overview/";
 
   return flashCardGroup;
@@ -27,7 +28,7 @@ export function createFlashCards(): FlashCard[] {
           vexFlowRender={vexFlowRender.bind(null, "w", [])}
         />
       ),
-      "Whole Note - 4 beats"
+      "Whole Note"
     ),
     FlashCard.fromRenderFns(
       () => (
@@ -36,7 +37,7 @@ export function createFlashCards(): FlashCard[] {
           vexFlowRender={vexFlowRender.bind(null, "h", ["hr"])}
         />
       ),
-      "Half Note - 2 beats"
+      "Half Note"
     ),
     FlashCard.fromRenderFns(
       () => (
@@ -45,7 +46,7 @@ export function createFlashCards(): FlashCard[] {
           vexFlowRender={vexFlowRender.bind(null, "q", ["qr", "hr"])}
         />
       ),
-      "Quarter Note - 1 beat"
+      "Quarter Note"
     ),
     FlashCard.fromRenderFns(
       () => (
@@ -54,7 +55,7 @@ export function createFlashCards(): FlashCard[] {
           vexFlowRender={vexFlowRender.bind(null, "8", ["8r", "qr", "hr"])}
         />
       ),
-      "Eighth Note - 1/2 beats"
+      "Eighth Note"
     ),
     FlashCard.fromRenderFns(
       () => (
@@ -63,7 +64,7 @@ export function createFlashCards(): FlashCard[] {
           vexFlowRender={vexFlowRender.bind(null, "16", ["16r", "8r", "qr", "hr"])}
         />
       ),
-      "Sixteenth Note - 1/4 beats"
+      "Sixteenth Note"
     ),
     FlashCard.fromRenderFns(
       () => (
@@ -72,7 +73,7 @@ export function createFlashCards(): FlashCard[] {
           vexFlowRender={vexFlowRender.bind(null, "32", ["32r", "16r", "8r", "qr", "hr"])}
         />
       ),
-      "32nd Note - 1/8 beats"
+      "32nd Note"
     ),
     FlashCard.fromRenderFns(
       () => (
@@ -81,7 +82,7 @@ export function createFlashCards(): FlashCard[] {
           vexFlowRender={vexFlowRender.bind(null, "64", ["64r", "32r", "16r", "8r", "qr", "hr"])}
         />
       ),
-      "64th Note - 1/16 beats"
+      "64th Note"
     ),
     FlashCard.fromRenderFns(
       () => (
@@ -90,7 +91,7 @@ export function createFlashCards(): FlashCard[] {
           vexFlowRender={vexFlowRender.bind(null, "128", ["128r", "64r", "32r", "16r", "8r", "qr", "hr"])}
         />
       ),
-      "128th Note - 1/32 beats"
+      "128th Note"
     ),
     FlashCard.fromRenderFns(
       () => (
@@ -99,7 +100,7 @@ export function createFlashCards(): FlashCard[] {
           vexFlowRender={vexFlowRender.bind(null, "wr", [])}
         />
       ),
-      "Whole Rest - 4 beats"
+      "Whole Rest"
     ),
     FlashCard.fromRenderFns(
       () => (
@@ -108,7 +109,7 @@ export function createFlashCards(): FlashCard[] {
           vexFlowRender={vexFlowRender.bind(null, "hr", ["hr"])}
         />
       ),
-      "Half Rest - 2 beats"
+      "Half Rest"
     ),
     FlashCard.fromRenderFns(
       () => (
@@ -117,7 +118,7 @@ export function createFlashCards(): FlashCard[] {
           vexFlowRender={vexFlowRender.bind(null, "qr", ["qr", "hr"])}
         />
       ),
-      "Quarter Rest - 1 beat"
+      "Quarter Rest"
     ),
     FlashCard.fromRenderFns(
       () => (
@@ -126,7 +127,7 @@ export function createFlashCards(): FlashCard[] {
           vexFlowRender={vexFlowRender.bind(null, "8r", ["8r", "qr", "hr"])}
         />
       ),
-      "Eighth Rest - 1/2 beats"
+      "Eighth Rest"
     ),
     FlashCard.fromRenderFns(
       () => (
@@ -135,7 +136,7 @@ export function createFlashCards(): FlashCard[] {
           vexFlowRender={vexFlowRender.bind(null, "16r", ["16r", "8r", "qr", "hr"])}
         />
       ),
-      "Sixteenth Rest - 1/4 beats"
+      "Sixteenth Rest"
     ),
     FlashCard.fromRenderFns(
       () => (
@@ -144,7 +145,7 @@ export function createFlashCards(): FlashCard[] {
           vexFlowRender={vexFlowRender.bind(null, "32r", ["32r", "16r", "8r", "qr", "hr"])}
         />
       ),
-      "32nd Rest - 1/8 beats"
+      "32nd Rest"
     ),
     FlashCard.fromRenderFns(
       () => (
@@ -153,7 +154,7 @@ export function createFlashCards(): FlashCard[] {
           vexFlowRender={vexFlowRender.bind(null, "64r", ["64r", "32r", "16r", "8r", "qr", "hr"])}
         />
       ),
-      "64th Rest - 1/16 beats"
+      "64th Rest"
     ),
     FlashCard.fromRenderFns(
       () => (
@@ -162,7 +163,7 @@ export function createFlashCards(): FlashCard[] {
           vexFlowRender={vexFlowRender.bind(null, "128r", ["128r", "64r", "32r", "16r", "8r", "qr", "hr"])}
         />
       ),
-      "128th Rest - 1/32 beats"
+      "128th Rest"
     )
   ];
 }
@@ -171,7 +172,7 @@ function vexFlowRender(noteDurationString: string, restDurationStrings: string[]
     .setFont("Arial", 10)
     .setBackgroundFillStyle("#eed");
 
-  const stave = new Vex.Flow.Stave(0, 0, width);
+  const stave = new Vex.Flow.Stave(0, -20, width);
   stave.setContext(context).draw();
   
   const notes = [

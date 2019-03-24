@@ -112,7 +112,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
     const flashCardContainerStyle: any = {
       fontSize: "2em",
       textAlign: "center",
-      padding: "1em 0",
+      padding: "0.5em 0",
       height: this.props.containerHeight,
       display: "flex",
       justifyContent: "center",
@@ -127,7 +127,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
               {this.props.title}{this.state.invertFlashCards ? " (Inverted)" : ""}
             </Typography>
             
-            <Button variant="contained" onClick={event => this.toggleConfiguration()}>
+            <Button variant="contained" onClick={event => this.toggleConfiguration()} style={{width: "48px", height: "41px"}}>
               <i
                 className="cursor-pointer material-icons"
                 style={{ verticalAlign: "sub", display: "inline-block" }}

@@ -90,6 +90,7 @@ export function createFlashCardGroup(): FlashCardGroup {
   group.renderAnswerSelect = FlashCardUtils.renderNoteAnswerSelect;
   group.enableInvertFlashCards = false;
   group.moreInfoUri = "https://medium.com/@aslushnikov/memorizing-fretboard-a9f4f28dbf03";
+  group.containerHeight = "120px";
 
   return group;
 }
@@ -118,7 +119,7 @@ export function createFlashCards(): FlashCard[] {
               />
             );
           },
-          guitarNote.pitch.toOneAccidentalAmbiguousString(false)
+          guitarNote.pitch.toOneAccidentalAmbiguousString(false, true)
         );
       })
     )
