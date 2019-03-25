@@ -180,6 +180,7 @@ export function renderAnswerSelect(
   flashCards: FlashCard[],
   enabledFlashCardIndices: number[],
   areFlashCardsInverted: boolean,
+  flashCardIndex: number,
   flashCard: FlashCard,
   onAnswer: (answerDifficulty: AnswerDifficulty) => void
 ) {

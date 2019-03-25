@@ -1,17 +1,19 @@
 import * as React from "react";
 import * as Utils from "./Utils";
 
+export type FlashCardSideRenderFn = string | ((width: number, height: number) => JSX.Element);
+
 export class FlashCardSide {
   public constructor(
-    public renderFn: string | ((width: number, height: number) => JSX.Element),
+    public renderFn: FlashCardSideRenderFn,
     public data: any = null
   ) {}
 }
 
 export class FlashCard {
   public static fromRenderFns(
-    frontSideRenderFn: string | ((width: number, height: number) => JSX.Element),
-    backSideRenderFn: string | ((width: number, height: number) => JSX.Element)
+    frontSideRenderFn: FlashCardSideRenderFn,
+    backSideRenderFn: FlashCardSideRenderFn
   ): FlashCard {
     return new FlashCard(
       new FlashCardSide(frontSideRenderFn),

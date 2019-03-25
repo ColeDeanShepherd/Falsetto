@@ -140,6 +140,7 @@ export function renderNoteAnswerSelect(
   flashCards: FlashCard[],
   enabledFlashCardIndices: number[],
   areFlashCardsInverted: boolean,
+  flashCardIndex: number,
   flashCard: FlashCard,
   onAnswer: (answerDifficulty: AnswerDifficulty) => void
 ): JSX.Element {
@@ -148,9 +149,9 @@ export function renderNoteAnswerSelect(
   const flatNotes = ["Ab", "Bb", "Cb", "Db", "Eb", "Fb", "Gb"];
   return (
     <div>
-      {FlashCardUtils.renderStringAnswerSelect(width, height, sharpNotes, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCard, onAnswer)}
-      {FlashCardUtils.renderStringAnswerSelect(width, height, naturalNotes, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCard, onAnswer)}
-      {FlashCardUtils.renderStringAnswerSelect(width, height, flatNotes, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCard, onAnswer)}
+      {FlashCardUtils.renderStringAnswerSelectInternal(`${flashCardIndex}.0`, sharpNotes, flashCard, onAnswer)}
+      {FlashCardUtils.renderStringAnswerSelectInternal(`${flashCardIndex}.1`, naturalNotes, flashCard, onAnswer)}
+      {FlashCardUtils.renderStringAnswerSelectInternal(`${flashCardIndex}.2`, flatNotes, flashCard, onAnswer)}
     </div>
   );
 }

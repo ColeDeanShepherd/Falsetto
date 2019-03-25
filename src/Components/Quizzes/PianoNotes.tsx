@@ -39,13 +39,14 @@ export function renderAnswerSelect(
   flashCards: FlashCard[],
   enabledFlashCardIndices: number[],
   areFlashCardsInverted: boolean,
+  flashCardIndex: number,
   flashCard: FlashCard,
   onAnswer: (answerDifficulty: AnswerDifficulty) => void
 ) {
   return (
     <div>
-      {!areFlashCardsInverted ? FlashCardUtils.renderNoteAnswerSelect(width, height, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCard, onAnswer) : null}
-      {areFlashCardsInverted ? FlashCardUtils.renderDistinctFlashCardSideAnswerSelect(width, height, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCard, onAnswer) : null}
+      {!areFlashCardsInverted ? FlashCardUtils.renderNoteAnswerSelect(width, height, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCardIndex, flashCard, onAnswer) : null}
+      {areFlashCardsInverted ? FlashCardUtils.renderDistinctFlashCardSideAnswerSelect(width, height, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCardIndex, flashCard, onAnswer) : null}
     </div>
   );
 }

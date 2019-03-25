@@ -10,6 +10,9 @@ import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
 import registerServiceWorker from "./registerServiceWorker";
 
 const theme = createMuiTheme({
+  /*typography: {
+    useNextVariants: true,
+  },*/
   overrides: {
     MuiTableCell: {
       root: {

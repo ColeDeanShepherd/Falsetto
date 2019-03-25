@@ -10,6 +10,7 @@ import { renderFlashCardSide } from "./FlashCard";
 import { DefaultFlashCardMultiSelect } from "./DefaultFlashCardMultiSelect";
 import { StudyAlgorithm, AnswerDifficulty, isAnswerDifficultyCorrect, LeitnerStudyAlgorithm } from "../StudyAlgorithm";
 import App from './App';
+import { RenderAnswerSelectFunc, RenderFlashCardMultiSelectFunc } from '../FlashCardGroup';
 
 export interface IStudyFlashCardsProps {
   title: string;
@@ -17,19 +18,8 @@ export interface IStudyFlashCardsProps {
   containerHeight: string;
   initialSelectedFlashCardIndices?: number[];
   initialConfigData: any;
-  renderFlashCardMultiSelect?: (
-    selectedFlashCardIndices: number[],
-    configData: any,
-    onChange: (newValue: number[], newConfigData: any) => void
-  ) => JSX.Element;
-  renderAnswerSelect?: (
-    width: number, height: number,
-    flashCards: FlashCard[],
-    enabledFlashCardIndices: number[],
-    areFlashCardsInverted: boolean,
-    flashCard: FlashCard,
-    onAnswer: (answerDifficulty: AnswerDifficulty) => void
-  ) => JSX.Element;
+  renderFlashCardMultiSelect?: RenderFlashCardMultiSelectFunc;
+  renderAnswerSelect?: RenderAnswerSelectFunc;
   enableInvertFlashCards?: boolean;
   moreInfoUri?: string;
   customNextFlashCardIdFilter?: (studyAlgorithm: StudyAlgorithm, enabledFlashCardIds: number[]) => number[];
@@ -178,7 +168,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
 
           <div style={{textAlign: "center"}}>
             {this.props.renderAnswerSelect ? (
-              this.props.renderAnswerSelect(containerWidth, containerHeight, flashCards, this.state.enabledFlashCardIndices, this.state.invertFlashCards, currentFlashCard, boundOnAnswer)
+              this.props.renderAnswerSelect(containerWidth, containerHeight, flashCards, this.state.enabledFlashCardIndices, this.state.invertFlashCards, this.state.currentFlashCardIndex, currentFlashCard, boundOnAnswer)
              ) : null}
 
             <div style={{marginTop: "1em"}}>

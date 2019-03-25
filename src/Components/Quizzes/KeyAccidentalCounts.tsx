@@ -10,6 +10,7 @@ export function renderAnswerSelect(
   flashCards: FlashCard[],
   enabledFlashCardIndices: number[],
   areFlashCardsInverted: boolean,
+  flashCardIndex: number,
   flashCard: FlashCard,
   onAnswer: (answerDifficulty: AnswerDifficulty) => void
 ): JSX.Element {
@@ -19,9 +20,9 @@ export function renderAnswerSelect(
 
   return (
     <div>
-      {FlashCardUtils.renderStringAnswerSelect(width, height, row0, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCard, onAnswer)}
-      {FlashCardUtils.renderStringAnswerSelect(width, height, row1, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCard, onAnswer)}
-      {FlashCardUtils.renderStringAnswerSelect(width, height, row2, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCard, onAnswer)}
+      {FlashCardUtils.renderStringAnswerSelectInternal(`${flashCardIndex}.0`, row0, flashCard, onAnswer)}
+      {FlashCardUtils.renderStringAnswerSelectInternal(`${flashCardIndex}.1`, row1, flashCard, onAnswer)}
+      {FlashCardUtils.renderStringAnswerSelectInternal(`${flashCardIndex}.2`, row2, flashCard, onAnswer)}
     </div>
   );
 }

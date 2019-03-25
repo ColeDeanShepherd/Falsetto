@@ -139,6 +139,7 @@ export function renderAnswerSelect(
   flashCards: FlashCard[],
   enabledFlashCardIndices: number[],
   areFlashCardsInverted: boolean,
+  flashCardIndex: number,
   flashCard: FlashCard,
   onAnswer: (answerDifficulty: AnswerDifficulty) => void
 ): JSX.Element {
@@ -148,8 +149,8 @@ export function renderAnswerSelect(
     .map(i => "↓ " + i);
   return (
     <div>
-      {FlashCardUtils.renderStringAnswerSelect(width, height, ascendingIntervals, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCard, onAnswer)}
-      {FlashCardUtils.renderStringAnswerSelect(width, height, descendingIntervals, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCard, onAnswer)}
+      {FlashCardUtils.renderStringAnswerSelectInternal(`${flashCardIndex}.0`, ascendingIntervals, flashCard, onAnswer)}
+      {FlashCardUtils.renderStringAnswerSelectInternal(`${flashCardIndex}.1`, descendingIntervals, flashCard, onAnswer)}
     </div>
   );
 }
