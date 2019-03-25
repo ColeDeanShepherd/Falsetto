@@ -1,7 +1,5 @@
 # To-Do
 ## High Priority
-* Fix caching
-* Fix routes not working on initial site load.
 * Improve performance of menu.
 * Set exercise flash card heights.
 
