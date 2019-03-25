@@ -64,6 +64,30 @@ interface IAppState {
 }
 class App extends React.Component<{}, IAppState> {
   public static instance: App;
+  
+  public static trackCustomEvent(id: string, label?: string, value?: number, category?: string) {
+    Utils.precondition((value === undefined) || (Number.isInteger(value) && (value >= 0)));
+
+    if (isProduction()) {
+      const gtag: any = (window as any).gtag;
+
+      let parameters = {};
+      
+      if (label !== undefined) {
+        parameters["event_label"] = label;
+      }
+
+      if (value !== undefined) {
+        parameters["value"] = value;
+      }
+      
+      if (category !== undefined) {
+        parameters["event_category"] = category;
+      }
+
+      gtag("event", id, parameters);      
+    }
+  }
 
   public constructor(props: {}) {
     super(props);
@@ -269,30 +293,6 @@ class App extends React.Component<{}, IAppState> {
   }
   public setMenuIsVisibleOnMobile(value: boolean) {
     this.setState({ isMenuVisibleOnMobile: value });
-  }
-  
-  public trackCustomEvent(id: string, label?: string, value?: number, category?: string) {
-    Utils.precondition((value === undefined) || (Number.isInteger(value) && (value >= 0)));
-
-    if (isProduction()) {
-      const gtag: any = (window as any).gtag;
-
-      let parameters = {};
-      
-      if (label !== undefined) {
-        parameters["event_label"] = label;
-      }
-
-      if (value !== undefined) {
-        parameters["value"] = value;
-      }
-      
-      if (category !== undefined) {
-        parameters["event_category"] = category;
-      }
-
-      gtag("event", id, parameters);      
-    }
   }
 
   private history: History<any>;

@@ -14,9 +14,11 @@
     "react-router-dom": "^4.3.1",
     "react-scripts": "^2.1.5",
     "resize-observer-polyfill": "^1.5.1",
+    "source-map-explorer": "^1.8.0",
     "vexflow": "^1.2.87"
   },
   "scripts": {
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

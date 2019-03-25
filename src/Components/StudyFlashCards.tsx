@@ -249,7 +249,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
       const eventLabel = this.state.currentFlashCardIndex.toString();
       const eventValue = undefined;
       const eventCategory = this.props.title;
-      App.instance.trackCustomEvent(
+      App.trackCustomEvent(
         eventId, eventLabel, eventValue, eventCategory
       );
     }
