@@ -56,6 +56,10 @@ a:visited {
   text-decoration: underline;
 }
 
+.watermark {
+  user-select: none;
+}
+
 /* Mobile */
 @media (max-width: 640px) {
   .hide-on-mobile {

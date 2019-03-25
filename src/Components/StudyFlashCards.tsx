@@ -33,6 +33,7 @@ export interface IStudyFlashCardsProps {
   enableInvertFlashCards?: boolean;
   moreInfoUri?: string;
   customNextFlashCardIdFilter?: (studyAlgorithm: StudyAlgorithm, enabledFlashCardIds: number[]) => number[];
+  showWatermark?: boolean;
 }
 export interface IStudyFlashCardsState {
   currentFlashCardIndex: number;
@@ -119,9 +120,18 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
       alignItems: "center"
     };
 
+    const watermarkStyle: any = {
+      position: "absolute",
+      bottom: 0,
+      right: 0,
+      margin: "0.25em",
+      fontWeight: "bold",
+      opacity: 0.25
+    };
+
     return (
       <Card>
-        <CardContent>
+        <CardContent style={{position: "relative"}}>
           <div style={{display: "flex"}}>
             <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
               {this.props.title}{this.state.invertFlashCards ? " (Inverted)" : ""}
@@ -138,7 +148,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
           </div>
 
           {this.state.showConfiguration ? (
-            <Paper style={{marginBottom: "1em"}}>
+            <Paper style={{margin: "1em 0"}}>
               {this.props.enableInvertFlashCards ? <div><Checkbox checked={this.state.invertFlashCards} onChange={event => this.toggleInvertFlashCards()} /> Invert Flash Cards</div> : null}
               {false ? <p>{flashCards.length} Flash Cards</p> : null}
               {this.renderFlashCardMultiSelect(flashCards)}
@@ -186,6 +196,8 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
               </Button>
             </div>
           </div>
+
+          <p style={watermarkStyle} className="watermark">falsetto.app</p>
         </CardContent>
       </Card>
     );

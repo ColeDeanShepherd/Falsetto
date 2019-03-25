@@ -41,6 +41,7 @@ const renderRootElementFn = (currentFlashCardGroup: FlashCardGroup | undefined) 
         renderAnswerSelect={currentFlashCardGroup.renderAnswerSelect}
         enableInvertFlashCards={currentFlashCardGroup.enableInvertFlashCards}
         customNextFlashCardIdFilter={currentFlashCardGroup.customNextFlashCardIdFilter}
+        showWatermark={true}
       />;
 const rootElement = (
   <MuiThemeProvider theme={theme}>
