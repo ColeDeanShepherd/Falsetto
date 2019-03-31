@@ -16,7 +16,7 @@ const validSharpKeyPitches = [
   null,
   null,
   new Pitch(PitchLetter.C, 1, 4),
-  new Pitch(PitchLetter.D, 1, 4),
+  null,
   null,
   new Pitch(PitchLetter.F, 1, 4),
   null
@@ -33,9 +33,9 @@ const validNaturalKeyPitches = [
 const validFlatKeyPitches = [
   new Pitch(PitchLetter.A, -1, 4),
   new Pitch(PitchLetter.B, -1, 4),
-  new Pitch(PitchLetter.C, -1, 4),
+  new Pitch(PitchLetter.C, -1, 5),
   new Pitch(PitchLetter.D, -1, 4),
-  null,
+  new Pitch(PitchLetter.E, -1, 4),
   null,
   new Pitch(PitchLetter.G, -1, 4)
 ];

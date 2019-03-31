@@ -127,6 +127,10 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
     const noteHighlights = this.props.pressedPitches
       .map(pressedPitch => {
         const noteIndex = pressedPitch.midiNumber - metrics.lowestPitch.midiNumber;
+        if ((noteIndex < 0) || (noteIndex >= metrics.keyLeftXs.length)) {
+          return;
+        }
+
         const highlightedNoteX = pressedPitch.isWhiteKey
           ? metrics.keyLeftXs[noteIndex] + (metrics.whiteKeyWidth / 2)
           : metrics.keyLeftXs[noteIndex] + (metrics.blackKeyWidth / 2);
