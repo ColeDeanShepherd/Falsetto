@@ -4,11 +4,11 @@ import { FlashCard } from "../../FlashCard";
 import { FlashCardGroup } from "../../FlashCardGroup";
 
 export function createFlashCardGroup(): FlashCardGroup {
-  const flashCards = createFlashCards();
-  const flashCardGroup = new FlashCardGroup("Chord Notes", flashCards);
+  const flashCardGroup = new FlashCardGroup("Chord Notes", createFlashCards);
   flashCardGroup.initialSelectedFlashCardIndices = Utils.range(1, 16);
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardGroup.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/jazz-chords/extensions-alterations/";
+  flashCardGroup.containerHeight = "80px";
 
   return flashCardGroup;
 }

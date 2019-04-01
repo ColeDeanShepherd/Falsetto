@@ -2,8 +2,7 @@ import { FlashCard } from "../../FlashCard";
 import { FlashCardGroup } from "../../FlashCardGroup";
 
 export function createFlashCardGroup(): FlashCardGroup {
-  const flashCards = createFlashCards();
-  const flashCardGroup = new FlashCardGroup("Miscellaneous", flashCards);
+  const flashCardGroup = new FlashCardGroup("Miscellaneous", createFlashCards);
 
   return flashCardGroup;
 }

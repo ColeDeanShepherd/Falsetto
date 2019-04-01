@@ -52,7 +52,7 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
   }
 }
 
-export function createFlashCardGroup(): FlashCardGroup {
+export function createFlashCards(): Array<FlashCard> {
   let i = 0;
 
   const flashCards = Utils.flattenArrays<FlashCard>(rootNotes
@@ -86,7 +86,12 @@ export function createFlashCardGroup(): FlashCardGroup {
       )
     )
   );
+
+  return flashCards;
+}
+export function createFlashCardGroup(): FlashCardGroup {
   const renderFlashCardMultiSelect = (
+    flashCards: Array<FlashCard>,
     selectedFlashCardIndices: number[],
     configData: any,
     onChange: (newValue: number[], newConfigData: any) => void
@@ -110,7 +115,7 @@ export function createFlashCardGroup(): FlashCardGroup {
   
   const group = new FlashCardGroup(
     "Interval Ear Training",
-    flashCards
+    createFlashCards
   );
   group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(true, initialConfigData);
   group.initialConfigData = initialConfigData;
@@ -118,6 +123,7 @@ export function createFlashCardGroup(): FlashCardGroup {
   group.enableInvertFlashCards = false;
   group.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   group.moreInfoUri = "https://www.youtube.com/watch?v=_aDCO3h_xik";
+  group.containerHeight = "120px";
 
   return group;
 }

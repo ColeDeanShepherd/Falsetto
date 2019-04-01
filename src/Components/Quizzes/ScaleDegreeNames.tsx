@@ -3,10 +3,10 @@ import { FlashCard } from "../../FlashCard";
 import { FlashCardGroup } from "../../FlashCardGroup";
 
 export function createFlashCardGroup(): FlashCardGroup {
-  const flashCards = createFlashCards();
-  const flashCardGroup = new FlashCardGroup("Scale Degree Names", flashCards);
+  const flashCardGroup = new FlashCardGroup("Scale Degree Names", createFlashCards);
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardGroup.moreInfoUri = "http://musictheoryblog.blogspot.com/2007/01/scale-degrees.html";
+  flashCardGroup.containerHeight = "80px";
 
   return flashCardGroup;
 }

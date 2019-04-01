@@ -172,7 +172,7 @@ export function renderAnswerSelect(
   );
 }
 
-export function createFlashCardGroup(): FlashCardGroup {
+export function createFlashCards(): Array<FlashCard> {
   const flashCards = new Array<FlashCard>();
 
   forEachInterval((pitches, intervalString) => {
@@ -198,7 +198,12 @@ export function createFlashCardGroup(): FlashCardGroup {
     ));
   });
 
+  return flashCards;
+}
+export function createFlashCardGroup(): FlashCardGroup {
+
   const renderFlashCardMultiSelect = (
+    flashCards: Array<FlashCard>,
     selectedFlashCardIndices: number[],
     configData: any,
     onChange: (newValue: number[], newConfigData: any) => void
@@ -220,13 +225,14 @@ export function createFlashCardGroup(): FlashCardGroup {
   
   const group = new FlashCardGroup(
     "Piano Intervals",
-    flashCards
+    createFlashCards
   );
   group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
   group.initialConfigData = initialConfigData;
   group.enableInvertFlashCards = false;
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   group.renderAnswerSelect = renderAnswerSelect;
+  group.containerHeight = "100px";
 
   return group;
 }

@@ -4,11 +4,11 @@ import { FlashCard } from "../../FlashCard";
 import { FlashCardGroup } from "../../FlashCardGroup";
 
 export function createFlashCardGroup(): FlashCardGroup {
-  const flashCards = createFlashCards();
-  const flashCardGroup = new FlashCardGroup("Scale Degree Modes", flashCards);
+  const flashCardGroup = new FlashCardGroup("Scale Degree Modes", createFlashCards);
   flashCardGroup.initialSelectedFlashCardIndices = Utils.range(0, 6);
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardGroup.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/the-basics/modes";
+  flashCardGroup.containerHeight = "80px";
 
   return flashCardGroup;
 }

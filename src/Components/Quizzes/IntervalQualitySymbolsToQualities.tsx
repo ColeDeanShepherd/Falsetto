@@ -3,10 +3,10 @@ import { FlashCard } from "../../FlashCard";
 import { FlashCardGroup } from "../../FlashCardGroup";
 
 export function createFlashCardGroup(): FlashCardGroup {
-  const flashCards = createFlashCards();
-  const flashCardGroup = new FlashCardGroup("Interval Quality Symbols", flashCards);
+  const flashCardGroup = new FlashCardGroup("Interval Quality Symbols", createFlashCards);
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardGroup.moreInfoUri = "https://method-behind-the-music.com/theory/intervals/";
+  flashCardGroup.containerHeight = "80px";
 
   return flashCardGroup;
 }

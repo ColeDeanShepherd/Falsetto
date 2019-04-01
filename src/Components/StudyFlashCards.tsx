@@ -10,7 +10,7 @@ import { renderFlashCardSide } from "./FlashCard";
 import { DefaultFlashCardMultiSelect } from "./DefaultFlashCardMultiSelect";
 import { StudyAlgorithm, AnswerDifficulty, isAnswerDifficultyCorrect, LeitnerStudyAlgorithm } from "../StudyAlgorithm";
 import App from './App';
-import { RenderAnswerSelectFunc, RenderFlashCardMultiSelectFunc } from '../FlashCardGroup';
+import { RenderAnswerSelectFunc, RenderFlashCardMultiSelectFunc, CustomNextFlashCardIdFilter } from '../FlashCardGroup';
 
 export interface IStudyFlashCardsProps {
   title: string;
@@ -22,7 +22,7 @@ export interface IStudyFlashCardsProps {
   renderAnswerSelect?: RenderAnswerSelectFunc;
   enableInvertFlashCards?: boolean;
   moreInfoUri?: string;
-  customNextFlashCardIdFilter?: (studyAlgorithm: StudyAlgorithm, enabledFlashCardIds: number[]) => number[];
+  customNextFlashCardIdFilter?: CustomNextFlashCardIdFilter;
   showWatermark?: boolean;
 }
 export interface IStudyFlashCardsState {
@@ -216,7 +216,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
 
     return this.props.renderFlashCardMultiSelect
       ? this.props.renderFlashCardMultiSelect(
-        this.state.enabledFlashCardIndices, this.state.configData, onEnabledFlashCardIndicesChange
+        flashCards, this.state.enabledFlashCardIndices, this.state.configData, onEnabledFlashCardIndicesChange
       )
       : <DefaultFlashCardMultiSelect
           flashCards={flashCards}
@@ -230,7 +230,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
     flashCards: FlashCard[],
     enabledQuestionIds: Array<number> | undefined
   ) {
-    this.studyAlgorithm.reset(flashCards.map((_, i) => i));
+    this.studyAlgorithm.reset(flashCards.map((_, i) => i), flashCards);
 
     if (enabledQuestionIds) {
       this.studyAlgorithm.enabledQuestionIds = enabledQuestionIds;

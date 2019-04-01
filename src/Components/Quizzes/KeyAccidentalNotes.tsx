@@ -28,10 +28,10 @@ export function renderAnswerSelect(
 }
 
 export function createFlashCardGroup(): FlashCardGroup {
-  const flashCards = createFlashCards();
-  const flashCardGroup = new FlashCardGroup("Key Accidental Notes", flashCards);
+  const flashCardGroup = new FlashCardGroup("Key Accidental Notes", createFlashCards);
   flashCardGroup.renderAnswerSelect = renderAnswerSelect;
   flashCardGroup.moreInfoUri = "http://myguitarpal.com/the-order-of-sharps-and-flats/";
+  flashCardGroup.containerHeight = "80px";
 
   return flashCardGroup;
 }

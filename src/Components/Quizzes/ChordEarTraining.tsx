@@ -184,7 +184,7 @@ export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesF
   }
 }
 
-export function createFlashCardGroup(): FlashCardGroup {
+export function createFlashCards(): Array<FlashCard> {
   let i = 0;
 
   const flashCards = new Array<FlashCard>();
@@ -204,7 +204,11 @@ export function createFlashCardGroup(): FlashCardGroup {
     }
   }
 
+  return flashCards;
+}
+export function createFlashCardGroup(): FlashCardGroup {
   const renderFlashCardMultiSelect = (
+    flashCards: Array<FlashCard>,
     selectedFlashCardIndices: number[],
     configData: any,
     onChange: (newValue: number[], newConfigData: any) => void
@@ -225,13 +229,14 @@ export function createFlashCardGroup(): FlashCardGroup {
   
   const group = new FlashCardGroup(
     "Chord Ear Training",
-    flashCards
+    createFlashCards
   );
   group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
   group.initialConfigData = initialConfigData;
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   group.enableInvertFlashCards = false;
   group.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+  group.containerHeight = "100px";
 
   return group;
 }

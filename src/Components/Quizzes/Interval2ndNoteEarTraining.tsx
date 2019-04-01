@@ -47,7 +47,7 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
   }
 }
 
-export function createFlashCardGroup(): FlashCardGroup {
+export function createFlashCards(): Array<FlashCard> {
   let i = 0;
 
   const flashCards = Utils.flattenArrays<FlashCard>(rootNotes
@@ -77,7 +77,12 @@ export function createFlashCardGroup(): FlashCardGroup {
       )
     )
   );
+
+  return flashCards;
+}
+export function createFlashCardGroup(): FlashCardGroup {
   const renderFlashCardMultiSelect = (
+    flashCards: Array<FlashCard>,
     selectedFlashCardIndices: number[],
     configData: any,
     onChange: (newValue: number[], newConfigData: any) => void
@@ -100,13 +105,14 @@ export function createFlashCardGroup(): FlashCardGroup {
   
   const group = new FlashCardGroup(
     "Interval 2nd Note Ear Training",
-    flashCards
+    createFlashCards
   );
   group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(false, initialConfigData);
   group.initialConfigData = initialConfigData;
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   group.enableInvertFlashCards = false;
   group.renderAnswerSelect = FlashCardUtils.renderNoteAnswerSelect;
+  group.containerHeight = "120px";
   
   return group;
 }

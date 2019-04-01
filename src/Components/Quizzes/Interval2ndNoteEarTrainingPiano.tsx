@@ -218,7 +218,7 @@ export function forEachInterval(callbackFn: (interval: string, pitch1: Pitch, pi
   }
 }
 
-export function createFlashCardGroup(): FlashCardGroup {
+export function createFlashCards(): Array<FlashCard> {
   const flashCards = new Array<FlashCard>();
   forEachInterval((interval, p1, p2, i) => {
     flashCards.push(
@@ -228,8 +228,11 @@ export function createFlashCardGroup(): FlashCardGroup {
       )
     );
   });
-
+  return flashCards;
+}
+export function createFlashCardGroup(): FlashCardGroup {
   const renderFlashCardMultiSelect = (
+    flashCards: Array<FlashCard>,
     selectedFlashCardIndices: number[],
     configData: any,
     onChange: (newValue: number[], newConfigData: any) => void
@@ -250,14 +253,14 @@ export function createFlashCardGroup(): FlashCardGroup {
   
   const group = new FlashCardGroup(
     "Interval 2nd Note Ear Training Piano",
-    flashCards
+    createFlashCards
   );
   group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
   group.initialConfigData = initialConfigData;
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   group.enableInvertFlashCards = false;
   group.renderAnswerSelect = renderAnswerSelect;
-  group.customNextFlashCardIdFilter = (studyAlgorithm, enabledFlashCardIds) => {
+  group.customNextFlashCardIdFilter = (studyAlgorithm, flashCards, enabledFlashCardIds) => {
     if (studyAlgorithm.currentQuestionId === undefined) {
       return enabledFlashCardIds;
     }
@@ -273,6 +276,7 @@ export function createFlashCardGroup(): FlashCardGroup {
         return firstPitch.midiNumber === secondPitch.midiNumber;
       });
   };
+  group.containerHeight = "180px";
   
   return group;
 }

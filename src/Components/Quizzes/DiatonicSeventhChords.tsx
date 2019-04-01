@@ -10,12 +10,12 @@ import { FlashCard } from "../../FlashCard";
 import { FlashCardGroup } from "../../FlashCardGroup";
 
 export function createFlashCardGroup(): FlashCardGroup {
-  const flashCards = createFlashCards();
-  const flashCardGroup = new FlashCardGroup("Diatonic Seventh Chords", flashCards);
+  const flashCardGroup = new FlashCardGroup("Diatonic Seventh Chords", createFlashCards);
   flashCardGroup.enableInvertFlashCards = false;
   flashCardGroup.initialSelectedFlashCardIndices = Utils.range(0, 13);
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardGroup.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/the-basics/keys/";
+  flashCardGroup.containerHeight = "80px";
 
   return flashCardGroup;
 }

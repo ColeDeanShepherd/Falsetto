@@ -1,8 +1,5 @@
 # To-Do
 ## High Priority
-* Improve performance of menu.
-* Set exercise flash card heights.
-
 * Make embeddable versions of exercises to integrate with other websites.
 * Send errors to server somewhere?
 * Enable inversion on guitar scale viewer.

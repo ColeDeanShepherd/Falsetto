@@ -11,9 +11,7 @@ import { PitchLetter } from "../../PitchLetter";
 const notes = ["C", "C#/D♭", "D", "D#/E♭", "E", "F", "F#/G♭", "G", "G#/A♭", "A", "A#/B♭", "B"];
 
 export function createFlashCardGroup(): FlashCardGroup {
-  const flashCards = createFlashCards();
-
-  const group = new FlashCardGroup("Piano Notes", flashCards);
+  const group = new FlashCardGroup("Piano Notes", createFlashCards);
   group.containerHeight = "120px";
   group.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/the-basics/overview/";
   group.renderAnswerSelect = renderAnswerSelect;

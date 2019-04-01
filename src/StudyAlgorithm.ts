@@ -1,6 +1,8 @@
 import * as Utils from "./Utils";
 import { QuizStats } from "./QuizStats";
 import { QuestionStats } from "./QuestionStats";
+import { CustomNextFlashCardIdFilter as CustomNextFlashCardIdFilterFn } from './FlashCardGroup';
+import { FlashCard } from './FlashCard';
 
 export enum AnswerDifficulty {
   Incorrect,
@@ -24,7 +26,7 @@ export function isAnswerDifficultyCorrect(answerDifficulty: AnswerDifficulty): b
 
 export abstract class StudyAlgorithm {
   public enabledQuestionIds: number[] = [];
-  public customNextQuestionIdFilter?: (studyAlgorithm: StudyAlgorithm, enabledQuestionIds: number[]) => number[];
+  public customNextQuestionIdFilter?: CustomNextFlashCardIdFilterFn;
 
   public get currentQuestionId(): number | undefined {
     return this._currentQuestionId;
@@ -33,12 +35,13 @@ export abstract class StudyAlgorithm {
     return this._quizStats;
   }
 
-  public reset(questionIds: number[]) {
-    this.questionIds = questionIds;
+  public reset(questionIds: number[], flashCards: Array<FlashCard>) {
+    this._questionIds = questionIds;
+    this._flashCards = flashCards;
     this.enabledQuestionIds = questionIds.slice();
     this._currentQuestionId = undefined;
     this._quizStats = new QuizStats(
-      this.questionIds.map(id => new QuestionStats(id, 0, 0))
+      this._questionIds.map(id => new QuestionStats(id, 0, 0))
     );
   }
   public onAnswer(answerDifficulty: AnswerDifficulty): void {
@@ -58,7 +61,7 @@ export abstract class StudyAlgorithm {
   }
   public getNextQuestionId(): number {
     const enabledQuestionIds = this.customNextQuestionIdFilter
-      ? this.customNextQuestionIdFilter(this, this.enabledQuestionIds)
+      ? this.customNextQuestionIdFilter(this, this._flashCards, this.enabledQuestionIds)
       : this.enabledQuestionIds;
       
     Utils.assert(enabledQuestionIds.length > 0);
@@ -68,7 +71,8 @@ export abstract class StudyAlgorithm {
 
   protected abstract getNextQuestionIdInternal(enabledQuestionIds: number[]): number;
 
-  protected questionIds: number[] = [];
+  protected _flashCards: Array<FlashCard> = [];
+  protected _questionIds: number[] = [];
   protected _currentQuestionId: number | undefined;
   protected _quizStats: QuizStats = new QuizStats([]);
 }
@@ -105,8 +109,8 @@ export class LeitnerStudyAlgorithm extends StudyAlgorithm {
       this.tieredQuestionIds[i] = new Array<number>();
     }
   }
-  public reset(questionIds: number[]) {
-    super.reset(questionIds);
+  public reset(questionIds: number[], flashCards: Array<FlashCard>) {
+    super.reset(questionIds, flashCards);
     
     this.tieredQuestionIds[0] = this.enabledQuestionIds.slice();
     for (let i = 1; i < this.tieredQuestionIds.length; i++) {

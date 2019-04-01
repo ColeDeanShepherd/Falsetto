@@ -267,9 +267,8 @@ export class PianoChordsAnswerSelect extends React.Component<IPianoChordsAnswerS
 }
 
 export function createFlashCardGroup(): FlashCardGroup {
-  const flashCards = createFlashCards();
-
   const renderFlashCardMultiSelect = (
+    flashCards: Array<FlashCard>,
     selectedFlashCardIndices: number[],
     configData: any,
     onChange: (newValue: number[], newConfigData: any) => void
@@ -291,12 +290,13 @@ export function createFlashCardGroup(): FlashCardGroup {
       .map(scale => scale.type)
   };
 
-  const group = new FlashCardGroup("Piano Chords", flashCards);
+  const group = new FlashCardGroup("Piano Chords", createFlashCards);
   group.enableInvertFlashCards = true;
   group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
   group.initialConfigData = initialConfigData;
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   group.renderAnswerSelect = renderAnswerSelect;
+  group.containerHeight = "120px";
 
   return group;
 }

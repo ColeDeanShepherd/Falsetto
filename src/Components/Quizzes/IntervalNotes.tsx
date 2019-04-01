@@ -224,8 +224,8 @@ export class IntervalNotesFlashCardMultiSelect extends React.Component<IInterval
   }
 }
 
-export function createFlashCardGroup(): FlashCardGroup {
-  const flashCards = Utils.flattenArrays<FlashCard>(rootNotes
+export function createFlashCards(): Array<FlashCard> {
+  return Utils.flattenArrays<FlashCard>(rootNotes
     .map(rootNote => intervals
       .map(interval => signs
         .map(sign => {
@@ -249,7 +249,10 @@ export function createFlashCardGroup(): FlashCardGroup {
       )
     )
   );
+}
+export function createFlashCardGroup(): FlashCardGroup {
   const renderFlashCardMultiSelect = (
+    flashCards: Array<FlashCard>,
     selectedFlashCardIndices: number[],
     configData: any,
     onChange: (newValue: number[], newConfigData: any) => void
@@ -272,13 +275,14 @@ export function createFlashCardGroup(): FlashCardGroup {
   
   const group = new FlashCardGroup(
     "Notes To Intervals",
-    flashCards
+    createFlashCards
   );
   group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
   group.initialConfigData = initialConfigData;
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   group.enableInvertFlashCards = false;
   group.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+  group.containerHeight = "80px";
 
   return group;
 }

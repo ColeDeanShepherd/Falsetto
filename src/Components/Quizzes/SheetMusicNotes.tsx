@@ -24,13 +24,13 @@ const clefs = [
 ];
 
 export function createFlashCardGroup(): FlashCardGroup {
-  const flashCards = createFlashCards();
   const initialConfigData: IConfigData = {
     isTrebleClefEnabled: true,
     isBassClefEnabled: true,
     areAccidentalsEnabled: false
   };
   const renderFlashCardMultiSelect = (
+    flashCards: Array<FlashCard>,
     selectedFlashCardIndices: number[],
     configData: any,
     onChange: (newValue: number[], newConfigData: any) => void
@@ -43,7 +43,7 @@ export function createFlashCardGroup(): FlashCardGroup {
     />;
   }
 
-  const flashCardGroup = new FlashCardGroup("Sheet Music Notes", flashCards);
+  const flashCardGroup = new FlashCardGroup("Sheet Music Notes", createFlashCards);
   flashCardGroup.enableInvertFlashCards = false;
   flashCardGroup.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
   flashCardGroup.initialConfigData = initialConfigData;

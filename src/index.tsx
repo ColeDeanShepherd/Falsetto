@@ -36,7 +36,7 @@ const renderRootElementFn = (currentFlashCardGroup: FlashCardGroup | undefined) 
     : <StudyFlashCards
         key={currentFlashCardGroup.route}
         title={currentFlashCardGroup.name}
-        flashCards={currentFlashCardGroup.flashCards}
+        flashCards={currentFlashCardGroup.createFlashCards()}
         containerHeight={currentFlashCardGroup.containerHeight}
         initialSelectedFlashCardIndices={currentFlashCardGroup.initialSelectedFlashCardIndices}
         initialConfigData={currentFlashCardGroup.initialConfigData}

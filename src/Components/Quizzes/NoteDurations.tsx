@@ -11,7 +11,7 @@ const width = 100;
 const height = 65;
 
 export function createFlashCardGroup(): FlashCardGroup {
-  const flashCardGroup = new FlashCardGroup("Sheet Music Note Durations", createFlashCards());
+  const flashCardGroup = new FlashCardGroup("Sheet Music Note Durations", createFlashCards);
   flashCardGroup.initialSelectedFlashCardIndices = Utils.range(0, 4).concat(Utils.range(8, 12));
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardGroup.containerHeight = "80px";

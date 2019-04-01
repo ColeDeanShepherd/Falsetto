@@ -28,10 +28,10 @@ export function renderAnswerSelect(
 }
 
 export function createFlashCardGroup(): FlashCardGroup {
-  const flashCards = createFlashCards();
-  const flashCardGroup = new FlashCardGroup("Key Accidental Counts", flashCards);
+  const flashCardGroup = new FlashCardGroup("Key Accidental Counts", createFlashCards);
   flashCardGroup.renderAnswerSelect = renderAnswerSelect;
   flashCardGroup.moreInfoUri = "https://www.musicnotes.com/now/tips/circle-of-fifths-guide/";
+  flashCardGroup.containerHeight = "80px";
 
   return flashCardGroup;
 }

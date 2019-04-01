@@ -3,10 +3,10 @@ import { FlashCard } from "../../FlashCard";
 import { FlashCardGroup } from "../../FlashCardGroup";
 
 export function createFlashCardGroup(): FlashCardGroup {
-  const flashCards = createFlashCards();
-  const flashCardGroup = new FlashCardGroup("Available Chord Tensions", flashCards);
+  const flashCardGroup = new FlashCardGroup("Available Chord Tensions", createFlashCards);
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardGroup.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/jazz-chords/extensions-alterations/";
+  flashCardGroup.containerHeight = "80px";
 
   return flashCardGroup;
 }

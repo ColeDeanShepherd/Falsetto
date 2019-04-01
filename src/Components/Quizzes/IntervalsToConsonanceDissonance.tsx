@@ -3,10 +3,10 @@ import { FlashCard } from "../../FlashCard";
 import { FlashCardGroup } from "../../FlashCardGroup";
 
 export function createFlashCardGroup(): FlashCardGroup {
-  const flashCards = createFlashCards();
-  const flashCardGroup = new FlashCardGroup("Intervals Consonance/Dissonance", flashCards);
+  const flashCardGroup = new FlashCardGroup("Intervals Consonance/Dissonance", createFlashCards);
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardGroup.moreInfoUri = "https://sites.google.com/site/nebironamsmusictheory/chords/1-01intervals";
+  flashCardGroup.containerHeight = "80px";
 
   return flashCardGroup;
 }

@@ -1,13 +1,12 @@
-import * as Utils from "../../Utils";
 import * as FlashCardUtils from "../../Components/Quizzes/Utils";
 import { FlashCard } from "../../FlashCard";
 import { FlashCardGroup } from "../../FlashCardGroup";
 
 export function createFlashCardGroup(): FlashCardGroup {
-  const flashCards = createFlashCards();
-  const flashCardGroup = new FlashCardGroup("Chord Harmonic Functions", flashCards);
+  const flashCardGroup = new FlashCardGroup("Chord Harmonic Functions", createFlashCards);
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardGroup.moreInfoUri = "https://davidkulma.com/musictheory/harmonicfunction";
+  flashCardGroup.containerHeight = "80px";
 
   return flashCardGroup;
 }

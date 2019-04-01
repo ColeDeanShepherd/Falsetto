@@ -65,8 +65,8 @@ export class GuitarNotesFlashCardMultiSelect extends React.Component<IGuitarNote
 }
 
 export function createFlashCardGroup(): FlashCardGroup {
-  const flashCards = createFlashCards();
   const renderFlashCardMultiSelect = (
+    flashCards: Array<FlashCard>,
     selectedFlashCardIndices: number[],
     configData: any,
     onChange: (newValue: number[], newConfigData: any) => void
@@ -83,7 +83,7 @@ export function createFlashCardGroup(): FlashCardGroup {
     maxFret: 11
   };
 
-  const group = new FlashCardGroup("Guitar Notes", flashCards);
+  const group = new FlashCardGroup("Guitar Notes", createFlashCards);
   group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
   group.initialConfigData = initialConfigData;
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;

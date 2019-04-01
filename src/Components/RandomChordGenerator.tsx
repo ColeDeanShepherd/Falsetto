@@ -235,14 +235,16 @@ export class RandomChordGeneratorFlashCardMultiSelect extends React.Component<IR
   }
 }
 
-export function createFlashCardGroup(): FlashCardGroup {
-  const flashCards = Utils.flattenArrays<FlashCard>(chordRoots
+export function createFlashCards(): Array<FlashCard> {
+  return Utils.flattenArrays<FlashCard>(chordRoots
     .map(chordRoot => chordTypes
       .map(chordType => FlashCard.fromRenderFns(chordRoot + chordType.name, chordType.notes))
     )
   );
-    
+}
+export function createFlashCardGroup(): FlashCardGroup {
   const renderFlashCardMultiSelect = (
+    flashCards: Array<FlashCard>,
     selectedFlashCardIndices: number[],
     configData: any,
     onChange: (newValue: number[], newConfigData: any) => void
@@ -266,11 +268,13 @@ export function createFlashCardGroup(): FlashCardGroup {
   
   const group = new FlashCardGroup(
     "Random Chord Generator",
-    flashCards
+    createFlashCards
   );
   group.enableInvertFlashCards = false;
   group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
   group.initialConfigData = initialConfigData;
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
+  group.containerHeight = "80px";
+
   return group;
 }

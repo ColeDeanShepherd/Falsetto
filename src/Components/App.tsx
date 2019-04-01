@@ -163,7 +163,7 @@ class App extends React.Component<{}, IAppState> {
       {
         title: "The Jazz Piano Site",
         flashCardGroups: [
-          new FlashCardGroup("Overview", Overview.createFlashCards())
+          new FlashCardGroup("Overview", Overview.createFlashCards)
         ]
       }
     ];
@@ -318,7 +318,7 @@ class App extends React.Component<{}, IAppState> {
         <StudyFlashCards
           key={currentFlashCardGroup.route}
           title={currentFlashCardGroup.name}
-          flashCards={currentFlashCardGroup.flashCards}
+          flashCards={currentFlashCardGroup.createFlashCards()}
           containerHeight={currentFlashCardGroup.containerHeight}
           initialSelectedFlashCardIndices={currentFlashCardGroup.initialSelectedFlashCardIndices}
           initialConfigData={currentFlashCardGroup.initialConfigData}

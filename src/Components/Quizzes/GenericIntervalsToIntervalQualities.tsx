@@ -3,8 +3,7 @@ import { FlashCard } from "../../FlashCard";
 import { FlashCardGroup } from "../../FlashCardGroup";
 
 export function createFlashCardGroup(): FlashCardGroup {
-  const flashCards = createFlashCards();
-  const flashCardGroup = new FlashCardGroup("Generic Intervals To Interval Qualities", flashCards);
+  const flashCardGroup = new FlashCardGroup("Generic Intervals To Interval Qualities", createFlashCards);
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
 
   return flashCardGroup;

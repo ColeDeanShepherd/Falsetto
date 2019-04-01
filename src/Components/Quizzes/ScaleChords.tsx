@@ -4,11 +4,11 @@ import { FlashCard } from "../../FlashCard";
 import { FlashCardGroup } from "../../FlashCardGroup";
 
 export function createFlashCardGroup(): FlashCardGroup {
-  const flashCards = createFlashCards();
-  const flashCardGroup = new FlashCardGroup("Scale Chords", flashCards);
+  const flashCardGroup = new FlashCardGroup("Scale Chords", createFlashCards);
   flashCardGroup.initialSelectedFlashCardIndices = Utils.range(0, 8);
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardGroup.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/jazz-scales/chord-scale-system/";
+  flashCardGroup.containerHeight = "80px";
 
   return flashCardGroup;
 }
