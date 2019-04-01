@@ -111,6 +111,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
     };
 
     const watermarkStyle: any = {
+      display: this.props.showWatermark ? "block" : "none",
       position: "absolute",
       bottom: 0,
       right: 0,

@@ -59,10 +59,13 @@ import { isProduction } from "../Config";
 
 const googleAnalyticsTrackingId = "UA-72494315-5";
 
+interface IAppProps {
+  isEmbedded: boolean;
+}
 interface IAppState {
   isMenuVisibleOnMobile: boolean;
 }
-class App extends React.Component<{}, IAppState> {
+class App extends React.Component<IAppProps, IAppState> {
   public static instance: App;
   
   public static trackCustomEvent(id: string, label?: string, value?: number, category?: string) {
@@ -89,7 +92,7 @@ class App extends React.Component<{}, IAppState> {
     }
   }
 
-  public constructor(props: {}) {
+  public constructor(props: IAppProps) {
     super(props);
 
     this.history = createBrowserHistory();
@@ -194,9 +197,76 @@ class App extends React.Component<{}, IAppState> {
       <NavLink to="rhythym-tapper" className="nav-link">Rhythym Tapper</NavLink>
     </div>
     */
-   
-    return (
-      <Router history={this.history}>
+
+    const nav = (
+      <div className="nav left-nav">
+        <div>
+          <p style={{marginTop: 0}}>Notes</p>
+          {renderFlashCardGroupLink(PianoNotes.createFlashCardGroup())}
+          {renderFlashCardGroupLink(GuitarNotes.createFlashCardGroup())}
+          {renderFlashCardGroupLink(NoteDurations.createFlashCardGroup())}
+          {renderFlashCardGroupLink(SheetMusicNotes.createFlashCardGroup())}
+        </div>
+        <div>
+          <p>Intervals</p>
+          {renderFlashCardGroupLink(IntervalQualitySymbolsToQualities.createFlashCardGroup())}
+          {renderFlashCardGroupLink(IntervalNamesToHalfSteps.createFlashCardGroup())}
+          {renderFlashCardGroupLink(IntervalsToConsonanceDissonance.createFlashCardGroup())}
+          {renderFlashCardGroupLink(Interval2ndNotes.createFlashCardGroup())}
+          {renderFlashCardGroupLink(IntervalNotes.createFlashCardGroup())}
+          {renderFlashCardGroupLink(SheetMusicIntervalRecognition.createFlashCardGroup())}
+          {renderFlashCardGroupLink(PianoIntervals.createFlashCardGroup())}
+          {renderFlashCardGroupLink(GuitarIntervals.createFlashCardGroup())}
+          {renderFlashCardGroupLink(IntervalEarTraining.createFlashCardGroup())}
+          {renderFlashCardGroupLink(Interval2ndNoteEarTraining.createFlashCardGroup())}
+          {renderFlashCardGroupLink(Interval2ndNoteEarTrainingPiano.createFlashCardGroup())}
+        </div>
+        <div>
+          <p>Scales</p>
+          {renderFlashCardGroupLink(ScaleDegreeNames.createFlashCardGroup())}
+          {renderFlashCardGroupLink(ScaleNotes.createFlashCardGroup())}
+          {renderFlashCardGroupLink(PianoScales.createFlashCardGroup())}
+          {renderFlashCardGroupLink(GuitarScales.createFlashCardGroup())}
+          {renderFlashCardGroupLink(ScaleDegreeModes.createFlashCardGroup())}
+          {renderFlashCardGroupLink(ScaleChords.createFlashCardGroup())}
+          {renderFlashCardGroupLink(ScaleEarTraining.createFlashCardGroup())}
+          <NavLink to="scale-viewer" className="nav-link">Scale Viewer</NavLink>
+        </div>
+        <div>
+          <p>Keys</p>
+          {renderFlashCardGroupLink(KeyAccidentalCounts.createFlashCardGroup())}
+          {renderFlashCardGroupLink(KeyAccidentalNotes.createFlashCardGroup())}
+          {renderFlashCardGroupLink(KeySignatureIdentification.createFlashCardGroup())}
+        </div>
+        <div>
+          <p>Chords</p>
+          {renderFlashCardGroupLink(ChordFamilies.createFlashCardGroup())}
+          {renderFlashCardGroupLink(ChordNotes.createFlashCardGroup())}
+          {renderFlashCardGroupLink(AvailableChordTensions.createFlashCardGroup())}
+          {renderFlashCardGroupLink(DiatonicTriads.createFlashCardGroup())}
+          {renderFlashCardGroupLink(DiatonicSeventhChords.createFlashCardGroup())}
+          {renderFlashCardGroupLink(SheetMusicChordRecognition.createFlashCardGroup())}
+          {renderFlashCardGroupLink(PianoChords.createFlashCardGroup())}
+          {renderFlashCardGroupLink(GuitarChords.createFlashCardGroup())}
+          {renderFlashCardGroupLink(ChordEarTraining.createFlashCardGroup())}
+          <NavLink to="chord-viewer" className="nav-link">Chord Viewer</NavLink>
+          {renderFlashCardGroupLink(RandomChordGenerator.createFlashCardGroup())}
+        </div>
+      </div>
+    );
+
+    const rightPane = (
+      <div className={!this.isEmbedded ? "right-pane" : "right-pane embedded"}>
+        <Route exact path="/" component={() => <DocumentTitle title="Falsetto"><HomePage /></DocumentTitle>} />
+        <Route path="/about" component={() => <DocumentTitle title="About - Falsetto"><AboutPage /></DocumentTitle>} />
+        {this.flashCardGroups.map(fcg => <Route key={fcg.route} path={fcg.route} component={this.createStudyFlashCardGroupComponent(fcg)} />)}
+        <Route path="/scale-viewer" component={() => <DocumentTitle title={"Scale Viewer - Falsetto"}><ScaleViewer /></DocumentTitle>} />
+        <Route path="/chord-viewer" component={() => <DocumentTitle title={"Chord Viewer - Falsetto"}><ChordViewer /></DocumentTitle>} />
+        <Route path="/rhythym-tapper" component={() => <DocumentTitle title={"Rhythym Tapper - Falsetto"}><RhythymTapper /></DocumentTitle>} />
+      </div>
+    );
+    const app = !this.isEmbedded
+      ? (
         <div className="app">
           <AppBar position="static" className="top-pane">
             <Toolbar className="nav top-nav">
@@ -216,71 +286,17 @@ class App extends React.Component<{}, IAppState> {
           </AppBar>
           <div className="bottom-pane horizontal-panes">
             <Paper className={"left-pane" + (!this.state.isMenuVisibleOnMobile ? " hide-on-mobile" : "")}>
-              <div className="nav left-nav">
-                <div>
-                  <p style={{marginTop: 0}}>Notes</p>
-                  {renderFlashCardGroupLink(PianoNotes.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(GuitarNotes.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(NoteDurations.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(SheetMusicNotes.createFlashCardGroup())}
-                </div>
-                <div>
-                  <p>Intervals</p>
-                  {renderFlashCardGroupLink(IntervalQualitySymbolsToQualities.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(IntervalNamesToHalfSteps.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(IntervalsToConsonanceDissonance.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(Interval2ndNotes.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(IntervalNotes.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(SheetMusicIntervalRecognition.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(PianoIntervals.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(GuitarIntervals.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(IntervalEarTraining.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(Interval2ndNoteEarTraining.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(Interval2ndNoteEarTrainingPiano.createFlashCardGroup())}
-                </div>
-                <div>
-                  <p>Scales</p>
-                  {renderFlashCardGroupLink(ScaleDegreeNames.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(ScaleNotes.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(PianoScales.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(GuitarScales.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(ScaleDegreeModes.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(ScaleChords.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(ScaleEarTraining.createFlashCardGroup())}
-                  <NavLink to="scale-viewer" className="nav-link">Scale Viewer</NavLink>
-                </div>
-                <div>
-                  <p>Keys</p>
-                  {renderFlashCardGroupLink(KeyAccidentalCounts.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(KeyAccidentalNotes.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(KeySignatureIdentification.createFlashCardGroup())}
-                </div>
-                <div>
-                  <p>Chords</p>
-                  {renderFlashCardGroupLink(ChordFamilies.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(ChordNotes.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(AvailableChordTensions.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(DiatonicTriads.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(DiatonicSeventhChords.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(SheetMusicChordRecognition.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(PianoChords.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(GuitarChords.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(ChordEarTraining.createFlashCardGroup())}
-                  <NavLink to="chord-viewer" className="nav-link">Chord Viewer</NavLink>
-                  {renderFlashCardGroupLink(RandomChordGenerator.createFlashCardGroup())}
-                </div>
-              </div>
+              {nav}
             </Paper>
-            <div className="right-pane">
-              <Route exact path="/" component={() => <DocumentTitle title="Falsetto"><HomePage /></DocumentTitle>} />
-              <Route path="/about" component={() => <DocumentTitle title="About - Falsetto"><AboutPage /></DocumentTitle>} />
-              {this.flashCardGroups.map(fcg => <Route key={fcg.route} path={fcg.route} component={this.createStudyFlashCardGroupComponent(fcg)} />)}
-              <Route path="/scale-viewer" component={() => <DocumentTitle title={"Scale Viewer - Falsetto"}><ScaleViewer /></DocumentTitle>} />
-              <Route path="/chord-viewer" component={() => <DocumentTitle title={"Chord Viewer - Falsetto"}><ChordViewer /></DocumentTitle>} />
-              <Route path="/rhythym-tapper" component={() => <DocumentTitle title={"Rhythym Tapper - Falsetto"}><RhythymTapper /></DocumentTitle>} />
-            </div>
+            {rightPane}
           </div>
         </div>
+      )
+      : <div className="app">{rightPane}</div>;
+   
+    return (
+      <Router history={this.history}>
+        {app}
       </Router>
     );
   }
@@ -299,9 +315,13 @@ class App extends React.Component<{}, IAppState> {
   private unregisterHistoryListener: UnregisterCallback;
   private groupedFlashCardGroups: { title: string; flashCardGroups: FlashCardGroup[]; }[];
   private flashCardGroups: FlashCardGroup[];
+
+  private get isEmbedded(): boolean {
+    return this.props.isEmbedded || this.history.location.search.includes("isEmbedded=true");
+  }
   
   private trackPageView() {
-    if (isProduction()) {
+    if (isProduction() && !this.isEmbedded) {
       const gtag: any = (window as any).gtag;
       gtag("config", googleAnalyticsTrackingId, {
         "page_title" : document.title,

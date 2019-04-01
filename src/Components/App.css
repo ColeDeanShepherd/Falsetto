@@ -113,4 +113,7 @@ a:visited {
     overflow-y: auto;
     flex-grow: 1;
   }
+  .right-pane.embedded {
+    padding: 0;
+  }
 }
