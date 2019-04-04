@@ -23,7 +23,7 @@ export interface IStudyFlashCardsProps {
   enableInvertFlashCards?: boolean;
   moreInfoUri?: string;
   customNextFlashCardIdFilter?: CustomNextFlashCardIdFilter;
-  showWatermark?: boolean;
+  isEmbedded?: boolean;
 }
 export interface IStudyFlashCardsState {
   currentFlashCardIndex: number;
@@ -111,7 +111,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
     };
 
     const watermarkStyle: any = {
-      display: this.props.showWatermark ? "block" : "none",
+      display: this.props.isEmbedded ? "block" : "none",
       position: "absolute",
       bottom: 0,
       right: 0,
@@ -120,8 +120,12 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
       opacity: 0.25
     };
 
+    const cardStyle: any = this.props.isEmbedded
+      ? { minHeight: "100vh", boxShadow: "none" }
+      : {};
+
     return (
-      <Card>
+      <Card style={cardStyle}>
         <CardContent style={{position: "relative"}}>
           <div style={{display: "flex"}}>
             <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
@@ -146,11 +150,11 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
             </Paper>
           ) : null}
 
-          {this.props.moreInfoUri ? <a href={this.props.moreInfoUri} target="_blank">To learn more, click here.</a> : null}
+          {(!this.props.isEmbedded && this.props.moreInfoUri) ? <p style={{ margin: "0.5em 0" }}><a href={this.props.moreInfoUri} className="moreInfoLink" target="_blank">To learn more, click here.</a></p> : null}
 
           {this.props.renderAnswerSelect
             ? (
-              <p style={{marginBottom: "0"}}>
+              <p style={{marginBottom: "0", marginTop: "0"}}>
                 <span style={{paddingRight: "2em"}}>{this.studyAlgorithm.quizStats.numCorrectGuesses} / {this.studyAlgorithm.quizStats.numIncorrectGuesses}</span>
                 <span style={{paddingRight: "2em"}}>{(100 * percentCorrect).toFixed(2)}%</span>
               </p>
@@ -187,9 +191,9 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
               </Button>
             </div>
           </div>
-
-          <p style={watermarkStyle} className="watermark">falsetto.app</p>
         </CardContent>
+        
+        <p style={watermarkStyle} className="watermark">https://falsetto.app</p>
       </Card>
     );
   }

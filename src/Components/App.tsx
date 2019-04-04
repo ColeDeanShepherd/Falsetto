@@ -51,7 +51,7 @@ import { ChordViewer } from "./ChordViewer";
 import { RhythymTapper } from "./RhythymTapper";
 import { FlashCardGroup } from "../FlashCardGroup";
 import { StudyFlashCards } from "./StudyFlashCards";
-import * as Overview from "./Quizzes/TheJazzPianoSite/TheBasics/Overview"
+import * as TheJazzPianoSiteOverview from "./Quizzes/TheJazzPianoSite/TheBasics/Overview"
 import { AboutPage } from "./AboutPage";
 import DocumentTitle from "react-document-title";
 import { HomePage } from "./HomePage";
@@ -166,7 +166,7 @@ class App extends React.Component<IAppProps, IAppState> {
       {
         title: "The Jazz Piano Site",
         flashCardGroups: [
-          new FlashCardGroup("Overview", Overview.createFlashCards)
+          new FlashCardGroup("The Jazz Piano Site Overview", TheJazzPianoSiteOverview.createFlashCards)
         ]
       }
     ];
@@ -347,6 +347,7 @@ class App extends React.Component<IAppProps, IAppState> {
           moreInfoUri={currentFlashCardGroup.moreInfoUri}
           enableInvertFlashCards={currentFlashCardGroup.enableInvertFlashCards}
           customNextFlashCardIdFilter={currentFlashCardGroup.customNextFlashCardIdFilter}
+          isEmbedded={this.isEmbedded}
         />
       </DocumentTitle>
     );
