@@ -1,4 +1,5 @@
 import * as React from "react";
+import { TableRow, TableCell, Table, TableHead, TableBody, Grid, Checkbox, Button } from "@material-ui/core";
 
 import * as Utils from "../../Utils";
 import { Size2D } from "../../Size2D";
@@ -9,9 +10,9 @@ import { FlashCardGroup } from "../../FlashCardGroup";
 import { AnswerDifficulty } from "../../StudyAlgorithm";
 import { Pitch } from "../../Pitch";
 import { PitchLetter } from "../../PitchLetter";
-import { TableRow, TableCell, Table, TableHead, TableBody, Grid, Checkbox, Button, Typography } from "@material-ui/core";
 import { Chord } from "../../Chord";
 import { GuitarFretboard, renderGuitarFretboardScaleExtras } from "../GuitarFretboard";
+import { ScaleAnswerSelect } from "../ScaleAnswerSelect";
 
 const rootPitchStrs = ["Ab", "A", "Bb", "B/Cb", "C", "C#/Db", "D", "Eb", "E", "F", "F#/Gb", "G"];
 
@@ -144,125 +145,6 @@ export class GuitarScalesFlashCardMultiSelect extends React.Component<IGuitarSca
 
     const newEnabledFlashCardIndices = configDataToEnabledQuestionIds(newConfigData);
     this.props.onChange(newEnabledFlashCardIndices, newConfigData);
-  }
-}
-
-export interface IGuitarScalesAnswerSelectProps {
-  correctAnswer: string;
-  onAnswer: (answerDifficulty: AnswerDifficulty) => void;
-}
-export interface IGuitarScalesAnswerSelectState {
-  selectedRootPitch: string | undefined;
-  selectedScaleType: string | undefined;
-}
-export class GuitarScalesAnswerSelect extends React.Component<IGuitarScalesAnswerSelectProps, IGuitarScalesAnswerSelectState> {
-  public constructor(props: IGuitarScalesAnswerSelectProps) {
-    super(props);
-    
-    this.state = {
-      selectedRootPitch: undefined,
-      selectedScaleType: undefined
-    };
-  }
-  public render(): JSX.Element {
-    return (
-      <div>
-        <Typography gutterBottom={true} variant="h6" component="h4">
-          Root Pitch
-        </Typography>
-        <div style={{padding: "1em 0"}}>
-          <div>
-            {rootPitchStrs.slice(0, 6).map(rootPitchStr => {
-              const style: any = { textTransform: "none" };
-              
-              const isPressed = rootPitchStr === this.state.selectedRootPitch;
-              if (isPressed) {
-                style.backgroundColor = "#959595";
-              }
-
-              return (
-                <Button
-                  key={rootPitchStr}
-                  onClick={event => this.onRootPitchClick(rootPitchStr)}
-                  variant="contained"
-                  style={style}
-                >
-                  {rootPitchStr}
-                </Button>
-              );
-            })}
-          </div>
-          <div>
-            {rootPitchStrs.slice(6, 12).map(rootPitchStr => {
-              const style: any = { textTransform: "none" };
-              
-              const isPressed = rootPitchStr === this.state.selectedRootPitch;
-              if (isPressed) {
-                style.backgroundColor = "#959595";
-              }
-
-              return (
-                <Button
-                  key={rootPitchStr}
-                  onClick={event => this.onRootPitchClick(rootPitchStr)}
-                  variant="contained"
-                  style={style}
-                >
-                  {rootPitchStr}
-                </Button>
-              );
-            })}
-          </div>
-        </div>
-        
-        <Typography gutterBottom={true} variant="h6" component="h4">
-          Scale
-        </Typography>
-        <div style={{padding: "1em 0"}}>
-          {scales.map(scale => {
-            const style: any = { textTransform: "none" };
-            
-            const isPressed = scale.type === this.state.selectedScaleType;
-            if (isPressed) {
-              style.backgroundColor = "#959595";
-            }
-            
-            return (
-              <Button
-                key={scale.type}
-                onClick={event => this.onScaleTypeClick(scale.type)}
-                variant="contained"
-                style={style}
-              >
-                {scale.type}
-              </Button>
-            );
-          })}
-        </div>
-
-        <div style={{padding: "1em 0"}}>
-          <Button
-            onClick={event => this.confirmAnswer()}
-            disabled={!this.state.selectedRootPitch || !this.state.selectedScaleType}
-            variant="contained"
-          >
-            Confirm Answer
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
-  private onRootPitchClick(rootPitch: string) {
-    this.setState({ selectedRootPitch: rootPitch });
-  }
-  private onScaleTypeClick(scaleType: string) {
-    this.setState({ selectedScaleType: scaleType });
-  }
-  private confirmAnswer() {
-    const selectedAnswer = this.state.selectedRootPitch + " " + this.state.selectedScaleType;
-    const isCorrect = selectedAnswer === this.props.correctAnswer;
-    this.props.onAnswer(isCorrect ? AnswerDifficulty.Easy : AnswerDifficulty.Incorrect);
   }
 }
 
@@ -410,7 +292,7 @@ export function renderAnswerSelect(
 ) {
   if (!areFlashCardsInverted) {
     const correctAnswer = flashCard.backSide.renderFn as string;
-    return <GuitarScalesAnswerSelect key={correctAnswer} correctAnswer={correctAnswer} onAnswer={onAnswer} />;
+    return <ScaleAnswerSelect key={correctAnswer} correctAnswer={correctAnswer} onAnswer={onAnswer} />;
   } else {
     const key = flashCard.frontSide.renderFn as string;
     const correctAnswer = flashCard.backSide.data[0] as Array<Pitch>;
