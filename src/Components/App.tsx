@@ -3,10 +3,11 @@ import { Router, Route, NavLink } from "react-router-dom";
 import { Paper, AppBar, Typography, Toolbar } from "@material-ui/core";
 import { History, createBrowserHistory, Location, Action, UnregisterCallback } from "history";
 
-import * as Utils from "../Utils";
-
 import "./App.css";
 
+import * as Utils from "../Utils";
+
+import { EssentialMusicTheory } from "./EssentialMusicTheory";
 import * as IntervalNamesToHalfSteps from "./Quizzes/IntervalNamesToHalfSteps";
 import * as IntervalQualitySymbolsToQualities from "./Quizzes/IntervalQualitySymbolsToQualities";
 import * as GenericIntervalsToIntervalQualities from "./Quizzes/GenericIntervalsToIntervalQualities";
@@ -188,6 +189,18 @@ class App extends React.Component<IAppProps, IAppState> {
       this.unregisterHistoryListener();
     }
   }
+  public renderRoutes(): Array<JSX.Element> {
+    return [
+      <Route exact path="/" component={() => <DocumentTitle title="Falsetto"><HomePage /></DocumentTitle>} />,
+      <Route path="/about" component={() => <DocumentTitle title="About - Falsetto"><AboutPage /></DocumentTitle>} />,
+      <Route path="/essential-music-theory" component={() => <DocumentTitle title="Essential Music Theory - Falsetto"><EssentialMusicTheory /></DocumentTitle>} />,
+      <Route path="/scale-viewer" component={() => <DocumentTitle title={"Scale Viewer - Falsetto"}><ScaleViewer /></DocumentTitle>} />,
+      <Route path="/chord-viewer" component={() => <DocumentTitle title={"Chord Viewer - Falsetto"}><ChordViewer /></DocumentTitle>} />,
+      <Route path="/rhythym-tapper" component={() => <DocumentTitle title={"Rhythym Tapper - Falsetto"}><RhythymTapper /></DocumentTitle>} />,
+    ].concat(
+      this.flashCardGroups.map(fcg => <Route key={fcg.route} path={fcg.route} component={this.createStudyFlashCardGroupComponent(fcg)} />)
+    );
+  }
   public render(): JSX.Element {
     const renderFlashCardGroupLink = this.renderFlashCardGroupLink.bind(this);
 
@@ -257,12 +270,7 @@ class App extends React.Component<IAppProps, IAppState> {
 
     const rightPane = (
       <div className={!this.isEmbedded ? "right-pane" : "right-pane embedded"}>
-        <Route exact path="/" component={() => <DocumentTitle title="Falsetto"><HomePage /></DocumentTitle>} />
-        <Route path="/about" component={() => <DocumentTitle title="About - Falsetto"><AboutPage /></DocumentTitle>} />
-        {this.flashCardGroups.map(fcg => <Route key={fcg.route} path={fcg.route} component={this.createStudyFlashCardGroupComponent(fcg)} />)}
-        <Route path="/scale-viewer" component={() => <DocumentTitle title={"Scale Viewer - Falsetto"}><ScaleViewer /></DocumentTitle>} />
-        <Route path="/chord-viewer" component={() => <DocumentTitle title={"Chord Viewer - Falsetto"}><ChordViewer /></DocumentTitle>} />
-        <Route path="/rhythym-tapper" component={() => <DocumentTitle title={"Rhythym Tapper - Falsetto"}><RhythymTapper /></DocumentTitle>} />
+        {this.renderRoutes()}
       </div>
     );
     const app = !this.isEmbedded
