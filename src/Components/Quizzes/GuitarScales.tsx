@@ -292,7 +292,9 @@ export function renderAnswerSelect(
 ) {
   if (!areFlashCardsInverted) {
     const correctAnswer = flashCard.backSide.renderFn as string;
-    return <ScaleAnswerSelect key={correctAnswer} correctAnswer={correctAnswer} onAnswer={onAnswer} />;
+    const activeScales = scales
+      .filter((_, i) => Utils.arrayContains(enabledFlashCardIndices, i));
+    return <ScaleAnswerSelect key={correctAnswer} scales={activeScales} correctAnswer={correctAnswer} onAnswer={onAnswer} />;
   } else {
     const key = flashCard.frontSide.renderFn as string;
     const correctAnswer = flashCard.backSide.data[0] as Array<Pitch>;

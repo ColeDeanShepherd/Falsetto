@@ -1,3 +1,8 @@
+export type Scale = {
+  type: string,
+  formulaString: string
+};
+
 export const scales = [
   {
     type: "Ionian (Major)",

@@ -1,12 +1,13 @@
 import * as React from "react";
 import { Button, Typography } from "@material-ui/core";
 
-import { scales } from "../Scale";
+import { Scale } from "../Scale";
 import { AnswerDifficulty } from "../StudyAlgorithm";
 
 const rootPitchStrs = ["Ab", "A", "Bb", "B/Cb", "C", "C#/Db", "D", "Eb", "E", "F", "F#/Gb", "G"];
 
 export interface IScaleAnswerSelectProps {
+  scales: Array<Scale>;
   correctAnswer: string;
   onAnswer: (answerDifficulty: AnswerDifficulty) => void;
 }
@@ -78,7 +79,7 @@ export class ScaleAnswerSelect extends React.Component<IScaleAnswerSelectProps, 
           Scale
         </Typography>
         <div style={{padding: "1em 0"}}>
-          {scales.map(scale => {
+          {this.props.scales.map(scale => {
             const style: any = { textTransform: "none" };
             
             const isPressed = scale.type === this.state.selectedScaleType;
