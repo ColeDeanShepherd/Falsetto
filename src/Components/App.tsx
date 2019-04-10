@@ -51,7 +51,7 @@ import { ScaleViewer } from "./ScaleViewer";
 import { ChordViewer } from "./ChordViewer";
 import { RhythymTapper } from "./RhythymTapper";
 import { FlashCardGroup } from "../FlashCardGroup";
-import { StudyFlashCards } from "./StudyFlashCards";
+import { createStudyFlashCardGroupComponent } from "./StudyFlashCards";
 import * as TheJazzPianoSiteOverview from "./Quizzes/TheJazzPianoSite/TheBasics/Overview"
 import { AboutPage } from "./AboutPage";
 import DocumentTitle from "react-document-title";
@@ -343,20 +343,7 @@ class App extends React.Component<IAppProps, IAppState> {
   private createStudyFlashCardGroupComponent(currentFlashCardGroup: FlashCardGroup): () => JSX.Element {
     return () => (
       <DocumentTitle title={currentFlashCardGroup.name + " - Falsetto"}>
-        <StudyFlashCards
-          key={currentFlashCardGroup.route}
-          title={currentFlashCardGroup.name}
-          flashCards={currentFlashCardGroup.createFlashCards()}
-          containerHeight={currentFlashCardGroup.containerHeight}
-          initialSelectedFlashCardIndices={currentFlashCardGroup.initialSelectedFlashCardIndices}
-          initialConfigData={currentFlashCardGroup.initialConfigData}
-          renderFlashCardMultiSelect={currentFlashCardGroup.renderFlashCardMultiSelect}
-          renderAnswerSelect={currentFlashCardGroup.renderAnswerSelect}
-          moreInfoUri={currentFlashCardGroup.moreInfoUri}
-          enableInvertFlashCards={currentFlashCardGroup.enableInvertFlashCards}
-          customNextFlashCardIdFilter={currentFlashCardGroup.customNextFlashCardIdFilter}
-          isEmbedded={this.isEmbedded}
-        />
+        {createStudyFlashCardGroupComponent(currentFlashCardGroup, this.isEmbedded, false)}
       </DocumentTitle>
     );
   }

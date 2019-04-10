@@ -37,6 +37,7 @@ interface IRhythymNote {
 }
 
 interface IRhythymTapperProps {
+  isEmbedded?: boolean;
 }
 interface IRhythymTapperState {
   rhythymNotes: Array<IRhythymNote>;

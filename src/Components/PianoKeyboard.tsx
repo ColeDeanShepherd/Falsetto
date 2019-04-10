@@ -3,7 +3,7 @@ import * as React from "react";
 import * as Utils from "../Utils";
 import { Pitch } from "../Pitch";
 
-class PianoKeyboardMetrics {
+export class PianoKeyboardMetrics {
   public constructor(
     public width: number,
     public height: number,
@@ -84,13 +84,56 @@ class PianoKeyboardMetrics {
   }
 }
 
+export function renderPianoKeyboardNoteNames(metrics: PianoKeyboardMetrics): JSX.Element {
+  let texts = new Array<JSX.Element>(metrics.keyCount);
+
+  for (let keyIndex = 0; keyIndex < metrics.keyCount; keyIndex++) {
+    const midiNumber = metrics.lowestPitch.midiNumber + keyIndex;
+    const pitch = Pitch.createFromMidiNumber(midiNumber);
+
+    const fontSize = 0.6 * metrics.blackKeyWidth;
+    const textStyle: any = {
+      fontSize: `${fontSize}px`,
+      fill: pitch.isWhiteKey ? "black" : "white",
+      fontWeight: "bold"
+    };
+    const textXOffset = -(0.3 * fontSize);
+    const textYOffset = 0.3 * fontSize;
+
+    const highlightedNoteX = pitch.isWhiteKey
+      ? metrics.keyLeftXs[keyIndex] + (metrics.whiteKeyWidth / 2)
+      : metrics.keyLeftXs[keyIndex] + (0.3 * metrics.blackKeyWidth);
+    const highlightedNoteY = pitch.isWhiteKey
+      ? (0.75 * metrics.whiteKeyHeight)
+      : (metrics.blackKeyHeight / 2);
+
+    const includeOctaveNumber = false;
+    const useFlatSymbol = true;
+    const splitPitchString = pitch.toOneAccidentalAmbiguousString(includeOctaveNumber, useFlatSymbol).split("/");
+
+    for (let i = 0; i < splitPitchString.length; i++) {
+      texts.push(
+        <text
+          key={pitch.midiNumber}
+          x={highlightedNoteX + textXOffset}
+          y={highlightedNoteY + textYOffset + (i * fontSize)}
+          style={textStyle}>
+          {splitPitchString[i]}
+        </text>);
+    }
+  }
+  
+  return <g>{texts}</g>;
+}
+
 export interface IPianoKeyboardProps {
   width: number;
   height: number;
   lowestPitch: Pitch;
   highestPitch: Pitch;
-  pressedPitches: Array<Pitch>;
+  pressedPitches?: Array<Pitch>;
   onKeyPress?: (keyPitch: Pitch) => void;
+  renderExtrasFn?: (metrics: PianoKeyboardMetrics) => JSX.Element;
 }
 export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
   public render(): JSX.Element {
@@ -125,36 +168,42 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
     const noteDotRadius = metrics.blackKeyWidth / 3;
 
     const noteHighlights = this.props.pressedPitches
-      .map(pressedPitch => {
-        const noteIndex = pressedPitch.midiNumber - metrics.lowestPitch.midiNumber;
-        if ((noteIndex < 0) || (noteIndex >= metrics.keyLeftXs.length)) {
-          return;
-        }
+      ? this.props.pressedPitches
+          .map(pressedPitch => {
+            const noteIndex = pressedPitch.midiNumber - metrics.lowestPitch.midiNumber;
+            if ((noteIndex < 0) || (noteIndex >= metrics.keyLeftXs.length)) {
+              return;
+            }
 
-        const highlightedNoteX = pressedPitch.isWhiteKey
-          ? metrics.keyLeftXs[noteIndex] + (metrics.whiteKeyWidth / 2)
-          : metrics.keyLeftXs[noteIndex] + (metrics.blackKeyWidth / 2);
-        const highlightedNoteY = pressedPitch.isWhiteKey
-          ? (0.75 * metrics.whiteKeyHeight)
-          : (metrics.blackKeyHeight / 2);
-        return <circle
-          key={pressedPitch.toString(true)}
-          cx={highlightedNoteX} cy={highlightedNoteY}
-          r={noteDotRadius}
-          fill="red" strokeWidth="0" className="cursor-pointer-on-hover"
-          onClick={event => this.props.onKeyPress ? this.props.onKeyPress(pressedPitch) : null}
-        />;
-      });
+            const highlightedNoteX = pressedPitch.isWhiteKey
+              ? metrics.keyLeftXs[noteIndex] + (metrics.whiteKeyWidth / 2)
+              : metrics.keyLeftXs[noteIndex] + (metrics.blackKeyWidth / 2);
+            const highlightedNoteY = pressedPitch.isWhiteKey
+              ? (0.75 * metrics.whiteKeyHeight)
+              : (metrics.blackKeyHeight / 2);
+            return <circle
+              key={pressedPitch.toString(true)}
+              cx={highlightedNoteX} cy={highlightedNoteY}
+              r={noteDotRadius}
+              fill="red" strokeWidth="0" className="cursor-pointer-on-hover"
+              onClick={event => this.props.onKeyPress ? this.props.onKeyPress(pressedPitch) : null}
+            />;
+          })
+      : null;
+
+    const extraElements = this.props.renderExtrasFn
+      ? this.props.renderExtrasFn(metrics)
+      : null;
 
     return (
       <svg width={this.props.width} height={this.props.height} version="1.1" xmlns="http://www.w3.org/2000/svg">
         {whiteKeys}
         {blackKeys}
         {noteHighlights}
+        {extraElements}
       </svg>
     );
   }
-
 
   private getMetrics(): PianoKeyboardMetrics {
     return new PianoKeyboardMetrics(

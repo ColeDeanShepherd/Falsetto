@@ -10,7 +10,26 @@ import { renderFlashCardSide } from "./FlashCard";
 import { DefaultFlashCardMultiSelect } from "./DefaultFlashCardMultiSelect";
 import { StudyAlgorithm, AnswerDifficulty, isAnswerDifficultyCorrect, LeitnerStudyAlgorithm } from "../StudyAlgorithm";
 import App from './App';
-import { RenderAnswerSelectFunc, RenderFlashCardMultiSelectFunc, CustomNextFlashCardIdFilter } from '../FlashCardGroup';
+import { RenderAnswerSelectFunc, RenderFlashCardMultiSelectFunc, CustomNextFlashCardIdFilter, FlashCardGroup } from '../FlashCardGroup';
+
+export function createStudyFlashCardGroupComponent(flashCardGroup: FlashCardGroup, isEmbedded: boolean, hideMoreInfoUri: boolean): JSX.Element {
+  return (
+    <StudyFlashCards
+      key={flashCardGroup.route}
+      title={flashCardGroup.name}
+      flashCards={flashCardGroup.createFlashCards()}
+      containerHeight={flashCardGroup.containerHeight}
+      initialSelectedFlashCardIndices={flashCardGroup.initialSelectedFlashCardIndices}
+      initialConfigData={flashCardGroup.initialConfigData}
+      renderFlashCardMultiSelect={flashCardGroup.renderFlashCardMultiSelect}
+      renderAnswerSelect={flashCardGroup.renderAnswerSelect}
+      moreInfoUri={!hideMoreInfoUri ? flashCardGroup.moreInfoUri : ""}
+      enableInvertFlashCards={flashCardGroup.enableInvertFlashCards}
+      customNextFlashCardIdFilter={flashCardGroup.customNextFlashCardIdFilter}
+      isEmbedded={isEmbedded}
+    />
+  );
+}
 
 export interface IStudyFlashCardsProps {
   title: string;

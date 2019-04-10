@@ -1,6 +1,6 @@
 # To-Do
 ## High Priority
-* Make embeddable versions of exercises to integrate with other websites.
+* Implement isEmbedded for ScaleViewer & RhythymTapper
 * Send errors to server somewhere?
 * Enable inversion on guitar scale viewer.
 * Rhythym tapper

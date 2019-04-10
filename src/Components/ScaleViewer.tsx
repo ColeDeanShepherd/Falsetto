@@ -44,6 +44,7 @@ interface IScaleViewerProps {
   scales?: Array<{ type: string, formulaString: string }>;
   typeTitle?: string;
   playSimultaneously?: boolean;
+  isEmbedded?: boolean;
 }
 interface IScaleViewerState {
   rootPitch: Pitch;
