@@ -93,7 +93,10 @@ export class EssentialMusicTheory extends React.Component<{}, {}> {
               pressedPitches={[]}
               renderExtrasFn={renderPianoKeyboardNoteNames} />
           </div>
-            
+
+          <p>The white note are "natural" notes, and the black notes are "accidentals". All of the black notes have two names - one using a sharp (#), which means we think about the note as a slightly raised version of the natural note to the left, and one using a flat (b), which means we think about the note as a slightly lowered version of the natural note to the right.</p>
+          <p>Note that the notes repeat as you move higher or lower:</p>
+
           <div>
             <PianoKeyboard
               width={300} height={150}
@@ -103,21 +106,183 @@ export class EssentialMusicTheory extends React.Component<{}, {}> {
               renderExtrasFn={renderPianoKeyboardNoteNames} />
           </div>
 
-          <p>The white note are "natural" notes, and the black notes are "accidentals". All of the black notes have two names - one using a sharp (#), which means we think about the note as a slightly raised version of the natural note to the left, and one using a flat (b), which means we think about the note as a slightly lowered version of the natural note to the right.</p>
-          <p>Note that the notes repeat as you move higher or lower. This is because notes with the same name sound similar to us, just higher or lower versions of the same note.</p>
+          <p>This is because notes with the same name sound similar to us, just higher or lower versions of the same note.</p>
 
           <SubSectionTitle>Non-essentials</SubSectionTitle>
           <p>Why are only 7 natural notes, with the rest being sharps &amp; flats? Why don't we just call the 12 notes A, B, C, D, E, F, G, H, I, J, K, and L? Why aren't there accidental notes in between B &amp; C and E &amp; F?</p>
           <p>This seems counter-intuitive at first, but the answer to all of these questions is: to make navigating instruments easier, and to work well with 7-note scales that most Western music is based on. Imagine trying to play a piano made entirely of white notes. It would be difficult to name any particular note because there is no frame of reference. That is possible to remedy by adding visual markers, but ideally you should be able to play an instruments by feel, without looking at them. Also, most Western music is based on 7-note scales, and having only 7 natural notes allows us to easily express each scale using the 7 natural notes which are then modified by sharps and flats.</p>
 
           <SectionTitle>Intervals</SectionTitle>
+          <p>An interval is the distance between two notes. Understanding intervals, and training your ear to be able to recognize them, is one of the most important skills as a composer and/or musician, as a firm grasp on intervals establishes a link between your mind, your instrument, and your emotions.</p>
+          <p>Intervals are measured by the number of "half steps" or "semitones" between the notes. Half steps are the smallest interval (aside from unison) that can be made between two notes. For example, there is one half step between:</p>
           <ul>
-            <li>Overview</li>
-            <li>The 12 Simple Intervals (whole steps &amp; half steps, semitones &amp; tones). Tunes to go with them</li>
-            <li>Compound Intervals</li>
-            <li>Consonance &amp; Dissonance</li>
-            <li>Ear Training</li>
+            <li>C &amp; D#</li>
+            <li>A &amp; Ab</li>
+            <li>E &amp; F</li>
+            <li>C &amp; B</li>
           </ul>
+
+          <SectionTitle>Simple Intervals</SectionTitle>
+          <p>There are 13 "simple" intervals:</p>
+          <ul>
+            <li>Unison - 0 half steps</li>
+            <li>Minor 2nd (m2) - 1 half step</li>
+            <li>Major 2nd (M2) - 2 half steps, also called a "whole step" or a "tone"</li>
+            <li>Minor 3rd (m3) - 3 half steps</li>
+            <li>Major 3rd (M3) - 4 half steps</li>
+            <li>Perfect 4th (P4) - 5 half steps</li>
+            <li>Tritone (A4/d5) - 6 half steps</li>
+            <li>Perfect 5th (P5) - 7 half steps</li>
+            <li>Minor 6th (m6) - 8 half steps</li>
+            <li>Major 6th (M6) - 9 half steps</li>
+            <li>Minor 7th  (m7) - 10 half steps</li>
+            <li>Major 7th (M7) - 11 half steps</li>
+            <li>Octave (P8) - 12 half steps</li>
+          </ul>
+          <p>"Simple" intervals are intervals as large, or smaller than, an octave.</p>
+
+          <SectionTitle>Compound Intervals</SectionTitle>
+          <p>Beyond the "simple" intervals, there are "compound" intervals, for example:</p>
+          <ul>
+            <li>Minor 9th (m9) - 13 half steps, or 1 octave and 1 half step</li>
+            <li>Perfect 16th (P16) - 24 half steps, or 2 octaves</li>
+            <li>Major 17th (M17) - 26 half steps, or 2 octaves and 2 half steps</li>
+            <li>and so on...</li>
+          </ul>
+          <p>but when analyzing intervals, it is often useful to reduce compound intervals to simple intervals by subtracting octaves until you are left with a simple interval.</p>
+          <p>TODO: examples?</p>
+
+          <p>TODO: ascending &amp; descending</p>
+          
+          <SectionTitle>Interval Qualities</SectionTitle>
+          <p>TODO: Explain minor/major/perfect/augmented/diminished</p>
+
+          <SectionTitle>Interval Numbering Explained</SectionTitle>
+          <p>TODO: Explain 2nd, 3rd, etc, and enharmonic intervals</p>
+
+          <SectionTitle>Consonance &amp; Dissonance</SectionTitle>
+          <table>
+            <thead>
+              <tr>
+                <th>Interval</th>
+                <th>Category</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Minor 2nd</td>
+                <td>Sharp Dissonance</td>
+              </tr>
+              <tr>
+                <td>Major 2nd</td>
+                <td>Mild Dissonance</td>
+              </tr>
+              <tr>
+                <td>Minor 3rd</td>
+                <td>Soft Consonance</td>
+              </tr>
+              <tr>
+                <td>Major 3rd</td>
+                <td>Soft Consonance</td>
+              </tr>
+              <tr>
+                <td>Perfect 4th</td>
+                <td>Context-Dependent</td>
+              </tr>
+              <tr>
+                <td>Tritone</td>
+                <td>Neutral? Restless? Sharp Dissonance?</td>
+              </tr>
+              <tr>
+                <td>Perfect 5th</td>
+                <td>Open Consonance</td>
+              </tr>
+              <tr>
+                <td>Minor 6th</td>
+                <td>Soft Consonance</td>
+              </tr>
+              <tr>
+                <td>Major 6th</td>
+                <td>Soft Consonance</td>
+              </tr>
+              <tr>
+                <td>Minor 7th</td>
+                <td>Mild Dissonance</td>
+              </tr>
+              <tr>
+                <td>Major 7th</td>
+                <td>Sharp Dissonance</td>
+              </tr>
+              <tr>
+                <td>Octave</td>
+                <td>Open Consonance</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <SectionTitle>Interval Ear Training</SectionTitle>
+          <p>It is important to train your ear to recognize intervals quickly, and your inner ear to be able to produce intervals of a certain type, to be able to express yourself on an instrument or on paper.</p>
+          <p>One way to train your ear to recognize intervals is by associating each interval with a song.</p>
+          <p>Here are some example songs for each interval.</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Interval</th>
+                <th>Song</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Minor 2nd</td>
+                <td>Fur Elise, Jaws Theme</td>
+              </tr>
+              <tr>
+                <td>Major 2nd</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Minor 3rd</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Major 3rd</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Perfect 4th</td>
+                <td>Amazing Grace</td>
+              </tr>
+              <tr>
+                <td>Tritone</td>
+                <td>The Simpsons Theme Song</td>
+              </tr>
+              <tr>
+                <td>Perfect 5th</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Minor 6th</td>
+                <td>Valse Op 64. No 2. - Chopin</td>
+              </tr>
+              <tr>
+                <td>Major 6th</td>
+                <td>Nocturne Opus 9 No. 2 - Chopin</td>
+              </tr>
+              <tr>
+                <td>Minor 7th</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Major 7th</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Octave</td>
+                <td>Somewhere Over The Rainbow</td>
+              </tr>
+            </tbody>
+          </table>
+
           {createStudyFlashCardGroupComponent(IntervalNamesToHalfSteps.createFlashCardGroup(), this.isEmbedded, this.hideMoreInfoUri)}
           {createStudyFlashCardGroupComponent(IntervalEarTraining.createFlashCardGroup(), this.isEmbedded, this.hideMoreInfoUri)}
 
