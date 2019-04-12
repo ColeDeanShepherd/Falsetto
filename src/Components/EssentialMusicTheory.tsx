@@ -287,18 +287,146 @@ export class EssentialMusicTheory extends React.Component<{}, {}> {
           {createStudyFlashCardGroupComponent(IntervalEarTraining.createFlashCardGroup(), this.isEmbedded, this.hideMoreInfoUri)}
 
           <SectionTitle>Scales &amp; Modes</SectionTitle>
+          <SubSectionTitle>Scales</SubSectionTitle>
+          <p>Scales are fundamental to music and lay the groundwork for both melody and harmony in music. Melody is the arrangement of individual notes, none playing simultaneously, over time. When you sing a song, you are singing the melody of that song.</p>
+          <p>Scales are nothing more than sets of notes forming particular intervals with a tonal center called a root note. Most scales in western music have 7 notes in them, so each scale selectively leaves out 5 notes to produce a certain feeling.</p>
+          <p>One of the most common scales, upon which other scales are often built by modifying a few notes, is the major scale. The major scale is a 7 note scale which can be built using the formula: "R W W H W W W", where "R" means the root name, "W" means a whole step, and "H" means a half step.</p>
+          <p>So, a C major scale, a scale with a root note of C following the major scale formula, is comprised of the notes: C, D, E, F, G, A, B.</p>
+          <p>TODO: interactive diagram</p>
+          <p>Though the notes of a scale are often given in ascending order, they can be played in any order, and repeated any number of times,and still be considered the same scale. What makes a scale distinct from other scales is simply the set of notes it contains.</p>
+
+          <p>Each note in a scale is sometimes called a "scale degree", with the first &amp; "root" note called the 1st scale degree (C in C major), the next note above that called the 2nd scale degree (D in C major), the next note above that called the 3rd scale degree (E in C major), and so on.</p>
+          <p>So, the major scale has the following scale degrees: 1 2 3 4 5 6 7, and other scales can be built by adding sharps and flats to the notes of of the major scale.</p>
+          <p>Another common scale with a darker sound is the natural minor scale. Relative to the major scale, the natural minor scale has the following formula: 1 2 b3 4 5 b6 b7, meaning the natural minor scale is a major scale with the 3rd, 6th, and 7th scale degrees flattened. So, a C natural minor scale (commonly referred to simply as a C minor scale) is comprised of the notes C, D, Eb, F, G, Ab, Bb.</p>
+
+          <SubSectionTitle>Modes</SubSectionTitle>
+          <p>Modes are simply scales that can be built by starting a particular scale on different notes and considering that starting note the root note.</p>
+          <p>So, the modes of the C major scale are the following scales:</p>
           <ul>
-            <li>Overview</li>
-            <li>Chromatic Scale</li>
-            <li>Major Scale</li>
-            <li>7 Modes of the Major Scale</li>
-            <li>Other Minor Scales</li>
-            <li>Pentatonic Scales</li>
-            <li>Whole Tone Scale</li>
-            <li>Diminished Scales</li>
-            <li>Blues Scale</li>
-            <li></li>
+            <li>C D E F G A B</li>
+            <li>D E F G A B C</li>
+            <li>E F G A B C D</li>
+            <li>F G A B C D E</li>
+            <li>G A B C D E F</li>
+            <li>A B C D E F G</li>
+            <li>B C D E F G A</li>
           </ul>
+
+          <p>Because there are 7 notes in the C major scale, there are 7 modes that can be built from it.</p>
+          <p>Note that each of the modes of a scale (except the 1st mode) has a different formula than the major scale, and often has a special name. The modes of the major scale have the following names and formulas:</p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Mode Name</th>
+                <th>Root Note as Scale Degree of Major Scale</th>
+                <th>Mode Formula (relative to major scale)</th>
+                <th>Mode Formula (using whole steps and half steps)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Ionian (a.k.a. major)</td>
+                <td>1</td>
+                <td>1 2 3 4 5 6 7</td>
+                <td>R W W H W W W</td>
+              </tr>
+              <tr>
+                <td>Dorian</td>
+                <td>2</td>
+                <td>1 2 b3 4 5 6 7</td>
+                <td>R W H W W W H</td>
+              </tr>
+              <tr>
+                <td>Phrygian</td>
+                <td>3</td>
+                <td>1 b2 b3 4 5 b6 b7</td>
+                <td>R H W W W H W</td>
+              </tr>
+              <tr>
+                <td>Lydian</td>
+                <td>4</td>
+                <td>1 2 3 b4 5 6 7</td>
+                <td>R W W W H W W</td>
+              </tr>
+              <tr>
+                <td>Mixolydian</td>
+                <td>5</td>
+                <td>1 2 3 4 5 6 b7</td>
+                <td>R W W H W W H</td>
+              </tr>
+              <tr>
+                <td>Aeolian (a.k.a natural minor)</td>
+                <td>6</td>
+                <td>1 2 b3 4 5 b6 b7</td>
+                <td>R W H W W H W</td>
+              </tr>
+              <tr>
+                <td>Locrian</td>
+                <td>7</td>
+                <td>1 b2 b3 b4 5 b6 b7</td>
+                <td>R H W W H W W</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>To get a feeling for a scale, try playing the scale with a droned, or sustained and repeated, root note. This will bring out the sound of the intervals in the scale.</p>
+
+          <SubSectionTitle>Other Common Scales</SubSectionTitle>
+          <p>There are many other common, named scales (and keep in mind that a mode can be built off each scale degree in each scale), including:</p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Formula (relative to major scale)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Harmonic Minor Scale</td>
+                <td>Version of the minor scale often used to build chords due to the tendency of the 7th scale degree to lean towards the root note above it.</td>
+                <td>1 2 b3 4 5 b6 7</td>
+              </tr>
+              <tr>
+                <td>Major Pentatonic Scale</td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Minor Pentatonic Scale</td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Blues Scale</td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Tonic Diminished Scale</td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Dominant Diminished Scale</td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Whole Tone Scale</td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Chromatic Scale</td>
+                <td>Contains all 12 notes.</td>
+                <td>R H H H H H H H H H H H</td>
+              </tr>
+            </tbody>
+          </table>
+
           <ScaleViewer isEmbedded={this.isEmbedded} />
           {createStudyFlashCardGroupComponent(ScaleNotes.createFlashCardGroup(), this.isEmbedded, this.hideMoreInfoUri)}
           {createStudyFlashCardGroupComponent(PianoScales.createFlashCardGroup(), this.isEmbedded, this.hideMoreInfoUri)}
