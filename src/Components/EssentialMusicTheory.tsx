@@ -434,17 +434,143 @@ export class EssentialMusicTheory extends React.Component<{}, {}> {
           {createStudyFlashCardGroupComponent(ScaleEarTraining.createFlashCardGroup(), this.isEmbedded, this.hideMoreInfoUri)}
 
           <SectionTitle>Chords</SectionTitle>
-          <ul>
-            <li>Overview</li>
-            <li>Triads</li>
-            <li>Suspended Chords</li>
-            <li>Seventh Chords</li>
-            <li>Extended Chords</li>
-            <li>Chord Scales</li>
-            <li>Diatonic Chords</li>
-            <li>Power Chords</li>
-            <li>Ear Training</li>
-          </ul>
+          <p>Chords are multiple notes played simultaneously. Chords make up what is called the "harmony" in music.</p>
+
+          <SubSectionTitle>Triads</SubSectionTitle>
+          <p>One of the simplest types of chords is the triad. Traids are chords made of 3 notes. Some of the most commond types of triads are:</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Triad Type</th>
+                <th>Triad Intervals</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Major Triad</td>
+                <td>R, M3, m3</td>
+              </tr>
+              <tr>
+                <td>Minor Triad</td>
+                <td>R, m3, M3</td>
+              </tr>
+              <tr>
+                <td>Diminished Triad</td>
+                <td>R, m3, m3</td>
+              </tr>
+              <tr>
+                <td>Augmented Triad</td>
+                <td>R, M3, M3</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>Note that you are free to play the notes of a chord in any order, spaced out as close or as far as you like, and any note in a chord can be repeated in different octaves.</p>
+
+          <SubSectionTitle>Inversions</SubSectionTitle>
+          <p>When playing a chord, whichever note you decide to put in the bass of a chord (the lowest note) determines which "inversion" a chord is in. If the root note is in the bass, the chord is considered in "root position". If the 2nd note of the chord is in the bass, the chord is considered in "1st inversion". If the 3rd note of the chord is in the bass, the chord is considered in "2nd inversion". And so on...</p>
+
+          <SubSectionTitle>Seventh Chords</SubSectionTitle>
+          <p>Note that these four triad types are built with all the possible combinations of major &amp; minor 3rds. Most chords in Western music are built on thirds, and we can build more chords by adding additional thirds to our triads.</p>
+          <p>Here are all the chords you get by adding one major or minor 3rd on to each type of triad, called seventh chords:</p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Seventh Chord Type</th>
+                <th>Symbol</th>
+                <th>Seventh Chord Intervals</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Dominant Seventh Chord</td>
+                <td>7</td>
+                <td>R, M3, m3, m3</td>
+              </tr>
+              <tr>
+                <td>Major Seventh Chord</td>
+                <td>M7</td>
+                <td>R, M3, m3, M3</td>
+              </tr>
+              <tr>
+                <td>Minor Seventh Chord</td>
+                <td>m7</td>
+                <td>R, m3, M3, m3</td>
+              </tr>
+              <tr>
+                <td>Minor-Major Seventh Chord</td>
+                <td>mM7</td>
+                <td>R, m3, M3, M3</td>
+              </tr>
+              <tr>
+                <td>Diminished Seventh Chord</td>
+                <td>d7</td>
+                <td>R, m3, m3, m3</td>
+              </tr>
+              <tr>
+                <td>Half-Diminished Seventh Chord</td>
+                <td>m7b5, </td>
+                <td>R, m3, m3, M3</td>
+              </tr>
+              <tr>
+                <td>Augmented Major Seventh Chord</td>
+                <td>maj7b5</td>
+                <td>R, M3, M3, m3</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>Note that if you try to build a seventh chord with the root and 3 major thirds, you end up with an augmented triad with a repeated root.</p>
+
+          <SubSectionTitle>Extended Chords &amp; Chord/Scale Relationships</SubSectionTitle>
+          <p>You can continue to add 3rds to these chords to form ninth chords, eleventh chords, and thirteenth chords. These chords are categorized as "extended" chords.</p>
+          <p>Note that thirteenth chords have 7 notes in them. This is the same number of notes that make up most scales in Western music, so you can think of thirteenth chords as all the notes of particular scales played together at the same time. So, each thirteenth chord only fits one distinct scale, and in a sense, thirteenth chords &amp; scales are really the same thing, just played differently.</p>
+          <p>As you omit notes from thirteenth chords to make eleventh chords, ninth chords, seventh chords, and triads, you open up more possibilities for what the omitted notes could be, and therefore open up more possibilities for what scale the chord could fit in.</p>
+          <p>In this way, chords &amp; scales are inextricably tied in a relationship Jazz musicians call the "chord-scale system".</p>
+
+          <SubSectionTitle>Diatonic Chords &amp; Roman Numeral Notation</SubSectionTitle>
+          <p>One way to build chords is to pick notes from a scale, separated by chords. Chords which are derived in this manner are called "diatonic chords".</p>
+          <p>For example, you could take a major scale and pick out the 1st, 3rd, 5th, and 7th notes of the scale. These notes form a major seventh chord with the 1st scale degree of the major scale as the root note.</p>
+          <p>This idea is commonly communicated using "roman numeral notation", where the roman numeral for the root note's scale degree # replaces the name of the root note.</p>
+          <p>So, the chord above could also be notated as a "I<sup>M7</sup>" chord. And a chord built using the 2nd, 4th, 6th, and 1st (8th = 1st) notes of a major scale could be notated as "ii<sup>m7</sup>". Note that chords build on a minor triad use lower-case roman numerals.</p>
+          <p>Here is roman numeral notation for the diatonic seventh chords in common scales.</p>
+
+          <p>TODO</p>
+
+          <SubSectionTitle>Other Chords</SubSectionTitle>
+          <table>
+            <thead>
+              <tr>
+                <th>Chord Type</th>
+                <th>Symbol</th>
+                <th>Intervals</th>
+              </tr>
+            </thead>
+            <tbody>
+              <thead>
+                <tr>
+                  <td>Power Chord</td>
+                  <td>5</td>
+                  <td>R, P5</td>
+                </tr>
+                <tr>
+                  <td>Suspended 2nd Chord</td>
+                  <td>sus2</td>
+                  <td>R, M2, P5</td>
+                </tr>
+                <tr>
+                  <td>Suspended 4th Chord</td>
+                  <td>sus2</td>
+                  <td>R, P4, P5</td>
+                </tr>
+              </thead>
+            </tbody>
+          </table>
+
+          <SubSectionTitle>Arpeggios</SubSectionTitle>
+          <p>Arpeggios are simply the notes of a chord played separately in a melodic fashion.</p>
+          
           <ChordViewer isEmbedded={this.isEmbedded} />
           {createStudyFlashCardGroupComponent(ChordNotes.createFlashCardGroup(), this.isEmbedded, this.hideMoreInfoUri)}
           {createStudyFlashCardGroupComponent(PianoChords.createFlashCardGroup(), this.isEmbedded, this.hideMoreInfoUri)}
