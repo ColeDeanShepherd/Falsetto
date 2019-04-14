@@ -578,15 +578,44 @@ export class EssentialMusicTheory extends React.Component<{}, {}> {
           {createStudyFlashCardGroupComponent(ChordEarTraining.createFlashCardGroup(), this.isEmbedded, this.hideMoreInfoUri)}
 
           <SectionTitle>Chord Progressions</SectionTitle>
+          <p>Chord progressions are simply sequences of chords. Chord progressions are often notated with roman numerals, allowing written chord progressions to be independent of key.</p>
+          <p>Chord progressions are built around tension &amp; resolution.</p>
+
+          <SectionTitle>V - I Chord Progression</SectionTitle>
+          <p>One of the most common and strongest patterns of tension &amp; resolution is the movement from a dominant (V7) chord to the tonic (I or i) chord. In major keys, the V7 chord is made of scale degrees 5, 7, 2, &amp; 4, and the I chord is made of scale degrees 1, 3, 5. The V7 chord carries tension and resolves to the I chord because of the tritone interval between scale degrees 7 and 4 (the 2nd &amp; 4th notes of the chord) and its resolution to the tonic and scale degree 3 in the tonic chord.</p>
+          <p>This dominant - tonic resolution can be used between other scale degrees as well. A very common chord progression is II - V - I, which works because II is the dominant chord of V, and V is the dominant chord of I.</p>
+          <p>Understanding the V - I resolution is key to understanding a vast majority of western chord progressions, which are often simply V - I progressions with alterations and added chords.</p>
+
+          <SectionTitle>Voice Leading</SectionTitle>
+          <p>The other key to understanding chord progressions is voice leading, which is the arrangement of the notes (called "voices") in chords to create smooth, flowing transitions between chords.</p>
+          <p>The most important rule of voice leading is to use the smallest possible movements between the corresponding notes of each chord.</p>
+          <p>Take the V7 - I chord progression in C major (G7 - C) as an example. One way we can voice these chords is by playing both of them in root position, with the C chord below the G7 chord.</p>
+
+          <p>Diagram here</p>
+
+          <p>The V7 chord contains the notes G, B, D, &amp; F, and the C major chord contains the notes C, E, &amp; G. These root position chords are an example of ineffective voice leading, because each voice in the G7 chord has to jump a long way to the corresponding voice in the C chord:</p>
+
           <ul>
-            <li>Overview</li>
-            <li>II - V - I</li>
-            <li>Blues</li>
-            <li>Cadences?</li>
-            <li>Tension &amp; Resolution</li>
-            <li>Ear Training</li>
+            <li>G moves down a P5 to C</li>
+            <li>B moves down a P5 to an E</li>
+            <li>D moves down a P5 to a G</li>
+            <li>F moves down a P4 to a C</li>
           </ul>
 
+          <p>Contrast this with an example of good voice leading, where V7 is in 2nd inversion, and I is in root position.</p>
+          
+          <p>Diagram here</p>
+
+          <p>You can hear that this voicing is much smoother. In this voicing, the voices move much less:</p>
+
+          <ul>
+            <li>D moves down a M2 to a C</li>
+            <li>F moves down a m2 to an E</li>
+            <li>G does not move at all</li>
+            <li>B moves up a m2 to a C</li>
+          </ul>
+
+          <p>Smooth voice leading is enough to make a chord progression work, even without strong dominant - tonic movement.</p>
         </CardContent>
       </Card>
     );
