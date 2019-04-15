@@ -6,6 +6,8 @@ import { Pitch } from '../Pitch';
 import { PitchLetter } from '../PitchLetter';
 import { createStudyFlashCardGroupComponent } from './StudyFlashCards';
 
+import { Metronome } from "./Metronome";
+
 import * as NoteDurations from "./Quizzes/NoteDurations";
 
 import * as IntervalNamesToHalfSteps from "./Quizzes/IntervalNamesToHalfSteps";
@@ -56,7 +58,7 @@ export class EssentialMusicTheory extends React.Component<{}, {}> {
 
           <p>Below is a metronome, a device that clicks a beat at a specified tempo. Try matching the metronome to some of your favorite music to get an idea of how different tempos feel.</p>
 
-          <p>METRONOME HERE</p>
+          <Metronome />
 
           <SubSectionTitle>Measures, Time Signatures, and Note Durations</SubSectionTitle>
           <p>A measure is a small section of music with a fixed duration, the smallest division of a piece of music after individual beats.</p>

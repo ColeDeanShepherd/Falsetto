@@ -1,6 +1,5 @@
-import { Howl } from "howler";
-
 import { Pitch } from "./Pitch";
+import { playSoundsSequentially, playSoundsSimultaneously } from './Audio';
 
 export const pianoAudioFilePathsByMidiNumber = new Array<[number, string]>();
 pianoAudioFilePathsByMidiNumber.push([21, "audio/piano/A0.mp3"]);
@@ -99,101 +98,20 @@ export function getPitchAudioFilePath(pitch: Pitch): string | null {
 
   return kvp[1];
 }
+
 export function playPitches(pitches: Array<Pitch>) {
   const soundFilePaths = pitches
     .map(getPitchAudioFilePath)
     .filter(fp => fp !== null)
     .map(fp => fp as string);
-  
-  const loadedSounds = new Array<Howl>();
-  let loadedSoundCount = 0;
 
-  const playSounds = () => {
-    for (const loadedSound of loadedSounds) {
-      loadedSound.play();
-    }
-  };
-
-  const sounds = soundFilePaths
-    .map(filePath => new Howl({
-      src: filePath,
-      onload: function(this: Howl) {
-        loadedSounds.push(this);
-        loadedSoundCount++;
-  
-        if (loadedSoundCount === sounds.length) {
-          playSounds();
-        }
-      },
-      onloaderror: () => {
-        loadedSoundCount++;
-  
-        if (loadedSoundCount === sounds.length) {
-          playSounds();
-        }
-      }
-    }));
+  playSoundsSimultaneously(soundFilePaths);
 }
 
 // returns: a cancellation function
 export function playPitchesSequentially(pitches: Array<Pitch>, delayInMs: number, cutOffSounds: boolean = false): () => void {
-  let isCancelled = false;
-
-  const playSounds = () => {
-    for (let i = 0; i < loadedSounds.length; i++) {
-      const iCopy = i; // for lambda
-      const loadedSound = loadedSounds[i];
-
-      if (loadedSound) {
-        setTimeout(() => {
-          // stop the previous sound if necessary
-          if (cutOffSounds && (iCopy > 0)) {
-            const previousLoadedSound = loadedSounds[iCopy - 1];
-
-            if (previousLoadedSound) {
-              previousLoadedSound.fade(1, 0, 300);
-            }
-          }
-
-          // play the current sound
-          if (!isCancelled) {
-            loadedSound.play();
-          }
-        }, delayInMs * i);
-      }
-    }
-  };
-
   const soundFilePaths = pitches
     .map(getPitchAudioFilePath);
   
-  const soundCount = soundFilePaths.length;
-  let loadedSoundCount = 0;
-  const loadedSounds = soundFilePaths
-    .map(filePath => {
-      if (filePath) {
-        return new Howl({
-          src: filePath,
-          onload: function(this: Howl) {
-            loadedSoundCount++;
-      
-            if (loadedSoundCount === soundCount) {
-              playSounds();
-            }
-          },
-          onloaderror: () => {
-            loadedSoundCount++;
-      
-            if (loadedSoundCount === soundCount) {
-              playSounds();
-            }
-          }
-        });
-      } else {
-        loadedSoundCount++;
-        return null;
-      }
-    });
-  
-  return () => isCancelled = true;
+  return playSoundsSequentially(soundFilePaths, delayInMs, cutOffSounds);
 }
