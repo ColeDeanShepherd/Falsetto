@@ -33,14 +33,29 @@ export class EssentialMusicTheory extends React.Component<{}, {}> {
       <Card>
         <CardContent>
           <MainTitle>Essential Music Theory</MainTitle>
-          <p>This is designed to teach students of all levels the essentials of Western music theory in a no-frills manner with accompanying interactive exercises to test and apply your knowledge. As you work your way through this lesson, keep in mind that music theory is descriptive, not prescriptive, meaning a lot of what you learn here are guidelines, not hard rules. The goal with learning music theory is not to restrict ourselves, but to understand how existing music works, how to apply this understanding to your own music, and how to break the rules effectively, and with intent.</p>
-          <p>Let's get started!</p>
+          <p>This course is designed to teach students the essentials of Western music theory interactively. As you work your way through this course, keep in mind that music theory is descriptive, not prescriptive. This means that there are no hard-rules, only guidelines based on music that already exists. The goal of learning music theory is not to restrict ourselves to doing only what is "correct", but to understand the music we hear on a deeper level, to apply this understanding to our music, and to know how to skillfully break the "rules" to fully express ourselves in our music.</p>
+          <p>Without further ado, let's get started!</p>
 
           <SectionTitle>Rhythm</SectionTitle>
-          <p>Rhythym is the arrangement of sounds over time. Rhythym is arguably the most fundamental element of music, as any sound can be arranged rhythmically to make music, and without rhythym, melodies and harmonies can lose their impact.</p>
+          <p><em>Rhythym</em> is the purposeful arrangement of sounds over time &mdash; what you dance to when listening to a piece of music. Rhythym is the basis of all music, and some music is based solely on rhythym:</p>
 
-          <SubSectionTitle>Tempo</SubSectionTitle>
-          <p>Tempo is the speed of the beat, and the beat is the repeating pulse in a piece of music. Tempo is often given as beats per minute (BPM). 120 BPM, for example, means there are two beats per second.</p>
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/Qsq5PHoik-s" frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+
+          <SubSectionTitle>Beat &amp; Tempo</SubSectionTitle>
+          <p>The <em>beat</em> is the repeating pulse you can feel when listening to a piece of music. The beat is the driving force of rhythym, and all sounds in music are arranged around it. If you tap your foot or bob your head to a song, you do it to the beat.</p>
+          <p><em>Tempo</em> is the speed of the beat, often given as beats per minute (BPM). 120 BPM, for example, means there are two beats per second. Most music is roughly 60 BPM to 180 BPM, and tempo is one of the defining characterstics of musical genres. Tempo, however, can vary throughout a piece of music at the discretion of the composers or performers.</p>
+
+          <p>Slow Tempo:</p>
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/SlTTgJau33Q" frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+
+          <p>Medium Tempo:</p>
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/hwmRQ0PBtXU" frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+          
+          <p>Fast Tempo:</p>
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/jYUilB9ngs0" frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+
+          <p>Below is a metronome, a device that clicks a beat at a specified tempo. Try matching the metronome to some of your favorite music to get an idea of how different tempos feel.</p>
+
           <p>METRONOME HERE</p>
 
           <SubSectionTitle>Measures, Time Signatures, and Note Durations</SubSectionTitle>
