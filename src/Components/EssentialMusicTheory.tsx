@@ -1,6 +1,9 @@
 import * as React from "react";
 import { CardContent, Card } from "@material-ui/core";
 
+import { YouTubeVideo } from "./YouTubeVideo";
+import { TimeSignature } from "./TimeSignature";
+
 import { PianoKeyboard, renderPianoKeyboardNoteNames } from "./PianoKeyboard";
 import { Pitch } from '../Pitch';
 import { PitchLetter } from '../PitchLetter';
@@ -41,41 +44,88 @@ export class EssentialMusicTheory extends React.Component<{}, {}> {
           <SectionTitle>Rhythm</SectionTitle>
           <p><em>Rhythym</em> is the purposeful arrangement of sounds over time &mdash; what you dance to when listening to a piece of music. Rhythym is the basis of all music, and some music is based solely on rhythym:</p>
 
-          <iframe width="560" height="315" src="https://www.youtube.com/embed/Qsq5PHoik-s" frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+          <YouTubeVideo videoId="Qsq5PHoik-s" />
 
           <SubSectionTitle>Beat &amp; Tempo</SubSectionTitle>
           <p>The <em>beat</em> is the repeating pulse you can feel when listening to a piece of music. The beat is the driving force of rhythym, and all sounds in music are arranged around it. If you tap your foot or bob your head to a song, you do it to the beat.</p>
           <p><em>Tempo</em> is the speed of the beat, often given as beats per minute (BPM). 120 BPM, for example, means there are two beats per second. Most music is roughly 60 BPM to 180 BPM, and tempo is one of the defining characterstics of musical genres. Tempo, however, can vary throughout a piece of music at the discretion of the composers or performers.</p>
 
           <p>Slow Tempo:</p>
-          <iframe width="560" height="315" src="https://www.youtube.com/embed/SlTTgJau33Q" frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+          <YouTubeVideo videoId="SlTTgJau33Q" />
 
           <p>Medium Tempo:</p>
-          <iframe width="560" height="315" src="https://www.youtube.com/embed/hwmRQ0PBtXU" frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+          <YouTubeVideo videoId="hwmRQ0PBtXU" />
           
           <p>Fast Tempo:</p>
-          <iframe width="560" height="315" src="https://www.youtube.com/embed/jYUilB9ngs0" frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+          <YouTubeVideo videoId="jYUilB9ngs0" />
 
           <p>Below is a metronome, a device that clicks a beat at a specified tempo. Try matching the metronome to some of your favorite music to get an idea of how different tempos feel.</p>
 
           <Metronome />
 
-          <SubSectionTitle>Measures, Time Signatures, and Note Durations</SubSectionTitle>
-          <p>A measure is a small section of music with a fixed duration, the smallest division of a piece of music after individual beats.</p>
-          <p>A time signature describes the type and number of beats that make up a measure.</p>
-          <p>The most common time signature is 4/4. The number on top means the number of beats in a measure. The number on bottom denotes the type of beat making up the measure.</p>
-          <p>So, 4/4 means there are 4 quarter notes in a measure. 3/4 means there are 3 quarter notes in a measure. 5/8 means there are 5 eighth notes in a measure. And so on...</p>
-          <p>The most common types of notes, and the numbers they are denoted by in the bottom of a time signature, are:</p>
+          <SubSectionTitle>Measures, Time Signatures, &amp; Note Durations</SubSectionTitle>
+          <p>Music is divided into <em>measures</em> (or <em>Bars</em>) &mdash; small sections containing a fixed number of beats.</p>
+          
+          <p>PICTURE OF A MEASURE HERE? IF I ADD IT, I MIGHT NEED TO EXPLAIN SHEET MUSIC...</p>
+
+          <p>The number &amp; type of beats in a measure are specified by <em>time signatures</em>:</p>
+          
+          <TimeSignature beatCount={3} beatType={4} />
+
+          <p>This time signature is read as "three-four" time. The top number is the number of beats in a measure, and the bottom number represents the <em>note values</em>, or durations, of the beats relative to the tempo.</p>
+          <p>Some common note values are:</p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Number</th>
+                <th>Note Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>2</td>
+                <td>Half Note</td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td>Quarter Note</td>
+              </tr>
+              <tr>
+                <td>8</td>
+                <td>Eighth Note</td>
+              </tr>
+              <tr>
+                <td>16</td>
+                <td>Sixteenth Note</td>
+              </tr>
+              <tr>
+                <td>And so on...</td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>Half notes are twice as long as quarter notes, quarter notes are twice as long as eighth notes, and so on...</p>
+
+          <p>The most common time signature is 4/4, or <em>common time</em>, in which there are 4 (top number) quarter notes (bottom number) in each measure.</p>
+
+          <TimeSignature beatCount={4} beatType={4} />
+
+          <p>Because there are 4 quarter notes in each measure, you can also say that in each measure there are:</p>
           <ul>
-            <li>Whole Note - 1</li>
-            <li>Half Note - 2</li>
-            <li>Quarter Note - 4</li>
-            <li>Eighth Note - 8</li>
-            <li>16th Note - 16</li>
-            <li>32nd Note - 32</li>
-            <li>64th Note - 64</li>
-            <li>And so on...</li>
+            <li>1 whole note</li>
+            <li>2 half notes</li>
+            <li>8 eighth notes</li>
+            <li>16 sixteenth notes</li>
+            <li>and so on...</li>
           </ul>
+
+          <p>This is what 4/4 time sounds like:</p>
+          <p>AUDIO EXAMPLE WITH STRONG &amp; WEAK BEATS</p>
+
+          <p>TALK ABOUT STRONG &amp; WEAK BEATS</p>
+
           <p>All note durations that are used when denoting time signatures are powers of two (1, 2, 4, 8, ...), but you can also divide these note durations into any number of notes, like:</p>
           <ul>
             <li>triplets</li>
@@ -565,23 +615,21 @@ export class EssentialMusicTheory extends React.Component<{}, {}> {
               </tr>
             </thead>
             <tbody>
-              <thead>
-                <tr>
-                  <td>Power Chord</td>
-                  <td>5</td>
-                  <td>R, P5</td>
-                </tr>
-                <tr>
-                  <td>Suspended 2nd Chord</td>
-                  <td>sus2</td>
-                  <td>R, M2, P5</td>
-                </tr>
-                <tr>
-                  <td>Suspended 4th Chord</td>
-                  <td>sus2</td>
-                  <td>R, P4, P5</td>
-                </tr>
-              </thead>
+              <tr>
+                <td>Power Chord</td>
+                <td>5</td>
+                <td>R, P5</td>
+              </tr>
+              <tr>
+                <td>Suspended 2nd Chord</td>
+                <td>sus2</td>
+                <td>R, M2, P5</td>
+              </tr>
+              <tr>
+                <td>Suspended 4th Chord</td>
+                <td>sus2</td>
+                <td>R, P4, P5</td>
+              </tr>
             </tbody>
           </table>
 

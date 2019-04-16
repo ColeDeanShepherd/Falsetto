@@ -1,5 +1,8 @@
 # To-Do
 ## High Priority
+* Essential Music Theory
+  * Make YouTube videos responsive.
+
 * Implement isEmbedded for ScaleViewer & RhythymTapper
 * Send errors to server somewhere?
 * Enable inversion on guitar scale viewer.
