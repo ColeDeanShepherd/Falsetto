@@ -1,5 +1,6 @@
 import * as React from "react";
 import { CardContent, Card } from "@material-ui/core";
+import * as Vex from "vexflow";
 
 import { YouTubeVideo } from "./YouTubeVideo";
 import { TimeSignature } from "./TimeSignature";
@@ -28,9 +29,21 @@ import * as GuitarChords from "./Quizzes/GuitarChords";
 import * as ChordEarTraining from "./Quizzes/ChordEarTraining";
 import { ChordViewer } from "./ChordViewer";
 
+import measures from "../img/sheet-music/measures.svg";
+
 const MainTitle: React.FunctionComponent<{}> = props => <h1>{props.children}</h1>;
 const SectionTitle: React.FunctionComponent<{}> = props => <h2>{props.children}</h2>;
 const SubSectionTitle: React.FunctionComponent<{}> = props => <h3>{props.children}</h3>;
+
+class MeasureDiagram extends React.Component<{}, {}> {
+  public render(): JSX.Element {
+    return (
+      <svg viewBox="14.5 6.5 71.25 8.5">
+        <image x="0" y="0" width="100" height="100" xlinkHref={measures} />
+      </svg>
+    );
+  }
+}
 
 export class EssentialMusicTheory extends React.Component<{}, {}> {
   public render(): JSX.Element {
@@ -66,7 +79,7 @@ export class EssentialMusicTheory extends React.Component<{}, {}> {
           <SubSectionTitle>Measures, Time Signatures, &amp; Note Durations</SubSectionTitle>
           <p>Music is divided into <em>measures</em> (or <em>Bars</em>) &mdash; small sections containing a fixed number of beats.</p>
           
-          <p>PICTURE OF A MEASURE HERE? IF I ADD IT, I MIGHT NEED TO EXPLAIN SHEET MUSIC...</p>
+          <MeasureDiagram />
 
           <p>The number &amp; type of beats in a measure are specified by <em>time signatures</em>:</p>
           

@@ -120,7 +120,7 @@ export class Metronome extends React.Component<IMetronomeProps, IMetronomeState>
     return (
       <div>
         <Typography variant="h4">{this.tempoTapper.tappedBpm ? Math.round(this.tempoTapper.tappedBpm) : "?"} BPM</Typography>
-        <div><Button variant="contained" onClick={e => this.tapTempo()}>Tap</Button></div>
+        <div><Button variant="contained" onMouseDown={e => this.tapTempo()}>Tap</Button></div>
         <div>
           <Button variant="contained" onClick={e => this.confirmTappedTempo()}>OK</Button>
           <Button variant="contained" onClick={e => this.cancelTappingTempo()}>Cancel</Button>
@@ -136,7 +136,7 @@ export class Metronome extends React.Component<IMetronomeProps, IMetronomeState>
 
   private readonly MIN_BPM = 30;
   private readonly MAX_BPM = 300;
-  private readonly MAX_NUM_TAPPED_TEMPO_SAMPLES = 6;
+  private readonly MAX_NUM_TAPPED_TEMPO_SAMPLES = 10;
   private readonly TAPPED_TEMPO_TIMEOUT_S = 3;
 
   private clickIntervalId: number = -1;
