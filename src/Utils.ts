@@ -43,6 +43,23 @@ export function range(minValue: number, maxValue: number): Array<number> {
 }
 
 // TODO: add tests
+export function wrapReal(value: number, minValue: number, maxValue: number): number {
+  precondition(maxValue >= minValue);
+
+  const range = maxValue - minValue;
+
+  while (value < minValue) {
+    value += range;
+  }
+
+  while (value > maxValue) {
+    value -= range;
+  }
+
+  return value;
+}
+
+// TODO: add tests
 export function clamp(value: number, minValue: number, maxValue: number): number {
   precondition(maxValue >= minValue);
 
@@ -206,6 +223,32 @@ export function tryRemoveArrayElement<T>(array: T[], element: T): boolean {
 // TODO: add tests
 export function arrayContains<T>(array: T[], element: T): boolean {
   return array.indexOf(element) >= 0;
+}
+
+// TODO: add tests
+export function repeatElement<T>(element: T, repeatCount: number): Array<T> {
+  assert(repeatCount >= 0);
+
+  const array = new Array<T>(repeatCount);
+
+  for (let i = 0; i < repeatCount; i++) {
+    array[i] = element;
+  }
+
+  return array;
+}
+
+// TODO: add tests
+export function repeatGenerator<T>(createElementFn: (index: number) => T, repeatCount: number): Array<T> {
+  assert(repeatCount >= 0);
+
+  const array = new Array<T>(repeatCount);
+
+  for (let i = 0; i < repeatCount; i++) {
+    array[i] = createElementFn(i);
+  }
+
+  return array;
 }
 
 export function intervalQualityToNumber(intervalQuality: string): number {

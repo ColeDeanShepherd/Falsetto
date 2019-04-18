@@ -1,5 +1,5 @@
 import * as React from "react";
-import { CardContent, Card } from "@material-ui/core";
+import { CardContent, Card, Table, TableHead, TableBody, TableRow, TableCell } from "@material-ui/core";
 import * as Vex from "vexflow";
 
 import { YouTubeVideo } from "./YouTubeVideo";
@@ -30,6 +30,19 @@ import * as ChordEarTraining from "./Quizzes/ChordEarTraining";
 import { ChordViewer } from "./ChordViewer";
 
 import measures from "../img/sheet-music/measures.svg";
+import wholeNote from "../img/sheet-music/whole-note.svg";
+import wholeRest from "../img/sheet-music/whole-rest.svg";
+import halfNote from "../img/sheet-music/half-note.svg";
+import halfRest from "../img/sheet-music/half-rest.svg";
+import quarterNote from "../img/sheet-music/quarter-note.svg";
+import quarterRest from "../img/sheet-music/quarter-rest.svg";
+import eighthNote from "../img/sheet-music/eighth-note.svg";
+import eighthRest from "../img/sheet-music/eighth-rest.svg";
+import sixteenthNote from "../img/sheet-music/sixteenth-note.svg";
+import sixteenthRest from "../img/sheet-music/sixteenth-rest.svg";
+import _32ndNote from "../img/sheet-music/32nd-note.svg";
+import _32ndRest from "../img/sheet-music/32nd-rest.svg";
+import { TimeSignaturePlayer } from './TimeSignaturePlayer';
 
 const MainTitle: React.FunctionComponent<{}> = props => <h1>{props.children}</h1>;
 const SectionTitle: React.FunctionComponent<{}> = props => <h2>{props.children}</h2>;
@@ -88,36 +101,44 @@ export class EssentialMusicTheory extends React.Component<{}, {}> {
           <p>This time signature is read as "three-four" time. The top number is the number of beats in a measure, and the bottom number represents the <em>note values</em>, or durations, of the beats relative to the tempo.</p>
           <p>Some common note values are:</p>
 
-          <table>
-            <thead>
-              <tr>
-                <th>Number</th>
-                <th>Note Value</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>2</td>
-                <td>Half Note</td>
-              </tr>
-              <tr>
-                <td>4</td>
-                <td>Quarter Note</td>
-              </tr>
-              <tr>
-                <td>8</td>
-                <td>Eighth Note</td>
-              </tr>
-              <tr>
-                <td>16</td>
-                <td>Sixteenth Note</td>
-              </tr>
-              <tr>
-                <td>And so on...</td>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Number</TableCell>
+                <TableCell>Note Value</TableCell>
+                <TableCell>Note Symbol</TableCell>
+                <TableCell>Rest Symbol</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                <TableCell>2</TableCell>
+                <TableCell>Half Note</TableCell>
+                <TableCell><img src={halfNote} /></TableCell>
+                <TableCell><img src={halfRest} /></TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>4</TableCell>
+                <TableCell>Quarter Note</TableCell>
+                <TableCell><img src={quarterNote} /></TableCell>
+                <TableCell><img src={quarterRest} /></TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>8</TableCell>
+                <TableCell>Eighth Note</TableCell>
+                <TableCell><img src={eighthNote} /></TableCell>
+                <TableCell><img src={eighthRest} /></TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>16</TableCell>
+                <TableCell>Sixteenth Note</TableCell>
+                <TableCell><img src={sixteenthNote} /></TableCell>
+                <TableCell><img src={sixteenthRest} /></TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+
+          <p>And so on...</p>
 
           <p>Half notes are twice as long as quarter notes, quarter notes are twice as long as eighth notes, and so on...</p>
 
@@ -135,7 +156,7 @@ export class EssentialMusicTheory extends React.Component<{}, {}> {
           </ul>
 
           <p>This is what 4/4 time sounds like:</p>
-          <p>AUDIO EXAMPLE WITH STRONG &amp; WEAK BEATS</p>
+          <TimeSignaturePlayer />
 
           <p>TALK ABOUT STRONG &amp; WEAK BEATS</p>
 

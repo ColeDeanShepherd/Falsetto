@@ -1,7 +1,7 @@
 import { Howl } from "howler";
 
-export function playSound(soundFilePath: string) {
-  const howl = new Howl({ src: soundFilePath });
+export function playSound(soundFilePath: string, volume: number = 1) {
+  const howl = new Howl({ src: soundFilePath, volume: volume });
   howl.play();
 }
 export function playSoundsSimultaneously(soundFilePaths: Array<string>) {

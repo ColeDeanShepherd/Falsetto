@@ -5,6 +5,7 @@ import * as Utils from "../Utils";
 import { Button, Card, CardContent, Typography } from "@material-ui/core";
 import { VexFlowComponent } from "./VexFlowComponent";
 import { Rational } from "../Rational";
+import { noteDurationToVexFlowStr } from '../VexFlowUtils';
 
 const width = 800;
 const height = 100;
@@ -233,7 +234,7 @@ export class RhythymTapper extends React.Component<IRhythymTapperProps, IRhythym
   private rhythymNotesToVexFlowNotes(rhythymNotes: Array<IRhythymNote>): Array<Vex.Flow.StaveNote> {
     return rhythymNotes
       .map(rn => {
-        const durationStr = this.noteDurationToVexFlowStr(rn.duration) + (rn.isRest ? "r" : "");
+        const durationStr = noteDurationToVexFlowStr(rn.duration) + (rn.isRest ? "r" : "");
 
         return new Vex.Flow.StaveNote({
           clef: "treble",
@@ -241,19 +242,6 @@ export class RhythymTapper extends React.Component<IRhythymTapperProps, IRhythym
           duration: durationStr
         })
       });
-  }
-  private noteDurationToVexFlowStr(noteDuration: Rational): string {
-    if (noteDuration.equals(new Rational(1, 1))) {
-      return "w";
-    } else if (noteDuration.equals(new Rational(1, 2))) {
-      return "h";
-    } else if (noteDuration.equals(new Rational(1, 4))) {
-      return "q";
-    } else if (noteDuration.equals(new Rational(1, 8))) {
-      return "8";
-    } else {
-      throw new Error(`Duration not implemented: ${noteDuration.toString()}`)
-    }
   }
 }
 
