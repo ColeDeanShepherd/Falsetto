@@ -1,10 +1,10 @@
 import * as React from "react";
 import * as Vex from "vexflow";
 import { VexFlowComponent } from './VexFlowComponent';
+import { TimeSignature as TimeSignatureModel } from "../TimeSignature";
 
 export interface TimeSignatureProps {
-  beatCount: number;
-  beatType: number;
+  timeSignature: TimeSignatureModel;
 }
 export class TimeSignature extends React.Component<TimeSignatureProps, {}> {
   public render(): JSX.Element {
@@ -27,7 +27,7 @@ export class TimeSignature extends React.Component<TimeSignatureProps, {}> {
       .setBackgroundFillStyle("#eed");
 
     const topStaff = new Vex.Flow.Stave(0, 0, this.width);
-    topStaff.addTimeSignature(`${this.props.beatCount}/${this.props.beatType}`);
+    topStaff.addTimeSignature(this.props.timeSignature.toString());
     topStaff.setY(-topStaff.getYForLine(0));
     
     topStaff.setContext(context).draw();

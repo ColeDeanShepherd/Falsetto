@@ -3,7 +3,8 @@ import { CardContent, Card, Table, TableHead, TableBody, TableRow, TableCell } f
 import * as Vex from "vexflow";
 
 import { YouTubeVideo } from "./YouTubeVideo";
-import { TimeSignature } from "./TimeSignature";
+import { TimeSignature } from "../TimeSignature";
+import { TimeSignature as TimeSignatureComponent } from "./TimeSignature";
 
 import { PianoKeyboard, renderPianoKeyboardNoteNames } from "./PianoKeyboard";
 import { Pitch } from '../Pitch';
@@ -96,7 +97,7 @@ export class EssentialMusicTheory extends React.Component<{}, {}> {
 
           <p>The number &amp; type of beats in a measure are specified by <em>time signatures</em>:</p>
           
-          <TimeSignature beatCount={3} beatType={4} />
+          <TimeSignatureComponent timeSignature={new TimeSignature(3, 4)} />
 
           <p>This time signature is read as "three-four" time. The top number is the number of beats in a measure, and the bottom number represents the <em>note values</em>, or durations, of the beats relative to the tempo.</p>
           <p>Some common note values are:</p>
@@ -144,7 +145,7 @@ export class EssentialMusicTheory extends React.Component<{}, {}> {
 
           <p>The most common time signature is 4/4, or <em>common time</em>, in which there are 4 (top number) quarter notes (bottom number) in each measure.</p>
 
-          <TimeSignature beatCount={4} beatType={4} />
+          <TimeSignatureComponent timeSignature={new TimeSignature(4, 4)} />
 
           <p>Because there are 4 quarter notes in each measure, you can also say that in each measure there are:</p>
           <ul>
@@ -156,25 +157,49 @@ export class EssentialMusicTheory extends React.Component<{}, {}> {
           </ul>
 
           <p>This is what 4/4 time sounds like:</p>
-          <TimeSignaturePlayer />
+          <TimeSignaturePlayer timeSignature={new TimeSignature(4, 4)} />
+          
+          <p>As you can hear, the beats vary in weight throughout the measure: the first beat is the strongest beat, the third beat is a medium-strength note, and the second and fourth beats are weak notes. This is because time signatures, like 4/4, have <em>strong beats</em> and <em>weak beats</em> (and beats in-between).</p>
+          <p>Another common time signature is 3/4, in which there are three quarter notes, the first beat is a strong beat, and the second and third notes are weak beats. This is what 3/4 sounds like:</p>
+          <TimeSignaturePlayer timeSignature={new TimeSignature(3, 4)} />
+          
+          <p>Use the time signature selector below to listen to some common time signature to get a feel for them.</p>
+          <TimeSignaturePlayer showTimeSignatureSelect={true} />
 
-          <p>TALK ABOUT STRONG &amp; WEAK BEATS</p>
+          <p>Note that all of the note values in time signatures (the bottom number) are powers of two (1, 2, 4, 8, ...). This is true for almost all, if not all, time signatures in practice.</p>
 
-          <p>All note durations that are used when denoting time signatures are powers of two (1, 2, 4, 8, ...), but you can also divide these note durations into any number of notes, like:</p>
-          <ul>
-            <li>triplets</li>
-            <li>quintuplets</li>
-            <li>sextuplets</li>
-            <li>septuplets</li>
-            <li>etc...</li>
-          </ul>
+          <p>Though time signature note values are generally powers of two, you are free to divide beats or measures into any number of notes, such as:</p>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell># of Divisions of Beat/Measure</TableCell>
+                <TableCell>Name</TableCell>
+                <TableCell>Symbol</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                <TableCell>3</TableCell>
+                <TableCell>Triplet</TableCell>
+                <TableCell></TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>5</TableCell>
+                <TableCell>Quintuplet</TableCell>
+                <TableCell></TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>7</TableCell>
+                <TableCell>Septuplet</TableCell>
+                <TableCell></TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+          
+          <p>and so on...</p>
 
-          <SubSectionTitle>Strong and Weak Beats</SubSectionTitle>
-          <p>The beats in a measure are classified into strong and weak beats. Strong beats carry the most weight in a rhythm, and weak beats carry less weight.</p>
-          <p>In 4/4, the first beat carries the most weight, and is a strong beat. The second beat carries less weight, and is a weak beat. The third beat carries more weight than the second beat, but less than the first, and is considered a strong beat. The fourth beat is considered a weak beat.</p>
-          <p>In 3/4, only the first beat is considered a strong beat.</p>
-          <p>TODO: more examples</p>
-          <p>TODO: interactive exercise</p>
+          <p>This is how these rhythmic patterns sound &amp; look:</p>
+          <p>EXERCISE HERE</p>
 
           <SubSectionTitle>Rubato</SubSectionTitle>
           <p>Though almost all music is structured using time signatures, performers and composers sometimes use rubato, or intentional deviation from the tempo to invoke a particular feeling in listeners.</p>
