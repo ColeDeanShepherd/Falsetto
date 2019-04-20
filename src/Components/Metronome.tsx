@@ -5,6 +5,11 @@ import * as Audio from "../Audio";
 
 var clickAudioPath = "audio/metronome_click.wav";
 
+export function getBeatIntervalS(bpm: number): number {
+  const bps = bpm / 60;
+  const beatIntervalS = 1 / bps;
+  return beatIntervalS;
+}
 export function getBeatIntervalMs(bpm: number): number {
   const bps = bpm / 60;
   const beatIntervalS = 1 / bps;

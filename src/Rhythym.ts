@@ -8,12 +8,15 @@ export interface IRhythymNote {
 }
 
 export class RhythymPlayer {
+  public onPlayUpdate: ((playTimeInSeconds: number, lastPlayTimeInSeconds: number | null) => void) | null;
+
   public constructor(
     public timeSignature: TimeSignature,
     public rhythymNotes: IRhythymNote[],
     public beatsPerMinute: number,
     public onNotePlay: ((i: number) => void) | null
   ) {
+    this.onPlayUpdate = null;
     this.shouldLoop = false;
     this.timeStartedPlaying = null;
     this.lastPlayTimeInSeconds = null;
@@ -79,6 +82,10 @@ export class RhythymPlayer {
     if (!this.isPlaying) { return; }
 
     const playTimeInSeconds = this.getPlayTimeInSeconds(window.performance.now());
+
+    if (this.onPlayUpdate) {
+      this.onPlayUpdate(playTimeInSeconds, this.lastPlayTimeInSeconds);
+    }
 
     if (this.onNotePlay) {
       const triggeredNoteIndex = this.getTriggeredNoteIndex(playTimeInSeconds);

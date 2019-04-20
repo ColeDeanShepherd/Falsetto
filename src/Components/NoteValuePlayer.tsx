@@ -9,8 +9,10 @@ import { VexFlowComponent } from "./VexFlowComponent";
 import { Rational } from "../Rational";
 import { noteDurationToVexFlowStr } from '../VexFlowUtils';
 import { RhythymPlayer, IRhythymNote } from '../Rhythym';
+import { getBeatIntervalS } from './Metronome';
 
 const clickAudioPath = "audio/metronome_click.wav";
+const woodBlockAudioPath = "audio/wood_block.wav";
 
 const width = 800;
 const height = 140;
@@ -37,6 +39,7 @@ export class NoteValuePlayer extends React.Component<INoteValuePlayerProps, INot
       120,
       this.onNotePlay.bind(this)
     );
+    this.rhythymPlayer.onPlayUpdate = this.onPlayUpdate.bind(this);
 
     this.state = initialState;
   }
@@ -172,6 +175,25 @@ export class NoteValuePlayer extends React.Component<INoteValuePlayerProps, INot
     this.forceUpdate();
   }
 
+  private onPlayUpdate(playTimeInSeconds: number, lastPlayTimeInSeconds: number | null) {
+    let shouldPlayBeat = false;
+
+    if (lastPlayTimeInSeconds === null) {
+      shouldPlayBeat = true;
+    } else {
+      const beatInterval = getBeatIntervalS(this.rhythymPlayer.beatsPerMinute);
+      const lastBeatIndex = Math.floor(lastPlayTimeInSeconds / beatInterval);
+      const beatIndex = Math.floor(playTimeInSeconds / beatInterval);
+
+      if (beatIndex !== lastBeatIndex) {
+        shouldPlayBeat = true;
+      }
+    }
+
+    if (shouldPlayBeat) {
+      Audio.playSound(woodBlockAudioPath);
+    }
+  }
   private onNotePlay(noteIndex: number) {
     Audio.playSound(clickAudioPath);
     this.forceUpdate();
@@ -213,6 +235,7 @@ export class NoteValuePlayer extends React.Component<INoteValuePlayerProps, INot
       120,
       this.onNotePlay.bind(this)
     );
+    this.rhythymPlayer.onPlayUpdate = this.onPlayUpdate.bind(this);
 
     this.setState(stateDelta);
   }
