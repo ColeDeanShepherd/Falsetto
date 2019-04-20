@@ -2,11 +2,12 @@ import * as React from "react";
 import * as Vex from "vexflow";
 
 import * as Utils from "../Utils";
-import { IRhythymNote } from "../Rhythym";
+import { IRhythymNote, RhythymPlayer } from "../Rhythym";
 import { Button, Card, CardContent, Typography } from "@material-ui/core";
 import { VexFlowComponent } from "./VexFlowComponent";
 import { Rational } from "../Rational";
 import { noteDurationToVexFlowStr } from '../VexFlowUtils';
+import { TimeSignature } from '../TimeSignature';
 
 const width = 800;
 const height = 100;
@@ -33,7 +34,6 @@ Need a way of configuring options
 Add space tapping
 */
 
-
 interface IRhythymTapperProps {
   isEmbedded?: boolean;
 }
@@ -54,6 +54,14 @@ export class RhythymTapper extends React.Component<IRhythymTapperProps, IRhythym
       isPlaying: false,
       timeStartedPlaying: 0
     };
+
+    this.rhythymPlayer = new RhythymPlayer(
+      new TimeSignature(4, 4),
+      initialState.rhythymNotes,
+      initialState.beatsPerMinute,
+      null
+    );
+
     this.state = initialState;
   }
 
@@ -119,6 +127,8 @@ export class RhythymTapper extends React.Component<IRhythymTapperProps, IRhythym
     }
   }
 
+  private rhythymPlayer: RhythymPlayer;
+
   private get playTimeInSeconds(): number {
     return (window.performance.now() - this.state.timeStartedPlaying) / 1000;
   }
@@ -144,7 +154,7 @@ export class RhythymTapper extends React.Component<IRhythymTapperProps, IRhythym
 
     if (this.state.isPlaying) {
       // render time bar
-      const timeBarNoteIndex = this.getCurrentNoteIndex(this.playTimeInSeconds);
+      const timeBarNoteIndex = this.rhythymPlayer.getCurrentNoteIndex(this.playTimeInSeconds);
 
       if (timeBarNoteIndex < this.state.rhythymNotes.length) {
         const timeBarWidth = 3;
@@ -164,10 +174,20 @@ export class RhythymTapper extends React.Component<IRhythymTapperProps, IRhythym
     );
   }
   private skipRhythym() {
-    this.setState({
+    const stateDelta = {
       rhythymNotes: generateRandomRhythym(),
       isPlaying: false
-    });
+    };
+
+    this.rhythymPlayer.stop();
+    this.rhythymPlayer = new RhythymPlayer(
+      new TimeSignature(4, 4),
+      stateDelta.rhythymNotes,
+      this.state.beatsPerMinute,
+      null
+    );
+
+    this.setState(stateDelta);
   }
   private tap() {
     // the note we"re tapping should probably be the note with
@@ -185,7 +205,7 @@ export class RhythymTapper extends React.Component<IRhythymTapperProps, IRhythym
 
     const newPlayTimeInSeconds = (window.performance.now() - this.state.timeStartedPlaying) / 1000;
 
-    if (this.getCurrentNoteIndex(newPlayTimeInSeconds) < this.state.rhythymNotes.length) {
+    if (this.rhythymPlayer.getCurrentNoteIndex(newPlayTimeInSeconds) < this.state.rhythymNotes.length) {
       this.forceUpdate();
       requestAnimationFrame(this.playUpdate.bind(this));
     } else {
@@ -195,39 +215,6 @@ export class RhythymTapper extends React.Component<IRhythymTapperProps, IRhythym
     }
   }
 
-  // TODO: add support for time signatures
-  private getMeasureDurationInSeconds(): number {
-    // Assuming 4/4.
-    const beatsPerSecond = this.state.beatsPerMinute / 60;
-    const beatsPerMeasure = 4;
-    return beatsPerMeasure / beatsPerSecond;
-  }
-  private getCurrentNoteIndex(playTimeInSeconds: number): number {
-    const currentTimeInMeasures = playTimeInSeconds / this.getMeasureDurationInSeconds();
-
-    let timeInMeasures = 0;
-    let noteIndex = 0;
-
-    while (noteIndex < this.state.rhythymNotes.length) {
-      timeInMeasures += this.state.rhythymNotes[noteIndex].duration.asReal;
-      if (currentTimeInMeasures >= timeInMeasures) {
-        noteIndex++;
-      } else {
-        break;
-      }
-    }
-
-    return noteIndex;
-  }
-  private getNoteStartTimeInSeconds(noteIndex: number): number {
-    let noteOffsetInMeasures = 0;
-
-    for (let i = 0; i < noteIndex; i++) {
-      noteOffsetInMeasures += this.state.rhythymNotes[i].duration.asReal;
-    }
-
-    return noteOffsetInMeasures * this.getMeasureDurationInSeconds();
-  }
   private rhythymNotesToVexFlowNotes(rhythymNotes: Array<IRhythymNote>): Array<Vex.Flow.StaveNote> {
     return rhythymNotes
       .map(rn => {

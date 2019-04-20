@@ -15,7 +15,7 @@
     "react-scripts": "^2.1.5",
     "resize-observer-polyfill": "^1.5.1",
     "source-map-explorer": "^1.8.0",
-    "vexflow": "^1.2.87"
+    "vexflow": "^1.2.89"
   },
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
@@ -33,7 +33,7 @@
     "@types/react-document-title": "^2.0.3",
     "@types/react-dom": "^16.8.2",
     "@types/react-router-dom": "^4.3.1",
-    "@types/vexflow": "^1.2.32",
+    "@types/vexflow": "^1.2.33",
     "typescript": "^3.3.3"
   },
   "browserslist": [

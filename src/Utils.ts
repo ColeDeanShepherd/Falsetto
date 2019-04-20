@@ -22,6 +22,21 @@ export function invariant(condition: boolean) {
   assert(condition);
 }
 
+export function unwrapValueOrUndefined<T>(value: T | undefined): T {
+  if (value === undefined) {
+    throw new Error("Tried to unwrap an undefined value.");
+  }
+
+  return value;
+}
+export function unwrapMaybe<T>(value: T | null): T {
+  if (value === null) {
+    throw new Error("Tried to unwrap a null value.");
+  }
+
+  return value;
+}
+
 // TODO: add tests
 export function isPowerOf2(x: number): boolean {
   return (x !== 0) && ((x & (x - 1)) === 0);

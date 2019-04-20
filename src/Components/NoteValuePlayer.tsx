@@ -8,6 +8,7 @@ import * as Audio from "../Audio";
 import { VexFlowComponent } from "./VexFlowComponent";
 import { Rational } from "../Rational";
 import { noteDurationToVexFlowStr } from '../VexFlowUtils';
+import { RhythymPlayer, IRhythymNote } from '../Rhythym';
 
 const clickAudioPath = "audio/metronome_click.wav";
 
@@ -20,10 +21,6 @@ interface INoteValuePlayerProps {
 }
 interface INoteValuePlayerState {
   noteValue: Rational;
-  beatsPerMinute: number;
-  isPlaying: boolean;
-  timeStartedPlaying: number;
-  lastPlayTimeInSeconds: number;
 }
 
 export class NoteValuePlayer extends React.Component<INoteValuePlayerProps, INoteValuePlayerState> {
@@ -31,12 +28,16 @@ export class NoteValuePlayer extends React.Component<INoteValuePlayerProps, INot
     super(props);
 
     const initialState: INoteValuePlayerState = {
-      noteValue: this.props.noteValue ? this.props.noteValue : new Rational(1, 4),
-      beatsPerMinute: 120,
-      isPlaying: false,
-      timeStartedPlaying: 0,
-      lastPlayTimeInSeconds: -1
+      noteValue: this.props.noteValue ? this.props.noteValue : new Rational(1, 4)
     };
+
+    this.rhythymPlayer = new RhythymPlayer(
+      new TimeSignature(4, 4),
+      this.createRhythymNotes(initialState.noteValue),
+      120,
+      this.onNotePlay.bind(this)
+    );
+
     this.state = initialState;
   }
 
@@ -70,7 +71,7 @@ export class NoteValuePlayer extends React.Component<INoteValuePlayerProps, INot
             vexFlowRender={vexFlowRender}
           />
           
-          {!this.state.isPlaying
+          {!this.rhythymPlayer.isPlaying
             ? (
               <Button
                 onClick={event => this.play()}
@@ -97,19 +98,8 @@ export class NoteValuePlayer extends React.Component<INoteValuePlayerProps, INot
     );
   }
 
-  private timeSignature = new TimeSignature(4, 4);
-  private getPlayTimeInSeconds(performanceNow: number): number {
-    return Utils.wrapReal(
-      (performanceNow - this.state.timeStartedPlaying) / 1000,
-      0, this.measureDurationInSeconds
-    );
-  }
-  private get measureDurationInSeconds(): number {
-    const measureDurationInMinutes = this.timeSignature.numBeats / this.state.beatsPerMinute;
-    const measureDurationInSeconds = 60 * measureDurationInMinutes;
-    return measureDurationInSeconds;
-  }
-
+  private rhythymPlayer: RhythymPlayer;
+  
   private vexFlowRender(context: Vex.IRenderContext) {
     context
       .setFont("Arial", 10)
@@ -118,37 +108,31 @@ export class NoteValuePlayer extends React.Component<INoteValuePlayerProps, INot
     const stave = new Vex.Flow.Stave(0, 0, width);
     stave
       .addClef("treble")
-      .addTimeSignature(this.timeSignature.toString());
+      .addTimeSignature(this.rhythymPlayer.timeSignature.toString());
     stave
       .setContext(context)
       .draw();
     
     // TODO: beams
 
-    const vexFlowNotes = Utils.repeatGenerator(
-      i => {
-        const note = new Vex.Flow.StaveNote({
-          clef: "treble",
-          keys: ["b/4"],
-          duration: noteDurationToVexFlowStr(this.state.noteValue),
-        });
-        //note.setStyle({ fillStyle: `rgba(0, 0, 0, ${this.getVolume(i)})` });
+    const vexFlowNotes = this.createVexFlowNotes();
 
-        return note;
-      },
-      this.state.noteValue.denominator
-    );
+    // TODO: improve beaming for powers of 2
+    let beam = (this.state.noteValue.denominator >= 8)
+      ? new Vex.Flow.Beam(vexFlowNotes)
+      : undefined;
 
     let tuplet = !Utils.isPowerOf2(this.state.noteValue.denominator)
       ? new Vex.Flow.Tuplet(vexFlowNotes, {
         num_notes: vexFlowNotes.length,
         notes_occupied: Utils.highestPowerOf2(vexFlowNotes.length),
         location: -1,
-        bracketed: true
-      } as any)
+        bracketed: true,
+        ratioed: false
+      })
       : undefined;
     
-    const voice = new Vex.Flow.Voice({num_beats: this.timeSignature.numBeats, beat_value: this.timeSignature.beatNoteValue});
+    const voice = new Vex.Flow.Voice({num_beats: this.rhythymPlayer.timeSignature.numBeats, beat_value: this.rhythymPlayer.timeSignature.beatNoteValue});
     voice.addTickables(vexFlowNotes);
     
     const formatter = new Vex.Flow.Formatter();
@@ -156,13 +140,17 @@ export class NoteValuePlayer extends React.Component<INoteValuePlayerProps, INot
     
     voice.draw(context, stave);
 
+    if (beam) {
+      beam.setContext(context).draw();
+    }
+
     if (tuplet) {
       tuplet.setContext(context).draw();
     }
 
-    if (this.state.isPlaying) {
+    if (this.rhythymPlayer.isPlaying) {
       // render time bar
-      const timeBarNoteIndex = this.getCurrentNoteIndex(this.getPlayTimeInSeconds(window.performance.now()));
+      const timeBarNoteIndex = this.rhythymPlayer.currentNoteIndex;
 
       if (timeBarNoteIndex < vexFlowNotes.length) {
         const timeBarWidth = 3;
@@ -176,38 +164,56 @@ export class NoteValuePlayer extends React.Component<INoteValuePlayerProps, INot
   }
 
   private play() {
-    this.setState(
-      { isPlaying: true, timeStartedPlaying: window.performance.now(), lastPlayTimeInSeconds: -1 },
-      () => requestAnimationFrame(this.playUpdate.bind(this))
-    );
+    this.rhythymPlayer.play(true);
+    this.forceUpdate();
   }
   private stop() {
-    this.setState({ isPlaying: false });
+    this.rhythymPlayer.stop();
+    this.forceUpdate();
   }
 
-  private playUpdate() {
-    if (!this.state.isPlaying) { return; }
-
-    const playTimeInSeconds = this.getPlayTimeInSeconds(window.performance.now());
-    const lastNoteIndex = this.getCurrentNoteIndex(this.state.lastPlayTimeInSeconds);
-    const currentNoteIndex = this.getCurrentNoteIndex(playTimeInSeconds);
-
-    if (currentNoteIndex !== lastNoteIndex) {
-      Audio.playSound(clickAudioPath);
-    }
-
-    this.setState({ lastPlayTimeInSeconds: playTimeInSeconds });
-
-    requestAnimationFrame(this.playUpdate.bind(this));
+  private onNotePlay(noteIndex: number) {
+    Audio.playSound(clickAudioPath);
+    this.forceUpdate();
   }
 
-  private getCurrentNoteIndex(playTimeInSeconds: number): number {
-    const percentDoneWithMeasure = playTimeInSeconds / this.measureDurationInSeconds;
-    return Math.floor(this.timeSignature.numBeats * percentDoneWithMeasure);
+  private createVexFlowNotes(): Array<Vex.Flow.StaveNote> {
+    return Utils.repeatGenerator(
+      i => {
+        const note = new Vex.Flow.StaveNote({
+          clef: "treble",
+          keys: ["b/4"],
+          duration: noteDurationToVexFlowStr(this.state.noteValue),
+        });
+        //note.setStyle({ fillStyle: `rgba(0, 0, 0, ${this.getVolume(i)})` });
+
+        return note;
+      },
+      this.state.noteValue.denominator
+    );
+  }
+  private createRhythymNotes(noteValue: Rational): Array<IRhythymNote> {
+    return Utils.repeatGenerator<IRhythymNote>(
+      i => ({
+        duration: noteValue,
+        isRest: false
+      }),
+      noteValue.denominator
+    );
   }
   
   private onNoteValueChange(newValueStr: string) {
     const noteValue = parseInt(newValueStr);
-    this.setState({ noteValue: new Rational(1, noteValue), timeStartedPlaying: window.performance.now(), lastPlayTimeInSeconds: -1 });
+    const stateDelta = { noteValue: new Rational(1, noteValue) };
+
+    this.rhythymPlayer.stop();
+    this.rhythymPlayer = new RhythymPlayer(
+      new TimeSignature(4, 4),
+      this.createRhythymNotes(stateDelta.noteValue),
+      120,
+      this.onNotePlay.bind(this)
+    );
+
+    this.setState(stateDelta);
   }
 }
