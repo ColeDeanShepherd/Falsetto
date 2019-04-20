@@ -44,6 +44,7 @@ import sixteenthRest from "../img/sheet-music/sixteenth-rest.svg";
 import _32ndNote from "../img/sheet-music/32nd-note.svg";
 import _32ndRest from "../img/sheet-music/32nd-rest.svg";
 import { TimeSignaturePlayer } from './TimeSignaturePlayer';
+import { NoteValuePlayer } from './NoteValuePlayer';
 
 const MainTitle: React.FunctionComponent<{}> = props => <h1>{props.children}</h1>;
 const SectionTitle: React.FunctionComponent<{}> = props => <h2>{props.children}</h2>;
@@ -199,7 +200,8 @@ export class EssentialMusicTheory extends React.Component<{}, {}> {
           <p>and so on...</p>
 
           <p>This is how these rhythmic patterns sound &amp; look:</p>
-          <p>EXERCISE HERE</p>
+
+          <NoteValuePlayer showNoteValueSelect={true} />
 
           <SubSectionTitle>Rubato</SubSectionTitle>
           <p>Though almost all music is structured using time signatures, performers and composers sometimes use rubato, or intentional deviation from the tempo to invoke a particular feeling in listeners.</p>

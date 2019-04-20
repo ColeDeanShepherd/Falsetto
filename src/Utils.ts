@@ -22,6 +22,27 @@ export function invariant(condition: boolean) {
   assert(condition);
 }
 
+// TODO: add tests
+export function isPowerOf2(x: number): boolean {
+  return (x !== 0) && ((x & (x - 1)) === 0);
+}
+
+// TODO: add tests
+export function highestPowerOf2(n: number): number {
+  precondition(Number.isInteger(n));
+
+  let res = 0;
+  
+  for (let i = n; i >= 1; i--) {
+    if (isPowerOf2(i)) {
+      res = i;
+      break;
+    }
+  }
+
+  return res; 
+}
+
 export function mod(n: number, m: number): number {
   return ((n % m) + m) % m;
 }

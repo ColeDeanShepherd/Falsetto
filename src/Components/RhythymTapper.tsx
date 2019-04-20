@@ -2,6 +2,7 @@ import * as React from "react";
 import * as Vex from "vexflow";
 
 import * as Utils from "../Utils";
+import { IRhythymNote } from "../Rhythym";
 import { Button, Card, CardContent, Typography } from "@material-ui/core";
 import { VexFlowComponent } from "./VexFlowComponent";
 import { Rational } from "../Rational";
@@ -32,10 +33,6 @@ Need a way of configuring options
 Add space tapping
 */
 
-interface IRhythymNote {
-  duration: Rational;
-  isRest: boolean;
-}
 
 interface IRhythymTapperProps {
   isEmbedded?: boolean;

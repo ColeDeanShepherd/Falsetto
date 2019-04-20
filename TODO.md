@@ -2,6 +2,7 @@
 ## High Priority
 * Essential Music Theory
   * Make YouTube videos responsive.
+  * Fix tempo in TimeSignature player with 8th notes.
 
 * Implement isEmbedded for ScaleViewer & RhythymTapper
 * Send errors to server somewhere?
