@@ -8,6 +8,7 @@ import * as Audio from "../Audio";
 import { VexFlowComponent } from "./VexFlowComponent";
 import { Rational } from "../Rational";
 import { noteDurationToVexFlowStr, getTimeSignatureStr } from '../VexFlowUtils';
+import { RhythymPlayer, IRhythymNote } from '../Rhythym';
 
 const clickAudioPath = "audio/metronome_click.wav";
 
@@ -18,26 +19,19 @@ interface ITimeSignaturePlayerProps {
   timeSignature?: TimeSignature;
   showTimeSignatureSelect?: boolean;
 }
-interface ITimeSignaturePlayerState {
-  timeSignature: TimeSignature;
-  beatsPerMinute: number;
-  isPlaying: boolean;
-  timeStartedPlaying: number;
-  lastPlayTimeInSeconds: number;
-}
+interface ITimeSignaturePlayerState {}
 
 export class TimeSignaturePlayer extends React.Component<ITimeSignaturePlayerProps, ITimeSignaturePlayerState> {
   public constructor(props: ITimeSignaturePlayerProps) {
     super(props);
 
-    const initialState: ITimeSignaturePlayerState = {
-      timeSignature: this.props.timeSignature ? this.props.timeSignature : new TimeSignature(4, 4),
-      beatsPerMinute: 120,
-      isPlaying: false,
-      timeStartedPlaying: 0,
-      lastPlayTimeInSeconds: -1
-    };
-    this.state = initialState;
+    const timeSignature = this.props.timeSignature ? this.props.timeSignature : new TimeSignature(4, 4);
+    this.rhythmPlayer = new RhythymPlayer(
+      timeSignature,
+      this.createRhythmNotes(timeSignature), 120, this.onNotePlay.bind(this)
+    );
+
+    this.state = {};
   }
 
   public render(): JSX.Element {
@@ -56,7 +50,7 @@ export class TimeSignaturePlayer extends React.Component<ITimeSignaturePlayerPro
             ? (
               <Select
                 native
-                value={this.state.timeSignature.toString()}
+                value={this.rhythmPlayer.timeSignature.toString()}
                 onChange={event => this.onTimeSignatureChange(event.target.value)}
               >
                 <option value="4/4">4/4</option>
@@ -75,7 +69,7 @@ export class TimeSignaturePlayer extends React.Component<ITimeSignaturePlayerPro
             vexFlowRender={vexFlowRender}
           />
           
-          {!this.state.isPlaying
+          {!this.rhythmPlayer.isPlaying
             ? (
               <Button
                 onClick={event => this.play()}
@@ -102,17 +96,7 @@ export class TimeSignaturePlayer extends React.Component<ITimeSignaturePlayerPro
     );
   }
 
-  private getPlayTimeInSeconds(performanceNow: number): number {
-    return Utils.wrapReal(
-      (performanceNow - this.state.timeStartedPlaying) / 1000,
-      0, this.measureDurationInSeconds
-    );
-  }
-  private get measureDurationInSeconds(): number {
-    const measureDurationInMinutes = this.state.timeSignature.numBeats / this.state.beatsPerMinute;
-    const measureDurationInSeconds = 60 * measureDurationInMinutes;
-    return measureDurationInSeconds;
-  }
+  private rhythmPlayer: RhythymPlayer;
 
   private vexFlowRender(context: Vex.IRenderContext) {
     context
@@ -122,27 +106,14 @@ export class TimeSignaturePlayer extends React.Component<ITimeSignaturePlayerPro
     const stave = new Vex.Flow.Stave(0, 0, width);
     stave
       .addClef("treble")
-      .addTimeSignature(this.state.timeSignature.toString());
+      .addTimeSignature(this.rhythmPlayer.timeSignature.toString());
     stave
       .setContext(context)
       .draw();
     
-    const vexFlowNotes = Utils.repeatGenerator(
-      i => {
-        const note = new Vex.Flow.StaveNote({
-          clef: "treble",
-          keys: ["b/4"],
-          duration: noteDurationToVexFlowStr(new Rational(1, this.state.timeSignature.beatNoteValue)),
-        });
-        const styleStr = `rgba(0, 0, 0, ${Math.sqrt(this.getVolume(i))})`;
-        note.setStyle({ fillStyle: styleStr, strokeStyle: styleStr });
-
-        return note;
-      },
-      this.state.timeSignature.numBeats
-    );
+    const vexFlowNotes = this.createVexFlowNotes(this.rhythmPlayer.timeSignature);
     
-    const voice = new Vex.Flow.Voice({num_beats: this.state.timeSignature.numBeats, beat_value: this.state.timeSignature.beatNoteValue});
+    const voice = new Vex.Flow.Voice({num_beats: this.rhythmPlayer.timeSignature.numBeats, beat_value: this.rhythmPlayer.timeSignature.beatNoteValue});
     voice.addTickables(vexFlowNotes);
     
     const formatter = new Vex.Flow.Formatter();
@@ -150,9 +121,9 @@ export class TimeSignaturePlayer extends React.Component<ITimeSignaturePlayerPro
     
     voice.draw(context, stave);
 
-    if (this.state.isPlaying) {
+    if (this.rhythmPlayer.isPlaying) {
       // render time bar
-      const timeBarNoteIndex = this.getCurrentNoteIndex(this.getPlayTimeInSeconds(window.performance.now()));
+      const timeBarNoteIndex = this.rhythmPlayer.currentNoteIndex;
 
       if (timeBarNoteIndex < vexFlowNotes.length) {
         const timeBarWidth = 3;
@@ -165,42 +136,52 @@ export class TimeSignaturePlayer extends React.Component<ITimeSignaturePlayerPro
     }
   }
 
-  private play() {
-    this.setState(
-      { isPlaying: true, timeStartedPlaying: window.performance.now(), lastPlayTimeInSeconds: -1 },
-      () => requestAnimationFrame(this.playUpdate.bind(this))
+  private createRhythmNotes(timeSignature: TimeSignature): Array<IRhythymNote> {
+    return Utils.repeatGenerator(
+      i => ({
+        duration: new Rational(1, timeSignature.numBeats),
+        isRest: false
+      }),
+      timeSignature.numBeats
     );
   }
+  private createVexFlowNotes(timeSignature: TimeSignature): Array<Vex.Flow.StaveNote> {
+    return Utils.repeatGenerator(
+      i => {
+        const note = new Vex.Flow.StaveNote({
+          clef: "treble",
+          keys: ["b/4"],
+          duration: noteDurationToVexFlowStr(new Rational(1, timeSignature.beatNoteValue)),
+        });
+        const styleStr = `rgba(0, 0, 0, ${Math.sqrt(this.getVolume(i))})`;
+        note.setStyle({ fillStyle: styleStr, strokeStyle: styleStr });
+
+        return note;
+      },
+      timeSignature.numBeats
+    );
+  }
+
+  private play() {
+    this.rhythmPlayer.play(true);
+    this.forceUpdate();
+  }
   private stop() {
-    this.setState({ isPlaying: false });
+    this.rhythmPlayer.stop();
+    this.forceUpdate();
   }
 
-  private playUpdate() {
-    if (!this.state.isPlaying) { return; }
-
-    const playTimeInSeconds = this.getPlayTimeInSeconds(window.performance.now());
-    const lastNoteIndex = this.getCurrentNoteIndex(this.state.lastPlayTimeInSeconds);
-    const currentNoteIndex = this.getCurrentNoteIndex(playTimeInSeconds);
-
-    if (currentNoteIndex !== lastNoteIndex) {
-      Audio.playSound(clickAudioPath, this.getVolume(currentNoteIndex));
-    }
-
-    this.setState({ lastPlayTimeInSeconds: playTimeInSeconds });
-
-    requestAnimationFrame(this.playUpdate.bind(this));
+  private onNotePlay(noteIndex: number) {
+    Audio.playSound(clickAudioPath, this.getVolume(noteIndex));
+    this.forceUpdate();
   }
 
-  private getCurrentNoteIndex(playTimeInSeconds: number): number {
-    const percentDoneWithMeasure = playTimeInSeconds / this.measureDurationInSeconds;
-    return Math.floor(this.state.timeSignature.numBeats * percentDoneWithMeasure);
-  }
   private getVolume(noteIndex: number): number {
     const strongBeatVolume = 1;
     const mediumBeatVolume = 0.6;
     const weakBeatVolume = 0.175;
 
-    const timeSignatureStr = getTimeSignatureStr(this.state.timeSignature.numBeats, this.state.timeSignature.beatNoteValue);
+    const timeSignatureStr = getTimeSignatureStr(this.rhythmPlayer.timeSignature.numBeats, this.rhythmPlayer.timeSignature.beatNoteValue);
 
     switch (timeSignatureStr) {
       case "4/4":
@@ -280,6 +261,14 @@ export class TimeSignaturePlayer extends React.Component<ITimeSignaturePlayerPro
   
   private onTimeSignatureChange(newValueStr: string) {
     const newValue = TimeSignature.parse(newValueStr);
-    this.setState({ timeSignature: newValue, timeStartedPlaying: window.performance.now(), lastPlayTimeInSeconds: -1 });
+
+    this.rhythmPlayer.stop();
+    this.rhythmPlayer = new RhythymPlayer(
+      newValue,
+      this.createRhythmNotes(newValue),
+      this.rhythmPlayer.beatsPerMinute,
+      this.rhythmPlayer.onNotePlay
+    );
+    this.forceUpdate();
   }
 }

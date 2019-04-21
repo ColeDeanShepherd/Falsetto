@@ -188,7 +188,7 @@ export class EssentialMusicTheory extends React.Component<{}, {}> {
           <p>Use the time signature selector below to listen to some common time signature to get a feel for them.</p>
           <TimeSignaturePlayer showTimeSignatureSelect={true} />
 
-          <p>Note that all of the note values in time signatures (the bottom number) are powers of two (1, 2, 4, 8, ...). This is true for almost all, if not all, time signatures in practice.</p>
+          <p>Note that all of the note values (the bottom number) in time signatures are powers of two (1, 2, 4, 8, ...). This is true for almost all, if not all, time signatures in practice.</p>
 
           <p>Though time signature note values are generally powers of two, you are free to divide beats or measures into any number of notes, such as:</p>
           <Table>
