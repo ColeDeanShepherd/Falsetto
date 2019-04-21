@@ -72,12 +72,12 @@ export class EssentialMusicTheory extends React.Component<{}, {}> {
           <p>Without further ado, let's get started!</p>
 
           <SectionTitle>Rhythm</SectionTitle>
-          <p><em>Rhythym</em> is the purposeful arrangement of sounds over time &mdash; what you dance to when listening to a piece of music. Rhythym is the basis of all music, and some music is based solely on rhythym:</p>
+          <p><em>Rhythm</em> is the purposeful arrangement of sounds over time &mdash; what you dance to when listening to a piece of music. Rhythm is the basis of all music, and some music is based solely on rhythm:</p>
 
           <YouTubeVideo videoId="Qsq5PHoik-s" />
 
           <SubSectionTitle>Beat &amp; Tempo</SubSectionTitle>
-          <p>The <em>beat</em> is the repeating pulse you can feel when listening to a piece of music. The beat is the driving force of rhythym, and all sounds in music are arranged around it. If you tap your foot or bob your head to a song, you do it to the beat.</p>
+          <p>The <em>beat</em> is the repeating pulse you can feel when listening to a piece of music. The beat is the driving force of rhythm, and all sounds in music are arranged around it. If you tap your foot or bob your head to a song, you do it to the beat.</p>
           <p><em>Tempo</em> is the speed of the beat, often given as beats per minute (BPM). 120 BPM, for example, means there are two beats per second:</p>
           
           <Metronome hideTitle={true} />

@@ -49,7 +49,7 @@ import * as ChordEarTraining from "./Quizzes/ChordEarTraining";
 import * as ScaleEarTraining from "./Quizzes/ScaleEarTraining";
 import { ScaleViewer } from "./ScaleViewer";
 import { ChordViewer } from "./ChordViewer";
-import { RhythymTapper } from "./RhythymTapper";
+import { RhythmTapper } from "./RhythmTapper";
 import { FlashCardGroup } from "../FlashCardGroup";
 import { createStudyFlashCardGroupComponent } from "./StudyFlashCards";
 import * as TheJazzPianoSiteOverview from "./Quizzes/TheJazzPianoSite/TheBasics/Overview"
@@ -196,7 +196,7 @@ class App extends React.Component<IAppProps, IAppState> {
       <Route path="/essential-music-theory" component={() => <DocumentTitle title="Essential Music Theory - Falsetto"><EssentialMusicTheory /></DocumentTitle>} />,
       <Route path="/scale-viewer" component={() => <DocumentTitle title={"Scale Viewer - Falsetto"}><ScaleViewer /></DocumentTitle>} />,
       <Route path="/chord-viewer" component={() => <DocumentTitle title={"Chord Viewer - Falsetto"}><ChordViewer /></DocumentTitle>} />,
-      <Route path="/rhythym-tapper" component={() => <DocumentTitle title={"Rhythym Tapper - Falsetto"}><RhythymTapper /></DocumentTitle>} />,
+      <Route path="/rhythm-tapper" component={() => <DocumentTitle title={"Rhythm Tapper - Falsetto"}><RhythmTapper /></DocumentTitle>} />,
     ].concat(
       this.flashCardGroups.map(fcg => <Route key={fcg.route} path={fcg.route} component={this.createStudyFlashCardGroupComponent(fcg)} />)
     );
@@ -206,8 +206,8 @@ class App extends React.Component<IAppProps, IAppState> {
 
     /*
     <div>
-      <p style={{marginTop: 0}}>Rhythyms</p>
-      <NavLink to="rhythym-tapper" className="nav-link">Rhythym Tapper</NavLink>
+      <p style={{marginTop: 0}}>Rhythms</p>
+      <NavLink to="rhythm-tapper" className="nav-link">Rhythm Tapper</NavLink>
     </div>
     */
 

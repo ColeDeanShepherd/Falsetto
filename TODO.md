@@ -4,10 +4,10 @@
   * Make YouTube videos responsive.
   * Fix tempo in TimeSignature player with 8th notes.
 
-* Implement isEmbedded for ScaleViewer & RhythymTapper
+* Implement isEmbedded for ScaleViewer & RhythmTapper
 * Send errors to server somewhere?
 * Enable inversion on guitar scale viewer.
-* Rhythym tapper
+* Rhythm tapper
 * Scale degree ear trainer
 * Playable piano?
 * Show scale degree #'s in piano scales.

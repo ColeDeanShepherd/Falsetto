@@ -20,11 +20,11 @@ const height = 100;
 // Add a skip button.
 
 /*
-First, need to be able to generate random rhythyms.
+First, need to be able to generate random rhythms.
 Maybe using random subdivisions?
 Each second (bar, note) can be subdivided in half or in thirds
 THirds should be less common
-Need a way of detecting the closeness of hits to rhythyms
+Need a way of detecting the closeness of hits to rhythms
 Need a way of thresholding or categorizing distance to notes.
 Might depend on the value of the note too.
 Need a metronome sound
@@ -34,30 +34,30 @@ Need a way of configuring options
 Add space tapping
 */
 
-interface IRhythymTapperProps {
+interface IRhythmTapperProps {
   isEmbedded?: boolean;
 }
-interface IRhythymTapperState {
-  rhythymNotes: Array<IRhythmNote>;
+interface IRhythmTapperState {
+  rhythmNotes: Array<IRhythmNote>;
   beatsPerMinute: number;
   isPlaying: boolean;
   timeStartedPlaying: number;
 }
 
-export class RhythymTapper extends React.Component<IRhythymTapperProps, IRhythymTapperState> {
-  public constructor(props: IRhythymTapperProps) {
+export class RhythmTapper extends React.Component<IRhythmTapperProps, IRhythmTapperState> {
+  public constructor(props: IRhythmTapperProps) {
     super(props);
 
-    const initialState: IRhythymTapperState = {
-      rhythymNotes: generateRandomRhythym(),
+    const initialState: IRhythmTapperState = {
+      rhythmNotes: generateRandomRhythm(),
       beatsPerMinute: 60,
       isPlaying: false,
       timeStartedPlaying: 0
     };
 
-    this.rhythymPlayer = new RhythmPlayer(
+    this.rhythmPlayer = new RhythmPlayer(
       new TimeSignature(4, 4),
-      initialState.rhythymNotes,
+      initialState.rhythmNotes,
       initialState.beatsPerMinute,
       null
     );
@@ -73,7 +73,7 @@ export class RhythymTapper extends React.Component<IRhythymTapperProps, IRhythym
         <CardContent>
           <div style={{display: "flex"}}>
             <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
-              Rhythym Tapper
+              Rhythm Tapper
             </Typography>
           </div>
 
@@ -83,7 +83,7 @@ export class RhythymTapper extends React.Component<IRhythymTapperProps, IRhythym
           />
 
           <Button
-            onClick={event => this.startTappingRhythym()}
+            onClick={event => this.startTappingRhythm()}
             disableRipple={true}
             disableFocusRipple={true}
             variant="contained"
@@ -99,7 +99,7 @@ export class RhythymTapper extends React.Component<IRhythymTapperProps, IRhythym
           </Button>
 
           <Button
-            onClick={event => this.skipRhythym()}
+            onClick={event => this.skipRhythm()}
             variant="contained"
           >
             Skip
@@ -127,7 +127,7 @@ export class RhythymTapper extends React.Component<IRhythymTapperProps, IRhythym
     }
   }
 
-  private rhythymPlayer: RhythmPlayer;
+  private rhythmPlayer: RhythmPlayer;
 
   private get playTimeInSeconds(): number {
     return (window.performance.now() - this.state.timeStartedPlaying) / 1000;
@@ -142,7 +142,7 @@ export class RhythymTapper extends React.Component<IRhythymTapperProps, IRhythym
     stave.addClef("treble").addTimeSignature("4/4");
     stave.setContext(context).draw();
     
-    const vexFlowNotes = this.rhythymNotesToVexFlowNotes(this.state.rhythymNotes);
+    const vexFlowNotes = this.rhythmNotesToVexFlowNotes(this.state.rhythmNotes);
     
     const voice = new Vex.Flow.Voice({num_beats: 4, beat_value: 4});
     voice.addTickables(vexFlowNotes);
@@ -154,9 +154,9 @@ export class RhythymTapper extends React.Component<IRhythymTapperProps, IRhythym
 
     if (this.state.isPlaying) {
       // render time bar
-      const timeBarNoteIndex = this.rhythymPlayer.getCurrentNoteIndex(this.playTimeInSeconds);
+      const timeBarNoteIndex = this.rhythmPlayer.getCurrentNoteIndex(this.playTimeInSeconds);
 
-      if (timeBarNoteIndex < this.state.rhythymNotes.length) {
+      if (timeBarNoteIndex < this.state.rhythmNotes.length) {
         const timeBarWidth = 3;
         const timeBarHeight = height;
         const timeBarX = vexFlowNotes[timeBarNoteIndex].getAbsoluteX();
@@ -167,20 +167,20 @@ export class RhythymTapper extends React.Component<IRhythymTapperProps, IRhythym
     }
   }
 
-  private startTappingRhythym() {
+  private startTappingRhythm() {
     this.setState(
       { isPlaying: true, timeStartedPlaying: window.performance.now() },
       () => requestAnimationFrame(this.playUpdate.bind(this))
     );
   }
-  private skipRhythym() {
+  private skipRhythm() {
     const stateDelta = {
-      rhythymNotes: generateRandomRhythym(),
+      rhythmNotes: generateRandomRhythm(),
       isPlaying: false
     };
 
-    this.rhythymPlayer.stop();
-    this.rhythymPlayer.rhythmNotes = stateDelta.rhythymNotes;
+    this.rhythmPlayer.stop();
+    this.rhythmPlayer.rhythmNotes = stateDelta.rhythmNotes;
 
     this.setState(stateDelta);
   }
@@ -200,7 +200,7 @@ export class RhythymTapper extends React.Component<IRhythymTapperProps, IRhythym
 
     const newPlayTimeInSeconds = (window.performance.now() - this.state.timeStartedPlaying) / 1000;
 
-    if (this.rhythymPlayer.getCurrentNoteIndex(newPlayTimeInSeconds) < this.state.rhythymNotes.length) {
+    if (this.rhythmPlayer.getCurrentNoteIndex(newPlayTimeInSeconds) < this.state.rhythmNotes.length) {
       this.forceUpdate();
       requestAnimationFrame(this.playUpdate.bind(this));
     } else {
@@ -210,8 +210,8 @@ export class RhythymTapper extends React.Component<IRhythymTapperProps, IRhythym
     }
   }
 
-  private rhythymNotesToVexFlowNotes(rhythymNotes: Array<IRhythmNote>): Array<Vex.Flow.StaveNote> {
-    return rhythymNotes
+  private rhythmNotesToVexFlowNotes(rhythmNotes: Array<IRhythmNote>): Array<Vex.Flow.StaveNote> {
+    return rhythmNotes
       .map(rn => {
         const durationStr = noteDurationToVexFlowStr(rn.duration) + (rn.isRest ? "r" : "");
 
@@ -224,7 +224,7 @@ export class RhythymTapper extends React.Component<IRhythymTapperProps, IRhythym
   }
 }
 
-function generateRandomRhythym(): Array<IRhythmNote> {
+function generateRandomRhythm(): Array<IRhythmNote> {
   // TODO: add triplets
   // TODO: add support for multiple time signatures
   const noteDurations = [
