@@ -48,15 +48,19 @@ import _32ndNote from "../img/sheet-music/32nd-note.svg";
 import _32ndRest from "../img/sheet-music/32nd-rest.svg";
 
 import timeSignature44 from "../img/sheet-music/time-signature-4-4.svg";
+import timeSignature34 from "../img/sheet-music/time-signature-3-4.svg";
 
 import { TimeSignaturePlayer } from './TimeSignaturePlayer';
 import { NoteValuePlayer } from './NoteValuePlayer';
+import { Rational } from '../Rational';
 
 const MainTitle: React.FunctionComponent<{}> = props => <h1>{props.children}</h1>;
 const SectionTitle: React.FunctionComponent<{}> = props => <h2>{props.children}</h2>;
 const SubSectionTitle: React.FunctionComponent<{}> = props => <h3>{props.children}</h3>;
 
-const noteValueTableImgWidth = "24px";
+const NoteText: React.FunctionComponent<{}> = props => <p style={{ color: "#004085", backgroundColor: "#cce5ff", padding: "1em", border: "1px solid #b8daff", borderRadius: "4px" }}>NOTE: {props.children}</p>;
+
+const noteValueTableImgWidth = 24;
 
 export class EssentialMusicTheory extends React.Component<{}, {}> {
   public render(): JSX.Element {
@@ -89,18 +93,18 @@ export class EssentialMusicTheory extends React.Component<{}, {}> {
           <p style={{ textAlign: "center", textDecoration: "underline" }}>Fast Tempo</p>
           <YouTubeVideo videoId="jYUilB9ngs0" />
 
-          <p>Though most music holds a steady tempo, it can vary throughout a piece of music. Composers can designate places where the music changes to a new fixed tempo, or performers can slightly deviate from a fixed tempo in a smooth and flowing manner &mdash; a technique called rubato.</p>
-          <p>The rendition below of "Nocturne op. 9 No. 2", a piece by Frédéric Chopin, is a great example of rubato. As you listen, note how the tempo ebbs and flows, making the music more emotionally impactful than if it were played mechanically with an unwavering tempo.</p>
+          <p>Though most music holds a steady tempo, it can vary throughout a piece of music. Composers can designate places where the music changes to a new fixed tempo, or performers can slightly deviate from a fixed tempo in a smooth and flowing manner &mdash; a technique called <em>rubato</em>.</p>
+          <p>The rendition below of "Nocturne op. 9 No. 2", a piece by <a href="https://www.youtube.com/watch?v=wygy721nzRc" target="_blank">Frédéric Chopin</a>, is a great example of rubato. As you listen, note how the tempo ebbs and flows, making the music more emotionally impactful than if it were played mechanically with an unwavering tempo.</p>
           
           <YouTubeVideo videoId="9E6b3swbnWg" />
 
           <SubSectionTitle>Measures &amp; Note Durations</SubSectionTitle>
-          <p>Music is divided into <em>measures</em> (or <em>Bars</em>) &mdash; small sections containing a fixed number of beats.</p>
-          <p>NOTE: We will use sheet music notation to visualize concepts in this section, but don't worry about understanding the notes or symbols if you are unfamiliar with sheet music.</p>
+          <p>Music is divided into <em>measures</em> (or <em>bars</em>) &mdash; small sections containing a fixed number of beats.</p>
+          <NoteText>We will use sheet music notation to visualize concepts in this section, but don't worry about understanding the notes or symbols if you are unfamiliar with sheet music.</NoteText>
           
           <p style={{ textAlign: "center" }}><img src={measures} style={{ maxWidth: "700px", width: "100%" }} /></p>
 
-          <p>Each measure contains musical notes and rests. Notes are the notes musicians play in a piece of music, and rests are periods of silence.</p>
+          <p>Each measure contains musical notes and rests. Notes are the what musicians actually play in a piece of music, and rests are periods of silence.</p>
           
           <p style={{ textAlign: "center" }}><img src={notesRestsDiagram} style={{ maxWidth: "700px", width: "100%" }} /></p>
 
@@ -119,43 +123,43 @@ export class EssentialMusicTheory extends React.Component<{}, {}> {
               <TableRow>
                 <TableCell>Whole Note</TableCell>
                 <TableCell>1</TableCell>
-                <TableCell><img src={wholeNote} style={{ width: noteValueTableImgWidth }} /></TableCell>
-                <TableCell><img src={wholeRest} style={{ width: noteValueTableImgWidth }} /></TableCell>
+                <TableCell><img src={wholeNote} style={{ width: `${noteValueTableImgWidth}px` }} /></TableCell>
+                <TableCell><img src={wholeRest} style={{ width: `${1.2 * noteValueTableImgWidth}px` }} /></TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>Half Note</TableCell>
                 <TableCell>2</TableCell>
-                <TableCell><img src={halfNote} style={{ width: noteValueTableImgWidth }} /></TableCell>
-                <TableCell><img src={halfRest} style={{ width: noteValueTableImgWidth }} /></TableCell>
+                <TableCell><img src={halfNote} style={{ width: `${0.7 * noteValueTableImgWidth}px` }} /></TableCell>
+                <TableCell><img src={halfRest} style={{ width: `${1.3 * noteValueTableImgWidth}px` }} /></TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>Quarter Note</TableCell>
                 <TableCell>4</TableCell>
-                <TableCell><img src={quarterNote} style={{ width: noteValueTableImgWidth }} /></TableCell>
-                <TableCell><img src={quarterRest} style={{ width: noteValueTableImgWidth }} /></TableCell>
+                <TableCell><img src={quarterNote} style={{ width: `${0.7 * noteValueTableImgWidth}px` }} /></TableCell>
+                <TableCell><img src={quarterRest} style={{ width: `${0.65 * noteValueTableImgWidth}px` }} /></TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>Eighth Note</TableCell>
                 <TableCell>8</TableCell>
-                <TableCell><img src={eighthNote} style={{ width: noteValueTableImgWidth }} /></TableCell>
-                <TableCell><img src={eighthRest} style={{ width: noteValueTableImgWidth }} /></TableCell>
+                <TableCell><img src={eighthNote} style={{ width: `${noteValueTableImgWidth}px` }} /></TableCell>
+                <TableCell><img src={eighthRest} style={{ width: `${0.9 * noteValueTableImgWidth}px` }} /></TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>Sixteenth Note</TableCell>
                 <TableCell>16</TableCell>
-                <TableCell><img src={sixteenthNote} style={{ width: noteValueTableImgWidth }} /></TableCell>
-                <TableCell><img src={sixteenthRest} style={{ width: noteValueTableImgWidth }} /></TableCell>
+                <TableCell><img src={sixteenthNote} style={{ width: `${noteValueTableImgWidth}px` }} /></TableCell>
+                <TableCell><img src={sixteenthRest} style={{ width: `${0.9 * noteValueTableImgWidth}px` }} /></TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>Thirty-second Note</TableCell>
                 <TableCell>32</TableCell>
-                <TableCell><img src={_32ndNote} style={{ width: noteValueTableImgWidth }} /></TableCell>
-                <TableCell><img src={_32ndRest} style={{ width: noteValueTableImgWidth }} /></TableCell>
+                <TableCell><img src={_32ndNote} style={{ width: `${noteValueTableImgWidth}px` }} /></TableCell>
+                <TableCell><img src={_32ndRest} style={{ width: `${0.9 * noteValueTableImgWidth}px` }} /></TableCell>
               </TableRow>
             </TableBody>
           </Table>
 
-          <p>Whole notes are twice as long as half notes, half notes are twice as long as quarter notes, quarter notes are twice as long as eighth notes, and so on...</p>
+          <p>Whole notes &amp; rests are twice as long as half notes &amp; rests, half notes &amp; rests are twice as long as quarter notes &amp; rests, quarter notes &amp; rests are twice as long as eighth notes &amp; rests, and so on...</p>
           
           <SubSectionTitle>Time Signatures</SubSectionTitle>
           <p>The number &amp; type of beats in a measure are specified by <em>time signatures</em>:</p>
@@ -178,11 +182,11 @@ export class EssentialMusicTheory extends React.Component<{}, {}> {
           <p>This is what <img src={timeSignature44} style={{ width: "12px" }} /> time sounds and looks like:</p>
           <TimeSignaturePlayer timeSignature={new TimeSignature(4, 4)} />
           
-          <p>As you can hear and see, the beats vary in weight throughout the measure: the first beat is the strongest beat, the third beat is a medium-strength note, and the second and fourth beats are weak notes. This is because time signatures, like 4/4, have <em>strong beats</em> and <em>weak beats</em> (and beats in-between).</p>
+          <p>As you can hear and see, the beats vary in weight throughout the measure: the first beat is the strongest beat, the third beat is a medium-strength note, and the second and fourth beats are weak notes. This is because time signatures, like <img src={timeSignature44} style={{ width: "12px" }} />, have <em>strong beats</em> and <em>weak beats</em> (and beats in-between).</p>
 
-          <p>NOTE: The differing volumes and colors of notes is only a visual/aural aid to understanding strong &amp; weak beats in time signatures. In real music, the notes would not differ in color, and all notes would be the same volume unless otherwise indicated.</p>
+          <NoteText>The differing volumes and colors of notes is only a visual/aural aid to understanding strong &amp; weak beats in time signatures. In real music, the notes would not differ in color, and all notes would be the same volume unless otherwise indicated.</NoteText>
 
-          <p>Another common time signature is 3/4, in which there are three quarter notes, the first beat is a strong beat, and the second and third notes are weak beats. This is what 3/4 sounds like:</p>
+          <p>Another common time signature is <img src={timeSignature34} style={{ width: "12px" }} />, in which there are three quarter notes, the first beat is a strong beat, and the second and third notes are weak beats. <img src={timeSignature34} style={{ width: "12px" }} /> is used in waltzes, among other types of music, and it sounds like this:</p>
           <TimeSignaturePlayer timeSignature={new TimeSignature(3, 4)} />
           
           <p>Use the time signature selector below to listen to some common time signature to get a feel for them.</p>
@@ -190,41 +194,10 @@ export class EssentialMusicTheory extends React.Component<{}, {}> {
 
           <p>Note that all of the note values (the bottom number) in time signatures are powers of two (1, 2, 4, 8, ...). This is true for almost all, if not all, time signatures in practice.</p>
 
-          <p>Though time signature note values are generally powers of two, you are free to divide beats or measures into any number of notes, such as:</p>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell># of Divisions of Beat/Measure</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Symbol</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableRow>
-                <TableCell>3</TableCell>
-                <TableCell>Triplet</TableCell>
-                <TableCell></TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>5</TableCell>
-                <TableCell>Quintuplet</TableCell>
-                <TableCell></TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>7</TableCell>
-                <TableCell>Septuplet</TableCell>
-                <TableCell></TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-          
-          <p>and so on...</p>
+          <p>Though time signature note values are generally powers of two, you are free to divide beats or measures into any number of notes:</p>
 
-          <p>This is how these rhythmic patterns sound &amp; look:</p>
-
-          <NoteValuePlayer showNoteValueSelect={true} />
+          <NoteValuePlayer notesPerBeat={3} showNotesPerBeatSelect={true} />
           
-          <p>RHYTHYM TAPPER HERE</p>
           {createStudyFlashCardGroupComponent(NoteDurations.createFlashCardGroup(), this.isEmbedded, this.hideMoreInfoUri)}
 
           <SectionTitle>Notes</SectionTitle>

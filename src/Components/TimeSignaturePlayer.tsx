@@ -8,12 +8,97 @@ import * as Audio from "../Audio";
 import { VexFlowComponent } from "./VexFlowComponent";
 import { Rational } from "../Rational";
 import { noteDurationToVexFlowStr, getTimeSignatureStr } from '../VexFlowUtils';
-import { RhythymPlayer, IRhythymNote } from '../Rhythym';
+import { RhythmPlayer, IRhythmNote } from '../Rhythm';
 
 const clickAudioPath = "audio/metronome_click.wav";
 
 const width = 800;
 const height = 100;
+
+export enum BeatStrength {
+  Strong,
+  Medium,
+  Weak
+}
+
+export function getBeatStrength(timeSignature: TimeSignature, noteIndex: number): BeatStrength {
+  const timeSignatureStr = getTimeSignatureStr(timeSignature.numBeats, timeSignature.beatNoteValue);
+
+  switch (timeSignatureStr) {
+    case "4/4":
+      switch (noteIndex) {
+        case 0:
+          return BeatStrength.Strong;
+        case 2:
+          return BeatStrength.Medium;
+        case 1:
+        case 3:
+          return BeatStrength.Weak;
+      }
+    case "3/4":
+      switch (noteIndex) {
+        case 0:
+          return BeatStrength.Strong;
+        case 1:
+        case 2:
+          return BeatStrength.Weak;
+      }
+    case "2/4":
+      switch (noteIndex) {
+        case 0:
+          return BeatStrength.Strong;
+        case 1:
+          return BeatStrength.Weak;
+      }
+    case "6/8":
+      switch (noteIndex) {
+        case 0:
+          return BeatStrength.Strong;
+        case 3:
+          return BeatStrength.Medium;
+        case 1:
+        case 2:
+        case 4:
+        case 5:
+          return BeatStrength.Weak;
+      }
+    case "9/8":
+      switch (noteIndex) {
+        case 0:
+          return BeatStrength.Strong;
+        case 3:
+        case 6:
+          return BeatStrength.Medium;
+        case 1:
+        case 2:
+        case 4:
+        case 5:
+        case 7:
+        case 8:
+          return BeatStrength.Weak;
+      }
+    case "12/8":
+      switch (noteIndex) {
+        case 0:
+          return BeatStrength.Strong;
+        case 3:
+        case 6:
+        case 9:
+          return BeatStrength.Medium;
+        case 1:
+        case 2:
+        case 4:
+        case 5:
+        case 7:
+        case 8:
+        case 10:
+        case 11:
+          return BeatStrength.Weak;
+      }
+  }
+
+  throw new Error(`Unsupported time signature ${timeSignatureStr} & note index ${noteIndex}`);
+}
 
 interface ITimeSignaturePlayerProps {
   timeSignature?: TimeSignature;
@@ -26,7 +111,7 @@ export class TimeSignaturePlayer extends React.Component<ITimeSignaturePlayerPro
     super(props);
 
     const timeSignature = this.props.timeSignature ? this.props.timeSignature : new TimeSignature(4, 4);
-    this.rhythmPlayer = new RhythymPlayer(
+    this.rhythmPlayer = new RhythmPlayer(
       timeSignature,
       this.createRhythmNotes(timeSignature), 120, this.onNotePlay.bind(this)
     );
@@ -45,6 +130,8 @@ export class TimeSignaturePlayer extends React.Component<ITimeSignaturePlayerPro
               Time Signature Player
             </Typography>
           </div>
+
+          <p style={{ margin: 0 }}>BPM: {this.rhythmPlayer.beatsPerMinute}</p>
 
           {this.props.showTimeSignatureSelect
             ? (
@@ -96,7 +183,7 @@ export class TimeSignaturePlayer extends React.Component<ITimeSignaturePlayerPro
     );
   }
 
-  private rhythmPlayer: RhythymPlayer;
+  private rhythmPlayer: RhythmPlayer;
 
   private vexFlowRender(context: Vex.IRenderContext) {
     context
@@ -113,6 +200,16 @@ export class TimeSignaturePlayer extends React.Component<ITimeSignaturePlayerPro
     
     const vexFlowNotes = this.createVexFlowNotes(this.rhythmPlayer.timeSignature);
     
+    let beams: Array<Vex.Flow.Beam> | undefined = undefined;
+    if (this.rhythmPlayer.timeSignature.beatNoteValue >= 8) {
+      beams = new Array<Vex.Flow.Beam>(this.rhythmPlayer.timeSignature.numBeats / 3);
+
+      for (let i = 0; i < beams.length; i++) {
+        const startNoteIndex = 3 * i;
+        beams[i] = new Vex.Flow.Beam(vexFlowNotes.slice(startNoteIndex, startNoteIndex + 3));
+      }
+    }
+    
     const voice = new Vex.Flow.Voice({num_beats: this.rhythmPlayer.timeSignature.numBeats, beat_value: this.rhythmPlayer.timeSignature.beatNoteValue});
     voice.addTickables(vexFlowNotes);
     
@@ -120,6 +217,12 @@ export class TimeSignaturePlayer extends React.Component<ITimeSignaturePlayerPro
     formatter.joinVoices([voice]).format([voice], width - 100);
     
     voice.draw(context, stave);
+
+    if (beams !== undefined) {
+      for (const beam of beams) {
+        beam.setContext(context).draw();
+      }
+    }
 
     if (this.rhythmPlayer.isPlaying) {
       // render time bar
@@ -136,7 +239,7 @@ export class TimeSignaturePlayer extends React.Component<ITimeSignaturePlayerPro
     }
   }
 
-  private createRhythmNotes(timeSignature: TimeSignature): Array<IRhythymNote> {
+  private createRhythmNotes(timeSignature: TimeSignature): Array<IRhythmNote> {
     return Utils.repeatGenerator(
       i => ({
         duration: new Rational(1, timeSignature.numBeats),
@@ -153,7 +256,7 @@ export class TimeSignaturePlayer extends React.Component<ITimeSignaturePlayerPro
           keys: ["b/4"],
           duration: noteDurationToVexFlowStr(new Rational(1, timeSignature.beatNoteValue)),
         });
-        const styleStr = `rgba(0, 0, 0, ${Math.sqrt(this.getVolume(i))})`;
+        const styleStr = `rgba(0, 0, 0, ${this.getOpacity(i)})`;
         note.setStyle({ fillStyle: styleStr, strokeStyle: styleStr });
 
         return note;
@@ -176,99 +279,55 @@ export class TimeSignaturePlayer extends React.Component<ITimeSignaturePlayerPro
     this.forceUpdate();
   }
 
+  private strongBeatVolume = 1;
+  private mediumBeatVolume = 0.6;
+  private weakBeatVolume = 0.175;
+
   private getVolume(noteIndex: number): number {
-    const strongBeatVolume = 1;
-    const mediumBeatVolume = 0.6;
-    const weakBeatVolume = 0.175;
+    const beatStrength = getBeatStrength(this.rhythmPlayer.timeSignature, noteIndex);
 
-    const timeSignatureStr = getTimeSignatureStr(this.rhythmPlayer.timeSignature.numBeats, this.rhythmPlayer.timeSignature.beatNoteValue);
-
-    switch (timeSignatureStr) {
-      case "4/4":
-        switch (noteIndex) {
-          case 0:
-            return strongBeatVolume;
-          case 2:
-            return mediumBeatVolume;
-          case 1:
-          case 3:
-            return weakBeatVolume;
-        }
-      case "3/4":
-        switch (noteIndex) {
-          case 0:
-            return strongBeatVolume;
-          case 1:
-          case 2:
-            return weakBeatVolume;
-        }
-      case "2/4":
-        switch (noteIndex) {
-          case 0:
-            return strongBeatVolume;
-          case 1:
-            return weakBeatVolume;
-        }
-      case "6/8":
-        switch (noteIndex) {
-          case 0:
-            return strongBeatVolume;
-          case 3:
-            return mediumBeatVolume
-          case 1:
-          case 2:
-          case 4:
-          case 5:
-            return weakBeatVolume;
-        }
-      case "9/8":
-        switch (noteIndex) {
-          case 0:
-            return strongBeatVolume;
-          case 3:
-          case 6:
-            return mediumBeatVolume
-          case 1:
-          case 2:
-          case 4:
-          case 5:
-          case 7:
-          case 8:
-            return weakBeatVolume;
-        }
-        case "12/8":
-          switch (noteIndex) {
-            case 0:
-              return strongBeatVolume;
-            case 3:
-            case 6:
-            case 9:
-              return mediumBeatVolume
-            case 1:
-            case 2:
-            case 4:
-            case 5:
-            case 7:
-            case 8:
-            case 10:
-            case 11:
-              return weakBeatVolume;
-          }
+    switch (beatStrength) {
+      case BeatStrength.Strong:
+        return this.strongBeatVolume;
+      case BeatStrength.Medium:
+        return this.mediumBeatVolume;
+      case BeatStrength.Weak:
+        return this.weakBeatVolume;
+      default:
+        throw new Error(`Unknown BeatStrength: ${beatStrength}`);
     }
- 
-    throw new Error(`Unsupported time signature ${timeSignatureStr} & note index ${noteIndex}`);
+  }
+  private getOpacity(noteIndex: number): number {
+    const beatStrength = getBeatStrength(this.rhythmPlayer.timeSignature, noteIndex);
+
+    switch (beatStrength) {
+      case BeatStrength.Strong:
+        return 1;
+      case BeatStrength.Medium:
+        return 0.6;
+      case BeatStrength.Weak:
+        return 0.3;
+      default:
+        throw new Error(`Unknown BeatStrength: ${beatStrength}`);
+    }
   }
   
   private onTimeSignatureChange(newValueStr: string) {
     const newValue = TimeSignature.parse(newValueStr);
 
-    this.rhythmPlayer.stop();
-    this.rhythmPlayer = new RhythymPlayer(
-      newValue,
-      this.createRhythmNotes(newValue),
-      this.rhythmPlayer.beatsPerMinute,
-      this.rhythmPlayer.onNotePlay
-    );
+    const wasPlaying = this.rhythmPlayer.isPlaying;
+
+    if (wasPlaying) {
+      this.rhythmPlayer.stop();
+    }
+
+    this.rhythmPlayer.timeSignature = newValue;
+    this.rhythmPlayer.rhythmNotes = this.createRhythmNotes(newValue);
+
+    if (wasPlaying) {
+      this.rhythmPlayer.play(true);
+    }
+
     this.forceUpdate();
   }
 }

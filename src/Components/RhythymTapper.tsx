@@ -2,7 +2,7 @@ import * as React from "react";
 import * as Vex from "vexflow";
 
 import * as Utils from "../Utils";
-import { IRhythymNote, RhythymPlayer } from "../Rhythym";
+import { IRhythmNote, RhythmPlayer } from "../Rhythm";
 import { Button, Card, CardContent, Typography } from "@material-ui/core";
 import { VexFlowComponent } from "./VexFlowComponent";
 import { Rational } from "../Rational";
@@ -38,7 +38,7 @@ interface IRhythymTapperProps {
   isEmbedded?: boolean;
 }
 interface IRhythymTapperState {
-  rhythymNotes: Array<IRhythymNote>;
+  rhythymNotes: Array<IRhythmNote>;
   beatsPerMinute: number;
   isPlaying: boolean;
   timeStartedPlaying: number;
@@ -55,7 +55,7 @@ export class RhythymTapper extends React.Component<IRhythymTapperProps, IRhythym
       timeStartedPlaying: 0
     };
 
-    this.rhythymPlayer = new RhythymPlayer(
+    this.rhythymPlayer = new RhythmPlayer(
       new TimeSignature(4, 4),
       initialState.rhythymNotes,
       initialState.beatsPerMinute,
@@ -127,7 +127,7 @@ export class RhythymTapper extends React.Component<IRhythymTapperProps, IRhythym
     }
   }
 
-  private rhythymPlayer: RhythymPlayer;
+  private rhythymPlayer: RhythmPlayer;
 
   private get playTimeInSeconds(): number {
     return (window.performance.now() - this.state.timeStartedPlaying) / 1000;
@@ -180,12 +180,7 @@ export class RhythymTapper extends React.Component<IRhythymTapperProps, IRhythym
     };
 
     this.rhythymPlayer.stop();
-    this.rhythymPlayer = new RhythymPlayer(
-      new TimeSignature(4, 4),
-      stateDelta.rhythymNotes,
-      this.state.beatsPerMinute,
-      null
-    );
+    this.rhythymPlayer.rhythmNotes = stateDelta.rhythymNotes;
 
     this.setState(stateDelta);
   }
@@ -215,7 +210,7 @@ export class RhythymTapper extends React.Component<IRhythymTapperProps, IRhythym
     }
   }
 
-  private rhythymNotesToVexFlowNotes(rhythymNotes: Array<IRhythymNote>): Array<Vex.Flow.StaveNote> {
+  private rhythymNotesToVexFlowNotes(rhythymNotes: Array<IRhythmNote>): Array<Vex.Flow.StaveNote> {
     return rhythymNotes
       .map(rn => {
         const durationStr = noteDurationToVexFlowStr(rn.duration) + (rn.isRest ? "r" : "");
@@ -229,7 +224,7 @@ export class RhythymTapper extends React.Component<IRhythymTapperProps, IRhythym
   }
 }
 
-function generateRandomRhythym(): Array<IRhythymNote> {
+function generateRandomRhythym(): Array<IRhythmNote> {
   // TODO: add triplets
   // TODO: add support for multiple time signatures
   const noteDurations = [
@@ -241,7 +236,7 @@ function generateRandomRhythym(): Array<IRhythymNote> {
   ];
   
   let durationLeft = new Rational(1, 1);
-  const notes = new Array<IRhythymNote>();
+  const notes = new Array<IRhythmNote>();
 
   while (durationLeft.numerator > 0) {
     // TODO: optimize

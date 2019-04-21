@@ -2,26 +2,51 @@ import * as Utils from "./Utils";
 import { Rational } from "./Rational";
 import { TimeSignature } from "./TimeSignature";
 
-export interface IRhythymNote {
+export interface IRhythmNote {
   duration: Rational;
   isRest: boolean;
 }
 
-export class RhythymPlayer {
+export class RhythmPlayer {
   public onPlayUpdate: ((playTimeInSeconds: number, lastPlayTimeInSeconds: number | null) => void) | null;
 
   public constructor(
-    public timeSignature: TimeSignature,
-    public rhythymNotes: IRhythymNote[],
-    public beatsPerMinute: number,
+    timeSignature: TimeSignature,
+    rhythmNotes: IRhythmNote[],
+    beatsPerMinute: number,
     public onNotePlay: ((i: number) => void) | null
   ) {
+    this._timeSignature = timeSignature;
+    this._rhythmNotes = rhythmNotes;
+    this._beatsPerMinute = beatsPerMinute;
+
     this.onPlayUpdate = null;
     this.shouldLoop = false;
     this.timeStartedPlaying = null;
     this.lastPlayTimeInSeconds = null;
   }
   
+  public get timeSignature(): TimeSignature {
+    return this._timeSignature;
+  }
+  public set timeSignature(value: TimeSignature) {
+    this._timeSignature = value;
+  }
+
+  public get rhythmNotes(): IRhythmNote[] {
+    return this._rhythmNotes;
+  }
+  public set rhythmNotes(value: IRhythmNote[]) {
+    this._rhythmNotes = value;
+  }
+
+  public get beatsPerMinute(): number {
+    return this._beatsPerMinute;
+  }
+  public set beatsPerMinute(value: number) {
+    this._beatsPerMinute = value;
+  }
+
   public get isPlaying(): boolean {
     return this.timeStartedPlaying !== null;
   }
@@ -49,8 +74,8 @@ export class RhythymPlayer {
     let timeInMeasures = 0;
     let noteIndex = 0;
 
-    while (noteIndex < this.rhythymNotes.length) {
-      timeInMeasures += this.rhythymNotes[noteIndex].duration.asReal;
+    while (noteIndex < this._rhythmNotes.length) {
+      timeInMeasures += this._rhythmNotes[noteIndex].duration.asReal;
       if (currentTimeInMeasures >= timeInMeasures) {
         noteIndex++;
       } else {
@@ -61,18 +86,22 @@ export class RhythymPlayer {
     return noteIndex;
   }
   public getMeasureDurationInSeconds(): number {
-    const beatsPerSecond = this.beatsPerMinute / 60;
-    return this.timeSignature.numBeats / beatsPerSecond;
+    const beatsPerSecond = this._beatsPerMinute / 60;
+    return this._timeSignature.numBeats / beatsPerSecond;
   }
   public getNoteStartTimeInSeconds(noteIndex: number): number {
     let noteOffsetInMeasures = 0;
 
     for (let i = 0; i < noteIndex; i++) {
-      noteOffsetInMeasures += this.rhythymNotes[i].duration.asReal;
+      noteOffsetInMeasures += this._rhythmNotes[i].duration.asReal;
     }
 
     return noteOffsetInMeasures * this.getMeasureDurationInSeconds();
   }
+
+  private _timeSignature: TimeSignature;
+  private _rhythmNotes: IRhythmNote[];
+  private _beatsPerMinute: number;
 
   private shouldLoop: boolean;
   private timeStartedPlaying: number | null;
@@ -101,7 +130,7 @@ export class RhythymPlayer {
   private getTriggeredNoteIndex(playTimeInSeconds: number): number | null {
     // If we just started playing or if we just looped:
     if ((this.lastPlayTimeInSeconds === null) || (this.lastPlayTimeInSeconds > playTimeInSeconds)) {
-      return (this.rhythymNotes.length > 0) ? 0 : null;
+      return (this._rhythmNotes.length > 0) ? 0 : null;
     }
 
     const lastNoteIndex = this.getCurrentNoteIndex(this.lastPlayTimeInSeconds);
