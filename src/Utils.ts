@@ -38,6 +38,22 @@ export function unwrapMaybe<T>(value: T | null): T {
 }
 
 // TODO: add tests
+export function reverseString(str: string): string {
+  let reversedString = "";
+
+  for (let i = str.length - 1; i >= 0; i--) {
+    reversedString += str[i];
+  }
+
+  return reversedString;
+}
+
+// TODO: add tests
+export function reverseInt(x: number): number {
+  return parseInt(reverseString(x.toString()));
+}
+
+// TODO: add tests
 export function isPowerOf2(x: number): boolean {
   return (x !== 0) && ((x & (x - 1)) === 0);
 }

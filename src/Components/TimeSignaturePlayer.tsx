@@ -134,7 +134,8 @@ export class TimeSignaturePlayer extends React.Component<ITimeSignaturePlayerPro
           keys: ["b/4"],
           duration: noteDurationToVexFlowStr(new Rational(1, this.state.timeSignature.beatNoteValue)),
         });
-        //note.setStyle({ fillStyle: `rgba(0, 0, 0, ${this.getVolume(i)})` });
+        const styleStr = `rgba(0, 0, 0, ${Math.sqrt(this.getVolume(i))})`;
+        note.setStyle({ fillStyle: styleStr, strokeStyle: styleStr });
 
         return note;
       },

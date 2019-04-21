@@ -70,6 +70,7 @@ export class TempoTapper {
 }
 
 interface IMetronomeProps {
+  hideTitle?: boolean;
 }
 interface IMetronomeState {
   bpm: number;
@@ -98,33 +99,39 @@ export class Metronome extends React.Component<IMetronomeProps, IMetronomeState>
 
   public render(): JSX.Element {
     return (
-      <Card>
+      <Card style={{ maxWidth: "420px", margin: "0 auto", textAlign: "center" }}>
         <CardContent>
-          <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
-            Metronome
-          </Typography>
+          {!this.props.hideTitle
+            ? (
+              <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
+                Metronome
+              </Typography>
+            ) : null}
 
           {!this.state.isTappingTempo ? this.renderMetronomeControls() : this.renderTempoTappingControls()}
         </CardContent>
       </Card>
     );
   }
+  private renderTempoText(bpm: number | null): JSX.Element {
+    return <Typography variant="h3">{bpm ? Math.round(bpm) : "?"} <span style={{ fontSize: "0.35em" }}>BPM</span></Typography>;
+  }
   private renderMetronomeControls(): JSX.Element {
     return (
       <div>
-        <Typography>BPM: {this.state.bpm}</Typography>
-          <input type="range" min={this.MIN_BPM} max={this.MAX_BPM} value={this.state.bpm} onChange={e => this.onBpmChange(parseInt(e.target.value))} style={this.SLIDER_STYLE} />
-          <div>
-            {!this.state.isPlaying ? <Button variant="contained" onClick={e => this.play()}><i className="material-icons">play_arrow</i></Button> : <Button variant="contained" onClick={e => this.pause()}><i className="material-icons">pause</i></Button>}
-            {!this.state.isPlaying ? <Button variant="contained" onClick={e => this.startTappingTempo()}>Tap</Button> : null}
-          </div>
+        {this.renderTempoText(this.state.bpm)}
+        <input type="range" min={this.MIN_BPM} max={this.MAX_BPM} value={this.state.bpm} onChange={e => this.onBpmChange(parseInt(e.target.value))} style={this.SLIDER_STYLE} />
+        <div>
+          {!this.state.isPlaying ? <Button variant="contained" onClick={e => this.play()}><i className="material-icons">play_arrow</i></Button> : <Button variant="contained" onClick={e => this.pause()}><i className="material-icons">pause</i></Button>}
+          <Button variant="contained" onClick={e => this.startTappingTempo()} disabled={this.state.isPlaying}>Tap Tempo</Button>
+        </div>
       </div>
     );
   }
   private renderTempoTappingControls(): JSX.Element {
     return (
       <div>
-        <Typography variant="h4">{this.tempoTapper.tappedBpm ? Math.round(this.tempoTapper.tappedBpm) : "?"} BPM</Typography>
+        {this.renderTempoText(this.tempoTapper.tappedBpm)}
         <div><Button variant="contained" onMouseDown={e => this.tapTempo()}>Tap</Button></div>
         <div>
           <Button variant="contained" onClick={e => this.confirmTappedTempo()}>OK</Button>

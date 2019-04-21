@@ -7,5 +7,6 @@ export const YouTubeVideo: React.FunctionComponent<{ videoId: string }> = props 
     src={`https://www.youtube.com/embed/${props.videoId}`}
     frameBorder="0"
     allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-    allowFullScreen />
+    allowFullScreen
+    style={{ display: "block", margin: "0 auto" }} />
 );

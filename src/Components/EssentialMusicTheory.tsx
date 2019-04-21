@@ -31,6 +31,9 @@ import * as ChordEarTraining from "./Quizzes/ChordEarTraining";
 import { ChordViewer } from "./ChordViewer";
 
 import measures from "../img/sheet-music/measures.svg";
+import timeSignatureDiagram from "../img/sheet-music/time-signature.svg";
+import notesRestsDiagram from "../img/sheet-music/notes-and-rests.svg";
+
 import wholeNote from "../img/sheet-music/whole-note.svg";
 import wholeRest from "../img/sheet-music/whole-rest.svg";
 import halfNote from "../img/sheet-music/half-note.svg";
@@ -43,6 +46,9 @@ import sixteenthNote from "../img/sheet-music/sixteenth-note.svg";
 import sixteenthRest from "../img/sheet-music/sixteenth-rest.svg";
 import _32ndNote from "../img/sheet-music/32nd-note.svg";
 import _32ndRest from "../img/sheet-music/32nd-rest.svg";
+
+import timeSignature44 from "../img/sheet-music/time-signature-4-4.svg";
+
 import { TimeSignaturePlayer } from './TimeSignaturePlayer';
 import { NoteValuePlayer } from './NoteValuePlayer';
 
@@ -50,15 +56,7 @@ const MainTitle: React.FunctionComponent<{}> = props => <h1>{props.children}</h1
 const SectionTitle: React.FunctionComponent<{}> = props => <h2>{props.children}</h2>;
 const SubSectionTitle: React.FunctionComponent<{}> = props => <h3>{props.children}</h3>;
 
-class MeasureDiagram extends React.Component<{}, {}> {
-  public render(): JSX.Element {
-    return (
-      <svg viewBox="14.5 6.5 71.25 8.5">
-        <image x="0" y="0" width="100" height="100" xlinkHref={measures} />
-      </svg>
-    );
-  }
-}
+const noteValueTableImgWidth = "24px";
 
 export class EssentialMusicTheory extends React.Component<{}, {}> {
   public render(): JSX.Element {
@@ -76,91 +74,114 @@ export class EssentialMusicTheory extends React.Component<{}, {}> {
 
           <SubSectionTitle>Beat &amp; Tempo</SubSectionTitle>
           <p>The <em>beat</em> is the repeating pulse you can feel when listening to a piece of music. The beat is the driving force of rhythym, and all sounds in music are arranged around it. If you tap your foot or bob your head to a song, you do it to the beat.</p>
-          <p><em>Tempo</em> is the speed of the beat, often given as beats per minute (BPM). 120 BPM, for example, means there are two beats per second. Most music is roughly 60 BPM to 180 BPM, and tempo is one of the defining characterstics of musical genres. Tempo, however, can vary throughout a piece of music at the discretion of the composers or performers.</p>
+          <p><em>Tempo</em> is the speed of the beat, often given as beats per minute (BPM). 120 BPM, for example, means there are two beats per second:</p>
+          
+          <Metronome hideTitle={true} />
 
-          <p>Slow Tempo:</p>
+          <p>Most music is roughly 60 BPM to 180 BPM, and tempo is one of the defining characterstics of musical genres.</p>
+          
+          <p style={{ textAlign: "center", textDecoration: "underline" }}>Slow Tempo</p>
           <YouTubeVideo videoId="SlTTgJau33Q" />
 
-          <p>Medium Tempo:</p>
+          <p style={{ textAlign: "center", textDecoration: "underline" }}>Medium Tempo</p>
           <YouTubeVideo videoId="hwmRQ0PBtXU" />
           
-          <p>Fast Tempo:</p>
+          <p style={{ textAlign: "center", textDecoration: "underline" }}>Fast Tempo</p>
           <YouTubeVideo videoId="jYUilB9ngs0" />
 
-          <p>Below is a metronome, a device that clicks a beat at a specified tempo. Try matching the metronome to some of your favorite music to get an idea of how different tempos feel.</p>
+          <p>Though most music holds a steady tempo, it can vary throughout a piece of music. Composers can designate places where the music changes to a new fixed tempo, or performers can slightly deviate from a fixed tempo in a smooth and flowing manner &mdash; a technique called rubato.</p>
+          <p>The rendition below of "Nocturne op. 9 No. 2", a piece by Frédéric Chopin, is a great example of rubato. As you listen, note how the tempo ebbs and flows, making the music more emotionally impactful than if it were played mechanically with an unwavering tempo.</p>
+          
+          <YouTubeVideo videoId="9E6b3swbnWg" />
 
-          <Metronome />
-
-          <SubSectionTitle>Measures, Time Signatures, &amp; Note Durations</SubSectionTitle>
+          <SubSectionTitle>Measures &amp; Note Durations</SubSectionTitle>
           <p>Music is divided into <em>measures</em> (or <em>Bars</em>) &mdash; small sections containing a fixed number of beats.</p>
+          <p>NOTE: We will use sheet music notation to visualize concepts in this section, but don't worry about understanding the notes or symbols if you are unfamiliar with sheet music.</p>
           
-          <MeasureDiagram />
+          <p style={{ textAlign: "center" }}><img src={measures} style={{ maxWidth: "700px", width: "100%" }} /></p>
 
-          <p>The number &amp; type of beats in a measure are specified by <em>time signatures</em>:</p>
+          <p>Each measure contains musical notes and rests. Notes are the notes musicians play in a piece of music, and rests are periods of silence.</p>
           
-          <TimeSignatureComponent timeSignature={new TimeSignature(3, 4)} />
+          <p style={{ textAlign: "center" }}><img src={notesRestsDiagram} style={{ maxWidth: "700px", width: "100%" }} /></p>
 
-          <p>This time signature is read as "three-four" time. The top number is the number of beats in a measure, and the bottom number represents the <em>note values</em>, or durations, of the beats relative to the tempo.</p>
-          <p>Some common note values are:</p>
+          <p>For now, we are only concerned with the <em>note values</em>, or durations, of the notes and rests, which are represented by different symbols. Below are some of the note values you'll commonly find in music:</p>
 
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Number</TableCell>
                 <TableCell>Note Value</TableCell>
+                <TableCell>Associated Number</TableCell>
                 <TableCell>Note Symbol</TableCell>
                 <TableCell>Rest Symbol</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               <TableRow>
-                <TableCell>2</TableCell>
+                <TableCell>Whole Note</TableCell>
+                <TableCell>1</TableCell>
+                <TableCell><img src={wholeNote} style={{ width: noteValueTableImgWidth }} /></TableCell>
+                <TableCell><img src={wholeRest} style={{ width: noteValueTableImgWidth }} /></TableCell>
+              </TableRow>
+              <TableRow>
                 <TableCell>Half Note</TableCell>
-                <TableCell><img src={halfNote} /></TableCell>
-                <TableCell><img src={halfRest} /></TableCell>
+                <TableCell>2</TableCell>
+                <TableCell><img src={halfNote} style={{ width: noteValueTableImgWidth }} /></TableCell>
+                <TableCell><img src={halfRest} style={{ width: noteValueTableImgWidth }} /></TableCell>
               </TableRow>
               <TableRow>
-                <TableCell>4</TableCell>
                 <TableCell>Quarter Note</TableCell>
-                <TableCell><img src={quarterNote} /></TableCell>
-                <TableCell><img src={quarterRest} /></TableCell>
+                <TableCell>4</TableCell>
+                <TableCell><img src={quarterNote} style={{ width: noteValueTableImgWidth }} /></TableCell>
+                <TableCell><img src={quarterRest} style={{ width: noteValueTableImgWidth }} /></TableCell>
               </TableRow>
               <TableRow>
-                <TableCell>8</TableCell>
                 <TableCell>Eighth Note</TableCell>
-                <TableCell><img src={eighthNote} /></TableCell>
-                <TableCell><img src={eighthRest} /></TableCell>
+                <TableCell>8</TableCell>
+                <TableCell><img src={eighthNote} style={{ width: noteValueTableImgWidth }} /></TableCell>
+                <TableCell><img src={eighthRest} style={{ width: noteValueTableImgWidth }} /></TableCell>
               </TableRow>
               <TableRow>
-                <TableCell>16</TableCell>
                 <TableCell>Sixteenth Note</TableCell>
-                <TableCell><img src={sixteenthNote} /></TableCell>
-                <TableCell><img src={sixteenthRest} /></TableCell>
+                <TableCell>16</TableCell>
+                <TableCell><img src={sixteenthNote} style={{ width: noteValueTableImgWidth }} /></TableCell>
+                <TableCell><img src={sixteenthRest} style={{ width: noteValueTableImgWidth }} /></TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Thirty-second Note</TableCell>
+                <TableCell>32</TableCell>
+                <TableCell><img src={_32ndNote} style={{ width: noteValueTableImgWidth }} /></TableCell>
+                <TableCell><img src={_32ndRest} style={{ width: noteValueTableImgWidth }} /></TableCell>
               </TableRow>
             </TableBody>
           </Table>
 
-          <p>And so on...</p>
+          <p>Whole notes are twice as long as half notes, half notes are twice as long as quarter notes, quarter notes are twice as long as eighth notes, and so on...</p>
+          
+          <SubSectionTitle>Time Signatures</SubSectionTitle>
+          <p>The number &amp; type of beats in a measure are specified by <em>time signatures</em>:</p>
 
-          <p>Half notes are twice as long as quarter notes, quarter notes are twice as long as eighth notes, and so on...</p>
+          <p style={{ textAlign: "center" }}><img src={timeSignatureDiagram} style={{ maxWidth: "600px", width: "100%" }} /></p>
 
-          <p>The most common time signature is 4/4, or <em>common time</em>, in which there are 4 (top number) quarter notes (bottom number) in each measure.</p>
+          <p>This time signature is read as "three-four" time. The top number is the number of beats in a measure, and the bottom number represents the note values of the beats relative to the tempo. So, the the "three-four" time signature above signifies that there are three quarter notes in each measure.</p>
+          <p>The most common time signature is <img src={timeSignature44} style={{ width: "12px" }} />, in which there are 4 (top number) quarter notes (bottom number) in each measure.</p>
 
-          <TimeSignatureComponent timeSignature={new TimeSignature(4, 4)} />
-
-          <p>Because there are 4 quarter notes in each measure, you can also say that in each measure there are:</p>
+          <p>Because there are 4 quarter notes in each measure, you can also say that each measure contains:</p>
           <ul>
             <li>1 whole note</li>
             <li>2 half notes</li>
             <li>8 eighth notes</li>
             <li>16 sixteenth notes</li>
+            <li>32 thirty-second notes</li>
             <li>and so on...</li>
           </ul>
 
-          <p>This is what 4/4 time sounds like:</p>
+          <p>This is what <img src={timeSignature44} style={{ width: "12px" }} /> time sounds and looks like:</p>
           <TimeSignaturePlayer timeSignature={new TimeSignature(4, 4)} />
           
-          <p>As you can hear, the beats vary in weight throughout the measure: the first beat is the strongest beat, the third beat is a medium-strength note, and the second and fourth beats are weak notes. This is because time signatures, like 4/4, have <em>strong beats</em> and <em>weak beats</em> (and beats in-between).</p>
+          <p>As you can hear and see, the beats vary in weight throughout the measure: the first beat is the strongest beat, the third beat is a medium-strength note, and the second and fourth beats are weak notes. This is because time signatures, like 4/4, have <em>strong beats</em> and <em>weak beats</em> (and beats in-between).</p>
+
+          <p>NOTE: The differing volumes and colors of notes is only a visual/aural aid to understanding strong &amp; weak beats in time signatures. In real music, the notes would not differ in color, and all notes would be the same volume unless otherwise indicated.</p>
+
           <p>Another common time signature is 3/4, in which there are three quarter notes, the first beat is a strong beat, and the second and third notes are weak beats. This is what 3/4 sounds like:</p>
           <TimeSignaturePlayer timeSignature={new TimeSignature(3, 4)} />
           
@@ -202,10 +223,6 @@ export class EssentialMusicTheory extends React.Component<{}, {}> {
           <p>This is how these rhythmic patterns sound &amp; look:</p>
 
           <NoteValuePlayer showNoteValueSelect={true} />
-
-          <SubSectionTitle>Rubato</SubSectionTitle>
-          <p>Though almost all music is structured using time signatures, performers and composers sometimes use rubato, or intentional deviation from the tempo to invoke a particular feeling in listeners.</p>
-          <p>TODO: examples</p>
           
           <p>RHYTHYM TAPPER HERE</p>
           {createStudyFlashCardGroupComponent(NoteDurations.createFlashCardGroup(), this.isEmbedded, this.hideMoreInfoUri)}
