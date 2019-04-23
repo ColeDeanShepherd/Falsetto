@@ -7,7 +7,16 @@ import "./App.css";
 
 import * as Utils from "../Utils";
 
-import { EssentialMusicTheory } from "./EssentialMusicTheory";
+import {
+  SectionContainer,
+  IntroSection,
+  RhythmSection,
+  NotesSection,
+  IntervalsSection,
+  ScalesAndModesSection,
+  ChordsSection,
+  ChordProgressionsSection
+} from "./EssentialMusicTheory";
 import * as IntervalNamesToHalfSteps from "./Quizzes/IntervalNamesToHalfSteps";
 import * as IntervalQualitySymbolsToQualities from "./Quizzes/IntervalQualitySymbolsToQualities";
 import * as GenericIntervalsToIntervalQualities from "./Quizzes/GenericIntervalsToIntervalQualities";
@@ -193,7 +202,8 @@ class App extends React.Component<IAppProps, IAppState> {
     return [
       <Route exact path="/" component={() => <DocumentTitle title="Falsetto"><HomePage /></DocumentTitle>} />,
       <Route path="/about" component={() => <DocumentTitle title="About - Falsetto"><AboutPage /></DocumentTitle>} />,
-      <Route path="/essential-music-theory" component={() => <DocumentTitle title="Essential Music Theory - Falsetto"><EssentialMusicTheory /></DocumentTitle>} />,
+      <Route exact path="/essential-music-theory" component={() => <DocumentTitle title="Essential Music Theory - Falsetto"><SectionContainer section={IntroSection}></SectionContainer></DocumentTitle>} />,
+      <Route exact path="/essential-music-theory/rhythm" component={() => <DocumentTitle title="Rhythm - Essential Music Theory - Falsetto"><SectionContainer section={RhythmSection}></SectionContainer></DocumentTitle>} />,
       <Route path="/scale-viewer" component={() => <DocumentTitle title={"Scale Viewer - Falsetto"}><ScaleViewer /></DocumentTitle>} />,
       <Route path="/chord-viewer" component={() => <DocumentTitle title={"Chord Viewer - Falsetto"}><ChordViewer /></DocumentTitle>} />,
       <Route path="/rhythm-tapper" component={() => <DocumentTitle title={"Rhythm Tapper - Falsetto"}><RhythmTapper /></DocumentTitle>} />,

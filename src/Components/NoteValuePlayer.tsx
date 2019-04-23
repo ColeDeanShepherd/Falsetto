@@ -11,8 +11,8 @@ import { noteDurationToVexFlowStr } from '../VexFlowUtils';
 import { RhythmPlayer, IRhythmNote } from '../Rhythm';
 import { getBeatIntervalS } from './Metronome';
 
-const clickAudioPath = "audio/metronome_click.wav";
-const woodBlockAudioPath = "audio/wood_block.wav";
+const clickAudioPath = "/audio/metronome_click.wav";
+const woodBlockAudioPath = "/audio/wood_block.wav";
 
 const width = 800;
 const height = 140;
@@ -68,7 +68,7 @@ export class NoteValuePlayer extends React.Component<INoteValuePlayerProps, INot
                   value={this.state.notesPerBeat}
                   onChange={event => this.onNoteValueChange(event.target.value)}
                 >
-                  {Utils.range(1, 9).map(n => <option value={n}>{n}</option>)}
+                  {Utils.range(1, 9).map(n => <option key={n} value={n}>{n}</option>)}
                 </Select>
               </div>
             )

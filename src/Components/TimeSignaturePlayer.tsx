@@ -10,7 +10,7 @@ import { Rational } from "../Rational";
 import { noteDurationToVexFlowStr, getTimeSignatureStr } from '../VexFlowUtils';
 import { RhythmPlayer, IRhythmNote } from '../Rhythm';
 
-const clickAudioPath = "audio/metronome_click.wav";
+const clickAudioPath = "/audio/metronome_click.wav";
 
 const width = 800;
 const height = 100;

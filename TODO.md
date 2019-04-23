@@ -2,7 +2,8 @@
 ## High Priority
 * Essential Music Theory
   * Make YouTube videos responsive.
-  * Fix tempo in TimeSignature player with 8th notes.
+  * Note value # quiz.
+  * Strong & weak beats quiz.
 
 * Implement isEmbedded for ScaleViewer & RhythmTapper
 * Send errors to server somewhere?

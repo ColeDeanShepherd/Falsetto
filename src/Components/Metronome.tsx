@@ -3,7 +3,7 @@ import { Card, CardContent, Typography, Button } from "@material-ui/core";
 
 import * as Audio from "../Audio";
 
-var clickAudioPath = "audio/metronome_click.wav";
+var clickAudioPath = "/audio/metronome_click.wav";
 
 export function getBeatIntervalS(bpm: number): number {
   const bps = bpm / 60;

@@ -120,7 +120,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
     const boundOnAnswer = this.onAnswer.bind(this);
     
     const flashCardContainerStyle: any = {
-      fontSize: "2em",
+      fontSize: "1.5em",
       textAlign: "center",
       padding: "0.5em 0",
       height: this.props.containerHeight,
