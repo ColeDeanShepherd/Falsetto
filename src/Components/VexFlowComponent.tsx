@@ -1,10 +1,11 @@
 import * as React from "react";
 import * as Vex from "vexflow";
+import { Size2D } from '../Size2D';
 
 export interface IVexFlowComponentProps {
   width: number;
   height: number;
-  vexFlowRender: (context: Vex.IRenderContext) => void
+  vexFlowRender: (context: Vex.IRenderContext, size: Size2D) => void
 }
 export class VexFlowComponent extends React.Component<IVexFlowComponentProps, {}> {
   public constructor(props: IVexFlowComponentProps) {
@@ -17,19 +18,20 @@ export class VexFlowComponent extends React.Component<IVexFlowComponentProps, {}
       return;
     }
 
-    const renderer = new Vex.Flow.Renderer(div, Vex.Flow.Renderer.Backends.SVG);
-    renderer.resize(this.props.width, this.props.height);
+    this.vexFlowRenderer = new Vex.Flow.Renderer(div, Vex.Flow.Renderer.Backends.SVG);
+    this.vexFlowRenderer.resize(this.props.width, this.props.height);
 
-    this.vexFlowContext = renderer.getContext();
+    this.vexFlowContext = this.vexFlowRenderer.getContext();
 
     if (this.props.vexFlowRender) {
-      this.props.vexFlowRender(this.vexFlowContext);
+      this.props.vexFlowRender(this.vexFlowContext, new Size2D(this.props.width, this.props.height));
     }
   }
   public componentDidUpdate(prevProps: IVexFlowComponentProps, prevState: {}, snapshot: any) {
-    if (this.vexFlowContext && this.props.vexFlowRender) {
+    if (this.vexFlowRenderer && this.vexFlowContext && this.props.vexFlowRender) {
       this.vexFlowContext.clear();
-      this.props.vexFlowRender(this.vexFlowContext);
+      this.vexFlowRenderer.resize(this.props.width, this.props.height);
+      this.props.vexFlowRender(this.vexFlowContext, new Size2D(this.props.width, this.props.height));
     }
   }
   
@@ -38,5 +40,6 @@ export class VexFlowComponent extends React.Component<IVexFlowComponentProps, {}
   }
   
   private containerRef: React.Ref<HTMLDivElement>;
+  private vexFlowRenderer: Vex.Flow.Renderer | null = null;
   private vexFlowContext: Vex.IRenderContext | null = null;
 }

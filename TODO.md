@@ -1,7 +1,7 @@
 # To-Do
 ## High Priority
 * Essential Music Theory
-  * Make YouTube videos responsive.
+  * Fix weird VexFlow resizing behavior.
   * Note value # quiz.
   * Strong & weak beats quiz.
 

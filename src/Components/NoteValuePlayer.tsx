@@ -10,27 +10,27 @@ import { Rational } from "../Rational";
 import { noteDurationToVexFlowStr } from '../VexFlowUtils';
 import { RhythmPlayer, IRhythmNote } from '../Rhythm';
 import { getBeatIntervalS } from './Metronome';
+import { SizeAwareContainer } from './SizeAwareContainer';
+import { Size2D } from '../Size2D';
 
 const clickAudioPath = "/audio/metronome_click.wav";
 const woodBlockAudioPath = "/audio/wood_block.wav";
 
-const width = 800;
-const height = 140;
-
-interface INoteValuePlayerProps {
+export interface INoteValuePlayerProps {
   notesPerBeat?: number;
   showNotesPerBeatSelect?: boolean;
 }
-interface INoteValuePlayerState {
+export interface INoteValuePlayerState {
   notesPerBeat: number;
+  canvasSize: Size2D;
 }
-
 export class NoteValuePlayer extends React.Component<INoteValuePlayerProps, INoteValuePlayerState> {
   public constructor(props: INoteValuePlayerProps) {
     super(props);
 
     const initialState: INoteValuePlayerState = {
-      notesPerBeat: this.props.notesPerBeat ? this.props.notesPerBeat : 3
+      notesPerBeat: this.props.notesPerBeat ? this.props.notesPerBeat : 3,
+      canvasSize: new Size2D(0, 0)
     };
 
     const timeSignature = new TimeSignature(4, 4);
@@ -79,10 +79,12 @@ export class NoteValuePlayer extends React.Component<INoteValuePlayerProps, INot
             Name: {this.getTupletName(this.state.notesPerBeat)}
           </div>
 
-          <VexFlowComponent
-            width={width} height={height}
-            vexFlowRender={vexFlowRender}
-          />
+          <SizeAwareContainer height={140} onResize={s => this.onCanvasResize(s)}>
+            <VexFlowComponent
+              width={this.state.canvasSize.width} height={this.state.canvasSize.height}
+              vexFlowRender={vexFlowRender}
+            />
+          </SizeAwareContainer>
           
           {!this.rhythmPlayer.isPlaying
             ? (
@@ -113,12 +115,12 @@ export class NoteValuePlayer extends React.Component<INoteValuePlayerProps, INot
 
   private rhythmPlayer: RhythmPlayer;
   
-  private vexFlowRender(context: Vex.IRenderContext) {
+  private vexFlowRender(context: Vex.IRenderContext, size: Size2D) {
     context
       .setFont("Arial", 10)
       .setBackgroundFillStyle("#eed");
   
-    const stave = new Vex.Flow.Stave(0, 0, width);
+    const stave = new Vex.Flow.Stave(0, 0, size.width);
     stave
       .addClef("treble")
       .addTimeSignature(this.rhythmPlayer.timeSignature.toString());
@@ -165,7 +167,7 @@ export class NoteValuePlayer extends React.Component<INoteValuePlayerProps, INot
     voice.addTickables(vexFlowNotes);
     
     const formatter = new Vex.Flow.Formatter();
-    formatter.joinVoices([voice]).format([voice], width - 100);
+    formatter.joinVoices([voice]).format([voice], size.width - 100);
     
     voice.draw(context, stave);
 
@@ -187,7 +189,7 @@ export class NoteValuePlayer extends React.Component<INoteValuePlayerProps, INot
 
       if (timeBarNoteIndex < vexFlowNotes.length) {
         const timeBarWidth = 3;
-        const timeBarHeight = height;
+        const timeBarHeight = size.height;
         const timeBarX = vexFlowNotes[timeBarNoteIndex].getAbsoluteX();
         const timeBarY = 0;
         
@@ -266,6 +268,9 @@ export class NoteValuePlayer extends React.Component<INoteValuePlayerProps, INot
     }
 
     this.setState(stateDelta);
+  }
+  private onCanvasResize(newValue: Size2D) {
+    this.setState({ canvasSize: newValue });
   }
 
   private getTupletName(notesPerBeat: number): string {

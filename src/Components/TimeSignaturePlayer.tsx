@@ -9,11 +9,10 @@ import { VexFlowComponent } from "./VexFlowComponent";
 import { Rational } from "../Rational";
 import { noteDurationToVexFlowStr, getTimeSignatureStr } from '../VexFlowUtils';
 import { RhythmPlayer, IRhythmNote } from '../Rhythm';
+import { SizeAwareContainer } from './SizeAwareContainer';
+import { Size2D } from '../Size2D';
 
 const clickAudioPath = "/audio/metronome_click.wav";
-
-const width = 800;
-const height = 100;
 
 export enum BeatStrength {
   Strong,
@@ -104,7 +103,9 @@ interface ITimeSignaturePlayerProps {
   timeSignature?: TimeSignature;
   showTimeSignatureSelect?: boolean;
 }
-interface ITimeSignaturePlayerState {}
+interface ITimeSignaturePlayerState {
+  canvasSize: Size2D;
+}
 
 export class TimeSignaturePlayer extends React.Component<ITimeSignaturePlayerProps, ITimeSignaturePlayerState> {
   public constructor(props: ITimeSignaturePlayerProps) {
@@ -116,7 +117,9 @@ export class TimeSignaturePlayer extends React.Component<ITimeSignaturePlayerPro
       this.createRhythmNotes(timeSignature), 120, this.onNotePlay.bind(this)
     );
 
-    this.state = {};
+    this.state = {
+      canvasSize: new Size2D(0, 0)
+    };
   }
 
   public render(): JSX.Element {
@@ -151,10 +154,12 @@ export class TimeSignaturePlayer extends React.Component<ITimeSignaturePlayerPro
             : null
           }
 
-          <VexFlowComponent
-            width={width} height={height}
-            vexFlowRender={vexFlowRender}
-          />
+          <SizeAwareContainer height={100} onResize={s => this.onCanvasResize(s)}>
+            <VexFlowComponent
+              width={this.state.canvasSize.width} height={this.state.canvasSize.height}
+              vexFlowRender={vexFlowRender}
+            />
+          </SizeAwareContainer>
           
           {!this.rhythmPlayer.isPlaying
             ? (
@@ -185,12 +190,12 @@ export class TimeSignaturePlayer extends React.Component<ITimeSignaturePlayerPro
 
   private rhythmPlayer: RhythmPlayer;
 
-  private vexFlowRender(context: Vex.IRenderContext) {
+  private vexFlowRender(context: Vex.IRenderContext, size: Size2D) {
     context
       .setFont("Arial", 10)
       .setBackgroundFillStyle("#eed");
   
-    const stave = new Vex.Flow.Stave(0, 0, width);
+    const stave = new Vex.Flow.Stave(0, 0, size.width);
     stave
       .addClef("treble")
       .addTimeSignature(this.rhythmPlayer.timeSignature.toString());
@@ -214,7 +219,7 @@ export class TimeSignaturePlayer extends React.Component<ITimeSignaturePlayerPro
     voice.addTickables(vexFlowNotes);
     
     const formatter = new Vex.Flow.Formatter();
-    formatter.joinVoices([voice]).format([voice], width - 100);
+    formatter.joinVoices([voice]).format([voice], size.width - 100);
     
     voice.draw(context, stave);
 
@@ -230,7 +235,7 @@ export class TimeSignaturePlayer extends React.Component<ITimeSignaturePlayerPro
 
       if (timeBarNoteIndex < vexFlowNotes.length) {
         const timeBarWidth = 3;
-        const timeBarHeight = height;
+        const timeBarHeight = size.height;
         const timeBarX = vexFlowNotes[timeBarNoteIndex].getAbsoluteX();
         const timeBarY = 0;
         
@@ -329,5 +334,8 @@ export class TimeSignaturePlayer extends React.Component<ITimeSignaturePlayerPro
     }
 
     this.forceUpdate();
+  }
+  private onCanvasResize(newValue: Size2D) {
+    this.setState({ canvasSize: newValue });
   }
 }
