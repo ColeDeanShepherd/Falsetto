@@ -47,7 +47,7 @@ a:visited {
   color: #0645ad;
   text-decoration: none;
   display: block;
-  margin-bottom: 0.5em;
+  margin-bottom: 0.75em;
 }
 
 .nav-link.active {
@@ -59,7 +59,7 @@ a:visited {
 }
 
 /* Mobile */
-@media (max-width: 640px) {
+@media (max-width: 800px) {
   .hide-on-mobile {
     display: none;
   }
@@ -74,7 +74,7 @@ a:visited {
 }
 
 /* Desktop */
-@media (min-width: 641px) {
+@media (min-width: 801px) {
   .hide-on-desktop {
     display: none !important;
   }
@@ -100,7 +100,7 @@ a:visited {
   }
   
   .left-pane {
-    flex-basis: 300px;
+    flex-basis: 250px;
     flex-grow: 0;
     flex-shrink: 0;
     overflow-y: auto;
