@@ -5,6 +5,8 @@ import * as Utils from "../Utils";
 import { FlashCard } from "../FlashCard";
 import { Pitch } from "../Pitch";
 import { PitchLetter } from "../PitchLetter";
+import { intervalQualityStringToNumber, Interval } from '../Interval';
+import { VerticalDirection } from '../VerticalDirection';
 
 // TODO: move this somewhere else
 export const rootNotes = [
@@ -30,8 +32,7 @@ export const intervals = [
   "m3",
   "M3",
   "P4",
-  "A4",
-  "d5",
+  "A4/d5",
   "P5",
   "m6",
   "M6",
@@ -41,6 +42,43 @@ export const intervals = [
 ];
 export const directions = ["↑", "↓"];
 export const directionsWithHarmonic = directions.concat(["harmonic"]);
+
+export function forEachInterval(
+  rootNotes: Array<Pitch>,
+  callbackFn: (interval: string, pitch1: Pitch, pitch2: Pitch, isHarmonicInterval: boolean, index: number) => void,
+  includeHarmonicIntervals: boolean,
+  minPitch?: Pitch,
+  maxPitch?: Pitch
+) {
+  let i = 0;
+  const theDirections = includeHarmonicIntervals ? directionsWithHarmonic : directions;
+
+  for (const rootPitch of rootNotes) {
+    for (let intervalIndex = 0; intervalIndex < intervals.length; intervalIndex++) {
+      const interval = intervals[intervalIndex];
+
+      for (const direction of theDirections) {
+        const intervalHalfSteps = (direction === "↑")
+          ? intervalIndex + 1
+          : -(intervalIndex + 1);
+        const newPitch = Pitch.createFromMidiNumber(rootPitch.midiNumber + intervalHalfSteps);
+
+        if (minPitch && (newPitch.midiNumber < minPitch.midiNumber)) {
+          continue;
+        }
+        
+        if (maxPitch && (newPitch.midiNumber > maxPitch.midiNumber)) {
+          continue;
+        }
+        
+        const isHarmonicInterval = direction === "harmonic";
+
+        callbackFn(interval, rootPitch, newPitch, isHarmonicInterval, i);
+        i++;
+      }
+    }
+  }
+}
 
 export interface IConfigData {
   enabledRootNotes: Pitch[];

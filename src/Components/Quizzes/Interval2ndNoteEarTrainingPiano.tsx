@@ -4,12 +4,10 @@ import * as Utils from "../../Utils";
 import { FlashCard, FlashCardSide } from "../../FlashCard";
 import { FlashCardGroup } from "../../FlashCardGroup";
 import { Pitch } from "../../Pitch";
-import { VerticalDirection } from "../../VerticalDirection";
-import { Interval, intervalQualityStringToNumber } from "../../Interval";
 import { playPitchesSequentially } from "../../Piano";
 import {
   intervals,
-  directions
+  forEachInterval
 } from "../../Components/IntervalEarTrainingFlashCardMultiSelect";
 import { Button, TableRow, TableCell, Checkbox, Table, TableHead, TableBody, Grid } from "@material-ui/core";
 import { PianoKeyboard } from "../PianoKeyboard";
@@ -20,6 +18,7 @@ import { Size2D } from "../../Size2D";
 
 const minPitch = new Pitch(PitchLetter.C, 0, 4);
 const maxPitch = new Pitch(PitchLetter.B, 0, 5);
+const includeHarmonicIntervals = false;
 
 export const rootNotes = [
   new Pitch(PitchLetter.C, 0, 4),
@@ -60,11 +59,12 @@ export function configDataToEnabledQuestionIds(
   configData: IConfigData
 ): Array<number> {
   const enabledQuestionIds = new Array<number>();
-  forEachInterval((interval, p1, p2, i) => {
+  forEachInterval(rootNotes,
+    (interval, p1, p2, isHarmonicInterval, i) => {
     if (Utils.arrayContains(configData.enabledIntervals, interval)) {
       enabledQuestionIds.push(i);
     }
-  });
+  }, includeHarmonicIntervals, minPitch, maxPitch);
 
   return enabledQuestionIds;
 }
@@ -191,43 +191,17 @@ export function renderAnswerSelect(
   return <PianoKeysAnswerSelect key={key} width={size.width} height={size.height} correctAnswer={correctAnswer} onAnswer={onAnswer} maxNumPitches={1} />;
 }
 
-export function forEachInterval(callbackFn: (interval: string, pitch1: Pitch, pitch2: Pitch, index: number) => void) {
-  let i = 0;
-
-  for (const rootPitch of rootNotes) {
-    for (const interval of intervals) {
-      for (const direction of directions) {
-        const intervalQuality = interval[0];
-        const intervalQualityNum = intervalQualityStringToNumber(intervalQuality);
-
-        const genericInterval = interval[1];
-        const genericIntervalNum = parseInt(genericInterval, 10);
-
-        const newPitch = Pitch.addInterval(
-          rootPitch,
-          (direction === "↑") ? VerticalDirection.Up : VerticalDirection.Down,
-          new Interval(genericIntervalNum, intervalQualityNum)
-        );
-
-        if ((newPitch.midiNumber >= minPitch.midiNumber) && (newPitch.midiNumber <= maxPitch.midiNumber)) {
-          callbackFn(interval, rootPitch, newPitch, i);
-          i++;
-        }
-      }
-    }
-  }
-}
-
 export function createFlashCards(): Array<FlashCard> {
   const flashCards = new Array<FlashCard>();
-  forEachInterval((interval, p1, p2, i) => {
+  forEachInterval(rootNotes,
+    (interval, p1, p2, isHarmonicInterval, i) => {
     flashCards.push(
       new FlashCard(
         new FlashCardSide((width, height) => <FlashCardFrontSide key={i} width={width} height={height} pitch1={p1} pitch2={p2} />, p1),
         new FlashCardSide(p2.toOneAccidentalAmbiguousString(false), p2)
       )
     );
-  });
+  }, includeHarmonicIntervals, minPitch, maxPitch);
   return flashCards;
 }
 export function createFlashCardGroup(): FlashCardGroup {

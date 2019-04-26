@@ -8,7 +8,6 @@ import { FlashCard } from "../../FlashCard";
 import { FlashCardGroup } from "../../FlashCardGroup";
 import { Pitch } from "../../Pitch";
 import { PitchLetter } from "../../PitchLetter";
-import { Interval } from "../../Interval";
 import { PianoKeyboard } from "../PianoKeyboard";
 import { AnswerDifficulty } from '../../StudyAlgorithm';
 

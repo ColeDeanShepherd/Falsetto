@@ -1,12 +1,9 @@
 import * as React from "react";
 
-import * as Utils from "../../Utils";
 import * as FlashCardUtils from "./Utils";
 import { FlashCard } from "../../FlashCard";
 import { FlashCardGroup } from "../../FlashCardGroup";
 import { Pitch } from "../../Pitch";
-import { VerticalDirection } from "../../VerticalDirection";
-import { Interval, intervalQualityStringToNumber } from "../../Interval";
 import { playPitches, playPitchesSequentially } from "../../Piano";
 import {
   IConfigData,
@@ -14,7 +11,8 @@ import {
   intervals,
   directionsWithHarmonic as directions,
   IntervalEarTrainingFlashCardMultiSelect,
-  configDataToEnabledQuestionIds
+  configDataToEnabledQuestionIds,
+  forEachInterval
 } from "../../Components/IntervalEarTrainingFlashCardMultiSelect";
 import { Button } from "@material-ui/core";
 
@@ -53,39 +51,17 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
 }
 
 export function createFlashCards(): Array<FlashCard> {
-  let i = 0;
+  let flashCards = new Array<FlashCard>();
 
-  const flashCards = Utils.flattenArrays<FlashCard>(rootNotes
-    .map(rootPitch => intervals
-      .map(intervalStr => directions
-        .map(direction => {
-          const intervalQuality = intervalStr[0];
-          const intervalQualityNum = intervalQualityStringToNumber(intervalQuality);
-
-          const genericInterval = intervalStr[1];
-          const genericIntervalNum = parseInt(genericInterval, 10);
-
-          const interval = new Interval(genericIntervalNum, intervalQualityNum);
-
-          const newPitch = Pitch.addInterval(
-            rootPitch,
-            (direction !== "↓") ? VerticalDirection.Up : VerticalDirection.Down,
-            interval
-          );
-
-          const isHarmonicInterval = direction === "harmonic";
-
-          const iCopy = i;
-          i++;
-          
-          return FlashCard.fromRenderFns(
-            () => <FlashCardFrontSide key={iCopy} pitch1={rootPitch} pitch2={newPitch} isHarmonicInterval={isHarmonicInterval} />,
-            interval.toString()
-          );
-        })
-      )
-    )
-  );
+  const includeHarmonicIntervals = true;
+  forEachInterval(rootNotes,
+    (interval, pitch1, pitch2, isHarmonicInterval, i) => {
+      flashCards.push(FlashCard.fromRenderFns(
+        () => <FlashCardFrontSide key={i} pitch1={pitch1} pitch2={pitch2} isHarmonicInterval={isHarmonicInterval} />,
+        interval.toString()
+      ));
+    },
+    includeHarmonicIntervals);
 
   return flashCards;
 }
