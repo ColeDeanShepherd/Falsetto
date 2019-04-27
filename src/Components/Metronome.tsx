@@ -178,8 +178,8 @@ export class Metronome extends React.Component<IMetronomeProps, IMetronomeState>
           this.clickSound = clickSound;
           this.playAfterSoundsLoaded();
         })
-        .catch(reason => {
-          window.alert(`Failed loading sounds: ${reason}`);
+        .catch(error => {
+          window.alert(`Failed loading sounds: ${error}`);
           this.setState({ isLoadingSounds: false });
         });
       

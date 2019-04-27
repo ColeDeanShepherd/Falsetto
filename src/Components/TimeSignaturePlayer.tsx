@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as Vex from "vexflow";
-import { Button, Card, CardContent, Typography, Select } from "@material-ui/core";
+import { Button, Card, CardContent, Typography, Select, CircularProgress } from "@material-ui/core";
 
 import * as Utils from "../Utils";
 import { TimeSignature } from "../TimeSignature";
@@ -105,6 +105,7 @@ interface ITimeSignaturePlayerProps {
 }
 interface ITimeSignaturePlayerState {
   canvasSize: Size2D;
+  isLoadingSounds: boolean;
 }
 
 export class TimeSignaturePlayer extends React.Component<ITimeSignaturePlayerProps, ITimeSignaturePlayerState> {
@@ -118,7 +119,8 @@ export class TimeSignaturePlayer extends React.Component<ITimeSignaturePlayerPro
     );
 
     this.state = {
-      canvasSize: new Size2D(0, 0)
+      canvasSize: new Size2D(0, 0),
+      isLoadingSounds: false
     };
   }
 
@@ -165,11 +167,12 @@ export class TimeSignaturePlayer extends React.Component<ITimeSignaturePlayerPro
             ? (
               <Button
                 onClick={event => this.play()}
+                disabled={this.state.isLoadingSounds}
                 disableRipple={true}
                 disableFocusRipple={true}
                 variant="contained"
               >
-                Play
+                {!this.state.isLoadingSounds ? <i className="material-icons">play_arrow</i> : <CircularProgress size={20} disableShrink={true} />}
               </Button>
             )
             : (
@@ -179,7 +182,7 @@ export class TimeSignaturePlayer extends React.Component<ITimeSignaturePlayerPro
                 disableFocusRipple={true}
                 variant="contained"
               >
-                Stop
+                <i className="material-icons">pause</i>
               </Button>
             )
           }
@@ -189,6 +192,7 @@ export class TimeSignaturePlayer extends React.Component<ITimeSignaturePlayerPro
   }
 
   private rhythmPlayer: RhythmPlayer;
+  private clickSound: Howl | null = null;
 
   private vexFlowRender(context: Vex.IRenderContext, size: Size2D) {
     context
@@ -271,8 +275,25 @@ export class TimeSignaturePlayer extends React.Component<ITimeSignaturePlayerPro
   }
 
   private play() {
+    if (!this.clickSound) {
+      Audio.loadSoundAsync(clickAudioPath)
+        .then(clickSound => {
+          this.clickSound = clickSound;
+          this.playAfterLoading();
+        })
+        .catch(error => {
+          window.alert(`Failed loading sounds: ${error}`);
+          this.setState({ isLoadingSounds: false });
+        });
+
+      this.setState({ isLoadingSounds: true });
+    } else {
+      this.playAfterLoading();
+    }
+  }
+  private playAfterLoading() {
     this.rhythmPlayer.play(true);
-    this.forceUpdate();
+    this.setState({ isLoadingSounds: false });
   }
   private stop() {
     this.rhythmPlayer.stop();
@@ -280,7 +301,10 @@ export class TimeSignaturePlayer extends React.Component<ITimeSignaturePlayerPro
   }
 
   private onNotePlay(noteIndex: number) {
-    Audio.playSound(clickAudioPath, this.getVolume(noteIndex));
+    if (this.clickSound) {
+      this.clickSound.volume(this.getVolume(noteIndex));
+      this.clickSound.play();
+    }
     this.forceUpdate();
   }
 
