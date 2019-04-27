@@ -1,5 +1,11 @@
 import { Howl } from "howler";
 
+export function loadSoundAsync(
+  soundFilePath: string,
+  onLoad?: (this: Howl) => void,
+  onLoadError?: () => void): Howl {
+  return new Howl({ src: soundFilePath, onload: onLoad, onloaderror: onLoadError });
+}
 export function playSound(soundFilePath: string, volume: number = 1) {
   const howl = new Howl({ src: soundFilePath, volume: volume });
   howl.play();

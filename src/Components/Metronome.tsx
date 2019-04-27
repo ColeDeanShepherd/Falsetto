@@ -1,6 +1,8 @@
 import * as React from "react";
-import { Card, CardContent, Typography, Button } from "@material-ui/core";
+import { Card, CardContent, Typography, Button, CircularProgress } from "@material-ui/core";
+import { Howl } from "howler";
 
+import * as Utils from "../Utils";
 import * as Audio from "../Audio";
 
 var clickAudioPath = "/audio/metronome_click.wav";
@@ -74,8 +76,8 @@ interface IMetronomeProps {
 }
 interface IMetronomeState {
   bpm: number;
+  isLoadingSounds: boolean;
   isPlaying: boolean;
-
   isTappingTempo: boolean;
 }
 
@@ -85,6 +87,7 @@ export class Metronome extends React.Component<IMetronomeProps, IMetronomeState>
 
     this.state = {
       bpm: 120,
+      isLoadingSounds: false,
       isPlaying: false,
       isTappingTempo: false
     };
@@ -122,7 +125,13 @@ export class Metronome extends React.Component<IMetronomeProps, IMetronomeState>
         {this.renderTempoText(this.state.bpm)}
         <input type="range" min={this.MIN_BPM} max={this.MAX_BPM} value={this.state.bpm} onChange={e => this.onBpmChange(parseInt(e.target.value))} style={this.SLIDER_STYLE} />
         <div>
-          {!this.state.isPlaying ? <Button variant="contained" onClick={e => this.play()}><i className="material-icons">play_arrow</i></Button> : <Button variant="contained" onClick={e => this.pause()}><i className="material-icons">pause</i></Button>}
+          {!this.state.isPlaying ? (
+            <Button variant="contained" onClick={e => this.play()} disabled={this.state.isLoadingSounds}>
+              {!this.state.isLoadingSounds ? <i className="material-icons">play_arrow</i> : <CircularProgress size={20} disableShrink={true} />}
+            </Button>
+          ) : (
+            <Button variant="contained" onClick={e => this.pause()}><i className="material-icons">pause</i></Button>
+          )}
           <Button variant="contained" onClick={e => this.startTappingTempo()} disabled={this.state.isPlaying}>Tap Tempo</Button>
         </div>
       </div>
@@ -152,6 +161,7 @@ export class Metronome extends React.Component<IMetronomeProps, IMetronomeState>
   private readonly TAPPED_TEMPO_TIMEOUT_S = 3;
 
   private clickIntervalId: number = -1;
+  private clickSound: Howl | null = null;
   private tempoTapper = new TempoTapper(this.MAX_NUM_TAPPED_TEMPO_SAMPLES, this.TAPPED_TEMPO_TIMEOUT_S);
 
   private onBpmChange(value: number) {
@@ -162,10 +172,29 @@ export class Metronome extends React.Component<IMetronomeProps, IMetronomeState>
     this.setState({ bpm: value });
   }
   private play() {
-    Audio.playSound(clickAudioPath);
+    if (!this.clickSound) {
+      const _this = this;
+  
+      this.clickSound = Audio.loadSoundAsync(
+        clickAudioPath,
+        function(this: Howl) {
+          _this.playAfterSoundsLoaded();
+        },
+        () => {
+          this.setState({ isLoadingSounds: false });
+          window.alert("Failed loading sounds.");
+        });
+      
+      this.setState({ isLoadingSounds: true });
+    } else {
+      this.playAfterSoundsLoaded();
+    }
+  }
+  private playAfterSoundsLoaded() {
+    Utils.unwrapMaybe(this.clickSound).play();
     this.resetClickInterval(this.state.bpm);
 
-    this.setState({ isPlaying: true });
+    this.setState({ isPlaying: true, isLoadingSounds: false });
   }
   private pause() {
     window.clearInterval(this.clickIntervalId);
@@ -179,7 +208,7 @@ export class Metronome extends React.Component<IMetronomeProps, IMetronomeState>
       window.clearInterval(this.clickIntervalId);
     }
 
-    this.clickIntervalId = window.setInterval(() => Audio.playSound(clickAudioPath), getBeatIntervalMs(bpm));
+    this.clickIntervalId = window.setInterval(() => Utils.unwrapMaybe(this.clickSound).play(), getBeatIntervalMs(bpm));
   }
 
   private startTappingTempo() {
