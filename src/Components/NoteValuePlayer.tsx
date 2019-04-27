@@ -16,8 +16,11 @@ import { Size2D } from '../Size2D';
 const clickAudioPath = "/audio/metronome_click.wav";
 const woodBlockAudioPath = "/audio/wood_block.wav";
 
+const DEFAULT_MAX_NOTES_PER_BEAT = 9;
+
 export interface INoteValuePlayerProps {
   notesPerBeat?: number;
+  maxNotesPerBeat?: number;
   showNotesPerBeatSelect?: boolean;
 }
 export interface INoteValuePlayerState {
@@ -49,6 +52,7 @@ export class NoteValuePlayer extends React.Component<INoteValuePlayerProps, INot
 
   public render(): JSX.Element {
     const vexFlowRender = this.vexFlowRender.bind(this);
+    const maxNotesPerBeat = this.props.maxNotesPerBeat ? this.props.maxNotesPerBeat : DEFAULT_MAX_NOTES_PER_BEAT;
 
     return (
       <Card>
@@ -70,7 +74,7 @@ export class NoteValuePlayer extends React.Component<INoteValuePlayerProps, INot
                   value={this.state.notesPerBeat}
                   onChange={event => this.onNoteValueChange(event.target.value)}
                 >
-                  {Utils.range(1, 9).map(n => <option key={n} value={n}>{n}</option>)}
+                  {Utils.range(1, maxNotesPerBeat).map(n => <option key={n} value={n}>{n}</option>)}
                 </Select>
               </div>
             )

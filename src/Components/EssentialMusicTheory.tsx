@@ -203,7 +203,7 @@ export const RhythmSection: React.FunctionComponent<SectionProps> = props => (
 
     <p>Though time signature note values are generally powers of two, you are free to divide beats or measures into any number of notes:</p>
 
-    <NoteValuePlayer notesPerBeat={3} showNotesPerBeatSelect={true} />
+    <NoteValuePlayer notesPerBeat={3} maxNotesPerBeat={5} showNotesPerBeatSelect={true} />
     
     <SubSectionTitle>Interactive Exercises</SubSectionTitle>
 
