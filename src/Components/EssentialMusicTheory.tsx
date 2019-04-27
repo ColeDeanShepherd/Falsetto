@@ -2,6 +2,8 @@ import * as React from "react";
 import { CardContent, Card, Table, TableHead, TableBody, TableRow, TableCell } from "@material-ui/core";
 import * as Vex from "vexflow";
 
+import App from './App';
+
 import { YouTubeVideo } from "./YouTubeVideo";
 import { TimeSignature } from "../TimeSignature";
 import { TimeSignature as TimeSignatureComponent } from "./TimeSignature";
@@ -71,10 +73,13 @@ export const IntroSection: React.FunctionComponent<SectionProps> = props => (
     <MainTitle>Essential Music Theory</MainTitle>
     <p>This course is designed to teach students the essentials of Western music theory interactively. As you work your way through this course, keep in mind that music theory is descriptive, not prescriptive. This means that there are no hard-rules, only guidelines based on music that already exists. The goal of learning music theory is not to restrict ourselves to doing only what is "correct", but to understand the music we hear on a deeper level, to apply this understanding to our music, and to know how to skillfully break the "rules" to fully express ourselves in our music.</p>
     <p>Without further ado, let's get started!</p>
+    <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory/rhythm", "Next: Rhythm >>")}</p>
   </div>
 );
 export const RhythmSection: React.FunctionComponent<SectionProps> = props => (
   <div>
+    <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory", "<< Previous: Introduction")} | Next: Notes (coming soon) >></p>
+
     <SectionTitle>Rhythm</SectionTitle>
     <p><em>Rhythm</em> is the purposeful arrangement of sounds over time &mdash; what you dance to when listening to a piece of music. Rhythm is the basis of all music, and some music is based solely on rhythm:</p>
 
@@ -205,9 +210,11 @@ export const RhythmSection: React.FunctionComponent<SectionProps> = props => (
     
     <SubSectionTitle>Interactive Exercises</SubSectionTitle>
 
-    <div style={{ marginBottom: "1em" }}>{createStudyFlashCardGroupComponent(RhythymTermsQuiz.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "1em" }}>{createStudyFlashCardGroupComponent(NoteDurations.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div>{createStudyFlashCardGroupComponent(NoteValueNumbers.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(RhythymTermsQuiz.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(NoteDurations.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(NoteValueNumbers.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+
+    <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory", "<< Previous: Introduction")} | Next: Notes (coming soon) >></p>
   </div>
 );
 export const NotesSection: React.FunctionComponent<SectionProps> = props => (

@@ -69,6 +69,8 @@ import { isProduction } from "../Config";
 
 const googleAnalyticsTrackingId = "UA-72494315-5";
 
+const NavSectionTitle: React.FunctionComponent<{ style?: any }> = props => <p style={Object.assign({ fontWeight: "bold" }, props.style)}>{props.children}</p>;
+
 interface IAppProps {
   isEmbedded: boolean;
 }
@@ -204,6 +206,11 @@ class App extends React.Component<IAppProps, IAppState> {
       <Route path="/about" component={() => <DocumentTitle title="About - Falsetto"><AboutPage /></DocumentTitle>} />,
       <Route exact path="/essential-music-theory" component={() => <DocumentTitle title="Essential Music Theory - Falsetto"><SectionContainer section={IntroSection}></SectionContainer></DocumentTitle>} />,
       <Route exact path="/essential-music-theory/rhythm" component={() => <DocumentTitle title="Rhythm - Essential Music Theory - Falsetto"><SectionContainer section={RhythmSection}></SectionContainer></DocumentTitle>} />,
+      <Route exact path="/essential-music-theory/notes" component={() => <DocumentTitle title="Notes - Essential Music Theory - Falsetto"><SectionContainer section={NotesSection}></SectionContainer></DocumentTitle>} />,
+      <Route exact path="/essential-music-theory/intervals" component={() => <DocumentTitle title="Intervals - Essential Music Theory - Falsetto"><SectionContainer section={IntervalsSection}></SectionContainer></DocumentTitle>} />,
+      <Route exact path="/essential-music-theory/scales-and-modes" component={() => <DocumentTitle title="Scales And Modes - Essential Music Theory - Falsetto"><SectionContainer section={ScalesAndModesSection}></SectionContainer></DocumentTitle>} />,
+      <Route exact path="/essential-music-theory/chords" component={() => <DocumentTitle title="Chords - Essential Music Theory - Falsetto"><SectionContainer section={ChordsSection}></SectionContainer></DocumentTitle>} />,
+      <Route exact path="/essential-music-theory/chord-progressions" component={() => <DocumentTitle title="Chord Progressions - Essential Music Theory - Falsetto"><SectionContainer section={ChordProgressionsSection}></SectionContainer></DocumentTitle>} />,
       <Route path="/scale-viewer" component={() => <DocumentTitle title={"Scale Viewer - Falsetto"}><ScaleViewer /></DocumentTitle>} />,
       <Route path="/chord-viewer" component={() => <DocumentTitle title={"Chord Viewer - Falsetto"}><ChordViewer /></DocumentTitle>} />,
       <Route path="/rhythm-tapper" component={() => <DocumentTitle title={"Rhythm Tapper - Falsetto"}><RhythmTapper /></DocumentTitle>} />,
@@ -221,17 +228,23 @@ class App extends React.Component<IAppProps, IAppState> {
     </div>
     */
 
+    const navSectionStyle = { fontWeight: "bold" };
     const nav = (
       <div className="nav left-nav">
         <div>
-          <p style={{marginTop: 0}}>Notes</p>
+          <NavSectionTitle style={{marginTop: 0}}>Essential Music Theory</NavSectionTitle>
+          {this.renderNavLink("/essential-music-theory", "Introduction")}
+          {this.renderNavLink("/essential-music-theory/rhythm", "Rhythm")}
+          <p><em>More coming soon...</em></p>
+
+          <NavSectionTitle>Notes</NavSectionTitle>
           {renderFlashCardGroupLink(PianoNotes.createFlashCardGroup())}
           {renderFlashCardGroupLink(GuitarNotes.createFlashCardGroup())}
           {renderFlashCardGroupLink(NoteDurations.createFlashCardGroup())}
           {renderFlashCardGroupLink(SheetMusicNotes.createFlashCardGroup())}
         </div>
         <div>
-          <p>Intervals</p>
+          <NavSectionTitle>Intervals</NavSectionTitle>
           {renderFlashCardGroupLink(IntervalQualitySymbolsToQualities.createFlashCardGroup())}
           {renderFlashCardGroupLink(IntervalNamesToHalfSteps.createFlashCardGroup())}
           {renderFlashCardGroupLink(IntervalsToConsonanceDissonance.createFlashCardGroup())}
@@ -245,7 +258,7 @@ class App extends React.Component<IAppProps, IAppState> {
           {renderFlashCardGroupLink(Interval2ndNoteEarTrainingPiano.createFlashCardGroup())}
         </div>
         <div>
-          <p>Scales</p>
+          <NavSectionTitle>Scales</NavSectionTitle>
           {renderFlashCardGroupLink(ScaleDegreeNames.createFlashCardGroup())}
           {renderFlashCardGroupLink(ScaleNotes.createFlashCardGroup())}
           {renderFlashCardGroupLink(PianoScales.createFlashCardGroup())}
@@ -256,13 +269,13 @@ class App extends React.Component<IAppProps, IAppState> {
           <NavLink to="scale-viewer" className="nav-link">Scale Viewer</NavLink>
         </div>
         <div>
-          <p>Keys</p>
+          <NavSectionTitle>Keys</NavSectionTitle>
           {renderFlashCardGroupLink(KeyAccidentalCounts.createFlashCardGroup())}
           {renderFlashCardGroupLink(KeyAccidentalNotes.createFlashCardGroup())}
           {renderFlashCardGroupLink(KeySignatureIdentification.createFlashCardGroup())}
         </div>
         <div>
-          <p>Chords</p>
+          <NavSectionTitle>Chords</NavSectionTitle>
           {renderFlashCardGroupLink(ChordFamilies.createFlashCardGroup())}
           {renderFlashCardGroupLink(ChordNotes.createFlashCardGroup())}
           {renderFlashCardGroupLink(AvailableChordTensions.createFlashCardGroup())}
@@ -319,8 +332,11 @@ class App extends React.Component<IAppProps, IAppState> {
     );
   }
 
+  public renderNavLink(route: string, text: string): JSX.Element {
+    return <NavLink exact to={route} onClick={event => this.onNavLinkClick()} className="nav-link">{text}</NavLink>;
+  }
   public renderFlashCardGroupLink(flashCardGroup: FlashCardGroup): JSX.Element {
-    return <NavLink to={flashCardGroup.route} onClick={event => this.onNavLinkClick()} className="nav-link">{flashCardGroup.name}</NavLink>;
+    return <NavLink exact to={flashCardGroup.route} onClick={event => this.onNavLinkClick()} className="nav-link">{flashCardGroup.name}</NavLink>;
   }
   public toggleMenu() {
     this.setState({ isMenuVisibleOnMobile: !this.state.isMenuVisibleOnMobile });
