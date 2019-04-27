@@ -173,16 +173,14 @@ export class Metronome extends React.Component<IMetronomeProps, IMetronomeState>
   }
   private play() {
     if (!this.clickSound) {
-      const _this = this;
-  
-      this.clickSound = Audio.loadSoundAsync(
-        clickAudioPath,
-        function(this: Howl) {
-          _this.playAfterSoundsLoaded();
-        },
-        () => {
+      Audio.loadSoundAsync(clickAudioPath)
+        .then(clickSound => {
+          this.clickSound = clickSound;
+          this.playAfterSoundsLoaded();
+        })
+        .catch(reason => {
+          window.alert(`Failed loading sounds: ${reason}`);
           this.setState({ isLoadingSounds: false });
-          window.alert("Failed loading sounds.");
         });
       
       this.setState({ isLoadingSounds: true });
