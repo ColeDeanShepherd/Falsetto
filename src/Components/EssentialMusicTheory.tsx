@@ -15,6 +15,7 @@ import { Metronome } from "./Metronome";
 
 import * as RhythymTermsQuiz from "./Quizzes/RhythmTermsQuiz";
 import * as NoteDurations from "./Quizzes/NoteDurations";
+import * as NoteValueNumbers from "./Quizzes/NoteValueNumbers";
 
 import * as IntervalNamesToHalfSteps from "./Quizzes/IntervalNamesToHalfSteps";
 import * as IntervalEarTraining from "./Quizzes/IntervalEarTraining";
@@ -191,8 +192,9 @@ export const RhythmSection: React.FunctionComponent<SectionProps> = props => (
 
     <p>Another common time signature is <img src={timeSignature34} style={{ width: "12px" }} />, in which there are three quarter notes, the first beat is a strong beat, and the second and third notes are weak beats. <img src={timeSignature34} style={{ width: "12px" }} /> is used in waltzes, among other types of music, and it sounds like this:</p>
     <TimeSignaturePlayer timeSignature={new TimeSignature(3, 4)} />
-    
-    <p>Use the time signature selector below to listen to some common time signature to get a feel for them.</p>
+    <p>In general, any time signature with a number of beats divisible by 3 will have a repeating pattern of one strong beat followed by two weak beats, and any time signature with a number of beats divisible by 4 (but not 3) will have a repeating pattern of: strong beat, weak beat, medium-strength beat, weak beat.</p>
+
+    <p>Use the time signature selector below to listen to some common time signatures to get a feel for them.</p>
     <TimeSignaturePlayer showTimeSignatureSelect={true} />
 
     <p>Note that all of the note values (the bottom number) in time signatures are powers of two (1, 2, 4, 8, ...). This is true for almost all, if not all, time signatures in practice.</p>
@@ -204,7 +206,8 @@ export const RhythmSection: React.FunctionComponent<SectionProps> = props => (
     <SubSectionTitle>Interactive Exercises</SubSectionTitle>
 
     <div style={{ marginBottom: "1em" }}>{createStudyFlashCardGroupComponent(RhythymTermsQuiz.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div>{createStudyFlashCardGroupComponent(NoteDurations.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "1em" }}>{createStudyFlashCardGroupComponent(NoteDurations.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div>{createStudyFlashCardGroupComponent(NoteValueNumbers.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
   </div>
 );
 export const NotesSection: React.FunctionComponent<SectionProps> = props => (

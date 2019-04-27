@@ -25,9 +25,9 @@ export function createFlashCards(): FlashCard[] {
     FlashCard.fromRenderFns("Six-eight time means there are _ _ notes in a measure.", "six, eighth"),
     FlashCard.fromRenderFns("The top number in a time signature represents the _ of beats in a measure.", "number"),
     FlashCard.fromRenderFns("The bottom number in a time signature represents the _ of beats in a measure.", "note value"),
-    FlashCard.fromRenderFns("In four-four time, _ beat(s) are the strong beats, _ beat(s) are medium-strength beat(s), and _ beat(s) are weak beats.", "the 1st, the 2nd & 4th, the 3rd"),
-    FlashCard.fromRenderFns("In three-four time, _ beat(s) are the strong beats, _ beat(s) are medium-strength beat(s), and _ beat(s) are weak beats.", "the 1st, no, the 2nd & 3rd"),
     FlashCard.fromRenderFns("Time signature note values are generally powers of _.", "two"),
     FlashCard.fromRenderFns("A division of a a beat or measure into three notes is called a _.", "triplet"),
+    FlashCard.fromRenderFns("In general, any time signature with a # of beats divisible by 3 will have a repeating pattern of _.", "strong beat, weak beat, weak beat"),
+    FlashCard.fromRenderFns("In general, any time signature with a # of beats divisible by 4 (but not 3) will have a repeating pattern of: _.", "strong beat, weak beat, medium-strength beat, weak beat")
   ];
 }

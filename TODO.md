@@ -1,9 +1,6 @@
 # To-Do
 ## High Priority
 * Essential Music Theory
-  * Note value # quiz.
-  * Strong & weak beats quiz.
-
 * Implement isEmbedded for ScaleViewer & RhythmTapper
 * Send errors to server somewhere?
 * Enable inversion on guitar scale viewer.
