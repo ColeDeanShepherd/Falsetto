@@ -279,7 +279,7 @@ export class TimeSignaturePlayer extends React.Component<ITimeSignaturePlayerPro
       Audio.loadSoundAsync(clickAudioPath)
         .then(clickSound => {
           this.clickSound = clickSound;
-          this.playAfterLoading();
+          this.playAfterSoundsLoaded();
         })
         .catch(error => {
           window.alert(`Failed loading sounds: ${error}`);
@@ -288,10 +288,10 @@ export class TimeSignaturePlayer extends React.Component<ITimeSignaturePlayerPro
 
       this.setState({ isLoadingSounds: true });
     } else {
-      this.playAfterLoading();
+      this.playAfterSoundsLoaded();
     }
   }
-  private playAfterLoading() {
+  private playAfterSoundsLoaded() {
     this.rhythmPlayer.play(true);
     this.setState({ isLoadingSounds: false });
   }

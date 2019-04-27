@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as Vex from "vexflow";
-import { Button, Card, CardContent, Typography, Select } from "@material-ui/core";
+import { Button, Card, CardContent, Typography, Select, CircularProgress } from "@material-ui/core";
 
 import * as Utils from "../Utils";
 import { TimeSignature } from "../TimeSignature";
@@ -23,6 +23,7 @@ export interface INoteValuePlayerProps {
 export interface INoteValuePlayerState {
   notesPerBeat: number;
   canvasSize: Size2D;
+  isLoadingSounds: boolean;
 }
 export class NoteValuePlayer extends React.Component<INoteValuePlayerProps, INoteValuePlayerState> {
   public constructor(props: INoteValuePlayerProps) {
@@ -30,7 +31,8 @@ export class NoteValuePlayer extends React.Component<INoteValuePlayerProps, INot
 
     const initialState: INoteValuePlayerState = {
       notesPerBeat: this.props.notesPerBeat ? this.props.notesPerBeat : 3,
-      canvasSize: new Size2D(0, 0)
+      canvasSize: new Size2D(0, 0),
+      isLoadingSounds: false
     };
 
     const timeSignature = new TimeSignature(4, 4);
@@ -90,11 +92,12 @@ export class NoteValuePlayer extends React.Component<INoteValuePlayerProps, INot
             ? (
               <Button
                 onClick={event => this.play()}
+                disabled={this.state.isLoadingSounds}
                 disableRipple={true}
                 disableFocusRipple={true}
                 variant="contained"
               >
-                Play
+                {!this.state.isLoadingSounds ? <i className="material-icons">play_arrow</i> : <CircularProgress size={20} disableShrink={true} />}
               </Button>
             )
             : (
@@ -104,7 +107,7 @@ export class NoteValuePlayer extends React.Component<INoteValuePlayerProps, INot
                 disableFocusRipple={true}
                 variant="contained"
               >
-                Stop
+                <i className="material-icons">pause</i>
               </Button>
             )
           }
@@ -114,6 +117,8 @@ export class NoteValuePlayer extends React.Component<INoteValuePlayerProps, INot
   }
 
   private rhythmPlayer: RhythmPlayer;
+  private clickSound: Howl | null = null;
+  private woodBlockSound: Howl | null = null;
   
   private vexFlowRender(context: Vex.IRenderContext, size: Size2D) {
     context
@@ -199,8 +204,26 @@ export class NoteValuePlayer extends React.Component<INoteValuePlayerProps, INot
   }
 
   private play() {
+    if (!this.clickSound || !this.woodBlockSound) {
+      Audio.loadSoundsAsync([clickAudioPath, woodBlockAudioPath])
+        .then(sounds => {
+          this.clickSound = sounds[0];
+          this.woodBlockSound = sounds[1];
+          this.playAfterSoundsLoaded();
+        })
+        .catch(error => {
+          window.alert(`Failed loading sounds: ${error}`);
+          this.setState({ isLoadingSounds: false });
+        });
+
+      this.setState({ isLoadingSounds: true });
+    } else {
+      this.playAfterSoundsLoaded();
+    }
+  }
+  private playAfterSoundsLoaded() {
     this.rhythmPlayer.play(true);
-    this.forceUpdate();
+    this.setState({ isLoadingSounds: false });
   }
   private stop() {
     this.rhythmPlayer.stop();
@@ -223,11 +246,11 @@ export class NoteValuePlayer extends React.Component<INoteValuePlayerProps, INot
     }
 
     if (shouldPlayBeat) {
-      Audio.playSound(woodBlockAudioPath);
+      Utils.unwrapMaybe(this.woodBlockSound).play();
     }
   }
   private onNotePlay(noteIndex: number) {
-    Audio.playSound(clickAudioPath);
+    Utils.unwrapMaybe(this.clickSound).play();
     this.forceUpdate();
   }
 
