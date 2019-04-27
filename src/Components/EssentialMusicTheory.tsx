@@ -1,12 +1,10 @@
 import * as React from "react";
 import { CardContent, Card, Table, TableHead, TableBody, TableRow, TableCell } from "@material-ui/core";
-import * as Vex from "vexflow";
 
 import App from './App';
 
 import { YouTubeVideo } from "./YouTubeVideo";
 import { TimeSignature } from "../TimeSignature";
-import { TimeSignature as TimeSignatureComponent } from "./TimeSignature";
 
 import { PianoKeyboard, renderPianoKeyboardNoteNames } from "./PianoKeyboard";
 import { Pitch } from '../Pitch';
@@ -56,7 +54,6 @@ import timeSignature34 from "../img/sheet-music/time-signature-3-4.svg";
 
 import { TimeSignaturePlayer } from './TimeSignaturePlayer';
 import { NoteValuePlayer } from './NoteValuePlayer';
-import { Rational } from '../Rational';
 
 const MainTitle: React.FunctionComponent<{}> = props => <h1>{props.children}</h1>;
 const SectionTitle: React.FunctionComponent<{}> = props => <h2>{props.children}</h2>;
