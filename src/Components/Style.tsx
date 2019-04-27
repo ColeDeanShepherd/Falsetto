@@ -1,0 +1,1 @@
+export const MAX_MAIN_CARD_WIDTH = "1200px";

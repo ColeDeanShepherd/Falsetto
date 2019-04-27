@@ -54,6 +54,7 @@ import timeSignature34 from "../img/sheet-music/time-signature-3-4.svg";
 
 import { TimeSignaturePlayer } from './TimeSignaturePlayer';
 import { NoteValuePlayer } from './NoteValuePlayer';
+import { MAX_MAIN_CARD_WIDTH } from './Style';
 
 const MainTitle: React.FunctionComponent<{}> = props => <h1>{props.children}</h1>;
 const SectionTitle: React.FunctionComponent<{}> = props => <h2>{props.children}</h2>;
@@ -771,7 +772,7 @@ export interface ISectionProps {
 export class SectionContainer extends React.Component<ISectionProps, {}> {
   public render(): JSX.Element {
     return (
-      <Card style={{ marginBottom: "6em" }}>
+      <Card style={{ maxWidth: MAX_MAIN_CARD_WIDTH, marginBottom: "6em" }}>
         <CardContent>
           {React.createElement(this.props.section, { isEmbedded: this.isEmbedded, hideMoreInfoUri: this.hideMoreInfoUri })}
         </CardContent>
