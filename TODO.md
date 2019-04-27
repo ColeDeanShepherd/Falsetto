@@ -1,7 +1,6 @@
 # To-Do
 ## High Priority
 * Essential Music Theory
-  * Fix weird VexFlow resizing behavior.
   * Note value # quiz.
   * Strong & weak beats quiz.
 
