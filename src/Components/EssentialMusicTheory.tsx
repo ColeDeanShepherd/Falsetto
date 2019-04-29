@@ -218,8 +218,10 @@ export const RhythmSection: React.FunctionComponent<SectionProps> = props => (
 export const NotesSection: React.FunctionComponent<SectionProps> = props => (
   <div>
     <SectionTitle>Notes</SectionTitle>
-    <p>All Western music is made with 12 notes, as seen on the piano below.</p>
-    
+    <p>In music, a <em>note</em> is a sound with a distinct pitch and a duration, and a <em>pitch</em> is the "highness" or "lowness" of a sound.</p>
+    <NoteText><em>Note</em> and <em>pitch</em> have slightly different meanings, but in practice these words are often used interchangably.</NoteText>
+    <p>Technically, there are an infinite number of pitches, but the vast majority of music is composed of a standardized set of pitches with distinct names. These names, arranged on a small section of a piano, are:</p>
+
     <div>
       <PianoKeyboard
         width={300} height={150}
@@ -229,23 +231,20 @@ export const NotesSection: React.FunctionComponent<SectionProps> = props => (
         renderExtrasFn={renderPianoKeyboardNoteNames} />
     </div>
 
-    <p>The white note are "natural" notes, and the black notes are "accidentals". All of the black notes have two names - one using a sharp (#), which means we think about the note as a slightly raised version of the natural note to the left, and one using a flat (b), which means we think about the note as a slightly lowered version of the natural note to the right.</p>
-    <p>Note that the notes repeat as you move higher or lower:</p>
+    <p>TODO: MAKE PLAYABLE</p>
 
-    <div>
-      <PianoKeyboard
-        width={300} height={150}
-        lowestPitch={new Pitch(PitchLetter.C, 0, 3)}
-        highestPitch={new Pitch(PitchLetter.B, 0, 4)}
-        pressedPitches={[]}
-        renderExtrasFn={renderPianoKeyboardNoteNames} />
-    </div>
-
-    <p>This is because notes with the same name sound similar to us, just higher or lower versions of the same note.</p>
-
-    <SubSectionTitle>Non-essentials</SubSectionTitle>
-    <p>Why are only 7 natural notes, with the rest being sharps &amp; flats? Why don't we just call the 12 notes A, B, C, D, E, F, G, H, I, J, K, and L? Why aren't there accidental notes in between B &amp; C and E &amp; F?</p>
-    <p>This seems counter-intuitive at first, but the answer to all of these questions is: to make navigating instruments easier, and to work well with 7-note scales that most Western music is based on. Imagine trying to play a piano made entirely of white notes. It would be difficult to name any particular note because there is no frame of reference. That is possible to remedy by adding visual markers, but ideally you should be able to play an instruments by feel, without looking at them. Also, most Western music is based on 7-note scales, and having only 7 natural notes allows us to easily express each scale using the 7 natural notes which are then modified by sharps and flats.</p>
+    <p>A few things to notice:</p>
+    <ul>
+      <li>The base of all pitch names is one of the seven letters: A, B, C, D, E, F, G. We do not use more than seven letters to name pitches because most Western music is based on 7-note <em>scales</em> which use each letter exactly once. We will cover <em>scales</em> in a future lesson.</li>
+      <li>The 7 notes on white keys each have a one-letter name with no symbol. These are called <em>natural</em> notes.</li>
+      <li>The black keys each have two names: one with a "#", read as "sharp" and meaning slightly raised, and one with a "b", read as "flat" and meaning slightly lowered. This is because Western music has 12 names for pitches but only uses 7 letters. To name the 5 pitches on the black piano keys we add sharps or flats &mdash; called <em>accidentals</em> &mdash; to the letters to indicate where the note is compared to an adjacent note.</li>
+      <li>There are no black keys between B &amp; C and E &amp; F. This is because we are only left with 5 notes after naming all the natural notes &mdash; there has to be gaps somewhere! These "missing" black notes also create groups of 2 &amp; 3 black notes, which are useful for finding where you are on a piano by sight or by touch.</li>
+      <li>There are only 12 pitches here! This is because humans hear all pitches with the same name as <strong>very</strong> similar, regardless of how high or low they are played on an instrument. So, the pitch names repeat as you go higher or lower. TODO: ADD INTERACTIVE EXERCISE</li>
+    </ul>
+    
+    <NoteText>Though there are no black keys in-between B &amp; C and E &amp; F, you can &mdash; and sometimes must, as we will discover in a future lesson &mdash; use accidentals to name those notes relative to another. So, Cb is the same as B, B# is the same as C, Fb is the same as E, and E# is the same as F.</NoteText>
+    
+    <p>TODO: ADD QUIZ &amp; OTHER EXERCISES</p>
   </div>
 );
 export const IntervalsSection: React.FunctionComponent<SectionProps> = props => (
