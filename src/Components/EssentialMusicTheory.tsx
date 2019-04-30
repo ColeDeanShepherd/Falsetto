@@ -3,12 +3,21 @@ import { CardContent, Card, Table, TableHead, TableBody, TableRow, TableCell } f
 
 import App from './App';
 
+import * as Utils from "../Utils";
+
+import { playPitches, playPitchesSequentially } from "../Piano";
+
 import { YouTubeVideo } from "./YouTubeVideo";
 import { TimeSignature } from "../TimeSignature";
 
 import { PianoKeyboard, renderPianoKeyboardNoteNames } from "./PianoKeyboard";
 import { Pitch } from '../Pitch';
 import { PitchLetter } from '../PitchLetter';
+
+import * as PianoNotes from "./Quizzes/PianoNotes";
+import * as GuitarNotes from "./Quizzes/GuitarNotes";
+import * as SheetMusicNotes from "./Quizzes/SheetMusicNotes";
+
 import { createStudyFlashCardGroupComponent } from './StudyFlashCards';
 
 import { Metronome } from "./Metronome";
@@ -54,6 +63,9 @@ import timeSignature34 from "../img/sheet-music/time-signature-3-4.svg";
 
 import { TimeSignaturePlayer } from './TimeSignaturePlayer';
 import { NoteValuePlayer } from './NoteValuePlayer';
+
+import * as NotesQuiz from "./Quizzes/NotesQuiz";
+
 import { MAX_MAIN_CARD_WIDTH } from './Style';
 
 const MainTitle: React.FunctionComponent<{}> = props => <h1>{props.children}</h1>;
@@ -61,6 +73,18 @@ const SectionTitle: React.FunctionComponent<{}> = props => <h2>{props.children}<
 const SubSectionTitle: React.FunctionComponent<{}> = props => <h3>{props.children}</h3>;
 
 const NoteText: React.FunctionComponent<{}> = props => <p style={{ color: "#004085", backgroundColor: "#cce5ff", padding: "1em", border: "1px solid #b8daff", borderRadius: "4px" }}>NOTE: {props.children}</p>;
+
+const OctavesPlayer: React.FunctionComponent<{}> = props => {
+  return (
+    <PianoKeyboard
+      width={300} height={150}
+      lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
+      highestPitch={new Pitch(PitchLetter.B, 0, 4)}
+      pressedPitches={[]}
+      onKeyPress={p => playPitchesSequentially(Utils.range(0, 3).map(i => new Pitch(p.letter, p.signedAccidental, p.octaveNumber + i)), 500, true)}
+      renderExtrasFn={renderPianoKeyboardNoteNames} />
+  );
+};
 
 export interface SectionProps {
   isEmbedded: boolean;
@@ -207,7 +231,6 @@ export const RhythmSection: React.FunctionComponent<SectionProps> = props => (
     <NoteValuePlayer notesPerBeat={3} maxNotesPerBeat={5} showNotesPerBeatSelect={true} />
     
     <SubSectionTitle>Interactive Exercises</SubSectionTitle>
-
     <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(RhythymTermsQuiz.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
     <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(NoteDurations.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
     <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(NoteValueNumbers.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
@@ -222,29 +245,24 @@ export const NotesSection: React.FunctionComponent<SectionProps> = props => (
     <NoteText><em>Note</em> and <em>pitch</em> have slightly different meanings, but in practice these words are often used interchangably.</NoteText>
     <p>Technically, there are an infinite number of pitches, but the vast majority of music is composed of a standardized set of pitches with distinct names. These names, arranged on a small section of a piano, are:</p>
 
-    <div>
-      <PianoKeyboard
-        width={300} height={150}
-        lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-        highestPitch={new Pitch(PitchLetter.B, 0, 4)}
-        pressedPitches={[]}
-        renderExtrasFn={renderPianoKeyboardNoteNames} />
-    </div>
-
-    <p>TODO: MAKE PLAYABLE</p>
+    <OctavesPlayer />
 
     <p>A few things to notice:</p>
     <ul>
+      <li>There are only 12 pitches here! This is because humans hear all pitches with the same name as <strong>very</strong> similar, regardless of how high or low they are played on an instrument. So, the pitch names repeat as you go higher or lower. Try clicking the piano above to hear pitches of different highness/lowness with the same name.</li>
       <li>The base of all pitch names is one of the seven letters: A, B, C, D, E, F, G. We do not use more than seven letters to name pitches because most Western music is based on 7-note <em>scales</em> which use each letter exactly once. We will cover <em>scales</em> in a future lesson.</li>
       <li>The 7 notes on white keys each have a one-letter name with no symbol. These are called <em>natural</em> notes.</li>
       <li>The black keys each have two names: one with a "#", read as "sharp" and meaning slightly raised, and one with a "b", read as "flat" and meaning slightly lowered. This is because Western music has 12 names for pitches but only uses 7 letters. To name the 5 pitches on the black piano keys we add sharps or flats &mdash; called <em>accidentals</em> &mdash; to the letters to indicate where the note is compared to an adjacent note.</li>
       <li>There are no black keys between B &amp; C and E &amp; F. This is because we are only left with 5 notes after naming all the natural notes &mdash; there has to be gaps somewhere! These "missing" black notes also create groups of 2 &amp; 3 black notes, which are useful for finding where you are on a piano by sight or by touch.</li>
-      <li>There are only 12 pitches here! This is because humans hear all pitches with the same name as <strong>very</strong> similar, regardless of how high or low they are played on an instrument. So, the pitch names repeat as you go higher or lower. TODO: ADD INTERACTIVE EXERCISE</li>
     </ul>
     
     <NoteText>Though there are no black keys in-between B &amp; C and E &amp; F, you can &mdash; and sometimes must, as we will discover in a future lesson &mdash; use accidentals to name those notes relative to another. So, Cb is the same as B, B# is the same as C, Fb is the same as E, and E# is the same as F.</NoteText>
     
-    <p>TODO: ADD QUIZ &amp; OTHER EXERCISES</p>
+    <SubSectionTitle>Interactive Exercises</SubSectionTitle>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(NotesQuiz.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(PianoNotes.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(GuitarNotes.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(SheetMusicNotes.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
   </div>
 );
 export const IntervalsSection: React.FunctionComponent<SectionProps> = props => (
