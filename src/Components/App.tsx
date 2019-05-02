@@ -235,6 +235,7 @@ class App extends React.Component<IAppProps, IAppState> {
           <NavSectionTitle style={{marginTop: 0}}>Essential Music Theory</NavSectionTitle>
           {this.renderNavLink("/essential-music-theory", "Introduction")}
           {this.renderNavLink("/essential-music-theory/rhythm", "Rhythm")}
+          {this.renderNavLink("/essential-music-theory/notes", "Notes")}
           <p><em>More coming soon...</em></p>
 
           <NavSectionTitle>Notes</NavSectionTitle>

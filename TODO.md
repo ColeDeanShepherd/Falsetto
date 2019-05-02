@@ -1,8 +1,6 @@
 # To-Do
 ## High Priority
 * Essential Music Theory
-  * Rhythm
-    * Pre-load sounds before playing (time signature player, note value player).
 * Implement isEmbedded for ScaleViewer & RhythmTapper
 * Send errors to server somewhere?
 * Enable inversion on guitar scale viewer.

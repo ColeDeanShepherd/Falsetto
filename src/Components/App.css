@@ -58,6 +58,10 @@ a:visited {
   user-select: none;
 }
 
+ul li {
+  padding-bottom: 0.25em;
+}
+
 /* Mobile */
 @media (max-width: 800px) {
   .hide-on-mobile {
