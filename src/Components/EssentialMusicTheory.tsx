@@ -1,20 +1,30 @@
 import * as React from "react";
 import { CardContent, Card, Table, TableHead, TableBody, TableRow, TableCell } from "@material-ui/core";
-import * as Vex from "vexflow";
+
+import App from './App';
+
+import * as Utils from "../Utils";
+
+import { playPitches, playPitchesSequentially } from "../Piano";
 
 import { YouTubeVideo } from "./YouTubeVideo";
 import { TimeSignature } from "../TimeSignature";
-import { TimeSignature as TimeSignatureComponent } from "./TimeSignature";
 
 import { PianoKeyboard, renderPianoKeyboardNoteNames } from "./PianoKeyboard";
 import { Pitch } from '../Pitch';
 import { PitchLetter } from '../PitchLetter';
+
+import * as PianoNotes from "./Quizzes/PianoNotes";
+import * as GuitarNotes from "./Quizzes/GuitarNotes";
+import * as SheetMusicNotes from "./Quizzes/SheetMusicNotes";
+
 import { createStudyFlashCardGroupComponent } from './StudyFlashCards';
 
 import { Metronome } from "./Metronome";
 
 import * as RhythymTermsQuiz from "./Quizzes/RhythmTermsQuiz";
 import * as NoteDurations from "./Quizzes/NoteDurations";
+import * as NoteValueNumbers from "./Quizzes/NoteValueNumbers";
 
 import * as IntervalNamesToHalfSteps from "./Quizzes/IntervalNamesToHalfSteps";
 import * as IntervalEarTraining from "./Quizzes/IntervalEarTraining";
@@ -53,13 +63,30 @@ import timeSignature34 from "../img/sheet-music/time-signature-3-4.svg";
 
 import { TimeSignaturePlayer } from './TimeSignaturePlayer';
 import { NoteValuePlayer } from './NoteValuePlayer';
-import { Rational } from '../Rational';
+
+import * as NotesQuiz from "./Quizzes/NotesQuiz";
+
+import { MAX_MAIN_CARD_WIDTH } from './Style';
 
 const MainTitle: React.FunctionComponent<{}> = props => <h1>{props.children}</h1>;
 const SectionTitle: React.FunctionComponent<{}> = props => <h2>{props.children}</h2>;
 const SubSectionTitle: React.FunctionComponent<{}> = props => <h3>{props.children}</h3>;
 
 const NoteText: React.FunctionComponent<{}> = props => <p style={{ color: "#004085", backgroundColor: "#cce5ff", padding: "1em", border: "1px solid #b8daff", borderRadius: "4px" }}>NOTE: {props.children}</p>;
+
+const OctavesPlayer: React.FunctionComponent<{}> = props => {
+  return (
+    <PianoKeyboard
+      width={300} height={150}
+      lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
+      highestPitch={new Pitch(PitchLetter.B, 0, 4)}
+      pressedPitches={[]}
+      onKeyPress={p => playPitchesSequentially(Utils.range(0, 3).map(i => new Pitch(p.letter, p.signedAccidental, p.octaveNumber - 2 + i)), 500, true)}
+      renderExtrasFn={renderPianoKeyboardNoteNames} />
+  );
+};
+
+const Term: React.FunctionComponent<{}> = props => <span style={{ fontWeight: "bold" }}>{props.children}</span>;
 
 export interface SectionProps {
   isEmbedded: boolean;
@@ -70,18 +97,21 @@ export const IntroSection: React.FunctionComponent<SectionProps> = props => (
     <MainTitle>Essential Music Theory</MainTitle>
     <p>This course is designed to teach students the essentials of Western music theory interactively. As you work your way through this course, keep in mind that music theory is descriptive, not prescriptive. This means that there are no hard-rules, only guidelines based on music that already exists. The goal of learning music theory is not to restrict ourselves to doing only what is "correct", but to understand the music we hear on a deeper level, to apply this understanding to our music, and to know how to skillfully break the "rules" to fully express ourselves in our music.</p>
     <p>Without further ado, let's get started!</p>
+    <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory/rhythm", "Next: Rhythm >>")}</p>
   </div>
 );
 export const RhythmSection: React.FunctionComponent<SectionProps> = props => (
   <div>
+    <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory", "<< Previous: Introduction")} | {App.instance.renderNavLink("/essential-music-theory/notes", "Next: Notes >>")}</p>
+
     <SectionTitle>Rhythm</SectionTitle>
-    <p><em>Rhythm</em> is the purposeful arrangement of sounds over time &mdash; what you dance to when listening to a piece of music. Rhythm is the basis of all music, and some music is based solely on rhythm:</p>
+    <p><Term>Rhythm</Term> is the purposeful arrangement of sounds over time &mdash; what you dance to when listening to a piece of music. Rhythm is the basis of all music, and some music is based solely on rhythm:</p>
 
     <YouTubeVideo videoId="Qsq5PHoik-s" style={{ margin: "0 auto" }} />
 
     <SubSectionTitle>Beat &amp; Tempo</SubSectionTitle>
-    <p>The <em>beat</em> is the repeating pulse you can feel when listening to a piece of music. The beat is the driving force of rhythm, and all sounds in music are arranged around it. If you tap your foot or bob your head to a song, you do it to the beat.</p>
-    <p><em>Tempo</em> is the speed of the beat, often given as beats per minute (BPM). 120 BPM, for example, means there are two beats per second:</p>
+    <p>The <Term>beat</Term> is the repeating pulse you can feel when listening to a piece of music. The beat is the driving force of rhythm, and all sounds in music are arranged around it. If you tap your foot or bob your head to a song, you do it to the beat.</p>
+    <p><Term>Tempo</Term> is the speed of the beat, often given as beats per minute (BPM). 120 BPM, for example, means there are two beats per second:</p>
     
     <Metronome hideTitle={true} />
 
@@ -96,13 +126,13 @@ export const RhythmSection: React.FunctionComponent<SectionProps> = props => (
     <p style={{ textAlign: "center", textDecoration: "underline" }}>Fast Tempo</p>
     <YouTubeVideo videoId="jYUilB9ngs0" style={{ margin: "0 auto" }} />
 
-    <p>Though most music holds a steady tempo, it can vary throughout a piece of music. Composers can designate places where the music changes to a new fixed tempo, or performers can slightly deviate from a fixed tempo in a smooth and flowing manner &mdash; a technique called <em>rubato</em>.</p>
+    <p>Though most music holds a steady tempo, it can vary throughout a piece of music. Composers can designate places where the music changes to a new fixed tempo, or performers can slightly deviate from a fixed tempo in a smooth and flowing manner &mdash; a technique called <Term>rubato</Term>.</p>
     <p>The rendition below of "Nocturne op. 9 No. 2", a piece by <a href="https://www.youtube.com/watch?v=wygy721nzRc" target="_blank">Frédéric Chopin</a>, is a great example of rubato. As you listen, note how the tempo ebbs and flows, making the music more emotionally impactful than if it were played mechanically with an unwavering tempo.</p>
     
     <YouTubeVideo videoId="9E6b3swbnWg" style={{ margin: "0 auto" }} />
 
     <SubSectionTitle>Measures &amp; Note Durations</SubSectionTitle>
-    <p>Music is divided into <em>measures</em> (or <em>bars</em>) &mdash; small sections containing a fixed number of beats.</p>
+    <p>Music is divided into <Term>measures</Term> (or <Term>bars</Term>) &mdash; small sections containing a fixed number of beats.</p>
     <NoteText>We will use sheet music notation to visualize concepts in this section, but don't worry about understanding the notes or symbols if you are unfamiliar with sheet music.</NoteText>
     
     <p style={{ textAlign: "center" }}><img src={measures} style={{ maxWidth: "700px", width: "100%" }} /></p>
@@ -111,7 +141,7 @@ export const RhythmSection: React.FunctionComponent<SectionProps> = props => (
     
     <p style={{ textAlign: "center" }}><img src={notesRestsDiagram} style={{ maxWidth: "700px", width: "100%" }} /></p>
 
-    <p>For now, we are only concerned with the <em>note values</em>, or durations, of the notes and rests, which are represented by different symbols. Below are some of the note values you'll commonly find in music:</p>
+    <p>For now, we are only concerned with the <Term>note values</Term>, or durations, of the notes and rests, which are represented by different symbols. Below are some of the note values you'll commonly find in music:</p>
 
     <Table>
       <TableHead>
@@ -165,7 +195,7 @@ export const RhythmSection: React.FunctionComponent<SectionProps> = props => (
     <p>Whole notes &amp; rests are twice as long as half notes &amp; rests, half notes &amp; rests are twice as long as quarter notes &amp; rests, quarter notes &amp; rests are twice as long as eighth notes &amp; rests, and so on...</p>
     
     <SubSectionTitle>Time Signatures</SubSectionTitle>
-    <p>The number &amp; type of beats in a measure are specified by <em>time signatures</em>:</p>
+    <p>The number &amp; type of beats in a measure are specified by <Term>time signatures</Term>:</p>
 
     <p style={{ textAlign: "center" }}><img src={timeSignatureDiagram} style={{ maxWidth: "600px", width: "100%" }} /></p>
 
@@ -185,59 +215,62 @@ export const RhythmSection: React.FunctionComponent<SectionProps> = props => (
     <p>This is what <img src={timeSignature44} style={{ width: "12px" }} /> time sounds and looks like:</p>
     <TimeSignaturePlayer timeSignature={new TimeSignature(4, 4)} />
     
-    <p>As you can hear and see, the beats vary in weight throughout the measure: the first beat is the strongest beat, the third beat is a medium-strength note, and the second and fourth beats are weak notes. This is because time signatures, like <img src={timeSignature44} style={{ width: "12px" }} />, have <em>strong beats</em> and <em>weak beats</em> (and beats in-between).</p>
+    <p>As you can hear and see, the beats vary in weight throughout the measure: the first beat is the strongest beat, the third beat is a medium-strength note, and the second and fourth beats are weak notes. This is because time signatures, like <img src={timeSignature44} style={{ width: "12px" }} />, have <Term>strong beats</Term> and <Term>weak beats</Term> (and beats in-between).</p>
 
     <NoteText>The differing volumes and colors of notes is only a visual/aural aid to understanding strong &amp; weak beats in time signatures. In real music, the notes would not differ in color, and all notes would be the same volume unless otherwise indicated.</NoteText>
 
     <p>Another common time signature is <img src={timeSignature34} style={{ width: "12px" }} />, in which there are three quarter notes, the first beat is a strong beat, and the second and third notes are weak beats. <img src={timeSignature34} style={{ width: "12px" }} /> is used in waltzes, among other types of music, and it sounds like this:</p>
     <TimeSignaturePlayer timeSignature={new TimeSignature(3, 4)} />
-    
-    <p>Use the time signature selector below to listen to some common time signature to get a feel for them.</p>
+    <p>In general, any time signature with a number of beats divisible by 3 will have a repeating pattern of one strong beat followed by two weak beats, and any time signature with a number of beats divisible by 4 (but not 3) will have a repeating pattern of: strong beat, weak beat, medium-strength beat, weak beat.</p>
+
+    <p>Use the time signature selector below to listen to some common time signatures to get a feel for them.</p>
     <TimeSignaturePlayer showTimeSignatureSelect={true} />
 
     <p>Note that all of the note values (the bottom number) in time signatures are powers of two (1, 2, 4, 8, ...). This is true for almost all, if not all, time signatures in practice.</p>
 
     <p>Though time signature note values are generally powers of two, you are free to divide beats or measures into any number of notes:</p>
 
-    <NoteValuePlayer notesPerBeat={3} showNotesPerBeatSelect={true} />
+    <NoteValuePlayer notesPerBeat={3} maxNotesPerBeat={5} showNotesPerBeatSelect={true} />
     
     <SubSectionTitle>Interactive Exercises</SubSectionTitle>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(RhythymTermsQuiz.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(NoteDurations.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(NoteValueNumbers.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
 
-    <div style={{ marginBottom: "1em" }}>{createStudyFlashCardGroupComponent(RhythymTermsQuiz.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div>{createStudyFlashCardGroupComponent(NoteDurations.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory", "<< Previous: Introduction")} | {App.instance.renderNavLink("/essential-music-theory/notes", "Next: Notes >>")}</p>
   </div>
 );
 export const NotesSection: React.FunctionComponent<SectionProps> = props => (
   <div>
+    <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory/rhythm", "<< Previous: Rhythm")} | Next: Intervals (coming soon) >></p>
+
     <SectionTitle>Notes</SectionTitle>
-    <p>All Western music is made with 12 notes, as seen on the piano below.</p>
+    <p>In music, a <Term>note</Term> is a sound with a distinct pitch and a duration, and a <Term>pitch</Term> is the "highness" or "lowness" of a sound.</p>
+    <NoteText><Term>Note</Term> and <Term>pitch</Term> have slightly different meanings, but in practice these words are often used interchangably.</NoteText>
+    <p>Technically, there are an infinite number of pitches, but the vast majority of music is composed of a standardized set of pitches with distinct names. These names, arranged on a small section of a piano, are:</p>
+
+    <div style={{ textAlign: "center" }}><OctavesPlayer /></div>
+
+    <p>A few things to notice:</p>
+    <ul>
+      <li>There are only 12 pitch names here! This is because humans hear all pitches with the same name as very similar, regardless of how high or low they are played on an instrument. So, the pitch names repeat as you go higher or lower. <strong>Try clicking the piano above to hear pitches of different highness/lowness with the same name!</strong></li>
+      <li>The base of all pitch names is one of the seven letters: A, B, C, D, E, F, G. We do not use more than seven letters to name pitches because most Western music is based on 7-note <Term>scales</Term> which use each letter exactly once. We will cover <Term>scales</Term> in a future lesson.</li>
+      <li>The 7 notes on white keys each have a one-letter name with no symbol. These are called <Term>natural</Term> notes.</li>
+      <li>The black keys each have two names: one with a "#", read as "sharp" and meaning slightly raised, and one with a "b", read as "flat" and meaning slightly lowered. This is because Western music has 12 names for pitches but only uses 7 letters. To name the 5 pitches on the black piano keys we add sharps or flats &mdash; called <Term>accidentals</Term> &mdash; to the letters to indicate where the note is compared to an adjacent note.</li>
+      <li>There are no black keys between B &amp; C and E &amp; F. This is because we are only left with 5 notes after naming all the natural notes &mdash; there has to be gaps somewhere! These "missing" black notes also create groups of 2 &amp; 3 black notes, which are useful for finding where you are on a piano by sight or by touch.</li>
+    </ul>
     
-    <div>
-      <PianoKeyboard
-        width={300} height={150}
-        lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-        highestPitch={new Pitch(PitchLetter.B, 0, 4)}
-        pressedPitches={[]}
-        renderExtrasFn={renderPianoKeyboardNoteNames} />
-    </div>
+    <NoteText>Though there are no black keys in-between B &amp; C and E &amp; F, you can &mdash; and sometimes must, as we will discover in a future lesson &mdash; use accidentals to name those notes relative to another. So, Cb is the same as B, B# is the same as C, Fb is the same as E, and E# is the same as F.</NoteText>
+    
+    <p>It is <strong>vitally</strong> important to learn where all the notes are on your instrument of choice. Please take some time to do so before moving on to the next lesson, and if your instrument of choice is piano or guitar, test your note identification skills using the exercises below!</p>
 
-    <p>The white note are "natural" notes, and the black notes are "accidentals". All of the black notes have two names - one using a sharp (#), which means we think about the note as a slightly raised version of the natural note to the left, and one using a flat (b), which means we think about the note as a slightly lowered version of the natural note to the right.</p>
-    <p>Note that the notes repeat as you move higher or lower:</p>
-
-    <div>
-      <PianoKeyboard
-        width={300} height={150}
-        lowestPitch={new Pitch(PitchLetter.C, 0, 3)}
-        highestPitch={new Pitch(PitchLetter.B, 0, 4)}
-        pressedPitches={[]}
-        renderExtrasFn={renderPianoKeyboardNoteNames} />
-    </div>
-
-    <p>This is because notes with the same name sound similar to us, just higher or lower versions of the same note.</p>
-
-    <SubSectionTitle>Non-essentials</SubSectionTitle>
-    <p>Why are only 7 natural notes, with the rest being sharps &amp; flats? Why don't we just call the 12 notes A, B, C, D, E, F, G, H, I, J, K, and L? Why aren't there accidental notes in between B &amp; C and E &amp; F?</p>
-    <p>This seems counter-intuitive at first, but the answer to all of these questions is: to make navigating instruments easier, and to work well with 7-note scales that most Western music is based on. Imagine trying to play a piano made entirely of white notes. It would be difficult to name any particular note because there is no frame of reference. That is possible to remedy by adding visual markers, but ideally you should be able to play an instruments by feel, without looking at them. Also, most Western music is based on 7-note scales, and having only 7 natural notes allows us to easily express each scale using the 7 natural notes which are then modified by sharps and flats.</p>
+    <SubSectionTitle>Interactive Exercises</SubSectionTitle>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(NotesQuiz.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(PianoNotes.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(GuitarNotes.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(SheetMusicNotes.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    
+    <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory/rhythm", "<< Previous: Rhythm")} | Next: Intervals (coming soon) >></p>
   </div>
 );
 export const IntervalsSection: React.FunctionComponent<SectionProps> = props => (
@@ -764,7 +797,7 @@ export interface ISectionProps {
 export class SectionContainer extends React.Component<ISectionProps, {}> {
   public render(): JSX.Element {
     return (
-      <Card style={{ marginBottom: "6em" }}>
+      <Card style={{ maxWidth: MAX_MAIN_CARD_WIDTH, marginBottom: "6em" }}>
         <CardContent>
           {React.createElement(this.props.section, { isEmbedded: this.isEmbedded, hideMoreInfoUri: this.hideMoreInfoUri })}
         </CardContent>

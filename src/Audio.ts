@@ -1,5 +1,43 @@
 import { Howl } from "howler";
 
+export function loadSoundAsync(soundFilePath: string): Promise<Howl> {
+  return new Promise<Howl>((resolve, reject) => {
+    new Howl({
+      src: soundFilePath,
+      onload: function(this: Howl) {
+        resolve(this);
+      },
+      onloaderror: (soundId, error) => {
+        reject(error);
+      }
+    });
+  });
+}
+export function loadSoundsAsync(soundFilePaths: Array<string>): Promise<Array<Howl>> {
+  const soundCount = soundFilePaths.length;
+  const loadedSounds = new Array<Howl>(soundCount);
+  let loadedSoundCount = 0;
+  
+  return new Promise((resolve, reject) => {
+    soundFilePaths
+      .map((filePath, i) => {
+        return new Howl({
+          src: filePath,
+          onload: function(this: Howl) {
+            loadedSounds[i] = this;
+            loadedSoundCount++;
+      
+            if (loadedSoundCount === soundCount) {
+              resolve(loadedSounds);
+            }
+          },
+          onloaderror: (soundId, error) => {
+            reject(error);
+          }
+        });
+      });
+  });
+}
 export function playSound(soundFilePath: string, volume: number = 1) {
   const howl = new Howl({ src: soundFilePath, volume: volume });
   howl.play();

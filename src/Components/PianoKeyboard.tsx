@@ -95,7 +95,8 @@ export function renderPianoKeyboardNoteNames(metrics: PianoKeyboardMetrics): JSX
     const textStyle: any = {
       fontSize: `${fontSize}px`,
       fill: pitch.isWhiteKey ? "black" : "white",
-      fontWeight: "bold"
+      fontWeight: "bold",
+      pointerEvents: "none"
     };
     const textXOffset = -(0.3 * fontSize);
     const textYOffset = 0.3 * fontSize;

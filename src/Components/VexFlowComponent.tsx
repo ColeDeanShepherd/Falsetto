@@ -31,6 +31,7 @@ export class VexFlowComponent extends React.Component<IVexFlowComponentProps, {}
     if (this.vexFlowRenderer && this.vexFlowContext && this.props.vexFlowRender) {
       this.vexFlowContext.clear();
       this.vexFlowRenderer.resize(this.props.width, this.props.height);
+      this.vexFlowContext.scale(1, 1); // Fix the viewbox after clear sets it and resize doesn't update it.
       this.props.vexFlowRender(this.vexFlowContext, new Size2D(this.props.width, this.props.height));
     }
   }

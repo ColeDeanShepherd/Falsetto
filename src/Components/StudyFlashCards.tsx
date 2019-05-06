@@ -11,6 +11,7 @@ import { DefaultFlashCardMultiSelect } from "./DefaultFlashCardMultiSelect";
 import { StudyAlgorithm, AnswerDifficulty, isAnswerDifficultyCorrect, LeitnerStudyAlgorithm } from "../StudyAlgorithm";
 import App from './App';
 import { RenderAnswerSelectFunc, RenderFlashCardMultiSelectFunc, CustomNextFlashCardIdFilter, FlashCardGroup } from '../FlashCardGroup';
+import { MAX_MAIN_CARD_WIDTH } from './Style';
 
 export function createStudyFlashCardGroupComponent(flashCardGroup: FlashCardGroup, isEmbedded: boolean, hideMoreInfoUri: boolean): JSX.Element {
   return (
@@ -141,7 +142,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
 
     const cardStyle: any = this.props.isEmbedded
       ? { minHeight: "100vh", boxShadow: "none" }
-      : {};
+      : { maxWidth: MAX_MAIN_CARD_WIDTH };
 
     return (
       <Card style={cardStyle}>

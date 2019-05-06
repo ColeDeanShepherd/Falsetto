@@ -1,10 +1,6 @@
 # To-Do
 ## High Priority
 * Essential Music Theory
-  * Fix weird VexFlow resizing behavior.
-  * Note value # quiz.
-  * Strong & weak beats quiz.
-
 * Implement isEmbedded for ScaleViewer & RhythmTapper
 * Send errors to server somewhere?
 * Enable inversion on guitar scale viewer.
