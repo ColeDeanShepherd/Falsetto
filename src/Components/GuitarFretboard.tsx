@@ -66,8 +66,11 @@ export class GuitarNote {
 export class GuitarFretboardMetrics {
   public constructor(
     public width: number,
-    public height: number
+    public height: number,
+    public fretCount: number = 11
   ) {
+    Utils.precondition((fretCount >= 1) && (fretCount <= 24))
+    
     this.stringSpacing = (this.height - this.stringWidth) / (this.stringCount - 1);
     this.fretSpacing = (this.width - this.nutWidth) / this.fretCount;
     
@@ -80,7 +83,6 @@ export class GuitarFretboardMetrics {
   }
 
   public stringCount: number = 6;
-  public fretCount: number = 11;
   public nutWidth: number = 8;
   public stringWidth: number = 4;
   public fretWidth: number = 4;
@@ -107,9 +109,44 @@ export class GuitarFretboardMetrics {
       this.nutWidth / 2
     );
   }
+  public getTextXOffset(fontSize: number): number {
+    return -(0.3 * fontSize);
+  }
+  public getTextYOffset(fontSize: number): number {
+    return 0.3 * fontSize;
+  }
 }
 
-export function renderGuitarFretboardScaleExtras(metrics: GuitarFretboardMetrics, pitches: Array<Pitch>): JSX.Element {
+export function renderGuitarNoteHighlightsAndNoteNames(
+  metrics: GuitarFretboardMetrics, notes: Array<GuitarNote>, highlightStyle: string
+) {
+  const rootPitchFretDots = notes
+    .map((note, noteIndex) => {
+      const x = metrics.getNoteX(note.getFretNumber(standardGuitarTuning));
+      const y = metrics.getStringY(note.stringIndex);
+
+      const fontSize = 16;
+      const textStyle = {
+        fontSize: `${fontSize}px`
+      };
+      const textXOffset = metrics.getTextXOffset(fontSize);
+      const textYOffset = metrics.getTextYOffset(fontSize);
+
+      const noteName = note.pitch.toOneAccidentalAmbiguousString(false, true);
+
+      return (
+        <g>
+          <circle key={noteIndex} cx={x} cy={y} r={metrics.fretDotRadius} fill={highlightStyle} strokeWidth="0" />
+          <text x={x + textXOffset} y={y + textYOffset} style={textStyle}>{noteName}</text>
+        </g>
+      );
+    });
+  
+  return <g>{rootPitchFretDots}</g>;
+}
+export function renderGuitarFretboardScaleExtras(
+  metrics: GuitarFretboardMetrics, pitches: Array<Pitch>
+): JSX.Element {
   const guitarNotes = GuitarNote.allNotesOfPitches(
     standardGuitarTuning,
     pitches,
@@ -128,8 +165,8 @@ export function renderGuitarFretboardScaleExtras(metrics: GuitarFretboardMetrics
       const textStyle = {
         fontSize: `${fontSize}px`
       };
-      const textXOffset = -(0.3 * fontSize);
-      const textYOffset = 0.3 * fontSize;
+      const textXOffset = metrics.getTextXOffset(fontSize);
+      const textYOffset = metrics.getTextYOffset(fontSize);
 
       return (
         <g>
@@ -146,6 +183,7 @@ export interface IGuitarFretboardProps {
   width: number;
   height: number;
   pressedNotes: Array<GuitarNote>;
+  fretCount?: number;
   renderExtrasFn?: (metrics: GuitarFretboardMetrics) => JSX.Element;
 }
 export class GuitarFretboard extends React.Component<IGuitarFretboardProps, {}> {
@@ -154,7 +192,8 @@ export class GuitarFretboard extends React.Component<IGuitarFretboardProps, {}> 
 
     const metrics = new GuitarFretboardMetrics(
       this.props.width - (2 * margin),
-      this.props.height - (2 * margin)
+      this.props.height - (2 * margin),
+      this.props.fretCount ? this.props.fretCount : 11
     );
 
     const nut = <line x1={metrics.nutX} x2={metrics.nutX} y1={0} y2={metrics.height} stroke="black" strokeWidth={metrics.nutWidth} />;
@@ -169,9 +208,21 @@ export class GuitarFretboard extends React.Component<IGuitarFretboardProps, {}> 
         return <line key={i} x1={x} x2={x} y1={0} y2={metrics.height} stroke="black" strokeWidth={metrics.fretWidth} />;
       });
     const fretDots = this.dottedFretNumbers
+      .filter(fretNumber => fretNumber <= metrics.fretCount)
       .map(fretNumber => {
         const x = metrics.getFretSpaceCenterX(fretNumber);
-        return <circle key={fretNumber} cx={x} cy={metrics.fretDotY} r={metrics.fretDotRadius} fill="black" strokeWidth="0" />;
+
+        if ((fretNumber % 12) != 0) {
+          return <circle key={fretNumber} cx={x} cy={metrics.fretDotY} r={metrics.fretDotRadius} fill="black" strokeWidth="0" />;
+        } else {
+          const fretDotYOffset = metrics.stringSpacing;
+          return (
+            <g>
+              <circle key={fretNumber} cx={x} cy={metrics.fretDotY - fretDotYOffset} r={metrics.fretDotRadius} fill="black" strokeWidth="0" />
+              <circle key={fretNumber} cx={x} cy={metrics.fretDotY + fretDotYOffset} r={metrics.fretDotRadius} fill="black" strokeWidth="0" />
+            </g>
+          );
+        }
       });
     const noteHighlights = this.props.pressedNotes
       .map((note, i) => {
@@ -197,5 +248,5 @@ export class GuitarFretboard extends React.Component<IGuitarFretboardProps, {}> 
     );
   }
 
-  private dottedFretNumbers = [3, 5, 7, 9];
+  private dottedFretNumbers = [3, 5, 7, 9, 12, 15, 17, 19, 21, 24];
 }
