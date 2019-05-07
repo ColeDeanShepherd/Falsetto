@@ -98,6 +98,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           </p>
           <p>Though we can reach &amp; identify all natural notes with these rules, it can sometimes take a few steps to get to some of the notes. To shorten the number of steps to get to these notes you can memorize some additional rules:</p>
           <ul>
+            <li>The names of the open notes, from lowest to highest, are: E, A, D, G, B, E</li>
             <li>If you move up 3 strings and left 3 frets from any note (or in the opposite direction), that note has the same name as the starting note. The rule when moving between the 2nd-highest and 3rd-highest strings still holds!</li>
             <li>C is directly to the right of B, and F is directly to the right of E.</li>
             <li>For every string but the 3rd-highest string, the name of the 5th fret is the same as the name of the next open string. For the 3rd-highest string, this is true for the 4th fret instead.</li>

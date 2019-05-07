@@ -3,6 +3,7 @@ import * as React from "react";
 import * as Utils from "../Utils";
 import { Pitch } from "../Pitch";
 import { PitchLetter } from "../PitchLetter";
+import { Size2D } from '../Size2D';
 
 export const STRING_COUNT = 6;
 
@@ -122,22 +123,43 @@ export function renderGuitarNoteHighlightsAndNoteNames(
 ) {
   const rootPitchFretDots = notes
     .map((note, noteIndex) => {
-      const x = metrics.getNoteX(note.getFretNumber(standardGuitarTuning));
+      const fretNumber = note.getFretNumber(standardGuitarTuning);
+      let x = metrics.getNoteX(fretNumber);
+      if (fretNumber == 0) {
+        x -= 0.3 * metrics.fretSpacing;
+      }
+
       const y = metrics.getStringY(note.stringIndex);
 
       const noteName = note.pitch.toOneAccidentalAmbiguousString(false, true);
 
-      const fontSize = (noteName.length == 1) ? 16 : 8;
-      const textStyle = {
-        fontSize: `${fontSize}px`
+      const isNaturalNote = (noteName.length == 1);
+      const fontSize = isNaturalNote ? 11 : 8;
+      const textStyle: any = {
+        fontSize: `${fontSize}px`,
+        fontWeight: "bold"
       };
-      const textXOffset = metrics.getTextXOffset(16);
-      const textYOffset = metrics.getTextYOffset(16);
+      const textXOffset = isNaturalNote
+        ? metrics.getTextXOffset(16)
+        : metrics.getTextXOffset(36);
+      const textYOffset = isNaturalNote
+        ? metrics.getTextYOffset(16)
+        : metrics.getTextYOffset(11);
+
+      const rectSize = new Size2D(
+        0.7 * metrics.fretSpacing,
+        0.8 * metrics.stringSpacing
+      );
 
       return (
         <g>
-          <circle key={noteIndex} cx={x} cy={y} r={metrics.fretDotRadius} fill={highlightStyle} strokeWidth="0" />
-          <text x={x + textXOffset} y={y + textYOffset} style={textStyle}>{noteName}</text>
+          <rect
+            x={x - (rectSize.width / 2)} y={y - (rectSize.height / 2)}
+            width={rectSize.width} height={rectSize.height}
+            fill={highlightStyle} fillOpacity={0.9} strokeWidth="0" />
+          <text
+            x={x + textXOffset} y={y + textYOffset}
+            style={textStyle}>{noteName}</text>
         </g>
       );
     });
@@ -188,7 +210,7 @@ export interface IGuitarFretboardProps {
 }
 export class GuitarFretboard extends React.Component<IGuitarFretboardProps, {}> {
   public render(): JSX.Element {
-    const margin = 10;
+    const margin = 20;
 
     const metrics = new GuitarFretboardMetrics(
       this.props.width - (2 * margin),
