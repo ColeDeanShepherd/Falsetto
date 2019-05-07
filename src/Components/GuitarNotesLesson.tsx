@@ -191,6 +191,8 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
     return (
       <Card style={{ marginBottom: "6em" }}>
         <CardContent>
+          <h1>Guitar Note Identification Lesson</h1>
+
           <p>Being able to identify all of the notes on your instrument is vital to becoming a skilled musician, and learning this skill on guitar is quicker and easier than you might think. There are no excuses to not having this skill. Let's get started!</p>
           
           <h3>Introduction</h3>
@@ -245,7 +247,8 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
             />
           </p>
           <p>
-            {createStudyFlashCardGroupComponent(GuitarNotes.createFlashCardGroup(diagram1Notes), false, true)}
+            {createStudyFlashCardGroupComponent(
+              GuitarNotes.createFlashCardGroup(diagram1Notes), false, true, "Step 3 Quiz")}
           </p>
           
           <h3>Step 4</h3>
@@ -258,7 +261,8 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
             />
           </p>
           <p>
-            {createStudyFlashCardGroupComponent(GuitarNotes.createFlashCardGroup(diagram2Notes), false, true)}
+            {createStudyFlashCardGroupComponent(
+              GuitarNotes.createFlashCardGroup(diagram2Notes), false, true, "Step 4 Quiz")}
           </p>
 
           <h3>Step 5</h3>
@@ -284,7 +288,8 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           <p>These rules should be enough for fast identification of natural notes, but there are many more rules you can memorize. Explore your fretboard and apply your knowledge of music theory to discover them!</p>
           
           <p>
-            {createStudyFlashCardGroupComponent(GuitarNotes.createFlashCardGroup(diagram3Notes), false, true)}
+            {createStudyFlashCardGroupComponent(
+              GuitarNotes.createFlashCardGroup(diagram3Notes), false, true, "Step 5 Quiz")}
           </p>
           
           <h3>Step 6</h3>
@@ -308,7 +313,8 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           <h3>Test Your Knowledge</h3>
           <p>Now, you can practice your knowledge on your guitar, or using the exercise below.</p>
           <p>
-            {createStudyFlashCardGroupComponent(GuitarNotes.createFlashCardGroup(diagram5Notes), false, true)}
+            {createStudyFlashCardGroupComponent(
+              GuitarNotes.createFlashCardGroup(diagram5Notes), false, true, "Step 6 Quiz")}
           </p>
         </CardContent>
       </Card>

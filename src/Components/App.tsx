@@ -215,7 +215,7 @@ class App extends React.Component<IAppProps, IAppState> {
       <Route path="/scale-viewer" component={() => <DocumentTitle title={"Scale Viewer - Falsetto"}><ScaleViewer /></DocumentTitle>} />,
       <Route path="/chord-viewer" component={() => <DocumentTitle title={"Chord Viewer - Falsetto"}><ChordViewer /></DocumentTitle>} />,
       <Route path="/rhythm-tapper" component={() => <DocumentTitle title={"Rhythm Tapper - Falsetto"}><RhythmTapper /></DocumentTitle>} />,
-      <Route path="/guitar-notes-lesson" component={() => <DocumentTitle title={"Guitar Notes Lesson - Falsetto"}><GuitarNotesLesson /></DocumentTitle>} />,
+      <Route path="/guitar-notes-lesson" component={() => <DocumentTitle title={"Guitar Note Identification Lesson - Falsetto"}><GuitarNotesLesson /></DocumentTitle>} />,
     ].concat(
       this.flashCardGroups.map(fcg => <Route key={fcg.route} path={fcg.route} component={this.createStudyFlashCardGroupComponent(fcg)} />)
     );
