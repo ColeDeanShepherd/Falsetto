@@ -125,14 +125,14 @@ export function renderGuitarNoteHighlightsAndNoteNames(
       const x = metrics.getNoteX(note.getFretNumber(standardGuitarTuning));
       const y = metrics.getStringY(note.stringIndex);
 
-      const fontSize = 16;
+      const noteName = note.pitch.toOneAccidentalAmbiguousString(false, true);
+
+      const fontSize = (noteName.length == 1) ? 16 : 8;
       const textStyle = {
         fontSize: `${fontSize}px`
       };
-      const textXOffset = metrics.getTextXOffset(fontSize);
-      const textYOffset = metrics.getTextYOffset(fontSize);
-
-      const noteName = note.pitch.toOneAccidentalAmbiguousString(false, true);
+      const textXOffset = metrics.getTextXOffset(16);
+      const textYOffset = metrics.getTextYOffset(16);
 
       return (
         <g>
