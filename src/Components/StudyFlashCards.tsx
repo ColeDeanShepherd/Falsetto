@@ -13,11 +13,13 @@ import App from './App';
 import { RenderAnswerSelectFunc, RenderFlashCardMultiSelectFunc, CustomNextFlashCardIdFilter, FlashCardGroup } from '../FlashCardGroup';
 import { MAX_MAIN_CARD_WIDTH } from './Style';
 
-export function createStudyFlashCardGroupComponent(flashCardGroup: FlashCardGroup, isEmbedded: boolean, hideMoreInfoUri: boolean): JSX.Element {
+export function createStudyFlashCardGroupComponent(
+  flashCardGroup: FlashCardGroup, isEmbedded: boolean, hideMoreInfoUri: boolean,
+  title?: string): JSX.Element {
   return (
     <StudyFlashCards
       key={flashCardGroup.route}
-      title={flashCardGroup.name}
+      title={title ? title : flashCardGroup.name}
       flashCards={flashCardGroup.createFlashCards()}
       containerHeight={flashCardGroup.containerHeight}
       initialSelectedFlashCardIndices={flashCardGroup.initialSelectedFlashCardIndices}

@@ -4,7 +4,12 @@ import { TextField } from "@material-ui/core";
 import * as Utils from "../../Utils";
 import { Size2D } from "../../Size2D";
 import * as FlashCardUtils from "./Utils";
-import { GuitarFretboard, STRING_COUNT, standardGuitarTuning } from "../GuitarFretboard";
+import {
+  GuitarFretboard,
+  STRING_COUNT,
+  standardGuitarTuning,
+  GuitarNote
+} from "../GuitarFretboard";
 import { FlashCard } from "../../FlashCard";
 import { FlashCardGroup } from "../../FlashCardGroup";
 
@@ -64,7 +69,7 @@ export class GuitarNotesFlashCardMultiSelect extends React.Component<IGuitarNote
   }
 }
 
-export function createFlashCardGroup(): FlashCardGroup {
+export function createFlashCardGroup(guitarNotes?: Array<GuitarNote>): FlashCardGroup {
   const renderFlashCardMultiSelect = (
     flashCards: Array<FlashCard>,
     selectedFlashCardIndices: number[],
@@ -83,7 +88,7 @@ export function createFlashCardGroup(): FlashCardGroup {
     maxFret: 11
   };
 
-  const group = new FlashCardGroup("Guitar Notes", createFlashCards);
+  const group = new FlashCardGroup("Guitar Notes", () => createFlashCards(guitarNotes));
   group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
   group.initialConfigData = initialConfigData;
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
@@ -95,33 +100,34 @@ export function createFlashCardGroup(): FlashCardGroup {
   return group;
 }
 
-export function createFlashCards(): FlashCard[] {
+export function createFlashCards(guitarNotes?: Array<GuitarNote>): FlashCard[] {
   const MAX_FRET_NUMBER = 11;
-
-  return Utils.flattenArrays(Utils.range(0, STRING_COUNT - 1)
+  guitarNotes = !guitarNotes
+    ? Utils.flattenArrays(Utils.range(0, STRING_COUNT - 1)
     .map(stringIndex => Utils.range(0, MAX_FRET_NUMBER)
       .map(fretNumber => {
-        const guitarNote = standardGuitarTuning.getNote(
+        return standardGuitarTuning.getNote(
           stringIndex, fretNumber
         );
-
-        return FlashCard.fromRenderFns(
-          (width, height) => {
-            const size = Utils.shrinkRectToFit(
-              new Size2D(width, height),
-              new Size2D(400, 100)
-            );
-
-            return (
-              <GuitarFretboard
-                width={size.width} height={size.height}
-                pressedNotes={[guitarNote]}
-              />
-            );
-          },
-          guitarNote.pitch.toOneAccidentalAmbiguousString(false, true)
-        );
       })
-    )
-  );
+    ))
+    : guitarNotes;
+
+  return guitarNotes
+    .map(guitarNote => FlashCard.fromRenderFns(
+      (width, height) => {
+        const size = Utils.shrinkRectToFit(
+          new Size2D(width, height),
+          new Size2D(400, 100)
+        );
+
+        return (
+          <GuitarFretboard
+            width={size.width} height={size.height}
+            pressedNotes={[guitarNote]}
+          />
+        );
+      },
+      guitarNote.pitch.toOneAccidentalAmbiguousString(false, true)
+    ));
 }
