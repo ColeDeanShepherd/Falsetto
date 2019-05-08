@@ -123,86 +123,120 @@ const noteGroups = [
   }
 ];
 
-const diagram1NoteGroups = [
+const step3Diagram1NoteGroups = [
   {
     color: noteGroups[0].color,
     notes: noteGroups[0].notes.slice(0, 7)
   }
 ];
-const diagram1Notes = Utils.flattenArrays<GuitarNote>(diagram1NoteGroups
+const step3Diagram1Notes = Utils.flattenArrays<GuitarNote>(step3Diagram1NoteGroups
   .map(ng => ng.notes));
 
-const diagram2NoteGroups = diagram1NoteGroups.concat([
+const step4Diagram1NoteGroups = step3Diagram1NoteGroups.concat([
   {
     color: noteGroups[1].color,
     notes: noteGroups[1].notes.slice(0, 6)
   }
 ]);
-const diagram2Notes = Utils.flattenArrays<GuitarNote>(diagram2NoteGroups
+const step4Diagram1Notes = Utils.flattenArrays<GuitarNote>(step4Diagram1NoteGroups
   .map(ng => ng.notes));
 
-const diagram3NoteGroups = diagram2NoteGroups.concat([
+const step5Diagram1NoteGroups = step4Diagram1NoteGroups.concat([
   {
     color: noteGroups[1].color,
     notes: noteGroups[1].notes.slice(6)
   },
   {
     color: noteGroups[2].color,
-    notes: noteGroups[2].notes.slice(0, 7)
+    notes: noteGroups[2].notes.slice(0, 2)
   }
 ]);
-const diagram3Notes = Utils.flattenArrays<GuitarNote>(diagram3NoteGroups
+const step5Diagram1Notes = Utils.flattenArrays<GuitarNote>(step5Diagram1NoteGroups
   .map(ng => ng.notes));
 
-const diagram4NoteGroups = diagram3NoteGroups.concat([
-  {
-    color: noteGroups[3].color,
-    notes: noteGroups[3].notes
-  }
-]);
-const diagram4Notes = Utils.flattenArrays<GuitarNote>(diagram4NoteGroups
-  .map(ng => ng.notes));
-
-
-const diagram5NoteGroups = diagram4NoteGroups.concat([
+const step6Diagram1NoteGroups = step5Diagram1NoteGroups.concat([
   {
     color: noteGroups[4].color,
-    notes: noteGroups[4].notes.slice(0, 7)
+    notes: noteGroups[4].notes.slice(0, 6)
   }
 ]);
-const diagram5Notes = Utils.flattenArrays<GuitarNote>(diagram4NoteGroups
+const step6Diagram1Notes = Utils.flattenArrays<GuitarNote>(step6Diagram1NoteGroups
   .map(ng => ng.notes));
 
-const diagram7NoteGroups = diagram2NoteGroups.concat([
-  {
-    color: noteGroups[1].color,
-    notes: noteGroups[1].notes.slice(6)
-  },
+const step7Diagram1NoteGroups = step6Diagram1NoteGroups.concat([
   {
     color: noteGroups[2].color,
-    notes: noteGroups[2].notes.slice(0, 7)
+    notes: [
+      noteGroups[2].notes[2],
+      noteGroups[2].notes[5]
+    ]
   },
   {
     color: noteGroups[3].color,
-    notes: noteGroups[3].notes
+    notes: [
+      noteGroups[3].notes[1],
+      noteGroups[3].notes[4]
+    ]
+  }
+]);
+const step7Diagram1Notes = Utils.flattenArrays<GuitarNote>(step7Diagram1NoteGroups
+  .map(ng => ng.notes));
+
+const step8Diagram1NoteGroups = step7Diagram1NoteGroups.concat([
+  {
+    color: noteGroups[2].color,
+    notes: [
+      noteGroups[2].notes[3],
+      noteGroups[2].notes[6]
+    ]
+  },
+  {
+    color: noteGroups[3].color,
+    notes: [
+      noteGroups[3].notes[2],
+      noteGroups[3].notes[3],
+      noteGroups[3].notes[5],
+      noteGroups[3].notes[6]
+    ]
   },
   {
     color: noteGroups[4].color,
-    notes: noteGroups[4].notes.slice(0, 7)
+    notes: [
+      noteGroups[4].notes[6]
+    ]
   }
 ]);
-const diagram7Notes = Utils.flattenArrays<GuitarNote>(diagram7NoteGroups
+const step8Diagram1Notes = Utils.flattenArrays<GuitarNote>(step8Diagram1NoteGroups
   .map(ng => ng.notes));
 
-const diagram8NoteGroups = diagram7NoteGroups.concat([
+const step9Diagram1NoteGroups = step8Diagram1NoteGroups.concat([
+  {
+    color: noteGroups[2].color,
+    notes: [
+      noteGroups[2].notes[4]
+    ]
+  },
+  {
+    color: noteGroups[3].color,
+    notes: [
+      noteGroups[3].notes[0]
+    ]
+  }
+]);
+const step9Diagram1Notes = Utils.flattenArrays<GuitarNote>(step9Diagram1NoteGroups
+  .map(ng => ng.notes));
+
+const step10Diagram1NoteGroups = step9Diagram1NoteGroups.concat([
   {
     color: noteGroups[5].color,
     notes: noteGroups[5].notes.slice(0, 25)
   }
-]);
-
-const diagram9NoteGroups = noteGroups;
-const diagram9Notes = Utils.flattenArrays<GuitarNote>(diagram9NoteGroups
+]);;
+const step10Diagram1Notes = Utils.flattenArrays<GuitarNote>(step10Diagram1NoteGroups
+  .map(ng => ng.notes));
+  
+const step10Diagram2NoteGroups = noteGroups;
+const step10Diagram2Notes = Utils.flattenArrays<GuitarNote>(step10Diagram2NoteGroups
   .map(ng => ng.notes));
 
 export interface IGuitarNotesLessonProps {
@@ -222,7 +256,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
     return (
       <Card style={{ maxWidth: MAX_MAIN_CARD_WIDTH, marginBottom: "6em" }}>
         <CardContent>
-          <h1>Guitar Note Identification Lesson</h1>
+          <h1>Learn Guitar Notes in 10 Easy Steps</h1>
 
           <p>Being able to identify all of the notes on your instrument is vital to becoming a skilled musician, and learning this skill on guitar is quicker and easier than you might think. Let's get started!</p>
           
@@ -236,7 +270,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
             />
           </p>
 
-          <p>This means that there are 150 notes to learn! Luckily, you can leverage a few rules to cut the number of notes you need to memorize down only <strong>7 notes</strong>! Then, as you use combine these rules with the 7 notes to identify other notes, you will naturally memorize more notes on the fretboard and become faster at identifying them.</p>
+          <p>This means that there are 150 notes to learn! Luckily, you can learn them all in only 10 easy steps by leveraging a few rules to drastically reduce number of notes you need to memorize.</p>
           
           <h3>Step 1</h3>
           <p>The first rule is that the notes repeat every 12 frets. This means that we can ignore all fretted notes after the 11th fret and wrap around instead (so the 12th fret is the same as the open string, the 13th fret is the same as the 1st fret, and so on). Now we are left with this section of the guitar:</p>
@@ -274,62 +308,113 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
               pressedNotes={[]}
-              renderExtrasFn={metrics => this.renderDiagramExtras(metrics, diagram1NoteGroups)}
+              renderExtrasFn={metrics => this.renderDiagramExtras(metrics, step3Diagram1NoteGroups)}
             />
           </p>
           <p>
             {createStudyFlashCardGroupComponent(
-              GuitarNotes.createFlashCardGroup(diagram1Notes), false, true, "Step 3 Quiz", { margin: "0 auto" })}
+              GuitarNotes.createFlashCardGroup(step3Diagram1Notes), false, true, "Step 3 Quiz", { margin: "0 auto" })}
           </p>
           
           <h3>Step 4</h3>
-          <p>Memorize this rule: If you move up 2 strings and right 2 frets (or in the exact opposite direction) from any note, that note has the same name as the starting note.</p>
+          <p>Memorize this rule: If you move up 2 strings and right 2 frets (or move in the exact opposite direction) from any note, that note has the same name as the starting note.</p>
           <p style={{ textAlign: "center" }}>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
               pressedNotes={[]}
-              renderExtrasFn={metrics => this.renderDiagramExtras(metrics, diagram2NoteGroups)}
+              renderExtrasFn={metrics => this.renderDiagramExtras(metrics, step4Diagram1NoteGroups)}
             />
           </p>
           <p>
             {createStudyFlashCardGroupComponent(
-              GuitarNotes.createFlashCardGroup(diagram2Notes), false, true, "Step 4 Quiz", { margin: "0 auto" })}
+              GuitarNotes.createFlashCardGroup(step4Diagram1Notes), false, true, "Step 4 Quiz", { margin: "0 auto" })}
           </p>
 
           <h3>Step 5</h3>
           <p>We stopped on the 3rd highest string because there is a special rule you must follow to continue: When moving from the 3rd highest string to the 2nd highest string, you must shift one fret to the right (and therefore when crossing back from the 2nd highest string to the 3rd highest string, you must shift one fret to the left).</p>
-          <p>This rule, combined with the previous rules, allows us to identify the rest of the natural notes (non-sharp/flat notes):</p>
           <p style={{ textAlign: "center" }}>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
               pressedNotes={[]}
-              renderExtrasFn={metrics => this.renderDiagramExtras(metrics, diagram5NoteGroups)}
+              renderExtrasFn={metrics => this.renderDiagramExtras(metrics, step5Diagram1NoteGroups)}
             />
           </p>
 
-          <p>Though we can reach &amp; identify all natural notes with these rules, it can sometimes take a few steps to get to some of the notes. To shorten the number of steps to get to these notes you can memorize some additional rules:</p>
-          <ul>
-            <li>The names of the open notes, from lowest to highest, are: E, A, D, G, B, E</li>
-            <li>If you move up 3 strings and left 3 frets from any note (or in the opposite direction), that note has the same name as the starting note. The rule when moving between the 2nd-highest and 3rd-highest strings still holds!</li>
-            <li>C is directly to the right of B, and F is directly to the right of E.</li>
-            <li>For every string but the 3rd-highest string, the name of the 5th fret is the same as the name of the next open string. For the 3rd-highest string, this is true for the 4th fret instead.</li>
-            <li>For every string but the 2nd-highest string, the name of the 7th fret is the same as the name of the previous open string. For the 2nd-highest string, this is true for the 8th fret instead.</li>
-          </ul>
+          <p>We could continue on with this pattern but it can be difficult to follow while wrapping around the fretboard, so we will learn the rest of the notes another way.</p>
 
-          <p>These rules should be enough for fast identification of natural notes, but there are many more rules you can memorize. Explore your fretboard and apply your knowledge of music theory to discover them!</p>
-          
           <p>
             {createStudyFlashCardGroupComponent(
-              GuitarNotes.createFlashCardGroup(diagram7Notes), false, true, "Step 5 Quiz", { margin: "0 auto" })}
+              GuitarNotes.createFlashCardGroup(step5Diagram1Notes), false, true, "Step 5 Quiz", { margin: "0 auto" })}
           </p>
-          
+
           <h3>Step 6</h3>
-          <p>To identify the rest of the notes (accidental notes, whose names have added symbols as well), simply add a '#' (read "sharp") to the natural note to the left, or add a 'b' (read "flat") to the natural note to the right. Yes, each of these notes has two possible names, and which name you use depends on the context (more info. on this in the {App.instance.renderNavLink("/essential-music-theory", "Essential Music Theory")} lesson).</p>
+          <p>Memorize this rule: If you move up 3 strings and left 3 frets from any note (or in the opposite direction), that note has the same name as the starting note. The previous rule for moving between the 2nd-highest and 3rd-highest strings still holds!</p>
+
           <p style={{ textAlign: "center" }}>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
               pressedNotes={[]}
-              renderExtrasFn={metrics => this.renderDiagramExtras(metrics, diagram8NoteGroups)}
+              renderExtrasFn={metrics => this.renderDiagramExtras(metrics, step6Diagram1NoteGroups)}
+            />
+          </p>
+          <p>
+            {createStudyFlashCardGroupComponent(
+              GuitarNotes.createFlashCardGroup(step6Diagram1Notes), false, true, "Step 6 Quiz", { margin: "0 auto" })}
+          </p>
+          
+          <h3>Step 7</h3>
+          <p>Memorize the remaining open string notes. From the lowest string to the 2nd highest string, they are E, A, D, G, B. The highest string's note names are exactly the same as the lowest string's notes, so we are ignoring the highest string for now.</p>
+          <p style={{ textAlign: "center" }}>
+            <GuitarFretboard
+              width={fretboardWidth} height={fretboardHeight}
+              pressedNotes={[]}
+              renderExtrasFn={metrics => this.renderDiagramExtras(metrics, step7Diagram1NoteGroups)}
+            />
+          </p>
+          <p>
+            {createStudyFlashCardGroupComponent(
+              GuitarNotes.createFlashCardGroup(step7Diagram1Notes), false, true, "Step 7 Quiz", { margin: "0 auto" })}
+          </p>
+
+          <h3>Step 8</h3>
+          <p>Memorize this rule: C is always directly to the right of B, and F is always directly to the right of E.</p>
+          <p style={{ textAlign: "center" }}>
+            <GuitarFretboard
+              width={fretboardWidth} height={fretboardHeight}
+              pressedNotes={[]}
+              renderExtrasFn={metrics => this.renderDiagramExtras(metrics, step8Diagram1NoteGroups)}
+            />
+          </p>
+          <p>
+            {createStudyFlashCardGroupComponent(
+              GuitarNotes.createFlashCardGroup(step8Diagram1Notes), false, true, "Step 8 Quiz", { margin: "0 auto" })}
+          </p>
+
+          <h3>Step 9</h3>
+          <p>Memorize the D on the 10th fret of the lowest string, and the G on the 10th fret of the 2nd lowest string:</p>
+
+          <p style={{ textAlign: "center" }}>
+            <GuitarFretboard
+              width={fretboardWidth} height={fretboardHeight}
+              pressedNotes={[]}
+              renderExtrasFn={metrics => this.renderDiagramExtras(metrics, step9Diagram1NoteGroups)}
+            />
+          </p>
+
+          <p>You have now learned all of the natural (non sharp/flat) notes on the guitar fretboard, and there is only one more step to learn the rest of the notes!</p>
+          
+          <p>
+            {createStudyFlashCardGroupComponent(
+              GuitarNotes.createFlashCardGroup(step9Diagram1Notes), false, true, "Step 9 Quiz", { margin: "0 auto" })}
+          </p>
+          
+          <h3>Step 10</h3>
+          <p>To identify the rest of the notes (accidental notes, whose names have added symbols as well), simply add a '#' (read "sharp") to the natural note to the left, or add a 'b' (read "flat") to the natural note to the right. Yes, each of these notes has two possible names, and which name you use depends on the context (more info. on this in the {App.instance.renderNavLink("/essential-music-theory", "Essential Music Theory")} lesson)! But for now we will just label each accidental note with both possible names.</p>
+          <p style={{ textAlign: "center" }}>
+            <GuitarFretboard
+              width={fretboardWidth} height={fretboardHeight}
+              pressedNotes={[]}
+              renderExtrasFn={metrics => this.renderDiagramExtras(metrics, step10Diagram1NoteGroups)}
             />
           </p>
           <p>Because the lowest and highest strings have the same note names, and because the note names repeat every 12 frets, you have now identified every note on the fretboard!</p>
@@ -337,7 +422,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
               pressedNotes={[]}
-              renderExtrasFn={metrics => this.renderDiagramExtras(metrics, diagram9NoteGroups)}
+              renderExtrasFn={metrics => this.renderDiagramExtras(metrics, step10Diagram2NoteGroups)}
             />
           </p>
 
@@ -345,7 +430,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           <p>Now, you can practice your knowledge on your guitar, or using the exercise below.</p>
           <p>
             {createStudyFlashCardGroupComponent(
-              GuitarNotes.createFlashCardGroup(diagram9Notes), false, true, "Step 6 Quiz", { margin: "0 auto" })}
+              GuitarNotes.createFlashCardGroup(step10Diagram2Notes), false, true, "Final Quiz", { margin: "0 auto" })}
           </p>
         </CardContent>
       </Card>

@@ -72,7 +72,7 @@ export class GuitarFretboardMetrics {
   ) {
     Utils.precondition((fretCount >= 1) && (fretCount <= 24))
     
-    this.stringSpacing = (this.height - this.stringWidth) / (this.stringCount - 1);
+    this.stringSpacing = (this.height - this.lowestStringWidth) / (this.stringCount - 1);
     this.fretSpacing = (this.width - this.nutWidth) / this.fretCount;
     
     this.nutX = this.nutWidth / 2;
@@ -85,7 +85,6 @@ export class GuitarFretboardMetrics {
 
   public stringCount: number = 6;
   public nutWidth: number = 8;
-  public stringWidth: number = 4;
   public fretWidth: number = 4;
 
   public stringSpacing: number;
@@ -99,7 +98,10 @@ export class GuitarFretboardMetrics {
   public fretDotY: number;
 
   public getStringY(stringIndex: number): number {
-    return this.height - (this.stringWidth / 2) - (stringIndex * this.stringSpacing);
+    return this.height - (this.lowestStringWidth / 2) - (stringIndex * this.stringSpacing);
+  }
+  public getStringWidth(stringIndex: number): number {
+    return this.lowestStringWidth / (1 + (stringIndex / 4));
   }
   public getFretSpaceCenterX(fretNumber: number): number {
     return this.stringsLeft + ((fretNumber - 1) * this.fretSpacing) + (this.fretSpacing / 2);
@@ -116,6 +118,8 @@ export class GuitarFretboardMetrics {
   public getTextYOffset(fontSize: number): number {
     return 0.3 * fontSize;
   }
+  
+  public lowestStringWidth: number = 4;
 }
 
 export function renderGuitarNoteHighlightsAndNoteNames(
@@ -222,7 +226,7 @@ export class GuitarFretboard extends React.Component<IGuitarFretboardProps, {}> 
     const strings = Utils.range(0, metrics.stringCount - 1)
       .map(i => {
         const y = metrics.getStringY(i);
-        return <line key={i} x1={metrics.stringsLeft} x2={metrics.width} y1={y} y2={y} stroke="black" strokeWidth={metrics.stringWidth} />;
+        return <line key={i} x1={metrics.stringsLeft} x2={metrics.width} y1={y} y2={y} stroke="black" strokeWidth={metrics.getStringWidth(i)} />;
       });
     const frets = Utils.range(1, metrics.fretCount)
       .map(i => {

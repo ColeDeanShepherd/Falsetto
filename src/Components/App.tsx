@@ -215,7 +215,7 @@ class App extends React.Component<IAppProps, IAppState> {
       <Route path="/scale-viewer" component={() => <DocumentTitle title={"Scale Viewer - Falsetto"}><ScaleViewer /></DocumentTitle>} />,
       <Route path="/chord-viewer" component={() => <DocumentTitle title={"Chord Viewer - Falsetto"}><ChordViewer /></DocumentTitle>} />,
       <Route path="/rhythm-tapper" component={() => <DocumentTitle title={"Rhythm Tapper - Falsetto"}><RhythmTapper /></DocumentTitle>} />,
-      <Route path="/guitar-notes-lesson" component={() => <DocumentTitle title={"Guitar Note Identification Lesson - Falsetto"}><GuitarNotesLesson /></DocumentTitle>} />,
+      <Route path="/learn-guitar-notes-in-10-steps" component={() => <DocumentTitle title={"Learn the Guitar Notes in 10 Easy Steps - Falsetto"}><GuitarNotesLesson /></DocumentTitle>} />,
     ].concat(
       this.flashCardGroups.map(fcg => <Route key={fcg.route} path={fcg.route} component={this.createStudyFlashCardGroupComponent(fcg)} />)
     );
@@ -243,7 +243,7 @@ class App extends React.Component<IAppProps, IAppState> {
           <NavSectionTitle>Notes</NavSectionTitle>
           {renderFlashCardGroupLink(PianoNotes.createFlashCardGroup())}
           {renderFlashCardGroupLink(GuitarNotes.createFlashCardGroup())}
-          <NavLink to="guitar-notes-lesson" className="nav-link">Guitar Notes Lesson</NavLink>
+          <NavLink to="learn-guitar-notes-in-10-steps" className="nav-link">Learn Guitar Notes in 10 Easy Steps</NavLink>
           {renderFlashCardGroupLink(NoteDurations.createFlashCardGroup())}
           {renderFlashCardGroupLink(SheetMusicNotes.createFlashCardGroup())}
         </div>
