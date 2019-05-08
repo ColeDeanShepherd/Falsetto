@@ -140,15 +140,15 @@ export function renderGuitarNoteHighlightsAndNoteNames(
         fontWeight: "bold"
       };
       const textXOffset = isNaturalNote
-        ? metrics.getTextXOffset(16)
+        ? metrics.getTextXOffset(12)
         : metrics.getTextXOffset(36);
       const textYOffset = isNaturalNote
-        ? metrics.getTextYOffset(16)
+        ? metrics.getTextYOffset(14)
         : metrics.getTextYOffset(11);
 
       const rectSize = new Size2D(
         0.7 * metrics.fretSpacing,
-        0.8 * metrics.stringSpacing
+        0.6 * metrics.stringSpacing
       );
 
       return (
@@ -156,7 +156,7 @@ export function renderGuitarNoteHighlightsAndNoteNames(
           <rect
             x={x - (rectSize.width / 2)} y={y - (rectSize.height / 2)}
             width={rectSize.width} height={rectSize.height}
-            fill={highlightStyle} fillOpacity={0.9} strokeWidth="0" />
+            fill={highlightStyle} fillOpacity={1} strokeWidth="0" />
           <text
             x={x + textXOffset} y={y + textYOffset}
             style={textStyle}>{noteName}</text>

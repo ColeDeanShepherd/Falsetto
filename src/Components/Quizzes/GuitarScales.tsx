@@ -263,7 +263,7 @@ export function createFlashCards(): FlashCard[] {
         return new FlashCard(
           new FlashCardSide(
             (width, height) => {
-              const size = Utils.shrinkRectToFit(new Size2D(width, height), new Size2D(400, 100));
+              const size = Utils.shrinkRectToFit(new Size2D(width, height), new Size2D(400, 140));
 
               return (
                 <GuitarFretboard

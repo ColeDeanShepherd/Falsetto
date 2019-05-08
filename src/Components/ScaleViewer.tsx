@@ -94,7 +94,7 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
     }
 
     const pianoSize = Utils.shrinkRectToFit(new Size2D(width, height), new Size2D(400, 100));
-    const guitarSize = pianoSize;
+    const guitarSize = Utils.shrinkRectToFit(new Size2D(width, height), new Size2D(400, 140));
 
     return (
       <Card>

@@ -15,7 +15,7 @@ import { MAX_MAIN_CARD_WIDTH } from './Style';
 
 export function createStudyFlashCardGroupComponent(
   flashCardGroup: FlashCardGroup, isEmbedded: boolean, hideMoreInfoUri: boolean,
-  title?: string): JSX.Element {
+  title?: string, style?: any): JSX.Element {
   return (
     <StudyFlashCards
       key={flashCardGroup.route}
@@ -30,6 +30,7 @@ export function createStudyFlashCardGroupComponent(
       enableInvertFlashCards={flashCardGroup.enableInvertFlashCards}
       customNextFlashCardIdFilter={flashCardGroup.customNextFlashCardIdFilter}
       isEmbedded={isEmbedded}
+      style={style}
     />
   );
 }
@@ -46,6 +47,7 @@ export interface IStudyFlashCardsProps {
   moreInfoUri?: string;
   customNextFlashCardIdFilter?: CustomNextFlashCardIdFilter;
   isEmbedded?: boolean;
+  style?: any;
 }
 export interface IStudyFlashCardsState {
   currentFlashCardIndex: number;
@@ -142,9 +144,9 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
       opacity: 0.25
     };
 
-    const cardStyle: any = this.props.isEmbedded
+    const cardStyle: any = Object.assign(this.props.isEmbedded
       ? { minHeight: "100vh", boxShadow: "none" }
-      : { maxWidth: MAX_MAIN_CARD_WIDTH };
+      : { maxWidth: MAX_MAIN_CARD_WIDTH }, this.props.style);
 
     return (
       <Card style={cardStyle}>

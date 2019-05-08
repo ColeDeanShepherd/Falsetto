@@ -118,7 +118,7 @@ export function createFlashCards(guitarNotes?: Array<GuitarNote>): FlashCard[] {
       (width, height) => {
         const size = Utils.shrinkRectToFit(
           new Size2D(width, height),
-          new Size2D(400, 100)
+          new Size2D(400, 140)
         );
 
         return (
