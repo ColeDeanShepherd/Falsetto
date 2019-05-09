@@ -1,5 +1,8 @@
 # To-Do
 ## High Priority
+* Improve SVG rendering to be scalable.
+  * PianoKeyboard
+  * Everything else!
 * Essential Music Theory
 * Implement isEmbedded for ScaleViewer & RhythmTapper
 * Send errors to server somewhere?

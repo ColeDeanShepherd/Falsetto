@@ -252,6 +252,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
   public render(): JSX.Element {
     const fretboardWidth = 400;
     const fretboardHeight = 140;
+    const fretboardStyle = { width: "100%", maxWidth: "400px", height: "auto" };
 
     return (
       <Card style={{ maxWidth: MAX_MAIN_CARD_WIDTH, marginBottom: "6em" }}>
@@ -267,6 +268,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
               width={fretboardWidth} height={0.8 * fretboardHeight}
               pressedNotes={[]}
               fretCount={24}
+              style={fretboardStyle}
             />
           </p>
 
@@ -279,6 +281,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
               width={fretboardWidth} height={fretboardHeight}
               pressedNotes={[]}
               renderExtrasFn={metrics => this.renderFretNumbers(metrics)}
+              style={fretboardStyle}
             />
           </p>
 
@@ -303,6 +306,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
                   </g>
                 );
               }}
+              style={fretboardStyle}
             />
           </p>
 
@@ -313,6 +317,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
               width={fretboardWidth} height={fretboardHeight}
               pressedNotes={[]}
               renderExtrasFn={metrics => this.renderDiagramExtras(metrics, step3Diagram1NoteGroups)}
+              style={fretboardStyle}
             />
           </p>
           <p>
@@ -327,6 +332,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
               width={fretboardWidth} height={fretboardHeight}
               pressedNotes={[]}
               renderExtrasFn={metrics => this.renderDiagramExtras(metrics, step4Diagram1NoteGroups)}
+              style={fretboardStyle}
             />
           </p>
           <p>
@@ -341,6 +347,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
               width={fretboardWidth} height={fretboardHeight}
               pressedNotes={[]}
               renderExtrasFn={metrics => this.renderDiagramExtras(metrics, step5Diagram1NoteGroups)}
+              style={fretboardStyle}
             />
           </p>
 
@@ -359,6 +366,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
               width={fretboardWidth} height={fretboardHeight}
               pressedNotes={[]}
               renderExtrasFn={metrics => this.renderDiagramExtras(metrics, step6Diagram1NoteGroups)}
+              style={fretboardStyle}
             />
           </p>
           <p>
@@ -373,6 +381,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
               width={fretboardWidth} height={fretboardHeight}
               pressedNotes={[]}
               renderExtrasFn={metrics => this.renderDiagramExtras(metrics, step7Diagram1NoteGroups)}
+              style={fretboardStyle}
             />
           </p>
           <p>
@@ -387,6 +396,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
               width={fretboardWidth} height={fretboardHeight}
               pressedNotes={[]}
               renderExtrasFn={metrics => this.renderDiagramExtras(metrics, step8Diagram1NoteGroups)}
+              style={fretboardStyle}
             />
           </p>
           <p>
@@ -402,6 +412,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
               width={fretboardWidth} height={fretboardHeight}
               pressedNotes={[]}
               renderExtrasFn={metrics => this.renderDiagramExtras(metrics, step9Diagram1NoteGroups)}
+              style={fretboardStyle}
             />
           </p>
 
@@ -419,6 +430,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
               width={fretboardWidth} height={fretboardHeight}
               pressedNotes={[]}
               renderExtrasFn={metrics => this.renderDiagramExtras(metrics, step10Diagram1NoteGroups)}
+              style={fretboardStyle}
             />
           </p>
           <p>Because the lowest and highest strings have the same note names, and because the note names repeat every 12 frets, you have now identified every note on the fretboard!</p>
@@ -427,6 +439,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
               width={fretboardWidth} height={fretboardHeight}
               pressedNotes={[]}
               renderExtrasFn={metrics => this.renderDiagramExtras(metrics, step10Diagram2NoteGroups)}
+              style={fretboardStyle}
             />
           </p>
 

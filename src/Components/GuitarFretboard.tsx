@@ -211,6 +211,7 @@ export interface IGuitarFretboardProps {
   pressedNotes: Array<GuitarNote>;
   fretCount?: number;
   renderExtrasFn?: (metrics: GuitarFretboardMetrics) => JSX.Element;
+  style?: any;
 }
 export class GuitarFretboard extends React.Component<IGuitarFretboardProps, {}> {
   public render(): JSX.Element {
@@ -261,7 +262,11 @@ export class GuitarFretboard extends React.Component<IGuitarFretboardProps, {}> 
       : null;
 
     return (
-      <svg width={this.props.width} height={this.props.height} version="1.1" xmlns="http://www.w3.org/2000/svg">
+      <svg
+        width={this.props.width} height={this.props.height}
+        viewBox={`0 0 ${this.props.width} ${this.props.height}`}
+        version="1.1" xmlns="http://www.w3.org/2000/svg"
+        style={this.props.style}>
         <g transform={`translate(${margin},${margin})`}>
           {nut}
           {strings}
