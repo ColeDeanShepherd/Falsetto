@@ -135,7 +135,7 @@ export function renderGuitarNoteHighlightsAndNoteNames(
 
       const y = metrics.getStringY(note.stringIndex);
 
-      const noteName = note.pitch.toOneAccidentalAmbiguousString(false, true);
+      const noteName = note.pitch.toOneAccidentalAmbiguousString(false, false);
 
       const isNaturalNote = (noteName.length == 1);
       const fontSize = isNaturalNote ? 11 : 8;

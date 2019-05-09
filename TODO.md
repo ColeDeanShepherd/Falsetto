@@ -3,6 +3,9 @@
 * Improve SVG rendering to be scalable.
   * PianoKeyboard
   * Everything else!
+* Improve SVG text align
+  * Horizontal align
+  * dy
 * Essential Music Theory
 * Implement isEmbedded for ScaleViewer & RhythmTapper
 * Send errors to server somewhere?
