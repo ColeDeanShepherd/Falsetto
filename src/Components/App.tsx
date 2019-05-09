@@ -243,7 +243,7 @@ class App extends React.Component<IAppProps, IAppState> {
           <NavSectionTitle>Notes</NavSectionTitle>
           {renderFlashCardGroupLink(PianoNotes.createFlashCardGroup())}
           {renderFlashCardGroupLink(GuitarNotes.createFlashCardGroup())}
-          <NavLink to="learn-guitar-notes-in-10-steps" className="nav-link">Learn Guitar Notes in 10 Easy Steps</NavLink>
+          <NavLink to="learn-guitar-notes-in-10-steps" className="nav-link">Learn the Notes on Guitar in 10 Easy Steps</NavLink>
           {renderFlashCardGroupLink(NoteDurations.createFlashCardGroup())}
           {renderFlashCardGroupLink(SheetMusicNotes.createFlashCardGroup())}
         </div>

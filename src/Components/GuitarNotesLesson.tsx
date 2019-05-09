@@ -256,7 +256,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
     return (
       <Card style={{ maxWidth: MAX_MAIN_CARD_WIDTH, marginBottom: "6em" }}>
         <CardContent>
-          <h1>Learn Guitar Notes in 10 Easy Steps</h1>
+          <h1>Learn the Notes on Guitar in 10 Easy Steps</h1>
 
           <p>Being able to identify all of the notes on your instrument is vital to becoming a skilled musician, and learning this skill on guitar is quicker and easier than you might think. Let's get started!</p>
           
@@ -278,6 +278,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
               pressedNotes={[]}
+              renderExtrasFn={metrics => this.renderFretNumbers(metrics)}
             />
           </p>
 
@@ -291,12 +292,15 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
                 const y = 0.75 * metrics.stringSpacing;
 
                 return (
-                  <rect
-                    x={0} y={y}
-                    width={metrics.width} height={metrics.height - y}
-                    fill="green"
-                    fillOpacity={0.3}>
-                  </rect>
+                  <g>
+                    <rect
+                      x={0} y={y}
+                      width={metrics.width} height={metrics.height - y}
+                      fill="green"
+                      fillOpacity={0.3}>
+                    </rect>
+                    {this.renderFretNumbers(metrics)}
+                  </g>
                 );
               }}
             />
@@ -313,7 +317,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           </p>
           <p>
             {createStudyFlashCardGroupComponent(
-              GuitarNotes.createFlashCardGroup(step3Diagram1Notes), false, true, "Step 3 Quiz", { margin: "0 auto" })}
+              GuitarNotes.createFlashCardGroup(step3Diagram1Notes), false, true, "Step 3 Quiz", { margin: "0 auto" }, false)}
           </p>
           
           <h3>Step 4</h3>
@@ -327,7 +331,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           </p>
           <p>
             {createStudyFlashCardGroupComponent(
-              GuitarNotes.createFlashCardGroup(step4Diagram1Notes), false, true, "Step 4 Quiz", { margin: "0 auto" })}
+              GuitarNotes.createFlashCardGroup(step4Diagram1Notes), false, true, "Step 4 Quiz", { margin: "0 auto" }, false)}
           </p>
 
           <h3>Step 5</h3>
@@ -344,7 +348,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
 
           <p>
             {createStudyFlashCardGroupComponent(
-              GuitarNotes.createFlashCardGroup(step5Diagram1Notes), false, true, "Step 5 Quiz", { margin: "0 auto" })}
+              GuitarNotes.createFlashCardGroup(step5Diagram1Notes), false, true, "Step 5 Quiz", { margin: "0 auto" }, false)}
           </p>
 
           <h3>Step 6</h3>
@@ -359,7 +363,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           </p>
           <p>
             {createStudyFlashCardGroupComponent(
-              GuitarNotes.createFlashCardGroup(step6Diagram1Notes), false, true, "Step 6 Quiz", { margin: "0 auto" })}
+              GuitarNotes.createFlashCardGroup(step6Diagram1Notes), false, true, "Step 6 Quiz", { margin: "0 auto" }, false)}
           </p>
           
           <h3>Step 7</h3>
@@ -373,7 +377,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           </p>
           <p>
             {createStudyFlashCardGroupComponent(
-              GuitarNotes.createFlashCardGroup(step7Diagram1Notes), false, true, "Step 7 Quiz", { margin: "0 auto" })}
+              GuitarNotes.createFlashCardGroup(step7Diagram1Notes), false, true, "Step 7 Quiz", { margin: "0 auto" }, false)}
           </p>
 
           <h3>Step 8</h3>
@@ -387,7 +391,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           </p>
           <p>
             {createStudyFlashCardGroupComponent(
-              GuitarNotes.createFlashCardGroup(step8Diagram1Notes), false, true, "Step 8 Quiz", { margin: "0 auto" })}
+              GuitarNotes.createFlashCardGroup(step8Diagram1Notes), false, true, "Step 8 Quiz", { margin: "0 auto" }, false)}
           </p>
 
           <h3>Step 9</h3>
@@ -405,7 +409,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           
           <p>
             {createStudyFlashCardGroupComponent(
-              GuitarNotes.createFlashCardGroup(step9Diagram1Notes), false, true, "Step 9 Quiz", { margin: "0 auto" })}
+              GuitarNotes.createFlashCardGroup(step9Diagram1Notes), false, true, "Step 9 Quiz", { margin: "0 auto" }, false)}
           </p>
           
           <h3>Step 10</h3>
@@ -438,13 +442,43 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
   }
   private renderDiagramExtras(
     metrics: GuitarFretboardMetrics,
-    diagramNoteGroups: Array<{ color: string, notes: Array<GuitarNote> }>): JSX.Element {
+    diagramNoteGroups: Array<{ color: string, notes: Array<GuitarNote> }>
+  ): JSX.Element {
     return (
       <g>
         {diagramNoteGroups
           .map(dng => renderGuitarNoteHighlightsAndNoteNames(
             metrics, dng.notes, dng.color
           ))}
+        {this.renderFretNumbers(metrics)}
+      </g>
+    );
+  }
+  private renderFretNumbers(metrics: GuitarFretboardMetrics): JSX.Element {
+    const fretNumbers = Utils.range(0, 11);
+    return (
+      <g>
+        {fretNumbers.map(fretNumber => {
+          const fontSize = 12;
+          let x = metrics.getNoteX(fretNumber) - (0.4 * fontSize);
+          if (fretNumber == 0) {
+            x -= 0.25 * metrics.fretSpacing;
+          }
+
+          const y = metrics.height + 20;
+          const textStyle: any = {
+            fontSize: `${fontSize}px`,
+            fontWeight: "bold"
+          };
+
+          return (
+            <text
+              x={x} y={y}
+              style={textStyle}>
+              {fretNumber}
+            </text>
+          );
+        })}
       </g>
     );
   }

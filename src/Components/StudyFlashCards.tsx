@@ -15,7 +15,7 @@ import { MAX_MAIN_CARD_WIDTH } from './Style';
 
 export function createStudyFlashCardGroupComponent(
   flashCardGroup: FlashCardGroup, isEmbedded: boolean, hideMoreInfoUri: boolean,
-  title?: string, style?: any): JSX.Element {
+  title?: string, style?: any, enableSettings?: boolean): JSX.Element {
   return (
     <StudyFlashCards
       key={flashCardGroup.route}
@@ -27,6 +27,7 @@ export function createStudyFlashCardGroupComponent(
       renderFlashCardMultiSelect={flashCardGroup.renderFlashCardMultiSelect}
       renderAnswerSelect={flashCardGroup.renderAnswerSelect}
       moreInfoUri={!hideMoreInfoUri ? flashCardGroup.moreInfoUri : ""}
+      enableSettings={enableSettings}
       enableInvertFlashCards={flashCardGroup.enableInvertFlashCards}
       customNextFlashCardIdFilter={flashCardGroup.customNextFlashCardIdFilter}
       isEmbedded={isEmbedded}
@@ -43,6 +44,7 @@ export interface IStudyFlashCardsProps {
   initialConfigData: any;
   renderFlashCardMultiSelect?: RenderFlashCardMultiSelectFunc;
   renderAnswerSelect?: RenderAnswerSelectFunc;
+  enableSettings?: boolean;
   enableInvertFlashCards?: boolean;
   moreInfoUri?: string;
   customNextFlashCardIdFilter?: CustomNextFlashCardIdFilter;
@@ -148,6 +150,8 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
       ? { minHeight: "100vh", boxShadow: "none" }
       : { maxWidth: MAX_MAIN_CARD_WIDTH }, this.props.style);
 
+    const enableSettings = (this.props.enableSettings === undefined) || this.props.enableSettings;
+
     return (
       <Card style={cardStyle}>
         <CardContent style={{position: "relative"}}>
@@ -156,14 +160,16 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
               {this.props.title}{this.state.invertFlashCards ? " (Inverted)" : ""}
             </Typography>
             
-            <Button variant="contained" onClick={event => this.toggleConfiguration()} style={{width: "48px", height: "41px"}}>
-              <i
-                className="cursor-pointer material-icons"
-                style={{ verticalAlign: "sub", display: "inline-block" }}
-              >
-                settings
-              </i>
-            </Button>
+            {enableSettings ? (
+              <Button variant="contained" onClick={event => this.toggleConfiguration()} style={{width: "48px", height: "41px"}}>
+                <i
+                  className="cursor-pointer material-icons"
+                  style={{ verticalAlign: "sub", display: "inline-block" }}
+                >
+                  settings
+                </i>
+              </Button>
+            ) : null}
           </div>
 
           {this.state.showConfiguration ? (

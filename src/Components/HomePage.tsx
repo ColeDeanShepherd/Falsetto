@@ -22,6 +22,7 @@ export class HomePage extends React.Component<{}, {}> {
           <p>Falsetto is a collection of free, interactive music theory exercises. Get started by clicking one of the exercises below, or in the menu!</p>
           <ul style={{ listStyleType: "none", margin: 0, padding: 0 }}>
             <li>{App.instance.renderNavLink("/essential-music-theory", "Essential Music Theory (Comprehensive Lesson)")}</li>
+            <li>{App.instance.renderNavLink("/learn-guitar-notes-in-10-steps", "Learn the Notes on Guitar in 10 Easy Steps")}</li>
             <li>{App.instance.renderFlashCardGroupLink(PianoNotes.createFlashCardGroup())}</li>
             <li>{App.instance.renderFlashCardGroupLink(GuitarNotes.createFlashCardGroup())}</li>
             <li>{App.instance.renderFlashCardGroupLink(PianoIntervals.createFlashCardGroup())}</li>

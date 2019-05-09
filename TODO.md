@@ -1,7 +1,5 @@
 # To-Do
 ## High Priority
-* Hide settings on guitar notes lesson exercises (except the last).
-* Add fret numbers to guitar notes lesson?
 * Essential Music Theory
 * Implement isEmbedded for ScaleViewer & RhythmTapper
 * Send errors to server somewhere?
