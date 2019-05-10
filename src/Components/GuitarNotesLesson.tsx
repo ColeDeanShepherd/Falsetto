@@ -341,7 +341,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           </p>
 
           <h3>Step 5</h3>
-          <p>We stopped on the 3rd highest string because there is a special rule you must follow to continue: When moving from the 3rd highest string to the 2nd highest string, you must shift one fret to the right (and therefore when crossing back from the 2nd highest string to the 3rd highest string, you must shift one fret to the left).</p>
+          <p>We stopped on the 3rd highest string because there is a special rule you must follow to continue: Any time you move from the 3rd highest string to the 2nd highest string, you must shift one fret to the right (and therefore any time you cross back from the 2nd highest string to the 3rd highest string, you must shift one fret to the left).</p>
           <p style={{ textAlign: "center" }}>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
@@ -359,7 +359,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           </p>
 
           <h3>Step 6</h3>
-          <p>Memorize this rule: If you move up 3 strings and left 3 frets from any note (or in the opposite direction), that note has the same name as the starting note. The previous rule for moving between the 2nd-highest and 3rd-highest strings still holds!</p>
+          <p>Memorize this rule: If you move up 3 strings and left 3 frets from any note (while remembering to shift one fret to the right if you cross from the 3rd highest string to the 2nd highest string), that note has the same name as the starting note.</p>
 
           <p style={{ textAlign: "center" }}>
             <GuitarFretboard
