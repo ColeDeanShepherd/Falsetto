@@ -66,6 +66,7 @@ import { FlashCardGroup } from "../FlashCardGroup";
 import { createStudyFlashCardGroupComponent } from "./StudyFlashCards";
 import * as TheJazzPianoSiteOverview from "./Quizzes/TheJazzPianoSite/TheBasics/Overview"
 import { AboutPage } from "./AboutPage";
+import { SupportUsPage } from "./SupportUs";
 import DocumentTitle from "react-document-title";
 import { HomePage } from "./HomePage";
 
@@ -209,6 +210,7 @@ class App extends React.Component<IAppProps, IAppState> {
     return [
       <Route exact path="/" component={() => <DocumentTitle title="Falsetto"><HomePage /></DocumentTitle>} />,
       <Route path="/about" component={() => <DocumentTitle title="About - Falsetto"><AboutPage /></DocumentTitle>} />,
+      <Route path="/support-us" component={() => <DocumentTitle title="Support Us - Falsetto"><SupportUsPage /></DocumentTitle>} />,
       <Route exact path="/essential-music-theory" component={() => <DocumentTitle title="Essential Music Theory - Falsetto"><SectionContainer section={IntroSection}></SectionContainer></DocumentTitle>} />,
       <Route exact path="/essential-music-theory/rhythm" component={() => <DocumentTitle title="Rhythm - Essential Music Theory - Falsetto"><SectionContainer section={RhythmSection}></SectionContainer></DocumentTitle>} />,
       <Route exact path="/essential-music-theory/notes" component={() => <DocumentTitle title="Notes - Essential Music Theory - Falsetto"><SectionContainer section={NotesSection}></SectionContainer></DocumentTitle>} />,
@@ -311,6 +313,7 @@ class App extends React.Component<IAppProps, IAppState> {
             <Toolbar className="nav top-nav">
               <Typography variant="h6" color="inherit">
                 <NavLink to="/" onClick={event => this.onNavLinkClick()} className="nav-link" activeClassName="" style={{ display: "inline-block" }}><img src="/logo-white.svg" style={{width: "24px", verticalAlign: "text-bottom"}} /><span style={{paddingLeft: "0.5em"}}>Falsetto</span></NavLink>
+                <NavLink to="/support-us" onClick={event => this.onNavLinkClick()} className="nav-link" activeClassName="" style={{ fontSize: "1.1rem", fontWeight: "normal", display: "inline-block" }}>Support Us</NavLink>
                 <a
                   href="https://docs.google.com/forms/d/e/1FAIpQLSfHT8tJTdmW_hCjxMPUf14wchM6GBPQAaq8PSMW05C01gBW4g/viewform"
                   target="_blank"
