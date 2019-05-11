@@ -2,10 +2,12 @@ import * as React from "react";
 import { Router, Route, NavLink } from "react-router-dom";
 import { Paper, AppBar, Typography, Toolbar } from "@material-ui/core";
 import { History, createBrowserHistory, Location, Action, UnregisterCallback } from "history";
+import StackTrace from "stacktrace-js";
 
 import "./App.css";
 
 import * as Utils from "../Utils";
+import * as Analytics from "../Analytics";
 
 import {
   SectionContainer,
@@ -66,9 +68,27 @@ import * as TheJazzPianoSiteOverview from "./Quizzes/TheJazzPianoSite/TheBasics/
 import { AboutPage } from "./AboutPage";
 import DocumentTitle from "react-document-title";
 import { HomePage } from "./HomePage";
-import { isProduction } from "../Config";
 
-const googleAnalyticsTrackingId = "UA-72494315-5";
+async function getErrorDescription(msg: string | Event, file: string | undefined, line: number | undefined, col: number | undefined, error: Error | undefined): Promise<string> {
+  return new Promise<string>((resolve, reject) => {
+    const fallbackErrorDescription = `${file}: ${msg} (${line}:${col})`;
+
+    if (error !== undefined) {
+      StackTrace.fromError(error)
+        .then(stackFrames => {
+          var stringifiedStack = stackFrames.map(sf => {
+            return sf.toString();
+          }).join('\n');
+          resolve(stringifiedStack);
+        })
+        .catch(err => {
+          resolve(fallbackErrorDescription + "\n\n" + err);
+        });
+    } else {
+      resolve(fallbackErrorDescription);
+    }
+  });
+}
 
 const NavSectionTitle: React.FunctionComponent<{ style?: any }> = props => <p style={Object.assign({ fontWeight: "bold" }, props.style)}>{props.children}</p>;
 
@@ -81,32 +101,14 @@ interface IAppState {
 class App extends React.Component<IAppProps, IAppState> {
   public static instance: App;
   
-  public static trackCustomEvent(id: string, label?: string, value?: number, category?: string) {
-    Utils.precondition((value === undefined) || (Number.isInteger(value) && (value >= 0)));
-
-    if (isProduction()) {
-      const gtag: any = (window as any).gtag;
-
-      let parameters = {};
-      
-      if (label !== undefined) {
-        parameters["event_label"] = label;
-      }
-
-      if (value !== undefined) {
-        parameters["value"] = value;
-      }
-      
-      if (category !== undefined) {
-        parameters["event_category"] = category;
-      }
-
-      gtag("event", id, parameters);      
-    }
-  }
-
   public constructor(props: IAppProps) {
     super(props);
+
+    window.onerror = (msg, file, line, col, error) => {
+      const fatal = true;
+      getErrorDescription(msg, file, line, col, error)
+        .then(errorDescription => Analytics.trackException(errorDescription, fatal));
+    };
 
     this.history = createBrowserHistory();
     this.unregisterHistoryListener = this.history.listen(this.historyListener.bind(this));
@@ -194,7 +196,9 @@ class App extends React.Component<IAppProps, IAppState> {
   }
 
   public componentWillMount() {
-    this.trackPageView();
+    if (!this.isEmbedded) {
+      Analytics.trackPageView();
+    }
   }
   public componentWillUnmount() {
     if (this.unregisterHistoryListener) {
@@ -358,17 +362,10 @@ class App extends React.Component<IAppProps, IAppState> {
     return this.props.isEmbedded || this.history.location.search.includes("isEmbedded=true");
   }
   
-  private trackPageView() {
-    if (isProduction() && !this.isEmbedded) {
-      const gtag: any = (window as any).gtag;
-      gtag("config", googleAnalyticsTrackingId, {
-        "page_title" : document.title,
-        "page_path": location.pathname + location.search
-      });
-    }
-  }
   private historyListener(location: Location<any>, action: Action) {
-    this.trackPageView();
+    if (!this.isEmbedded) {
+      Analytics.trackPageView();
+    }
   }
   private createStudyFlashCardGroupComponent(currentFlashCardGroup: FlashCardGroup): () => JSX.Element {
     return () => (
