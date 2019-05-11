@@ -5,11 +5,11 @@ import {
 import ResizeObserver from "resize-observer-polyfill";
 
 import * as Utils from "../Utils";
+import * as Analytics from "../Analytics";
 import { FlashCard, invertFlashCards } from "../FlashCard";
 import { renderFlashCardSide } from "./FlashCard";
 import { DefaultFlashCardMultiSelect } from "./DefaultFlashCardMultiSelect";
 import { StudyAlgorithm, AnswerDifficulty, isAnswerDifficultyCorrect, LeitnerStudyAlgorithm } from "../StudyAlgorithm";
-import App from './App';
 import { RenderAnswerSelectFunc, RenderFlashCardMultiSelectFunc, CustomNextFlashCardIdFilter, FlashCardGroup } from '../FlashCardGroup';
 import { MAX_MAIN_CARD_WIDTH } from './Style';
 
@@ -286,7 +286,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
       const eventLabel = this.state.currentFlashCardIndex.toString();
       const eventValue = undefined;
       const eventCategory = this.props.title;
-      App.trackCustomEvent(
+      Analytics.trackCustomEvent(
         eventId, eventLabel, eventValue, eventCategory
       );
     }

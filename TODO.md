@@ -3,6 +3,7 @@
 * Guitar Notes Lesson
   * Separate quizzes from diagrams more so there's less of an urge to "cheat"?
   * Integrate knowledge of the circle of fifths?
+  * Integrate audio into guitar fretboard lesson?
 * Improve SVG rendering to be scalable.
   * PianoKeyboard
   * Everything else!
@@ -11,7 +12,6 @@
   * dy
 * Essential Music Theory
 * Implement isEmbedded for ScaleViewer & RhythmTapper
-* Send errors to server somewhere?
 * Enable inversion on guitar scale viewer.
 * Rhythm tapper
 * Scale degree ear trainer

@@ -15,6 +15,7 @@
     "react-scripts": "^2.1.5",
     "resize-observer-polyfill": "^1.5.1",
     "source-map-explorer": "^1.8.0",
+    "stacktrace-js": "^2.0.0",
     "vexflow": "^1.2.89"
   },
   "scripts": {
@@ -33,6 +34,7 @@
     "@types/react-document-title": "^2.0.3",
     "@types/react-dom": "^16.8.2",
     "@types/react-router-dom": "^4.3.1",
+    "@types/stacktrace-js": "0.0.32",
     "@types/vexflow": "^1.2.33",
     "typescript": "^3.3.3"
   },
