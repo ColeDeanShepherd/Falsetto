@@ -10,7 +10,7 @@ import { playPitches, playPitchesSequentially } from "../Piano";
 import { YouTubeVideo } from "./YouTubeVideo";
 import { TimeSignature } from "../TimeSignature";
 
-import { PianoKeyboard, renderPianoKeyboardNoteNames } from "./PianoKeyboard";
+import { PianoKeyboard, renderPianoKeyboardNoteNames, PianoKeyboardMetrics } from "./PianoKeyboard";
 import { Pitch } from '../Pitch';
 import { PitchLetter } from '../PitchLetter';
 
@@ -67,6 +67,12 @@ import { NoteValuePlayer } from './NoteValuePlayer';
 import * as NotesQuiz from "./Quizzes/NotesQuiz";
 
 import { MAX_MAIN_CARD_WIDTH } from './Style';
+import { Rect2D } from '../Rect2D';
+import { Vector2D } from '../Vector2D';
+import { Size2D } from '../Size2D';
+import { Margin } from '../Margin';
+
+const pianoKeyboardStyle = { width: "100%", maxWidth: "400px", height: "auto" };
 
 const MainTitle: React.FunctionComponent<{}> = props => <h1>{props.children}</h1>;
 const SectionTitle: React.FunctionComponent<{}> = props => <h2>{props.children}</h2>;
@@ -77,16 +83,76 @@ const NoteText: React.FunctionComponent<{}> = props => <p style={{ color: "#0040
 const OctavesPlayer: React.FunctionComponent<{}> = props => {
   return (
     <PianoKeyboard
-      width={300} height={150}
+      rect={new Rect2D(new Size2D(300, 150), new Vector2D(0, 0))}
       lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
       highestPitch={new Pitch(PitchLetter.B, 0, 4)}
       pressedPitches={[]}
       onKeyPress={p => playPitchesSequentially(Utils.range(0, 3).map(i => new Pitch(p.letter, p.signedAccidental, p.octaveNumber - 2 + i)), 500, true)}
-      renderExtrasFn={renderPianoKeyboardNoteNames} />
+      renderExtrasFn={renderPianoKeyboardNoteNames}
+      style={pianoKeyboardStyle} />
   );
 };
 
 const Term: React.FunctionComponent<{}> = props => <span style={{ fontWeight: "bold" }}>{props.children}</span>;
+
+const HalfStepsDiagram: React.FunctionComponent<{}> = props => {
+  const width = 300;
+  const height = 200;
+  const margin = new Margin(0, 50, 0, 0);
+  
+  function renderHalfStepLabels(metrics: PianoKeyboardMetrics): JSX.Element {
+    function renderHalfStepLabel(leftPitch: Pitch): JSX.Element {
+      const rightPitch = Pitch.createFromMidiNumber(leftPitch.midiNumber + 1);
+      const leftKeyRect = metrics.getKeyRect(leftPitch);
+      const rightKeyRect = metrics.getKeyRect(rightPitch);
+
+      const textPos = new Vector2D(leftKeyRect.right, -35);
+      const textStyle: any = {
+        textAnchor: "middle"
+      };
+      const halfStepConnectionPos = new Vector2D(textPos.x, textPos.y + 5);
+      const leftKeyLinePos = new Vector2D(leftKeyRect.center.x, 20);
+      const rightKeyLinePos = new Vector2D(rightKeyRect.center.x, 20);
+
+      return (
+        <g>
+          <text
+            x={textPos.x} y={textPos.y}
+            style={textStyle}>
+            Half Step
+          </text>
+          <line
+            x1={halfStepConnectionPos.x} y1={halfStepConnectionPos.y}
+            x2={leftKeyLinePos.x} y2={leftKeyLinePos.y}
+            stroke="red" strokeWidth={4} />
+          <line
+            x1={halfStepConnectionPos.x} y1={halfStepConnectionPos.y}
+            x2={rightKeyLinePos.x} y2={rightKeyLinePos.y}
+            stroke="red" strokeWidth={4} />
+        </g>
+      );
+    }
+
+    return (
+      <g>
+        {renderHalfStepLabel(new Pitch(PitchLetter.E, 0, 4))}
+        {renderHalfStepLabel(new Pitch(PitchLetter.A, -1, 4))}
+      </g>
+    );
+  }
+
+  return (
+    <PianoKeyboard
+      rect={new Rect2D(new Size2D(width, height), new Vector2D(0, 0))}
+      margin={margin}
+      lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
+      highestPitch={new Pitch(PitchLetter.B, 0, 4)}
+      pressedPitches={[]}
+      onKeyPress={p => playPitches([p])}
+      renderExtrasFn={renderHalfStepLabels}
+      style={pianoKeyboardStyle} />
+  );
+};
 
 export interface SectionProps {
   isEmbedded: boolean;
@@ -276,33 +342,136 @@ export const NotesSection: React.FunctionComponent<SectionProps> = props => (
 export const IntervalsSection: React.FunctionComponent<SectionProps> = props => (
   <div>
     <SectionTitle>Intervals</SectionTitle>
-    <p>An interval is the distance between two notes. Understanding intervals, and training your ear to be able to recognize them, is one of the most important skills as a composer and/or musician, as a firm grasp on intervals establishes a link between your mind, your instrument, and your emotions.</p>
-    <p>Intervals are measured by the number of "half steps" or "semitones" between the notes. Half steps are the smallest interval (aside from unison) that can be made between two notes. For example, there is one half step between:</p>
-    <ul>
-      <li>C &amp; D#</li>
-      <li>A &amp; Ab</li>
-      <li>E &amp; F</li>
-      <li>C &amp; B</li>
-    </ul>
+    <p>An <Term>interval</Term> is the distance between two notes. Understanding intervals and training your ear to be able to recognize them is one of the most important skills as a musician, because a firm grasp on intervals establishes a link between your mind, your instrument, and your emotions.</p>
+    <p>Intervals are measured by the number of <Term>half steps</Term> or <Term>semitones</Term> between the notes. <Term>Half steps</Term> are the smallest interval that can be made between two notes (aside from <Term>unisons</Term>, which are explained after the diagram).</p>
+    <HalfStepsDiagram />
 
     <SectionTitle>Simple Intervals</SectionTitle>
-    <p>There are 13 "simple" intervals:</p>
-    <ul>
-      <li>Unison - 0 half steps</li>
-      <li>Minor 2nd (m2) - 1 half step</li>
-      <li>Major 2nd (M2) - 2 half steps, also called a "whole step" or a "tone"</li>
-      <li>Minor 3rd (m3) - 3 half steps</li>
-      <li>Major 3rd (M3) - 4 half steps</li>
-      <li>Perfect 4th (P4) - 5 half steps</li>
-      <li>Tritone (A4/d5) - 6 half steps</li>
-      <li>Perfect 5th (P5) - 7 half steps</li>
-      <li>Minor 6th (m6) - 8 half steps</li>
-      <li>Major 6th (M6) - 9 half steps</li>
-      <li>Minor 7th  (m7) - 10 half steps</li>
-      <li>Major 7th (M7) - 11 half steps</li>
-      <li>Octave (P8) - 12 half steps</li>
-    </ul>
-    <p>"Simple" intervals are intervals as large, or smaller than, an octave.</p>
+    <p>There are 13 <Term>simple intervals</Term>, which are intervals an octave (12 half steps) or smaller:</p>
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell># of Half Steps</TableCell>
+          <TableCell>Interval Name</TableCell>
+          <TableCell>Interval Symbol</TableCell>
+          <TableCell>Ascending Example</TableCell>
+          <TableCell>Descending Example</TableCell>
+          <TableCell>Category</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        <TableRow>
+          <TableCell>0</TableCell>
+          <TableCell>Unison</TableCell>
+          <TableCell>P1</TableCell>
+          <TableCell>N/A</TableCell>
+          <TableCell>N/A</TableCell>
+          <TableCell>N/A</TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>1</TableCell>
+          <TableCell>Minor 2nd, "whole step", "tone"</TableCell>
+          <TableCell>m2</TableCell>
+          <TableCell>Jaws (Theme) - <a href="https://www.youtube.com/watch?v=ZvCI-gNK_y4#t=0s">YouTube</a></TableCell>
+          <TableCell>Für Elise (Beethoven) - <a href="https://www.youtube.com/watch?v=LQTTFUtMSvQ#t=0s">YouTube</a></TableCell>
+          <TableCell>Sharp Dissonance</TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>2</TableCell>
+          <TableCell>Major 2nd</TableCell>
+          <TableCell>M2</TableCell>
+          <TableCell>Happy Birthday to You - <a href="https://www.youtube.com/watch?v=90w2RegGf9w#t=7s">YouTube</a></TableCell>
+          <TableCell>Mary Had a Little Lamb - <a href="https://www.youtube.com/watch?v=Zq-MtHpRhVk#t=11s">YouTube</a></TableCell>
+          <TableCell>Mild Dissonance</TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>3</TableCell>
+          <TableCell>Minor 3rd</TableCell>
+          <TableCell>m3</TableCell>
+          <TableCell>Smoke on the Water (Deep Purple - <a href="https://www.youtube.com/watch?v=arpZ3fCwDEw#t=23s">YouTube</a></TableCell>
+          <TableCell>Frosty the Snowman - <a href="Smoke on the Water (Deep Purple) - youtube">YouTube</a></TableCell>
+          <TableCell>Soft Consonance</TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>4</TableCell>
+          <TableCell>Major 3rd</TableCell>
+          <TableCell>M3</TableCell>
+          <TableCell>Oh, when the Saints - <a href="https://www.youtube.com/watch?v=UREnLVrHv4A#t=27s">YouTube</a></TableCell>
+          <TableCell>Fate - Symphoni No.5 (Beethoven) - <a href="https://www.youtube.com/watch?v=6z4KK7RWjmk#t=8s">YouTube</a></TableCell>
+          <TableCell>Soft Consonance</TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>5</TableCell>
+          <TableCell>Perfect 4th</TableCell>
+          <TableCell>P4</TableCell>
+          <TableCell>Here Comes the Bride - <a href="https://www.youtube.com/watch?v=oBt6Myv75jk#t=30s">YouTube</a></TableCell>
+          <TableCell>Eine Kleine Nachtmusik (Mozart) - <a href="https://www.youtube.com/watch?v=Qb_jQBgzU-I#t=28s">YouTube</a></TableCell>
+          <TableCell>Context-Dependent</TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>6</TableCell>
+          <TableCell>Tritone</TableCell>
+          <TableCell>A4/d5</TableCell>
+          <TableCell>The Simpsons (Theme) - <a href="https://www.youtube.com/watch?v=Xqog63KOANc#t=2s">YouTube</a></TableCell>
+          <TableCell>Even Flow (Pearl Jam) - <a href="https://www.youtube.com/watch?v=CxKWTzr-k6s#t=26s">YouTube</a></TableCell>
+          <TableCell>Neutral? Restless? Sharp Dissonance?</TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>7</TableCell>
+          <TableCell>Perfect 5th</TableCell>
+          <TableCell>P5</TableCell>
+          <TableCell>Twinkle Twinkle Little Star (Mozart) - <a href="https://www.youtube.com/watch?v=yCjJyiqpAuU#t=20s">YouTube</a></TableCell>
+          <TableCell>What do you do with a Drunken Sailor - <a href="https://www.youtube.com/watch?v=qGyPuey-1Jw#t=4s">YouTube</a></TableCell>
+          <TableCell>Open Consonance</TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>8</TableCell>
+          <TableCell>Minor 6th</TableCell>
+          <TableCell>m6</TableCell>
+          <TableCell>Waltz Op.64 No.2 (Chopin) - <a href="https://www.youtube.com/watch?v=C9r-0sL6jL0#t=4s">YouTube</a></TableCell>
+          <TableCell>Five for Fighting - (100 Years) - <a href="https://www.youtube.com/watch?v=tR-qQcNT_fY#t=16s">YouTube</a></TableCell>
+          <TableCell>Soft Consonance</TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>9</TableCell>
+          <TableCell>Major 6th</TableCell>
+          <TableCell>M6</TableCell>
+          <TableCell>Dashing Through the Snow - <a href="https://www.youtube.com/watch?v=UPeol7oEzrw#t=9s">YouTube</a></TableCell>
+          <TableCell>The Music of the Night (Phantom of the Opera) - <a href="https://www.youtube.com/watch?v=EPXPwRgV-NM#t=0s">YouTube</a></TableCell>
+          <TableCell>Soft Consonance</TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>10</TableCell>
+          <TableCell>Minor 7th </TableCell>
+          <TableCell>m7</TableCell>
+          <TableCell>Somewhere - (West side story)<a href="https://www.youtube.com/watch?v=HtO2iC0KIQ8#t=67s">YouTube</a></TableCell>
+          <TableCell>An American in Paris (Gershwin) - <a href="https://www.youtube.com/watch?v=MWzlivSzpJM#t=0s">YouTube</a></TableCell>
+          <TableCell>Mild Dissonance</TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>11</TableCell>
+          <TableCell>Major 7th</TableCell>
+          <TableCell>M7</TableCell>
+          <TableCell>Take on Me (A-Ha) - <a href="https://www.youtube.com/watch?v=djV11Xbc914#t=53s">YouTube</a></TableCell>
+          <TableCell>I Love You (Cole Porter) - <a href="https://www.youtube.com/watch?v=nXIXknT-iQ8#t=15s">YouTube</a></TableCell>
+          <TableCell>Sharp Dissonance</TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>12</TableCell>
+          <TableCell>Octave</TableCell>
+          <TableCell>P8</TableCell>
+          <TableCell>Somewhere Over the Rainbow - <a href="https://www.youtube.com/watch?v=PSZxmZmBfnU">YouTube</a></TableCell>
+          <TableCell>The Lonely Goatherd (The Sound of Music) - <a href="https://www.youtube.com/watch?v=gRo0NlLYvwE#t=13s">YouTube</a></TableCell>
+          <TableCell>Open Consonance</TableCell>
+        </TableRow>
+      </TableBody>
+    </Table>
+
+    <SectionTitle>Interval Qualities</SectionTitle>
+    <p>TODO: Explain minor/major/perfect/augmented/diminished</p>
+
+    <SectionTitle>Interval Numbering Explained</SectionTitle>
+    <p>TODO: Explain 2nd, 3rd, etc, and enharmonic intervals</p>
 
     <SectionTitle>Compound Intervals</SectionTitle>
     <p>Beyond the "simple" intervals, there are "compound" intervals, for example:</p>
@@ -314,138 +483,7 @@ export const IntervalsSection: React.FunctionComponent<SectionProps> = props => 
     </ul>
     <p>but when analyzing intervals, it is often useful to reduce compound intervals to simple intervals by subtracting octaves until you are left with a simple interval.</p>
     <p>TODO: examples?</p>
-
-    <p>TODO: ascending &amp; descending</p>
     
-    <SectionTitle>Interval Qualities</SectionTitle>
-    <p>TODO: Explain minor/major/perfect/augmented/diminished</p>
-
-    <SectionTitle>Interval Numbering Explained</SectionTitle>
-    <p>TODO: Explain 2nd, 3rd, etc, and enharmonic intervals</p>
-
-    <SectionTitle>Consonance &amp; Dissonance</SectionTitle>
-    <table>
-      <thead>
-        <tr>
-          <th>Interval</th>
-          <th>Category</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Minor 2nd</td>
-          <td>Sharp Dissonance</td>
-        </tr>
-        <tr>
-          <td>Major 2nd</td>
-          <td>Mild Dissonance</td>
-        </tr>
-        <tr>
-          <td>Minor 3rd</td>
-          <td>Soft Consonance</td>
-        </tr>
-        <tr>
-          <td>Major 3rd</td>
-          <td>Soft Consonance</td>
-        </tr>
-        <tr>
-          <td>Perfect 4th</td>
-          <td>Context-Dependent</td>
-        </tr>
-        <tr>
-          <td>Tritone</td>
-          <td>Neutral? Restless? Sharp Dissonance?</td>
-        </tr>
-        <tr>
-          <td>Perfect 5th</td>
-          <td>Open Consonance</td>
-        </tr>
-        <tr>
-          <td>Minor 6th</td>
-          <td>Soft Consonance</td>
-        </tr>
-        <tr>
-          <td>Major 6th</td>
-          <td>Soft Consonance</td>
-        </tr>
-        <tr>
-          <td>Minor 7th</td>
-          <td>Mild Dissonance</td>
-        </tr>
-        <tr>
-          <td>Major 7th</td>
-          <td>Sharp Dissonance</td>
-        </tr>
-        <tr>
-          <td>Octave</td>
-          <td>Open Consonance</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <SectionTitle>Interval Ear Training</SectionTitle>
-    <p>It is important to train your ear to recognize intervals quickly, and your inner ear to be able to produce intervals of a certain type, to be able to express yourself on an instrument or on paper.</p>
-    <p>One way to train your ear to recognize intervals is by associating each interval with a song.</p>
-    <p>Here are some example songs for each interval.</p>
-    <table>
-      <thead>
-        <tr>
-          <th>Interval</th>
-          <th>Song</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Minor 2nd</td>
-          <td>Fur Elise, Jaws Theme</td>
-        </tr>
-        <tr>
-          <td>Major 2nd</td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>Minor 3rd</td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>Major 3rd</td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>Perfect 4th</td>
-          <td>Amazing Grace</td>
-        </tr>
-        <tr>
-          <td>Tritone</td>
-          <td>The Simpsons Theme Song</td>
-        </tr>
-        <tr>
-          <td>Perfect 5th</td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>Minor 6th</td>
-          <td>Valse Op 64. No 2. - Chopin</td>
-        </tr>
-        <tr>
-          <td>Major 6th</td>
-          <td>Nocturne Opus 9 No. 2 - Chopin</td>
-        </tr>
-        <tr>
-          <td>Minor 7th</td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>Major 7th</td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>Octave</td>
-          <td>Somewhere Over The Rainbow</td>
-        </tr>
-      </tbody>
-    </table>
-
     {createStudyFlashCardGroupComponent(IntervalNamesToHalfSteps.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}
     {createStudyFlashCardGroupComponent(IntervalEarTraining.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}
   </div>
