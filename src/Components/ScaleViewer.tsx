@@ -1,7 +1,9 @@
 import * as React from "react";
 
 import * as Utils from "../Utils";
+import { Vector2D } from '../Vector2D';
 import { Size2D } from "../Size2D";
+import { Rect2D } from '../Rect2D';
 import { PitchLetter } from "../PitchLetter";
 import { scales as allScales } from "../Scale";
 import { Pitch } from "../Pitch";
@@ -159,7 +161,7 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
             <div ref={this.instrumentsContainerRef}>
               <div>
                 <PianoKeyboard
-                  width={pianoSize.width} height={pianoSize.height}
+                  rect={new Rect2D(pianoSize, new Vector2D(0, 0))}
                   lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
                   highestPitch={new Pitch(PitchLetter.B, 0, 5)}
                   pressedPitches={pitches}

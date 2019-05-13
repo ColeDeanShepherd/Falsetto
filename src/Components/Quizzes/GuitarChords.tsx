@@ -1,7 +1,9 @@
 import * as React from "react";
 
 import * as Utils from "../../Utils";
+import { Vector2D } from '../../Vector2D';
 import { Size2D } from "../../Size2D";
+import { Rect2D } from '../../Rect2D';
 import { PianoKeyboard } from "../PianoKeyboard";
 import { FlashCard, FlashCardSide } from "../../FlashCard";
 import { FlashCardGroup } from "../../FlashCardGroup";
@@ -285,7 +287,7 @@ export class GuitarNotesAnswerSelect extends React.Component<IGuitarNotesAnswerS
     return (
       <div>
         <PianoKeyboard
-          width={400} height={100}
+          rect={new Rect2D(new Size2D(400, 100), new Vector2D(0, 0))}
           lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
           highestPitch={new Pitch(PitchLetter.B, 0, 5)}
           pressedPitches={this.state.selectedPitches}

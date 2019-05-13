@@ -6,6 +6,9 @@ import { Pitch } from "../Pitch";
 import { AnswerDifficulty } from "../StudyAlgorithm";
 import { PianoKeyboard } from "./PianoKeyboard";
 import { PitchLetter } from "../PitchLetter";
+import { Rect2D } from '../Rect2D';
+import { Size2D } from '../Size2D';
+import { Vector2D } from '../Vector2D';
 
 export interface IPianoKeysAnswerSelectProps {
   width: number;
@@ -29,7 +32,7 @@ export class PianoKeysAnswerSelect extends React.Component<IPianoKeysAnswerSelec
     return (
       <div>
         <PianoKeyboard
-          width={this.props.width} height={this.props.height}
+          rect={new Rect2D(new Size2D(this.props.width, this.props.height), new Vector2D(0, 0))}
           lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
           highestPitch={new Pitch(PitchLetter.B, 0, 5)}
           pressedPitches={this.state.selectedPitches}

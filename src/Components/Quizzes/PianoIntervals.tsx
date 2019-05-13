@@ -2,7 +2,9 @@ import * as React from "react";
 import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody } from "@material-ui/core";
 
 import * as Utils from "../../Utils";
-import { Size2D } from '../../Size2D';
+import { Vector2D } from '../../Vector2D';
+import { Size2D } from "../../Size2D";
+import { Rect2D } from '../../Rect2D';
 import * as FlashCardUtils from "../../Components/Quizzes/Utils";
 import { FlashCard } from "../../FlashCard";
 import { FlashCardGroup } from "../../FlashCardGroup";
@@ -185,7 +187,7 @@ export function createFlashCards(): Array<FlashCard> {
         return (
           <div>
             <PianoKeyboard
-              width={size.width} height={size.height}
+              rect={new Rect2D(size, new Vector2D(0, 0))}
               lowestPitch={minPitch}
               highestPitch={maxPitch}
               pressedPitches={pitches}

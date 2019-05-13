@@ -2,6 +2,10 @@ import * as React from "react";
 
 import * as Utils from "../Utils";
 import { Pitch } from "../Pitch";
+import { Rect2D } from '../Rect2D';
+import { Margin } from '../Margin';
+import { Size2D } from '../Size2D';
+import { Vector2D } from '../Vector2D';
 
 export class PianoKeyboardMetrics {
   public constructor(
@@ -82,6 +86,23 @@ export class PianoKeyboardMetrics {
   public get keyCount(): number {
     return this.whiteKeyCount + this.blackKeyCount;
   }
+
+  public getKeyRect(pitch: Pitch): Rect2D {
+    Utils.precondition(pitch.midiNumber >= this.lowestPitch.midiNumber);
+    Utils.precondition(pitch.midiNumber <= this.highestPitch.midiNumber);
+
+    const keyIndex = pitch.midiNumber - this.lowestPitch.midiNumber;
+    return new Rect2D(
+      new Size2D(
+        pitch.isWhiteKey ? this.whiteKeyWidth : this.blackKeyWidth,
+        pitch.isWhiteKey ? this.whiteKeyHeight : this.blackKeyHeight
+      ),
+      new Vector2D(
+        this.keyLeftXs[keyIndex],
+        0
+      )
+    );
+  }
 }
 
 export function renderPianoKeyboardNoteNames(metrics: PianoKeyboardMetrics): JSX.Element {
@@ -128,16 +149,19 @@ export function renderPianoKeyboardNoteNames(metrics: PianoKeyboardMetrics): JSX
 }
 
 export interface IPianoKeyboardProps {
-  width: number;
-  height: number;
+  rect: Rect2D;
   lowestPitch: Pitch;
   highestPitch: Pitch;
   pressedPitches?: Array<Pitch>;
   onKeyPress?: (keyPitch: Pitch) => void;
   renderExtrasFn?: (metrics: PianoKeyboardMetrics) => JSX.Element;
+  margin?: Margin;
+  style?: any;
 }
 export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
   public render(): JSX.Element {
+    const margin = this.getMargin();
+    const svgSize = new Size2D(margin.horizontal + this.props.rect.size.width, margin.vertical + this.props.rect.size.height);
     const metrics = this.getMetrics();
 
     const whiteKeys = new Array<JSX.Element>();
@@ -153,7 +177,7 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
           x={metrics.keyLeftXs[i]} y={0}
           width={metrics.whiteKeyWidth} height={metrics.whiteKeyHeight}
           fill="white" stroke="black" strokeWidth="2" className="cursor-pointer-on-hover"
-          onClick={event => this.props.onKeyPress ? this.props.onKeyPress(pitch) : null}
+          onMouseDown={event => this.props.onKeyPress ? this.props.onKeyPress(pitch) : null}
         />);
       } else {
         blackKeys.push(<rect
@@ -161,7 +185,7 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
           x={metrics.keyLeftXs[i]} y={0}
           width={metrics.blackKeyWidth} height={metrics.blackKeyHeight}
           fill="black" strokeWidth="0" className="cursor-pointer-on-hover"
-          onClick={event => this.props.onKeyPress ? this.props.onKeyPress(pitch) : null}
+          onMouseDown={event => this.props.onKeyPress ? this.props.onKeyPress(pitch) : null}
         />);
       }
     }
@@ -187,7 +211,7 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
               cx={highlightedNoteX} cy={highlightedNoteY}
               r={noteDotRadius}
               fill="red" strokeWidth="0" className="cursor-pointer-on-hover"
-              onClick={event => this.props.onKeyPress ? this.props.onKeyPress(pressedPitch) : null}
+              onMouseDown={event => this.props.onKeyPress ? this.props.onKeyPress(pressedPitch) : null}
             />;
           })
       : null;
@@ -197,18 +221,30 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
       : null;
 
     return (
-      <svg width={this.props.width} height={this.props.height} version="1.1" xmlns="http://www.w3.org/2000/svg">
-        {whiteKeys}
-        {blackKeys}
-        {noteHighlights}
-        {extraElements}
+      <svg
+        width={svgSize.width} height={svgSize.height}
+        x={this.props.rect.position.x} y={this.props.rect.position.y}
+        viewBox={`0 0 ${svgSize.width} ${svgSize.height}`}
+        version="1.1" xmlns="http://www.w3.org/2000/svg"
+        style={this.props.style}>
+        <g transform={`translate(${margin.left}, ${margin.top})`}>
+          {whiteKeys}
+          {blackKeys}
+          {noteHighlights}
+          {extraElements}
+        </g>
       </svg>
     );
   }
 
+  private getMargin(): Margin {
+    return this.props.margin
+      ? this.props.margin
+      : new Margin(0, 0, 0, 0)
+  }
   private getMetrics(): PianoKeyboardMetrics {
     return new PianoKeyboardMetrics(
-      this.props.width, this.props.height,
+      this.props.rect.size.width, this.props.rect.size.height,
       this.props.lowestPitch, this.props.highestPitch
     );
   }

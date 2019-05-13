@@ -1,6 +1,9 @@
 import * as React from "react";
 
 import * as Utils from "../../Utils";
+import { Vector2D } from '../../Vector2D';
+import { Size2D } from "../../Size2D";
+import { Rect2D } from '../../Rect2D';
 import { FlashCard, FlashCardSide } from "../../FlashCard";
 import { FlashCardGroup } from "../../FlashCardGroup";
 import { Pitch } from "../../Pitch";
@@ -14,7 +17,6 @@ import { PianoKeyboard } from "../PianoKeyboard";
 import { PitchLetter } from "../../PitchLetter";
 import { AnswerDifficulty } from "../../StudyAlgorithm";
 import { PianoKeysAnswerSelect } from "../PianoKeysAnswerSelect";
-import { Size2D } from "../../Size2D";
 
 const minPitch = new Pitch(PitchLetter.C, 0, 4);
 const maxPitch = new Pitch(PitchLetter.B, 0, 5);
@@ -90,7 +92,7 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
       <div>
         <div>
           <PianoKeyboard
-            width={size.width} height={size.height}
+            rect={new Rect2D(size, new Vector2D(0, 0))}
             lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
             highestPitch={new Pitch(PitchLetter.B, 0, 5)}
             pressedPitches={[this.props.pitch1]}

@@ -1,5 +1,8 @@
 import * as React from "react";
 
+import { Vector2D } from '../../Vector2D';
+import { Size2D } from "../../Size2D";
+import { Rect2D } from '../../Rect2D';
 import * as FlashCardUtils from "./Utils";
 import { PianoKeyboard } from "../PianoKeyboard";
 import { FlashCard } from "../../FlashCard";
@@ -23,7 +26,7 @@ export function createFlashCards(): FlashCard[] {
     .map((_, i) => FlashCard.fromRenderFns(
       () => (
         <PianoKeyboard
-          width={200} height={100}
+          rect={new Rect2D(new Size2D(200, 100), new Vector2D(0, 0))}
           lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
           highestPitch={new Pitch(PitchLetter.B, 0, 4)}
           pressedPitches={[Pitch.createFromMidiNumber((new Pitch(PitchLetter.C, 0, 4)).midiNumber + i)]}
