@@ -1,5 +1,7 @@
 # To-Do
 ## High Priority
+* Add sheet music notes lesson.
+* Add piano notes lesson?
 * Guitar Notes Lesson
   * Separate quizzes from diagrams more so there's less of an urge to "cheat"?
   * Integrate knowledge of the circle of fifths?

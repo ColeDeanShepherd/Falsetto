@@ -71,6 +71,7 @@ import { Rect2D } from '../Rect2D';
 import { Vector2D } from '../Vector2D';
 import { Size2D } from '../Size2D';
 import { Margin } from '../Margin';
+import { NavLink } from 'react-router-dom';
 
 const pianoKeyboardStyle = { width: "100%", maxWidth: "400px", height: "auto" };
 
@@ -455,7 +456,8 @@ export const NotesSection: React.FunctionComponent<SectionProps> = props => (
     
     <NoteText>Though there are no black keys in-between B &amp; C and E &amp; F, you can &mdash; and sometimes must, as we will discover in a future lesson &mdash; use accidentals to name those notes relative to another. So, Cb is the same as B, B# is the same as C, Fb is the same as E, and E# is the same as F.</NoteText>
     
-    <p>It is <strong>vitally</strong> important to learn where all the notes are on your instrument of choice. Please take some time to do so before moving on to the next lesson, and if your instrument of choice is piano or guitar, test your note identification skills using the exercises below!</p>
+    <p>It is <strong>vitally</strong> important to learn where all the notes are on your instrument of choice. Please take some time to do so before moving on to the next lesson!</p>
+    <p>If your instrument of choice is piano, there is an interactive exercise below. If your instrument of choise is guitar, there is an interactive exercise below, and a comprehensive lesson: <NavLink to="learn-guitar-notes-in-10-steps" className="nav-link">Learn the Notes on Guitar in 10 Easy Steps</NavLink></p>
 
     <SubSectionTitle>Interactive Exercises</SubSectionTitle>
     <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(NotesQuiz.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
