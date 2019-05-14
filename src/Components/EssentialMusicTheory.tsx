@@ -154,6 +154,133 @@ const HalfStepsDiagram: React.FunctionComponent<{}> = props => {
   );
 };
 
+
+const IntervalsTable: React.FunctionComponent<{ showExamples?: boolean, showCategories?: boolean }> = props => {
+  const showExamples = (props.showExamples != undefined) ? props.showExamples : true;
+  const showCategories = (props.showCategories != undefined) ? props.showCategories : true;
+
+  return (
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell># of Half Steps</TableCell>
+          <TableCell>Common Name</TableCell>
+          <TableCell>Symbol</TableCell>
+          {showExamples ? <TableCell>Ascending Example</TableCell> : null}
+          {showExamples ? <TableCell>Descending Example</TableCell> : null}
+          {showCategories ? <TableCell>Category</TableCell> : null}
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        <TableRow>
+          <TableCell>0</TableCell>
+          <TableCell>Unison</TableCell>
+          <TableCell>P1</TableCell>
+          {showExamples ? <TableCell>N/A</TableCell> : null}
+          {showExamples ? <TableCell>N/A</TableCell> : null}
+          {showCategories ? <TableCell>N/A</TableCell> : null}
+        </TableRow>
+        <TableRow>
+          <TableCell>1</TableCell>
+          <TableCell>Minor 2nd, "whole step", "tone"</TableCell>
+          <TableCell>m2</TableCell>
+          {showExamples ? <TableCell>Jaws (Theme) - <a href="https://www.youtube.com/watch?v=ZvCI-gNK_y4#t=0s">YouTube</a></TableCell> : null}
+          {showExamples ? <TableCell>Für Elise (Beethoven) - <a href="https://www.youtube.com/watch?v=LQTTFUtMSvQ#t=0s">YouTube</a></TableCell> : null}
+          {showCategories ? <TableCell>Sharp Dissonance</TableCell> : null}
+        </TableRow>
+        <TableRow>
+          <TableCell>2</TableCell>
+          <TableCell>Major 2nd</TableCell>
+          <TableCell>M2</TableCell>
+          {showExamples ? <TableCell>Happy Birthday to You - <a href="https://www.youtube.com/watch?v=90w2RegGf9w#t=7s">YouTube</a></TableCell> : null}
+          {showExamples ? <TableCell>Mary Had a Little Lamb - <a href="https://www.youtube.com/watch?v=Zq-MtHpRhVk#t=11s">YouTube</a></TableCell> : null}
+          {showCategories ? <TableCell>Mild Dissonance</TableCell> : null}
+        </TableRow>
+        <TableRow>
+          <TableCell>3</TableCell>
+          <TableCell>Minor 3rd</TableCell>
+          <TableCell>m3</TableCell>
+          {showExamples ? <TableCell>Smoke on the Water (Deep Purple - <a href="https://www.youtube.com/watch?v=arpZ3fCwDEw#t=23s">YouTube</a></TableCell> : null}
+          {showExamples ? <TableCell>Frosty the Snowman - <a href="Smoke on the Water (Deep Purple) - youtube">YouTube</a></TableCell> : null}
+          {showCategories ? <TableCell>Soft Consonance</TableCell> : null}
+        </TableRow>
+        <TableRow>
+          <TableCell>4</TableCell>
+          <TableCell>Major 3rd</TableCell>
+          <TableCell>M3</TableCell>
+          {showExamples ? <TableCell>Oh, when the Saints - <a href="https://www.youtube.com/watch?v=UREnLVrHv4A#t=27s">YouTube</a></TableCell> : null}
+          {showExamples ? <TableCell>Fate - Symphoni No.5 (Beethoven) - <a href="https://www.youtube.com/watch?v=6z4KK7RWjmk#t=8s">YouTube</a></TableCell> : null}
+          {showCategories ? <TableCell>Soft Consonance</TableCell> : null}
+        </TableRow>
+        <TableRow>
+          <TableCell>5</TableCell>
+          <TableCell>Perfect 4th</TableCell>
+          <TableCell>P4</TableCell>
+          {showExamples ? <TableCell>Here Comes the Bride - <a href="https://www.youtube.com/watch?v=oBt6Myv75jk#t=30s">YouTube</a></TableCell> : null}
+          {showExamples ? <TableCell>Eine Kleine Nachtmusik (Mozart) - <a href="https://www.youtube.com/watch?v=Qb_jQBgzU-I#t=28s">YouTube</a></TableCell> : null}
+          {showCategories ? <TableCell>Context-Dependent</TableCell> : null}
+        </TableRow>
+        <TableRow>
+          <TableCell>6</TableCell>
+          <TableCell>Tritone</TableCell>
+          <TableCell>A4/d5</TableCell>
+          {showExamples ? <TableCell>The Simpsons (Theme) - <a href="https://www.youtube.com/watch?v=Xqog63KOANc#t=2s">YouTube</a></TableCell> : null}
+          {showExamples ? <TableCell>Even Flow (Pearl Jam) - <a href="https://www.youtube.com/watch?v=CxKWTzr-k6s#t=26s">YouTube</a></TableCell> : null}
+          {showCategories ? <TableCell>Neutral? Restless? Sharp Dissonance?</TableCell> : null}
+        </TableRow>
+        <TableRow>
+          <TableCell>7</TableCell>
+          <TableCell>Perfect 5th</TableCell>
+          <TableCell>P5</TableCell>
+          {showExamples ? <TableCell>Twinkle Twinkle Little Star (Mozart) - <a href="https://www.youtube.com/watch?v=yCjJyiqpAuU#t=20s">YouTube</a></TableCell> : null}
+          {showExamples ? <TableCell>What do you do with a Drunken Sailor - <a href="https://www.youtube.com/watch?v=qGyPuey-1Jw#t=4s">YouTube</a></TableCell> : null}
+          {showCategories ? <TableCell>Open Consonance</TableCell> : null}
+        </TableRow>
+        <TableRow>
+          <TableCell>8</TableCell>
+          <TableCell>Minor 6th</TableCell>
+          <TableCell>m6</TableCell>
+          {showExamples ? <TableCell>Waltz Op.64 No.2 (Chopin) - <a href="https://www.youtube.com/watch?v=C9r-0sL6jL0#t=4s">YouTube</a></TableCell> : null}
+          {showExamples ? <TableCell>Five for Fighting - (100 Years) - <a href="https://www.youtube.com/watch?v=tR-qQcNT_fY#t=16s">YouTube</a></TableCell> : null}
+          {showCategories ? <TableCell>Soft Consonance</TableCell> : null}
+        </TableRow>
+        <TableRow>
+          <TableCell>9</TableCell>
+          <TableCell>Major 6th</TableCell>
+          <TableCell>M6</TableCell>
+          {showExamples ? <TableCell>Dashing Through the Snow - <a href="https://www.youtube.com/watch?v=UPeol7oEzrw#t=9s">YouTube</a></TableCell> : null}
+          {showExamples ? <TableCell>The Music of the Night (Phantom of the Opera) - <a href="https://www.youtube.com/watch?v=EPXPwRgV-NM#t=0s">YouTube</a></TableCell> : null}
+          {showCategories ? <TableCell>Soft Consonance</TableCell> : null}
+        </TableRow>
+        <TableRow>
+          <TableCell>10</TableCell>
+          <TableCell>Minor 7th </TableCell>
+          <TableCell>m7</TableCell>
+          {showExamples ? <TableCell>Somewhere - (West side story)<a href="https://www.youtube.com/watch?v=HtO2iC0KIQ8#t=67s">YouTube</a></TableCell> : null}
+          {showExamples ? <TableCell>An American in Paris (Gershwin) - <a href="https://www.youtube.com/watch?v=MWzlivSzpJM#t=0s">YouTube</a></TableCell> : null}
+          {showCategories ? <TableCell>Mild Dissonance</TableCell> : null}
+        </TableRow>
+        <TableRow>
+          <TableCell>11</TableCell>
+          <TableCell>Major 7th</TableCell>
+          <TableCell>M7</TableCell>
+          {showExamples ? <TableCell>Take on Me (A-Ha) - <a href="https://www.youtube.com/watch?v=djV11Xbc914#t=53s">YouTube</a></TableCell> : null}
+          {showExamples ? <TableCell>I Love You (Cole Porter) - <a href="https://www.youtube.com/watch?v=nXIXknT-iQ8#t=15s">YouTube</a></TableCell> : null}
+          {showCategories ? <TableCell>Sharp Dissonance</TableCell> : null}
+        </TableRow>
+        <TableRow>
+          <TableCell>12</TableCell>
+          <TableCell>Octave</TableCell>
+          <TableCell>P8</TableCell>
+          {showExamples ? <TableCell>Somewhere Over the Rainbow - <a href="https://www.youtube.com/watch?v=PSZxmZmBfnU">YouTube</a></TableCell> : null}
+          {showExamples ? <TableCell>The Lonely Goatherd (The Sound of Music) - <a href="https://www.youtube.com/watch?v=gRo0NlLYvwE#t=13s">YouTube</a></TableCell> : null}
+          {showCategories ? <TableCell>Open Consonance</TableCell> : null}
+        </TableRow>
+      </TableBody>
+    </Table>
+  );
+};
+
 export interface SectionProps {
   isEmbedded: boolean;
   hideMoreInfoUri: boolean;
@@ -342,136 +469,53 @@ export const NotesSection: React.FunctionComponent<SectionProps> = props => (
 export const IntervalsSection: React.FunctionComponent<SectionProps> = props => (
   <div>
     <SectionTitle>Intervals</SectionTitle>
-    <p>An <Term>interval</Term> is the distance between two notes. Understanding intervals and training your ear to be able to recognize them is one of the most important skills as a musician, because a firm grasp on intervals establishes a link between your mind, your instrument, and your emotions.</p>
-    <p>Intervals are measured by the number of <Term>half steps</Term> or <Term>semitones</Term> between the notes. <Term>Half steps</Term> are the smallest interval that can be made between two notes (aside from <Term>unisons</Term>, which are explained after the diagram).</p>
+    <p>An <Term>interval</Term> is simply the distance between two notes. Understanding intervals and training your ear to be able to recognize them is one of the most important skills as a musician, because a firm grasp on intervals establishes a link between your mind, your instrument, and your emotions.</p>
+    
+    <p>Intervals are measured by the number of <Term>half steps</Term> or <Term>semitones</Term> between the notes. <Term>Half steps</Term> are the smallest interval (aside from <Term>unisons</Term>, which are explained after the diagram) in Western music.</p>
     <HalfStepsDiagram />
 
+    <p>Every interval is described by an <Term>interval number</Term> and an <Term>interval quality</Term>.</p>
+    <p>The <Term>interval number</Term> is the number of letters the interval spans &mdash; so C to D (ascending) would be 2, G to Db (ascending) would be 5, F# to Db (descending) would be 3, and so on.</p>
+    <p>The interval quality is one of the following: perfect (P), major (M), minor (m), diminished (d), augmented (A). Before learning how to choose the interval quality when naming an interval, we must first learn the <Term>simple intervals</Term> and their common names.</p>
+
     <SectionTitle>Simple Intervals</SectionTitle>
-    <p>There are 13 <Term>simple intervals</Term>, which are intervals an octave (12 half steps) or smaller:</p>
-    <Table>
-      <TableHead>
-        <TableRow>
-          <TableCell># of Half Steps</TableCell>
-          <TableCell>Interval Name</TableCell>
-          <TableCell>Interval Symbol</TableCell>
-          <TableCell>Ascending Example</TableCell>
-          <TableCell>Descending Example</TableCell>
-          <TableCell>Category</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        <TableRow>
-          <TableCell>0</TableCell>
-          <TableCell>Unison</TableCell>
-          <TableCell>P1</TableCell>
-          <TableCell>N/A</TableCell>
-          <TableCell>N/A</TableCell>
-          <TableCell>N/A</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>1</TableCell>
-          <TableCell>Minor 2nd, "whole step", "tone"</TableCell>
-          <TableCell>m2</TableCell>
-          <TableCell>Jaws (Theme) - <a href="https://www.youtube.com/watch?v=ZvCI-gNK_y4#t=0s">YouTube</a></TableCell>
-          <TableCell>Für Elise (Beethoven) - <a href="https://www.youtube.com/watch?v=LQTTFUtMSvQ#t=0s">YouTube</a></TableCell>
-          <TableCell>Sharp Dissonance</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>2</TableCell>
-          <TableCell>Major 2nd</TableCell>
-          <TableCell>M2</TableCell>
-          <TableCell>Happy Birthday to You - <a href="https://www.youtube.com/watch?v=90w2RegGf9w#t=7s">YouTube</a></TableCell>
-          <TableCell>Mary Had a Little Lamb - <a href="https://www.youtube.com/watch?v=Zq-MtHpRhVk#t=11s">YouTube</a></TableCell>
-          <TableCell>Mild Dissonance</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>3</TableCell>
-          <TableCell>Minor 3rd</TableCell>
-          <TableCell>m3</TableCell>
-          <TableCell>Smoke on the Water (Deep Purple - <a href="https://www.youtube.com/watch?v=arpZ3fCwDEw#t=23s">YouTube</a></TableCell>
-          <TableCell>Frosty the Snowman - <a href="Smoke on the Water (Deep Purple) - youtube">YouTube</a></TableCell>
-          <TableCell>Soft Consonance</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>4</TableCell>
-          <TableCell>Major 3rd</TableCell>
-          <TableCell>M3</TableCell>
-          <TableCell>Oh, when the Saints - <a href="https://www.youtube.com/watch?v=UREnLVrHv4A#t=27s">YouTube</a></TableCell>
-          <TableCell>Fate - Symphoni No.5 (Beethoven) - <a href="https://www.youtube.com/watch?v=6z4KK7RWjmk#t=8s">YouTube</a></TableCell>
-          <TableCell>Soft Consonance</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>5</TableCell>
-          <TableCell>Perfect 4th</TableCell>
-          <TableCell>P4</TableCell>
-          <TableCell>Here Comes the Bride - <a href="https://www.youtube.com/watch?v=oBt6Myv75jk#t=30s">YouTube</a></TableCell>
-          <TableCell>Eine Kleine Nachtmusik (Mozart) - <a href="https://www.youtube.com/watch?v=Qb_jQBgzU-I#t=28s">YouTube</a></TableCell>
-          <TableCell>Context-Dependent</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>6</TableCell>
-          <TableCell>Tritone</TableCell>
-          <TableCell>A4/d5</TableCell>
-          <TableCell>The Simpsons (Theme) - <a href="https://www.youtube.com/watch?v=Xqog63KOANc#t=2s">YouTube</a></TableCell>
-          <TableCell>Even Flow (Pearl Jam) - <a href="https://www.youtube.com/watch?v=CxKWTzr-k6s#t=26s">YouTube</a></TableCell>
-          <TableCell>Neutral? Restless? Sharp Dissonance?</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>7</TableCell>
-          <TableCell>Perfect 5th</TableCell>
-          <TableCell>P5</TableCell>
-          <TableCell>Twinkle Twinkle Little Star (Mozart) - <a href="https://www.youtube.com/watch?v=yCjJyiqpAuU#t=20s">YouTube</a></TableCell>
-          <TableCell>What do you do with a Drunken Sailor - <a href="https://www.youtube.com/watch?v=qGyPuey-1Jw#t=4s">YouTube</a></TableCell>
-          <TableCell>Open Consonance</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>8</TableCell>
-          <TableCell>Minor 6th</TableCell>
-          <TableCell>m6</TableCell>
-          <TableCell>Waltz Op.64 No.2 (Chopin) - <a href="https://www.youtube.com/watch?v=C9r-0sL6jL0#t=4s">YouTube</a></TableCell>
-          <TableCell>Five for Fighting - (100 Years) - <a href="https://www.youtube.com/watch?v=tR-qQcNT_fY#t=16s">YouTube</a></TableCell>
-          <TableCell>Soft Consonance</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>9</TableCell>
-          <TableCell>Major 6th</TableCell>
-          <TableCell>M6</TableCell>
-          <TableCell>Dashing Through the Snow - <a href="https://www.youtube.com/watch?v=UPeol7oEzrw#t=9s">YouTube</a></TableCell>
-          <TableCell>The Music of the Night (Phantom of the Opera) - <a href="https://www.youtube.com/watch?v=EPXPwRgV-NM#t=0s">YouTube</a></TableCell>
-          <TableCell>Soft Consonance</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>10</TableCell>
-          <TableCell>Minor 7th </TableCell>
-          <TableCell>m7</TableCell>
-          <TableCell>Somewhere - (West side story)<a href="https://www.youtube.com/watch?v=HtO2iC0KIQ8#t=67s">YouTube</a></TableCell>
-          <TableCell>An American in Paris (Gershwin) - <a href="https://www.youtube.com/watch?v=MWzlivSzpJM#t=0s">YouTube</a></TableCell>
-          <TableCell>Mild Dissonance</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>11</TableCell>
-          <TableCell>Major 7th</TableCell>
-          <TableCell>M7</TableCell>
-          <TableCell>Take on Me (A-Ha) - <a href="https://www.youtube.com/watch?v=djV11Xbc914#t=53s">YouTube</a></TableCell>
-          <TableCell>I Love You (Cole Porter) - <a href="https://www.youtube.com/watch?v=nXIXknT-iQ8#t=15s">YouTube</a></TableCell>
-          <TableCell>Sharp Dissonance</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>12</TableCell>
-          <TableCell>Octave</TableCell>
-          <TableCell>P8</TableCell>
-          <TableCell>Somewhere Over the Rainbow - <a href="https://www.youtube.com/watch?v=PSZxmZmBfnU">YouTube</a></TableCell>
-          <TableCell>The Lonely Goatherd (The Sound of Music) - <a href="https://www.youtube.com/watch?v=gRo0NlLYvwE#t=13s">YouTube</a></TableCell>
-          <TableCell>Open Consonance</TableCell>
-        </TableRow>
-      </TableBody>
-    </Table>
+    <p>There are 13 <Term>simple intervals</Term>, which are intervals an <Term>octave</Term> (12 half steps) or smaller. Take some time to memorize them:</p>
+    <IntervalsTable showExamples={false} showCategories={false} />
 
-    <SectionTitle>Interval Qualities</SectionTitle>
-    <p>TODO: Explain minor/major/perfect/augmented/diminished</p>
+    <SectionTitle>Choosing Interval Qualities</SectionTitle>
+    <p>To figure out what interval quality to use when naming an interval, you first need to know three things about the interval:</p>
+    <ul>
+      <li>the interval's number (which the number of letters the interval spans, as stated earlier)</li>
+      <li>the number of half steps in the interval</li>
+      <li>the common name for intervals with that number of half steps</li>
+    </ul>
+    <p>If the common name for that number of half steps matches with what you determined to be the interval number, you can simply use the common name.</p>
 
-    <SectionTitle>Interval Numbering Explained</SectionTitle>
-    <p>TODO: Explain 2nd, 3rd, etc, and enharmonic intervals</p>
+    <p>For the interval between C and E, for example:</p>
+    <ul>
+      <li>The interval number is 3.</li>
+      <li>There are 4 half steps between the two notes.</li>
+      <li>The common name for intervals with 4 half step is "Major 3rd".</li>
+    </ul>
+    <p>Because the common name is a 3rd, and the interval number between C and E is 3, we can simply name the interval a "Major 3rd" (M3).</p>
+
+    <p>The interval between C and D#, for example, is not as straightforward to name:</p>
+    <ul>
+      <li>The interval number is 2.</li>
+      <li>There are 3 half steps between the two notes.</li>
+      <li>The common name for intervals with 3 half steps is "Minor 3rd".</li>
+    </ul>
+    <p>In this case, we can't use the common name for intervals with 3 half steps ("Minor 3rd") because it is a 3rd, which doesn't match our decided interval number of 2. Instead, we will keep the interval number of 2 and change the quality of the interval from "Major" to something else.</p>
+    <p>The interval qualities actually have an order to them based on their sharpness/flatness. From sharpest to flattest:</p>
+    <ol>
+      <li>Augmented (A)</li>
+      <li>Perfect (P), Major (M)</li>
+      <li>Minor (m)</li>
+      <li>Diminished (d)</li>
+    </ol>
+    <p>TODO: diagram</p>
+    <p>TODO: finish naming interval</p>
+    <p>TODO: explain doubly augmented/dimished</p>
 
     <SectionTitle>Compound Intervals</SectionTitle>
     <p>Beyond the "simple" intervals, there are "compound" intervals, for example:</p>
