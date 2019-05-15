@@ -26,6 +26,8 @@ import * as RhythymTermsQuiz from "./Quizzes/RhythmTermsQuiz";
 import * as NoteDurations from "./Quizzes/NoteDurations";
 import * as NoteValueNumbers from "./Quizzes/NoteValueNumbers";
 
+import intervalQualityChart from "../img/interval-qualities.svg";
+
 import * as IntervalNamesToHalfSteps from "./Quizzes/IntervalNamesToHalfSteps";
 import * as IntervalEarTraining from "./Quizzes/IntervalEarTraining";
 
@@ -457,7 +459,7 @@ export const NotesSection: React.FunctionComponent<SectionProps> = props => (
     <NoteText>Though there are no black keys in-between B &amp; C and E &amp; F, you can &mdash; and sometimes must, as we will discover in a future lesson &mdash; use accidentals to name those notes relative to another. So, Cb is the same as B, B# is the same as C, Fb is the same as E, and E# is the same as F.</NoteText>
     
     <p>It is <strong>vitally</strong> important to learn where all the notes are on your instrument of choice. Please take some time to do so before moving on to the next lesson!</p>
-    <p>If your instrument of choice is piano, there is an interactive exercise below. If your instrument of choise is guitar, there is an interactive exercise below, and a comprehensive lesson: <NavLink to="learn-guitar-notes-in-10-steps" className="nav-link">Learn the Notes on Guitar in 10 Easy Steps</NavLink></p>
+    <p>If your instrument of choice is piano, there is an interactive exercise below. If your instrument of choise is guitar, there is an interactive exercise below, and a comprehensive lesson: <NavLink to="/learn-guitar-notes-in-10-steps" className="nav-link">Learn the Notes on Guitar in 10 Easy Steps</NavLink></p>
 
     <SubSectionTitle>Interactive Exercises</SubSectionTitle>
     <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(NotesQuiz.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
@@ -480,11 +482,11 @@ export const IntervalsSection: React.FunctionComponent<SectionProps> = props => 
     <p>The <Term>interval number</Term> is the number of letters the interval spans &mdash; so C to D (ascending) would be 2, G to Db (ascending) would be 5, F# to Db (descending) would be 3, and so on.</p>
     <p>The interval quality is one of the following: perfect (P), major (M), minor (m), diminished (d), augmented (A). Before learning how to choose the interval quality when naming an interval, we must first learn the <Term>simple intervals</Term> and their common names.</p>
 
-    <SectionTitle>Simple Intervals</SectionTitle>
+    <SubSectionTitle>Simple Intervals</SubSectionTitle>
     <p>There are 13 <Term>simple intervals</Term>, which are intervals an <Term>octave</Term> (12 half steps) or smaller. Take some time to memorize them:</p>
     <IntervalsTable showExamples={false} showCategories={false} />
 
-    <SectionTitle>Choosing Interval Qualities</SectionTitle>
+    <SubSectionTitle>Choosing Interval Qualities</SubSectionTitle>
     <p>To figure out what interval quality to use when naming an interval, you first need to know three things about the interval:</p>
     <ul>
       <li>the interval's number (which the number of letters the interval spans, as stated earlier)</li>
@@ -493,7 +495,7 @@ export const IntervalsSection: React.FunctionComponent<SectionProps> = props => 
     </ul>
     <p>If the common name for that number of half steps matches with what you determined to be the interval number, you can simply use the common name.</p>
 
-    <p>For the interval between C and E, for example:</p>
+    <p>For the interval from C to E, for example:</p>
     <ul>
       <li>The interval number is 3.</li>
       <li>There are 4 half steps between the two notes.</li>
@@ -501,34 +503,37 @@ export const IntervalsSection: React.FunctionComponent<SectionProps> = props => 
     </ul>
     <p>Because the common name is a 3rd, and the interval number between C and E is 3, we can simply name the interval a "Major 3rd" (M3).</p>
 
-    <p>The interval between C and D#, for example, is not as straightforward to name:</p>
+    <p>The interval from C to D#, for example, is not as straightforward to name:</p>
     <ul>
       <li>The interval number is 2.</li>
       <li>There are 3 half steps between the two notes.</li>
       <li>The common name for intervals with 3 half steps is "Minor 3rd".</li>
     </ul>
-    <p>In this case, we can't use the common name for intervals with 3 half steps ("Minor 3rd") because it is a 3rd, which doesn't match our decided interval number of 2. Instead, we will keep the interval number of 2 and change the quality of the interval from "Major" to something else.</p>
-    <p>The interval qualities actually have an order to them based on their sharpness/flatness. From sharpest to flattest:</p>
-    <ol>
-      <li>Augmented (A)</li>
-      <li>Perfect (P), Major (M)</li>
-      <li>Minor (m)</li>
-      <li>Diminished (d)</li>
-    </ol>
-    <p>TODO: diagram</p>
-    <p>TODO: finish naming interval</p>
-    <p>TODO: explain doubly augmented/dimished</p>
+    <p>In this case, we can't use the common name for intervals with 3 half steps ("Minor 3rd") because it doesn't match our decided interval number of 2. Instead, we will keep the interval number of 2 and change the quality of the interval to make it span 3 half steps.</p>
+    <p>We have memorized the simple intervals above, so we know that the largest interval with an interval number of 2 is a Major 2nd (M2), which spans 2 half steps. We need to change the quality to increase the number of spanned half steps to 3. To do this, we follow this chart which describes how interval qualities change as half steps are added (+) or removed (-):</p>
+    <p><img src={intervalQualityChart} alt="Interval Qualities" style={{ width: "100%", maxWidth: "400px", height: "auto" }} /></p>
+    <p>From the chart we see that, to change the Major 2nd interval's quality to make it span an additional half step, we need to change the quality to "Augmented". So, the name for the interval from C to D# is "Augmented 2nd" (A2).</p>
 
-    <SectionTitle>Compound Intervals</SectionTitle>
-    <p>Beyond the "simple" intervals, there are "compound" intervals, for example:</p>
+    <NoteText>Some intervals (such as from C to D##) require interval qualities that exceed the ones in the chart above. In these cases, you can simply use "doubly augmented" (AA), "triply augmented" (AAA), and so on, or "doubly diminished" (dd), "triply diminished" (ddd), and so on.</NoteText>
+
+    <SubSectionTitle>Compound Intervals</SubSectionTitle>
+    <p>Beyond the <Term>simple intervals</Term> there are <Term>compound intervals</Term>, which span more than 12 half steps (P8). Some examples of <Term>compound intervals</Term> are:</p>
     <ul>
       <li>Minor 9th (m9) - 13 half steps, or 1 octave and 1 half step</li>
-      <li>Perfect 16th (P16) - 24 half steps, or 2 octaves</li>
-      <li>Major 17th (M17) - 26 half steps, or 2 octaves and 2 half steps</li>
+      <li>Perfect 15th (P15) - 24 half steps, or 2 octaves</li>
+      <li>Major 17th (M17) - 28 half steps, or 2 octaves and 4 half steps</li>
       <li>and so on...</li>
     </ul>
-    <p>but when analyzing intervals, it is often useful to reduce compound intervals to simple intervals by subtracting octaves until you are left with a simple interval.</p>
-    <p>TODO: examples?</p>
+    <p>When analyzing the sound and function of <Term>compound intervals</Term>, however, we generally reduce compound intervals to simple intervals by subtracting octaves until you are left with a simple interval. So:</p>
+    <ul>
+      <li>m9 would reduce to m2</li>
+      <li>P15 would reduce to P8</li>
+      <li>M17 would reduce to M3</li>
+    </ul>
+    <p>and so on...</p>
+
+    <SubSectionTitle>Ear Training</SubSectionTitle>
+    <p>TODO: ear training &amp; consonance/dissonance</p>
     
     {createStudyFlashCardGroupComponent(IntervalNamesToHalfSteps.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}
     {createStudyFlashCardGroupComponent(IntervalEarTraining.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}

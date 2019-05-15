@@ -1,5 +1,6 @@
 # To-Do
 ## High Priority
+* Add inversions to Piano Chords
 * Add sheet music notes lesson.
 * Add piano notes lesson?
 * Guitar Notes Lesson
