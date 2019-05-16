@@ -99,13 +99,13 @@ export function getPitchAudioFilePath(pitch: Pitch): string | null {
   return kvp[1];
 }
 
-export function playPitches(pitches: Array<Pitch>) {
+export function playPitches(pitches: Array<Pitch>): Promise<Array<Howl>> {
   const soundFilePaths = pitches
     .map(getPitchAudioFilePath)
     .filter(fp => fp !== null)
     .map(fp => fp as string);
 
-  playSoundsSimultaneously(soundFilePaths);
+  return playSoundsSimultaneously(soundFilePaths);
 }
 
 // returns: a cancellation function

@@ -162,6 +162,24 @@ const IntervalsTable: React.FunctionComponent<{ showExamples?: boolean, showCate
   const showExamples = (props.showExamples != undefined) ? props.showExamples : true;
   const showCategories = (props.showCategories != undefined) ? props.showCategories : true;
 
+  let playingSounds: Array<Howl> | null = null;
+  const playInterval = (halfSteps: number) => {
+    if (playingSounds !== null) {
+      for (const playingSound of playingSounds) {
+        playingSound.stop();
+      }
+      
+      playingSounds = null;
+    }
+
+    const basePitch = new Pitch(PitchLetter.C, 0, 4);
+    const pitches = (halfSteps === 0)
+      ? [basePitch]
+      : [basePitch, Pitch.createFromMidiNumber(basePitch.midiNumber + halfSteps)];
+    playPitches(pitches)
+      .then(sounds => { playingSounds = sounds; });
+  };
+
   return (
     <Table>
       <TableHead>
@@ -169,6 +187,7 @@ const IntervalsTable: React.FunctionComponent<{ showExamples?: boolean, showCate
           <TableCell># of Half Steps</TableCell>
           <TableCell>Common Name</TableCell>
           <TableCell>Symbol</TableCell>
+          {showExamples ? <TableCell>Play</TableCell> : null}
           {showExamples ? <TableCell>Ascending Example</TableCell> : null}
           {showExamples ? <TableCell>Descending Example</TableCell> : null}
           {showCategories ? <TableCell>Category</TableCell> : null}
@@ -179,14 +198,16 @@ const IntervalsTable: React.FunctionComponent<{ showExamples?: boolean, showCate
           <TableCell>0</TableCell>
           <TableCell>Unison</TableCell>
           <TableCell>P1</TableCell>
+          {showExamples ? <TableCell><i className="cursor-pointer material-icons" onClick={e => playInterval(0)}>play_arrow</i></TableCell> : null}
           {showExamples ? <TableCell>N/A</TableCell> : null}
           {showExamples ? <TableCell>N/A</TableCell> : null}
-          {showCategories ? <TableCell>N/A</TableCell> : null}
+          {showCategories ? <TableCell>Perfect Consonance</TableCell> : null}
         </TableRow>
         <TableRow>
           <TableCell>1</TableCell>
           <TableCell>Minor 2nd, "whole step", "tone"</TableCell>
           <TableCell>m2</TableCell>
+          {showExamples ? <TableCell><i className="cursor-pointer material-icons" onClick={e => playInterval(1)}>play_arrow</i></TableCell> : null}
           {showExamples ? <TableCell>Jaws (Theme) - <a href="https://www.youtube.com/watch?v=ZvCI-gNK_y4#t=0s">YouTube</a></TableCell> : null}
           {showExamples ? <TableCell>Für Elise (Beethoven) - <a href="https://www.youtube.com/watch?v=LQTTFUtMSvQ#t=0s">YouTube</a></TableCell> : null}
           {showCategories ? <TableCell>Sharp Dissonance</TableCell> : null}
@@ -195,6 +216,7 @@ const IntervalsTable: React.FunctionComponent<{ showExamples?: boolean, showCate
           <TableCell>2</TableCell>
           <TableCell>Major 2nd</TableCell>
           <TableCell>M2</TableCell>
+          {showExamples ? <TableCell><i className="cursor-pointer material-icons" onClick={e => playInterval(2)}>play_arrow</i></TableCell> : null}
           {showExamples ? <TableCell>Happy Birthday to You - <a href="https://www.youtube.com/watch?v=90w2RegGf9w#t=7s">YouTube</a></TableCell> : null}
           {showExamples ? <TableCell>Mary Had a Little Lamb - <a href="https://www.youtube.com/watch?v=Zq-MtHpRhVk#t=11s">YouTube</a></TableCell> : null}
           {showCategories ? <TableCell>Mild Dissonance</TableCell> : null}
@@ -203,62 +225,70 @@ const IntervalsTable: React.FunctionComponent<{ showExamples?: boolean, showCate
           <TableCell>3</TableCell>
           <TableCell>Minor 3rd</TableCell>
           <TableCell>m3</TableCell>
-          {showExamples ? <TableCell>Smoke on the Water (Deep Purple - <a href="https://www.youtube.com/watch?v=arpZ3fCwDEw#t=23s">YouTube</a></TableCell> : null}
+          {showExamples ? <TableCell><i className="cursor-pointer material-icons" onClick={e => playInterval(3)}>play_arrow</i></TableCell> : null}
+          {showExamples ? <TableCell>Smoke on the Water (Deep Purple) - <a href="https://www.youtube.com/watch?v=arpZ3fCwDEw#t=23s">YouTube</a></TableCell> : null}
           {showExamples ? <TableCell>Frosty the Snowman - <a href="Smoke on the Water (Deep Purple) - youtube">YouTube</a></TableCell> : null}
-          {showCategories ? <TableCell>Soft Consonance</TableCell> : null}
+          {showCategories ? <TableCell>Imperfect Consonance</TableCell> : null}
         </TableRow>
         <TableRow>
           <TableCell>4</TableCell>
           <TableCell>Major 3rd</TableCell>
           <TableCell>M3</TableCell>
+          {showExamples ? <TableCell><i className="cursor-pointer material-icons" onClick={e => playInterval(4)}>play_arrow</i></TableCell> : null}
           {showExamples ? <TableCell>Oh, when the Saints - <a href="https://www.youtube.com/watch?v=UREnLVrHv4A#t=27s">YouTube</a></TableCell> : null}
           {showExamples ? <TableCell>Fate - Symphoni No.5 (Beethoven) - <a href="https://www.youtube.com/watch?v=6z4KK7RWjmk#t=8s">YouTube</a></TableCell> : null}
-          {showCategories ? <TableCell>Soft Consonance</TableCell> : null}
+          {showCategories ? <TableCell>Imperfect Consonance</TableCell> : null}
         </TableRow>
         <TableRow>
           <TableCell>5</TableCell>
           <TableCell>Perfect 4th</TableCell>
           <TableCell>P4</TableCell>
+          {showExamples ? <TableCell><i className="cursor-pointer material-icons" onClick={e => playInterval(5)}>play_arrow</i></TableCell> : null}
           {showExamples ? <TableCell>Here Comes the Bride - <a href="https://www.youtube.com/watch?v=oBt6Myv75jk#t=30s">YouTube</a></TableCell> : null}
           {showExamples ? <TableCell>Eine Kleine Nachtmusik (Mozart) - <a href="https://www.youtube.com/watch?v=Qb_jQBgzU-I#t=28s">YouTube</a></TableCell> : null}
-          {showCategories ? <TableCell>Context-Dependent</TableCell> : null}
+          {showCategories ? <TableCell>Context Dependent</TableCell> : null}
         </TableRow>
         <TableRow>
           <TableCell>6</TableCell>
           <TableCell>Tritone</TableCell>
           <TableCell>A4/d5</TableCell>
+          {showExamples ? <TableCell><i className="cursor-pointer material-icons" onClick={e => playInterval(6)}>play_arrow</i></TableCell> : null}
           {showExamples ? <TableCell>The Simpsons (Theme) - <a href="https://www.youtube.com/watch?v=Xqog63KOANc#t=2s">YouTube</a></TableCell> : null}
           {showExamples ? <TableCell>Even Flow (Pearl Jam) - <a href="https://www.youtube.com/watch?v=CxKWTzr-k6s#t=26s">YouTube</a></TableCell> : null}
-          {showCategories ? <TableCell>Neutral? Restless? Sharp Dissonance?</TableCell> : null}
+          {showCategories ? <TableCell>Sharp Dissonance</TableCell> : null}
         </TableRow>
         <TableRow>
           <TableCell>7</TableCell>
           <TableCell>Perfect 5th</TableCell>
           <TableCell>P5</TableCell>
+          {showExamples ? <TableCell><i className="cursor-pointer material-icons" onClick={e => playInterval(7)}>play_arrow</i></TableCell> : null}
           {showExamples ? <TableCell>Twinkle Twinkle Little Star (Mozart) - <a href="https://www.youtube.com/watch?v=yCjJyiqpAuU#t=20s">YouTube</a></TableCell> : null}
           {showExamples ? <TableCell>What do you do with a Drunken Sailor - <a href="https://www.youtube.com/watch?v=qGyPuey-1Jw#t=4s">YouTube</a></TableCell> : null}
-          {showCategories ? <TableCell>Open Consonance</TableCell> : null}
+          {showCategories ? <TableCell>Perfect Consonance</TableCell> : null}
         </TableRow>
         <TableRow>
           <TableCell>8</TableCell>
           <TableCell>Minor 6th</TableCell>
           <TableCell>m6</TableCell>
+          {showExamples ? <TableCell><i className="cursor-pointer material-icons" onClick={e => playInterval(8)}>play_arrow</i></TableCell> : null}
           {showExamples ? <TableCell>Waltz Op.64 No.2 (Chopin) - <a href="https://www.youtube.com/watch?v=C9r-0sL6jL0#t=4s">YouTube</a></TableCell> : null}
           {showExamples ? <TableCell>Five for Fighting - (100 Years) - <a href="https://www.youtube.com/watch?v=tR-qQcNT_fY#t=16s">YouTube</a></TableCell> : null}
-          {showCategories ? <TableCell>Soft Consonance</TableCell> : null}
+          {showCategories ? <TableCell>Imperfect Consonance</TableCell> : null}
         </TableRow>
         <TableRow>
           <TableCell>9</TableCell>
           <TableCell>Major 6th</TableCell>
           <TableCell>M6</TableCell>
+          {showExamples ? <TableCell><i className="cursor-pointer material-icons" onClick={e => playInterval(9)}>play_arrow</i></TableCell> : null}
           {showExamples ? <TableCell>Dashing Through the Snow - <a href="https://www.youtube.com/watch?v=UPeol7oEzrw#t=9s">YouTube</a></TableCell> : null}
           {showExamples ? <TableCell>The Music of the Night (Phantom of the Opera) - <a href="https://www.youtube.com/watch?v=EPXPwRgV-NM#t=0s">YouTube</a></TableCell> : null}
-          {showCategories ? <TableCell>Soft Consonance</TableCell> : null}
+          {showCategories ? <TableCell>Imperfect Consonance</TableCell> : null}
         </TableRow>
         <TableRow>
           <TableCell>10</TableCell>
           <TableCell>Minor 7th </TableCell>
           <TableCell>m7</TableCell>
+          {showExamples ? <TableCell><i className="cursor-pointer material-icons" onClick={e => playInterval(10)}>play_arrow</i></TableCell> : null}
           {showExamples ? <TableCell>Somewhere - (West side story)<a href="https://www.youtube.com/watch?v=HtO2iC0KIQ8#t=67s">YouTube</a></TableCell> : null}
           {showExamples ? <TableCell>An American in Paris (Gershwin) - <a href="https://www.youtube.com/watch?v=MWzlivSzpJM#t=0s">YouTube</a></TableCell> : null}
           {showCategories ? <TableCell>Mild Dissonance</TableCell> : null}
@@ -267,6 +297,7 @@ const IntervalsTable: React.FunctionComponent<{ showExamples?: boolean, showCate
           <TableCell>11</TableCell>
           <TableCell>Major 7th</TableCell>
           <TableCell>M7</TableCell>
+          {showExamples ? <TableCell><i className="cursor-pointer material-icons" onClick={e => playInterval(11)}>play_arrow</i></TableCell> : null}
           {showExamples ? <TableCell>Take on Me (A-Ha) - <a href="https://www.youtube.com/watch?v=djV11Xbc914#t=53s">YouTube</a></TableCell> : null}
           {showExamples ? <TableCell>I Love You (Cole Porter) - <a href="https://www.youtube.com/watch?v=nXIXknT-iQ8#t=15s">YouTube</a></TableCell> : null}
           {showCategories ? <TableCell>Sharp Dissonance</TableCell> : null}
@@ -275,9 +306,10 @@ const IntervalsTable: React.FunctionComponent<{ showExamples?: boolean, showCate
           <TableCell>12</TableCell>
           <TableCell>Octave</TableCell>
           <TableCell>P8</TableCell>
+          {showExamples ? <TableCell><i className="cursor-pointer material-icons" onClick={e => playInterval(12)}>play_arrow</i></TableCell> : null}
           {showExamples ? <TableCell>Somewhere Over the Rainbow - <a href="https://www.youtube.com/watch?v=PSZxmZmBfnU">YouTube</a></TableCell> : null}
           {showExamples ? <TableCell>The Lonely Goatherd (The Sound of Music) - <a href="https://www.youtube.com/watch?v=gRo0NlLYvwE#t=13s">YouTube</a></TableCell> : null}
-          {showCategories ? <TableCell>Open Consonance</TableCell> : null}
+          {showCategories ? <TableCell>Perfect Consonance</TableCell> : null}
         </TableRow>
       </TableBody>
     </Table>
@@ -473,20 +505,43 @@ export const NotesSection: React.FunctionComponent<SectionProps> = props => (
 export const IntervalsSection: React.FunctionComponent<SectionProps> = props => (
   <div>
     <SectionTitle>Intervals</SectionTitle>
-    <p>An <Term>interval</Term> is simply the distance between two notes. Understanding intervals and training your ear to be able to recognize them is one of the most important skills as a musician, because a firm grasp on intervals establishes a link between your mind, your instrument, and your emotions.</p>
+    <p>An <Term>interval</Term> is simply the distance between two notes. Understanding intervals and training your ear to recognize them is one of the most important skills as a musician, because a firm grasp on intervals establishes a link between your mind, your instrument, and your emotions.</p>
     
-    <p>Intervals are measured by the number of <Term>half steps</Term> or <Term>semitones</Term> between the notes. <Term>Half steps</Term> are the smallest interval (aside from <Term>unisons</Term>, which are explained after the diagram) in Western music.</p>
-    <HalfStepsDiagram />
+    <p>Intervals are measured by the number of <Term>half steps</Term> (also called <Term>semitones</Term>) between two notes. <Term>Half steps</Term> are the smallest interval (aside from <Term>unisons</Term>, which are explained after the diagram) in Western music.</p>
+    <p><HalfStepsDiagram /></p>
 
+    <SubSectionTitle>Interval Numbers &amp; Qualities</SubSectionTitle>
     <p>Every interval is described by an <Term>interval number</Term> and an <Term>interval quality</Term>.</p>
-    <p>The <Term>interval number</Term> is the number of letters the interval spans &mdash; so C to D (ascending) would be 2, G to Db (ascending) would be 5, F# to Db (descending) would be 3, and so on.</p>
-    <p>The interval quality is one of the following: perfect (P), major (M), minor (m), diminished (d), augmented (A). Before learning how to choose the interval quality when naming an interval, we must first learn the <Term>simple intervals</Term> and their common names.</p>
+    <p>The <Term>interval number</Term> is the number of letters that the interval spans:</p>
+    <ul>
+      <li>C to D (ascending) has an interval number of 2, because it spans the letters C &amp; D</li>
+      <li>F# to Db (descending) has an interval number of 3, because it spans the letters F, E, &amp; D</li>
+      <li>G to Db (ascending) has an interval number of 5, because it spans the letters G, A, B, C, &amp; D</li>
+    </ul>
+    <p>and so on...</p>
+
+    <p>The <Term>interval quality</Term> describes the sound of the interval and helps specify the exact number of half steps in the interval. The possible <Term>interval qualities</Term> are:</p>
+    <ul>
+      <li>Perfect (P)</li>
+      <li>Major (M)</li>
+      <li>Minor (m)</li>
+      <li>Diminished (d)</li>
+      <li>Augmented (A)</li>
+    </ul>
+    <p>We will learn exactly what these <Term>interval qualities</Term> mean and how to use them soon, but we must learn some prerequisite knowledge first.</p>
+
+    <p>To notate an interval, we write the <Term>interval quality</Term> followed by the <Term>interval number</Term>, for example:</p>
+    <ul>
+      <li>M2 &ndash; Major 2nd</li>
+      <li>P4 &ndash; Perfect 4th</li>
+      <li>d5 &ndash; Diminished 5th</li>
+    </ul>
 
     <SubSectionTitle>Simple Intervals</SubSectionTitle>
-    <p>There are 13 <Term>simple intervals</Term>, which are intervals an <Term>octave</Term> (12 half steps) or smaller. Take some time to memorize them:</p>
+    <p>There are 13 <Term>simple intervals</Term>, which are intervals spanning 12 half steps or less. Take some time to memorize them:</p>
     <IntervalsTable showExamples={false} showCategories={false} />
 
-    <SubSectionTitle>Choosing Interval Qualities</SubSectionTitle>
+    <SubSectionTitle>More on Interval Qualities</SubSectionTitle>
     <p>To figure out what interval quality to use when naming an interval, you first need to know three things about the interval:</p>
     <ul>
       <li>the interval's number (which the number of letters the interval spans, as stated earlier)</li>
@@ -533,7 +588,17 @@ export const IntervalsSection: React.FunctionComponent<SectionProps> = props => 
     <p>and so on...</p>
 
     <SubSectionTitle>Ear Training</SubSectionTitle>
-    <p>TODO: ear training &amp; consonance/dissonance</p>
+    <p>Finally we have come to one of the most important skills a musician should have: recognizing intervals by ear. This skill allows you to translate the music you hear in your mind (or in your ear) to your instrument, and helps you identify and understand fragments of music and why they make you feel a certain way.</p>
+    <p>One way to train your ear is by associating every <Term>simple interval</Term> with a memorable part of a song. The table below associates each ascending and descending <Term>simple interval</Term> with a song, and also describes how <Term>consonant</Term> or <Term>dissonant</Term> each interval is.</p>
+    <p><Term>Consonant</Term> intervals sound pleasing to the ear, and <Term>dissonant</Term> intervals sound harsh or tense to the ear. The categories of consonance/dissonance we will use, from most consonant to most dissonant, are:</p>
+    <ul>
+      <li>Perfect Consonance</li>
+      <li>Imperfect Consonance</li>
+      <li>Mild Dissonance</li>
+      <li>Sharp Dissonance</li>
+    </ul>
+    <p>When training your ear to recognize intervals using the table below, pay close attention to how consonant or dissonant each interval is, and how each interval makes you feel.</p>
+    <IntervalsTable />
     
     {createStudyFlashCardGroupComponent(IntervalNamesToHalfSteps.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}
     {createStudyFlashCardGroupComponent(IntervalEarTraining.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}

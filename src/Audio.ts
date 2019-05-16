@@ -38,39 +38,45 @@ export function loadSoundsAsync(soundFilePaths: Array<string>): Promise<Array<Ho
       });
   });
 }
-export function playSound(soundFilePath: string, volume: number = 1) {
+export function playSound(soundFilePath: string, volume: number = 1): Howl {
   const howl = new Howl({ src: soundFilePath, volume: volume });
   howl.play();
+
+  return howl;
 }
-export function playSoundsSimultaneously(soundFilePaths: Array<string>) {
-  const loadedSounds = new Array<Howl>();
-  let loadedSoundCount = 0;
+export function playSoundsSimultaneously(soundFilePaths: Array<string>): Promise<Array<Howl>> {
+  return new Promise((resolve, reject) => {
+    const loadedSounds = new Array<Howl>();
+    let loadedSoundCount = 0;
 
-  const playSounds = () => {
-    for (const loadedSound of loadedSounds) {
-      loadedSound.play();
-    }
-  };
-
-  const sounds = soundFilePaths
-    .map(filePath => new Howl({
-      src: filePath,
-      onload: function(this: Howl) {
-        loadedSounds.push(this);
-        loadedSoundCount++;
-  
-        if (loadedSoundCount === sounds.length) {
-          playSounds();
-        }
-      },
-      onloaderror: () => {
-        loadedSoundCount++;
-  
-        if (loadedSoundCount === sounds.length) {
-          playSounds();
-        }
+    const playSounds = () => {
+      for (const loadedSound of loadedSounds) {
+        loadedSound.play();
       }
-    }));
+
+      resolve(sounds);
+    };
+    
+    const sounds = soundFilePaths
+      .map(filePath => new Howl({
+        src: filePath,
+        onload: function(this: Howl) {
+          loadedSounds.push(this);
+          loadedSoundCount++;
+    
+          if (loadedSoundCount === sounds.length) {
+            playSounds();
+          }
+        },
+        onloaderror: () => {
+          loadedSoundCount++;
+    
+          if (loadedSoundCount === sounds.length) {
+            playSounds();
+          }
+        }
+      }));
+  });
 }
 export function playSoundsSequentially(soundFilePaths: Array<string | null>, delayInMs: number, cutOffSounds: boolean = false): () => void {
   let isCancelled = false;
