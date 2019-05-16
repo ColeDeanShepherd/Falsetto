@@ -63,6 +63,8 @@ import _32ndRest from "../img/sheet-music/32nd-rest.svg";
 import timeSignature44 from "../img/sheet-music/time-signature-4-4.svg";
 import timeSignature34 from "../img/sheet-music/time-signature-3-4.svg";
 
+import becomeAPatronButton from "../img/become_a_patron_button.png";
+
 import { TimeSignaturePlayer } from './TimeSignaturePlayer';
 import { NoteValuePlayer } from './NoteValuePlayer';
 
@@ -98,10 +100,22 @@ const OctavesPlayer: React.FunctionComponent<{}> = props => {
 
 const Term: React.FunctionComponent<{}> = props => <span style={{ fontWeight: "bold" }}>{props.children}</span>;
 
+const BecomeAPatronSection: React.FunctionComponent<{}> = props => (
+  <div style={{ margin: "2em 0" }}>
+    <p style={{ textAlign: "center", marginBottom: "0.5em", fontWeight: "bold" }}>Enjoying these lessons? Help support us and</p>
+    <p style={{ textAlign: "center", marginTop: 0 }}>
+      <a href="https://www.patreon.com/bePatron?u=4644571" target="_blank">
+        <img src={becomeAPatronButton} alt="Become a Patron!" style={{width: "176px", borderRadius: "9999px"}} />
+      </a>
+    </p>
+  </div>
+);
+
 const HalfStepsDiagram: React.FunctionComponent<{}> = props => {
   const width = 300;
   const height = 200;
   const margin = new Margin(0, 50, 0, 0);
+  const style = { width: "100%", maxWidth: "300px", height: "auto" };
   
   function renderHalfStepLabels(metrics: PianoKeyboardMetrics): JSX.Element {
     function renderHalfStepLabel(leftPitch: Pitch): JSX.Element {
@@ -153,7 +167,7 @@ const HalfStepsDiagram: React.FunctionComponent<{}> = props => {
       pressedPitches={[]}
       onKeyPress={p => playPitches([p])}
       renderExtrasFn={renderHalfStepLabels}
-      style={pianoKeyboardStyle} />
+      style={style} />
   );
 };
 
@@ -460,6 +474,8 @@ export const RhythmSection: React.FunctionComponent<SectionProps> = props => (
 
     <NoteValuePlayer notesPerBeat={3} maxNotesPerBeat={5} showNotesPerBeatSelect={true} />
     
+    <BecomeAPatronSection />
+    
     <SubSectionTitle>Interactive Exercises</SubSectionTitle>
     <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(RhythymTermsQuiz.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
     <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(NoteDurations.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
@@ -470,7 +486,7 @@ export const RhythmSection: React.FunctionComponent<SectionProps> = props => (
 );
 export const NotesSection: React.FunctionComponent<SectionProps> = props => (
   <div>
-    <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory/rhythm", "<< Previous: Rhythm")} | Next: Intervals (coming soon) >></p>
+    <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory/rhythm", "<< Previous: Rhythm")} | {App.instance.renderNavLink("/essential-music-theory/intervals", "Next: Intervals >>")}</p>
 
     <SectionTitle>Notes</SectionTitle>
     <p>In music, a <Term>note</Term> is a sound with a distinct pitch and a duration, and a <Term>pitch</Term> is the "highness" or "lowness" of a sound.</p>
@@ -493,22 +509,26 @@ export const NotesSection: React.FunctionComponent<SectionProps> = props => (
     <p>It is <strong>vitally</strong> important to learn where all the notes are on your instrument of choice. Please take some time to do so before moving on to the next lesson!</p>
     <p>If your instrument of choice is piano, there is an interactive exercise below. If your instrument of choise is guitar, there is an interactive exercise below, and a comprehensive lesson: <NavLink to="/learn-guitar-notes-in-10-steps" className="nav-link">Learn the Notes on Guitar in 10 Easy Steps</NavLink></p>
 
+    <BecomeAPatronSection />
+    
     <SubSectionTitle>Interactive Exercises</SubSectionTitle>
     <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(NotesQuiz.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
     <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(PianoNotes.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
     <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(GuitarNotes.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
     <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(SheetMusicNotes.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
     
-    <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory/rhythm", "<< Previous: Rhythm")} | Next: Intervals (coming soon) >></p>
+    <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory/rhythm", "<< Previous: Rhythm")} | {App.instance.renderNavLink("/essential-music-theory/intervals", "Next: Intervals >>")}</p>
   </div>
 );
 export const IntervalsSection: React.FunctionComponent<SectionProps> = props => (
   <div>
+      <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory/notes", "<< Previous: Notes")} | Next: Scales and Modes (coming soon) >></p>
+      
     <SectionTitle>Intervals</SectionTitle>
     <p>An <Term>interval</Term> is simply the distance between two notes. Understanding intervals and training your ear to recognize them is one of the most important skills as a musician, because a firm grasp on intervals establishes a link between your mind, your instrument, and your emotions.</p>
     
     <p>Intervals are measured by the number of <Term>half steps</Term> (also called <Term>semitones</Term>) between two notes. <Term>Half steps</Term> are the smallest interval (aside from <Term>unisons</Term>, which are explained after the diagram) in Western music.</p>
-    <p><HalfStepsDiagram /></p>
+    <p style={{ textAlign: "center" }}><HalfStepsDiagram /></p>
 
     <SubSectionTitle>Interval Numbers &amp; Qualities</SubSectionTitle>
     <p>Every interval is described by an <Term>interval number</Term> and an <Term>interval quality</Term>.</p>
@@ -566,7 +586,7 @@ export const IntervalsSection: React.FunctionComponent<SectionProps> = props => 
     </ul>
     <p>In this case, we can't use the common name for intervals with 3 half steps ("Minor 3rd") because it doesn't match our decided interval number of 2. Instead, we will keep the interval number of 2 and change the quality of the interval to make it span 3 half steps.</p>
     <p>We have memorized the simple intervals above, so we know that the largest interval with an interval number of 2 is a Major 2nd (M2), which spans 2 half steps. We need to change the quality to increase the number of spanned half steps to 3. To do this, we follow this chart which describes how interval qualities change as half steps are added (+) or removed (-):</p>
-    <p><img src={intervalQualityChart} alt="Interval Qualities" style={{ width: "100%", maxWidth: "400px", height: "auto" }} /></p>
+    <p style={{ textAlign: "center" }}><img src={intervalQualityChart} alt="Interval Qualities" style={{ width: "100%", maxWidth: "400px", height: "auto" }} /></p>
     <p>From the chart we see that, to change the Major 2nd interval's quality to make it span an additional half step, we need to change the quality to "Augmented". So, the name for the interval from C to D# is "Augmented 2nd" (A2).</p>
 
     <NoteText>Some intervals (such as from C to D##) require interval qualities that exceed the ones in the chart above. In these cases, you can simply use "doubly augmented" (AA), "triply augmented" (AAA), and so on, or "doubly diminished" (dd), "triply diminished" (ddd), and so on.</NoteText>
@@ -599,9 +619,14 @@ export const IntervalsSection: React.FunctionComponent<SectionProps> = props => 
     </ul>
     <p>When training your ear to recognize intervals using the table below, pay close attention to how consonant or dissonant each interval is, and how each interval makes you feel.</p>
     <IntervalsTable />
+
+    <BecomeAPatronSection />
     
-    {createStudyFlashCardGroupComponent(IntervalNamesToHalfSteps.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}
-    {createStudyFlashCardGroupComponent(IntervalEarTraining.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}
+    <SubSectionTitle>Interactive Exercises</SubSectionTitle>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(IntervalNamesToHalfSteps.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(IntervalEarTraining.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    
+    <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory/notes", "<< Previous: Notes")} | Next: Scales and Modes (coming soon) >></p>
   </div>
 );
 export const ScalesAndModesSection: React.FunctionComponent<SectionProps> = props => (
