@@ -312,7 +312,7 @@ class App extends React.Component<IAppProps, IAppState> {
           <AppBar position="static" className="top-pane">
             <Toolbar className="nav top-nav">
               <Typography variant="h6" color="inherit">
-                <NavLink to="/" onClick={event => this.onNavLinkClick()} className="nav-link" activeClassName="" style={{ display: "inline-block" }}><img src="/logo-white.svg" style={{width: "24px", verticalAlign: "text-bottom"}} /><span style={{paddingLeft: "0.5em"}}>Falsetto</span></NavLink>
+                <NavLink to="/" onClick={event => this.onNavLinkClick()} className="nav-link" activeClassName="" style={{ display: "inline-block" }}><img src="/logo-white.svg" style={{width: "24px", verticalAlign: "text-bottom"}} /><span style={{paddingLeft: "0.5em"}} className="hide-on-mobile">Falsetto</span></NavLink>
                 <NavLink to="/support-us" onClick={event => this.onNavLinkClick()} className="nav-link" activeClassName="" style={{ fontSize: "1.1rem", fontWeight: "normal", display: "inline-block" }}>Support Us</NavLink>
                 <a
                   href="https://docs.google.com/forms/d/e/1FAIpQLSfHT8tJTdmW_hCjxMPUf14wchM6GBPQAaq8PSMW05C01gBW4g/viewform"
