@@ -30,6 +30,14 @@ import intervalQualityChart from "../img/interval-qualities.svg";
 
 import * as IntervalNamesToHalfSteps from "./Quizzes/IntervalNamesToHalfSteps";
 import * as IntervalEarTraining from "./Quizzes/IntervalEarTraining";
+import * as IntervalQualitySymbols from "./Quizzes/IntervalQualitySymbolsToQualities";
+import * as IntervalsToConsonanceDissonance from "./Quizzes/IntervalsToConsonanceDissonance";
+import * as IntervalNotes from "./Quizzes/IntervalNotes";
+import * as SheetMusicIntervalRecognition from "./Quizzes/SheetMusicIntervalRecognition";
+import * as GuitarIntervals from "./Quizzes/GuitarIntervals";
+import * as Interval2ndNotes from "./Quizzes/Interval2ndNotes";
+import * as Interval2ndNoteEarTraining from "./Quizzes/Interval2ndNoteEarTraining";
+import * as Interval2ndNoteEarTrainingPiano from "./Quizzes/Interval2ndNoteEarTrainingPiano";
 
 import * as ScaleNotes from "./Quizzes/ScaleNotes";
 import * as PianoScales from "./Quizzes/PianoScales";
@@ -621,10 +629,18 @@ export const IntervalsSection: React.FunctionComponent<SectionProps> = props => 
     <IntervalsTable />
 
     <BecomeAPatronSection />
-    
+  
     <SubSectionTitle>Interactive Exercises</SubSectionTitle>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(IntervalQualitySymbols.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
     <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(IntervalNamesToHalfSteps.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(IntervalNotes.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(Interval2ndNotes.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(SheetMusicIntervalRecognition.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(GuitarIntervals.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(IntervalsToConsonanceDissonance.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
     <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(IntervalEarTraining.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(Interval2ndNoteEarTraining.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(Interval2ndNoteEarTrainingPiano.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
     
     <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory/notes", "<< Previous: Notes")} | Next: Scales and Modes (coming soon) >></p>
   </div>

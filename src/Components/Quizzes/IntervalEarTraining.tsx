@@ -23,29 +23,42 @@ export interface IFlashCardFrontSideProps {
 }
 export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps, {}> {
   public componentDidMount() {
-    this.playAudio();
+    //this.playAudio();
   }
 
   public render(): JSX.Element {
     return (
       <div>
-        <div>sound is playing</div>
         <Button
           onClick={event => this.playAudio()}
           variant="contained"
         >
-          Replay
+          Play Sound
         </Button>
       </div>
     );
   }
 
+  private stopSoundsFunc: (() => void) | null = null;
+
   private playAudio(): void {
+    if (this.stopSoundsFunc) {
+      this.stopSoundsFunc();
+      this.stopSoundsFunc = null;
+    }
+
     if (this.props.isHarmonicInterval) {
-      playPitches([this.props.pitch1, this.props.pitch2]);
+      const sounds = playPitches([this.props.pitch1, this.props.pitch2])
+        .then(sounds => {
+          this.stopSoundsFunc = () => {
+            for (const sound of sounds) {
+              sound.stop();
+            }
+          };
+        });
     } else {
       const cutOffSounds = true;
-      playPitchesSequentially([this.props.pitch1, this.props.pitch2], 500, cutOffSounds);
+      this.stopSoundsFunc = playPitchesSequentially([this.props.pitch1, this.props.pitch2], 500, cutOffSounds);
     }
   }
 }

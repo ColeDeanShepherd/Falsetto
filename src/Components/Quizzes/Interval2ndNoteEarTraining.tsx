@@ -22,7 +22,7 @@ export interface IFlashCardFrontSideProps {
 }
 export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps, {}> {
   public componentDidMount() {
-    this.playAudio();
+    //this.playAudio();
   }
 
   public render(): JSX.Element {
@@ -33,15 +33,22 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
           onClick={event => this.playAudio()}
           variant="contained"
         >
-          Replay
+          Play Sound
         </Button>
       </div>
     );
   }
 
+  private stopSoundsFunc: (() => void) | null = null;
+
   private playAudio() {
+    if (this.stopSoundsFunc !== null) {
+      this.stopSoundsFunc();
+      this.stopSoundsFunc = null;
+    }
+
     const cutOffSounds = true;
-    playPitchesSequentially([this.props.pitch1, this.props.pitch2], 500, cutOffSounds);
+    this.stopSoundsFunc = playPitchesSequentially([this.props.pitch1, this.props.pitch2], 500, cutOffSounds);
   }
 }
 
