@@ -649,16 +649,28 @@ export const ScalesAndModesSection: React.FunctionComponent<SectionProps> = prop
   <div>
     <SectionTitle>Scales &amp; Modes</SectionTitle>
     <SubSectionTitle>Scales</SubSectionTitle>
-    <p>Scales are fundamental to music and lay the groundwork for both melody and harmony in music. Melody is the arrangement of individual notes, none playing simultaneously, over time. When you sing a song, you are singing the melody of that song.</p>
-    <p>Scales are nothing more than sets of notes forming particular intervals with a tonal center called a root note. Most scales in western music have 7 notes in them, so each scale selectively leaves out 5 notes to produce a certain feeling.</p>
-    <p>One of the most common scales, upon which other scales are often built by modifying a few notes, is the major scale. The major scale is a 7 note scale which can be built using the formula: "R W W H W W W", where "R" means the root name, "W" means a whole step, and "H" means a half step.</p>
-    <p>So, a C major scale, a scale with a root note of C following the major scale formula, is comprised of the notes: C, D, E, F, G, A, B.</p>
-    <p>TODO: interactive diagram</p>
-    <p>Though the notes of a scale are often given in ascending order, they can be played in any order, and repeated any number of times,and still be considered the same scale. What makes a scale distinct from other scales is simply the set of notes it contains.</p>
+    <p><Term>Scales</Term> are sets of notes forming particular intervals with a tonal center called a <Term>root note</Term>. Most scales in Western music consist of 7 notes, so each scale selectively leaves out 5 notes to invoke a particular feeling in listeners.</p>
+    <p><Term>Melody</Term> and <Term>harmony</Term> are built on scales. <Term>Melody</Term> is the arrangement of individual notes over time, with no two notes playing simultaneously. When you sing a song, you sing the <Term>melody</Term>. <Term>Harmony</Term> is the arrangement of multiple notes at the same time to form <Term>chords</Term>. We will explore <Term>harmony</Term> and <Term>in the next lesson</Term>.</p>
 
-    <p>Each note in a scale is sometimes called a "scale degree", with the first &amp; "root" note called the 1st scale degree (C in C major), the next note above that called the 2nd scale degree (D in C major), the next note above that called the 3rd scale degree (E in C major), and so on.</p>
-    <p>So, the major scale has the following scale degrees: 1 2 3 4 5 6 7, and other scales can be built by adding sharps and flats to the notes of of the major scale.</p>
-    <p>Another common scale with a darker sound is the natural minor scale. Relative to the major scale, the natural minor scale has the following formula: 1 2 b3 4 5 b6 b7, meaning the natural minor scale is a major scale with the 3rd, 6th, and 7th scale degrees flattened. So, a C natural minor scale (commonly referred to simply as a C minor scale) is comprised of the notes C, D, Eb, F, G, Ab, Bb.</p>
+    <SubSectionTitle>The Major Scale</SubSectionTitle>
+    <p>One of the most common scales, upon which other scales are often built by modifying notes, is the <Term>major scale</Term>. The <Term>major scale</Term> is a 7 note scale which can be built using the formula: "R W W H W W W", where "R" denotes the root name, "W" means the next note is a whole step higher, and "H" means the next note is a half step higher.</p>
+    <p>So, a C major scale, a scale with a <Term>root note</Term> of C following the major scale formula, is comprised of the notes: C, D, E, F, G, A, B.</p>
+    <p>TODO: piano diagram showing formula and notes</p>
+
+    <NoteText>Though the notes of scales are often given in ascending order, they can be played in any order or repeated any number of times and still be considered the same scale. What makes a scale distinct is simply the set of notes it contains, not the order or count of the notes.</NoteText>
+
+    <p>Every scale has a <Term>root note</Term> which we naturally gravitate towards and compare other notes in the scale to. Every note in a scale forms a particular interval with the root note, and thinking about scales in terms of intervals from the root note can be helpful when analyzing why a particular scale or melody sounds the way it does. Because of this, sometimes scales are denoted in terms of intervals from the root note, like so:</p>
+    <p>C Major scale formula: R, M2, M3, P4, P5, M6, M7</p>
+
+    <p>Major scales often sound "happy" or "bright". Try playing the piano keyboard below to hear each note of the C major scale at the same time as the root note to internalize the sound of the major scale yourself.</p>
+    <p>TODO: the sound of the major scale (play over a drone)</p>
+    
+    <SubSectionTitle>Scale Degrees</SubSectionTitle>
+    <p>Each note in a scale is sometimes called a <Term>scale degree</Term>, with the first note (the <Term>root note</Term>) called the 1st scale degree (C in C major), the next note above that called the 2nd scale degree (D in C major), the next note above that called the 3rd scale degree (E in C major), and so on.</p>
+    <p>The major scale has the following scale degrees: 1 2 3 4 5 6 7. This is obvious, but listing the scale degrees of the major scale is useful because other scales can be built from major by adding sharps and flats to its scale degrees.</p>
+    <p>Another common scale with a "darker" sound is the <Term>natural minor scale</Term> (commonly referred to simply as the <Term>minor scale</Term>). Relative to the major scale, the natural minor scale has the following formula: 1 2 b3 4 5 b6 b7, meaning the natural minor scale is a major scale with the 3rd, 6th, and 7th scale degrees flattened. So, a C natural minor scale is comprised of the notes C, D, Eb, F, G, Ab, Bb.</p>
+    
+    <p>Try playing the piano keyboard below to get a feel for the natural minor scale.</p>
 
     <SubSectionTitle>Modes</SubSectionTitle>
     <p>Modes are simply scales that can be built by starting a particular scale on different notes and considering that starting note the root note.</p>
@@ -730,8 +742,6 @@ export const ScalesAndModesSection: React.FunctionComponent<SectionProps> = prop
         </tr>
       </tbody>
     </table>
-
-    <p>To get a feeling for a scale, try playing the scale with a droned, or sustained and repeated, root note. This will bring out the sound of the intervals in the scale.</p>
 
     <SubSectionTitle>Other Common Scales</SubSectionTitle>
     <p>There are many other common, named scales (and keep in mind that a mode can be built off each scale degree in each scale), including:</p>
