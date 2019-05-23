@@ -85,6 +85,7 @@ import { Size2D } from '../Size2D';
 import { Margin } from '../Margin';
 import { NavLink } from 'react-router-dom';
 import { Scale } from '../Scale';
+import { doesKeyUseSharps } from '../Key';
 
 const pianoKeyboardStyle = { width: "100%", maxWidth: "400px", height: "auto" };
 
@@ -186,13 +187,13 @@ const PianoScaleFormulaDiagram: React.FunctionComponent<{ scale: Scale }> = prop
   const style = { width: "100%", maxWidth: "300px", height: "auto" };
   const rootPitch = new Pitch(PitchLetter.C, 0, 4);
   const pitches = props.scale.getPitches(rootPitch);
-  const pitchMidiNumbers = pitches.map(p => p.midiNumber);
+  const pitchMidiNumberNoOctaves = pitches.map(p => p.midiNumberNoOctave);
   
   function renderExtrasFn(metrics: PianoKeyboardMetrics): JSX.Element {
     return (
       <g>
         {renderScaleStepLabels(metrics)}
-        {renderPianoKeyboardNoteNames(metrics)}
+        {renderPianoKeyboardNoteNames(metrics, doesKeyUseSharps(rootPitch.letter, rootPitch.signedAccidental), p => Utils.arrayContains(pitchMidiNumberNoOctaves, p.midiNumberNoOctave))}
       </g>
     );
   }
@@ -247,7 +248,7 @@ const PianoScaleFormulaDiagram: React.FunctionComponent<{ scale: Scale }> = prop
       highestPitch={new Pitch(PitchLetter.B, 0, 4)}
       pressedPitches={[]}
       onKeyPress={p => {
-        if (Utils.arrayContains(pitchMidiNumbers, p.midiNumber)) {
+        if (Utils.arrayContains(pitchMidiNumberNoOctaves, p.midiNumberNoOctave)) {
           playPitches([p]);
         }
       }}
@@ -258,10 +259,10 @@ const PianoScaleFormulaDiagram: React.FunctionComponent<{ scale: Scale }> = prop
 const PianoScaleDronePlayer: React.FunctionComponent<{ scale: Scale }> = props => {
   const rootPitch = new Pitch(PitchLetter.C, 0, 4);
   const pitches = props.scale.getPitches(rootPitch);
-  const pitchMidiNumbers = pitches.map(p => p.midiNumberNoOctave);
+  const pitchMidiNumberNoOctaves = pitches.map(p => p.midiNumberNoOctave);
 
   function onKeyPress(pitch: Pitch) {
-    if (Utils.arrayContains(pitchMidiNumbers, pitch.midiNumberNoOctave)) {
+    if (Utils.arrayContains(pitchMidiNumberNoOctaves, pitch.midiNumberNoOctave)) {
       if (pitch.midiNumber === rootPitch.midiNumber) {
         playPitches([rootPitch]);
       } else {
@@ -275,6 +276,7 @@ const PianoScaleDronePlayer: React.FunctionComponent<{ scale: Scale }> = props =
       lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
       highestPitch={new Pitch(PitchLetter.C, 0, 5)}
       pressedPitches={[]}
+      renderExtrasFn={metrics => renderPianoKeyboardNoteNames(metrics, doesKeyUseSharps(rootPitch.letter, rootPitch.signedAccidental), p => Utils.arrayContains(pitchMidiNumberNoOctaves, p.midiNumberNoOctave))}
       onKeyPress={onKeyPress}
       style={pianoKeyboardStyle} />
   );
@@ -757,7 +759,7 @@ export const ScalesAndModesSection: React.FunctionComponent<SectionProps> = prop
     <p>So, a C major scale, a scale with a <Term>root note</Term> of C following the major scale formula, is comprised of the notes: C, D, E, F, G, A, B.</p>
     <PianoScaleFormulaDiagram scale={Scale.Ionian} />
 
-    <NoteText>Though the notes of scales are often given in ascending order, they can be played in any order or repeated any number of times and still be considered the same scale. What makes a scale distinct is simply the set of notes it contains, not the order or count of the notes.</NoteText>
+    <NoteText>Though the notes of scales are often given in ascending order, they can be played in any order or repeated any number of times and still be considered the same scale. What makes a scale distinct is simply the set of notes it contains, not the order or the count of the notes.</NoteText>
 
     <p>Every scale has a <Term>root note</Term> which we naturally gravitate towards and compare other notes in the scale to. Every note in a scale forms a particular interval with the root note, and thinking about scales in terms of intervals from the root note can be helpful when analyzing why a particular scale or melody sounds the way it does. Because of this, sometimes scales are denoted in terms of intervals from the root note, like so:</p>
     <p>C Major scale formula: R, M2, M3, P4, P5, M6, M7</p>
@@ -771,7 +773,7 @@ export const ScalesAndModesSection: React.FunctionComponent<SectionProps> = prop
     <p>Another common scale with a "darker" sound is the <Term>natural minor scale</Term> (commonly referred to simply as the <Term>minor scale</Term>). Relative to the major scale, the natural minor scale has the following formula: 1 2 b3 4 5 b6 b7, meaning the natural minor scale is a major scale with the 3rd, 6th, and 7th scale degrees flattened. So, a C natural minor scale is comprised of the notes C, D, Eb, F, G, Ab, Bb.</p>
     
     <p>Try playing the piano keyboard below to get a feel for the natural minor scale.</p>
-    <p>TODO: natural minor piano</p>
+    <PianoScaleDronePlayer scale={Scale.Aeolian} />
 
     <SubSectionTitle>Modes</SubSectionTitle>
     <p>Modes are simply scales that can be built by starting a particular scale on different notes and considering that starting note the root note.</p>

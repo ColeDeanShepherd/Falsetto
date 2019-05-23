@@ -105,12 +105,16 @@ export class PianoKeyboardMetrics {
   }
 }
 
-export function renderPianoKeyboardNoteNames(metrics: PianoKeyboardMetrics): JSX.Element {
+export function renderPianoKeyboardNoteNames(metrics: PianoKeyboardMetrics, useSharps?: boolean, showLetterPredicate?: (pitch: Pitch) => boolean): JSX.Element {
   let texts = new Array<JSX.Element>(metrics.keyCount);
 
   for (let keyIndex = 0; keyIndex < metrics.keyCount; keyIndex++) {
     const midiNumber = metrics.lowestPitch.midiNumber + keyIndex;
-    const pitch = Pitch.createFromMidiNumber(midiNumber);
+    const pitch = Pitch.createFromMidiNumber(midiNumber, (useSharps !== undefined) ? useSharps : true);
+
+    if (showLetterPredicate && !showLetterPredicate(pitch)) {
+      continue;
+    }
 
     const fontSize = 0.6 * metrics.blackKeyWidth;
     const textStyle: any = {
@@ -130,8 +134,10 @@ export function renderPianoKeyboardNoteNames(metrics: PianoKeyboardMetrics): JSX
       : (metrics.blackKeyHeight / 2);
 
     const includeOctaveNumber = false;
-    const useFlatSymbol = true;
-    const splitPitchString = pitch.toOneAccidentalAmbiguousString(includeOctaveNumber, useFlatSymbol).split("/");
+    const useSymbols = true;
+    const splitPitchString = (useSharps === undefined)
+      ? pitch.toOneAccidentalAmbiguousString(includeOctaveNumber, useSymbols).split("/")
+      : [pitch.toString(includeOctaveNumber, useSymbols)];
 
     for (let i = 0; i < splitPitchString.length; i++) {
       texts.push(

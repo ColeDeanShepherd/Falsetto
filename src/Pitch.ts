@@ -55,7 +55,7 @@ export const ambiguousPitchStringsSymbols = [
 ];
 
 export class Pitch {
-  public static createFromMidiNumber(midiNumber: number): Pitch {
+  public static createFromMidiNumber(midiNumber: number, useSharps: boolean = true): Pitch {
     const positivePitchOffsetFromC = Utils.mod(midiNumber, 12);
     const octaveNumber = Math.floor(midiNumber / 12) - 1;
     
@@ -63,25 +63,25 @@ export class Pitch {
       case 0:
         return new Pitch(PitchLetter.C, 0, octaveNumber);
       case 1:
-        return new Pitch(PitchLetter.C, 1, octaveNumber);
+        return useSharps ? new Pitch(PitchLetter.C, 1, octaveNumber) : new Pitch(PitchLetter.D, -1, octaveNumber);
       case 2:
         return new Pitch(PitchLetter.D, 0, octaveNumber);
       case 3:
-        return new Pitch(PitchLetter.D, 1, octaveNumber);
+        return useSharps ? new Pitch(PitchLetter.D, 1, octaveNumber) : new Pitch(PitchLetter.E, -1, octaveNumber);
       case 4:
         return new Pitch(PitchLetter.E, 0, octaveNumber);
       case 5:
         return new Pitch(PitchLetter.F, 0, octaveNumber);
       case 6:
-        return new Pitch(PitchLetter.F, 1, octaveNumber);
+        return useSharps ? new Pitch(PitchLetter.F, 1, octaveNumber) : new Pitch(PitchLetter.G, -1, octaveNumber);
       case 7:
         return new Pitch(PitchLetter.G, 0, octaveNumber);
       case 8:
-        return new Pitch(PitchLetter.G, 1, octaveNumber);
+        return useSharps ? new Pitch(PitchLetter.G, 1, octaveNumber) : new Pitch(PitchLetter.A, -1, octaveNumber);
       case 9:
         return new Pitch(PitchLetter.A, 0, octaveNumber);
       case 10:
-        return new Pitch(PitchLetter.A, 1, octaveNumber);
+        return useSharps ? new Pitch(PitchLetter.A, 1, octaveNumber) : new Pitch(PitchLetter.B, -1, octaveNumber);
       case 11:
         return new Pitch(PitchLetter.B, 0, octaveNumber);
       default:
@@ -185,22 +185,24 @@ export class Pitch {
   public isEnharmonic(pitch: Pitch): boolean {
     return this.midiNumber === pitch.midiNumber;
   }
-  public getAccidentalString(): string {
+  public getAccidentalString(useSymbols: boolean = false): string {
     if (this.signedAccidental === 0) {
       return "";
     }
 
-    const accidentalCharacter = (this.signedAccidental > 0) ? "#" : "b";
+    const accidentalCharacter = (this.signedAccidental > 0)
+      ? useSymbols ? "#" : "#"
+      : useSymbols ? "♭" : "b";
     return accidentalCharacter.repeat(Math.abs(this.signedAccidental));
   }
-  public toString(includeOctaveNumber: boolean = true): string {
-    return PitchLetter[this.letter] + this.getAccidentalString() + (includeOctaveNumber ? this.octaveNumber.toString() : "");
+  public toString(includeOctaveNumber: boolean = true, useSymbols: boolean = false): string {
+    return PitchLetter[this.letter] + this.getAccidentalString(useSymbols) + (includeOctaveNumber ? this.octaveNumber.toString() : "");
   }
 
   // TODO: add tests
-  public toOneAccidentalAmbiguousString(includeOctaveNumber: boolean = true, useFlatSymbol: boolean = false): string {
+  public toOneAccidentalAmbiguousString(includeOctaveNumber: boolean = true, useSymbols: boolean = false): string {
     const positivePitchOffsetFromC = Utils.mod(this.midiNumber, 12);
-    const ambiguousPitchString = !useFlatSymbol
+    const ambiguousPitchString = !useSymbols
       ? ambiguousPitchStrings[positivePitchOffsetFromC]
       : ambiguousPitchStringsSymbols[positivePitchOffsetFromC];
     
