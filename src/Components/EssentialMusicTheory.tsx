@@ -86,6 +86,7 @@ import { Margin } from '../Margin';
 import { NavLink } from 'react-router-dom';
 import { Scale } from '../Scale';
 import { doesKeyUseSharps } from '../Key';
+import { PianoScaleDronePlayer } from './PianoScaleDronePlayer';
 
 const pianoKeyboardStyle = { width: "100%", maxWidth: "400px", height: "auto" };
 
@@ -254,31 +255,6 @@ const PianoScaleFormulaDiagram: React.FunctionComponent<{ scale: Scale }> = prop
       }}
       renderExtrasFn={renderExtrasFn}
       style={style} />
-  );
-};
-const PianoScaleDronePlayer: React.FunctionComponent<{ scale: Scale }> = props => {
-  const rootPitch = new Pitch(PitchLetter.C, 0, 4);
-  const pitches = props.scale.getPitches(rootPitch);
-  const pitchMidiNumberNoOctaves = pitches.map(p => p.midiNumberNoOctave);
-
-  function onKeyPress(pitch: Pitch) {
-    if (Utils.arrayContains(pitchMidiNumberNoOctaves, pitch.midiNumberNoOctave)) {
-      if (pitch.midiNumber === rootPitch.midiNumber) {
-        playPitches([rootPitch]);
-      } else {
-        playPitches([rootPitch, pitch]);
-      }
-    }
-  }
-  return (
-    <PianoKeyboard
-      rect={new Rect2D(new Size2D(300, 150), new Vector2D(0, 0))}
-      lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-      highestPitch={new Pitch(PitchLetter.C, 0, 5)}
-      pressedPitches={[]}
-      renderExtrasFn={metrics => renderPianoKeyboardNoteNames(metrics, doesKeyUseSharps(rootPitch.letter, rootPitch.signedAccidental), p => Utils.arrayContains(pitchMidiNumberNoOctaves, p.midiNumberNoOctave))}
-      onKeyPress={onKeyPress}
-      style={pianoKeyboardStyle} />
   );
 };
 
@@ -767,7 +743,7 @@ export const ScalesAndModesSection: React.FunctionComponent<SectionProps> = prop
     <p>C Major scale formula: R, M2, M3, P4, P5, M6, M7</p>
 
     <p>Major scales often sound "happy" or "bright". Try playing the piano keyboard below to hear each note of the C major scale at the same time as the root note to internalize the sound of the major scale yourself.</p>
-    <p style={{ textAlign: "center" }}><PianoScaleDronePlayer scale={Scale.Ionian} /></p>
+    <p style={{ textAlign: "center" }}><PianoScaleDronePlayer scale={Scale.Ionian} rootPitch={new Pitch(PitchLetter.C, 0, 4)} style={pianoKeyboardStyle} /></p>
     
     <SubSectionTitle>Scale Degrees</SubSectionTitle>
     <p>Each note in a scale is sometimes called a <Term>scale degree</Term>, with the first note (the <Term>root note</Term>) called the 1st scale degree (C in C major), the next note above that called the 2nd scale degree (D in C major), the next note above that called the 3rd scale degree (E in C major), and so on.</p>
@@ -775,7 +751,7 @@ export const ScalesAndModesSection: React.FunctionComponent<SectionProps> = prop
     <p>The <Term>natural minor scale</Term> (commonly referred to simply as the <Term>minor scale</Term>) is another common scale with a "darker" sound. Relative to the major scale, the natural minor scale has the following formula: 1 2 b3 4 5 b6 b7, meaning the natural minor scale is a major scale with the 3rd, 6th, and 7th scale degrees flattened. So, a C natural minor scale is comprised of the notes C, D, Eb, F, G, Ab, Bb.</p>
     
     <p>Try playing the piano keyboard below to get a feel for the natural minor scale.</p>
-    <p style={{ textAlign: "center" }}><PianoScaleDronePlayer scale={Scale.Aeolian} /></p>
+    <p style={{ textAlign: "center" }}><PianoScaleDronePlayer scale={Scale.Aeolian} rootPitch={new Pitch(PitchLetter.C, 0, 4)} style={pianoKeyboardStyle} /></p>
 
     <SubSectionTitle>Modes</SubSectionTitle>
     <p>The <Term>modes</Term> of a scale are the different scales you get when you start on different notes of a "base" scale, and consider those starting notes the new <Term>root notes</Term>.</p>

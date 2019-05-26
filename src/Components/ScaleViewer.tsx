@@ -5,7 +5,7 @@ import { Vector2D } from '../Vector2D';
 import { Size2D } from "../Size2D";
 import { Rect2D } from '../Rect2D';
 import { PitchLetter } from "../PitchLetter";
-import { scales as allScales } from "../Scale";
+import { scales as allScales, Scale } from "../Scale";
 import { Pitch } from "../Pitch";
 import { Button, Card, CardContent, Typography } from "@material-ui/core";
 import { Chord } from "../Chord";
@@ -13,6 +13,7 @@ import { PianoKeyboard } from "./PianoKeyboard";
 import { GuitarFretboard, GuitarNote, standardGuitarTuning, GuitarFretboardMetrics, renderGuitarFretboardScaleExtras } from "./GuitarFretboard";
 import ResizeObserver from 'resize-observer-polyfill';
 import { playPitchesSequentially, playPitches } from '../Piano';
+import * as PianoScaleDronePlayer from "./PianoScaleDronePlayer";
 
 const validSharpKeyPitches = [
   null,
@@ -43,14 +44,14 @@ const validFlatKeyPitches = [
 ];
 
 interface IScaleViewerProps {
-  scales?: Array<{ type: string, formulaString: string }>;
+  scales?: Array<Scale>;
   typeTitle?: string;
   playSimultaneously?: boolean;
   isEmbedded?: boolean;
 }
 interface IScaleViewerState {
   rootPitch: Pitch;
-  scale: { type: string, formulaString: string };
+  scale: Scale;
 }
 
 export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewerState> {
@@ -164,7 +165,8 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
                   rect={new Rect2D(pianoSize, new Vector2D(0, 0))}
                   lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
                   highestPitch={new Pitch(PitchLetter.B, 0, 5)}
-                  pressedPitches={pitches}
+                  onKeyPress={pitch => PianoScaleDronePlayer.onKeyPress(this.state.scale, this.state.rootPitch, pitch)}
+                  renderExtrasFn={metrics => PianoScaleDronePlayer.renderExtrasFn(metrics, this.state.scale, this.state.rootPitch)}
                 />
               </div>
 
@@ -199,7 +201,7 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
   private instrumentsContainerRef: React.Ref<HTMLDivElement>;
   private instrumentsContainerResizeObserver: ResizeObserver | null;
 
-  private get scales(): Array<{ type: string, formulaString: string }> {
+  private get scales(): Array<Scale> {
     return this.props.scales
       ? this.props.scales
       : allScales;
@@ -241,7 +243,7 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
   private onRootPitchClick(rootPitch: Pitch) {
     this.setState({ rootPitch: rootPitch }, this.onScaleChange.bind(this));
   }
-  private onScaleClick(scale: { type: string, formulaString: string }) {
+  private onScaleClick(scale: Scale) {
     this.setState({ scale: scale }, this.onScaleChange.bind(this));
   }
 
