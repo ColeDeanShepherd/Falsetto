@@ -68,19 +68,14 @@ export interface IFlashCardFrontSideProps {
   pitches: Array<Pitch>;
 }
 export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps, {}> {
-  public componentDidMount() {
-    this.playAudio();
-  }
-
   public render(): JSX.Element {
     return (
       <div>
-        <div>sound is playing</div>
         <Button
           onClick={event => this.playAudio()}
           variant="contained"
         >
-          Replay
+          Play Sound
         </Button>
       </div>
     );

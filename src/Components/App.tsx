@@ -69,6 +69,7 @@ import { AboutPage } from "./AboutPage";
 import { SupportUsPage } from "./SupportUs";
 import DocumentTitle from "react-document-title";
 import { HomePage } from "./HomePage";
+import ScrollToTop from './ScrollToTop';
 
 async function getErrorDescription(msg: string | Event, file: string | undefined, line: number | undefined, col: number | undefined, error: Error | undefined): Promise<string> {
   return new Promise<string>((resolve, reject) => {
@@ -189,6 +190,8 @@ class App extends React.Component<IAppProps, IAppState> {
 
     this.flashCardGroups = Utils.flattenArrays<FlashCardGroup>(this.groupedFlashCardGroups.map(g => g.flashCardGroups));
 
+    this.rightPaneRef = React.createRef();
+
     this.state = {
       isMenuVisibleOnMobile: false
     };
@@ -245,7 +248,9 @@ class App extends React.Component<IAppProps, IAppState> {
           {this.renderNavLink("/essential-music-theory/rhythm", "Rhythm")}
           {this.renderNavLink("/essential-music-theory/notes", "Notes")}
           {this.renderNavLink("/essential-music-theory/intervals", "Intervals")}
-          <p><em>More coming soon...</em></p>
+          {this.renderNavLink("/essential-music-theory/scales-and-modes", "Scales & Modes")}
+          <p><em>Chords (coming soon)</em></p>
+          <p><em>Chord Progressions (coming soon)</em></p>
 
           <NavSectionTitle>Notes</NavSectionTitle>
           {renderFlashCardGroupLink(PianoNotes.createFlashCardGroup())}
@@ -303,7 +308,7 @@ class App extends React.Component<IAppProps, IAppState> {
     );
 
     const rightPane = (
-      <div className={!this.isEmbedded ? "right-pane" : "right-pane embedded"}>
+      <div ref={this.rightPaneRef} className={!this.isEmbedded ? "right-pane" : "right-pane embedded"}>
         {this.renderRoutes()}
       </div>
     );
@@ -339,7 +344,9 @@ class App extends React.Component<IAppProps, IAppState> {
    
     return (
       <Router history={this.history}>
-        {app}
+        <ScrollToTop>
+          {app}
+        </ScrollToTop>
       </Router>
     );
   }
@@ -356,11 +363,15 @@ class App extends React.Component<IAppProps, IAppState> {
   public setMenuIsVisibleOnMobile(value: boolean) {
     this.setState({ isMenuVisibleOnMobile: value });
   }
+  public scrollBodyToTop() {
+    (this.rightPaneRef as any).current.scrollTo(0, 0);
+  }
 
   private history: History<any>;
   private unregisterHistoryListener: UnregisterCallback;
   private groupedFlashCardGroups: { title: string; flashCardGroups: FlashCardGroup[]; }[];
   private flashCardGroups: FlashCardGroup[];
+  private rightPaneRef: React.Ref<HTMLDivElement>;
 
   private get isEmbedded(): boolean {
     return this.props.isEmbedded || this.history.location.search.includes("isEmbedded=true");
