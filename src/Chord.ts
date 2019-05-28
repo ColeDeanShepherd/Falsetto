@@ -40,6 +40,22 @@ export class Chord {
   }
 }
 
+export const basicTriads = [
+  { type: "major", formulaString: "1 3 5" },
+  { type: "minor", formulaString: "1 b3 5" },
+  { type: "diminished", formulaString: "1 b3 b5" },
+  { type: "augmented", formulaString: "1 3 #5" }
+];
+export const seventhChords = [
+  { type: "Maj7", formulaString: "1 3 5 7" },
+  { type: "7", formulaString: "1 3 5 b7" },
+  { type: "m7", formulaString: "1 b3 5 b7" },
+  { type: "mMaj7", formulaString: "1 b3 5 7" },
+  { type: "dim7", formulaString: "1 b3 b5 bb7" },
+  { type: "m7b5", formulaString: "1 b3 b5 b7" },
+  { type: "aug7", formulaString: "1 3 #5 b7" },
+  { type: "Maj7#5", formulaString: "1 3 #5 7" },
+];
 export const allChords = [
   { type: "power", formulaString: "1 5" },
 

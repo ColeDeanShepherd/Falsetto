@@ -87,6 +87,7 @@ import { NavLink } from 'react-router-dom';
 import { Scale } from '../Scale';
 import { doesKeyUseSharps } from '../Key';
 import { PianoScaleDronePlayer } from './PianoScaleDronePlayer';
+import { basicTriads, seventhChords } from "../Chord";
 
 const pianoKeyboardStyle = { width: "100%", maxWidth: "400px", height: "auto" };
 
@@ -829,40 +830,65 @@ export const ScalesAndModesSection: React.FunctionComponent<SectionProps> = prop
 export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
   <div>
     <SectionTitle>Chords</SectionTitle>
-    <p>Chords are multiple notes played simultaneously. Chords make up what is called the "harmony" in music.</p>
+    <p><Term>Chords</Term> are groups of three or more notes played simultaneously. Chords make up <Term>harmony</Term> in music &mdash; the sounds or feelings that result from multiple notes being played simultaneously. <Term>Harmony</Term> is the third and final fundamental element of music we will study now that we have explored <Term>rhythm</Term> and <Term>melody</Term>.</p>
 
     <SubSectionTitle>Triads</SubSectionTitle>
-    <p>One of the simplest types of chords is the triad. Traids are chords made of 3 notes. Some of the most commond types of triads are:</p>
+    <p>The simplest class of chords are the <Term>triads</Term>. <Term>Traids</Term> are chords made of exactly three notes.</p>
+    <p>All chords have a root note, and the vast majority of chords are built with thirds (m3 and M3 intervals). Triads are no exception. To build a basic triad, we pick a root note, use a m3 or M3 to get to the 2nd note, and use another m3 or M3 to get to the 3rd note. Because there are 4 possible combinations of major and minor 3rds, there are 4 basic types of triads:</p>
+
     <table>
       <thead>
         <tr>
           <th>Triad Type</th>
-          <th>Triad Intervals</th>
+          <th>Symbols</th>
+          <th>Stacked Intervals</th>
+          <th>Intervals From Root Note</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td>Major Triad</td>
+          <td>no symbol, M, Maj, Δ</td>
           <td>R, M3, m3</td>
+          <td>R, M3, P5</td>
         </tr>
         <tr>
           <td>Minor Triad</td>
+          <td>m, min, -</td>
           <td>R, m3, M3</td>
+          <td>R, m3, P5</td>
         </tr>
         <tr>
           <td>Diminished Triad</td>
+          <td>dim, °</td>
           <td>R, m3, m3</td>
+          <td>R, m3, d5</td>
         </tr>
         <tr>
           <td>Augmented Triad</td>
+          <td>aug, +</td>
           <td>R, M3, M3</td>
+          <td>R, M3, A5</td>
         </tr>
       </tbody>
     </table>
 
-    <p>Note that you are free to play the notes of a chord in any order, spaced out as close or as far as you like, and any note in a chord can be repeated in different octaves.</p>
+    <NoteText>Looking at the "Intervals From Root Note" column of the table above, you can see that each triad has a root note, a note a 3rd above the root note, and a note a 5th above the root note. We call these chord notes the "root", the "third", and the "fifth" accordingly.</NoteText>
+
+    <p>We can use these triad formulas to easily find the three notes in each triad, for example:</p>
+    <ul>
+      <li>C major triad (C): C, E, G</li>
+      <li>C minor triad (Cm): C, Eb, G</li>
+      <li>C diminished triad (Cdim): C, Eb, Gb</li>
+      <li>C augmented triad (Caug): C, E#, G#</li>
+    </ul>
+
+    <p>Use the interactive diagram below to explore these triads:</p>
+
+    <ChordViewer title={"Triad Viewer"} chords={basicTriads} showGuitarFretboard={false} />
 
     <SubSectionTitle>Inversions</SubSectionTitle>
+    <p>Note that you are free to play the notes of a chord in any order, spaced out as close or as far as you like, and any note in a chord can be repeated in different octaves.</p>
     <p>When playing a chord, whichever note you decide to put in the bass of a chord (the lowest note) determines which "inversion" a chord is in. If the root note is in the bass, the chord is considered in "root position". If the 2nd note of the chord is in the bass, the chord is considered in "1st inversion". If the 3rd note of the chord is in the bass, the chord is considered in "2nd inversion". And so on...</p>
 
     <SubSectionTitle>Seventh Chords</SubSectionTitle>
@@ -909,6 +935,11 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
           <td>R, m3, m3, M3</td>
         </tr>
         <tr>
+          <td>Augmented Seventh Chord</td>
+          <td>maj7b5</td>
+          <td>R, M3, M3, d3</td>
+        </tr>
+        <tr>
           <td>Augmented Major Seventh Chord</td>
           <td>maj7b5</td>
           <td>R, M3, M3, m3</td>
@@ -916,7 +947,10 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
       </tbody>
     </table>
 
-    <p>Note that if you try to build a seventh chord with the root and 3 major thirds, you end up with an augmented triad with a repeated root.</p>
+    <NoteText>Note that if you try to build a seventh chord with the root and 3 major thirds, you end up with an augmented triad with a repeated root.</NoteText>
+
+    <p>Use the interactive diagram below to explore the basic seventh chords:</p>
+    <ChordViewer title={"Seventh Chord Viewer"} chords={seventhChords} showGuitarFretboard={false} />
 
     <SubSectionTitle>Extended Chords &amp; Chord/Scale Relationships</SubSectionTitle>
     <p>You can continue to add 3rds to these chords to form ninth chords, eleventh chords, and thirteenth chords. These chords are categorized as "extended" chords.</p>

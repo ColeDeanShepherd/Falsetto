@@ -44,9 +44,10 @@ const validFlatKeyPitches = [
 ];
 
 interface IScaleViewerProps {
+  title?: string;
   scales?: Array<Scale>;
-  typeTitle?: string;
   playSimultaneously?: boolean;
+  showGuitarFretboard?: boolean;
   isEmbedded?: boolean;
 }
 interface IScaleViewerState {
@@ -68,9 +69,9 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
   }
 
   public render(): JSX.Element {
-    const typeTitle = this.props.typeTitle
-      ? this.props.typeTitle
-      : "Scale";
+    const title = this.props.title
+      ? this.props.title
+      : "Scale Viewer";
     const pitches = Chord.fromPitchAndFormulaString(
       this.state.rootPitch,
       this.state.scale.formulaString
@@ -99,12 +100,20 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
     const pianoSize = Utils.shrinkRectToFit(new Size2D(width, height), new Size2D(400, 100));
     const guitarSize = Utils.shrinkRectToFit(new Size2D(width, height), new Size2D(400, 140));
 
+    const onKeyPress = this.props.playSimultaneously
+      ? (pitch: Pitch) => playPitches([pitch])
+      : (pitch: Pitch) => PianoScaleDronePlayer.onKeyPress(this.state.scale, this.state.rootPitch, pitch);
+    
+    const showGuitarFretboard = (this.props.showGuitarFretboard !== undefined)
+      ? this.props.showGuitarFretboard
+      : true;
+
     return (
       <Card>
         <CardContent>
           <div style={{display: "flex"}}>
             <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
-              {typeTitle} Viewer
+              {title}
             </Typography>
           </div>
         
@@ -119,7 +128,7 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
             </div>
             
             <Typography gutterBottom={true} variant="h6" component="h4">
-              {typeTitle}
+              Type
             </Typography>
             <div style={{padding: "1em 0"}}>
               {this.scales.map(scale => {
@@ -165,17 +174,19 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
                   rect={new Rect2D(pianoSize, new Vector2D(0, 0))}
                   lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
                   highestPitch={new Pitch(PitchLetter.B, 0, 5)}
-                  onKeyPress={pitch => PianoScaleDronePlayer.onKeyPress(this.state.scale, this.state.rootPitch, pitch)}
+                  onKeyPress={onKeyPress}
                   renderExtrasFn={metrics => PianoScaleDronePlayer.renderExtrasFn(metrics, this.state.scale, this.state.rootPitch)}
                 />
               </div>
 
               <div style={{marginTop: "1em"}}>
-                <GuitarFretboard
-                  width={guitarSize.width} height={guitarSize.height}
-                  pressedNotes={guitarNotes}
-                  renderExtrasFn={metrics => renderGuitarFretboardScaleExtras(metrics, pitches)}
-                />
+                {showGuitarFretboard ? (
+                  <GuitarFretboard
+                    width={guitarSize.width} height={guitarSize.height}
+                    pressedNotes={guitarNotes}
+                    renderExtrasFn={metrics => renderGuitarFretboardScaleExtras(metrics, pitches)}
+                  />
+                ) : null}
               </div>
             </div>
           </div>
