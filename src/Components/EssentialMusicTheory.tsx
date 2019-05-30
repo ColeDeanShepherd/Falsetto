@@ -981,13 +981,12 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
     <p>In this way, chords &amp; scales are inextricably tied in a relationship Jazz musicians call the "chord-scale system".</p>
 
     <SubSectionTitle>Diatonic Chords &amp; Roman Numeral Notation</SubSectionTitle>
-    <p>One way to build chords is to pick notes from a scale separated by thirds. Chords which are derived in this manner are called "diatonic chords".</p>
-    <p>For example, you could take a major scale and pick out the 1st, 3rd, 5th, and 7th notes of the scale. These notes form a major seventh chord with the 1st scale degree of the major scale as the root note.</p>
-    <p>This idea is commonly communicated using "roman numeral notation", where the roman numeral for the root note's scale degree # replaces the name of the root note.</p>
-    <p>So, the chord above could also be notated as a "I<sup>M7</sup>" chord. And a chord built using the 2nd, 4th, 6th, and 1st (8th = 1st) notes of a major scale could be notated as "ii<sup>m7</sup>". Note that chords build on a minor triad use lower-case roman numerals.</p>
-    <p>Here is roman numeral notation for the diatonic seventh chords in common scales.</p>
+    <p>One way to build chords is to exclusively pick notes out from a scale, separated by thirds. Because these chords are built solely with scale notes, they naturally "fit" well with the underlying scale, and lend themselves well to accompanying melodies built with the same scale. Chords which are derived in this manner are called <Term>diatonic chords</Term>, which make up <strong>most</strong> of the chords you find in Western music.</p>
+    <p>For example, you could take a C major scale and pick out the 1st, 3rd, and 5th scale degrees (C, E, G). These notes form a <Term>major triad</Term> with C, the 1st scale degree of the major scale, as the root note.</p>
+    <p><Term>Diatonic chords</Term> are commonly written in <Term>roman numeral notation</Term>, which uses roman numerals of scale degrees instead of letters to designate the root note. With <Term>roman numeral notation</Term>, the Cmaj (a.k.a. "C") chord above could instead be notated as a Imaj chord (a.k.a "I"). Note that "C" is not in the name of the chord at all. With <Term>roman numeral notation</Term>, any chord made with the 1st, 3rd, and 5th degrees of <strong>any</strong> major scale has the same name &ndash; I. This allows us to specify and analyze sequences of chords without concern for what key the composer decided to write the music in.</p>
+    <p>There is one more thing to know about roman numeral notation &ndash; minor and diminished chords are written with lower case roman numerals. So, because a chord built with the 2nd, 4th, and 6th notes of a major scale is a minor chord, it would be written as ii, <strong>not</strong> II.</p>
+    <p>Here are all the diatonic triads and seventh chords in some common scales:</p>
 
-    <p>TODO</p>
     <table>
       <thead>
         <tr>
@@ -1071,6 +1070,7 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
         </tr>
       </tbody>
     </table>
+    <p>TODO: listen to chords relative to root note</p>
 
     <SubSectionTitle>Other Chords</SubSectionTitle>
     <table>

@@ -92,7 +92,8 @@ async function getErrorDescription(msg: string | Event, file: string | undefined
   });
 }
 
-const NavSectionTitle: React.FunctionComponent<{ style?: any }> = props => <p style={Object.assign({ fontWeight: "bold" }, props.style)}>{props.children}</p>;
+const NavSectionTitle: React.FunctionComponent<{ style?: any }> = props => <p style={Object.assign({ fontSize: "1.2em", fontWeight: "bold", textDecoration: "underline" }, props.style)}>{props.children}</p>;
+const NavSectionSubTitle: React.FunctionComponent<{ style?: any }> = props => <p style={Object.assign({ fontWeight: "bold" }, props.style)}>{props.children}</p>;
 
 interface IAppProps {
   isEmbedded: boolean;
@@ -242,8 +243,9 @@ class App extends React.Component<IAppProps, IAppState> {
     const navSectionStyle = { fontWeight: "bold" };
     const nav = (
       <div className="nav left-nav">
+        <NavSectionTitle>Lessons</NavSectionTitle>
         <div>
-          <NavSectionTitle style={{marginTop: 0}}>Essential Music Theory</NavSectionTitle>
+          <NavSectionSubTitle style={{marginTop: 0}}>Essential Music Theory</NavSectionSubTitle>
           {this.renderNavLink("/essential-music-theory", "Introduction")}
           {this.renderNavLink("/essential-music-theory/rhythm", "Rhythm")}
           {this.renderNavLink("/essential-music-theory/notes", "Notes")}
@@ -251,16 +253,22 @@ class App extends React.Component<IAppProps, IAppState> {
           {this.renderNavLink("/essential-music-theory/scales-and-modes", "Scales & Modes")}
           <p><em>Chords (coming soon)</em></p>
           <p><em>Chord Progressions (coming soon)</em></p>
+        </div>
+        <div>
+          <NavSectionSubTitle>Notes</NavSectionSubTitle>
+          <NavLink to="learn-guitar-notes-in-10-steps" className="nav-link">Learn the Notes on Guitar in 10 Easy Steps</NavLink>
+        </div>
 
-          <NavSectionTitle>Notes</NavSectionTitle>
+        <NavSectionTitle>Exercises</NavSectionTitle>
+        <div>
+          <NavSectionSubTitle>Notes</NavSectionSubTitle>
           {renderFlashCardGroupLink(PianoNotes.createFlashCardGroup())}
           {renderFlashCardGroupLink(GuitarNotes.createFlashCardGroup())}
-          <NavLink to="learn-guitar-notes-in-10-steps" className="nav-link">Learn the Notes on Guitar in 10 Easy Steps</NavLink>
           {renderFlashCardGroupLink(NoteDurations.createFlashCardGroup())}
           {renderFlashCardGroupLink(SheetMusicNotes.createFlashCardGroup())}
         </div>
         <div>
-          <NavSectionTitle>Intervals</NavSectionTitle>
+          <NavSectionSubTitle>Intervals</NavSectionSubTitle>
           {renderFlashCardGroupLink(IntervalQualitySymbolsToQualities.createFlashCardGroup())}
           {renderFlashCardGroupLink(IntervalNamesToHalfSteps.createFlashCardGroup())}
           {renderFlashCardGroupLink(IntervalsToConsonanceDissonance.createFlashCardGroup())}
@@ -274,7 +282,7 @@ class App extends React.Component<IAppProps, IAppState> {
           {renderFlashCardGroupLink(Interval2ndNoteEarTrainingPiano.createFlashCardGroup())}
         </div>
         <div>
-          <NavSectionTitle>Scales</NavSectionTitle>
+          <NavSectionSubTitle>Scales</NavSectionSubTitle>
           {renderFlashCardGroupLink(ScaleDegreeNames.createFlashCardGroup())}
           {renderFlashCardGroupLink(ScaleNotes.createFlashCardGroup())}
           {renderFlashCardGroupLink(PianoScales.createFlashCardGroup())}
@@ -285,13 +293,13 @@ class App extends React.Component<IAppProps, IAppState> {
           <NavLink to="scale-viewer" className="nav-link">Scale Viewer</NavLink>
         </div>
         <div>
-          <NavSectionTitle>Keys</NavSectionTitle>
+          <NavSectionSubTitle>Keys</NavSectionSubTitle>
           {renderFlashCardGroupLink(KeyAccidentalCounts.createFlashCardGroup())}
           {renderFlashCardGroupLink(KeyAccidentalNotes.createFlashCardGroup())}
           {renderFlashCardGroupLink(KeySignatureIdentification.createFlashCardGroup())}
         </div>
         <div>
-          <NavSectionTitle>Chords</NavSectionTitle>
+          <NavSectionSubTitle>Chords</NavSectionSubTitle>
           {renderFlashCardGroupLink(ChordFamilies.createFlashCardGroup())}
           {renderFlashCardGroupLink(ChordNotes.createFlashCardGroup())}
           {renderFlashCardGroupLink(AvailableChordTensions.createFlashCardGroup())}
