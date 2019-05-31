@@ -4,6 +4,8 @@ import * as Utils from "../Utils";
 import { Pitch } from "../Pitch";
 import { PitchLetter } from "../PitchLetter";
 import { Size2D } from '../Size2D';
+import { Rect2D } from '../Rect2D';
+import { Vector2D } from '../Vector2D';
 
 export const STRING_COUNT = 6;
 
@@ -141,19 +143,24 @@ export function renderGuitarNoteHighlightsAndNoteNames(
       const fontSize = isNaturalNote ? 11 : 8;
       const textStyle: any = {
         fontSize: `${fontSize}px`,
-        fontWeight: "bold"
+        fontWeight: "bold",
+        textAnchor: "middle"
       };
-      const textXOffset = isNaturalNote
-        ? metrics.getTextXOffset(12)
-        : metrics.getTextXOffset(36);
-      const textYOffset = isNaturalNote
-        ? metrics.getTextYOffset(14)
-        : metrics.getTextYOffset(11);
-
+      
       const rectSize = new Size2D(
         0.7 * metrics.fretSpacing,
         0.6 * metrics.stringSpacing
       );
+      const rect = new Rect2D(
+        rectSize,
+        new Vector2D(
+          x - (rectSize.width / 2),
+          y - (rectSize.height / 2)
+        )
+      );
+
+      const textX = rect.center.x;
+      const textY = rect.bottom - (isNaturalNote ? 1 : 2.5);
 
       return (
         <g>
@@ -162,7 +169,7 @@ export function renderGuitarNoteHighlightsAndNoteNames(
             width={rectSize.width} height={rectSize.height}
             fill={highlightStyle} fillOpacity={1} strokeWidth="0" />
           <text
-            x={x + textXOffset} y={y + textYOffset}
+            x={textX} y={textY}
             style={textStyle}>{noteName}</text>
         </g>
       );
@@ -171,7 +178,7 @@ export function renderGuitarNoteHighlightsAndNoteNames(
   return <g>{rootPitchFretDots}</g>;
 }
 export function renderGuitarFretboardScaleExtras(
-  metrics: GuitarFretboardMetrics, pitches: Array<Pitch>
+  metrics: GuitarFretboardMetrics, pitches: Array<Pitch>, formulaStringParts: Array<string>
 ): JSX.Element {
   const guitarNotes = GuitarNote.allNotesOfPitches(
     standardGuitarTuning,
@@ -181,23 +188,42 @@ export function renderGuitarFretboardScaleExtras(
 
   const rootPitchFretDots = guitarNotes
     .map((guitarNote, noteIndex) => {
-      const scaleDegree = 1 + pitches.findIndex(p => p.midiNumberNoOctave === guitarNote.pitch.midiNumberNoOctave);
+      const pitchIndex = pitches.findIndex(p => p.midiNumberNoOctave === guitarNote.pitch.midiNumberNoOctave);
+      const formulaStringPart = formulaStringParts[pitchIndex];
 
       const x = metrics.getNoteX(guitarNote.getFretNumber(standardGuitarTuning));
       const y = metrics.getStringY(guitarNote.stringIndex);
-      const fill = (scaleDegree === 1) ? "green" : "red";
-
-      const fontSize = 16;
-      const textStyle = {
-        fontSize: `${fontSize}px`
+      const fill = "lightblue";
+      
+      const fontSize = 11;
+      const textStyle: any = {
+        fontSize: `${fontSize}px`,
+        fontWeight: "bold",
+        textAnchor: "middle"
       };
-      const textXOffset = metrics.getTextXOffset(fontSize);
-      const textYOffset = metrics.getTextYOffset(fontSize);
+
+      const rectSize = new Size2D(
+        0.7 * metrics.fretSpacing,
+        0.6 * metrics.stringSpacing
+      );
+      const rect = new Rect2D(
+        rectSize,
+        new Vector2D(
+          x - (rectSize.width / 2),
+          y - (rectSize.height / 2)
+        )
+      );
+
+      const textX = rect.center.x;
+      const textY = rect.bottom - 1;
 
       return (
         <g>
-          <circle key={noteIndex} cx={x} cy={y} r={metrics.fretDotRadius} fill={fill} strokeWidth="0" />
-          <text x={x + textXOffset} y={y + textYOffset} style={textStyle}>{scaleDegree}</text>
+          <rect
+            x={rect.position.x} y={rect.position.y}
+            width={rect.size.width} height={rect.size.height}
+            fill={fill} strokeWidth="0" />
+          <text x={textX} y={textY} style={textStyle}>{formulaStringPart}</text>
         </g>
       );
     });
@@ -208,8 +234,8 @@ export function renderGuitarFretboardScaleExtras(
 export interface IGuitarFretboardProps {
   width: number;
   height: number;
-  pressedNotes: Array<GuitarNote>;
   fretCount?: number;
+  pressedNotes?: Array<GuitarNote>;
   renderExtrasFn?: (metrics: GuitarFretboardMetrics) => JSX.Element;
   style?: any;
 }
@@ -251,12 +277,14 @@ export class GuitarFretboard extends React.Component<IGuitarFretboardProps, {}> 
           );
         }
       });
-    const noteHighlights = this.props.pressedNotes
-      .map((note, i) => {
-        const x = metrics.getNoteX(note.getFretNumber(standardGuitarTuning));
-        const y = metrics.getStringY(note.stringIndex);
-        return <circle key={i} cx={x} cy={y} r={metrics.fretDotRadius} fill="red" strokeWidth="0" />;
-      });
+    const noteHighlights = this.props.pressedNotes ? (
+        this.props.pressedNotes
+        .map((note, i) => {
+          const x = metrics.getNoteX(note.getFretNumber(standardGuitarTuning));
+          const y = metrics.getStringY(note.stringIndex);
+          return <circle key={i} cx={x} cy={y} r={metrics.fretDotRadius} fill="red" strokeWidth="0" />;
+        })
+      ) : null;
     const extraElements = this.props.renderExtrasFn
       ? this.props.renderExtrasFn(metrics)
       : null;

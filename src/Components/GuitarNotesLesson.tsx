@@ -266,7 +266,6 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           <p style={{ textAlign: "center" }}>
             <GuitarFretboard
               width={fretboardWidth} height={0.8 * fretboardHeight}
-              pressedNotes={[]}
               fretCount={24}
               style={fretboardStyle}
             />
@@ -279,7 +278,6 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           <p style={{ textAlign: "center" }}>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
-              pressedNotes={[]}
               renderExtrasFn={metrics => this.renderFretNumbers(metrics)}
               style={fretboardStyle}
             />
@@ -290,7 +288,6 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           <p style={{ textAlign: "center" }}>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
-              pressedNotes={[]}
               renderExtrasFn={metrics => {
                 const y = 0.75 * metrics.stringSpacing;
 
@@ -315,7 +312,6 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           <p style={{ textAlign: "center" }}>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
-              pressedNotes={[]}
               renderExtrasFn={metrics => this.renderDiagramExtras(metrics, step3Diagram1NoteGroups)}
               style={fretboardStyle}
             />
@@ -330,7 +326,6 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           <p style={{ textAlign: "center" }}>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
-              pressedNotes={[]}
               renderExtrasFn={metrics => this.renderDiagramExtras(metrics, step4Diagram1NoteGroups)}
               style={fretboardStyle}
             />
@@ -345,7 +340,6 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           <p style={{ textAlign: "center" }}>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
-              pressedNotes={[]}
               renderExtrasFn={metrics => this.renderDiagramExtras(metrics, step5Diagram1NoteGroups)}
               style={fretboardStyle}
             />
@@ -364,7 +358,6 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           <p style={{ textAlign: "center" }}>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
-              pressedNotes={[]}
               renderExtrasFn={metrics => this.renderDiagramExtras(metrics, step6Diagram1NoteGroups)}
               style={fretboardStyle}
             />
@@ -379,7 +372,6 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           <p style={{ textAlign: "center" }}>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
-              pressedNotes={[]}
               renderExtrasFn={metrics => this.renderDiagramExtras(metrics, step7Diagram1NoteGroups)}
               style={fretboardStyle}
             />
@@ -394,7 +386,6 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           <p style={{ textAlign: "center" }}>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
-              pressedNotes={[]}
               renderExtrasFn={metrics => this.renderDiagramExtras(metrics, step8Diagram1NoteGroups)}
               style={fretboardStyle}
             />
@@ -410,7 +401,6 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           <p style={{ textAlign: "center" }}>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
-              pressedNotes={[]}
               renderExtrasFn={metrics => this.renderDiagramExtras(metrics, step9Diagram1NoteGroups)}
               style={fretboardStyle}
             />
@@ -428,7 +418,6 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           <p style={{ textAlign: "center" }}>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
-              pressedNotes={[]}
               renderExtrasFn={metrics => this.renderDiagramExtras(metrics, step10Diagram1NoteGroups)}
               style={fretboardStyle}
             />
@@ -437,7 +426,6 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           <p style={{ textAlign: "center" }}>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
-              pressedNotes={[]}
               renderExtrasFn={metrics => this.renderDiagramExtras(metrics, step10Diagram2NoteGroups)}
               style={fretboardStyle}
             />

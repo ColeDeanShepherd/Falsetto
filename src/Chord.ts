@@ -1,32 +1,16 @@
 import * as Utils from "./Utils";
 import { Pitch } from "./Pitch";
-import { Interval } from "./Interval";
 import { VerticalDirection } from "./VerticalDirection";
+import { getIntervalsFromFormulaString } from './Scale';
 
 export class Chord {
   public static fromPitchAndFormulaString(pitch: Pitch, formulaString: string): Chord {
     Utils.precondition(!Utils.isNullOrWhiteSpace(formulaString));
 
-    const pitches = formulaString.split(" ")
-      .map(scaleDegree => {
-        const accidentalString = Utils.takeCharsWhile(scaleDegree, 0, c => (c === "#") || (c === "b"));
+    const intervals = getIntervalsFromFormulaString(formulaString);
 
-        let signedAccidental: number;
-        if (accidentalString.length === 0) {
-          signedAccidental = 0;
-        } else if (scaleDegree[0] === "#") {
-          signedAccidental = accidentalString.length;
-        } else if (scaleDegree[0] === "b") {
-          signedAccidental = -accidentalString.length;
-        } else {
-          throw new Error(`Invalid accidental character: ${scaleDegree[0]}`);
-        }
-
-        const degreeNumberString = scaleDegree.substring(accidentalString.length);
-        const degreeNumber = parseInt(degreeNumberString, 10);
-        const interval = new Interval(degreeNumber, signedAccidental);
-        return Pitch.addInterval(pitch, VerticalDirection.Up, interval);
-      });
+    const pitches = intervals
+      .map(interval => Pitch.addInterval(pitch, VerticalDirection.Up, interval));
     return new Chord(pitches);
   }
   public constructor(public pitches: Array<Pitch>) {
@@ -50,11 +34,11 @@ export const seventhChords = [
   { type: "Maj7", formulaString: "1 3 5 7" },
   { type: "7", formulaString: "1 3 5 b7" },
   { type: "m7", formulaString: "1 b3 5 b7" },
-  { type: "mMaj7", formulaString: "1 b3 5 7" },
+  { type: "minMaj7", formulaString: "1 b3 5 7" },
   { type: "dim7", formulaString: "1 b3 b5 bb7" },
   { type: "m7b5", formulaString: "1 b3 b5 b7" },
   { type: "aug7", formulaString: "1 3 #5 b7" },
-  { type: "Maj7#5", formulaString: "1 3 #5 7" },
+  { type: "augM7", formulaString: "1 3 #5 7" },
 ];
 export const allChords = [
   { type: "power", formulaString: "1 5" },

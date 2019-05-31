@@ -13,4 +13,7 @@ export class Rect2D {
   public get right(): number {
     return this.position.x + this.size.width;
   }
+  public get bottom(): number {
+    return this.position.y + this.size.height;
+  }
 }

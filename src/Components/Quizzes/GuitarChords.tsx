@@ -377,6 +377,7 @@ export function createFlashCards(): FlashCard[] {
       
       return scales.map(scale => {
         const formulaString = scale.formulaString;
+        const formulaStringParts = scale.formulaString.split(" ");
         const pitches = Chord.fromPitchAndFormulaString(rootPitch, formulaString)
           .pitches;
         const guitarNotes = GuitarNote.allNotesOfPitches(
@@ -393,8 +394,7 @@ export function createFlashCards(): FlashCard[] {
               return (
                 <GuitarFretboard
                   width={size.width} height={size.height}
-                  pressedNotes={guitarNotes}
-                  renderExtrasFn={metrics => renderGuitarFretboardScaleExtras(metrics, pitches)}
+                  renderExtrasFn={metrics => renderGuitarFretboardScaleExtras(metrics, pitches, formulaStringParts)}
                 />
               )
             },

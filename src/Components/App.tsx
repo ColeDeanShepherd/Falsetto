@@ -256,7 +256,7 @@ class App extends React.Component<IAppProps, IAppState> {
         </div>
         <div>
           <NavSectionSubTitle>Notes</NavSectionSubTitle>
-          <NavLink to="learn-guitar-notes-in-10-steps" className="nav-link">Learn the Notes on Guitar in 10 Easy Steps</NavLink>
+          <NavLink to="/learn-guitar-notes-in-10-steps" className="nav-link">Learn the Notes on Guitar in 10 Easy Steps</NavLink>
         </div>
 
         <NavSectionTitle>Exercises</NavSectionTitle>
@@ -290,7 +290,7 @@ class App extends React.Component<IAppProps, IAppState> {
           {renderFlashCardGroupLink(ScaleDegreeModes.createFlashCardGroup())}
           {renderFlashCardGroupLink(ScaleChords.createFlashCardGroup())}
           {renderFlashCardGroupLink(ScaleEarTraining.createFlashCardGroup())}
-          <NavLink to="scale-viewer" className="nav-link">Scale Viewer</NavLink>
+          <NavLink to="/scale-viewer" className="nav-link">Scale Viewer</NavLink>
         </div>
         <div>
           <NavSectionSubTitle>Keys</NavSectionSubTitle>
@@ -309,7 +309,7 @@ class App extends React.Component<IAppProps, IAppState> {
           {renderFlashCardGroupLink(PianoChords.createFlashCardGroup())}
           {renderFlashCardGroupLink(GuitarChords.createFlashCardGroup())}
           {renderFlashCardGroupLink(ChordEarTraining.createFlashCardGroup())}
-          <NavLink to="chord-viewer" className="nav-link">Chord Viewer</NavLink>
+          <NavLink to="/chord-viewer" className="nav-link">Chord Viewer</NavLink>
           {renderFlashCardGroupLink(RandomChordGenerator.createFlashCardGroup())}
         </div>
       </div>

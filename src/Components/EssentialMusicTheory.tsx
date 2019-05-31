@@ -818,6 +818,8 @@ export const ScalesAndModesSection: React.FunctionComponent<SectionProps> = prop
     <p>There are many other common, named scales (and keep in mind that a mode can be built off each scale degree in each scale). Explore them below with the interactive diagram below:</p>
     <ScaleViewer isEmbedded={props.isEmbedded} />
 
+    <BecomeAPatronSection />
+
     <SubSectionTitle>Exercises</SubSectionTitle>
     <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(ScaleNotes.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
     <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(PianoScales.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
@@ -834,44 +836,49 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
 
     <SubSectionTitle>Triads</SubSectionTitle>
     <p>The simplest class of chords are the <Term>triads</Term>. <Term>Traids</Term> are chords made of exactly three notes.</p>
-    <p>All chords have a root note, and the vast majority of chords are built with thirds (m3 and M3 intervals). Triads are no exception. To build a basic triad, we pick a root note, use a m3 or M3 to get to the 2nd note, and use another m3 or M3 to get to the 3rd note. Because there are 4 possible combinations of major and minor 3rds, there are 4 basic types of triads:</p>
+    <p>All chords have a root note, and the vast majority of chords are built with thirds (m3 and M3 intervals). Triads are no exception. To build a basic triad, we pick a root note, use a m3 or M3 to get to the 2nd note, and use another m3 or M3 (adding up to a 5th) to get to the 3rd note. Because there are 4 possible combinations of major and minor 3rds, there are 4 basic types of triads:</p>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Triad Type</th>
-          <th>Symbols</th>
-          <th>Stacked Intervals</th>
-          <th>Intervals From Root Note</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Major Triad</td>
-          <td>no symbol, M, Maj, Δ</td>
-          <td>R, M3, m3</td>
-          <td>R, M3, P5</td>
-        </tr>
-        <tr>
-          <td>Minor Triad</td>
-          <td>m, min, -</td>
-          <td>R, m3, M3</td>
-          <td>R, m3, P5</td>
-        </tr>
-        <tr>
-          <td>Diminished Triad</td>
-          <td>dim, °</td>
-          <td>R, m3, m3</td>
-          <td>R, m3, d5</td>
-        </tr>
-        <tr>
-          <td>Augmented Triad</td>
-          <td>aug, +</td>
-          <td>R, M3, M3</td>
-          <td>R, M3, A5</td>
-        </tr>
-      </tbody>
-    </table>
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell>Triad Type</TableCell>
+          <TableCell>Symbols</TableCell>
+          <TableCell>Stacked Intervals</TableCell>
+          <TableCell>Intervals From Root Note</TableCell>
+          <TableCell>Major Scale Based Formula</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        <TableRow>
+          <TableCell>Major Triad</TableCell>
+          <TableCell>no symbol, M, Maj, Δ</TableCell>
+          <TableCell>R, M3, m3</TableCell>
+          <TableCell>R, M3, P5</TableCell>
+          <TableCell>1, 3, 5</TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>Minor Triad</TableCell>
+          <TableCell>m, min, −, lowercase pitch letter</TableCell>
+          <TableCell>R, m3, M3</TableCell>
+          <TableCell>R, m3, P5</TableCell>
+          <TableCell>1, b3, 5</TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>Diminished Triad</TableCell>
+          <TableCell>dim, °</TableCell>
+          <TableCell>R, m3, m3</TableCell>
+          <TableCell>R, m3, d5</TableCell>
+          <TableCell>1, b3, b5</TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>Augmented Triad</TableCell>
+          <TableCell>aug, +</TableCell>
+          <TableCell>R, M3, M3</TableCell>
+          <TableCell>R, M3, A5</TableCell>
+          <TableCell>1, #3, #5</TableCell>
+        </TableRow>
+      </TableBody>
+    </Table>
 
     <NoteText>Looking at the "Intervals From Root Note" column of the table above, you can see that each triad has a root note, a note a 3rd above the root note, and a note a 5th above the root note. We call these chord notes the "root", the "3rd", and the "5th" accordingly.</NoteText>
 
@@ -894,75 +901,84 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
     <p>Triads are built with two 3rds, but chords can be built with even more &ndash; <Term>seventh chords</Term>, for example, are built with three 3rds. Seventh chords are more "colorful" than triads, and are heavily used (and built upon) in Jazz music.</p>
     <p>You can find all of the basic seventh chords by adding additional major and minor 3rds to each of the 4 basic triads:</p>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Seventh Chord Type</th>
-          <th>Symbols</th>
-          <th>Stacked Intervals</th>
-          <th>Intervals From Root Note</th>
-          <th>Base Triad Type</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Dominant Seventh Chord</td>
-          <td>7</td>
-          <td>R, M3, m3, m3</td>
-          <td>R, M3, P5, m7</td>
-          <td>Major</td>
-        </tr>
-        <tr>
-          <td>Major Seventh Chord</td>
-          <td>M7</td>
-          <td>R, M3, m3, M3</td>
-          <td>R, M3, P5, M7</td>
-          <td>Major</td>
-        </tr>
-        <tr>
-          <td>Minor Seventh Chord</td>
-          <td>m7</td>
-          <td>R, m3, M3, m3</td>
-          <td>R, m3, P5, m7</td>
-          <td>Minor</td>
-        </tr>
-        <tr>
-          <td>Minor-Major Seventh Chord</td>
-          <td>mM7</td>
-          <td>R, m3, M3, M3</td>
-          <td>R, m3, P5, M7</td>
-          <td>Minor</td>
-        </tr>
-        <tr>
-          <td>Diminished Seventh Chord</td>
-          <td>d7</td>
-          <td>R, m3, m3, m3</td>
-          <td>R, m3, d5, d7</td>
-          <td>Diminished</td>
-        </tr>
-        <tr>
-          <td>Half-Diminished Seventh Chord</td>
-          <td>m7b5, </td>
-          <td>R, m3, m3, M3</td>
-          <td>R, m3, d5, m7</td>
-          <td>Diminished</td>
-        </tr>
-        <tr>
-          <td>Augmented Seventh Chord</td>
-          <td>maj7b5</td>
-          <td>R, M3, M3, d3</td>
-          <td>R, M3, A5, m7</td>
-          <td>Augmented</td>
-        </tr>
-        <tr>
-          <td>Augmented Major Seventh Chord</td>
-          <td>maj7b5</td>
-          <td>R, M3, M3, m3</td>
-          <td>R, M3, A5, M7</td>
-          <td>Augmented</td>
-        </tr>
-      </tbody>
-    </table>
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell>Seventh Chord Type</TableCell>
+          <TableCell>Common Symbols</TableCell>
+          <TableCell>Stacked Intervals</TableCell>
+          <TableCell>Intervals From Root Note</TableCell>
+          <TableCell>Base Triad Type</TableCell>
+          <TableCell>Major Scale Based Formula</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        <TableRow>
+          <TableCell>Dominant Seventh Chord</TableCell>
+          <TableCell>7</TableCell>
+          <TableCell>R, M3, m3, m3</TableCell>
+          <TableCell>R, M3, P5, m7</TableCell>
+          <TableCell>Major</TableCell>
+          <TableCell>1, 3, 5, b7</TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>Major Seventh Chord</TableCell>
+          <TableCell>M7, Maj7</TableCell>
+          <TableCell>R, M3, m3, M3</TableCell>
+          <TableCell>R, M3, P5, M7</TableCell>
+          <TableCell>Major</TableCell>
+          <TableCell>1, 3, 5, 7</TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>Minor Seventh Chord</TableCell>
+          <TableCell>m7</TableCell>
+          <TableCell>R, m3, M3, m3</TableCell>
+          <TableCell>R, m3, P5, m7</TableCell>
+          <TableCell>Minor</TableCell>
+          <TableCell>1, b3, 5, b7</TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>Minor-Major Seventh Chord</TableCell>
+          <TableCell>minMaj7</TableCell>
+          <TableCell>R, m3, M3, M3</TableCell>
+          <TableCell>R, m3, P5, M7</TableCell>
+          <TableCell>Minor</TableCell>
+          <TableCell>1, b3, 5, 7</TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>Diminished Seventh Chord</TableCell>
+          <TableCell>°7, dim7</TableCell>
+          <TableCell>R, m3, m3, m3</TableCell>
+          <TableCell>R, m3, d5, d7</TableCell>
+          <TableCell>Diminished</TableCell>
+          <TableCell>1, b3, b5, bb7</TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>Half-Diminished Seventh Chord</TableCell>
+          <TableCell><sup>ø7</sup>, m<sup>7b5</sup></TableCell>
+          <TableCell>R, m3, m3, M3</TableCell>
+          <TableCell>R, m3, d5, m7</TableCell>
+          <TableCell>Diminished</TableCell>
+          <TableCell>1, b3, b5, b7</TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>Augmented Seventh Chord</TableCell>
+          <TableCell>+<sup>7</sup>, aug<sup>7</sup>, <sup>7#5</sup></TableCell>
+          <TableCell>R, M3, M3, d3</TableCell>
+          <TableCell>R, M3, A5, m7</TableCell>
+          <TableCell>Augmented</TableCell>
+          <TableCell>1, #3, #5, b7</TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>Augmented Major Seventh Chord</TableCell>
+          <TableCell>aug<sup>M7</sup>, +<sup>M7</sup>, M<sup>7(#5)</sup></TableCell>
+          <TableCell>R, M3, M3, m3</TableCell>
+          <TableCell>R, M3, A5, M7</TableCell>
+          <TableCell>Augmented</TableCell>
+          <TableCell>1, #3, #5, 7</TableCell>
+        </TableRow>
+      </TableBody>
+    </Table>
 
     <NoteText>Note that if you try to build a seventh chord with the root and 3 major thirds, you end up with an augmented triad with a repeated root an octave higher.</NoteText>
 
@@ -987,127 +1003,116 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
     <p>There is one more thing to know about roman numeral notation &ndash; minor and diminished chords are written with lower case roman numerals. So, because a chord built with the 2nd, 4th, and 6th notes of a major scale is a minor chord, it would be written as ii, <strong>not</strong> II.</p>
     <p>Here are all the diatonic triads and seventh chords in some common scales:</p>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Scale</th>
-          <th>Root Scale Degree</th>
-          <th>Roman Numeral Notation</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td rowSpan={7}>Major</td>
-          <td></td>
-          <td>1</td>
-          <td>I<sup>M7</sup></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>2</td>
-          <td>ii<sup>m7</sup></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>3</td>
-          <td>iii<sup>m7</sup></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>4</td>
-          <td>IV<sup>M7</sup></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>5</td>
-          <td>V<sup>7</sup></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>6</td>
-          <td>vi<sup>m7</sup></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>7</td>
-          <td>vii<sup>ø7</sup></td>
-        </tr>
-        <tr>
-          <td rowSpan={7}>Natural Minor</td>
-          <td></td>
-          <td>1</td>
-          <td>i<sup>m7</sup></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>2</td>
-          <td>ii<sup>ø7</sup></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>3</td>
-          <td>III<sup>M7</sup></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>4</td>
-          <td>iv<sup>m7</sup></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>5</td>
-          <td>v<sup>m7</sup></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>6</td>
-          <td>vi<sup>M7</sup></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>7</td>
-          <td>V<sup>7</sup></td>
-        </tr>
-      </tbody>
-    </table>
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell>Scale</TableCell>
+          <TableCell>Root Scale Degree</TableCell>
+          <TableCell>Roman Numeral Notation</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        <TableRow>
+          <TableCell rowSpan={7}>Major</TableCell>
+          <TableCell>1</TableCell>
+          <TableCell>I<sup>M7</sup></TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>2</TableCell>
+          <TableCell>ii<sup>m7</sup></TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>3</TableCell>
+          <TableCell>iii<sup>m7</sup></TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>4</TableCell>
+          <TableCell>IV<sup>M7</sup></TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>5</TableCell>
+          <TableCell>V<sup>7</sup></TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>6</TableCell>
+          <TableCell>vi<sup>m7</sup></TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>7</TableCell>
+          <TableCell>vii<sup>ø7</sup></TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell rowSpan={7}>Natural Minor</TableCell>
+          <TableCell>1</TableCell>
+          <TableCell>i<sup>m7</sup></TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>2</TableCell>
+          <TableCell>ii<sup>ø7</sup></TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>3</TableCell>
+          <TableCell>III<sup>M7</sup></TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>4</TableCell>
+          <TableCell>iv<sup>m7</sup></TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>5</TableCell>
+          <TableCell>v<sup>m7</sup></TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>6</TableCell>
+          <TableCell>vi<sup>M7</sup></TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>7</TableCell>
+          <TableCell>V<sup>7</sup></TableCell>
+        </TableRow>
+      </TableBody>
+    </Table>
     <p>TODO: listen to chords relative to root note</p>
 
     <SubSectionTitle>Other Chords</SubSectionTitle>
-    <table>
-      <thead>
-        <tr>
-          <th>Chord Type</th>
-          <th>Symbol</th>
-          <th>Intervals</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Power Chord</td>
-          <td>5</td>
-          <td>R, P5</td>
-        </tr>
-        <tr>
-          <td>Suspended 2nd Chord</td>
-          <td>sus2</td>
-          <td>R, M2, P5</td>
-        </tr>
-        <tr>
-          <td>Suspended 4th Chord</td>
-          <td>sus2</td>
-          <td>R, P4, P5</td>
-        </tr>
-      </tbody>
-    </table>
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell>Chord Type</TableCell>
+          <TableCell>Symbol</TableCell>
+          <TableCell>Intervals</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        <TableRow>
+          <TableCell>Power Chord</TableCell>
+          <TableCell>5</TableCell>
+          <TableCell>R, P5</TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>Suspended 2nd Chord</TableCell>
+          <TableCell>sus2</TableCell>
+          <TableCell>R, M2, P5</TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>Suspended 4th Chord</TableCell>
+          <TableCell>sus2</TableCell>
+          <TableCell>R, P4, P5</TableCell>
+        </TableRow>
+      </TableBody>
+    </Table>
 
     <SubSectionTitle>Arpeggios</SubSectionTitle>
     <p>Arpeggios are simply the notes of a chord played separately in a melodic fashion.</p>
+
+    <BecomeAPatronSection />
     
+    <SubSectionTitle>Exercises</SubSectionTitle>
     <ChordViewer isEmbedded={props.isEmbedded} />
-    {createStudyFlashCardGroupComponent(ChordNotes.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}
-    {createStudyFlashCardGroupComponent(PianoChords.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}
-    {createStudyFlashCardGroupComponent(GuitarChords.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}
-    {createStudyFlashCardGroupComponent(ChordEarTraining.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(ChordNotes.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(PianoChords.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(GuitarChords.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(ChordEarTraining.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
   </div>
 );
 export const ChordProgressionsSection: React.FunctionComponent<SectionProps> = props => (
@@ -1151,6 +1156,10 @@ export const ChordProgressionsSection: React.FunctionComponent<SectionProps> = p
     </ul>
 
     <p>Smooth voice leading is enough to make a chord progression work, even without strong dominant - tonic movement.</p>
+    
+    <BecomeAPatronSection />
+
+    <SubSectionTitle>Exercises</SubSectionTitle>
   </div>
 );
 

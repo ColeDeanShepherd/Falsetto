@@ -38,11 +38,11 @@ export class Interval {
         if (this.quality === 0) {
           return "M";
         } else if (this.quality >= 1) {
-          return "A".repeat(this.quality);
+          return "A".repeat(this.quality - 1);
         } else if (this.quality === -1) {
           return "m";
         } else { // this.quality <= -2
-          return "d".repeat(-this.quality);
+          return "d".repeat(-(this.quality + 1));
         }
     }
   }

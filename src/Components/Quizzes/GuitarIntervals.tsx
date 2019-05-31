@@ -215,7 +215,6 @@ export function createFlashCards(): Array<FlashCard> {
           <div>
             <GuitarFretboard
               width={size.width} height={size.height}
-              pressedNotes={[]}
               renderExtrasFn={renderExtras}
             />
           </div>

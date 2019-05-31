@@ -10,8 +10,7 @@ import { Pitch } from "../Pitch";
 import { Button, Card, CardContent, Typography } from "@material-ui/core";
 import { Chord } from "../Chord";
 import { PianoKeyboard } from "./PianoKeyboard";
-import { GuitarFretboard, GuitarNote, standardGuitarTuning, GuitarFretboardMetrics, renderGuitarFretboardScaleExtras } from "./GuitarFretboard";
-import ResizeObserver from 'resize-observer-polyfill';
+import { GuitarFretboard, GuitarNote, standardGuitarTuning, renderGuitarFretboardScaleExtras } from "./GuitarFretboard";
 import { playPitchesSequentially, playPitches } from '../Piano';
 import * as PianoScaleDronePlayer from "./PianoScaleDronePlayer";
 
@@ -59,9 +58,6 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
   public constructor(props: IScaleViewerProps) {
     super(props);
 
-    this.instrumentsContainerRef = React.createRef();
-    this.instrumentsContainerResizeObserver = null;
-
     this.state = {
       rootPitch: new Pitch(PitchLetter.C, 0, 4),
       scale: this.scales[0]
@@ -72,6 +68,9 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
     const title = this.props.title
       ? this.props.title
       : "Scale Viewer";
+    
+    const formulaStringParts = this.state.scale.formulaString.split(" ");
+      
     const pitches = Chord.fromPitchAndFormulaString(
       this.state.rootPitch,
       this.state.scale.formulaString
@@ -81,27 +80,24 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
       .map(pitch => pitch.toString(false));
     const pitchesString = pitchStrings.join(", ");
 
-    const guitarNotes = GuitarNote.allNotesOfPitches(
-      standardGuitarTuning,
-      pitches,
-      11
-    );
+    const intervals = this.state.scale.getIntervals();
+    const intervalStrings = intervals
+      .map((interval, i) => (i === 0) ? "R" : interval.toString());
+    const intervalsString = intervalStrings.join(", ");
 
-    let width = 0;
-    let height = 0;
+    const pianoGuitarStyle = { width: "100%", maxWidth: "400px", height: "auto" };
 
-    if (this.instrumentsContainerRef && (this.instrumentsContainerRef as any).current) {
-      const containerElement = (this.instrumentsContainerRef as any).current;
-
-      width = containerElement.offsetWidth;
-      height = containerElement.offsetHeight;
-    }
-
-    const pianoSize = Utils.shrinkRectToFit(new Size2D(width, height), new Size2D(400, 100));
-    const guitarSize = Utils.shrinkRectToFit(new Size2D(width, height), new Size2D(400, 140));
-
+    const pianoSize = new Size2D(400, 100);
+    const guitarSize = new Size2D(400, 140);
+    
     const onKeyPress = this.props.playSimultaneously
-      ? (pitch: Pitch) => playPitches([pitch])
+      ? ((pitch: Pitch) => {
+        const pitchMidiNumberNoOctaves = pitches.map(p => p.midiNumberNoOctave);
+
+        if (Utils.arrayContains(pitchMidiNumberNoOctaves, pitch.midiNumberNoOctave)) {
+          playPitches([pitch]);
+        }
+      })
       : (pitch: Pitch) => PianoScaleDronePlayer.onKeyPress(this.state.scale, this.state.rootPitch, pitch);
     
     const showGuitarFretboard = (this.props.showGuitarFretboard !== undefined)
@@ -155,6 +151,7 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
               <p>{this.state.rootPitch.toString(false)} {this.state.scale.type}</p>
               <p>{pitchesString}</p>
               <p>{this.state.scale.formulaString}</p>
+              <p>{intervalsString}</p>
             </div>
 
             <div>
@@ -168,7 +165,7 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
               </p>
             </div>
 
-            <div ref={this.instrumentsContainerRef}>
+            <div>
               <div>
                 <PianoKeyboard
                   rect={new Rect2D(pianoSize, new Vector2D(0, 0))}
@@ -176,6 +173,7 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
                   highestPitch={new Pitch(PitchLetter.B, 0, 5)}
                   onKeyPress={onKeyPress}
                   renderExtrasFn={metrics => PianoScaleDronePlayer.renderExtrasFn(metrics, this.state.scale, this.state.rootPitch)}
+                  style={pianoGuitarStyle}
                 />
               </div>
 
@@ -183,8 +181,8 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
                 {showGuitarFretboard ? (
                   <GuitarFretboard
                     width={guitarSize.width} height={guitarSize.height}
-                    pressedNotes={guitarNotes}
-                    renderExtrasFn={metrics => renderGuitarFretboardScaleExtras(metrics, pitches)}
+                    renderExtrasFn={metrics => renderGuitarFretboardScaleExtras(metrics, pitches, formulaStringParts)}
+                    style={pianoGuitarStyle}
                   />
                 ) : null}
               </div>
@@ -194,23 +192,6 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
       </Card>
     );
   }
-  public componentDidMount() {
-    this.instrumentsContainerResizeObserver = new ResizeObserver((entries, observer) => {
-      this.forceUpdate();
-    });
-    
-    this.instrumentsContainerResizeObserver.observe((this.instrumentsContainerRef as any).current);
-
-    this.forceUpdate();
-  }
-  public componentWillUnmount() {
-    if (this.instrumentsContainerResizeObserver) {
-      this.instrumentsContainerResizeObserver.disconnect();
-    }
-  }
-
-  private instrumentsContainerRef: React.Ref<HTMLDivElement>;
-  private instrumentsContainerResizeObserver: ResizeObserver | null;
 
   private get scales(): Array<Scale> {
     return this.props.scales
