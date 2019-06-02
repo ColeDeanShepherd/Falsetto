@@ -36,9 +36,6 @@ export function createFlashCards(): FlashCard[] {
     FlashCard.fromRenderFns("aug7", "1 3 #5 b7"),
     FlashCard.fromRenderFns("Maj7#5", "1 3 #5 7"),
 
-    FlashCard.fromRenderFns("lydian", "1 #4 5"),
-    FlashCard.fromRenderFns("sus4b5", "1 4 5b"),
-    FlashCard.fromRenderFns("phrygian", "1 b2 5"),
     FlashCard.fromRenderFns("quartal", "1 4 b7")
   ];
 }

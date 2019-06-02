@@ -373,6 +373,7 @@ class App extends React.Component<IAppProps, IAppState> {
   }
   public scrollBodyToTop() {
     (this.rightPaneRef as any).current.scrollTo(0, 0);
+    window.scrollTo(0, 0); // Needed for mobile devices.
   }
 
   private history: History<any>;

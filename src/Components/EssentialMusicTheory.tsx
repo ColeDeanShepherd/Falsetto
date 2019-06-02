@@ -87,9 +87,12 @@ import { NavLink } from 'react-router-dom';
 import { Scale } from '../Scale';
 import { doesKeyUseSharps } from '../Key';
 import { PianoScaleDronePlayer } from './PianoScaleDronePlayer';
-import { basicTriads, seventhChords } from "../Chord";
+import { basicTriads, seventhChords, Chord } from "../Chord";
+import { DiatonicChordViewer } from './DiatonicChordViewer';
+import { ChordAudioPlayer } from './ChordAudioPlayer';
 
 const pianoKeyboardStyle = { width: "100%", maxWidth: "400px", height: "auto" };
+const defaultRootPitch = new Pitch(PitchLetter.C, 0, 4);
 
 const MainTitle: React.FunctionComponent<{}> = props => <h1>{props.children}</h1>;
 const SectionTitle: React.FunctionComponent<{}> = props => <h2>{props.children}</h2>;
@@ -832,7 +835,7 @@ export const ScalesAndModesSection: React.FunctionComponent<SectionProps> = prop
 export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
   <div>
     <SectionTitle>Chords</SectionTitle>
-    <p><Term>Chords</Term> are groups of three or more notes played simultaneously. Chords make up <Term>harmony</Term> in music &mdash; the sounds or feelings that result from multiple notes being played simultaneously. <Term>Harmony</Term> is the third and final fundamental element of music we will study now that we have explored <Term>rhythm</Term> and <Term>melody</Term>.</p>
+    <p><Term>Chords</Term> are groups of three or more notes played simultaneously. Chords make up <Term>harmony</Term> in music &mdash; the sounds or feelings that result from multiple notes being played simultaneously. <Term>Harmony</Term> is the third and final fundamental element of music we will study, now that we have explored the first two: <Term>rhythm</Term> and <Term>melody</Term>.</p>
 
     <SubSectionTitle>Triads</SubSectionTitle>
     <p>The simplest class of chords are the <Term>triads</Term>. <Term>Traids</Term> are chords made of exactly three notes.</p>
@@ -846,6 +849,7 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
           <TableCell>Stacked Intervals</TableCell>
           <TableCell>Intervals From Root Note</TableCell>
           <TableCell>Major Scale Based Formula</TableCell>
+          <TableCell></TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -855,6 +859,9 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
           <TableCell>R, M3, m3</TableCell>
           <TableCell>R, M3, P5</TableCell>
           <TableCell>1, 3, 5</TableCell>
+          <TableCell>
+            <ChordAudioPlayer chord={Chord.fromPitchAndFormulaString(defaultRootPitch, Chord.MajorTriadFormulaString)} />
+          </TableCell>
         </TableRow>
         <TableRow>
           <TableCell>Minor Triad</TableCell>
@@ -862,6 +869,9 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
           <TableCell>R, m3, M3</TableCell>
           <TableCell>R, m3, P5</TableCell>
           <TableCell>1, b3, 5</TableCell>
+          <TableCell>
+            <ChordAudioPlayer chord={Chord.fromPitchAndFormulaString(defaultRootPitch, Chord.MinorTriadFormulaString)} />
+          </TableCell>
         </TableRow>
         <TableRow>
           <TableCell>Diminished Triad</TableCell>
@@ -869,6 +879,9 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
           <TableCell>R, m3, m3</TableCell>
           <TableCell>R, m3, d5</TableCell>
           <TableCell>1, b3, b5</TableCell>
+          <TableCell>
+            <ChordAudioPlayer chord={Chord.fromPitchAndFormulaString(defaultRootPitch, Chord.DiminishedTriadFormulaString)} />
+          </TableCell>
         </TableRow>
         <TableRow>
           <TableCell>Augmented Triad</TableCell>
@@ -876,6 +889,9 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
           <TableCell>R, M3, M3</TableCell>
           <TableCell>R, M3, A5</TableCell>
           <TableCell>1, #3, #5</TableCell>
+          <TableCell>
+            <ChordAudioPlayer chord={Chord.fromPitchAndFormulaString(defaultRootPitch, Chord.AugmentedTriadFormulaString)} />
+          </TableCell>
         </TableRow>
       </TableBody>
     </Table>
@@ -895,7 +911,7 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
     <ChordViewer title={"Triad Viewer"} chords={basicTriads} showGuitarFretboard={false} />
 
     <SubSectionTitle>Inversions</SubSectionTitle>
-    <p><strong>You are free to play the notes of a chord in any order, spaced out as close or as far as you like, and any note in a chord can be repeated in different octaves.</strong> Whichever note you decide to play in the bass (the lowest note) of a chord determines which "inversion" a chord is in. If the root note is in the bass, the chord is considered in "root position". If "3rd" of the chord is in the bass, the chord is in "2nd inversion". If the "5th" of the chord is in the bass, the chord is in "2nd inversion". And so on for the 7th, 9th, 11th, and 13th (more on seventh chords and extended chords later).</p>
+    <p><strong>You are free to play the notes of a chord in any order, spaced out as close or as far as you like, and any note in a chord can be repeated in different octaves.</strong> Whichever note you decide to play in the bass (the lowest note) of a chord determines which "inversion" a chord is in. If the root note is in the bass, the chord is considered in "root position". If "3rd" of the chord is in the bass, the chord is in "1st inversion". If the "5th" of the chord is in the bass, the chord is in "2nd inversion". And so on for the 7th, 9th, 11th, and 13th (more on seventh chords and extended chords later).</p>
 
     <SubSectionTitle>Seventh Chords</SubSectionTitle>
     <p>Triads are built with two 3rds, but chords can be built with even more &ndash; <Term>seventh chords</Term>, for example, are built with three 3rds. Seventh chords are more "colorful" than triads, and are heavily used (and built upon) in Jazz music.</p>
@@ -910,6 +926,7 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
           <TableCell>Intervals From Root Note</TableCell>
           <TableCell>Base Triad Type</TableCell>
           <TableCell>Major Scale Based Formula</TableCell>
+          <TableCell></TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -920,6 +937,9 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
           <TableCell>R, M3, P5, m7</TableCell>
           <TableCell>Major</TableCell>
           <TableCell>1, 3, 5, b7</TableCell>
+          <TableCell>
+            <ChordAudioPlayer chord={Chord.fromPitchAndFormulaString(defaultRootPitch, Chord.Dom7FormulaString)} />
+          </TableCell>
         </TableRow>
         <TableRow>
           <TableCell>Major Seventh Chord</TableCell>
@@ -928,6 +948,9 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
           <TableCell>R, M3, P5, M7</TableCell>
           <TableCell>Major</TableCell>
           <TableCell>1, 3, 5, 7</TableCell>
+          <TableCell>
+            <ChordAudioPlayer chord={Chord.fromPitchAndFormulaString(defaultRootPitch, Chord.Maj7FormulaString)} />
+          </TableCell>
         </TableRow>
         <TableRow>
           <TableCell>Minor Seventh Chord</TableCell>
@@ -936,6 +959,9 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
           <TableCell>R, m3, P5, m7</TableCell>
           <TableCell>Minor</TableCell>
           <TableCell>1, b3, 5, b7</TableCell>
+          <TableCell>
+            <ChordAudioPlayer chord={Chord.fromPitchAndFormulaString(defaultRootPitch, Chord.Min7FormulaString)} />
+          </TableCell>
         </TableRow>
         <TableRow>
           <TableCell>Minor-Major Seventh Chord</TableCell>
@@ -944,6 +970,9 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
           <TableCell>R, m3, P5, M7</TableCell>
           <TableCell>Minor</TableCell>
           <TableCell>1, b3, 5, 7</TableCell>
+          <TableCell>
+            <ChordAudioPlayer chord={Chord.fromPitchAndFormulaString(defaultRootPitch, Chord.MinMaj7FormulaString)} />
+          </TableCell>
         </TableRow>
         <TableRow>
           <TableCell>Diminished Seventh Chord</TableCell>
@@ -952,6 +981,9 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
           <TableCell>R, m3, d5, d7</TableCell>
           <TableCell>Diminished</TableCell>
           <TableCell>1, b3, b5, bb7</TableCell>
+          <TableCell>
+            <ChordAudioPlayer chord={Chord.fromPitchAndFormulaString(defaultRootPitch, Chord.Dim7FormulaString)} />
+          </TableCell>
         </TableRow>
         <TableRow>
           <TableCell>Half-Diminished Seventh Chord</TableCell>
@@ -960,6 +992,9 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
           <TableCell>R, m3, d5, m7</TableCell>
           <TableCell>Diminished</TableCell>
           <TableCell>1, b3, b5, b7</TableCell>
+          <TableCell>
+            <ChordAudioPlayer chord={Chord.fromPitchAndFormulaString(defaultRootPitch, Chord.HalfDiminishedFormulaString)} />
+          </TableCell>
         </TableRow>
         <TableRow>
           <TableCell>Augmented Seventh Chord</TableCell>
@@ -968,6 +1003,9 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
           <TableCell>R, M3, A5, m7</TableCell>
           <TableCell>Augmented</TableCell>
           <TableCell>1, #3, #5, b7</TableCell>
+          <TableCell>
+            <ChordAudioPlayer chord={Chord.fromPitchAndFormulaString(defaultRootPitch, Chord.Aug7FormulaString)} />
+          </TableCell>
         </TableRow>
         <TableRow>
           <TableCell>Augmented Major Seventh Chord</TableCell>
@@ -976,6 +1014,9 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
           <TableCell>R, M3, A5, M7</TableCell>
           <TableCell>Augmented</TableCell>
           <TableCell>1, #3, #5, 7</TableCell>
+          <TableCell>
+            <ChordAudioPlayer chord={Chord.fromPitchAndFormulaString(defaultRootPitch, Chord.AugM7FormulaString)} />
+          </TableCell>
         </TableRow>
       </TableBody>
     </Table>
@@ -995,14 +1036,15 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
     </ul>
     <p>As you omit notes from a thirteenth chord to form an eleventh chord, then a ninth chord, then a seventh chord, and lastly a triad, the chord has less notes (obviously) and therefore does not have to have as many notes in common with scales to "fit" with them. So chords with less notes can "fit" more scales, but are more ambiguous in meaning than chords with more notes.</p>
     <p>In this way, chords &amp; scales are inextricably tied in a relationship Jazz musicians call the "chord-scale system".</p>
+    <p>Use the interactive digram below to explore extended chords (and other chords we haven't covered):</p>
+    <ChordViewer isEmbedded={props.isEmbedded} />
 
     <SubSectionTitle>Diatonic Chords &amp; Roman Numeral Notation</SubSectionTitle>
     <p>One way to build chords is to exclusively pick notes out from a scale, separated by thirds. Because these chords are built solely with scale notes, they naturally "fit" well with the underlying scale, and lend themselves well to accompanying melodies built with the same scale. Chords which are derived in this manner are called <Term>diatonic chords</Term>, which make up <strong>most</strong> of the chords you find in Western music.</p>
     <p>For example, you could take a C major scale and pick out the 1st, 3rd, and 5th scale degrees (C, E, G). These notes form a <Term>major triad</Term> with C, the 1st scale degree of the major scale, as the root note.</p>
     <p><Term>Diatonic chords</Term> are commonly written in <Term>roman numeral notation</Term>, which uses roman numerals of scale degrees instead of letters to designate the root note. With <Term>roman numeral notation</Term>, the Cmaj (a.k.a. "C") chord above could instead be notated as a Imaj chord (a.k.a "I"). Note that "C" is not in the name of the chord at all. With <Term>roman numeral notation</Term>, any chord made with the 1st, 3rd, and 5th degrees of <strong>any</strong> major scale has the same name &ndash; I. This allows us to specify and analyze sequences of chords without concern for what key the composer decided to write the music in.</p>
     <p>There is one more thing to know about roman numeral notation &ndash; minor and diminished chords are written with lower case roman numerals. So, because a chord built with the 2nd, 4th, and 6th notes of a major scale is a minor chord, it would be written as ii, <strong>not</strong> II.</p>
-    <p>Here are all the diatonic triads and seventh chords in some common scales:</p>
-
+    <p>Use the interactive diagram below to explore diatonic triads and seventh chords in common scales:</p>
     <Table>
       <TableHead>
         <TableRow>
@@ -1072,43 +1114,16 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
         </TableRow>
       </TableBody>
     </Table>
+
+    <DiatonicChordViewer title={"Diatonic Chords"} showGuitarFretboard={false} />
     <p>TODO: listen to chords relative to root note</p>
 
-    <SubSectionTitle>Other Chords</SubSectionTitle>
-    <Table>
-      <TableHead>
-        <TableRow>
-          <TableCell>Chord Type</TableCell>
-          <TableCell>Symbol</TableCell>
-          <TableCell>Intervals</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        <TableRow>
-          <TableCell>Power Chord</TableCell>
-          <TableCell>5</TableCell>
-          <TableCell>R, P5</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>Suspended 2nd Chord</TableCell>
-          <TableCell>sus2</TableCell>
-          <TableCell>R, M2, P5</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>Suspended 4th Chord</TableCell>
-          <TableCell>sus2</TableCell>
-          <TableCell>R, P4, P5</TableCell>
-        </TableRow>
-      </TableBody>
-    </Table>
-
     <SubSectionTitle>Arpeggios</SubSectionTitle>
-    <p>Arpeggios are simply the notes of a chord played separately in a melodic fashion.</p>
+    <p>Though chords are groups of notes played simultaneously, you can also choose to play the notes of a chord individually in a melody, to create something called an <Term>arpeggio</Term>. Arpeggios are another way to add harmonic content to music by <strong>implying</strong> the chords instead of playing them outright.</p>
 
     <BecomeAPatronSection />
     
     <SubSectionTitle>Exercises</SubSectionTitle>
-    <ChordViewer isEmbedded={props.isEmbedded} />
     <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(ChordNotes.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
     <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(PianoChords.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
     <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(GuitarChords.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>

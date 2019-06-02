@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Card, CardContent, Typography, Button, CircularProgress } from "@material-ui/core";
-import { Howl } from "howler";
 
 import * as Utils from "../Utils";
 import * as Audio from "../Audio";
