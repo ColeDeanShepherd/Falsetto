@@ -1,5 +1,6 @@
 # To-Do
 ## High Priority
+* Make ear training exercises play automatically when you skip.
 * Add inversions to Piano Chords
 * Add sheet music notes lesson.
 * Add piano notes lesson?

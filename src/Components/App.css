@@ -32,6 +32,14 @@ a:visited {
   text-decoration: none;
 }
 
+ul li {
+  padding-bottom: 0.25em;
+}
+
+sup {
+  font-size: 75%;
+}
+
 .top-nav a {
   padding-right: 1.5em;
 }
@@ -56,10 +64,6 @@ a:visited {
 
 .watermark {
   user-select: none;
-}
-
-ul li {
-  padding-bottom: 0.25em;
 }
 
 /* Mobile */

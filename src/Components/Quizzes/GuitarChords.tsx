@@ -11,15 +11,15 @@ import { AnswerDifficulty } from "../../StudyAlgorithm";
 import { Pitch } from "../../Pitch";
 import { PitchLetter } from "../../PitchLetter";
 import { TableRow, TableCell, Table, TableHead, TableBody, Grid, Checkbox, Button, Typography } from "@material-ui/core";
-import { Chord, allChords } from "../../Chord";
+import { Chord, ChordType } from "../../Chord";
 import { GuitarFretboard, GuitarNote, standardGuitarTuning, renderGuitarFretboardScaleExtras } from "../GuitarFretboard";
 
-const scales = allChords;
+const chords = ChordType.All;
 const rootPitchStrs = ["Ab", "A", "Bb", "B/Cb", "C", "C#/Db", "D", "Eb", "E", "F", "F#/Gb", "G"];
 
 interface IConfigData {
   enabledRootPitches: string[];
-  enabledScaleTypes: string[];
+  enabledChordTypes: string[];
 }
 
 export function configDataToEnabledQuestionIds(configData: IConfigData): Array<number> {
@@ -28,11 +28,11 @@ export function configDataToEnabledQuestionIds(configData: IConfigData): Array<n
   let i = 0;
 
   for (const rootPitchStr of rootPitchStrs) {
-    for (const scale of scales) {
-      const scaleType = scale.type;
+    for (const chord of chords) {
+      const chordType = chord.name;
       if (
         Utils.arrayContains(configData.enabledRootPitches, rootPitchStr) &&
-        Utils.arrayContains(configData.enabledScaleTypes, scaleType)
+        Utils.arrayContains(configData.enabledChordTypes, chordType)
       ) {
         newEnabledFlashCardIndices.push(i);
       }
@@ -43,15 +43,15 @@ export function configDataToEnabledQuestionIds(configData: IConfigData): Array<n
 
   return newEnabledFlashCardIndices;
 }
-export interface IGuitarScalesFlashCardMultiSelectProps {
+export interface IGuitarChordsFlashCardMultiSelectProps {
   flashCards: FlashCard[];
   configData: IConfigData;
   selectedFlashCardIndices: number[];
   onChange?: (newValue: number[], newConfigData: any) => void;
 }
 
-export interface IGuitarScalesFlashCardMultiSelectState {}
-export class GuitarScalesFlashCardMultiSelect extends React.Component<IGuitarScalesFlashCardMultiSelectProps, IGuitarScalesFlashCardMultiSelectState> {
+export interface IGuitarChordsFlashCardMultiSelectState {}
+export class GuitarChordsFlashCardMultiSelect extends React.Component<IGuitarChordsFlashCardMultiSelectProps, IGuitarChordsFlashCardMultiSelectState> {
   public render(): JSX.Element {
     const rootPitchCheckboxTableRows = rootPitchStrs
       .map((rootPitch, i) => {
@@ -79,19 +79,19 @@ export class GuitarScalesFlashCardMultiSelect extends React.Component<IGuitarSca
       </Table>
     );
 
-    const scaleTypeCheckboxTableRows = scales
-      .map((scale, i) => {
-        const isChecked = this.props.configData.enabledScaleTypes.indexOf(scale.type) >= 0;
-        const isEnabled = !isChecked || (this.props.configData.enabledScaleTypes.length > 1);
+    const chordTypeCheckboxTableRows = chords
+      .map((chord, i) => {
+        const isChecked = this.props.configData.enabledChordTypes.indexOf(chord.name) >= 0;
+        const isEnabled = !isChecked || (this.props.configData.enabledChordTypes.length > 1);
 
         return (
           <TableRow key={i}>
-            <TableCell><Checkbox checked={isChecked} onChange={event => this.toggleScaleEnabled(scale.type)} disabled={!isEnabled} /></TableCell>
-            <TableCell>{scale.type}</TableCell>
+            <TableCell><Checkbox checked={isChecked} onChange={event => this.toggleChordEnabled(chord.name)} disabled={!isEnabled} /></TableCell>
+            <TableCell>{chord.name}</TableCell>
           </TableRow>
         );
       }, this);
-    const scaleTypeCheckboxes = (
+    const chordTypeCheckboxes = (
       <Table className="table">
         <TableHead>
           <TableRow>
@@ -100,7 +100,7 @@ export class GuitarScalesFlashCardMultiSelect extends React.Component<IGuitarSca
           </TableRow>
         </TableHead>
         <TableBody>
-          {scaleTypeCheckboxTableRows}
+          {chordTypeCheckboxTableRows}
         </TableBody>
       </Table>
     );
@@ -108,7 +108,7 @@ export class GuitarScalesFlashCardMultiSelect extends React.Component<IGuitarSca
     return (
       <Grid container spacing={32}>
         <Grid item xs={6}>{rootPitchCheckboxes}</Grid>
-        <Grid item xs={6}>{scaleTypeCheckboxes}</Grid>
+        <Grid item xs={6}>{chordTypeCheckboxes}</Grid>
       </Grid>
     );
   }
@@ -122,21 +122,21 @@ export class GuitarScalesFlashCardMultiSelect extends React.Component<IGuitarSca
     if (newEnabledRootPitches.length > 0) {
       const newConfigData: IConfigData = {
         enabledRootPitches: newEnabledRootPitches,
-        enabledScaleTypes: this.props.configData.enabledScaleTypes
+        enabledChordTypes: this.props.configData.enabledChordTypes
       };
       this.onChange(newConfigData);
     }
   }
-  private toggleScaleEnabled(scale: string) {
-    const newEnabledScaleTypes = Utils.toggleArrayElement(
-      this.props.configData.enabledScaleTypes,
-      scale
+  private toggleChordEnabled(chord: string) {
+    const newEnabledChordTypes = Utils.toggleArrayElement(
+      this.props.configData.enabledChordTypes,
+      chord
     );
     
-    if (newEnabledScaleTypes.length > 0) {
+    if (newEnabledChordTypes.length > 0) {
       const newConfigData: IConfigData = {
         enabledRootPitches: this.props.configData.enabledRootPitches,
-        enabledScaleTypes: newEnabledScaleTypes
+        enabledChordTypes: newEnabledChordTypes
       };
       this.onChange(newConfigData);
     }
@@ -149,21 +149,21 @@ export class GuitarScalesFlashCardMultiSelect extends React.Component<IGuitarSca
   }
 }
 
-export interface IGuitarScalesAnswerSelectProps {
+export interface IGuitarChordsAnswerSelectProps {
   correctAnswer: string;
   onAnswer: (answerDifficulty: AnswerDifficulty) => void;
 }
-export interface IGuitarScalesAnswerSelectState {
+export interface IGuitarChordsAnswerSelectState {
   selectedRootPitch: string | undefined;
-  selectedScaleType: string | undefined;
+  selectedChordType: string | undefined;
 }
-export class GuitarScalesAnswerSelect extends React.Component<IGuitarScalesAnswerSelectProps, IGuitarScalesAnswerSelectState> {
-  public constructor(props: IGuitarScalesAnswerSelectProps) {
+export class GuitarChordsAnswerSelect extends React.Component<IGuitarChordsAnswerSelectProps, IGuitarChordsAnswerSelectState> {
+  public constructor(props: IGuitarChordsAnswerSelectProps) {
     super(props);
     
     this.state = {
       selectedRootPitch: undefined,
-      selectedScaleType: undefined
+      selectedChordType: undefined
     };
   }
   public render(): JSX.Element {
@@ -221,22 +221,22 @@ export class GuitarScalesAnswerSelect extends React.Component<IGuitarScalesAnswe
           Chord
         </Typography>
         <div style={{padding: "1em 0"}}>
-          {scales.map(scale => {
+          {chords.map(chord => {
             const style: any = { textTransform: "none" };
             
-            const isPressed = scale.type === this.state.selectedScaleType;
+            const isPressed = chord.name === this.state.selectedChordType;
             if (isPressed) {
               style.backgroundColor = "#959595";
             }
             
             return (
               <Button
-                key={scale.type}
-                onClick={event => this.onScaleTypeClick(scale.type)}
+                key={chord.name}
+                onClick={event => this.onChordTypeClick(chord.name)}
                 variant="contained"
                 style={style}
               >
-                {scale.type}
+                {chord.name}
               </Button>
             );
           })}
@@ -245,7 +245,7 @@ export class GuitarScalesAnswerSelect extends React.Component<IGuitarScalesAnswe
         <div style={{padding: "1em 0"}}>
           <Button
             onClick={event => this.confirmAnswer()}
-            disabled={!this.state.selectedRootPitch || !this.state.selectedScaleType}
+            disabled={!this.state.selectedRootPitch || !this.state.selectedChordType}
             variant="contained"
           >
             Confirm Answer
@@ -258,11 +258,11 @@ export class GuitarScalesAnswerSelect extends React.Component<IGuitarScalesAnswe
   private onRootPitchClick(rootPitch: string) {
     this.setState({ selectedRootPitch: rootPitch });
   }
-  private onScaleTypeClick(scaleType: string) {
-    this.setState({ selectedScaleType: scaleType });
+  private onChordTypeClick(chordType: string) {
+    this.setState({ selectedChordType: chordType });
   }
   private confirmAnswer() {
-    const selectedAnswer = this.state.selectedRootPitch + " " + this.state.selectedScaleType;
+    const selectedAnswer = this.state.selectedRootPitch + " " + this.state.selectedChordType;
     const isCorrect = selectedAnswer === this.props.correctAnswer;
     this.props.onAnswer(isCorrect ? AnswerDifficulty.Easy : AnswerDifficulty.Incorrect);
   }
@@ -343,7 +343,7 @@ export function createFlashCardGroup(): FlashCardGroup {
     onChange: (newValue: number[], newConfigData: any) => void
   ): JSX.Element => {
     return (
-    <GuitarScalesFlashCardMultiSelect
+    <GuitarChordsFlashCardMultiSelect
       flashCards={flashCards}
       configData={configData}
       selectedFlashCardIndices={selectedFlashCardIndices}
@@ -354,9 +354,9 @@ export function createFlashCardGroup(): FlashCardGroup {
 
   const initialConfigData: IConfigData = {
     enabledRootPitches: rootPitchStrs.slice(),
-    enabledScaleTypes: scales
-      .filter((_, scaleIndex) => scaleIndex <= 8)
-      .map(scale => scale.type)
+    enabledChordTypes: chords
+      .filter((_, chordIndex) => chordIndex <= 8)
+      .map(chord => chord.name)
   };
 
   const group = new FlashCardGroup("Guitar Chords", createFlashCards);
@@ -375,9 +375,9 @@ export function createFlashCards(): FlashCard[] {
       const halfStepsFromC = Utils.mod(i - 4, 12);
       const rootPitch = Pitch.createFromMidiNumber((new Pitch(PitchLetter.C, 0, 4)).midiNumber + halfStepsFromC);
       
-      return scales.map(scale => {
-        const formulaString = scale.formulaString;
-        const formulaStringParts = scale.formulaString.split(" ");
+      return chords.map(chord => {
+        const formulaString = chord.formulaString;
+        const formulaStringParts = chord.formulaString.split(" ");
         const pitches = Chord.fromPitchAndFormulaString(rootPitch, formulaString)
           .pitches;
         const guitarNotes = GuitarNote.allNotesOfPitches(
@@ -400,7 +400,7 @@ export function createFlashCards(): FlashCard[] {
             },
             pitches
           ),
-          new FlashCardSide(rootPitchStr + " " + scale.type)
+          new FlashCardSide(rootPitchStr + " " + chord.name)
         );
       });
     })
@@ -417,7 +417,7 @@ export function renderAnswerSelect(
 ) {
   if (!areFlashCardsInverted) {
     const correctAnswer = flashCard.backSide.renderFn as string;
-    return <GuitarScalesAnswerSelect key={correctAnswer} correctAnswer={correctAnswer} onAnswer={onAnswer} />;
+    return <GuitarChordsAnswerSelect key={correctAnswer} correctAnswer={correctAnswer} onAnswer={onAnswer} />;
   } else {
     const key = flashCard.frontSide.renderFn as string;
     const correctAnswer = flashCard.backSide.data[0] as Array<Pitch>;

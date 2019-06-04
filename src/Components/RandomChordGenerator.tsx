@@ -4,7 +4,7 @@ import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid } from
 import * as Utils from "../Utils";
 import { FlashCard } from "../FlashCard";
 import { FlashCardGroup } from "../FlashCardGroup";
-import { allChords } from '../Chord';
+import { ChordType } from '../Chord';
 
 const chordRoots = [
   "Cb",
@@ -31,10 +31,10 @@ interface IConfigData {
 
 export function configDataToEnabledQuestionIds(configData: IConfigData): Array<number> {
   return Utils.flattenArrays<boolean>(chordRoots
-    .map(chordRoot => allChords
+    .map(chordRoot => ChordType.All
       .map(chordType =>
         Utils.arrayContains(configData.enabledChordRoots, chordRoot) &&
-        Utils.arrayContains(configData.enabledChordTypes, chordType.type))
+        Utils.arrayContains(configData.enabledChordTypes, chordType.name))
     )
   )
     .map((x, i) => x ? i : -1)
@@ -76,15 +76,15 @@ export class RandomChordGeneratorFlashCardMultiSelect extends React.Component<IR
       </Table>
     );
     
-    const chordTypeCheckboxTableRows = allChords
+    const chordTypeCheckboxTableRows = ChordType.All
       .map((chordType, i) => {
-        const isChecked = this.props.configData.enabledChordTypes.indexOf(chordType.type) >= 0;
+        const isChecked = this.props.configData.enabledChordTypes.indexOf(chordType.name) >= 0;
         const isEnabled = !isChecked || (this.props.configData.enabledChordTypes.length > 1);
 
         return (
           <TableRow key={i}>
-            <TableCell><Checkbox checked={isChecked} onChange={event => this.toggleChordTypeEnabled(chordType.type)} disabled={!isEnabled} /></TableCell>
-            <TableCell>{chordType.type}</TableCell>
+            <TableCell><Checkbox checked={isChecked} onChange={event => this.toggleChordTypeEnabled(chordType.name)} disabled={!isEnabled} /></TableCell>
+            <TableCell>{chordType.name}</TableCell>
           </TableRow>
         );
       }, this);
@@ -148,8 +148,8 @@ export class RandomChordGeneratorFlashCardMultiSelect extends React.Component<IR
 
 export function createFlashCards(): Array<FlashCard> {
   return Utils.flattenArrays<FlashCard>(chordRoots
-    .map(chordRoot => allChords
-      .map(chordType => FlashCard.fromRenderFns(chordRoot + chordType.type, chordType.formulaString))
+    .map(chordRoot => ChordType.All
+      .map(chordType => FlashCard.fromRenderFns(chordRoot + chordType.name, chordType.formulaString))
     )
   );
 }
@@ -172,8 +172,8 @@ export function createFlashCardGroup(): FlashCardGroup {
 
   const initialConfigData: IConfigData = {
     enabledChordRoots: chordRoots.slice(),
-    enabledChordTypes: allChords
-      .map(ct => ct.type)
+    enabledChordTypes: ChordType.All
+      .map(ct => ct.name)
       .filter((_, i) => (i >= 1) && (i <= 16))
   };
   

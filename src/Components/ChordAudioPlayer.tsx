@@ -3,8 +3,9 @@ import { Button, CircularProgress } from "@material-ui/core";
 
 import * as Utils from "../Utils";
 import * as Audio from "../Audio";
-import { Chord } from '../Chord';
+import { Chord, ChordType } from '../Chord';
 import { getPitchAudioFilePath } from '../Piano';
+import { Pitch } from '../Pitch';
 
 export enum ChordAudioPlayerPlayState {
   PLAYABLE,
@@ -12,7 +13,8 @@ export enum ChordAudioPlayerPlayState {
 }
 
 export interface IChordAudioPlayerProps {
-  chord: Chord;
+  chordType: ChordType;
+  rootPitch: Pitch;
 }
 export interface IChordAudioPlayerState {
   playState: ChordAudioPlayerPlayState;
@@ -29,19 +31,31 @@ export class ChordAudioPlayer extends React.Component<IChordAudioPlayerProps, IC
     this.loadedSounds = null;
   }
   public render(): JSX.Element {
+    const buttonStyle: any = { textTransform: "none" };
+
     switch (this.state.playState) {
       case ChordAudioPlayerPlayState.PLAYABLE:
         return (
-          <Button variant="contained" onClick={e => this.loadAndPlay()}>
-            {<i className="material-icons">play_arrow</i>}
+          <Button variant="contained" onClick={e => this.loadAndPlay()} style={buttonStyle}>
+            <span>{this.props.children ? this.props.children : <i className="material-icons">play_arrow</i>}</span>
           </Button>
         );
       case ChordAudioPlayerPlayState.LOADING:
         return (
-          <Button variant="contained">
+          <Button variant="contained" style={buttonStyle}>
             <CircularProgress size={20} disableShrink={true} />
           </Button>
         );
+    }
+  }
+  public componentDidUpdate(
+    prevProps: IChordAudioPlayerProps,
+    prevState: IChordAudioPlayerState) {
+    if (!this.props.rootPitch.equals(prevProps.rootPitch) || !this.props.chordType.equals(prevProps.chordType)) {
+      this.stopSounds();
+      this.loadSoundsPromise = null;
+      this.loadedSounds = null;
+      this.setState({ playState: ChordAudioPlayerPlayState.PLAYABLE });
     }
   }
 
@@ -62,7 +76,8 @@ export class ChordAudioPlayer extends React.Component<IChordAudioPlayerProps, IC
   private startLoadingSounds() {
     this.setState({ playState: ChordAudioPlayerPlayState.LOADING });
 
-    const pitches = this.props.chord.pitches;
+    const pitches = Chord.fromPitchAndFormulaString(this.props.rootPitch, this.props.chordType.formulaString)
+      .pitches;
     const soundFilePaths = pitches
       .map(p => getPitchAudioFilePath(p))
       .filter(sfp => sfp !== null)
@@ -79,10 +94,17 @@ export class ChordAudioPlayer extends React.Component<IChordAudioPlayerProps, IC
   }
   private playLoadedSounds() {
     this.setState({ playState: ChordAudioPlayerPlayState.PLAYABLE }, () => {
+      this.stopSounds();
+
       for (const sound of Utils.unwrapMaybe(this.loadedSounds)) {
-        sound.stop();
         sound.play();
       }
     });
+  }
+  private stopSounds() {
+    if (!this.loadedSounds) { return; }
+    for (const sound of Utils.unwrapMaybe(this.loadedSounds)) {
+      sound.stop();
+    }
   }
 }

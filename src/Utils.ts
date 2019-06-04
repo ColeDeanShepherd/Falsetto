@@ -4,7 +4,7 @@ export function identity<T>(value: T): T {
   return value;
 }
 
-// TODO: don"t run asserts in prod?
+// TODO: don't run asserts in prod?
 // TODO: add tests
 export function assert(condition: boolean) {
   if (!condition) {
@@ -212,6 +212,44 @@ export function flattenArrays<T>(arrays: any): T[] {
 }
 
 // TODO: add tests
+export function areArraysEqual<T>(arr1: T[], arr2: T[]): boolean {
+  if (arr1 === arr2) { return true; }
+  if (arr1.length !== arr2.length) { return false; }
+
+  for (let i = 0; i < arr1.length; i++) {
+    if (arr1[i] !== arr2[i]) { return false; }
+  }
+
+  return true;
+}
+export function areArraysEqualComparer<T>(arr1: T[], arr2: T[], comparer: (e1: T, e2: T) => boolean): boolean {
+  if (arr1 === arr2) { return true; }
+  if (arr1.length !== arr2.length) { return false; }
+
+  for (let i = 0; i < arr1.length; i++) {
+    if (!comparer(arr1[i], arr2[i])) { return false; }
+  }
+
+  return true;
+}
+
+export function circularArraySlice<T>(array: T[], start: number, length: number): T[] {
+  precondition(start >= 0);
+  precondition(start < array.length);
+  precondition(length >= 0);
+
+  if (length === 0) { return []; }
+
+  const slice = new Array<T>(length);
+
+  for (let i = 0; i < length; i++) {
+    slice[i] = array[(start + i) % array.length];
+  }
+
+  return slice;
+}
+
+// TODO: add tests
 export function arrayJoin<T>(array: T[], separator: T) {
   if (array.length === 0) { return []; }
 
@@ -275,6 +313,29 @@ export function tryRemoveArrayElement<T>(array: T[], element: T): boolean {
 // TODO: add tests
 export function arrayContains<T>(array: T[], element: T): boolean {
   return array.indexOf(element) >= 0;
+}
+
+// TODO: add tests
+export function getRomanNumerals(x: number): string {
+  switch (x) {
+    case 1: return "I";
+    case 2: return "II";
+    case 3: return "III";
+    case 4: return "IV";
+    case 5: return "V";
+    case 6: return "VI";
+    case 7: return "VII";
+    case 8: return "VIII";
+    case 9: return "IX";
+    case 10: return "X";
+    default:
+      throw new Error(`Failed converting ${x} to a roman numeral.`);
+  }
+}
+
+// TODO: add tests
+export function stringContains(str: string, substring: string): boolean {
+  return str.indexOf(substring) >= 0;
 }
 
 // TODO: add tests

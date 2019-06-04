@@ -240,7 +240,6 @@ class App extends React.Component<IAppProps, IAppState> {
     </div>
     */
 
-    const navSectionStyle = { fontWeight: "bold" };
     const nav = (
       <div className="nav left-nav">
         <NavSectionTitle>Lessons</NavSectionTitle>
@@ -251,7 +250,7 @@ class App extends React.Component<IAppProps, IAppState> {
           {this.renderNavLink("/essential-music-theory/notes", "Notes")}
           {this.renderNavLink("/essential-music-theory/intervals", "Intervals")}
           {this.renderNavLink("/essential-music-theory/scales-and-modes", "Scales & Modes")}
-          <p><em>Chords (coming soon)</em></p>
+          {this.renderNavLink("/essential-music-theory/chords", "Chords")}
           <p><em>Chord Progressions (coming soon)</em></p>
         </div>
         <div>

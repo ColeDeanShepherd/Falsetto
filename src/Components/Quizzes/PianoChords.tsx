@@ -4,7 +4,6 @@ import * as Utils from "../../Utils";
 import { Vector2D } from '../../Vector2D';
 import { Size2D } from "../../Size2D";
 import { Rect2D } from '../../Rect2D';
-import { allChords } from "../../Chord";
 import { PianoKeyboard } from "../PianoKeyboard";
 import { FlashCard, FlashCardSide } from "../../FlashCard";
 import { FlashCardGroup } from "../../FlashCardGroup";
@@ -12,14 +11,14 @@ import { AnswerDifficulty } from "../../StudyAlgorithm";
 import { Pitch } from "../../Pitch";
 import { PitchLetter } from "../../PitchLetter";
 import { TableRow, TableCell, Table, TableHead, TableBody, Grid, Checkbox, Button, Typography } from "@material-ui/core";
-import { Chord } from "../../Chord";
+import { Chord, ChordType } from "../../Chord";
 import { PianoKeysAnswerSelect } from "../../Components/PianoKeysAnswerSelect";
 
 const rootPitchStrs = ["Ab", "A", "Bb", "B/Cb", "C", "C#/Db", "D", "Eb", "E", "F", "F#/Gb", "G"];
 
 interface IConfigData {
   enabledRootPitches: string[];
-  enabledScaleTypes: string[];
+  enabledChordTypes: string[];
 }
 
 export function configDataToEnabledQuestionIds(configData: IConfigData): Array<number> {
@@ -28,11 +27,11 @@ export function configDataToEnabledQuestionIds(configData: IConfigData): Array<n
   let i = 0;
 
   for (const rootPitchStr of rootPitchStrs) {
-    for (const scale of allChords) {
-      const scaleType = scale.type;
+    for (const chord of ChordType.All) {
+      const chordType = chord.name;
       if (
         Utils.arrayContains(configData.enabledRootPitches, rootPitchStr) &&
-        Utils.arrayContains(configData.enabledScaleTypes, scaleType)
+        Utils.arrayContains(configData.enabledChordTypes, chordType)
       ) {
         newEnabledFlashCardIndices.push(i);
       }
@@ -79,19 +78,19 @@ export class PianoChordsFlashCardMultiSelect extends React.Component<IPianoChord
       </Table>
     );
 
-    const scaleTypeCheckboxTableRows = allChords
-      .map((scale, i) => {
-        const isChecked = this.props.configData.enabledScaleTypes.indexOf(scale.type) >= 0;
-        const isEnabled = !isChecked || (this.props.configData.enabledScaleTypes.length > 1);
+    const chordTypeCheckboxTableRows = ChordType.All
+      .map((chord, i) => {
+        const isChecked = this.props.configData.enabledChordTypes.indexOf(chord.name) >= 0;
+        const isEnabled = !isChecked || (this.props.configData.enabledChordTypes.length > 1);
 
         return (
           <TableRow key={i}>
-            <TableCell><Checkbox checked={isChecked} onChange={event => this.toggleScaleEnabled(scale.type)} disabled={!isEnabled} /></TableCell>
-            <TableCell>{scale.type}</TableCell>
+            <TableCell><Checkbox checked={isChecked} onChange={event => this.toggleChordEnabled(chord.name)} disabled={!isEnabled} /></TableCell>
+            <TableCell>{chord.name}</TableCell>
           </TableRow>
         );
       }, this);
-    const scaleTypeCheckboxes = (
+    const chordTypeCheckboxes = (
       <Table className="table">
         <TableHead>
           <TableRow>
@@ -100,7 +99,7 @@ export class PianoChordsFlashCardMultiSelect extends React.Component<IPianoChord
           </TableRow>
         </TableHead>
         <TableBody>
-          {scaleTypeCheckboxTableRows}
+          {chordTypeCheckboxTableRows}
         </TableBody>
       </Table>
     );
@@ -108,7 +107,7 @@ export class PianoChordsFlashCardMultiSelect extends React.Component<IPianoChord
     return (
       <Grid container spacing={32}>
         <Grid item xs={6}>{rootPitchCheckboxes}</Grid>
-        <Grid item xs={6}>{scaleTypeCheckboxes}</Grid>
+        <Grid item xs={6}>{chordTypeCheckboxes}</Grid>
       </Grid>
     );
   }
@@ -122,21 +121,21 @@ export class PianoChordsFlashCardMultiSelect extends React.Component<IPianoChord
     if (newEnabledRootPitches.length > 0) {
       const newConfigData: IConfigData = {
         enabledRootPitches: newEnabledRootPitches,
-        enabledScaleTypes: this.props.configData.enabledScaleTypes
+        enabledChordTypes: this.props.configData.enabledChordTypes
       };
       this.onChange(newConfigData);
     }
   }
-  private toggleScaleEnabled(scale: string) {
-    const newEnabledScaleTypes = Utils.toggleArrayElement(
-      this.props.configData.enabledScaleTypes,
-      scale
+  private toggleChordEnabled(chord: string) {
+    const newEnabledChordTypes = Utils.toggleArrayElement(
+      this.props.configData.enabledChordTypes,
+      chord
     );
     
-    if (newEnabledScaleTypes.length > 0) {
+    if (newEnabledChordTypes.length > 0) {
       const newConfigData: IConfigData = {
         enabledRootPitches: this.props.configData.enabledRootPitches,
-        enabledScaleTypes: newEnabledScaleTypes
+        enabledChordTypes: newEnabledChordTypes
       };
       this.onChange(newConfigData);
     }
@@ -155,7 +154,7 @@ export interface IPianoChordsAnswerSelectProps {
 }
 export interface IPianoChordsAnswerSelectState {
   selectedRootPitch: string | undefined;
-  selectedScaleType: string | undefined;
+  selectedChordType: string | undefined;
 }
 export class PianoChordsAnswerSelect extends React.Component<IPianoChordsAnswerSelectProps, IPianoChordsAnswerSelectState> {
   public constructor(props: IPianoChordsAnswerSelectProps) {
@@ -163,7 +162,7 @@ export class PianoChordsAnswerSelect extends React.Component<IPianoChordsAnswerS
     
     this.state = {
       selectedRootPitch: undefined,
-      selectedScaleType: undefined
+      selectedChordType: undefined
     };
   }
   public render(): JSX.Element {
@@ -221,22 +220,22 @@ export class PianoChordsAnswerSelect extends React.Component<IPianoChordsAnswerS
           Chord
         </Typography>
         <div style={{padding: "1em 0"}}>
-          {allChords.map(scale => {
+          {ChordType.All.map(chord => {
             const style: any = { textTransform: "none" };
             
-            const isPressed = scale.type === this.state.selectedScaleType;
+            const isPressed = chord.name === this.state.selectedChordType;
             if (isPressed) {
               style.backgroundColor = "#959595";
             }
             
             return (
               <Button
-                key={scale.type}
-                onClick={event => this.onScaleTypeClick(scale.type)}
+                key={chord.name}
+                onClick={event => this.onChordTypeClick(chord.name)}
                 variant="contained"
                 style={style}
               >
-                {scale.type}
+                {chord.name}
               </Button>
             );
           })}
@@ -245,7 +244,7 @@ export class PianoChordsAnswerSelect extends React.Component<IPianoChordsAnswerS
         <div style={{padding: "1em 0"}}>
           <Button
             onClick={event => this.confirmAnswer()}
-            disabled={!this.state.selectedRootPitch || !this.state.selectedScaleType}
+            disabled={!this.state.selectedRootPitch || !this.state.selectedChordType}
             variant="contained"
           >
             Confirm Answer
@@ -258,11 +257,11 @@ export class PianoChordsAnswerSelect extends React.Component<IPianoChordsAnswerS
   private onRootPitchClick(rootPitch: string) {
     this.setState({ selectedRootPitch: rootPitch });
   }
-  private onScaleTypeClick(scaleType: string) {
-    this.setState({ selectedScaleType: scaleType });
+  private onChordTypeClick(chordType: string) {
+    this.setState({ selectedChordType: chordType });
   }
   private confirmAnswer() {
-    const selectedAnswer = this.state.selectedRootPitch + " " + this.state.selectedScaleType;
+    const selectedAnswer = this.state.selectedRootPitch + " " + this.state.selectedChordType;
     const isCorrect = selectedAnswer === this.props.correctAnswer;
     this.props.onAnswer(isCorrect ? AnswerDifficulty.Easy : AnswerDifficulty.Incorrect);
   }
@@ -287,9 +286,9 @@ export function createFlashCardGroup(): FlashCardGroup {
 
   const initialConfigData: IConfigData = {
     enabledRootPitches: rootPitchStrs.slice(),
-    enabledScaleTypes: allChords
-      .filter((_, scaleIndex) => scaleIndex <= 8)
-      .map(scale => scale.type)
+    enabledChordTypes: ChordType.All
+      .filter((_, chordIndex) => chordIndex <= 8)
+      .map(chord => chord.name)
   };
 
   const group = new FlashCardGroup("Piano Chords", createFlashCards);
@@ -305,10 +304,10 @@ export function createFlashCardGroup(): FlashCardGroup {
 export function createFlashCards(): FlashCard[] {
   return Utils.flattenArrays<FlashCard>(
     rootPitchStrs.map((rootPitchStr, i) =>
-      allChords.map(scale => {
+      ChordType.All.map(chord => {
         const halfStepsFromC = Utils.mod(i - 4, 12);
         const rootPitch = Pitch.createFromMidiNumber((new Pitch(PitchLetter.C, 0, 4)).midiNumber + halfStepsFromC);
-        const pitches = Chord.fromPitchAndFormulaString(rootPitch, scale.formulaString)
+        const pitches = Chord.fromPitchAndFormulaString(rootPitch, chord.formulaString)
           .pitches;
 
         return new FlashCard(
@@ -327,7 +326,7 @@ export function createFlashCards(): FlashCard[] {
             },
             pitches
           ),
-          new FlashCardSide(rootPitchStr + " " + scale.type)
+          new FlashCardSide(rootPitchStr + " " + chord.name)
         );
       })
     )
