@@ -102,6 +102,11 @@ export function loadAndPlaySoundsSequentially(soundFilePaths: Array<string>, del
   return cancelFn
 }
 
+export function playSounds(sounds: Array<Howl>) {
+  for (const sound of sounds) {
+    sound.play();
+  }
+}
 export function playSoundsSequentially(sounds: Array<Howl>, delayInMs: number, cutOffSounds: boolean = false): () => void {
   let isCancelled = false;
 

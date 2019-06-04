@@ -89,7 +89,8 @@ import { doesKeyUseSharps } from '../Key';
 import { PianoScaleDronePlayer } from './PianoScaleDronePlayer';
 import { Chord, ChordType } from "../Chord";
 import { DiatonicChordViewer } from './DiatonicChordViewer';
-import { ChordAudioPlayer } from './ChordAudioPlayer';
+import { ChordAudioPlayer } from "./ChordAudioPlayer";
+import { ScaleAudioPlayer } from './ScaleAudioPlayer';
 
 const pianoKeyboardStyle = { width: "100%", maxWidth: "400px", height: "auto" };
 const defaultRootPitch = new Pitch(PitchLetter.C, 0, 4);
@@ -767,6 +768,7 @@ export const ScalesAndModesSection: React.FunctionComponent<SectionProps> = prop
           <TableCell>Scale Notes in Ascending Order</TableCell>
           <TableCell>Mode Name</TableCell>
           <TableCell>Formula</TableCell>
+          <TableCell></TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -775,42 +777,49 @@ export const ScalesAndModesSection: React.FunctionComponent<SectionProps> = prop
           <TableCell>C D E F G A B</TableCell>
           <TableCell>Ionian (a.k.a "Major")</TableCell>
           <TableCell>1 2 3 4 5 6 7</TableCell>
+          <TableCell><ScaleAudioPlayer scale={Scale.Ionian} rootPitch={defaultRootPitch} /></TableCell>
         </TableRow>
         <TableRow>
           <TableCell>D</TableCell>
           <TableCell>D E F G A B C</TableCell>
           <TableCell>Dorian</TableCell>
           <TableCell>1 2 b3 4 5 6 b7</TableCell>
+          <TableCell><ScaleAudioPlayer scale={Scale.Dorian} rootPitch={defaultRootPitch} /></TableCell>
         </TableRow>
         <TableRow>
           <TableCell>E</TableCell>
           <TableCell>E F G A B C D</TableCell>
           <TableCell>Phrygian</TableCell>
           <TableCell>1 b2 b3 4 5 b6 b7</TableCell>
+          <TableCell><ScaleAudioPlayer scale={Scale.Phrygian} rootPitch={defaultRootPitch} /></TableCell>
         </TableRow>
         <TableRow>
           <TableCell>F</TableCell>
           <TableCell>F G A B C D E</TableCell>
           <TableCell>Lydian</TableCell>
           <TableCell>1 2 3 #4 5 6 7</TableCell>
+          <TableCell><ScaleAudioPlayer scale={Scale.Lydian} rootPitch={defaultRootPitch} /></TableCell>
         </TableRow>
         <TableRow>
           <TableCell>G</TableCell>
           <TableCell>G A B C D E F</TableCell>
           <TableCell>Mixolydian</TableCell>
           <TableCell>1 2 3 4 5 6 b7</TableCell>
+          <TableCell><ScaleAudioPlayer scale={Scale.Mixolydian} rootPitch={defaultRootPitch} /></TableCell>
         </TableRow>
         <TableRow>
           <TableCell>A</TableCell>
           <TableCell>A B C D E F G</TableCell>
           <TableCell>Aeolian (a.k.a "Natural Minor")</TableCell>
           <TableCell>1 2 b3 4 5 b6 b7</TableCell>
+          <TableCell><ScaleAudioPlayer scale={Scale.Aeolian} rootPitch={defaultRootPitch} /></TableCell>
         </TableRow>
         <TableRow>
           <TableCell>B</TableCell>
           <TableCell>B C D E F G A</TableCell>
           <TableCell>Locrian</TableCell>
           <TableCell>1 b2 b3 4 b5 b6 b7</TableCell>
+          <TableCell><ScaleAudioPlayer scale={Scale.Locrian} rootPitch={defaultRootPitch} /></TableCell>
         </TableRow>
       </TableBody>
     </Table>
