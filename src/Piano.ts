@@ -1,5 +1,5 @@
 import { Pitch } from "./Pitch";
-import { playSoundsSequentially, playSoundsSimultaneously } from './Audio';
+import { loadAndPlaySoundsSequentially, loadAndPlaySoundsSimultaneously } from './Audio';
 
 export const pianoAudioFilePathsByMidiNumber = new Array<[number, string]>();
 pianoAudioFilePathsByMidiNumber.push([21, "/audio/piano/A0.mp3"]);
@@ -105,13 +105,15 @@ export function playPitches(pitches: Array<Pitch>): Promise<Array<Howl>> {
     .filter(fp => fp !== null)
     .map(fp => fp as string);
 
-  return playSoundsSimultaneously(soundFilePaths);
+  return loadAndPlaySoundsSimultaneously(soundFilePaths);
 }
 
 // returns: a cancellation function
 export function playPitchesSequentially(pitches: Array<Pitch>, delayInMs: number, cutOffSounds: boolean = false): () => void {
   const soundFilePaths = pitches
-    .map(getPitchAudioFilePath);
+    .map(getPitchAudioFilePath)
+    .filter(fp => fp !== null)
+    .map(fp => fp as string);
   
-  return playSoundsSequentially(soundFilePaths, delayInMs, cutOffSounds);
+  return loadAndPlaySoundsSequentially(soundFilePaths, delayInMs, cutOffSounds);
 }

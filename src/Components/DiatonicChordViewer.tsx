@@ -2,14 +2,14 @@ import * as React from "react";
 import { CardContent, Typography, Card, Table, TableHead, TableBody, TableRow, TableCell, Button } from '@material-ui/core';
 
 import * as Utils from "../Utils";
-import { Chord, ChordType } from '../Chord';
+import { ChordType } from '../Chord';
 import { ChordAudioPlayer } from './ChordAudioPlayer';
 import { Pitch } from '../Pitch';
 import { PitchLetter } from '../PitchLetter';
 import { Scale } from '../Scale';
 import { validSharpKeyPitches, validNaturalKeyPitches, validFlatKeyPitches } from '../Key';
 
-const scales = [
+export const defaultScales = [
   Scale.Ionian,
   Scale.Dorian,
   Scale.Phrygian,
@@ -22,45 +22,32 @@ const scales = [
 ];
 
 export interface IDiatonicChordViewerProps {
+  scales?: Array<Scale>;
 }
 export interface IDiatonicChordViewerState {
   rootPitch: Pitch;
+  playRootPitch: boolean;
 }
 export class DiatonicChordViewer extends React.Component<IDiatonicChordViewerProps, IDiatonicChordViewerState> {
   public constructor(props: IDiatonicChordViewerProps) {
     super(props);
 
     this.state = {
-      rootPitch: new Pitch(PitchLetter.C, 0, 4)
+      rootPitch: new Pitch(PitchLetter.C, 0, 4),
+      playRootPitch: true
     };
   }
   public render(): JSX.Element {
     const scalesRootPitch = this.state.rootPitch;
+    const scales = this.props.scales ? this.props.scales : defaultScales;
     const rows = scales
       .map(scale => {
         const scalePitches = scale.getPitches(scalesRootPitch);
-        const renderCell = (chordType: ChordType, i: number) => {
-          const chordRootPitch = scalePitches[i];
-          const scaleDegree = 1 + i;
-          const romanNumeral = chordType.isMajorType
-            ? Utils.getRomanNumerals(scaleDegree)
-            : Utils.getRomanNumerals(scaleDegree).toLowerCase();
-
-          return (
-            <TableCell>
-              <ChordAudioPlayer
-                rootPitch={chordRootPitch}
-                chordType={chordType}>
-                {romanNumeral}<sup>{chordType.symbols[0]}</sup>
-              </ChordAudioPlayer>
-            </TableCell>
-          );
-        };
 
         const triadCells = scale.getDiatonicChordTypes(3)
-          .map((chordType, i) => renderCell(chordType, i));
+          .map((chordType, i) => this.renderCell(chordType, scalePitches[i], 1 + i));
         const seventhChordCells = scale.getDiatonicChordTypes(4)
-          .map((chordType, i) => renderCell(chordType, i));
+          .map((chordType, i) => this.renderCell(chordType, scalePitches[i], 1 + i));
         
         return [
           (
@@ -121,6 +108,21 @@ export class DiatonicChordViewer extends React.Component<IDiatonicChordViewerPro
     );
   }
 
+  private renderCell(chordType: ChordType, chordRootPitch: Pitch, scaleDegree: number): JSX.Element {
+    const romanNumeral = chordType.isMajorType
+      ? Utils.getRomanNumerals(scaleDegree)
+      : Utils.getRomanNumerals(scaleDegree).toLowerCase();
+
+    return (
+      <TableCell>
+        <ChordAudioPlayer
+          rootPitch={chordRootPitch}
+          chordType={chordType}>
+          {romanNumeral}<sup>{chordType.symbols[0]}</sup>
+        </ChordAudioPlayer>
+      </TableCell>
+    );
+  }
   private renderRootPitchRow(rootPitches: Array<Pitch | null>): JSX.Element {
     return (
       <div>

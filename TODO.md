@@ -1,5 +1,7 @@
 # To-Do
 ## High Priority
+* Add option to play scale root in ChordAudioPlayer
+* Add ScaleAudioPlayer
 * Make ear training exercises play automatically when you skip.
 * Add inversions to Piano Chords
 * Add sheet music notes lesson.

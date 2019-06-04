@@ -14,11 +14,11 @@ export function loadSoundAsync(soundFilePath: string): Promise<Howl> {
   });
 }
 export function loadSoundsAsync(soundFilePaths: Array<string>): Promise<Array<Howl>> {
-  const soundCount = soundFilePaths.length;
-  const loadedSounds = new Array<Howl>(soundCount);
-  let loadedSoundCount = 0;
-  
   return new Promise((resolve, reject) => {
+    const soundCount = soundFilePaths.length;
+    const loadedSounds = new Array<Howl>(soundCount);
+    let loadedSoundCount = 0;
+
     soundFilePaths
       .map((filePath, i) => {
         return new Howl({
@@ -38,13 +38,14 @@ export function loadSoundsAsync(soundFilePaths: Array<string>): Promise<Array<Ho
       });
   });
 }
-export function playSound(soundFilePath: string, volume: number = 1): Howl {
+
+export function loadAndPlaySound(soundFilePath: string, volume: number = 1): Howl {
   const howl = new Howl({ src: soundFilePath, volume: volume });
   howl.play();
 
   return howl;
 }
-export function playSoundsSimultaneously(soundFilePaths: Array<string>): Promise<Array<Howl>> {
+export function loadAndPlaySoundsSimultaneously(soundFilePaths: Array<string>): Promise<Array<Howl>> {
   return new Promise((resolve, reject) => {
     const loadedSounds = new Array<Howl>();
     let loadedSoundCount = 0;
@@ -78,61 +79,55 @@ export function playSoundsSimultaneously(soundFilePaths: Array<string>): Promise
       }));
   });
 }
-export function playSoundsSequentially(soundFilePaths: Array<string | null>, delayInMs: number, cutOffSounds: boolean = false): () => void {
+export function loadAndPlaySoundsSequentially(soundFilePaths: Array<string>, delayInMs: number, cutOffSounds: boolean = false): () => void {
   let isCancelled = false;
+  let internalCancelFn: (() => void) | null;
+  const cancelFn = () => {
+    if (!isCancelled) {
+      isCancelled = true;
 
-  const playSounds = () => {
-    for (let i = 0; i < loadedSounds.length; i++) {
-      const iCopy = i; // for lambda
-      const loadedSound = loadedSounds[i];
-
-      if (loadedSound) {
-        setTimeout(() => {
-          // stop the previous sound if necessary
-          if (cutOffSounds && (iCopy > 0)) {
-            const previousLoadedSound = loadedSounds[iCopy - 1];
-
-            if (previousLoadedSound) {
-              previousLoadedSound.fade(1, 0, 300);
-            }
-          }
-
-          // play the current sound
-          if (!isCancelled) {
-            loadedSound.play();
-          }
-        }, delayInMs * i);
+      if (internalCancelFn) {
+        internalCancelFn();
       }
     }
   };
-  
-  const soundCount = soundFilePaths.length;
-  let loadedSoundCount = 0;
-  const loadedSounds = soundFilePaths
-    .map(filePath => {
-      if (filePath) {
-        return new Howl({
-          src: filePath,
-          onload: function(this: Howl) {
-            loadedSoundCount++;
-      
-            if (loadedSoundCount === soundCount) {
-              playSounds();
-            }
-          },
-          onloaderror: () => {
-            loadedSoundCount++;
-      
-            if (loadedSoundCount === soundCount) {
-              playSounds();
-            }
-          }
-        });
-      } else {
-        loadedSoundCount++;
-        return null;
+
+  loadSoundsAsync(soundFilePaths)
+    .then(sounds => {
+      if (!isCancelled) {
+        internalCancelFn = playSoundsSequentially(sounds, delayInMs, cutOffSounds);
       }
     });
   
-  return () => isCancelled = true;
+  return cancelFn
+}
+
+export function playSoundsSequentially(sounds: Array<Howl>, delayInMs: number, cutOffSounds: boolean = false): () => void {
+  let isCancelled = false;
+
+  for (let uncapturedI = 0; uncapturedI < sounds.length; uncapturedI++) {
+    const i = uncapturedI; // capture the index for the lambda
+    const sound = sounds[i];
+
+    if (sound) {
+      setTimeout(() => {
+        // stop the previous sound if necessary
+        if (cutOffSounds && (i > 0)) {
+          const previousLoadedSound = sounds[i - 1];
+
+          if (previousLoadedSound) {
+            previousLoadedSound.fade(1, 0, 300);
+          }
+        }
+
+        // play the current sound
+        if (!isCancelled) {
+          sound.play();
+        }
+      }, delayInMs * i);
+    }
+  }
+  
+  const cancelFn = () => isCancelled = true;
+  return cancelFn;
 }
