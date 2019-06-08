@@ -1076,16 +1076,30 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
 export const ChordProgressionsSection: React.FunctionComponent<SectionProps> = props => (
   <div>
     <SectionTitle>Chord Progressions</SectionTitle>
-    <p>Chord progressions are simply sequences of chords. Chord progressions are often notated with roman numerals, allowing written chord progressions to be independent of key.</p>
-    <p>Chord progressions are built around tension &amp; resolution.</p>
+    <p><Term>Chord progressions</Term> are simply sequences of chords. <Term>Chord progressions</Term> are often written with roman numeral notation instead of with pitch letters, allowing chord progressions to be described independent of the key they are played in. There are three fundamental concepts you must know to understand and compose effective chord progressions: the <Term>V - I progression</Term>, <Term>chord substitution</Term>, and <Term>voice leading</Term>.</p>
 
     <SectionTitle>V - I Chord Progression</SectionTitle>
-    <p>One of the most common and strongest patterns of tension &amp; resolution is the movement from a dominant (V7) chord to the tonic (I or i) chord. In major keys, the V7 chord is made of scale degrees 5, 7, 2, &amp; 4, and the I chord is made of scale degrees 1, 3, 5. The V7 chord carries tension and resolves to the I chord because of the tritone interval between scale degrees 7 and 4 (the 2nd &amp; 4th notes of the chord) and its resolution to the tonic and scale degree 3 in the tonic chord.</p>
-    <p>This dominant - tonic resolution can be used between other scale degrees as well. A very common chord progression is II - V - I, which works because II is the dominant chord of V, and V is the dominant chord of I.</p>
+    <p>One of the most common patterns in chord progressions is the descending fifth &mdash; the movement from one chord (the "V" chord, also called the "dominant" chord) to another chord with a root note a fifth below (the "I" chord, also called the "tonic" chord). For example: from G to C, or from F# to B.</p>
+    <NoteText>These chords can be played in any inversion. Though we are descending a fifth to find the I chord in a V - I progression, the I chord <strong>does not</strong> need to be positioned a perfect fifth below the first chord and <strong>does not</strong> need to be in root position.</NoteText>
+
+    <p>A particularly common form of the V - I progression is the V7 to I (or, in minor keys, V7 - i) progression. In major keys, the V7 chord consists of scale degrees 5, 7, 2, &amp; 4, and the I chord consists of scale degrees 1, 3, &amp; 5.</p>
+    <p>The V7 chord is tense because of the dissonant tritone interval between scale degrees 7 and 4 (the 2nd &amp; 4th notes of the chord):</p>
+    <p>TODO: diagram</p>
+    <p>and because it contains the leading tone (the 7th scale degree) which strongly leans towards the root note of the scale:</p>
+    <p>TODO: diagram</p>
+    <p>The I chord releases the tension because it resolves the tritone by moving the leading tone to the scale's root note, and moving the 4th scale degree down to the 3rd scale degree to form a major 3rd.</p>
+    <p>TODO: diagram</p>
+
+    <p>This dominant - tonic resolution can be used between scale degrees other than 5 &amp; 1 as well. For example, another common chord progression is II - V - I, which works because II is the dominant chord of V (because scale degree 2 is a perfect fifth above scale degree 5), and because V is the dominant chord of I. So, a II - V - I chord progression is essentially two successive V - I chord progressions.</p>
+    <p>TODO: diagram</p>
+
+    <SectionTitle>Chord Substitution</SectionTitle>
     <p>Understanding the V - I resolution is key to understanding a vast majority of western chord progressions, which are often simply V - I progressions with alterations and added chords.</p>
+    <p>TODO: talk about chord substitutions where chords up/down a 3rd have 2 of 3 notes in common, the 1st, 3rd, and 7th are the most important chord tones</p>
+    <p>TODO: give more complicated chord progression, simplify to tonic/dominant, audio demo</p>
 
     <SectionTitle>Voice Leading</SectionTitle>
-    <p>The other key to understanding chord progressions is voice leading, which is the arrangement of the notes (called "voices") in chords to create smooth, flowing transitions between chords.</p>
+    <p>Aside from strategically using tension &amp; resolution, the other key to effective chord progressions is voice leading, which is the arrangement of the notes (called "voices") in chords to create smooth, flowing transitions between chords.</p>
     <p>The most important rule of voice leading is to use the smallest possible movements between the corresponding notes of each chord.</p>
     <p>Take the V7 - I chord progression in C major (G7 - C) as an example. One way we can voice these chords is by playing both of them in root position, with the C chord below the G7 chord.</p>
 
@@ -1114,6 +1128,8 @@ export const ChordProgressionsSection: React.FunctionComponent<SectionProps> = p
     </ul>
 
     <p>Smooth voice leading is enough to make a chord progression work, even without strong dominant - tonic movement.</p>
+
+    <p>TODO: diagram</p>
     
     <BecomeAPatronSection />
 
