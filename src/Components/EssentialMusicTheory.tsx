@@ -643,9 +643,9 @@ export const IntervalsSection: React.FunctionComponent<SectionProps> = props => 
 
     <p>To notate an interval, we write the <Term>interval quality</Term> followed by the <Term>interval number</Term>, for example:</p>
     <ul>
-      <li>M2 &ndash; Major 2nd</li>
-      <li>P4 &ndash; Perfect 4th</li>
-      <li>d5 &ndash; Diminished 5th</li>
+      <li>M2 &mdash; Major 2nd</li>
+      <li>P4 &mdash; Perfect 4th</li>
+      <li>d5 &mdash; Diminished 5th</li>
     </ul>
 
     <SubSectionTitle>Simple Intervals</SubSectionTitle>
@@ -925,7 +925,7 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
     <p><strong>You are free to play the notes of a chord in any order, spaced out as close or as far as you like, and any note in a chord can be repeated in different octaves.</strong> Whichever note you decide to play in the bass (the lowest note) of a chord determines which "inversion" a chord is in. If the root note is in the bass, the chord is considered in "root position". If "3rd" of the chord is in the bass, the chord is in "1st inversion". If the "5th" of the chord is in the bass, the chord is in "2nd inversion". And so on for the 7th, 9th, 11th, and 13th (more on seventh chords and extended chords later).</p>
 
     <SubSectionTitle>Seventh Chords</SubSectionTitle>
-    <p>Triads are built with two 3rds, but chords can be built with even more &ndash; <Term>seventh chords</Term>, for example, are built with three 3rds. Seventh chords are more "colorful" than triads, and are heavily used (and built upon) in Jazz music.</p>
+    <p>Triads are built with two 3rds, but chords can be built with even more &mdash; <Term>seventh chords</Term>, for example, are built with three 3rds. Seventh chords are more "colorful" than triads, and are heavily used (and built upon) in Jazz music.</p>
     <p>You can find all of the basic seventh chords by adding additional major and minor 3rds to each of the 4 basic triads:</p>
 
     <Table>
@@ -1053,8 +1053,8 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
     <SubSectionTitle>Diatonic Chords &amp; Roman Numeral Notation</SubSectionTitle>
     <p>One way to build chords is to exclusively pick notes out from a scale, separated by thirds. Because these chords are built solely with scale notes, they naturally "fit" well with the underlying scale, and lend themselves well to accompanying melodies built with the same scale. Chords which are derived in this manner are called <Term>diatonic chords</Term>, which make up <strong>most</strong> of the chords you find in Western music.</p>
     <p>For example, you could take a C major scale and pick out the 1st, 3rd, and 5th scale degrees (C, E, G). These notes form a <Term>major triad</Term> with C, the 1st scale degree of the major scale, as the root note.</p>
-    <p><Term>Diatonic chords</Term> are commonly written in <Term>roman numeral notation</Term>, which uses roman numerals of scale degrees instead of letters to designate the root note. With <Term>roman numeral notation</Term>, the Cmaj (a.k.a. "C") chord above could instead be notated as a Imaj chord (a.k.a "I"). Note that "C" is not in the name of the chord at all. With <Term>roman numeral notation</Term>, any chord made with the 1st, 3rd, and 5th degrees of <strong>any</strong> major scale has the same name &ndash; I. This allows us to specify and analyze sequences of chords without concern for what key the composer decided to write the music in.</p>
-    <p>There is one more thing to know about roman numeral notation &ndash; minor and diminished chords are written with lower case roman numerals. So, because a chord built with the 2nd, 4th, and 6th notes of a major scale is a minor chord, it would be written as ii, <strong>not</strong> II.</p>
+    <p><Term>Diatonic chords</Term> are commonly written in <Term>roman numeral notation</Term>, which uses roman numerals of scale degrees instead of letters to designate the root note. With <Term>roman numeral notation</Term>, the Cmaj (a.k.a. "C") chord above could instead be notated as a Imaj chord (a.k.a "I"). Note that "C" is not in the name of the chord at all. With <Term>roman numeral notation</Term>, any chord made with the 1st, 3rd, and 5th degrees of <strong>any</strong> major scale has the same name &mdash; I. This allows us to specify and analyze sequences of chords without concern for what key the composer decided to write the music in.</p>
+    <p>There is one more thing to know about roman numeral notation &mdash; minor and diminished chords are written with lower case roman numerals. So, because a chord built with the 2nd, 4th, and 6th notes of a major scale is a minor chord, it would be written as ii, <strong>not</strong> II.</p>
     <p>Use the interactive diagram below to explore diatonic triads and seventh chords in common scales:</p>
     
     <DiatonicChordViewer />
@@ -1094,9 +1094,20 @@ export const ChordProgressionsSection: React.FunctionComponent<SectionProps> = p
     <p>TODO: diagram</p>
 
     <SectionTitle>Chord Substitution</SectionTitle>
-    <p>Understanding the V - I resolution is key to understanding a vast majority of western chord progressions, which are often simply V - I progressions with alterations and added chords.</p>
-    <p>TODO: talk about chord substitutions where chords up/down a 3rd have 2 of 3 notes in common, the 1st, 3rd, and 7th are the most important chord tones</p>
+    <p>One tool to use when composing or analyzing chord progressions is <Term>chord substitution</Term>. <Term>Chord substitution</Term> is simply replacing a chord in a chord progression with a similar chord. Chords are considered "similar" if they share many notes or if they resolve in similar ways to the next chord in a chord progression.</p>
+    <p>The simplest chord substitutions change only one note in a chord. A common way to change one note in a diatonic chord is to instead use a diatonic chord up or down a 3rd. In C major, for example, the I triad consists of the notes C, E, &amp; G. The iii triad, a 3rd up from I, consists of the notes E, G, &amp; B, which shares the E and the G with I triad. The vi triad, a 3rd down from I, consists of the notes A, C, &amp; E, which shares the C and the E with the I triad. So, both the iii chord and the vi chord can substitute for the I chord.</p>
+    <p>TODO: diagram</p>
+    <p>The same can be applied to the ii &amp; IV chords, the V &amp; vii chords, and so on.</p>
+    <p>You can create more complex chord substitutions changing more than one note in a chord, adding notes to a chord (forming extended chords), or removing notes from a chord.</p>
+    <NoteText>You do not always have to <strong>replace</strong> chords with similar chords in chord progressions &mdash; you can also <strong>add</strong> additional chords to chord progressions instead.</NoteText>
+
     <p>TODO: give more complicated chord progression, simplify to tonic/dominant, audio demo</p>
+
+    <SubSectionTitle>Important Chord Tones</SubSectionTitle>
+    <p>One thing to keep in mind when using chord substitution is that some chord tones are more important than others in giving a chord a specific sound and harmonic function, and these important chord tones may be worth preserving in substitute chords.</p>
+    <p>The two most important notes in any chord are the root and the 3rd. The root is important because it lays the foundation for chords &mdash; we can't have a C chord without a C! The 3rd is important because it determines whether the chord is major or minor, which plays a huge role in how the chord sounds.</p>
+    <p>Beyond the root and the 3rd, the 7th is the next important chord tone because it determines the type of 7th chord that is formed. Next are chord extensions &mdash; the 9th, the 11th, and the 13th. The least important chord tone in most chords is the 5th because in most cases it does not play any role in determining the type of chord that is formed.</p>
+    <NoteText>Though the 5th is not an important chord tone in most chords, it <strong>is</strong> important if it is altered in some way &mdash; for example, the #5 in an augmented triad, or the b5 in a diminished triad.</NoteText>
 
     <SectionTitle>Voice Leading</SectionTitle>
     <p>Aside from strategically using tension &amp; resolution, the other key to effective chord progressions is voice leading, which is the arrangement of the notes (called "voices") in chords to create smooth, flowing transitions between chords.</p>
