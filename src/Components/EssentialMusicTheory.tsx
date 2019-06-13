@@ -10,7 +10,7 @@ import { playPitches, playPitchesSequentially } from "../Piano";
 import { YouTubeVideo } from "./YouTubeVideo";
 import { TimeSignature } from "../TimeSignature";
 
-import { PianoKeyboard, renderPianoKeyboardNoteNames, PianoKeyboardMetrics } from "./PianoKeyboard";
+import { PianoKeyboard, renderPianoKeyboardNoteNames, PianoKeyboardMetrics, renderPianoKeyboardKeyLabels } from "./PianoKeyboard";
 import { Pitch } from '../Pitch';
 import { PitchLetter } from '../PitchLetter';
 
@@ -186,6 +186,78 @@ const HalfStepsDiagram: React.FunctionComponent<{}> = props => {
       style={style} />
   );
 };
+
+function renderPianoKeyLabel(metrics: PianoKeyboardMetrics, pitch: Pitch, label: string, isAboveKeyboard: boolean, textOffset: Vector2D = new Vector2D(0, 0)): JSX.Element {
+  const keyRect = metrics.getKeyRect(pitch);
+
+  const fontSizePx = 30;
+  const textPos = new Vector2D(
+    textOffset.x + keyRect.center.x,
+    textOffset.y + (isAboveKeyboard ? -35 : (metrics.height + fontSizePx + 35)));
+  const textStyle: any = {
+    textAnchor: "middle",
+    fontSize: `${fontSizePx}px`
+  };
+  const lineConnectionPos = new Vector2D(
+    textPos.x,
+    isAboveKeyboard ? (textPos.y + 5) : (textPos.y - fontSizePx)
+  );
+
+  const keyLinePos = new Vector2D(
+    keyRect.center.x,
+    isAboveKeyboard ? 20 : (metrics.height - 20)
+  );
+
+  return (
+    <g>
+      <text x={textPos.x} y={textPos.y} style={textStyle}>
+        {label}
+      </text>
+      <line
+        x1={lineConnectionPos.x} y1={lineConnectionPos.y}
+        x2={keyLinePos.x} y2={keyLinePos.y}
+        stroke="red" strokeWidth={4} />
+    </g>
+  );
+}
+function renderIntervalLabel(metrics: PianoKeyboardMetrics, leftPitch: Pitch, rightPitch: Pitch, label: string, isAboveKeyboard: boolean): JSX.Element {
+  const leftKeyRect = metrics.getKeyRect(leftPitch);
+  const rightKeyRect = metrics.getKeyRect(rightPitch);
+
+  const fontSizePx = 30;
+  const textPos = new Vector2D(
+    (leftKeyRect.center.x + rightKeyRect.center.x) / 2,
+    isAboveKeyboard ? -35 : (metrics.height + fontSizePx + 35));
+  const textStyle: any = {
+    textAnchor: "middle",
+    fontSize: `${fontSizePx}px`
+  };
+  const lineConnectionPos = new Vector2D(
+    textPos.x,
+    isAboveKeyboard ? (textPos.y + 5) : (textPos.y - fontSizePx)
+  );
+
+  const linePosY = isAboveKeyboard ? 20 : (metrics.height - 20);
+  const leftKeyLinePos = new Vector2D(leftKeyRect.center.x, linePosY);
+  const rightKeyLinePos = new Vector2D(rightKeyRect.center.x, linePosY);
+
+  return (
+    <g>
+      <text x={textPos.x} y={textPos.y} style={textStyle}>
+        {label}
+      </text>
+      <line
+        x1={lineConnectionPos.x} y1={lineConnectionPos.y}
+        x2={leftKeyLinePos.x} y2={leftKeyLinePos.y}
+        stroke="red" strokeWidth={4} />
+      <line
+        x1={lineConnectionPos.x} y1={lineConnectionPos.y}
+        x2={rightKeyLinePos.x} y2={rightKeyLinePos.y}
+        stroke="red" strokeWidth={4} />
+    </g>
+  );
+}
+
 const PianoScaleFormulaDiagram: React.FunctionComponent<{ scale: Scale }> = props => {
   const width = 300;
   const height = 200;
@@ -418,6 +490,46 @@ const IntervalsTable: React.FunctionComponent<{ showExamples?: boolean, showCate
         </TableRow>
       </TableBody>
     </Table>
+  );
+};
+
+const FiveChordDiagram: React.FunctionComponent<{}> = props => {
+  const width = 600;
+  const height = 200;
+  const margin = new Margin(0, 80, 0, 80);
+  const style = { width: "100%", maxWidth: "300px", height: "auto" };
+  const chord = Chord.fromPitchAndFormulaString(new Pitch(PitchLetter.G, 0, 4), ChordType.Dom7.formulaString);
+  const pitches = chord.pitches;
+  const scaleDegreeLabels = ["5", "7", "2", "4"];
+
+  function renderLabels(metrics: PianoKeyboardMetrics): JSX.Element {
+    const getKeyScaleDegreeLabels = (pitch: Pitch) => {
+      const pitchIndex = pitches.findIndex(p => p.midiNumber === pitch.midiNumber);
+      return (pitchIndex >= 0)
+        ? [scaleDegreeLabels[pitchIndex]]
+        : null;
+    };
+
+    return (
+      <g>
+        {renderPianoKeyboardKeyLabels(metrics, true, getKeyScaleDegreeLabels)}
+        {renderIntervalLabel(metrics, pitches[1], pitches[3], "tritone", true)}
+        {renderPianoKeyLabel(metrics, pitches[1], "leading tone", false, new Vector2D(-60, 0))}
+        {renderPianoKeyLabel(metrics, new Pitch(PitchLetter.C, 0, 5), "root note", false, new Vector2D(60, 0))}
+      </g>
+    );
+  }
+
+  return (
+    <PianoKeyboard
+      rect={new Rect2D(new Size2D(width, height), new Vector2D(0, 0))}
+      margin={margin}
+      lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
+      highestPitch={new Pitch(PitchLetter.B, 0, 5)}
+      pressedPitches={[]}
+      onKeyPress={p => playPitches([p])}
+      renderExtrasFn={renderLabels}
+      style={style} />
   );
 };
 
@@ -1083,9 +1195,8 @@ export const ChordProgressionsSection: React.FunctionComponent<SectionProps> = p
     <NoteText>These chords can be played in any inversion. Though we are descending a fifth to find the I chord in a V - I progression, the I chord <strong>does not</strong> need to be positioned a perfect fifth below the first chord and <strong>does not</strong> need to be in root position.</NoteText>
 
     <p>A particularly common form of the V - I progression is the V7 to I (or, in minor keys, V7 - i) progression. In major keys, the V7 chord consists of scale degrees 5, 7, 2, &amp; 4, and the I chord consists of scale degrees 1, 3, &amp; 5.</p>
-    <p>The V7 chord is tense because of the dissonant tritone interval between scale degrees 7 and 4 (the 2nd &amp; 4th notes of the chord):</p>
-    <p>TODO: diagram</p>
-    <p>and because it contains the leading tone (the 7th scale degree) which strongly leans towards the root note of the scale:</p>
+    <p>The V7 chord is tense because of the dissonant tritone interval between scale degrees 7 and 4 (the 2nd &amp; 4th notes of the chord) and because it contains the leading tone (the 7th scale degree) which strongly leans towards the root note of the scale:</p>
+    <p><FiveChordDiagram /></p>
     <p>TODO: diagram</p>
     <p>The I chord releases the tension because it resolves the tritone by moving the leading tone to the scale's root note, and moving the 4th scale degree down to the 3rd scale degree to form a major 3rd.</p>
     <p>TODO: diagram</p>
@@ -1093,8 +1204,10 @@ export const ChordProgressionsSection: React.FunctionComponent<SectionProps> = p
     <p>This dominant - tonic resolution can be used between scale degrees other than 5 &amp; 1 as well. For example, another common chord progression is II - V - I, which works because II is the dominant chord of V (because scale degree 2 is a perfect fifth above scale degree 5), and because V is the dominant chord of I. So, a II - V - I chord progression is essentially two successive V - I chord progressions.</p>
     <p>TODO: diagram</p>
 
+    <p>Just about every chord progression there is can be analyzed in terms of V - I progressions when combined with the next important concept: chord substitution.</p>
+
     <SectionTitle>Chord Substitution</SectionTitle>
-    <p>One tool to use when composing or analyzing chord progressions is <Term>chord substitution</Term>. <Term>Chord substitution</Term> is simply replacing a chord in a chord progression with a similar chord. Chords are considered "similar" if they share many notes or if they resolve in similar ways to the next chord in a chord progression.</p>
+    <p><Term>Chord substitution</Term> is simply replacing a chord in a chord progression with a similar chord. Chords are considered "similar" if they share many notes or if they resolve in similar ways to the next chord in a chord progression.</p>
     <p>The simplest chord substitutions change only one note in a chord. A common way to change one note in a diatonic chord is to instead use a diatonic chord up or down a 3rd. In C major, for example, the I triad consists of the notes C, E, &amp; G. The iii triad, a 3rd up from I, consists of the notes E, G, &amp; B, which shares the E and the G with I triad. The vi triad, a 3rd down from I, consists of the notes A, C, &amp; E, which shares the C and the E with the I triad. So, both the iii chord and the vi chord can substitute for the I chord.</p>
     <p>TODO: diagram</p>
     <p>The same can be applied to the ii &amp; IV chords, the V &amp; vii chords, and so on.</p>
@@ -1110,8 +1223,8 @@ export const ChordProgressionsSection: React.FunctionComponent<SectionProps> = p
     <NoteText>Though the 5th is not an important chord tone in most chords, it <strong>is</strong> important if it is altered in some way &mdash; for example, the #5 in an augmented triad, or the b5 in a diminished triad.</NoteText>
 
     <SectionTitle>Voice Leading</SectionTitle>
-    <p>Aside from strategically using tension &amp; resolution, the other key to effective chord progressions is voice leading, which is the arrangement of the notes (called "voices") in chords to create smooth, flowing transitions between chords.</p>
-    <p>The most important rule of voice leading is to use the smallest possible movements between the corresponding notes of each chord.</p>
+    <p>The last fundamental concept you must know to understand and compose effective chord progressions is <Term>voice leading</Term>, which is the arrangement of the notes in chords (called "voices") to create smooth, flowing transitions between chords. Good voice leading can make just about any set of chords work together in a chord progression.</p>
+    <p><strong>The most important rule of voice leading is to use the smallest possible movements when moving the voices of one chord to the next chord.</strong></p>
     <p>Take the V7 - I chord progression in C major (G7 - C) as an example. One way we can voice these chords is by playing both of them in root position, with the C chord below the G7 chord.</p>
 
     <p>Diagram here</p>
@@ -1125,12 +1238,11 @@ export const ChordProgressionsSection: React.FunctionComponent<SectionProps> = p
       <li>F moves down a P4 to a C</li>
     </ul>
 
-    <p>Contrast this with an example of good voice leading, where V7 is in 2nd inversion, and I is in root position.</p>
+    <p>Contrast this with a better example of voice leading, where V7 is in 2nd inversion and I is in root position, allowing for small movements between the voices in each chord:</p>
     
     <p>Diagram here</p>
 
     <p>You can hear that this voicing is much smoother. In this voicing, the voices move much less:</p>
-
     <ul>
       <li>D moves down a M2 to a C</li>
       <li>F moves down a m2 to an E</li>
@@ -1138,10 +1250,9 @@ export const ChordProgressionsSection: React.FunctionComponent<SectionProps> = p
       <li>B moves up a m2 to a C</li>
     </ul>
 
-    <p>Smooth voice leading is enough to make a chord progression work, even without strong dominant - tonic movement.</p>
-
+    <NoteText>Large jumps in the bass voice (the lowest notes) of chords are sometimes acceptable, as they are more pleasing to the ear than large jumps with other chord voices. The example below illustrates this: both the V7 chord and the I chord are in root position, and the bass voice jumps down by a P5, but the chord progression still sounds good.</NoteText>
     <p>TODO: diagram</p>
-    
+
     <BecomeAPatronSection />
 
     <SubSectionTitle>Exercises</SubSectionTitle>

@@ -105,14 +105,15 @@ export class PianoKeyboardMetrics {
   }
 }
 
-export function renderPianoKeyboardNoteNames(metrics: PianoKeyboardMetrics, useSharps?: boolean, showLetterPredicate?: (pitch: Pitch) => boolean): JSX.Element {
+export function renderPianoKeyboardKeyLabels(metrics: PianoKeyboardMetrics, useSharps?: boolean, getLabels?: (pitch: Pitch) => Array<string> | null): JSX.Element {
   let texts = new Array<JSX.Element>(metrics.keyCount);
 
   for (let keyIndex = 0; keyIndex < metrics.keyCount; keyIndex++) {
     const midiNumber = metrics.lowestPitch.midiNumber + keyIndex;
     const pitch = Pitch.createFromMidiNumber(midiNumber, (useSharps !== undefined) ? useSharps : true);
-
-    if (showLetterPredicate && !showLetterPredicate(pitch)) {
+    
+    const labels = getLabels ? getLabels(pitch) : null;
+    if (!labels || (labels.length === 0)) {
       continue;
     }
 
@@ -121,37 +122,45 @@ export function renderPianoKeyboardNoteNames(metrics: PianoKeyboardMetrics, useS
       fontSize: `${fontSize}px`,
       fill: pitch.isWhiteKey ? "black" : "white",
       fontWeight: "bold",
+      textAnchor: "middle",
       pointerEvents: "none"
     };
-    const textXOffset = -(0.3 * fontSize);
     const textYOffset = 0.3 * fontSize;
 
     const highlightedNoteX = pitch.isWhiteKey
       ? metrics.keyLeftXs[keyIndex] + (metrics.whiteKeyWidth / 2)
-      : metrics.keyLeftXs[keyIndex] + (0.3 * metrics.blackKeyWidth);
+      : metrics.keyLeftXs[keyIndex] + (metrics.blackKeyWidth / 2);
     const highlightedNoteY = pitch.isWhiteKey
       ? (0.75 * metrics.whiteKeyHeight)
       : (metrics.blackKeyHeight / 2);
+
+    for (let i = 0; i < labels.length; i++) {
+      texts.push(
+        <text
+          key={pitch.midiNumber}
+          x={highlightedNoteX}
+          y={highlightedNoteY + textYOffset + (i * fontSize)}
+          style={textStyle}>
+          {labels[i]}
+        </text>);
+    }
+  }
+  
+  return <g>{texts}</g>;
+}
+export function renderPianoKeyboardNoteNames(metrics: PianoKeyboardMetrics, useSharps?: boolean, showLetterPredicate?: (pitch: Pitch) => boolean): JSX.Element {
+  return renderPianoKeyboardKeyLabels(metrics, useSharps, pitch => {
+    if (showLetterPredicate && !showLetterPredicate(pitch)) {
+      return null;
+    }
 
     const includeOctaveNumber = false;
     const useSymbols = true;
     const splitPitchString = (useSharps === undefined)
       ? pitch.toOneAccidentalAmbiguousString(includeOctaveNumber, useSymbols).split("/")
       : [pitch.toString(includeOctaveNumber, useSymbols)];
-
-    for (let i = 0; i < splitPitchString.length; i++) {
-      texts.push(
-        <text
-          key={pitch.midiNumber}
-          x={highlightedNoteX + textXOffset}
-          y={highlightedNoteY + textYOffset + (i * fontSize)}
-          style={textStyle}>
-          {splitPitchString[i]}
-        </text>);
-    }
-  }
-  
-  return <g>{texts}</g>;
+    return splitPitchString;
+  });
 }
 
 export interface IPianoKeyboardProps {
