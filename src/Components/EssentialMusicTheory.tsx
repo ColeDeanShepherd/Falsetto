@@ -91,6 +91,7 @@ import { Chord, ChordType } from "../Chord";
 import { DiatonicChordViewer } from './DiatonicChordViewer';
 import { ChordAudioPlayer } from "./ChordAudioPlayer";
 import { ScaleAudioPlayer } from './ScaleAudioPlayer';
+import { PitchesAudioPlayer } from './PitchesAudioPlayer';
 
 const pianoKeyboardStyle = { width: "100%", maxWidth: "400px", height: "auto" };
 const defaultRootPitch = new Pitch(PitchLetter.C, 0, 4);
@@ -519,17 +520,71 @@ const FiveChordDiagram: React.FunctionComponent<{}> = props => {
       </g>
     );
   }
+  function onKeyPress(p: Pitch) {
+    const pitchMidiNumbers = pitches.map(p => p.midiNumber);
+
+    if (Utils.arrayContains(pitchMidiNumbers, p.midiNumber)) {
+      playPitches([p]);
+    }
+  }
 
   return (
-    <PianoKeyboard
-      rect={new Rect2D(new Size2D(width, height), new Vector2D(0, 0))}
-      margin={margin}
-      lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-      highestPitch={new Pitch(PitchLetter.B, 0, 5)}
-      pressedPitches={[]}
-      onKeyPress={p => playPitches([p])}
-      renderExtrasFn={renderLabels}
-      style={style} />
+    <div>
+      <p><PitchesAudioPlayer pitches={pitches} playSequentially={false} /></p>
+      <PianoKeyboard
+        rect={new Rect2D(new Size2D(width, height), new Vector2D(0, 0))}
+        margin={margin}
+        lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
+        highestPitch={new Pitch(PitchLetter.B, 0, 5)}
+        pressedPitches={[]}
+        onKeyPress={onKeyPress}
+        renderExtrasFn={renderLabels}
+        style={style} />
+    </div>
+  );
+};
+const ChordDiagram: React.FunctionComponent<{ pitches: Array<Pitch>, scaleDegreeLabels: Array<string>}> = props => {
+  const width = 600;
+  const height = 200;
+  const margin = new Margin(0, 0, 0, 0);
+  const style = { width: "100%", maxWidth: "300px", height: "auto" };
+  const { pitches, scaleDegreeLabels } = props;
+
+  function renderLabels(metrics: PianoKeyboardMetrics): JSX.Element {
+    const getKeyScaleDegreeLabels = (pitch: Pitch) => {
+      const pitchIndex = pitches.findIndex(p => p.midiNumber === pitch.midiNumber);
+      return (pitchIndex >= 0)
+        ? [scaleDegreeLabels[pitchIndex]]
+        : null;
+    };
+
+    return (
+      <g>
+        {renderPianoKeyboardKeyLabels(metrics, true, getKeyScaleDegreeLabels)}
+      </g>
+    );
+  }
+  function onKeyPress(p: Pitch) {
+    const pitchMidiNumbers = pitches.map(p => p.midiNumber);
+
+    if (Utils.arrayContains(pitchMidiNumbers, p.midiNumber)) {
+      playPitches([p]);
+    }
+  }
+
+  return (
+    <div>
+      <p><PitchesAudioPlayer pitches={pitches} playSequentially={false} /></p>
+      <PianoKeyboard
+        rect={new Rect2D(new Size2D(width, height), new Vector2D(0, 0))}
+        margin={margin}
+        lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
+        highestPitch={new Pitch(PitchLetter.B, 0, 5)}
+        pressedPitches={[]}
+        onKeyPress={onKeyPress}
+        renderExtrasFn={renderLabels}
+        style={style} />
+    </div>
   );
 };
 
@@ -1196,13 +1251,25 @@ export const ChordProgressionsSection: React.FunctionComponent<SectionProps> = p
 
     <p>A particularly common form of the V - I progression is the V7 to I (or, in minor keys, V7 - i) progression. In major keys, the V7 chord consists of scale degrees 5, 7, 2, &amp; 4, and the I chord consists of scale degrees 1, 3, &amp; 5.</p>
     <p>The V7 chord is tense because of the dissonant tritone interval between scale degrees 7 and 4 (the 2nd &amp; 4th notes of the chord) and because it contains the leading tone (the 7th scale degree) which strongly leans towards the root note of the scale:</p>
-    <p><FiveChordDiagram /></p>
-    <p>TODO: diagram</p>
-    <p>The I chord releases the tension because it resolves the tritone by moving the leading tone to the scale's root note, and moving the 4th scale degree down to the 3rd scale degree to form a major 3rd.</p>
-    <p>TODO: diagram</p>
+    
+    <p style={{fontSize: "1.25em", fontWeight: "bold", textDecoration: "underline", textAlign: "center"}}>V7</p>
+    <p style={{textAlign: "center"}}><FiveChordDiagram /></p>
 
-    <p>This dominant - tonic resolution can be used between scale degrees other than 5 &amp; 1 as well. For example, another common chord progression is II - V - I, which works because II is the dominant chord of V (because scale degree 2 is a perfect fifth above scale degree 5), and because V is the dominant chord of I. So, a II - V - I chord progression is essentially two successive V - I chord progressions.</p>
-    <p>TODO: diagram</p>
+    <p>The I chord releases the tension because it resolves the tritone by moving the leading tone to the scale's root note, and moving the 4th scale degree down to the 3rd scale degree to form a major 3rd:</p>
+    
+    <p style={{fontSize: "1.25em", fontWeight: "bold", textDecoration: "underline", textAlign: "center"}}>I</p>
+    <p style={{textAlign: "center"}}><ChordDiagram pitches={[new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5), new Pitch(PitchLetter.E, 0, 5)]} scaleDegreeLabels={["5", "1", "3"]} /></p>
+
+    <p>This dominant - tonic resolution can be used between scale degrees other than 5 &amp; 1 as well. For example, another common chord progression is II - V - I, which works because II is the dominant chord of V (because scale degree 2 is a perfect fifth above scale degree 5), and because V is the dominant chord of I. So, a II - V - I chord progression is essentially two successive V - I chord progressions:</p>
+    
+    <p style={{fontSize: "1.25em", fontWeight: "bold", textDecoration: "underline", textAlign: "center"}}>ii</p>
+    <p style={{textAlign: "center"}}><ChordDiagram pitches={[new Pitch(PitchLetter.A, 0, 4), new Pitch(PitchLetter.D, 0, 5), new Pitch(PitchLetter.F, 0, 5)]} scaleDegreeLabels={["6", "2", "4"]} /></p>
+    
+    <p style={{fontSize: "1.25em", fontWeight: "bold", textDecoration: "underline", textAlign: "center"}}>V7</p>
+    <p style={{textAlign: "center"}}><ChordDiagram pitches={Chord.fromPitchAndFormulaString(new Pitch(PitchLetter.G, 0, 4), ChordType.Dom7.formulaString).pitches} scaleDegreeLabels={["5", "7", "2", "4"]} /></p>
+    
+    <p style={{fontSize: "1.25em", fontWeight: "bold", textDecoration: "underline", textAlign: "center"}}>I</p>
+    <p style={{textAlign: "center"}}><ChordDiagram pitches={[new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5), new Pitch(PitchLetter.E, 0, 5)]} scaleDegreeLabels={["1", "5", "1", "3"]} /></p>
 
     <p>Just about every chord progression there is can be analyzed in terms of V - I progressions when combined with the next important concept: chord substitution.</p>
 
