@@ -6,23 +6,23 @@ import { Chord, ChordType } from '../Chord';
 import { PitchesAudioPlayer } from './PitchesAudioPlayer';
 import { Pitch } from '../Pitch';
 import { PitchLetter } from '../PitchLetter';
-import { Scale } from '../Scale';
+import { ScaleType } from '../Scale';
 import { validSharpKeyPitches, validNaturalKeyPitches, validFlatKeyPitches } from '../Key';
 
 export const defaultScales = [
-  Scale.Ionian,
-  Scale.Dorian,
-  Scale.Phrygian,
-  Scale.Lydian,
-  Scale.Mixolydian,
-  Scale.Aeolian,
-  Scale.Locrian,
-  Scale.MelodicMinor,
-  Scale.HarmonicMinor
+  ScaleType.Ionian,
+  ScaleType.Dorian,
+  ScaleType.Phrygian,
+  ScaleType.Lydian,
+  ScaleType.Mixolydian,
+  ScaleType.Aeolian,
+  ScaleType.Locrian,
+  ScaleType.MelodicMinor,
+  ScaleType.HarmonicMinor
 ];
 
 export interface IDiatonicChordViewerProps {
-  scales?: Array<Scale>;
+  scales?: Array<ScaleType>;
 }
 export interface IDiatonicChordViewerState {
   rootPitch: Pitch;

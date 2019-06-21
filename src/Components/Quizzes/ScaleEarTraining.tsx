@@ -9,7 +9,7 @@ import { Pitch, pitchRange } from "../../Pitch";
 import { PitchLetter } from "../../PitchLetter";
 import { Chord } from "../../Chord";
 import { playPitchesSequentially } from "../../Piano";
-import { scales } from "../../Scale";
+import { scaleTypes } from "../../Scale";
 
 const minPitch = new Pitch(PitchLetter.C, -1, 2);
 const maxPitch = new Pitch(PitchLetter.C, 1, 6);
@@ -63,7 +63,7 @@ export function configDataToEnabledQuestionIds(configData: IConfigData): Array<n
   let i = 0;
 
   for (const rootPitch of rootPitches) {
-    for (const scale of scales) {
+    for (const scale of scaleTypes) {
       const scaleType = scale.type;
       if (Utils.arrayContains(configData.enabledScaleTypes, scaleType)) {
         newEnabledFlashCardIndices.push(i);
@@ -88,11 +88,11 @@ export class ScaleNotesFlashCardMultiSelect extends React.Component<IScaleNotesF
     super(props);
 
     this.state = {
-      enabledScaleTypes: scales.map(c => c.type)
+      enabledScaleTypes: scaleTypes.map(c => c.type)
     };
   }
   public render(): JSX.Element {
-    const scaleTypeCheckboxTableRows = scales
+    const scaleTypeCheckboxTableRows = scaleTypes
       .map((scale, i) => {
         const isChecked = this.props.configData.enabledScaleTypes.indexOf(scale.type) >= 0;
         const isEnabled = !isChecked || (this.props.configData.enabledScaleTypes.length > 1);
@@ -152,7 +152,7 @@ export function createFlashCards(): Array<FlashCard> {
   const flashCards = new Array<FlashCard>();
 
   for (const rootPitch of rootPitches) {
-    for (const scale of scales) {
+    for (const scale of scaleTypes) {
       const formulaString = scale.formulaString + " 8";
 
       const pitches = Chord.fromPitchAndFormulaString(rootPitch, formulaString)
@@ -189,7 +189,7 @@ export function createFlashCardGroup(): FlashCardGroup {
   };
 
   const initialConfigData: IConfigData = {
-    enabledScaleTypes: scales
+    enabledScaleTypes: scaleTypes
       .filter((_, scaleIndex) => scaleIndex <= 8)
       .map(scale => scale.type)
   };

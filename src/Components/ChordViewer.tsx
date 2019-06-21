@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { ScaleViewer } from "./ScaleViewer";
-import { Scale } from '../Scale';
+import { ScaleType } from '../Scale';
 import { ChordType } from '../Chord';
 
 export interface IChordViewerProps {
@@ -22,7 +22,7 @@ export class ChordViewer extends React.Component<IChordViewerProps, {}> {
       : true;
 
     const scales = chords
-      .map(c => new Scale(c.name, c.pitchIntegers, c.formulaString));
+      .map(c => new ScaleType(c.name, c.pitchIntegers, c.formulaString));
     return <ScaleViewer
       scales={scales}
       title={title}

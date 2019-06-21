@@ -5,7 +5,7 @@ import * as Utils from "../../Utils";
 import { Vector2D } from '../../Vector2D';
 import { Size2D } from "../../Size2D";
 import { Rect2D } from '../../Rect2D';
-import { scales } from "../../Scale";
+import { scaleTypes } from "../../Scale";
 import { PianoKeyboard } from "../PianoKeyboard";
 import { FlashCard, FlashCardSide } from "../../FlashCard";
 import { FlashCardGroup } from "../../FlashCardGroup";
@@ -29,7 +29,7 @@ export function configDataToEnabledQuestionIds(configData: IConfigData): Array<n
   let i = 0;
 
   for (const rootPitchStr of rootPitchStrs) {
-    for (const scale of scales) {
+    for (const scale of scaleTypes) {
       const scaleType = scale.type;
       if (
         Utils.arrayContains(configData.enabledRootPitches, rootPitchStr) &&
@@ -80,7 +80,7 @@ export class GuitarScalesFlashCardMultiSelect extends React.Component<IGuitarSca
       </Table>
     );
 
-    const scaleTypeCheckboxTableRows = scales
+    const scaleTypeCheckboxTableRows = scaleTypes
       .map((scale, i) => {
         const isChecked = this.props.configData.enabledScaleTypes.indexOf(scale.type) >= 0;
         const isEnabled = !isChecked || (this.props.configData.enabledScaleTypes.length > 1);
@@ -236,7 +236,7 @@ export function createFlashCardGroup(): FlashCardGroup {
 
   const initialConfigData: IConfigData = {
     enabledRootPitches: rootPitchStrs.slice(),
-    enabledScaleTypes: scales
+    enabledScaleTypes: scaleTypes
       .filter((_, scaleIndex) => scaleIndex <= 8)
       .map(scale => scale.type)
   };
@@ -257,7 +257,7 @@ export function createFlashCards(): FlashCard[] {
       const halfStepsFromC = Utils.mod(i - 4, 12);
       const rootPitch = Pitch.createFromMidiNumber((new Pitch(PitchLetter.C, 0, 4)).midiNumber + halfStepsFromC);
       
-      return scales.map(scale => {
+      return scaleTypes.map(scale => {
         const formulaString = scale.formulaString + " 8";
         const formulaStringParts = scale.formulaString.split(" ");
         const pitches = Chord.fromPitchAndFormulaString(rootPitch, formulaString)
@@ -294,7 +294,7 @@ export function renderAnswerSelect(
 ) {
   if (!areFlashCardsInverted) {
     const correctAnswer = flashCard.backSide.renderFn as string;
-    const activeScales = scales
+    const activeScales = scaleTypes
       .filter((_, i) => Utils.arrayContains(enabledFlashCardIndices, i));
     return <ScaleAnswerSelect key={correctAnswer} scales={activeScales} correctAnswer={correctAnswer} onAnswer={onAnswer} />;
   } else {

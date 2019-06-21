@@ -84,7 +84,7 @@ import { Vector2D } from '../Vector2D';
 import { Size2D } from '../Size2D';
 import { Margin } from '../Margin';
 import { NavLink } from 'react-router-dom';
-import { Scale } from '../Scale';
+import { ScaleType } from '../Scale';
 import { doesKeyUseSharps } from '../Key';
 import { PianoScaleDronePlayer } from './PianoScaleDronePlayer';
 import { Chord, ChordType } from "../Chord";
@@ -259,7 +259,7 @@ function renderIntervalLabel(metrics: PianoKeyboardMetrics, leftPitch: Pitch, ri
   );
 }
 
-const PianoScaleFormulaDiagram: React.FunctionComponent<{ scale: Scale }> = props => {
+const PianoScaleFormulaDiagram: React.FunctionComponent<{ scale: ScaleType }> = props => {
   const width = 300;
   const height = 200;
   const margin = new Margin(0, 50, 0, 0);
@@ -507,7 +507,7 @@ const FiveChordDiagram: React.FunctionComponent<{}> = props => {
     const getKeyScaleDegreeLabels = (pitch: Pitch) => {
       const pitchIndex = pitches.findIndex(p => p.midiNumber === pitch.midiNumber);
       return (pitchIndex >= 0)
-        ? [scaleDegreeLabels[pitchIndex]]
+        ? [scaleDegreeLabels[pitchIndex], pitch.toOneAccidentalAmbiguousString(false)]
         : null;
     };
 
@@ -543,18 +543,33 @@ const FiveChordDiagram: React.FunctionComponent<{}> = props => {
     </div>
   );
 };
-const ChordDiagram: React.FunctionComponent<{ pitches: Array<Pitch>, scaleDegreeLabels: Array<string>}> = props => {
+const ChordDiagram: React.FunctionComponent<{ pitches: Array<Pitch>, scaleType: ScaleType, scaleRootPitch: Pitch, canListen?: boolean}> = props => {
+  const canListen = (props.canListen !== undefined) ? props.canListen : true;
+
+  return (
+    <div>
+      {canListen ? <p><PitchesAudioPlayer pitches={props.pitches} playSequentially={false} /></p> : null}
+      {React.createElement(ChordDiagramInternal, props)}
+    </div>
+  );
+}
+const ChordDiagramInternal: React.FunctionComponent<{ pitches: Array<Pitch>, scaleType: ScaleType, scaleRootPitch: Pitch, canListen?: boolean, position?: Vector2D, lowestPitch?: Pitch }> = props => {
   const width = 600;
   const height = 200;
   const margin = new Margin(0, 0, 0, 0);
   const style = { width: "100%", maxWidth: "300px", height: "auto" };
-  const { pitches, scaleDegreeLabels } = props;
+  const { pitches, scaleType, scaleRootPitch } = props;
+  const scalePitches = scaleType.getPitches(scaleRootPitch);
+  const scaleDegreeLabels = pitches
+    .map(p => 1 + scalePitches.findIndex(sp => sp.midiNumberNoOctave == p.midiNumberNoOctave));
+  const position = (props.position !== undefined) ? props.position : new Vector2D(0, 0);
+  const lowestPitch = (props.lowestPitch !== undefined) ? props.lowestPitch : new Pitch(PitchLetter.C, 0, 4);
 
   function renderLabels(metrics: PianoKeyboardMetrics): JSX.Element {
     const getKeyScaleDegreeLabels = (pitch: Pitch) => {
       const pitchIndex = pitches.findIndex(p => p.midiNumber === pitch.midiNumber);
       return (pitchIndex >= 0)
-        ? [scaleDegreeLabels[pitchIndex]]
+        ? [scaleDegreeLabels[pitchIndex].toString(), pitch.toOneAccidentalAmbiguousString(false)]
         : null;
     };
 
@@ -573,18 +588,65 @@ const ChordDiagram: React.FunctionComponent<{ pitches: Array<Pitch>, scaleDegree
   }
 
   return (
-    <div>
-      <p><PitchesAudioPlayer pitches={pitches} playSequentially={false} /></p>
-      <PianoKeyboard
-        rect={new Rect2D(new Size2D(width, height), new Vector2D(0, 0))}
-        margin={margin}
-        lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-        highestPitch={new Pitch(PitchLetter.B, 0, 5)}
-        pressedPitches={[]}
-        onKeyPress={onKeyPress}
-        renderExtrasFn={renderLabels}
-        style={style} />
-    </div>
+    <PianoKeyboard
+      rect={new Rect2D(new Size2D(width, height), position)}
+      margin={margin}
+      lowestPitch={lowestPitch}
+      highestPitch={new Pitch(PitchLetter.B, 0, 5)}
+      pressedPitches={[]}
+      onKeyPress={onKeyPress}
+      renderExtrasFn={renderLabels}
+      style={style} />
+  );
+};
+
+const ChordTransitionDiagram: React.FunctionComponent<{ chord1Pitches: Array<Pitch>, chord2Pitches: Array<Pitch>, scaleType: ScaleType, scaleRootPitch: Pitch, lowestPitch?: Pitch }> = props => {
+  const width = 600;
+  const height = 500;
+  const chordDiagram2Position = new Vector2D(0, 300);
+  const style = { width: "100%", maxWidth: "300px", height: "auto" };
+  const lowestPitch = (props.lowestPitch !== undefined) ? props.lowestPitch : new Pitch(PitchLetter.C, 0, 4);
+  
+  const pianoMetrics = new PianoKeyboardMetrics(width, 200, lowestPitch, new Pitch(PitchLetter.B, 0, 5));
+  const arrowPianoPadding = 15;
+
+  const arrows = props.chord1Pitches
+    .map((p1, i) => {
+      const p2 = props.chord2Pitches[i];
+
+      const p1Pos = new Vector2D(
+        pianoMetrics.getKeyRect(p1).center.x,
+        pianoMetrics.height - arrowPianoPadding
+      );
+      const arrowTipPos = new Vector2D(
+        pianoMetrics.getKeyRect(p2).center.x,
+        chordDiagram2Position.y + arrowPianoPadding
+      );
+      const p2Pos = p1Pos.plus(arrowTipPos.minus(p1Pos).plusLength(-8));
+
+      return (
+        <line
+          x1={p1Pos.x} y1={p1Pos.y}
+          x2={p2Pos.x} y2={p2Pos.y}
+          stroke="red" strokeWidth={4}
+          marker-end="url(#arrow)" />
+      );
+    });
+
+  return (
+    <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} style={style}>
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5"
+            markerWidth="6" markerHeight="6"
+            orient="auto-start-reverse">
+          <path d="M 0 2 L 10 5 L 0 8 z" fill="red" />
+        </marker>
+      </defs>.
+
+      <ChordDiagramInternal pitches={props.chord1Pitches} scaleType={props.scaleType} scaleRootPitch={props.scaleRootPitch} canListen={false} lowestPitch={props.lowestPitch} />
+      <ChordDiagramInternal pitches={props.chord2Pitches} scaleType={props.scaleType} scaleRootPitch={props.scaleRootPitch} canListen={false} position={chordDiagram2Position} lowestPitch={props.lowestPitch} />
+      {arrows}
+    </svg>
   );
 };
 
@@ -907,7 +969,7 @@ export const ScalesAndModesSection: React.FunctionComponent<SectionProps> = prop
     <SubSectionTitle>The Major Scale</SubSectionTitle>
     <p>One of the most common scales, upon which other scales are often built by modifying notes, is the <Term>major scale</Term>. The <Term>major scale</Term> is a 7 note scale which can be built using the formula: "R W W H W W W", where "R" denotes the root name, "W" means the next note is a whole step higher, and "H" means the next note is a half step higher.</p>
     <p>So, a C major scale, a scale with a <Term>root note</Term> of C following the major scale formula, is comprised of the notes: C, D, E, F, G, A, B.</p>
-    <p style={{ textAlign: "center" }}><PianoScaleFormulaDiagram scale={Scale.Ionian} /></p>
+    <p style={{ textAlign: "center" }}><PianoScaleFormulaDiagram scale={ScaleType.Ionian} /></p>
 
     <NoteText>Though the notes of scales are often given in ascending order, they can be played in any order or repeated any number of times and still be considered the same scale. What makes a scale distinct is simply the set of notes it contains, not the order or the count of the notes.</NoteText>
 
@@ -915,7 +977,7 @@ export const ScalesAndModesSection: React.FunctionComponent<SectionProps> = prop
     <p>C Major scale formula: R, M2, M3, P4, P5, M6, M7</p>
 
     <p>Major scales often sound "happy" or "bright". Try playing the piano keyboard below to hear each note of the C major scale at the same time as the root note to internalize the sound of the major scale yourself.</p>
-    <p style={{ textAlign: "center" }}><PianoScaleDronePlayer scale={Scale.Ionian} rootPitch={new Pitch(PitchLetter.C, 0, 4)} style={pianoKeyboardStyle} /></p>
+    <p style={{ textAlign: "center" }}><PianoScaleDronePlayer scale={ScaleType.Ionian} rootPitch={new Pitch(PitchLetter.C, 0, 4)} style={pianoKeyboardStyle} /></p>
     
     <SubSectionTitle>Scale Degrees</SubSectionTitle>
     <p>Each note in a scale is sometimes called a <Term>scale degree</Term>, with the first note (the <Term>root note</Term>) called the 1st scale degree (C in C major), the next note above that called the 2nd scale degree (D in C major), the next note above that called the 3rd scale degree (E in C major), and so on.</p>
@@ -923,7 +985,7 @@ export const ScalesAndModesSection: React.FunctionComponent<SectionProps> = prop
     <p>The <Term>natural minor scale</Term> (commonly referred to simply as the <Term>minor scale</Term>) is another common scale with a "darker" sound. Relative to the major scale, the natural minor scale has the following formula: 1 2 b3 4 5 b6 b7, meaning the natural minor scale is a major scale with the 3rd, 6th, and 7th scale degrees flattened. So, a C natural minor scale is comprised of the notes C, D, Eb, F, G, Ab, Bb.</p>
     
     <p>Try playing the piano keyboard below to get a feel for the natural minor scale.</p>
-    <p style={{ textAlign: "center" }}><PianoScaleDronePlayer scale={Scale.Aeolian} rootPitch={new Pitch(PitchLetter.C, 0, 4)} style={pianoKeyboardStyle} /></p>
+    <p style={{ textAlign: "center" }}><PianoScaleDronePlayer scale={ScaleType.Aeolian} rootPitch={new Pitch(PitchLetter.C, 0, 4)} style={pianoKeyboardStyle} /></p>
 
     <SubSectionTitle>Modes</SubSectionTitle>
     <p>The <Term>modes</Term> of a scale are the different scales you get when you start on different notes of a "base" scale, and consider those starting notes the new <Term>root notes</Term>.</p>
@@ -944,49 +1006,49 @@ export const ScalesAndModesSection: React.FunctionComponent<SectionProps> = prop
           <TableCell>C D E F G A B</TableCell>
           <TableCell>Ionian (a.k.a "Major")</TableCell>
           <TableCell>1 2 3 4 5 6 7</TableCell>
-          <TableCell><ScaleAudioPlayer scale={Scale.Ionian} rootPitch={defaultRootPitch} /></TableCell>
+          <TableCell><ScaleAudioPlayer scale={ScaleType.Ionian} rootPitch={defaultRootPitch} /></TableCell>
         </TableRow>
         <TableRow>
           <TableCell>D</TableCell>
           <TableCell>D E F G A B C</TableCell>
           <TableCell>Dorian</TableCell>
           <TableCell>1 2 b3 4 5 6 b7</TableCell>
-          <TableCell><ScaleAudioPlayer scale={Scale.Dorian} rootPitch={defaultRootPitch} /></TableCell>
+          <TableCell><ScaleAudioPlayer scale={ScaleType.Dorian} rootPitch={defaultRootPitch} /></TableCell>
         </TableRow>
         <TableRow>
           <TableCell>E</TableCell>
           <TableCell>E F G A B C D</TableCell>
           <TableCell>Phrygian</TableCell>
           <TableCell>1 b2 b3 4 5 b6 b7</TableCell>
-          <TableCell><ScaleAudioPlayer scale={Scale.Phrygian} rootPitch={defaultRootPitch} /></TableCell>
+          <TableCell><ScaleAudioPlayer scale={ScaleType.Phrygian} rootPitch={defaultRootPitch} /></TableCell>
         </TableRow>
         <TableRow>
           <TableCell>F</TableCell>
           <TableCell>F G A B C D E</TableCell>
           <TableCell>Lydian</TableCell>
           <TableCell>1 2 3 #4 5 6 7</TableCell>
-          <TableCell><ScaleAudioPlayer scale={Scale.Lydian} rootPitch={defaultRootPitch} /></TableCell>
+          <TableCell><ScaleAudioPlayer scale={ScaleType.Lydian} rootPitch={defaultRootPitch} /></TableCell>
         </TableRow>
         <TableRow>
           <TableCell>G</TableCell>
           <TableCell>G A B C D E F</TableCell>
           <TableCell>Mixolydian</TableCell>
           <TableCell>1 2 3 4 5 6 b7</TableCell>
-          <TableCell><ScaleAudioPlayer scale={Scale.Mixolydian} rootPitch={defaultRootPitch} /></TableCell>
+          <TableCell><ScaleAudioPlayer scale={ScaleType.Mixolydian} rootPitch={defaultRootPitch} /></TableCell>
         </TableRow>
         <TableRow>
           <TableCell>A</TableCell>
           <TableCell>A B C D E F G</TableCell>
           <TableCell>Aeolian (a.k.a "Natural Minor")</TableCell>
           <TableCell>1 2 b3 4 5 b6 b7</TableCell>
-          <TableCell><ScaleAudioPlayer scale={Scale.Aeolian} rootPitch={defaultRootPitch} /></TableCell>
+          <TableCell><ScaleAudioPlayer scale={ScaleType.Aeolian} rootPitch={defaultRootPitch} /></TableCell>
         </TableRow>
         <TableRow>
           <TableCell>B</TableCell>
           <TableCell>B C D E F G A</TableCell>
           <TableCell>Locrian</TableCell>
           <TableCell>1 b2 b3 4 b5 b6 b7</TableCell>
-          <TableCell><ScaleAudioPlayer scale={Scale.Locrian} rootPitch={defaultRootPitch} /></TableCell>
+          <TableCell><ScaleAudioPlayer scale={ScaleType.Locrian} rootPitch={defaultRootPitch} /></TableCell>
         </TableRow>
       </TableBody>
     </Table>
@@ -1257,31 +1319,41 @@ export const ChordProgressionsSection: React.FunctionComponent<SectionProps> = p
 
     <p>The I chord releases the tension because it resolves the tritone by moving the leading tone to the scale's root note, and moving the 4th scale degree down to the 3rd scale degree to form a major 3rd:</p>
     
-    <p style={{fontSize: "1.25em", fontWeight: "bold", textDecoration: "underline", textAlign: "center"}}>I</p>
-    <p style={{textAlign: "center"}}><ChordDiagram pitches={[new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5), new Pitch(PitchLetter.E, 0, 5)]} scaleDegreeLabels={["5", "1", "3"]} /></p>
+    <p style={{fontSize: "1.25em", fontWeight: "bold", textDecoration: "underline", textAlign: "center"}}>I (2nd inversion)</p>
+    <p style={{textAlign: "center"}}><ChordDiagram pitches={[new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5), new Pitch(PitchLetter.E, 0, 5)]} scaleType={ScaleType.Ionian} scaleRootPitch={new Pitch(PitchLetter.C, 0, 4)} /></p>
 
     <p>This dominant - tonic resolution can be used between scale degrees other than 5 &amp; 1 as well. For example, another common chord progression is II - V - I, which works because II is the dominant chord of V (because scale degree 2 is a perfect fifth above scale degree 5), and because V is the dominant chord of I. So, a II - V - I chord progression is essentially two successive V - I chord progressions:</p>
     
-    <p style={{fontSize: "1.25em", fontWeight: "bold", textDecoration: "underline", textAlign: "center"}}>ii</p>
-    <p style={{textAlign: "center"}}><ChordDiagram pitches={[new Pitch(PitchLetter.A, 0, 4), new Pitch(PitchLetter.D, 0, 5), new Pitch(PitchLetter.F, 0, 5)]} scaleDegreeLabels={["6", "2", "4"]} /></p>
+    <p style={{fontSize: "1.25em", fontWeight: "bold", textDecoration: "underline", textAlign: "center"}}>ii (2nd inversion)</p>
+    <p style={{textAlign: "center"}}><ChordDiagram pitches={[new Pitch(PitchLetter.A, 0, 4), new Pitch(PitchLetter.D, 0, 5), new Pitch(PitchLetter.F, 0, 5)]} scaleType={ScaleType.Ionian} scaleRootPitch={new Pitch(PitchLetter.C, 0, 4)} /></p>
     
     <p style={{fontSize: "1.25em", fontWeight: "bold", textDecoration: "underline", textAlign: "center"}}>V7</p>
-    <p style={{textAlign: "center"}}><ChordDiagram pitches={Chord.fromPitchAndFormulaString(new Pitch(PitchLetter.G, 0, 4), ChordType.Dom7.formulaString).pitches} scaleDegreeLabels={["5", "7", "2", "4"]} /></p>
+    <p style={{textAlign: "center"}}><ChordDiagram pitches={Chord.fromPitchAndFormulaString(new Pitch(PitchLetter.G, 0, 4), ChordType.Dom7.formulaString).pitches} scaleType={ScaleType.Ionian} scaleRootPitch={new Pitch(PitchLetter.C, 0, 4)} /></p>
     
     <p style={{fontSize: "1.25em", fontWeight: "bold", textDecoration: "underline", textAlign: "center"}}>I</p>
-    <p style={{textAlign: "center"}}><ChordDiagram pitches={[new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5), new Pitch(PitchLetter.E, 0, 5)]} scaleDegreeLabels={["1", "5", "1", "3"]} /></p>
+    <p style={{textAlign: "center"}}><ChordDiagram pitches={[new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5), new Pitch(PitchLetter.E, 0, 5)]} scaleType={ScaleType.Ionian} scaleRootPitch={new Pitch(PitchLetter.C, 0, 4)} /></p>
 
     <p>Just about every chord progression there is can be analyzed in terms of V - I progressions when combined with the next important concept: chord substitution.</p>
 
     <SectionTitle>Chord Substitution</SectionTitle>
     <p><Term>Chord substitution</Term> is simply replacing a chord in a chord progression with a similar chord. Chords are considered "similar" if they share many notes or if they resolve in similar ways to the next chord in a chord progression.</p>
-    <p>The simplest chord substitutions change only one note in a chord. A common way to change one note in a diatonic chord is to instead use a diatonic chord up or down a 3rd. In C major, for example, the I triad consists of the notes C, E, &amp; G. The iii triad, a 3rd up from I, consists of the notes E, G, &amp; B, which shares the E and the G with I triad. The vi triad, a 3rd down from I, consists of the notes A, C, &amp; E, which shares the C and the E with the I triad. So, both the iii chord and the vi chord can substitute for the I chord.</p>
-    <p>TODO: diagram</p>
-    <p>The same can be applied to the ii &amp; IV chords, the V &amp; vii chords, and so on.</p>
+    <p>The simplest chord substitutions change only one note in a chord. A common way to change one note in a diatonic chord is to instead use a diatonic chord up or down a 3rd.</p>
+    <p>In C major, for example, the I triad consists of the notes C, E, &amp; G:</p>
+    <p style={{fontSize: "1.25em", fontWeight: "bold", textDecoration: "underline", textAlign: "center"}}>I</p>
+    <p style={{textAlign: "center"}}><ChordDiagram pitches={[new Pitch(PitchLetter.C, 0, 5), new Pitch(PitchLetter.E, 0, 5), new Pitch(PitchLetter.G, 0, 5)]} scaleType={ScaleType.Ionian} scaleRootPitch={new Pitch(PitchLetter.C, 0, 4)} /></p>
+
+    <p>The iii triad, a 3rd up from I, consists of the notes E, G, &amp; B, which shares the E and the G with I triad:</p>
+    <p style={{fontSize: "1.25em", fontWeight: "bold", textDecoration: "underline", textAlign: "center"}}>iii (2nd inversion)</p>
+    <p style={{textAlign: "center"}}><ChordDiagram pitches={[new Pitch(PitchLetter.B, 0, 4), new Pitch(PitchLetter.E, 0, 5), new Pitch(PitchLetter.G, 0, 5)]} scaleType={ScaleType.Ionian} scaleRootPitch={new Pitch(PitchLetter.C, 0, 4)} /></p>
+
+    <p>The vi triad, a 3rd down from I, consists of the notes A, C, &amp; E, which shares the C and the E with the I triad:</p>
+    <p style={{fontSize: "1.25em", fontWeight: "bold", textDecoration: "underline", textAlign: "center"}}>vi (1st inversion)</p>
+    <p style={{textAlign: "center"}}><ChordDiagram pitches={[new Pitch(PitchLetter.C, 0, 5), new Pitch(PitchLetter.E, 0, 5), new Pitch(PitchLetter.A, 0, 5)]} scaleType={ScaleType.Ionian} scaleRootPitch={new Pitch(PitchLetter.C, 0, 4)} /></p>
+
+    <p>Because both the iii chord and the vi chord share 2 of 3 notes with the I chord, they can both substitute for the I chord. The same can be applied other chords that are a 3rd apart, like the ii &amp; IV chords, the V &amp; vii chords, and so on.</p>
+
     <p>You can create more complex chord substitutions changing more than one note in a chord, adding notes to a chord (forming extended chords), or removing notes from a chord.</p>
     <NoteText>You do not always have to <strong>replace</strong> chords with similar chords in chord progressions &mdash; you can also <strong>add</strong> additional chords to chord progressions instead.</NoteText>
-
-    <p>TODO: give more complicated chord progression, simplify to tonic/dominant, audio demo</p>
 
     <SubSectionTitle>Important Chord Tones</SubSectionTitle>
     <p>One thing to keep in mind when using chord substitution is that some chord tones are more important than others in giving a chord a specific sound and harmonic function, and these important chord tones may be worth preserving in substitute chords.</p>
@@ -1292,11 +1364,7 @@ export const ChordProgressionsSection: React.FunctionComponent<SectionProps> = p
     <SectionTitle>Voice Leading</SectionTitle>
     <p>The last fundamental concept you must know to understand and compose effective chord progressions is <Term>voice leading</Term>, which is the arrangement of the notes in chords (called "voices") to create smooth, flowing transitions between chords. Good voice leading can make just about any set of chords work together in a chord progression.</p>
     <p><strong>The most important rule of voice leading is to use the smallest possible movements when moving the voices of one chord to the next chord.</strong></p>
-    <p>Take the V7 - I chord progression in C major (G7 - C) as an example. One way we can voice these chords is by playing both of them in root position, with the C chord below the G7 chord.</p>
-
-    <p>Diagram here</p>
-
-    <p>The V7 chord contains the notes G, B, D, &amp; F, and the C major chord contains the notes C, E, &amp; G. These root position chords are an example of ineffective voice leading, because each voice in the G7 chord has to jump a long way to the corresponding voice in the C chord:</p>
+    <p>Take the V7 - I chord progression in C major (G7 - C) as an example. One way we can voice these chords is by playing both of them in root position, with the C chord below the G7 chord. These root position chords are an example of ineffective voice leading, because each voice in the G7 chord has to jump a long way to the corresponding voice in the C chord:</p>
 
     <ul>
       <li>G moves down a P5 to C</li>
@@ -1304,22 +1372,36 @@ export const ChordProgressionsSection: React.FunctionComponent<SectionProps> = p
       <li>D moves down a P5 to a G</li>
       <li>F moves down a P4 to a C</li>
     </ul>
+    
+    <p style={{textAlign: "center"}}>
+      <ChordTransitionDiagram
+        chord1Pitches={Chord.fromPitchAndFormulaString(new Pitch(PitchLetter.G, 0, 4), ChordType.Dom7.formulaString).pitches}
+        chord2Pitches={[new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]}
+        scaleType={ScaleType.Ionian}
+        scaleRootPitch={new Pitch(PitchLetter.C, 0, 4)} />
+    </p>
 
     <p>Contrast this with a better example of voice leading, where V7 is in 2nd inversion and I is in root position, allowing for small movements between the voices in each chord:</p>
-    
-    <p>Diagram here</p>
-
-    <p>You can hear that this voicing is much smoother. In this voicing, the voices move much less:</p>
     <ul>
       <li>D moves down a M2 to a C</li>
       <li>F moves down a m2 to an E</li>
       <li>G does not move at all</li>
       <li>B moves up a m2 to a C</li>
     </ul>
+    
+    <p style={{textAlign: "center"}}>
+      <ChordTransitionDiagram
+        chord1Pitches={[new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.B, 0, 4)]}
+        chord2Pitches={[new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]}
+        scaleType={ScaleType.Ionian}
+        scaleRootPitch={new Pitch(PitchLetter.C, 0, 4)} />
+    </p>
+
+    <p>You can hear (TODO: listening) that this voicing is much smoother, because the individual chord voices move small distances.</p>
 
     <NoteText>Large jumps in the bass voice (the lowest notes) of chords are sometimes acceptable, as they are more pleasing to the ear than large jumps with other chord voices. The example below illustrates this: both the V7 chord and the I chord are in root position, and the bass voice jumps down by a P5, but the chord progression still sounds good.</NoteText>
-    <p>TODO: diagram</p>
-
+    <p>TODO: example of note</p>
+    
     <BecomeAPatronSection />
 
     <SubSectionTitle>Exercises</SubSectionTitle>

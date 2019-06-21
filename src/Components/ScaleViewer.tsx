@@ -5,7 +5,7 @@ import { Vector2D } from '../Vector2D';
 import { Size2D } from "../Size2D";
 import { Rect2D } from '../Rect2D';
 import { PitchLetter } from "../PitchLetter";
-import { scales as allScales, Scale } from "../Scale";
+import { scaleTypes as allScales, ScaleType } from "../Scale";
 import { Pitch } from "../Pitch";
 import { Button, Card, CardContent, Typography } from "@material-ui/core";
 import { Chord } from "../Chord";
@@ -44,14 +44,14 @@ const validFlatKeyPitches = [
 
 interface IScaleViewerProps {
   title?: string;
-  scales?: Array<Scale>;
+  scales?: Array<ScaleType>;
   playSimultaneously?: boolean;
   showGuitarFretboard?: boolean;
   isEmbedded?: boolean;
 }
 interface IScaleViewerState {
   rootPitch: Pitch;
-  scale: Scale;
+  scale: ScaleType;
 }
 
 export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewerState> {
@@ -193,7 +193,7 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
     );
   }
 
-  private get scales(): Array<Scale> {
+  private get scales(): Array<ScaleType> {
     return this.props.scales
       ? this.props.scales
       : allScales;
@@ -235,7 +235,7 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
   private onRootPitchClick(rootPitch: Pitch) {
     this.setState({ rootPitch: rootPitch }, this.onScaleChange.bind(this));
   }
-  private onScaleClick(scale: Scale) {
+  private onScaleClick(scale: ScaleType) {
     this.setState({ scale: scale }, this.onScaleChange.bind(this));
   }
 

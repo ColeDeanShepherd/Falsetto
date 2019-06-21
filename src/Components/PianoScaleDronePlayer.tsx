@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import * as Utils from "../Utils";
-import { Scale } from '../Scale';
+import { ScaleType } from '../Scale';
 import { Pitch } from '../Pitch';
 import { playPitches } from '../Piano';
 import { Rect2D } from '../Rect2D';
@@ -11,7 +11,7 @@ import { PitchLetter } from '../PitchLetter';
 import { renderPianoKeyboardNoteNames, PianoKeyboard, PianoKeyboardMetrics } from './PianoKeyboard';
 import { doesKeyUseSharps } from '../Key';
 
-export function onKeyPress(scale: Scale, rootPitch: Pitch, keyPitch: Pitch) {
+export function onKeyPress(scale: ScaleType, rootPitch: Pitch, keyPitch: Pitch) {
   const pitches = scale.getPitches(rootPitch);
   const pitchMidiNumberNoOctaves = pitches.map(p => p.midiNumberNoOctave);
 
@@ -23,14 +23,14 @@ export function onKeyPress(scale: Scale, rootPitch: Pitch, keyPitch: Pitch) {
     }
   }
 }
-export function renderExtrasFn(metrics: PianoKeyboardMetrics, scale: Scale, rootPitch: Pitch): JSX.Element {
+export function renderExtrasFn(metrics: PianoKeyboardMetrics, scale: ScaleType, rootPitch: Pitch): JSX.Element {
   const pitches = scale.getPitches(rootPitch);
   const pitchMidiNumberNoOctaves = pitches.map(p => p.midiNumberNoOctave);
 
   return renderPianoKeyboardNoteNames(metrics, doesKeyUseSharps(rootPitch.letter, rootPitch.signedAccidental), p => Utils.arrayContains(pitchMidiNumberNoOctaves, p.midiNumberNoOctave));
 }
 
-export const PianoScaleDronePlayer: React.FunctionComponent<{ scale: Scale, rootPitch: Pitch, style?: any }> = props => {
+export const PianoScaleDronePlayer: React.FunctionComponent<{ scale: ScaleType, rootPitch: Pitch, style?: any }> = props => {
   return (
     <PianoKeyboard
       rect={new Rect2D(new Size2D(300, 150), new Vector2D(0, 0))}

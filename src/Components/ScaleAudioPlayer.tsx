@@ -1,11 +1,11 @@
 import * as React from "react";
 
 import { Pitch } from '../Pitch';
-import { Scale } from '../Scale';
+import { ScaleType } from '../Scale';
 import { PitchesAudioPlayer } from './PitchesAudioPlayer';
 
 export interface IScaleAudioPlayerProps {
-  scale: Scale;
+  scale: ScaleType;
   rootPitch: Pitch;
 }
 export class ScaleAudioPlayer extends React.Component<IScaleAudioPlayerProps, {}> {
