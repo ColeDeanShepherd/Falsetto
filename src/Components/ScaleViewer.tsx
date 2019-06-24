@@ -10,9 +10,10 @@ import { Pitch } from "../Pitch";
 import { Button, Card, CardContent, Typography } from "@material-ui/core";
 import { Chord } from "../Chord";
 import { PianoKeyboard } from "./PianoKeyboard";
-import { GuitarFretboard, GuitarNote, standardGuitarTuning, renderGuitarFretboardScaleExtras } from "./GuitarFretboard";
+import { GuitarFretboard, renderGuitarFretboardScaleExtras } from "./GuitarFretboard";
 import { playPitchesSequentially, playPitches } from '../Piano';
 import * as PianoScaleDronePlayer from "./PianoScaleDronePlayer";
+import { GuitarScaleViewer } from './Quizzes/GuitarScales';
 
 const validSharpKeyPitches = [
   null,
@@ -45,6 +46,7 @@ const validFlatKeyPitches = [
 interface IScaleViewerProps {
   title?: string;
   scales?: Array<ScaleType>;
+  renderAllScaleShapes: boolean;
   playSimultaneously?: boolean;
   showGuitarFretboard?: boolean;
   isEmbedded?: boolean;
@@ -68,8 +70,6 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
     const title = this.props.title
       ? this.props.title
       : "Scale Viewer";
-    
-    const formulaStringParts = this.state.scale.formulaString.split(" ");
       
     const pitches = Chord.fromPitchAndFormulaString(
       this.state.rootPitch,
@@ -103,6 +103,12 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
     const showGuitarFretboard = (this.props.showGuitarFretboard !== undefined)
       ? this.props.showGuitarFretboard
       : true;
+
+    const guitarRootPitch = new Pitch(
+      this.state.rootPitch.letter,
+      this.state.rootPitch.signedAccidental,
+      this.state.rootPitch.octaveNumber - 2
+    );
 
     return (
       <Card>
@@ -172,19 +178,20 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
                   lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
                   highestPitch={new Pitch(PitchLetter.B, 0, 5)}
                   onKeyPress={onKeyPress}
-                  renderExtrasFn={metrics => PianoScaleDronePlayer.renderExtrasFn(metrics, this.state.scale, this.state.rootPitch)}
+                  renderExtrasFn={metrics => PianoScaleDronePlayer.renderExtrasFn(metrics, pitches, this.state.rootPitch)}
                   style={pianoGuitarStyle}
                 />
               </div>
 
               <div style={{marginTop: "1em"}}>
-                {showGuitarFretboard ? (
-                  <GuitarFretboard
-                    width={guitarSize.width} height={guitarSize.height}
-                    renderExtrasFn={metrics => renderGuitarFretboardScaleExtras(metrics, pitches, formulaStringParts)}
-                    style={pianoGuitarStyle}
-                  />
+                {(showGuitarFretboard && false) ? (
+                  <GuitarScaleViewer
+                    scaleType={this.state.scale}
+                    rootPitch={guitarRootPitch}
+                    size={guitarSize}
+                    renderAllScaleShapes={this.props.renderAllScaleShapes} />
                 ) : null}
+                <p>Guitar scales coming soon!</p>
               </div>
             </div>
           </div>

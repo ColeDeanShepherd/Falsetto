@@ -5,42 +5,121 @@ import * as Utils from "../../Utils";
 import { Vector2D } from '../../Vector2D';
 import { Size2D } from "../../Size2D";
 import { Rect2D } from '../../Rect2D';
-import { scaleTypes } from "../../Scale";
+import { scaleTypes, ScaleType } from "../../Scale";
 import { PianoKeyboard } from "../PianoKeyboard";
 import { FlashCard, FlashCardSide } from "../../FlashCard";
 import { FlashCardGroup } from "../../FlashCardGroup";
 import { AnswerDifficulty } from "../../StudyAlgorithm";
 import { Pitch } from "../../Pitch";
 import { PitchLetter } from "../../PitchLetter";
-import { Chord } from "../../Chord";
-import { GuitarFretboard, renderGuitarFretboardScaleExtras } from "../GuitarFretboard";
+import { Chord, ChordType } from "../../Chord";
+import { GuitarFretboard, renderGuitarFretboardScaleExtras, getStandardGuitarTuning, findGuitarChordShape, renderGuitarFretboardChordExtras } from "../GuitarFretboard";
 import { ScaleAnswerSelect } from "../ScaleAnswerSelect";
+import { get3NotePerStringScaleNotes } from '../GuitarScalesLesson';
 
 const rootPitchStrs = ["Ab", "A", "Bb", "B/Cb", "C", "C#/Db", "D", "Eb", "E", "F", "F#/Gb", "G"];
+const renderAllScaleShapes = false;
+const STRING_COUNT = 6;
 
 interface IConfigData {
   enabledRootPitches: string[];
   enabledScaleTypes: string[];
 }
 
-export function configDataToEnabledQuestionIds(configData: IConfigData): Array<number> {
-  const newEnabledFlashCardIndices = new Array<number>();
+export const GuitarScaleViewer: React.FunctionComponent<{
+  scaleType: ScaleType,
+  rootPitch: Pitch,
+  renderAllScaleShapes: boolean,
+  size: Size2D
+}> = props => {
+  let rootPitch = Pitch.createFromMidiNumber(
+    (new Pitch(PitchLetter.C, 0, 2)).midiNumber + props.rootPitch.midiNumberNoOctave
+  );
 
+  // If the root pitch is below the range of the guitar, add an octave.
+  const guitarLowestNoteMidiNumber = (new Pitch(PitchLetter.E, 0, 2)).midiNumber;
+  if (rootPitch.midiNumber < guitarLowestNoteMidiNumber) {
+    rootPitch.octaveNumber++;
+  }
+
+  const guitarNotes = get3NotePerStringScaleNotes(props.scaleType, rootPitch, STRING_COUNT);
+  const guitarTuning = getStandardGuitarTuning(STRING_COUNT);
+  const maxFretNumber = Utils.arrayMax(guitarNotes
+    .map(gn => gn.getFretNumber(guitarTuning))
+  );
+  const minFretNumber = Math.max(0, maxFretNumber - 11);
+
+  return (
+    <GuitarFretboard
+      width={props.size.width} height={props.size.height}
+      minFretNumber={minFretNumber}
+      renderExtrasFn={metrics => renderGuitarFretboardScaleExtras(metrics, rootPitch, props.scaleType, props.renderAllScaleShapes)}
+    />
+  );
+}
+export const GuitarChordViewer: React.FunctionComponent<{
+  chordType: ChordType,
+  rootPitch: Pitch,
+  size: Size2D
+}> = props => {
+  let rootPitch = Pitch.createFromMidiNumber(
+    (new Pitch(PitchLetter.C, 0, 2)).midiNumber + props.rootPitch.midiNumberNoOctave
+  );
+
+  // If the root pitch is below the range of the guitar, add an octave.
+  const guitarLowestNoteMidiNumber = (new Pitch(PitchLetter.E, 0, 2)).midiNumber;
+  if (rootPitch.midiNumber < guitarLowestNoteMidiNumber) {
+    rootPitch.octaveNumber++;
+  }
+
+  const guitarNotes = findGuitarChordShape(props.chordType, rootPitch, 1, 0, getStandardGuitarTuning(STRING_COUNT));
+  const guitarTuning = getStandardGuitarTuning(STRING_COUNT);
+  const maxFretNumber = Utils.arrayMax(guitarNotes
+    .map(gn => gn.getFretNumber(guitarTuning))
+  );
+  const minFretNumber = Math.max(0, maxFretNumber - 11);
+
+  return (
+    <GuitarFretboard
+      width={props.size.width} height={props.size.height}
+      minFretNumber={minFretNumber}
+      renderExtrasFn={metrics => renderGuitarFretboardChordExtras(metrics, rootPitch, props.chordType)}
+    />
+  );
+}
+
+export function forEachScale(callbackFn: (scaleType: ScaleType, rootPitch: Pitch, rootPitchStr: string, i: number) => void) {
   let i = 0;
+  const guitarLowestNoteMidiNumber = (new Pitch(PitchLetter.E, 0, 2)).midiNumber;
 
-  for (const rootPitchStr of rootPitchStrs) {
-    for (const scale of scaleTypes) {
-      const scaleType = scale.type;
-      if (
-        Utils.arrayContains(configData.enabledRootPitches, rootPitchStr) &&
-        Utils.arrayContains(configData.enabledScaleTypes, scaleType)
-      ) {
-        newEnabledFlashCardIndices.push(i);
-      }
+  for (let rootPitchStrIndex = 0; rootPitchStrIndex < rootPitchStrs.length; rootPitchStrIndex++) {
+    // Compute the root pitch.
+    const halfStepsFromC = Utils.mod(rootPitchStrIndex - 4, 12);
+    const rootPitch = Pitch.createFromMidiNumber((new Pitch(PitchLetter.C, 0, 2)).midiNumber + halfStepsFromC);
 
+    // If the root pitch is below the range of the guitar, add an octave.
+    if (rootPitch.midiNumber < guitarLowestNoteMidiNumber) {
+      rootPitch.octaveNumber++;
+    }
+
+    // Iterate through each scale type for the root pitch.
+    for (const scaleType of scaleTypes) {
+      callbackFn(scaleType, rootPitch, rootPitchStrs[rootPitchStrIndex], i);
       i++;
     }
   }
+}
+export function configDataToEnabledQuestionIds(configData: IConfigData): Array<number> {
+  const newEnabledFlashCardIndices = new Array<number>();
+
+  forEachScale((scaleType, rootPitch, rootPitchStr, i) => {
+    if (
+      Utils.arrayContains(configData.enabledRootPitches, rootPitchStr) &&
+      Utils.arrayContains(configData.enabledScaleTypes, scaleType.type)
+    ) {
+      newEnabledFlashCardIndices.push(i);
+    }
+  });
 
   return newEnabledFlashCardIndices;
 }
@@ -251,37 +330,36 @@ export function createFlashCardGroup(): FlashCardGroup {
 
   return group;
 }
-export function createFlashCards(): FlashCard[] {
-  return Utils.flattenArrays<FlashCard>(
-    rootPitchStrs.map((rootPitchStr, i) => {
-      const halfStepsFromC = Utils.mod(i - 4, 12);
-      const rootPitch = Pitch.createFromMidiNumber((new Pitch(PitchLetter.C, 0, 4)).midiNumber + halfStepsFromC);
-      
-      return scaleTypes.map(scale => {
-        const formulaString = scale.formulaString + " 8";
-        const formulaStringParts = scale.formulaString.split(" ");
-        const pitches = Chord.fromPitchAndFormulaString(rootPitch, formulaString)
-          .pitches;
+export function createFlashCards(): Array<FlashCard> {
+  const flashCards = new Array<FlashCard>();
 
-        return new FlashCard(
-          new FlashCardSide(
-            (width, height) => {
-              const size = Utils.shrinkRectToFit(new Size2D(width, height), new Size2D(400, 140));
+  forEachScale((scaleType, rootPitch, rootPitchStr, i) => {
+    const formulaString = scaleType.formulaString + " 8";
+    const pitches = Chord.fromPitchAndFormulaString(rootPitch, formulaString)
+      .pitches;
 
-              return (
-                <GuitarFretboard
-                  width={size.width} height={size.height}
-                  renderExtrasFn={metrics => renderGuitarFretboardScaleExtras(metrics, pitches, formulaStringParts)}
-                />
-              );
-            },
-            pitches
-          ),
-          new FlashCardSide(rootPitchStr + " " + scale.type)
-        );
-      });
-    })
-  );
+    flashCards.push(new FlashCard(
+      new FlashCardSide(
+        (width, height) => {
+          const size = Utils.shrinkRectToFit(new Size2D(width, height), new Size2D(400, 140));
+
+          return (
+            <div>
+              <GuitarFretboard
+                width={size.width} height={size.height}
+                renderExtrasFn={metrics => renderGuitarFretboardScaleExtras(metrics, rootPitch, scaleType, renderAllScaleShapes)}
+              />
+              <GuitarScaleViewer scaleType={scaleType} rootPitch={rootPitch} renderAllScaleShapes={false} size={size} />
+            </div>
+          );
+        },
+        pitches
+      ),
+      new FlashCardSide(rootPitchStr + " " + scaleType.type)
+    ));
+  });
+
+  return flashCards;
 }
 export function renderAnswerSelect(
   width: number, height: number,

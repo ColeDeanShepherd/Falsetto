@@ -381,7 +381,7 @@ const MainTitle: React.FunctionComponent<{}> = props => <h1>{props.children}</h1
 const SectionTitle: React.FunctionComponent<{}> = props => <h2>{props.children}</h2>;
 const SubSectionTitle: React.FunctionComponent<{}> = props => <h3>{props.children}</h3>;
 
-const NoteText: React.FunctionComponent<{}> = props => <p style={{ color: "#004085", backgroundColor: "#cce5ff", padding: "1em", border: "1px solid #b8daff", borderRadius: "4px" }}>NOTE: {props.children}</p>;
+export const NoteText: React.FunctionComponent<{}> = props => <p style={{ color: "#004085", backgroundColor: "#cce5ff", padding: "1em", border: "1px solid #b8daff", borderRadius: "4px" }}>NOTE: {props.children}</p>;
 
 const OctavesPlayer: React.FunctionComponent<{}> = props => {
   return (
@@ -1103,7 +1103,7 @@ export const ScalesAndModesSection: React.FunctionComponent<SectionProps> = prop
     <p>C Major scale formula: R, M2, M3, P4, P5, M6, M7</p>
 
     <p>Major scales often sound "happy" or "bright". Try playing the piano keyboard below to hear each note of the C major scale at the same time as the root note to internalize the sound of the major scale yourself.</p>
-    <p style={{ textAlign: "center" }}><PianoScaleDronePlayer scale={ScaleType.Ionian} rootPitch={new Pitch(PitchLetter.C, 0, 4)} style={pianoKeyboardStyle} /></p>
+    <p style={{ textAlign: "center" }}><PianoScaleDronePlayer scaleType={ScaleType.Ionian} rootPitch={new Pitch(PitchLetter.C, 0, 4)} style={pianoKeyboardStyle} /></p>
     
     <SubSectionTitle>Scale Degrees</SubSectionTitle>
     <p>Each note in a scale is sometimes called a <Term>scale degree</Term>, with the first note (the <Term>root note</Term>) called the 1st scale degree (C in C major), the next note above that called the 2nd scale degree (D in C major), the next note above that called the 3rd scale degree (E in C major), and so on.</p>
@@ -1111,7 +1111,7 @@ export const ScalesAndModesSection: React.FunctionComponent<SectionProps> = prop
     <p>The <Term>natural minor scale</Term> (commonly referred to simply as the <Term>minor scale</Term>) is another common scale with a "darker" sound. Relative to the major scale, the natural minor scale has the following formula: 1 2 b3 4 5 b6 b7, meaning the natural minor scale is a major scale with the 3rd, 6th, and 7th scale degrees flattened. So, a C natural minor scale is comprised of the notes C, D, Eb, F, G, Ab, Bb.</p>
     
     <p>Try playing the piano keyboard below to get a feel for the natural minor scale.</p>
-    <p style={{ textAlign: "center" }}><PianoScaleDronePlayer scale={ScaleType.Aeolian} rootPitch={new Pitch(PitchLetter.C, 0, 4)} style={pianoKeyboardStyle} /></p>
+    <p style={{ textAlign: "center" }}><PianoScaleDronePlayer scaleType={ScaleType.Aeolian} rootPitch={new Pitch(PitchLetter.C, 0, 4)} style={pianoKeyboardStyle} /></p>
 
     <SubSectionTitle>Modes</SubSectionTitle>
     <p>The <Term>modes</Term> of a scale are the different scales you get when you start on different notes of a "base" scale, and consider those starting notes the new <Term>root notes</Term>.</p>
@@ -1183,7 +1183,7 @@ export const ScalesAndModesSection: React.FunctionComponent<SectionProps> = prop
 
     <SubSectionTitle>Other Common Scales &amp; Modes</SubSectionTitle>
     <p>There are many other common, named scales (and keep in mind that a mode can be built off each scale degree in each scale). Explore them below with the interactive diagram below:</p>
-    <ScaleViewer isEmbedded={props.isEmbedded} />
+    <ScaleViewer renderAllScaleShapes={false} isEmbedded={props.isEmbedded} />
 
     <BecomeAPatronSection />
 
@@ -1277,7 +1277,7 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
 
     <p>Use the interactive diagram below to explore these triads:</p>
 
-    <ChordViewer title={"Triad Viewer"} chords={ChordType.BasicTriads} showGuitarFretboard={false} />
+    <ChordViewer title={"Triad Viewer"} chordTypes={ChordType.BasicTriads} showGuitarFretboard={false} />
 
     <SubSectionTitle>Inversions</SubSectionTitle>
     <p><strong>You are free to play the notes of a chord in any order, spaced out as close or as far as you like, and any note in a chord can be repeated in different octaves.</strong> Whichever note you decide to play in the bass (the lowest note) of a chord determines which "inversion" a chord is in. If the root note is in the bass, the chord is considered in "root position". If "3rd" of the chord is in the bass, the chord is in "1st inversion". If the "5th" of the chord is in the bass, the chord is in "2nd inversion". And so on for the 7th, 9th, 11th, and 13th (more on seventh chords and extended chords later).</p>
@@ -1393,7 +1393,7 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
     <NoteText>Note that if you try to build a seventh chord with the root and 3 major thirds, you end up with an augmented triad with a repeated root an octave higher.</NoteText>
 
     <p>Use the interactive diagram below to explore the basic seventh chords:</p>
-    <ChordViewer title={"Seventh Chord Viewer"} chords={ChordType.SeventhChords} showGuitarFretboard={false} />
+    <ChordViewer title={"Seventh Chord Viewer"} chordTypes={ChordType.SeventhChords} showGuitarFretboard={false} />
 
     <SubSectionTitle>Extended Chords &amp; Chord/Scale Relationships</SubSectionTitle>
     <p>You can continue to add 3rds to chords to form ninth chords (5 notes), eleventh chords (6 notes), and thirteenth (7 notes) chords. These chords are categorized as <Term>extended</Term> chords.</p>

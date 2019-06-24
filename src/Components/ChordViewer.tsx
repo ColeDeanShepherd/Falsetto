@@ -1,34 +1,265 @@
 import * as React from "react";
 
-import { ScaleViewer } from "./ScaleViewer";
-import { ScaleType } from '../Scale';
-import { ChordType } from '../Chord';
+import * as Utils from "../Utils";
+import { Vector2D } from '../Vector2D';
+import { Size2D } from "../Size2D";
+import { Rect2D } from '../Rect2D';
+import { PitchLetter } from "../PitchLetter";
+import { Pitch } from "../Pitch";
+import { Button, Card, CardContent, Typography } from "@material-ui/core";
+import { Chord, ChordType } from "../Chord";
+import { PianoKeyboard } from "./PianoKeyboard";
+import { GuitarFretboard, renderGuitarFretboardChordExtras } from "./GuitarFretboard";
+import { playPitches } from '../Piano';
+import * as PianoScaleDronePlayer from "./PianoScaleDronePlayer";
+import { GuitarChordViewer } from './Quizzes/GuitarScales';
 
-export interface IChordViewerProps {
+const validSharpKeyPitches = [
+  null,
+  null,
+  new Pitch(PitchLetter.C, 1, 4),
+  null,
+  null,
+  new Pitch(PitchLetter.F, 1, 4),
+  null
+];
+const validNaturalKeyPitches = [
+  new Pitch(PitchLetter.A, 0, 4),
+  new Pitch(PitchLetter.B, 0, 4),
+  new Pitch(PitchLetter.C, 0, 4),
+  new Pitch(PitchLetter.D, 0, 4),
+  new Pitch(PitchLetter.E, 0, 4),
+  new Pitch(PitchLetter.F, 0, 4),
+  new Pitch(PitchLetter.G, 0, 4)
+];
+const validFlatKeyPitches = [
+  new Pitch(PitchLetter.A, -1, 4),
+  new Pitch(PitchLetter.B, -1, 4),
+  new Pitch(PitchLetter.C, -1, 5),
+  new Pitch(PitchLetter.D, -1, 4),
+  new Pitch(PitchLetter.E, -1, 4),
+  null,
+  new Pitch(PitchLetter.G, -1, 4)
+];
+
+interface IChordViewerProps {
   title?: string;
-  chords?: Array<ChordType>;
+  chordTypes?: Array<ChordType>;
   showGuitarFretboard?: boolean;
   isEmbedded?: boolean;
 }
-export class ChordViewer extends React.Component<IChordViewerProps, {}> {
+interface IChordViewerState {
+  rootPitch: Pitch;
+  chordType: ChordType;
+}
+
+export class ChordViewer extends React.Component<IChordViewerProps, IChordViewerState> {
   public constructor(props: IChordViewerProps) {
     super(props);
+
+    this.state = {
+      rootPitch: new Pitch(PitchLetter.C, 0, 4),
+      chordType: this.chordTypes[0]
+    };
   }
+
   public render(): JSX.Element {
-    const title = this.props.title ? this.props.title : "Chord Viewer";
-    const chords = this.props.chords ? this.props.chords : ChordType.All;
+    const title = this.props.title
+      ? this.props.title
+      : "Scale Viewer";
+      
+    const pitches = Chord.fromPitchAndFormulaString(
+      this.state.rootPitch,
+      this.state.chordType.formulaString
+    )
+      .pitches;
+    const pitchStrings = pitches
+      .map(pitch => pitch.toString(false));
+    const pitchesString = pitchStrings.join(", ");
+
+    const intervals = this.state.chordType.getIntervals();
+    const intervalStrings = intervals
+      .map((interval, i) => (i === 0) ? "R" : interval.toString());
+    const intervalsString = intervalStrings.join(", ");
+
+    const pianoGuitarStyle = { width: "100%", maxWidth: "400px", height: "auto" };
+
+    const pianoSize = new Size2D(400, 100);
+    const guitarSize = new Size2D(400, 140);
+    
+    const onKeyPress = (pitch: Pitch) => {
+      const pitchMidiNumberNoOctaves = pitches.map(p => p.midiNumberNoOctave);
+
+      if (Utils.arrayContains(pitchMidiNumberNoOctaves, pitch.midiNumberNoOctave)) {
+        playPitches([pitch]);
+      }
+    };
+    
     const showGuitarFretboard = (this.props.showGuitarFretboard !== undefined)
       ? this.props.showGuitarFretboard
       : true;
 
-    const scales = chords
-      .map(c => new ScaleType(c.name, c.pitchIntegers, c.formulaString));
-    return <ScaleViewer
-      scales={scales}
-      title={title}
-      playSimultaneously={true}
-      showGuitarFretboard={showGuitarFretboard}
-      isEmbedded={this.props.isEmbedded}
-    />;
+    const guitarRootPitch = new Pitch(
+      this.state.rootPitch.letter,
+      this.state.rootPitch.signedAccidental,
+      this.state.rootPitch.octaveNumber - 2
+    );
+
+    return (
+      <Card>
+        <CardContent>
+          <div style={{display: "flex"}}>
+            <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
+              {title}
+            </Typography>
+          </div>
+        
+          <div style={{textAlign: "center"}}>
+            <Typography gutterBottom={true} variant="h6" component="h4">
+              Root Pitch
+            </Typography>
+            <div style={{padding: "1em 0"}}>
+              {this.renderRootPitchRow(validSharpKeyPitches)}
+              {this.renderRootPitchRow(validNaturalKeyPitches)}
+              {this.renderRootPitchRow(validFlatKeyPitches)}
+            </div>
+            
+            <Typography gutterBottom={true} variant="h6" component="h4">
+              Type
+            </Typography>
+            <div style={{padding: "1em 0"}}>
+              {this.chordTypes.map(chordType => {
+                const style: any = { textTransform: "none" };
+                
+                const isPressed = chordType.name === this.state.chordType.name;
+                if (isPressed) {
+                  style.backgroundColor = "#959595";
+                }
+
+                return (
+                  <Button
+                    key={chordType.name}
+                    onClick={event => this.onChordType(chordType)}
+                    variant="contained"
+                    style={style}
+                  >
+                    {chordType.name}
+                  </Button>
+                );
+              })}
+            </div>
+            <div style={{fontSize: "1.5em"}}>
+              <p>{this.state.rootPitch.toString(false)} {this.state.chordType.name}</p>
+              <p>{pitchesString}</p>
+              <p>{this.state.chordType.formulaString}</p>
+              <p>{intervalsString}</p>
+            </div>
+
+            <div>
+              <p>
+                <Button
+                  onClick={event => this.onListenClick()}
+                  variant="contained"
+                >
+                  Listen
+                </Button>
+              </p>
+            </div>
+
+            <div>
+              <div>
+                <PianoKeyboard
+                  rect={new Rect2D(pianoSize, new Vector2D(0, 0))}
+                  lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
+                  highestPitch={new Pitch(PitchLetter.B, 0, 5)}
+                  onKeyPress={onKeyPress}
+                  renderExtrasFn={metrics => PianoScaleDronePlayer.renderExtrasFn(metrics, pitches, this.state.rootPitch)}
+                  style={pianoGuitarStyle}
+                />
+              </div>
+
+              <div style={{marginTop: "1em"}}>
+                {(showGuitarFretboard && false) ? (
+                  <GuitarChordViewer
+                    chordType={this.state.chordType}
+                    rootPitch={guitarRootPitch}
+                    size={guitarSize} />
+                ) : null}
+                <p>Guitar scales coming soon!</p>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  private get chordTypes(): Array<ChordType> {
+    return this.props.chordTypes
+      ? this.props.chordTypes
+      : ChordType.All;
+  }
+  private renderRootPitchRow(rootPitches: Array<Pitch | null>): JSX.Element {
+    return (
+      <div>
+        {rootPitches.map(pitch => {
+          const style: any = { textTransform: "none" };
+          
+          const isPressed = pitch && (pitch.equals(this.state.rootPitch));
+          if (isPressed) {
+            style.backgroundColor = "#959595";
+          }
+
+          return (
+            pitch
+              ? (
+                <Button
+                  onClick={event => this.onRootPitchClick(pitch)}
+                  variant="contained"
+                  style={style}
+                >
+                  {pitch.toString(false)}
+                </Button>
+              )
+              : (
+                <Button
+                  variant="contained"
+                  style={{ visibility: "hidden" }}
+                />
+              )
+          );
+        })}
+      </div>
+    );
+  }
+
+  private onRootPitchClick(rootPitch: Pitch) {
+    this.setState({ rootPitch: rootPitch }, this.onChordChange.bind(this));
+  }
+  private onChordType(chordType: ChordType) {
+    this.setState({ chordType: chordType }, this.onChordChange.bind(this));
+  }
+
+  private onChordChange() {
+    if (this.playAudioCancelFn) {
+      this.playAudioCancelFn();
+      this.playAudioCancelFn = null;
+    }
+  }
+
+  private playAudioCancelFn: (() => void) | null = null;
+
+  private onListenClick() {
+    if (this.playAudioCancelFn) {
+      this.playAudioCancelFn();
+      this.playAudioCancelFn = null;
+    }
+
+    let pitches = Chord.fromPitchAndFormulaString(
+      this.state.rootPitch,
+      this.state.chordType.formulaString
+    ).pitches;
+
+    playPitches(pitches);
   }
 }

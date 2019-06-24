@@ -6,15 +6,21 @@ import { PitchLetter } from "../PitchLetter";
 import { Size2D } from '../Size2D';
 import { Rect2D } from '../Rect2D';
 import { Vector2D } from '../Vector2D';
-
-export const STRING_COUNT = 6;
+import { get3NotePerStringScaleNotes } from './GuitarScalesLesson';
+import { ScaleType } from '../Scale';
+import { ChordType, Chord } from '../Chord';
 
 export class GuitarTuning {
   public constructor(public openStringPitches: Array<Pitch>) {
-    Utils.invariant(this.openStringPitches.length === STRING_COUNT);
+    Utils.invariant(this.openStringPitches.length > 0);
   }
+
+  public get stringCount(): number {
+    return this.openStringPitches.length;
+  }
+
   public getNote(stringIndex: number, fretNumber: number): GuitarNote {
-    Utils.precondition((stringIndex >= 0) && (stringIndex < STRING_COUNT));
+    Utils.precondition((stringIndex >= 0) && (stringIndex < this.stringCount));
 
     const pitch = Pitch.createFromMidiNumber(
       this.openStringPitches[stringIndex].midiNumber + fretNumber
@@ -22,7 +28,7 @@ export class GuitarTuning {
     return new GuitarNote(pitch, stringIndex);
   }
 }
-export const standardGuitarTuning = new GuitarTuning([
+export const standard6StringGuitarTuning = new GuitarTuning([
   new Pitch(PitchLetter.E, 0, 2),
   new Pitch(PitchLetter.A, 0, 2),
   new Pitch(PitchLetter.D, 0, 3),
@@ -30,6 +36,46 @@ export const standardGuitarTuning = new GuitarTuning([
   new Pitch(PitchLetter.B, 0, 3),
   new Pitch(PitchLetter.E, 0, 4)
 ]);
+export const standard7StringGuitarTuning = new GuitarTuning([
+  new Pitch(PitchLetter.B, 0, 1),
+  new Pitch(PitchLetter.E, 0, 2),
+  new Pitch(PitchLetter.A, 0, 2),
+  new Pitch(PitchLetter.D, 0, 3),
+  new Pitch(PitchLetter.G, 0, 3),
+  new Pitch(PitchLetter.B, 0, 3),
+  new Pitch(PitchLetter.E, 0, 4)
+]);
+export function getStandardGuitarTuning(stringCount: number): GuitarTuning {
+  switch (stringCount) {
+    case 6:
+      return standard6StringGuitarTuning;
+    case 7:
+      return standard7StringGuitarTuning;
+    default:
+      throw new Error(`No registered standard guitar tuning for ${stringCount} strings.`);
+  }
+}
+
+export function findGuitarChordShape(
+  chordType: ChordType, rootPitch: Pitch, inversion: number, firstStringIndex: number,
+  tuning: GuitarTuning
+): Array<GuitarNote> {
+  Utils.precondition((inversion >= 0) && (inversion < chordType.pitchCount));
+  Utils.precondition((firstStringIndex >= 0) && (firstStringIndex < tuning.stringCount));
+
+  const pitches = Chord.fromPitchAndFormulaString(rootPitch, chordType.formulaString).pitches;
+
+  let guitarNotes = new Array<GuitarNote>();
+
+  for (let i = 0; i < pitches.length; i++) {
+    const pitch = pitches[Utils.mod(i + (inversion - 1), pitches.length)];
+    const stringIndex = firstStringIndex + i;
+
+    guitarNotes.push(new GuitarNote(pitch, stringIndex));
+  }
+
+  return guitarNotes;
+}
 
 export class GuitarNote {
   public static allNotesOfPitches(
@@ -56,7 +102,7 @@ export class GuitarNote {
     public pitch: Pitch,
     public stringIndex: number
   ) {
-    Utils.invariant((stringIndex >= 0) && (stringIndex < STRING_COUNT));
+    Utils.invariant(stringIndex >= 0);
   }
 
   // TODO: add tests
@@ -70,10 +116,14 @@ export class GuitarFretboardMetrics {
   public constructor(
     public width: number,
     public height: number,
-    public fretCount: number = 11
+    public minFretNumber: number = 0,
+    public fretCount: number = 11,
+    public stringCount: number = 6
   ) {
     Utils.precondition((fretCount >= 1) && (fretCount <= 24))
     
+    this.nutWidth = (minFretNumber === 0) ? 8 :  4;
+
     this.stringSpacing = (this.height - this.lowestStringWidth) / (this.stringCount - 1);
     this.fretSpacing = (this.width - this.nutWidth) / this.fretCount;
     
@@ -85,8 +135,7 @@ export class GuitarFretboardMetrics {
     this.fretDotY = this.height / 2;
   }
 
-  public stringCount: number = 6;
-  public nutWidth: number = 8;
+  public nutWidth: number;
   public fretWidth: number = 4;
 
   public stringSpacing: number;
@@ -106,7 +155,7 @@ export class GuitarFretboardMetrics {
     return this.lowestStringWidth / (1 + (stringIndex / 4));
   }
   public getFretSpaceCenterX(fretNumber: number): number {
-    return this.stringsLeft + ((fretNumber - 1) * this.fretSpacing) + (this.fretSpacing / 2);
+    return this.stringsLeft + ((fretNumber - 1 - this.minFretNumber) * this.fretSpacing) + (this.fretSpacing / 2);
   }
   public getNoteX(fretNumber: number) {
     return Math.max(
@@ -124,12 +173,14 @@ export class GuitarFretboardMetrics {
   public lowestStringWidth: number = 4;
 }
 
-export function renderGuitarNoteHighlightsAndNoteNames(
-  metrics: GuitarFretboardMetrics, notes: Array<GuitarNote>, highlightStyle: string
+export function renderGuitarNoteHighlightsAndLabels(
+  metrics: GuitarFretboardMetrics, notes: Array<GuitarNote>, highlightStyle: string,
+  getLabelsFn: (n: GuitarNote, i: number) => string
 ) {
   const rootPitchFretDots = notes
     .map((note, noteIndex) => {
-      const fretNumber = note.getFretNumber(standardGuitarTuning);
+      const tuning = getStandardGuitarTuning(metrics.stringCount);
+      const fretNumber = note.getFretNumber(tuning);
       let x = metrics.getNoteX(fretNumber);
       if (fretNumber == 0) {
         x -= 0.3 * metrics.fretSpacing;
@@ -137,10 +188,10 @@ export function renderGuitarNoteHighlightsAndNoteNames(
 
       const y = metrics.getStringY(note.stringIndex);
 
-      const noteName = note.pitch.toOneAccidentalAmbiguousString(false, false);
+      const noteLabel = getLabelsFn(note, noteIndex) ;
 
-      const isNaturalNote = (noteName.length == 1);
-      const fontSize = isNaturalNote ? 11 : 8;
+      const isShortLabel = noteLabel.length <= 1;
+      const fontSize = isShortLabel ? 11 : 8;
       const textStyle: any = {
         fontSize: `${fontSize}px`,
         fontWeight: "bold",
@@ -160,7 +211,7 @@ export function renderGuitarNoteHighlightsAndNoteNames(
       );
 
       const textX = rect.center.x;
-      const textY = rect.bottom - (isNaturalNote ? 1 : 2.5);
+      const textY = rect.bottom - (isShortLabel ? 1 : 2.5);
 
       return (
         <g>
@@ -170,28 +221,41 @@ export function renderGuitarNoteHighlightsAndNoteNames(
             fill={highlightStyle} fillOpacity={1} strokeWidth="0" />
           <text
             x={textX} y={textY}
-            style={textStyle}>{noteName}</text>
+            style={textStyle}>{noteLabel}</text>
         </g>
       );
     });
   
   return <g>{rootPitchFretDots}</g>;
 }
-export function renderGuitarFretboardScaleExtras(
-  metrics: GuitarFretboardMetrics, pitches: Array<Pitch>, formulaStringParts: Array<string>
-): JSX.Element {
-  const guitarNotes = GuitarNote.allNotesOfPitches(
-    standardGuitarTuning,
-    pitches,
-    11
+export function renderGuitarNoteHighlightsAndNoteNames(
+  metrics: GuitarFretboardMetrics, notes: Array<GuitarNote>, highlightStyle: string
+) {
+  return renderGuitarNoteHighlightsAndLabels(
+    metrics, notes, highlightStyle, (n, _) => n.pitch.toOneAccidentalAmbiguousString(false, false)
   );
+}
+export function renderGuitarFretboardScaleExtras(
+  metrics: GuitarFretboardMetrics, rootPitch: Pitch, scaleType: ScaleType,
+  renderAllScaleShapes: boolean = false
+): JSX.Element {
+  const tuning = getStandardGuitarTuning(metrics.stringCount);
+  const pitches = scaleType.getPitches(rootPitch);
+  const guitarNotes = renderAllScaleShapes
+    ? (
+      GuitarNote.allNotesOfPitches(
+        tuning, pitches, metrics.fretCount
+      )
+    )
+    : get3NotePerStringScaleNotes(scaleType, rootPitch, metrics.stringCount);
+  const formulaStringParts = scaleType.formulaString.split(" ");
 
   const rootPitchFretDots = guitarNotes
-    .map((guitarNote, noteIndex) => {
+    .map((guitarNote, _) => {
       const pitchIndex = pitches.findIndex(p => p.midiNumberNoOctave === guitarNote.pitch.midiNumberNoOctave);
       const formulaStringPart = formulaStringParts[pitchIndex];
 
-      const x = metrics.getNoteX(guitarNote.getFretNumber(standardGuitarTuning));
+      const x = metrics.getNoteX(guitarNote.getFretNumber(tuning));
       const y = metrics.getStringY(guitarNote.stringIndex);
       const fill = "lightblue";
       
@@ -227,14 +291,116 @@ export function renderGuitarFretboardScaleExtras(
         </g>
       );
     });
+  const labeledFretNumber = (metrics.minFretNumber === 0)
+    ? 0
+    : metrics.minFretNumber + 1;
   
-  return <g>{rootPitchFretDots}</g>;
+  return (
+    <g>
+      {rootPitchFretDots}
+      {renderFretNumber(metrics, labeledFretNumber)}
+    </g>
+  );
+}
+export function renderGuitarFretboardChordExtras(
+  metrics: GuitarFretboardMetrics, rootPitch: Pitch, chordType: ChordType
+): JSX.Element {
+  const tuning = getStandardGuitarTuning(metrics.stringCount);
+  const pitches = chordType.getPitches(rootPitch);
+  const guitarNotes = findGuitarChordShape(chordType, rootPitch, 1, 0, tuning);
+  const formulaStringParts = chordType.formulaString.split(" ");
+
+  const rootPitchFretDots = guitarNotes
+    .map((guitarNote, _) => {
+      const pitchIndex = pitches.findIndex(p => p.midiNumberNoOctave === guitarNote.pitch.midiNumberNoOctave);
+      const formulaStringPart = formulaStringParts[pitchIndex];
+
+      const x = metrics.getNoteX(guitarNote.getFretNumber(tuning));
+      const y = metrics.getStringY(guitarNote.stringIndex);
+      const fill = "lightblue";
+      
+      const fontSize = 11;
+      const textStyle: any = {
+        fontSize: `${fontSize}px`,
+        fontWeight: "bold",
+        textAnchor: "middle"
+      };
+
+      const rectSize = new Size2D(
+        0.7 * metrics.fretSpacing,
+        0.6 * metrics.stringSpacing
+      );
+      const rect = new Rect2D(
+        rectSize,
+        new Vector2D(
+          x - (rectSize.width / 2),
+          y - (rectSize.height / 2)
+        )
+      );
+
+      const textX = rect.center.x;
+      const textY = rect.bottom - 1;
+
+      return (
+        <g>
+          <rect
+            x={rect.position.x} y={rect.position.y}
+            width={rect.size.width} height={rect.size.height}
+            fill={fill} strokeWidth="0" />
+          <text x={textX} y={textY} style={textStyle}>{formulaStringPart}</text>
+        </g>
+      );
+    });
+  const labeledFretNumber = (metrics.minFretNumber === 0)
+    ? 0
+    : metrics.minFretNumber + 1;
+  
+  return (
+    <g>
+      {rootPitchFretDots}
+      {renderFretNumber(metrics, labeledFretNumber)}
+    </g>
+  );
+}
+
+export function renderFretNumber(
+  metrics: GuitarFretboardMetrics, fretNumber: number
+): JSX.Element {
+  const fontSize = 12;
+  let x = metrics.getNoteX(fretNumber) - (0.4 * fontSize);
+  if (fretNumber == 0) {
+    x -= 0.25 * metrics.fretSpacing;
+  }
+
+  const y = metrics.height + 20;
+  const textStyle: any = {
+    fontSize: `${fontSize}px`,
+    fontWeight: "bold"
+  };
+
+  return (
+    <text
+      x={x} y={y}
+      style={textStyle}>
+      {fretNumber}
+    </text>
+  );
+}
+export function renderFretNumbers(metrics: GuitarFretboardMetrics): JSX.Element {
+  const fretNumbers = Utils.range(0, 11);
+  return (
+    <g>
+      {fretNumbers.map(fretNumber => renderFretNumber(metrics, fretNumber))}
+    </g>
+  );
 }
 
 export interface IGuitarFretboardProps {
   width: number;
   height: number;
+  minFretNumber?: number;
   fretCount?: number;
+  stringCount?: number;
   pressedNotes?: Array<GuitarNote>;
   renderExtrasFn?: (metrics: GuitarFretboardMetrics) => JSX.Element;
   style?: any;
@@ -246,8 +412,12 @@ export class GuitarFretboard extends React.Component<IGuitarFretboardProps, {}> 
     const metrics = new GuitarFretboardMetrics(
       this.props.width - (2 * margin),
       this.props.height - (2 * margin),
-      this.props.fretCount ? this.props.fretCount : 11
+      (this.props.minFretNumber !== undefined) ? this.props.minFretNumber : 0,
+      (this.props.fretCount !== undefined) ? this.props.fretCount : 11,
+      this.props.stringCount
     );
+    
+    const tuning = getStandardGuitarTuning(metrics.stringCount);
 
     const nut = <line x1={metrics.nutX} x2={metrics.nutX} y1={0} y2={metrics.height} stroke="black" strokeWidth={metrics.nutWidth} />;
     const strings = Utils.range(0, metrics.stringCount - 1)
@@ -261,7 +431,7 @@ export class GuitarFretboard extends React.Component<IGuitarFretboardProps, {}> 
         return <line key={i} x1={x} x2={x} y1={0} y2={metrics.height} stroke="black" strokeWidth={metrics.fretWidth} />;
       });
     const fretDots = this.dottedFretNumbers
-      .filter(fretNumber => fretNumber <= metrics.fretCount)
+      .filter(fretNumber => (fretNumber > metrics.minFretNumber) && ((fretNumber - metrics.minFretNumber) <= metrics.fretCount))
       .map(fretNumber => {
         const x = metrics.getFretSpaceCenterX(fretNumber);
 
@@ -280,7 +450,7 @@ export class GuitarFretboard extends React.Component<IGuitarFretboardProps, {}> 
     const noteHighlights = this.props.pressedNotes ? (
         this.props.pressedNotes
         .map((note, i) => {
-          const x = metrics.getNoteX(note.getFretNumber(standardGuitarTuning));
+          const x = metrics.getNoteX(note.getFretNumber(tuning));
           const y = metrics.getStringY(note.stringIndex);
           return <circle key={i} cx={x} cy={y} r={metrics.fretDotRadius} fill="red" strokeWidth="0" />;
         })

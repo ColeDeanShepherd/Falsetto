@@ -12,9 +12,11 @@ import { Pitch } from "../../Pitch";
 import { PitchLetter } from "../../PitchLetter";
 import { TableRow, TableCell, Table, TableHead, TableBody, Grid, Checkbox, Button, Typography } from "@material-ui/core";
 import { Chord, ChordType } from "../../Chord";
-import { GuitarFretboard, GuitarNote, standardGuitarTuning, renderGuitarFretboardScaleExtras } from "../GuitarFretboard";
+import { GuitarFretboard, GuitarNote, standard6StringGuitarTuning, renderGuitarFretboardScaleExtras, renderGuitarFretboardChordExtras } from "../GuitarFretboard";
+import { ScaleType } from '../../Scale';
+import { GuitarChordViewer } from './GuitarScales';
 
-const chords = ChordType.All;
+const chordTypes = ChordType.All;
 const rootPitchStrs = ["Ab", "A", "Bb", "B/Cb", "C", "C#/Db", "D", "Eb", "E", "F", "F#/Gb", "G"];
 
 interface IConfigData {
@@ -28,7 +30,7 @@ export function configDataToEnabledQuestionIds(configData: IConfigData): Array<n
   let i = 0;
 
   for (const rootPitchStr of rootPitchStrs) {
-    for (const chord of chords) {
+    for (const chord of chordTypes) {
       const chordType = chord.name;
       if (
         Utils.arrayContains(configData.enabledRootPitches, rootPitchStr) &&
@@ -79,7 +81,7 @@ export class GuitarChordsFlashCardMultiSelect extends React.Component<IGuitarCho
       </Table>
     );
 
-    const chordTypeCheckboxTableRows = chords
+    const chordTypeCheckboxTableRows = chordTypes
       .map((chord, i) => {
         const isChecked = this.props.configData.enabledChordTypes.indexOf(chord.name) >= 0;
         const isEnabled = !isChecked || (this.props.configData.enabledChordTypes.length > 1);
@@ -221,7 +223,7 @@ export class GuitarChordsAnswerSelect extends React.Component<IGuitarChordsAnswe
           Chord
         </Typography>
         <div style={{padding: "1em 0"}}>
-          {chords.map(chord => {
+          {chordTypes.map(chord => {
             const style: any = { textTransform: "none" };
             
             const isPressed = chord.name === this.state.selectedChordType;
@@ -354,7 +356,7 @@ export function createFlashCardGroup(): FlashCardGroup {
 
   const initialConfigData: IConfigData = {
     enabledRootPitches: rootPitchStrs.slice(),
-    enabledChordTypes: chords
+    enabledChordTypes: chordTypes
       .filter((_, chordIndex) => chordIndex <= 8)
       .map(chord => chord.name)
   };
@@ -375,32 +377,23 @@ export function createFlashCards(): FlashCard[] {
       const halfStepsFromC = Utils.mod(i - 4, 12);
       const rootPitch = Pitch.createFromMidiNumber((new Pitch(PitchLetter.C, 0, 4)).midiNumber + halfStepsFromC);
       
-      return chords.map(chord => {
-        const formulaString = chord.formulaString;
-        const formulaStringParts = chord.formulaString.split(" ");
-        const pitches = Chord.fromPitchAndFormulaString(rootPitch, formulaString)
-          .pitches;
-        const guitarNotes = GuitarNote.allNotesOfPitches(
-          standardGuitarTuning,
-          pitches,
-          11
-        );
-
+      return chordTypes.map(chordType => {
+        const pitches = chordType.getPitches(rootPitch);
         return new FlashCard(
           new FlashCardSide(
             (width, height) => {
               const size = Utils.shrinkRectToFit(new Size2D(width, height), new Size2D(400, 140));
 
               return (
-                <GuitarFretboard
-                  width={size.width} height={size.height}
-                  renderExtrasFn={metrics => renderGuitarFretboardScaleExtras(metrics, pitches, formulaStringParts)}
-                />
+                <GuitarChordViewer
+                  chordType={chordType}
+                  rootPitch={rootPitch}
+                  size={size} />
               )
             },
             pitches
           ),
-          new FlashCardSide(rootPitchStr + " " + chord.name)
+          new FlashCardSide(rootPitchStr + " " + chordType.name)
         );
       });
     })

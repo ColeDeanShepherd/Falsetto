@@ -7,7 +7,7 @@ import { FlashCard } from "../../FlashCard";
 import { FlashCardGroup } from "../../FlashCardGroup";
 import { Pitch } from "../../Pitch";
 import { Interval } from "../../Interval";
-import { standardGuitarTuning, GuitarNote, GuitarFretboard, GuitarFretboardMetrics } from "../GuitarFretboard";
+import { standard6StringGuitarTuning, GuitarNote, GuitarFretboard, GuitarFretboardMetrics } from "../GuitarFretboard";
 import { VerticalDirection } from "../../VerticalDirection";
 import { AnswerDifficulty } from "../../StudyAlgorithm";
 import { Size2D } from '../../Size2D';
@@ -118,8 +118,8 @@ function forEachInterval(fn: (pitches: Array<GuitarNote>, interval: Interval) =>
     for (let fretNumber1 = 0; fretNumber1 < 12; fretNumber1++) {
       for (let stringIndex2 = 0; stringIndex2 < 6; stringIndex2++) {
         for (let fretNumber2 = 0; fretNumber2 < 12; fretNumber2++) {
-          const note1 = standardGuitarTuning.getNote(stringIndex1, fretNumber1);
-          const note2 = standardGuitarTuning.getNote(stringIndex2, fretNumber2);
+          const note1 = standard6StringGuitarTuning.getNote(stringIndex1, fretNumber1);
+          const note2 = standard6StringGuitarTuning.getNote(stringIndex2, fretNumber2);
 
           const halfSteps = Math.abs(note2.pitch.midiNumber - note1.pitch.midiNumber);
           if ((halfSteps === 0) || (halfSteps > 12)) { continue; }
@@ -172,10 +172,10 @@ export function createFlashCards(): Array<FlashCard> {
         fontSize: `${fontSize}px`
       };
 
-      const x1 = metrics.getNoteX(notes[0].getFretNumber(standardGuitarTuning));
+      const x1 = metrics.getNoteX(notes[0].getFretNumber(standard6StringGuitarTuning));
       const y1 = metrics.getStringY(notes[0].stringIndex);
       
-      const x2 = metrics.getNoteX(notes[1].getFretNumber(standardGuitarTuning));
+      const x2 = metrics.getNoteX(notes[1].getFretNumber(standard6StringGuitarTuning));
       const y2 = metrics.getStringY(notes[1].stringIndex);
 
       const textXOffset = -(0.3 * fontSize);

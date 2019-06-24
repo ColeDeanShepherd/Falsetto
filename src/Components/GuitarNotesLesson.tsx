@@ -3,7 +3,13 @@ import { Card, CardContent } from '@material-ui/core';
 
 import App from "./App";
 import * as Utils from "../Utils";
-import { GuitarFretboard, renderGuitarNoteHighlightsAndNoteNames, GuitarNote, GuitarFretboardMetrics } from './GuitarFretboard';
+import {
+  GuitarFretboard,
+  renderGuitarNoteHighlightsAndNoteNames,
+  GuitarNote,
+  GuitarFretboardMetrics,
+  renderFretNumbers
+} from './GuitarFretboard';
 import * as GuitarNotes from "./Quizzes/GuitarNotes";
 import { Pitch } from '../Pitch';
 import { PitchLetter } from '../PitchLetter';
@@ -278,7 +284,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           <p style={{ textAlign: "center" }}>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
-              renderExtrasFn={metrics => this.renderFretNumbers(metrics)}
+              renderExtrasFn={metrics => renderFretNumbers(metrics)}
               style={fretboardStyle}
             />
           </p>
@@ -299,7 +305,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
                       fill="green"
                       fillOpacity={0.3}>
                     </rect>
-                    {this.renderFretNumbers(metrics)}
+                    {renderFretNumbers(metrics)}
                   </g>
                 );
               }}
@@ -451,35 +457,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           .map(dng => renderGuitarNoteHighlightsAndNoteNames(
             metrics, dng.notes, dng.color
           ))}
-        {this.renderFretNumbers(metrics)}
-      </g>
-    );
-  }
-  private renderFretNumbers(metrics: GuitarFretboardMetrics): JSX.Element {
-    const fretNumbers = Utils.range(0, 11);
-    return (
-      <g>
-        {fretNumbers.map(fretNumber => {
-          const fontSize = 12;
-          let x = metrics.getNoteX(fretNumber) - (0.4 * fontSize);
-          if (fretNumber == 0) {
-            x -= 0.25 * metrics.fretSpacing;
-          }
-
-          const y = metrics.height + 20;
-          const textStyle: any = {
-            fontSize: `${fontSize}px`,
-            fontWeight: "bold"
-          };
-
-          return (
-            <text
-              x={x} y={y}
-              style={textStyle}>
-              {fretNumber}
-            </text>
-          );
-        })}
+        {renderFretNumbers(metrics)}
       </g>
     );
   }

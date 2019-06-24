@@ -2,6 +2,7 @@ import * as Utils from "./Utils";
 import { Pitch } from "./Pitch";
 import { VerticalDirection } from "./VerticalDirection";
 import { getIntervalsFromFormulaString } from './Scale';
+import { Interval } from './Interval';
 
 export class ChordType {
   public static Power = new ChordType("Power", [0, 7], "1 5", ["power"]);
@@ -80,6 +81,10 @@ export class ChordType {
   public get isMinorType(): boolean {
     return Utils.stringContains(this.formulaString, "b3");
   }
+  
+  public get pitchCount(): number {
+    return this.pitchIntegers.length;
+  }
 
   public equals(other: ChordType): boolean {
     return Utils.areArraysEqual(this.pitchIntegers, other.pitchIntegers);
@@ -95,6 +100,13 @@ export class ChordType {
       .find(chordType => Utils.areArraysEqual(chordType.pitchIntegers, newPitchIntegers));
     
     return Utils.unwrapValueOrUndefined(subChordType);
+  }
+  
+  public getPitches(rootPitch: Pitch): Array<Pitch> {
+    return Chord.fromPitchAndFormulaString(rootPitch, this.formulaString).pitches;
+  }
+  public getIntervals(): Array<Interval> {
+    return getIntervalsFromFormulaString(this.formulaString);
   }
 }
 

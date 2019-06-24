@@ -233,6 +233,18 @@ export function areArraysEqualComparer<T>(arr1: T[], arr2: T[], comparer: (e1: T
   return true;
 }
 
+export function arrayMax<T>(array: T[]): T {
+  precondition(array.length > 0);
+
+  let max = array[0];
+
+  for (let i = 1; i < array.length; i++) {
+    max = (array[i] > max) ? array[i] : max;
+  }
+
+  return max;
+}
+
 export function circularArraySlice<T>(array: T[], start: number, length: number): T[] {
   precondition(start >= 0);
   precondition(start < array.length);
