@@ -204,7 +204,7 @@ const ChordDiagramInternal: React.FunctionComponent<{ pitches: Array<Pitch>, sca
   );
 };
 
-const ChordTransitionDiagram: React.FunctionComponent<{ chord1Pitches: Array<Pitch>, chord2Pitches: Array<Pitch>, scaleType: ScaleType, scaleRootPitch: Pitch, lowestPitch?: Pitch }> = props => {
+const ChordTransitionDiagram: React.FunctionComponent<{ chord1Pitches: Array<Pitch>, chord1Name: string, chord2Pitches: Array<Pitch>, chord2Name: string, scaleType: ScaleType, scaleRootPitch: Pitch, lowestPitch?: Pitch }> = props => {
   const width = 600;
   const height = 500;
   const chordDiagram2Position = new Vector2D(0, 300);
@@ -238,19 +238,35 @@ const ChordTransitionDiagram: React.FunctionComponent<{ chord1Pitches: Array<Pit
     });
 
   return (
-    <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} style={style}>
-      <defs>
-        <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5"
-            markerWidth="6" markerHeight="6"
-            orient="auto-start-reverse">
-          <path d="M 0 2 L 10 5 L 0 8 z" fill="red" />
-        </marker>
-      </defs>.
+    <div>
+      <div style={{ padding: "1em" }}>
+        <span style={{ paddingRight: "0.5em" }}>
+          <PitchesAudioPlayer pitches={props.chord1Pitches} playSequentially={false} cutOffSounds={true}>
+            <div><i className="material-icons">play_arrow</i></div>
+            <span>{props.chord1Name}</span>
+          </PitchesAudioPlayer>
+        </span>
+        <span>
+          <PitchesAudioPlayer pitches={props.chord2Pitches} playSequentially={false} cutOffSounds={true}>
+            <div><i className="material-icons">play_arrow</i></div>
+            <span>{props.chord2Name}</span>
+          </PitchesAudioPlayer>
+        </span>
+      </div>
+      <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} style={style}>
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5"
+              markerWidth="6" markerHeight="6"
+              orient="auto-start-reverse">
+            <path d="M 0 2 L 10 5 L 0 8 z" fill="red" />
+          </marker>
+        </defs>.
 
-      <ChordDiagramInternal pitches={props.chord1Pitches} scaleType={props.scaleType} scaleRootPitch={props.scaleRootPitch} canListen={false} lowestPitch={props.lowestPitch} />
-      <ChordDiagramInternal pitches={props.chord2Pitches} scaleType={props.scaleType} scaleRootPitch={props.scaleRootPitch} canListen={false} position={chordDiagram2Position} lowestPitch={props.lowestPitch} />
-      {arrows}
-    </svg>
+        <ChordDiagramInternal pitches={props.chord1Pitches} scaleType={props.scaleType} scaleRootPitch={props.scaleRootPitch} canListen={false} lowestPitch={props.lowestPitch} />
+        <ChordDiagramInternal pitches={props.chord2Pitches} scaleType={props.scaleType} scaleRootPitch={props.scaleRootPitch} canListen={false} position={chordDiagram2Position} lowestPitch={props.lowestPitch} />
+        {arrows}
+      </svg>
+    </div>
   );
 };
 
@@ -330,7 +346,9 @@ export const ChordProgressionsSection: React.FunctionComponent<SectionProps> = p
     <p style={{textAlign: "center"}}>
       <ChordTransitionDiagram
         chord1Pitches={Chord.fromPitchAndFormulaString(new Pitch(PitchLetter.G, 0, 4), ChordType.Dom7.formulaString).pitches}
+        chord1Name="V7"
         chord2Pitches={[new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]}
+        chord2Name="I"
         scaleType={ScaleType.Ionian}
         scaleRootPitch={new Pitch(PitchLetter.C, 0, 4)} />
     </p>
@@ -346,21 +364,27 @@ export const ChordProgressionsSection: React.FunctionComponent<SectionProps> = p
     <p style={{textAlign: "center"}}>
       <ChordTransitionDiagram
         chord1Pitches={[new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.B, 0, 4)]}
+        chord1Name="V7"
         chord2Pitches={[new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]}
+        chord2Name="I"
         scaleType={ScaleType.Ionian}
         scaleRootPitch={new Pitch(PitchLetter.C, 0, 4)} />
     </p>
 
-    <p>You can hear (TODO: listening) that this voicing is much smoother, because the individual chord voices move small distances.</p>
+    <p>You can hear that this voicing is much smoother, because the individual chord voices move small distances.</p>
 
-    <NoteText>Large jumps in the bass voice (the lowest notes) of chords are sometimes acceptable, as they are more pleasing to the ear than large jumps with other chord voices. The example below illustrates this: both the V7 chord and the I chord are in root position, and the bass voice jumps down by a P5, but the chord progression still sounds good.</NoteText>
-    <p style={{textAlign: "center"}}>
-      <ChordTransitionDiagram
-        chord1Pitches={Chord.fromPitchAndFormulaString(new Pitch(PitchLetter.G, 0, 4), ChordType.Dom7.formulaString).pitches}
-        chord2Pitches={[new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5), new Pitch(PitchLetter.E, 0, 5)]}
-        scaleType={ScaleType.Ionian}
-        scaleRootPitch={new Pitch(PitchLetter.C, 0, 4)} />
-    </p>
+    <NoteText>
+      Large jumps in the bass voice (the lowest notes) of chords are sometimes acceptable, as they are more pleasing to the ear than large jumps with other chord voices. The example below illustrates this: both the V7 chord and the I chord are in root position, and the bass voice jumps down by a P5, but the chord progression still sounds good.
+      <p style={{textAlign: "center"}}>
+        <ChordTransitionDiagram
+          chord1Pitches={Chord.fromPitchAndFormulaString(new Pitch(PitchLetter.G, 0, 4), ChordType.Dom7.formulaString).pitches}
+          chord1Name="V7"
+          chord2Pitches={[new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5), new Pitch(PitchLetter.E, 0, 5)]}
+          chord2Name="I"
+          scaleType={ScaleType.Ionian}
+          scaleRootPitch={new Pitch(PitchLetter.C, 0, 4)} />
+      </p>
+    </NoteText>
     
     <BecomeAPatronSection />
 
@@ -1201,7 +1225,7 @@ export const ScalesAndModesSection: React.FunctionComponent<SectionProps> = prop
 
 export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
   <div>
-    <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory/scales-and-modes", "<< Previous: Scales & Modes")} | Next: Chord Progressions (coming soon) >></p>
+    <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory/scales-and-modes", "<< Previous: Scales & Modes")} | {App.instance.renderNavLink("/essential-music-theory/chord-progressions", "Next: Chord Progressions >>")}</p>
 
     <SectionTitle>Chords</SectionTitle>
     <p><Term>Chords</Term> are groups of three or more notes played simultaneously. Chords make up <Term>harmony</Term> in music &mdash; the sounds or feelings that result from multiple notes being played simultaneously. <Term>Harmony</Term> is the third and final fundamental element of music we will study, now that we have explored the first two: <Term>rhythm</Term> and <Term>melody</Term>.</p>
@@ -1428,7 +1452,7 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
     <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(GuitarChords.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
     <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(ChordEarTraining.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
 
-    <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory/scales-and-modes", "<< Previous: Scales & Modes")} | Next: Chord Progressions (coming soon) >></p>
+    <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory/scales-and-modes", "<< Previous: Scales & Modes")} | {App.instance.renderNavLink("/essential-music-theory/chord-progressions", "Next: Chord Progressions >>")}</p>
   </div>
 );
 

@@ -253,7 +253,8 @@ class App extends React.Component<IAppProps, IAppState> {
           {this.renderNavLink("/essential-music-theory/intervals", "Intervals")}
           {this.renderNavLink("/essential-music-theory/scales-and-modes", "Scales & Modes")}
           {this.renderNavLink("/essential-music-theory/chords", "Chords")}
-          <p><em>Chord Progressions (coming soon)</em></p>
+          {this.renderNavLink("/essential-music-theory/chord-progressions", "Chord Progressions")}
+          <p><em>Next steps (coming soon)</em></p>
         </div>
         <div>
           <NavSectionSubTitle>Notes</NavSectionSubTitle>
