@@ -257,8 +257,9 @@ class App extends React.Component<IAppProps, IAppState> {
           <p><em>Next steps (coming soon)</em></p>
         </div>
         <div>
-          <NavSectionSubTitle>Notes</NavSectionSubTitle>
+          <NavSectionSubTitle>Guitar</NavSectionSubTitle>
           <NavLink to="/learn-guitar-notes-in-10-steps" className="nav-link">Learn the Notes on Guitar in 10 Easy Steps</NavLink>
+          <NavLink to="/learn-guitar-scales" className="nav-link">Learn Scales &amp; Modes on Guitar</NavLink>
         </div>
 
         <NavSectionTitle>Exercises</NavSectionTitle>

@@ -118,7 +118,7 @@ export class ScaleType {
     public pitchIntegers: Array<number>,
     public formulaString: string) {}
 
-  public get length(): number {
+  public get numPitches(): number {
     return this.pitchIntegers.length;
   }
   
@@ -133,15 +133,15 @@ export class ScaleType {
   }
   public getMode(scaleDegree: number): ScaleType {
     Utils.precondition(scaleDegree >= 1);
-    Utils.precondition(scaleDegree <= this.length);
+    Utils.precondition(scaleDegree <= this.numPitches);
 
     if (scaleDegree === 1) { return this; }
 
     const halfStepsToSubtract = this.pitchIntegers[scaleDegree - 1];
-    const modePitchIntegers = new Array<number>(this.length);
+    const modePitchIntegers = new Array<number>(this.numPitches);
     for (let modeI = 0; modeI < modePitchIntegers.length; modeI++) {
       const unwrappedBaseScaleI = (scaleDegree - 1) + modeI;
-      const baseScaleI = unwrappedBaseScaleI % this.length;
+      const baseScaleI = unwrappedBaseScaleI % this.numPitches;
       
       modePitchIntegers[modeI] = Utils.mod(this.pitchIntegers[baseScaleI] - halfStepsToSubtract, 12);
     }
@@ -151,15 +151,15 @@ export class ScaleType {
   }
   public getDiatonicChordType(scaleDegree: number, numChordPitches: number): ChordType {
     Utils.precondition(scaleDegree >= 1);
-    Utils.precondition(scaleDegree <= this.length);
+    Utils.precondition(scaleDegree <= this.numPitches);
     Utils.precondition(numChordPitches >= 1);
-    Utils.precondition(numChordPitches <= this.length);
+    Utils.precondition(numChordPitches <= this.numPitches);
 
     const halfStepsToSubtract = this.pitchIntegers[scaleDegree - 1];
     const chordPitchIntegers = new Array<number>(numChordPitches);
     for (let chordI = 0; chordI < chordPitchIntegers.length; chordI++) {
       const unwrappedScaleI = (scaleDegree - 1) + (2 * chordI);
-      const baseScaleI = unwrappedScaleI % this.length;
+      const baseScaleI = unwrappedScaleI % this.numPitches;
       
       chordPitchIntegers[chordI] = Utils.mod(this.pitchIntegers[baseScaleI] - halfStepsToSubtract, 12);
     }
@@ -169,7 +169,7 @@ export class ScaleType {
   }
   public getDiatonicChordTypes(numChordPitches: number): Array<ChordType> {
     Utils.precondition(numChordPitches >= 1);
-    Utils.precondition(numChordPitches <= this.length);
+    Utils.precondition(numChordPitches <= this.numPitches);
 
     return this.pitchIntegers
       .map((_, i) => this.getDiatonicChordType(1 + i, numChordPitches));

@@ -345,10 +345,6 @@ export function createFlashCards(): Array<FlashCard> {
 
           return (
             <div>
-              <GuitarFretboard
-                width={size.width} height={size.height}
-                renderExtrasFn={metrics => renderGuitarFretboardScaleExtras(metrics, rootPitch, scaleType, renderAllScaleShapes)}
-              />
               <GuitarScaleViewer scaleType={scaleType} rootPitch={rootPitch} renderAllScaleShapes={false} size={size} />
             </div>
           );

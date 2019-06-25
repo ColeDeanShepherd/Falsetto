@@ -1,7 +1,7 @@
 import * as React from "react";
 import { CardContent, Card, Typography } from "@material-ui/core";
-import App from './App';
 
+import App from './App';
 import * as GuitarNotes from "./Quizzes/GuitarNotes";
 import * as PianoNotes from "./Quizzes/PianoNotes";
 import * as PianoIntervals from "./Quizzes/PianoIntervals";

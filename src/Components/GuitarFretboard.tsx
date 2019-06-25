@@ -291,14 +291,11 @@ export function renderGuitarFretboardScaleExtras(
         </g>
       );
     });
-  const labeledFretNumber = (metrics.minFretNumber === 0)
-    ? 0
-    : metrics.minFretNumber + 1;
   
   return (
     <g>
       {rootPitchFretDots}
-      {renderFretNumber(metrics, labeledFretNumber)}
+      {renderFretNumbers(metrics)}
     </g>
   );
 }
@@ -387,7 +384,7 @@ export function renderFretNumber(
   );
 }
 export function renderFretNumbers(metrics: GuitarFretboardMetrics): JSX.Element {
-  const fretNumbers = Utils.range(0, 11);
+  const fretNumbers = Utils.range(metrics.minFretNumber, metrics.minFretNumber + metrics.fretCount);
   return (
     <g>
       {fretNumbers.map(fretNumber => renderFretNumber(metrics, fretNumber))}

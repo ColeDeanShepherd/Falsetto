@@ -2,24 +2,48 @@ import * as React from "react";
 import { Card, CardContent } from '@material-ui/core';
 
 import * as Utils from "../Utils";
-import { GuitarFretboard, renderGuitarNoteHighlightsAndNoteNames, GuitarNote, GuitarFretboardMetrics, renderGuitarNoteHighlightsAndLabels } from './GuitarFretboard';
+import App from './App';
+import { GuitarFretboard, GuitarNote, GuitarFretboardMetrics, renderGuitarNoteHighlightsAndLabels, renderFretNumbers } from './GuitarFretboard';
 import { Pitch } from '../Pitch';
 import { PitchLetter } from '../PitchLetter';
 import { MAX_MAIN_CARD_WIDTH } from './Style';
 import { ScaleType } from '../Scale';
 import { NoteText } from './EssentialMusicTheory';
+import { ScaleAudioPlayer } from './ScaleAudioPlayer';
+import { createStudyFlashCardGroupComponent } from './StudyFlashCards';
+import * as GuitarScales from "./Quizzes/GuitarScales";
 
+export function getConstantNotesPerStringScaleNotes(
+  scaleType: ScaleType, rootPitch: Pitch, stringCount: number, notesPerString: number
+): Array<GuitarNote> {
+  Utils.precondition(stringCount >= 1);
+  Utils.precondition(notesPerString >= 1)
+
+  const scalePitches = scaleType.getPitches(rootPitch);
+  const guitarNotes = new Array<GuitarNote>(stringCount * notesPerString);
+
+  for (let i = 0; i < guitarNotes.length; i++) {
+    const scalePitchI = i % scaleType.numPitches;
+    const deltaOctave = Math.floor(i / scaleType.numPitches);
+    const stringI = Math.floor(i / notesPerString);
+
+    guitarNotes[i] = new GuitarNote(
+      new Pitch(scalePitches[scalePitchI].letter, scalePitches[scalePitchI].signedAccidental, scalePitches[scalePitchI].octaveNumber + deltaOctave),
+      stringI
+    );
+  }
+
+  return guitarNotes;
+}
+export function get2NotePerStringScaleNotes(
+  scaleType: ScaleType, rootPitch: Pitch, stringCount: number
+): Array<GuitarNote> {
+  return getConstantNotesPerStringScaleNotes(scaleType, rootPitch, stringCount, 2);
+}
 export function get3NotePerStringScaleNotes(
   scaleType: ScaleType, rootPitch: Pitch, stringCount: number
 ): Array<GuitarNote> {
-  const scalePitches = (new Array<Pitch>())
-    .concat(scaleType.getPitches(rootPitch))
-    .concat(scaleType.getPitches(new Pitch(rootPitch.letter, rootPitch.signedAccidental, rootPitch.octaveNumber + 1)))
-    .concat(scaleType.getPitches(new Pitch(rootPitch.letter, rootPitch.signedAccidental, rootPitch.octaveNumber + 2)))
-    .slice(0, 3 * stringCount);
-  const guitarNotes = scalePitches
-    .map((p, i) => new GuitarNote(p, Math.floor(i / 3)));
-  return guitarNotes;
+  return getConstantNotesPerStringScaleNotes(scaleType, rootPitch, stringCount, 3);
 }
 
 const fretCount = 17;
@@ -39,14 +63,16 @@ export class GuitarScalesLesson extends React.Component<IGuitarScalesLessonProps
   }
   public render(): JSX.Element {
     const fretboardWidth = 600;
-    const fretboardHeight = 160;
+    const fretboardHeight = 170;
     const fretboardStyle = { width: "100%", maxWidth: "400px", height: "auto" };
 
     return (
       <Card style={{ maxWidth: MAX_MAIN_CARD_WIDTH, marginBottom: "6em" }}>
         <CardContent style={{ textAlign: "center" }}>
-          <h1>Learn the Guitar Scales</h1>
-          
+          <h1>Learn the Scales &amp; Modes on Guitar</h1>
+          <p>Knowing common scales &amp; modes on your instrument is vital to becoming a skilled musician. There are countless scales &amp; modes to learn, but we will leverage some repeating patterns that arise on the guitar fretboard to quickly and easily learn the most common scales &amp; modes on guitar.</p>
+          <p>If you are not already familiar with scales &amp; modes at a conceptual level, we highly recommend you complete the {App.instance.renderNavLink("/essential-music-theory/scales-and-modes", "Scales & Modes")} section of our "Essential Music Theory" course before continuing with this lesson.</p>
+
           <h3>Repeating Pattern for Modes of the Major Scale</h3>
           <p>The modes of each scale played with 3 notes per string on guitar follows a specific repeating pattern of shapes. For the modes of the major scale, there are 7 parts to the repeating pattern -- one for each note in the major scale -- so we will show the repeating pattern on a 7 string guitar. The diagram below just happens to start on the 5th fret, but the pattern will be shifted left or right depending on which scale or mode is being played.</p>
           <p>
@@ -78,10 +104,11 @@ export class GuitarScalesLesson extends React.Component<IGuitarScalesLessonProps
             <li>repeat the pattern if it extends past the 7th part of the pattern</li>
             <li>include a 1-fret shift to the right when crossing from the G string (3rd string) to the B string (2nd string)</li>
           </ul>
-          <p>Let's take a look at the shapes for the modes of the F major scale. Pay closer attention to the shapes on the fretboard, which are not specific to the underlying key, than the exact fret numbers.</p>
+          <p>Let's take a look at the shapes for the modes of the F major scale. Pay attention to the shapes on the fretboard, which are not specific to the underlying key, instead of the exact fret numbers.</p>
 
-          <h3>Major Scale (Ionian)</h3>
-          <p>The major scale starts on the 2nd part of the repeating pattern above. Here is the F major scale (1st mode of the F major scale):</p>
+          <h3>Major Scale (Ionian Mode)</h3>
+          <p>The F ionian mode is the 1st mode of the F major scale, and starts on the 2nd part of the repeating pattern above. Here is the F ionian scale:</p>
+          <p><ScaleAudioPlayer scale={ScaleType.Ionian} rootPitch={baseScalePitches[0]} /></p>
           <p>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
@@ -92,7 +119,8 @@ export class GuitarScalesLesson extends React.Component<IGuitarScalesLessonProps
           </p>
           
           <h3>Dorian</h3>
-          <p>The dorian mode starts on the 7th part of the repeating pattern above. Here is the G dorian mode (2st mode of the F major scale):</p>
+          <p>The G dorian mode is the 2nd mode of the F major scale, and starts on the 7th part of the repeating pattern above. Here is the G dorian mode:</p>
+          <p><ScaleAudioPlayer scale={ScaleType.Dorian} rootPitch={baseScalePitches[1]} /></p>
           <p>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
@@ -103,7 +131,8 @@ export class GuitarScalesLesson extends React.Component<IGuitarScalesLessonProps
           </p>
           
           <h3>Phrygian</h3>
-          <p>The phrygian mode starts on the 5th part of the repeating pattern. Here is the A phrygian mode (3rd mode of the F major scale):</p>
+          <p>The A phrygian mode is the 3rd mode of the F major scale, and starts on the 5th part of the repeating pattern. Here is the A phrygian mode:</p>
+          <p><ScaleAudioPlayer scale={ScaleType.Phrygian} rootPitch={baseScalePitches[2]} /></p>
           <p>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
@@ -114,7 +143,8 @@ export class GuitarScalesLesson extends React.Component<IGuitarScalesLessonProps
           </p>
 
           <h3>Lydian</h3>
-          <p>The lydian mode starts on the 3rd part of the repeating pattern. Here is the Bb lydian mode (4th mode of the F major scale):</p>
+          <p>The Bb lydian mode is the 4th mode of the F major scale, and starts on the 3rd part of the repeating pattern. Here is the Bb lydian mode:</p>
+          <p><ScaleAudioPlayer scale={ScaleType.Lydian} rootPitch={baseScalePitches[3]} /></p>
           <p>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
@@ -125,7 +155,8 @@ export class GuitarScalesLesson extends React.Component<IGuitarScalesLessonProps
           </p>
 
           <h3>Mixolydian</h3>
-          <p>The mixolydian mode starts on the 1st part of the repeating pattern. Here is the C mixolydian mode (5th mode of the F major scale):</p>
+          <p>The C mixolydian mode is the 5th mode of the F major scale, and starts on the 1st part of the repeating pattern. Here is the C mixolydian mode:</p>
+          <p><ScaleAudioPlayer scale={ScaleType.Mixolydian} rootPitch={baseScalePitches[4]} /></p>
           <p>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
@@ -135,8 +166,9 @@ export class GuitarScalesLesson extends React.Component<IGuitarScalesLessonProps
             />
           </p>
 
-          <h3>Minor Scale (Aeolian)</h3>
-          <p>The minor scale (aeolian mode) starts on the 6th part of the repeating pattern. Here is the D major scale (aeolian mode) (6th mode of the F major scale):</p>
+          <h3>Minor Scale (Aeolian Mode)</h3>
+          <p>The D minor scale (aeolian mode) is the 6th mode of the F major scale, and starts on the 6th part of the repeating pattern. Here is the D minor scale (aeolian mode):</p>
+          <p><ScaleAudioPlayer scale={ScaleType.Aeolian} rootPitch={baseScalePitches[5]} /></p>
           <p>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
@@ -147,7 +179,8 @@ export class GuitarScalesLesson extends React.Component<IGuitarScalesLessonProps
           </p>
 
           <h3>Locrian</h3>
-          <p>The locrian mode starts on the 4th part of the repeating pattern. Here is the E locrian mode (7th mode of the F major scale):</p>
+          <p>The E locrian mode is the 7th mode of the F major scale, and starts on the 4th part of the repeating pattern. Here is the E locrian mode:</p>
+          <p><ScaleAudioPlayer scale={ScaleType.Locrian} rootPitch={baseScalePitches[6]} /></p>
           <p>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
@@ -160,11 +193,8 @@ export class GuitarScalesLesson extends React.Component<IGuitarScalesLessonProps
           <h3>Summary</h3>
           <p>We have now learned the 7 modes of the F major scale, and with that knowledge, we can now play any mode of any other major scale, simply by shifting the patterns to the left or right to start on the desired note. Use the interactive exercises below to test your knowledge:</p>
 
-          <p>TODO: audio</p>
-          <p>TODO: quizzes</p>
-
           <h3>Interactive Exercises</h3>
-
+          <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(GuitarScales.createFlashCardGroup(), false, true)}</div>
         </CardContent>
       </Card>
     );
@@ -178,7 +208,9 @@ export class GuitarScalesLesson extends React.Component<IGuitarScalesLessonProps
     dontShiftBetweenGAndBStrings = (dontShiftBetweenGAndBStrings !== undefined)
       ? dontShiftBetweenGAndBStrings
       : false;
-    const notes = get3NotePerStringScaleNotes(scaleType, rootPitch, metrics.stringCount);
+    const notes = (scaleType.numPitches === 5)
+      ? get2NotePerStringScaleNotes(scaleType, rootPitch, metrics.stringCount)
+      : get3NotePerStringScaleNotes(scaleType, rootPitch, metrics.stringCount);
 
     if (dontShiftBetweenGAndBStrings) {
       const gStringIndex = (metrics.stringCount === 6)
@@ -197,35 +229,7 @@ export class GuitarScalesLesson extends React.Component<IGuitarScalesLessonProps
         {renderGuitarNoteHighlightsAndLabels(
           metrics, notes, noteHighlightColor, (n, i) => (1 + (i % scaleType.pitchIntegers.length)).toString()
         )}
-        {this.renderFretNumbers(metrics)}
-      </g>
-    );
-  }
-  private renderFretNumbers(metrics: GuitarFretboardMetrics): JSX.Element {
-    const fretNumbers = Utils.range(0, fretCount);
-    return (
-      <g>
-        {fretNumbers.map(fretNumber => {
-          const fontSize = 12;
-          let x = metrics.getNoteX(fretNumber) - (0.4 * fontSize);
-          if (fretNumber == 0) {
-            x -= 0.25 * metrics.fretSpacing;
-          }
-
-          const y = metrics.height + 20;
-          const textStyle: any = {
-            fontSize: `${fontSize}px`,
-            fontWeight: "bold"
-          };
-
-          return (
-            <text
-              x={x} y={y}
-              style={textStyle}>
-              {fretNumber}
-            </text>
-          );
-        })}
+        {renderFretNumbers(metrics)}
       </g>
     );
   }

@@ -114,8 +114,13 @@ export function playSoundsSequentially(sounds: Array<Howl>, delayInMs: number, c
     const i = uncapturedI; // capture the index for the lambda
     const sound = sounds[i];
 
+    sound.stop();
+    sound.volume(1);
+
     if (sound) {
       setTimeout(() => {
+        if (isCancelled) { return; }
+
         // stop the previous sound if necessary
         if (cutOffSounds && (i > 0)) {
           const previousLoadedSound = sounds[i - 1];
@@ -126,9 +131,7 @@ export function playSoundsSequentially(sounds: Array<Howl>, delayInMs: number, c
         }
 
         // play the current sound
-        if (!isCancelled) {
-          sound.play();
-        }
+        sound.play();
       }, delayInMs * i);
     }
   }
