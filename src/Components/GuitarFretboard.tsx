@@ -6,7 +6,7 @@ import { PitchLetter } from "../PitchLetter";
 import { Size2D } from '../Size2D';
 import { Rect2D } from '../Rect2D';
 import { Vector2D } from '../Vector2D';
-import { get3NotePerStringScaleNotes } from './GuitarScalesLesson';
+import { get3NotePerStringScaleNotes, get2NotePerStringScaleNotes } from './GuitarScalesLesson';
 import { ScaleType } from '../Scale';
 import { ChordType, Chord } from '../Chord';
 
@@ -45,12 +45,24 @@ export const standard7StringGuitarTuning = new GuitarTuning([
   new Pitch(PitchLetter.B, 0, 3),
   new Pitch(PitchLetter.E, 0, 4)
 ]);
+export const standard8StringGuitarTuning = new GuitarTuning([
+  new Pitch(PitchLetter.F, 1, 1),
+  new Pitch(PitchLetter.B, 0, 1),
+  new Pitch(PitchLetter.E, 0, 2),
+  new Pitch(PitchLetter.A, 0, 2),
+  new Pitch(PitchLetter.D, 0, 3),
+  new Pitch(PitchLetter.G, 0, 3),
+  new Pitch(PitchLetter.B, 0, 3),
+  new Pitch(PitchLetter.E, 0, 4)
+]);
 export function getStandardGuitarTuning(stringCount: number): GuitarTuning {
   switch (stringCount) {
     case 6:
       return standard6StringGuitarTuning;
     case 7:
       return standard7StringGuitarTuning;
+    case 8:
+      return standard8StringGuitarTuning;
     default:
       throw new Error(`No registered standard guitar tuning for ${stringCount} strings.`);
   }
@@ -247,7 +259,9 @@ export function renderGuitarFretboardScaleExtras(
         tuning, pitches, metrics.fretCount
       )
     )
-    : get3NotePerStringScaleNotes(scaleType, rootPitch, metrics.stringCount);
+    : ((scaleType.numPitches === 5)
+      ? get2NotePerStringScaleNotes(scaleType, rootPitch, metrics.stringCount)
+      : get3NotePerStringScaleNotes(scaleType, rootPitch, metrics.stringCount));
   const formulaStringParts = scaleType.formulaString.split(" ");
 
   const rootPitchFretDots = guitarNotes

@@ -48,6 +48,9 @@ export class ScaleType {
   public static Augmented = new ScaleType("Augmented", [0, 3, 4, 7, 8, 11], "1 #2 3 5 #5 7");
 
   public static MajorPentatonic = new ScaleType("Major Pentatonic", [0, 2, 4, 7, 9], "1 2 3 5 6");
+  public static MajorPentatonicMode2 = new ScaleType("Major Pentatonic Mode 2", [0, 2, 5, 7, 10], "1 2 4 5 b7");
+  public static MajorPentatonicMode3 = new ScaleType("Major Pentatonic Mode 3", [0, 3, 5, 8, 10], "1 b3 4 b6 b7");
+  public static MajorPentatonicMode4 = new ScaleType("Major Pentatonic Mode 4", [0, 2, 5, 7, 9], "1 2 4 5 6");
   public static MinorPentatonic = new ScaleType("Minor Pentatonic", [0, 3, 5, 7, 10], "1 b3 4 5 b7");
 
   public static MajorBlues = new ScaleType("Major Blues", [0, 2, 3, 4, 7, 9], "1 2 b3 3 5 6");
@@ -75,6 +78,13 @@ export class ScaleType {
     ScaleType.Aeolian,
     ScaleType.Locrian
   ];
+  public static MajorPentatonicScaleModes = [
+    ScaleType.MajorPentatonic,
+    ScaleType.MajorPentatonicMode2,
+    ScaleType.MajorPentatonicMode2,
+    ScaleType.MajorPentatonicMode3,
+    ScaleType.MinorPentatonic,
+  ];
   public static All = [
     ScaleType.Ionian,
     ScaleType.Dorian,
@@ -94,6 +104,9 @@ export class ScaleType {
     ScaleType.Augmented,
 
     ScaleType.MajorPentatonic,
+    ScaleType.MajorPentatonicMode2,
+    ScaleType.MajorPentatonicMode2,
+    ScaleType.MajorPentatonicMode3,
     ScaleType.MinorPentatonic,
 
     ScaleType.MajorBlues,
@@ -175,35 +188,3 @@ export class ScaleType {
       .map((_, i) => this.getDiatonicChordType(1 + i, numChordPitches));
   }
 }
-
-export const scaleTypes: Array<ScaleType> = [
-  ScaleType.Ionian,
-  ScaleType.Dorian,
-  ScaleType.Phrygian,
-  ScaleType.Lydian,
-  ScaleType.Mixolydian,
-  ScaleType.Aeolian,
-  ScaleType.Locrian,
-  ScaleType.MelodicMinor,
-  ScaleType.HarmonicMinor,
-  ScaleType.TonicDiminished,
-  ScaleType.DominantDiminished,
-  ScaleType.WholeTone,
-  ScaleType.Augmented,
-  ScaleType.MajorPentatonic,
-  ScaleType.MinorPentatonic,
-  ScaleType.MajorBlues,
-  ScaleType.MinorBlues,
-  ScaleType.Dorianb2,
-  ScaleType.LydianAug,
-  ScaleType.MixolydianSharp11,
-  ScaleType.Mixolydianb6,
-  ScaleType.LocrianNat9,
-  ScaleType.AlteredDominant,
-  ScaleType.LocrianNat6,
-  ScaleType.IonianAug,
-  ScaleType.DorianSharp11,
-  ScaleType.PhrygianMajor,
-  ScaleType.LydianSharp9,
-  ScaleType.AlteredDominantbb7
-];

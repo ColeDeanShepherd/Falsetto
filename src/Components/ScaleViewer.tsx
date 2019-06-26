@@ -5,7 +5,7 @@ import { Vector2D } from '../Vector2D';
 import { Size2D } from "../Size2D";
 import { Rect2D } from '../Rect2D';
 import { PitchLetter } from "../PitchLetter";
-import { scaleTypes as allScales, ScaleType } from "../Scale";
+import { ScaleType } from "../Scale";
 import { Pitch } from "../Pitch";
 import { Button, Card, CardContent, Typography } from "@material-ui/core";
 import { Chord } from "../Chord";
@@ -203,7 +203,7 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
   private get scales(): Array<ScaleType> {
     return this.props.scales
       ? this.props.scales
-      : allScales;
+      : ScaleType.All;
   }
   private renderRootPitchRow(rootPitches: Array<Pitch | null>): JSX.Element {
     return (

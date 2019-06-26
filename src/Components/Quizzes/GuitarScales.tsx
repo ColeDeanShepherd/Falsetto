@@ -5,7 +5,7 @@ import * as Utils from "../../Utils";
 import { Vector2D } from '../../Vector2D';
 import { Size2D } from "../../Size2D";
 import { Rect2D } from '../../Rect2D';
-import { scaleTypes, ScaleType } from "../../Scale";
+import { ScaleType } from "../../Scale";
 import { PianoKeyboard } from "../PianoKeyboard";
 import { FlashCard, FlashCardSide } from "../../FlashCard";
 import { FlashCardGroup } from "../../FlashCardGroup";
@@ -15,7 +15,7 @@ import { PitchLetter } from "../../PitchLetter";
 import { Chord, ChordType } from "../../Chord";
 import { GuitarFretboard, renderGuitarFretboardScaleExtras, getStandardGuitarTuning, findGuitarChordShape, renderGuitarFretboardChordExtras } from "../GuitarFretboard";
 import { ScaleAnswerSelect } from "../ScaleAnswerSelect";
-import { get3NotePerStringScaleNotes } from '../GuitarScalesLesson';
+import { get3NotePerStringScaleNotes, get2NotePerStringScaleNotes } from '../GuitarScalesLesson';
 
 const rootPitchStrs = ["Ab", "A", "Bb", "B/Cb", "C", "C#/Db", "D", "Eb", "E", "F", "F#/Gb", "G"];
 const renderAllScaleShapes = false;
@@ -42,7 +42,9 @@ export const GuitarScaleViewer: React.FunctionComponent<{
     rootPitch.octaveNumber++;
   }
 
-  const guitarNotes = get3NotePerStringScaleNotes(props.scaleType, rootPitch, STRING_COUNT);
+  const guitarNotes = (props.scaleType.numPitches === 5)
+    ? get2NotePerStringScaleNotes(props.scaleType, rootPitch, STRING_COUNT)
+    : get3NotePerStringScaleNotes(props.scaleType, rootPitch, STRING_COUNT);
   const guitarTuning = getStandardGuitarTuning(STRING_COUNT);
   const maxFretNumber = Utils.arrayMax(guitarNotes
     .map(gn => gn.getFretNumber(guitarTuning))
@@ -103,7 +105,7 @@ export function forEachScale(callbackFn: (scaleType: ScaleType, rootPitch: Pitch
     }
 
     // Iterate through each scale type for the root pitch.
-    for (const scaleType of scaleTypes) {
+    for (const scaleType of ScaleType.All) {
       callbackFn(scaleType, rootPitch, rootPitchStrs[rootPitchStrIndex], i);
       i++;
     }
@@ -159,7 +161,7 @@ export class GuitarScalesFlashCardMultiSelect extends React.Component<IGuitarSca
       </Table>
     );
 
-    const scaleTypeCheckboxTableRows = scaleTypes
+    const scaleTypeCheckboxTableRows = ScaleType.All
       .map((scale, i) => {
         const isChecked = this.props.configData.enabledScaleTypes.indexOf(scale.type) >= 0;
         const isEnabled = !isChecked || (this.props.configData.enabledScaleTypes.length > 1);
@@ -296,7 +298,7 @@ export class GuitarNotesAnswerSelect extends React.Component<IGuitarNotesAnswerS
   }
 }
 
-export function createFlashCardGroup(): FlashCardGroup {
+export function createFlashCardGroup(initialScaleTypes?: Array<ScaleType>): FlashCardGroup {
   const renderFlashCardMultiSelect = (
     flashCards: Array<FlashCard>,
     selectedFlashCardIndices: number[],
@@ -315,9 +317,12 @@ export function createFlashCardGroup(): FlashCardGroup {
 
   const initialConfigData: IConfigData = {
     enabledRootPitches: rootPitchStrs.slice(),
-    enabledScaleTypes: scaleTypes
-      .filter((_, scaleIndex) => scaleIndex <= 8)
-      .map(scale => scale.type)
+    enabledScaleTypes: !initialScaleTypes
+      ? ScaleType.All
+        .filter((_, scaleIndex) => scaleIndex <= 8)
+        .map(scale => scale.type)
+      : initialScaleTypes
+        .map(scaleType => Utils.unwrapValueOrUndefined(ScaleType.All.find(st => st.equals(scaleType))).type)
   };
 
   const group = new FlashCardGroup("Guitar Scales", createFlashCards);
@@ -368,7 +373,7 @@ export function renderAnswerSelect(
 ) {
   if (!areFlashCardsInverted) {
     const correctAnswer = flashCard.backSide.renderFn as string;
-    const activeScales = scaleTypes
+    const activeScales = ScaleType.All
       .filter((_, i) => Utils.arrayContains(enabledFlashCardIndices, i));
     return <ScaleAnswerSelect key={correctAnswer} scales={activeScales} correctAnswer={correctAnswer} onAnswer={onAnswer} />;
   } else {

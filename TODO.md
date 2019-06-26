@@ -1,5 +1,9 @@
 # To-Do
 ## High Priority
+* Guitar Scales Lesson
+  * Make play buttons play all guitar notes
+  * Play guitar sounds?
+  * Major scale repeating pattern game?
 * Make ear training exercises play automatically when you skip.
 * Add inversions to Piano Chords
 * Add sheet music notes lesson.

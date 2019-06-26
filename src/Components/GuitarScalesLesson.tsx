@@ -47,8 +47,10 @@ export function get3NotePerStringScaleNotes(
 }
 
 const fretCount = 17;
-const scalesRootPitch = new Pitch(PitchLetter.F, 0, 2);
-const baseScalePitches = ScaleType.Ionian.getPitches(scalesRootPitch);
+const ionianRootPitch = new Pitch(PitchLetter.F, 0, 2);
+const ionianPitches = ScaleType.Ionian.getPitches(ionianRootPitch);
+const majorPentatonicRootPitch = new Pitch(PitchLetter.A, 0, 2);
+const majorPentatonicPitches = ScaleType.MajorPentatonic.getPitches(majorPentatonicRootPitch);
 const noteHighlightColor = "lightgreen";
 
 export interface IGuitarScalesLessonProps {
@@ -78,7 +80,7 @@ export class GuitarScalesLesson extends React.Component<IGuitarScalesLessonProps
           <p>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
-              renderExtrasFn={metrics => this.renderDiagramExtras(metrics, ScaleType.Mixolydian, baseScalePitches[0], true)}
+              renderExtrasFn={metrics => this.renderDiagramExtras(metrics, ScaleType.Mixolydian, ionianPitches[0], true)}
               fretCount={fretCount}
               stringCount={7}
               style={fretboardStyle}
@@ -89,7 +91,7 @@ export class GuitarScalesLesson extends React.Component<IGuitarScalesLessonProps
             <p>
               <GuitarFretboard
                 width={fretboardWidth} height={fretboardHeight}
-                renderExtrasFn={metrics => this.renderDiagramExtras(metrics, ScaleType.Mixolydian, baseScalePitches[0])}
+                renderExtrasFn={metrics => this.renderDiagramExtras(metrics, ScaleType.Mixolydian, ionianPitches[0])}
                 fretCount={fretCount}
                 stringCount={7}
                 style={fretboardStyle}
@@ -108,11 +110,11 @@ export class GuitarScalesLesson extends React.Component<IGuitarScalesLessonProps
 
           <h3>Major Scale (Ionian Mode)</h3>
           <p>The F ionian mode is the 1st mode of the F major scale, and starts on the 2nd part of the repeating pattern above. Here is the F ionian scale:</p>
-          <p><ScaleAudioPlayer scale={ScaleType.Ionian} rootPitch={baseScalePitches[0]} /></p>
+          <p><ScaleAudioPlayer scale={ScaleType.Ionian} rootPitch={ionianPitches[0]} /></p>
           <p>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
-              renderExtrasFn={metrics => this.renderDiagramExtras(metrics, ScaleType.Ionian, baseScalePitches[0])}
+              renderExtrasFn={metrics => this.renderDiagramExtras(metrics, ScaleType.Ionian, ionianPitches[0])}
               fretCount={fretCount}
               style={fretboardStyle}
             />
@@ -120,11 +122,11 @@ export class GuitarScalesLesson extends React.Component<IGuitarScalesLessonProps
           
           <h3>Dorian</h3>
           <p>The G dorian mode is the 2nd mode of the F major scale, and starts on the 7th part of the repeating pattern above. Here is the G dorian mode:</p>
-          <p><ScaleAudioPlayer scale={ScaleType.Dorian} rootPitch={baseScalePitches[1]} /></p>
+          <p><ScaleAudioPlayer scale={ScaleType.Dorian} rootPitch={ionianPitches[1]} /></p>
           <p>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
-              renderExtrasFn={metrics => this.renderDiagramExtras(metrics, ScaleType.Dorian, baseScalePitches[1])}
+              renderExtrasFn={metrics => this.renderDiagramExtras(metrics, ScaleType.Dorian, ionianPitches[1])}
               fretCount={fretCount}
               style={fretboardStyle}
             />
@@ -132,11 +134,11 @@ export class GuitarScalesLesson extends React.Component<IGuitarScalesLessonProps
           
           <h3>Phrygian</h3>
           <p>The A phrygian mode is the 3rd mode of the F major scale, and starts on the 5th part of the repeating pattern. Here is the A phrygian mode:</p>
-          <p><ScaleAudioPlayer scale={ScaleType.Phrygian} rootPitch={baseScalePitches[2]} /></p>
+          <p><ScaleAudioPlayer scale={ScaleType.Phrygian} rootPitch={ionianPitches[2]} /></p>
           <p>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
-              renderExtrasFn={metrics => this.renderDiagramExtras(metrics, ScaleType.Phrygian, baseScalePitches[2])}
+              renderExtrasFn={metrics => this.renderDiagramExtras(metrics, ScaleType.Phrygian, ionianPitches[2])}
               fretCount={fretCount}
               style={fretboardStyle}
             />
@@ -144,11 +146,11 @@ export class GuitarScalesLesson extends React.Component<IGuitarScalesLessonProps
 
           <h3>Lydian</h3>
           <p>The Bb lydian mode is the 4th mode of the F major scale, and starts on the 3rd part of the repeating pattern. Here is the Bb lydian mode:</p>
-          <p><ScaleAudioPlayer scale={ScaleType.Lydian} rootPitch={baseScalePitches[3]} /></p>
+          <p><ScaleAudioPlayer scale={ScaleType.Lydian} rootPitch={ionianPitches[3]} /></p>
           <p>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
-              renderExtrasFn={metrics => this.renderDiagramExtras(metrics, ScaleType.Lydian, baseScalePitches[3])}
+              renderExtrasFn={metrics => this.renderDiagramExtras(metrics, ScaleType.Lydian, ionianPitches[3])}
               fretCount={fretCount}
               style={fretboardStyle}
             />
@@ -156,11 +158,11 @@ export class GuitarScalesLesson extends React.Component<IGuitarScalesLessonProps
 
           <h3>Mixolydian</h3>
           <p>The C mixolydian mode is the 5th mode of the F major scale, and starts on the 1st part of the repeating pattern. Here is the C mixolydian mode:</p>
-          <p><ScaleAudioPlayer scale={ScaleType.Mixolydian} rootPitch={baseScalePitches[4]} /></p>
+          <p><ScaleAudioPlayer scale={ScaleType.Mixolydian} rootPitch={ionianPitches[4]} /></p>
           <p>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
-              renderExtrasFn={metrics => this.renderDiagramExtras(metrics, ScaleType.Mixolydian, baseScalePitches[4])}
+              renderExtrasFn={metrics => this.renderDiagramExtras(metrics, ScaleType.Mixolydian, ionianPitches[4])}
               fretCount={fretCount}
               style={fretboardStyle}
             />
@@ -168,11 +170,11 @@ export class GuitarScalesLesson extends React.Component<IGuitarScalesLessonProps
 
           <h3>Minor Scale (Aeolian Mode)</h3>
           <p>The D minor scale (aeolian mode) is the 6th mode of the F major scale, and starts on the 6th part of the repeating pattern. Here is the D minor scale (aeolian mode):</p>
-          <p><ScaleAudioPlayer scale={ScaleType.Aeolian} rootPitch={baseScalePitches[5]} /></p>
+          <p><ScaleAudioPlayer scale={ScaleType.Aeolian} rootPitch={ionianPitches[5]} /></p>
           <p>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
-              renderExtrasFn={metrics => this.renderDiagramExtras(metrics, ScaleType.Aeolian, baseScalePitches[5])}
+              renderExtrasFn={metrics => this.renderDiagramExtras(metrics, ScaleType.Aeolian, ionianPitches[5])}
               fretCount={fretCount}
               style={fretboardStyle}
             />
@@ -180,21 +182,86 @@ export class GuitarScalesLesson extends React.Component<IGuitarScalesLessonProps
 
           <h3>Locrian</h3>
           <p>The E locrian mode is the 7th mode of the F major scale, and starts on the 4th part of the repeating pattern. Here is the E locrian mode:</p>
-          <p><ScaleAudioPlayer scale={ScaleType.Locrian} rootPitch={baseScalePitches[6]} /></p>
+          <p><ScaleAudioPlayer scale={ScaleType.Locrian} rootPitch={ionianPitches[6]} /></p>
           <p>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
-              renderExtrasFn={metrics => this.renderDiagramExtras(metrics, ScaleType.Locrian, baseScalePitches[6])}
+              renderExtrasFn={metrics => this.renderDiagramExtras(metrics, ScaleType.Locrian, ionianPitches[6])}
+              fretCount={fretCount}
+              style={fretboardStyle}
+            />
+          </p>
+          
+          <h3>Major Scale Mode Exercises</h3>
+          <p>We have now learned the 7 modes of the F major scale, and with that knowledge, we can now play any mode of any other major scale, simply by shifting the patterns to the left or right to start on the desired note. Use the interactive exercises below to test your knowledge:</p>
+          <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(GuitarScales.createFlashCardGroup(ScaleType.MajorScaleModes), false, true)}</div>
+
+          <hr style={{ margin: "5em 0" }} />
+
+          <h3>Major Pentatonic Scale</h3>
+          <p>Now let's take a look at the shapes for the modes of the A major pentatonic scale. Again, pay attention to the shapes on the fretboard, which are not specific to the underlying key, instead of the exact fret numbers.</p>
+          <p><ScaleAudioPlayer scale={ScaleType.MajorPentatonic} rootPitch={majorPentatonicPitches[0]} /></p>
+          <p>
+            <GuitarFretboard
+              width={fretboardWidth} height={fretboardHeight}
+              renderExtrasFn={metrics => this.renderDiagramExtras(metrics, ScaleType.MajorPentatonic, majorPentatonicPitches[0])}
+              fretCount={fretCount}
+              style={fretboardStyle}
+            />
+          </p>
+          <p>The modes of the major pentatonic scale have a pattern of: two 4-fret intervals followed by three 3-fret intervals. As you can see, the major scale starts with the 3rd 3-fret interval on the lowest string, then goes back to the beginning of the pattern starting on the 2nd-lowest string.</p>
+          
+          <h3>Major Pentatonic Mode 2</h3>
+          <p>The 2nd mode of the A major pentatonic scale starts with B and has the following shape:</p>
+          <p><ScaleAudioPlayer scale={ScaleType.MajorPentatonicMode2} rootPitch={majorPentatonicPitches[1]} /></p>
+          <p>
+            <GuitarFretboard
+              width={fretboardWidth} height={fretboardHeight}
+              renderExtrasFn={metrics => this.renderDiagramExtras(metrics, ScaleType.MajorPentatonicMode2, majorPentatonicPitches[1])}
+              fretCount={fretCount}
+              style={fretboardStyle}
+            />
+          </p>
+          
+          <h3>Major Pentatonic Mode 3</h3>
+          <p>The 3rd mode of the A major pentatonic scale starts with C# and has the following shape:</p>
+          <p><ScaleAudioPlayer scale={ScaleType.MajorPentatonicMode3} rootPitch={majorPentatonicPitches[2]} /></p>
+          <p>
+            <GuitarFretboard
+              width={fretboardWidth} height={fretboardHeight}
+              renderExtrasFn={metrics => this.renderDiagramExtras(metrics, ScaleType.MajorPentatonicMode3, majorPentatonicPitches[2])}
               fretCount={fretCount}
               style={fretboardStyle}
             />
           </p>
 
-          <h3>Summary</h3>
-          <p>We have now learned the 7 modes of the F major scale, and with that knowledge, we can now play any mode of any other major scale, simply by shifting the patterns to the left or right to start on the desired note. Use the interactive exercises below to test your knowledge:</p>
+          <h3>Major Pentatonic Mode 4</h3>
+          <p>The 4th mode of the A major pentatonic scale starts with E and has the following shape:</p>
+          <p><ScaleAudioPlayer scale={ScaleType.MajorPentatonicMode4} rootPitch={majorPentatonicPitches[3]} /></p>
+          <p>
+            <GuitarFretboard
+              width={fretboardWidth} height={fretboardHeight}
+              renderExtrasFn={metrics => this.renderDiagramExtras(metrics, ScaleType.MajorPentatonicMode4, majorPentatonicPitches[3])}
+              fretCount={fretCount}
+              style={fretboardStyle}
+            />
+          </p>
 
-          <h3>Interactive Exercises</h3>
-          <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(GuitarScales.createFlashCardGroup(), false, true)}</div>
+          <h3>Minor Pentatonic Scale</h3>
+          <p>The 5th mode of the A major pentatonic scale is the F# minor pentatonic scale, which has the following shape:</p>
+          <p><ScaleAudioPlayer scale={ScaleType.MinorPentatonic} rootPitch={majorPentatonicPitches[4]} /></p>
+          <p>
+            <GuitarFretboard
+              width={fretboardWidth} height={fretboardHeight}
+              renderExtrasFn={metrics => this.renderDiagramExtras(metrics, ScaleType.MinorPentatonic, majorPentatonicPitches[4])}
+              fretCount={fretCount}
+              style={fretboardStyle}
+            />
+          </p>
+
+          <h3>Exercises</h3>
+          <p>Use the interactive exercises below to test your knowledge of the 5 modes of the major pentatonic scale:</p>
+          <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(GuitarScales.createFlashCardGroup(ScaleType.MajorPentatonicScaleModes), false, true)}</div>
         </CardContent>
       </Card>
     );
