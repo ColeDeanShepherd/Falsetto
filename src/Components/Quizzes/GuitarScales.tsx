@@ -18,7 +18,6 @@ import { ScaleAnswerSelect } from "../ScaleAnswerSelect";
 import { get3NotePerStringScaleNotes, get2NotePerStringScaleNotes } from '../GuitarScalesLesson';
 
 const rootPitchStrs = ["Ab", "A", "Bb", "B/Cb", "C", "C#/Db", "D", "Eb", "E", "F", "F#/Gb", "G"];
-const renderAllScaleShapes = false;
 const STRING_COUNT = 6;
 
 interface IConfigData {
@@ -50,12 +49,15 @@ export const GuitarScaleViewer: React.FunctionComponent<{
     .map(gn => gn.getFretNumber(guitarTuning))
   );
   const minFretNumber = Math.max(0, maxFretNumber - 11);
+  
+  const fretboardStyle = { width: "100%", maxWidth: `${props.size.width}px`, height: "auto" };
 
   return (
     <GuitarFretboard
       width={props.size.width} height={props.size.height}
       minFretNumber={minFretNumber}
       renderExtrasFn={metrics => renderGuitarFretboardScaleExtras(metrics, rootPitch, props.scaleType, props.renderAllScaleShapes)}
+      style={fretboardStyle}
     />
   );
 }
@@ -298,7 +300,9 @@ export class GuitarNotesAnswerSelect extends React.Component<IGuitarNotesAnswerS
   }
 }
 
-export function createFlashCardGroup(initialScaleTypes?: Array<ScaleType>): FlashCardGroup {
+export function createFlashCardGroup(title?: string, initialScaleTypes?: Array<ScaleType>): FlashCardGroup {
+  title = (title !== undefined) ? title : "Guitar Scales";
+
   const renderFlashCardMultiSelect = (
     flashCards: Array<FlashCard>,
     selectedFlashCardIndices: number[],
@@ -325,7 +329,7 @@ export function createFlashCardGroup(initialScaleTypes?: Array<ScaleType>): Flas
         .map(scaleType => Utils.unwrapValueOrUndefined(ScaleType.All.find(st => st.equals(scaleType))).type)
   };
 
-  const group = new FlashCardGroup("Guitar Scales", createFlashCards);
+  const group = new FlashCardGroup(title, createFlashCards);
   group.enableInvertFlashCards = false;
   group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
   group.initialConfigData = initialConfigData;
@@ -346,11 +350,9 @@ export function createFlashCards(): Array<FlashCard> {
     flashCards.push(new FlashCard(
       new FlashCardSide(
         (width, height) => {
-          const size = Utils.shrinkRectToFit(new Size2D(width, height), new Size2D(400, 140));
-
           return (
             <div>
-              <GuitarScaleViewer scaleType={scaleType} rootPitch={rootPitch} renderAllScaleShapes={false} size={size} />
+              <GuitarScaleViewer scaleType={scaleType} rootPitch={rootPitch} renderAllScaleShapes={false} size={new Size2D(400, 140)} />
             </div>
           );
         },

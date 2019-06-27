@@ -1,7 +1,6 @@
 # To-Do
 ## High Priority
 * Guitar Scales Lesson
-  * Make play buttons play all guitar notes
   * Play guitar sounds?
   * Major scale repeating pattern game?
 * Make ear training exercises play automatically when you skip.
@@ -14,7 +13,7 @@
   * Integrate audio into guitar fretboard lesson?
 * Improve SVG rendering to be scalable.
   * PianoKeyboard
-  * Everything else!
+  * Everything else! (look for Utils.shrinkRectToFit)
 * Improve SVG text align
   * Horizontal align
   * dy

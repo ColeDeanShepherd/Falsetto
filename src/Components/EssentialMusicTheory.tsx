@@ -422,7 +422,7 @@ const OctavesPlayer: React.FunctionComponent<{}> = props => {
 
 const Term: React.FunctionComponent<{}> = props => <span style={{ fontWeight: "bold" }}>{props.children}</span>;
 
-const BecomeAPatronSection: React.FunctionComponent<{}> = props => (
+export const BecomeAPatronSection: React.FunctionComponent<{}> = props => (
   <div style={{ margin: "2em 0" }}>
     <p style={{ textAlign: "center", marginBottom: "0.5em", fontWeight: "bold" }}>Enjoying these lessons? Help support us and</p>
     <p style={{ textAlign: "center", marginTop: 0 }}>
