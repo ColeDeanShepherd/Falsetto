@@ -23,6 +23,7 @@ export class HomePage extends React.Component<{}, {}> {
           <ul style={{ listStyleType: "none", margin: 0, padding: 0 }}>
             <li>{App.instance.renderNavLink("/essential-music-theory", "Essential Music Theory (Comprehensive Lesson)")}</li>
             <li>{App.instance.renderNavLink("/learn-guitar-notes-in-10-steps", "Learn the Notes on Guitar in 10 Easy Steps")}</li>
+            <li>{App.instance.renderNavLink("/learn-guitar-scales", "Learn the Guitar Scale Shapes")}</li>
             <li>{App.instance.renderFlashCardGroupLink(PianoNotes.createFlashCardGroup())}</li>
             <li>{App.instance.renderFlashCardGroupLink(GuitarNotes.createFlashCardGroup())}</li>
             <li>{App.instance.renderFlashCardGroupLink(PianoIntervals.createFlashCardGroup())}</li>

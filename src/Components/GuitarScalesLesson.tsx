@@ -110,8 +110,9 @@ export class GuitarScalesLesson extends React.Component<IGuitarScalesLessonProps
       <Card style={{ maxWidth: MAX_MAIN_CARD_WIDTH, marginBottom: "6em" }}>
         <CardContent>
           <h1>Learn Guitar Scale Shapes</h1>
-          <p>Knowing common scales &amp; modes on your instrument is vital to becoming a skilled musician. There are countless scales &amp; modes to learn, but we will leverage some repeating patterns that arise on the guitar fretboard to quickly and easily learn the most common scales &amp; modes on guitar.</p>
+          <p>Knowing common scales &amp; modes on your instrument is vital to becoming a skilled musician. There are countless scales &amp; modes to learn, but we will leverage some repeating patterns that arise on the guitar fretboard to quickly and easily learn some common scales &amp; modes on guitar.</p>
           <p>If you are not already familiar with scales &amp; modes at a conceptual level, we highly recommend you complete the {App.instance.renderNavLink("/essential-music-theory/scales-and-modes", "Scales & Modes")} section of our {App.instance.renderNavLink("/essential-music-theory", "Essential Music Theory")} course before continuing with this lesson.</p>
+          <p>In this lesson we will be covering the modes of the major scale and the major pentatonic scale, but at <a href="#all-scales">the bottom</a> of this lesson there is an interactive scale viewer with more scales &amp; modes to explore.</p>
 
           <h3 style={{ marginTop: "3em" }}>Modes of the Major Scale</h3>
           <p>The modes of each scale played with 3 notes per string on guitar follows a specific repeating pattern of shapes.</p>
@@ -244,7 +245,7 @@ export class GuitarScalesLesson extends React.Component<IGuitarScalesLessonProps
           <p>Use the interactive exercises below to test your knowledge of the 5 modes of the major pentatonic scale:</p>
           <div>{createStudyFlashCardGroupComponent(GuitarScales.createFlashCardGroup("Modes of the Major Pentatonic Scale", ScaleType.MajorPentatonicScaleModes), false, true)}</div>
 
-          <h3 style={{ marginTop: "4em" }}>Other Scales</h3>
+          <h3 id="all-scales" style={{ marginTop: "4em" }}>Other Scales</h3>
           <p>Use the interactive diagram below to view other guitar scales.</p>
           <ScaleViewer renderAllScaleShapes={false} showPianoKeyboard={false} isEmbedded={false} />
         </CardContent>
