@@ -3,7 +3,10 @@ import { Card, CardContent } from '@material-ui/core';
 
 import * as Utils from "../Utils";
 import App from './App';
-import { GuitarFretboard, GuitarNote, GuitarFretboardMetrics, renderGuitarNoteHighlightsAndLabels, renderFretNumbers, getStandardGuitarTuning } from './GuitarFretboard';
+import {
+  GuitarFretboard, GuitarNote, GuitarFretboardMetrics,
+  renderGuitarNoteHighlightsAndLabels, renderFretNumbers, getStandardGuitarTuning,
+  getPreferredGuitarScaleShape } from './GuitarFretboard';
 import { Pitch } from '../Pitch';
 import { PitchLetter } from '../PitchLetter';
 import { MAX_MAIN_CARD_WIDTH } from './Style';
@@ -12,39 +15,7 @@ import { NoteText, BecomeAPatronSection } from './EssentialMusicTheory';
 import { ScaleAudioPlayer } from './ScaleAudioPlayer';
 import { createStudyFlashCardGroupComponent } from './StudyFlashCards';
 import * as GuitarScales from "./Quizzes/GuitarScales";
-
-export function getConstantNotesPerStringScaleNotes(
-  scaleType: ScaleType, rootPitch: Pitch, stringCount: number, notesPerString: number
-): Array<GuitarNote> {
-  Utils.precondition(stringCount >= 1);
-  Utils.precondition(notesPerString >= 1)
-
-  const scalePitches = scaleType.getPitches(rootPitch);
-  const guitarNotes = new Array<GuitarNote>(stringCount * notesPerString);
-
-  for (let i = 0; i < guitarNotes.length; i++) {
-    const scalePitchI = i % scaleType.numPitches;
-    const deltaOctave = Math.floor(i / scaleType.numPitches);
-    const stringI = Math.floor(i / notesPerString);
-
-    guitarNotes[i] = new GuitarNote(
-      new Pitch(scalePitches[scalePitchI].letter, scalePitches[scalePitchI].signedAccidental, scalePitches[scalePitchI].octaveNumber + deltaOctave),
-      stringI
-    );
-  }
-
-  return guitarNotes;
-}
-export function get2NotePerStringScaleNotes(
-  scaleType: ScaleType, rootPitch: Pitch, stringCount: number
-): Array<GuitarNote> {
-  return getConstantNotesPerStringScaleNotes(scaleType, rootPitch, stringCount, 2);
-}
-export function get3NotePerStringScaleNotes(
-  scaleType: ScaleType, rootPitch: Pitch, stringCount: number
-): Array<GuitarNote> {
-  return getConstantNotesPerStringScaleNotes(scaleType, rootPitch, stringCount, 3);
-}
+import { ScaleViewer } from './ScaleViewer';
 
 const fretCount = 11;
 const ionianRootPitch = new Pitch(PitchLetter.F, 0, 2);
@@ -69,9 +40,8 @@ const GuitarScalePatternDiagram: React.FunctionComponent<{
   const dontShiftBetweenGAndBStrings = (props.dontShiftBetweenGAndBStrings !== undefined)
     ? props.dontShiftBetweenGAndBStrings
     : false;
-  const guitarNotes = (props.scaleType.numPitches === 5)
-    ? get2NotePerStringScaleNotes(props.scaleType, props.rootPitch, stringCount)
-    : get3NotePerStringScaleNotes(props.scaleType, props.rootPitch, stringCount);
+  const guitarTuning = getStandardGuitarTuning(stringCount);
+  const guitarNotes = getPreferredGuitarScaleShape(props.scaleType, props.rootPitch, guitarTuning);
 
   if (dontShiftBetweenGAndBStrings) {
     const gStringIndex = (props.stringCount === 6)
@@ -85,7 +55,6 @@ const GuitarScalePatternDiagram: React.FunctionComponent<{
     }
   }
 
-  const guitarTuning = getStandardGuitarTuning(stringCount);
   const maxFretNumber = Utils.arrayMax(guitarNotes
     .map(gn => gn.getFretNumber(guitarTuning))
   );
@@ -273,7 +242,11 @@ export class GuitarScalesLesson extends React.Component<IGuitarScalesLessonProps
 
           <h3>Exercises</h3>
           <p>Use the interactive exercises below to test your knowledge of the 5 modes of the major pentatonic scale:</p>
-          <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(GuitarScales.createFlashCardGroup("Modes of the Major Pentatonic Scale", ScaleType.MajorPentatonicScaleModes), false, true)}</div>
+          <div>{createStudyFlashCardGroupComponent(GuitarScales.createFlashCardGroup("Modes of the Major Pentatonic Scale", ScaleType.MajorPentatonicScaleModes), false, true)}</div>
+
+          <h3 style={{ marginTop: "4em" }}>Other Scales</h3>
+          <p>Use the interactive diagram below to view other guitar scales.</p>
+          <ScaleViewer renderAllScaleShapes={false} showPianoKeyboard={false} isEmbedded={false} />
         </CardContent>
       </Card>
     );

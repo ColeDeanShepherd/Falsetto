@@ -2,9 +2,9 @@ import * as React from "react";
 import { TableRow, TableCell, Table, TableHead, TableBody, Grid, Checkbox, Button } from "@material-ui/core";
 
 import * as Utils from "../../Utils";
-import { Vector2D } from '../../Vector2D';
+import { Vector2D } from "../../Vector2D";
 import { Size2D } from "../../Size2D";
-import { Rect2D } from '../../Rect2D';
+import { Rect2D } from "../../Rect2D";
 import { ScaleType } from "../../Scale";
 import { PianoKeyboard } from "../PianoKeyboard";
 import { FlashCard, FlashCardSide } from "../../FlashCard";
@@ -15,7 +15,7 @@ import { PitchLetter } from "../../PitchLetter";
 import { Chord, ChordType } from "../../Chord";
 import { GuitarFretboard, renderGuitarFretboardScaleExtras, getStandardGuitarTuning, findGuitarChordShape, renderGuitarFretboardChordExtras } from "../GuitarFretboard";
 import { ScaleAnswerSelect } from "../ScaleAnswerSelect";
-import { get3NotePerStringScaleNotes, get2NotePerStringScaleNotes } from '../GuitarScalesLesson';
+import { getPreferredGuitarScaleShape } from "../GuitarFretboard";
 
 const rootPitchStrs = ["Ab", "A", "Bb", "B/Cb", "C", "C#/Db", "D", "Eb", "E", "F", "F#/Gb", "G"];
 const STRING_COUNT = 6;
@@ -41,10 +41,8 @@ export const GuitarScaleViewer: React.FunctionComponent<{
     rootPitch.octaveNumber++;
   }
 
-  const guitarNotes = (props.scaleType.numPitches === 5)
-    ? get2NotePerStringScaleNotes(props.scaleType, rootPitch, STRING_COUNT)
-    : get3NotePerStringScaleNotes(props.scaleType, rootPitch, STRING_COUNT);
   const guitarTuning = getStandardGuitarTuning(STRING_COUNT);
+  const guitarNotes = getPreferredGuitarScaleShape(props.scaleType, rootPitch, guitarTuning);
   const maxFretNumber = Utils.arrayMax(guitarNotes
     .map(gn => gn.getFretNumber(guitarTuning))
   );

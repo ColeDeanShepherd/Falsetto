@@ -233,6 +233,17 @@ export function areArraysEqualComparer<T>(arr1: T[], arr2: T[], comparer: (e1: T
   return true;
 }
 
+export function arrayMin<T>(array: T[]): T {
+  precondition(array.length > 0);
+
+  let min = array[0];
+
+  for (let i = 1; i < array.length; i++) {
+    min = (array[i] < min) ? array[i] : min;
+  }
+
+  return min;
+}
 export function arrayMax<T>(array: T[]): T {
   precondition(array.length > 0);
 

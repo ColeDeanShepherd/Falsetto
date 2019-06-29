@@ -105,8 +105,8 @@ export class ScaleType {
 
     ScaleType.MajorPentatonic,
     ScaleType.MajorPentatonicMode2,
-    ScaleType.MajorPentatonicMode2,
     ScaleType.MajorPentatonicMode3,
+    ScaleType.MajorPentatonicMode4,
     ScaleType.MinorPentatonic,
 
     ScaleType.MajorBlues,

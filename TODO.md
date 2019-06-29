@@ -1,5 +1,7 @@
 # To-Do
 ## High Priority
+* Chord Progressions
+  * Ensure it works on mobile.
 * Guitar Scales Lesson
   * Play guitar sounds?
   * Major scale repeating pattern game?

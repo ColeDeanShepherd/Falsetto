@@ -185,7 +185,7 @@ export class ChordViewer extends React.Component<IChordViewerProps, IChordViewer
                     rootPitch={guitarRootPitch}
                     size={guitarSize} />
                 ) : null}
-                <p>Guitar scales coming soon!</p>
+                <p>Guitar chords coming soon!</p>
               </div>
             </div>
           </div>

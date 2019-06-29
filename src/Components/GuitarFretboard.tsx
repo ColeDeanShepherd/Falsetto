@@ -6,7 +6,6 @@ import { PitchLetter } from "../PitchLetter";
 import { Size2D } from '../Size2D';
 import { Rect2D } from '../Rect2D';
 import { Vector2D } from '../Vector2D';
-import { get3NotePerStringScaleNotes, get2NotePerStringScaleNotes } from './GuitarScalesLesson';
 import { ScaleType } from '../Scale';
 import { ChordType, Chord } from '../Chord';
 
@@ -65,6 +64,145 @@ export function getStandardGuitarTuning(stringCount: number): GuitarTuning {
       return standard8StringGuitarTuning;
     default:
       throw new Error(`No registered standard guitar tuning for ${stringCount} strings.`);
+  }
+}
+
+export function getPreferredGuitarScaleShape(
+  scaleType: ScaleType, rootPitch: Pitch, tuning: GuitarTuning
+) {
+  const scaleShapes = findGuitarScaleShapes(scaleType, rootPitch, tuning);
+  scaleShapes.sort((shape1, shape2) => {
+    // sort by fret range
+    const shape1FretNumbers = shape1.map(gn => gn.getFretNumber(tuning));
+    const shape1MinFretNumber = Utils.arrayMin(shape1FretNumbers);
+    const shape1MaxFretNumber = Utils.arrayMax(shape1FretNumbers);
+    const shape1FretRange = shape1MaxFretNumber - shape1MinFretNumber;
+    
+    const shape2FretNumbers = shape2.map(gn => gn.getFretNumber(tuning));
+    const shape2MinFretNumber = Utils.arrayMin(shape2FretNumbers);
+    const shape2MaxFretNumber = Utils.arrayMax(shape2FretNumbers);
+    const shape2FretRange = shape2MaxFretNumber - shape2MinFretNumber;
+
+    if (shape1FretRange < shape2FretRange) { return -1; }
+    else if (shape1FretRange > shape2FretRange) { return 1; }
+
+    // then by num notes descending
+    if (shape1.length > shape2.length) { return -1; }
+    else if (shape1.length < shape2.length) { return 1; }
+
+    // break ties
+    return -1;
+  });
+  return scaleShapes[0];
+}
+
+class GuitarScaleShapeFinderState {
+  public guitarNotes: Array<GuitarNote> = new Array<GuitarNote>();
+  public stringIndex: number = 0;
+  public numNotesOnCurrentString: number = 0;
+
+  public copy(): GuitarScaleShapeFinderState {
+    const copy = new GuitarScaleShapeFinderState();
+    copy.guitarNotes = this.guitarNotes.slice();
+    copy.stringIndex = this.stringIndex;
+    copy.numNotesOnCurrentString = this.numNotesOnCurrentString;
+
+    return copy;
+  }
+}
+export function findGuitarScaleShapes(
+  scaleType: ScaleType, rootPitch: Pitch, tuning: GuitarTuning): Array<Array<GuitarNote>> {
+    const { minNotesPerString, maxNotesPerString } = getPreferredNumNotesPerStringRange(scaleType);
+    const scalePitches = scaleType.getPitches(rootPitch);
+
+    const state = new GuitarScaleShapeFinderState();
+    const outShapes = new Array<Array<GuitarNote>>();
+    findGuitarScaleShapesRecursive(scalePitches, tuning, minNotesPerString, maxNotesPerString, state, outShapes);
+
+    return outShapes;
+}
+export function findGuitarScaleShapesRecursive(
+  scalePitches: Array<Pitch>, tuning: GuitarTuning,  minNotesPerString: number, maxNotesPerString: number,
+  state: GuitarScaleShapeFinderState,
+  outShapes: Array<Array<GuitarNote>>
+) {
+  function addNoteToString(state: GuitarScaleShapeFinderState, note: GuitarNote) {
+    state.guitarNotes.push(note);
+    state.numNotesOnCurrentString++;
+  }
+  function moveToNextString(state: GuitarScaleShapeFinderState) {
+    state.stringIndex++;
+    state.numNotesOnCurrentString = 0;
+  }
+
+  while (state.stringIndex < tuning.stringCount) {
+    const i = state.guitarNotes.length;
+    const scalePitch = scalePitches[i % scalePitches.length];
+    const deltaOctave = Math.floor(i / scalePitches.length);
+    const pitch = new Pitch(scalePitch.letter, scalePitch.signedAccidental, scalePitch.octaveNumber + deltaOctave);
+    const guitarNoteSameString = new GuitarNote(pitch, state.stringIndex);
+
+    // On all string, add notes until at the min.
+    // Until at max:
+      // Branch and try to add note on: same string, AND next string
+    
+    // Add notes to the current string until we're at the min.
+    // If the min is also the max, move to the next string.
+    if (state.numNotesOnCurrentString < minNotesPerString) {
+      addNoteToString(state, guitarNoteSameString);
+      
+      if (state.numNotesOnCurrentString === maxNotesPerString) {
+        moveToNextString(state);
+      }
+    } else {
+      // We're between the min. & max. # of notes per string.
+
+      // Try putting the note on the next string.
+      const nextStringState = state.copy();
+      moveToNextString(nextStringState);
+      findGuitarScaleShapesRecursive(scalePitches, tuning, minNotesPerString, maxNotesPerString, nextStringState, outShapes);
+
+      // Try continuing with the note on the current string.
+      addNoteToString(state, guitarNoteSameString);
+      
+      if (state.numNotesOnCurrentString === maxNotesPerString) {
+        moveToNextString(state);
+      }
+    }
+  }
+
+  outShapes.push(state.guitarNotes);
+}
+
+// TODO: Add integer interval type?
+export function getPreferredNumNotesPerStringRange(scaleType: ScaleType): ({ minNotesPerString: number, maxNotesPerString: number, preferredNotesPerString: number }) {
+  switch (scaleType.numPitches) {
+    case 5:
+      return {
+        minNotesPerString: 2,
+        maxNotesPerString: 2,
+        preferredNotesPerString: 2
+      };
+    case 6:
+      return {
+        minNotesPerString: 2,
+        maxNotesPerString: 3,
+        preferredNotesPerString: 2
+      };
+    case 7:
+      return {
+        minNotesPerString: 3,
+        maxNotesPerString: 3,
+        preferredNotesPerString: 3
+      };
+    case 8:
+      return {
+        minNotesPerString: 3,
+        maxNotesPerString: 4,
+        preferredNotesPerString: 3
+      };
+    default:
+      throw new Error(`Unsupported scale length: ${scaleType.numPitches}`);
   }
 }
 
@@ -259,9 +397,7 @@ export function renderGuitarFretboardScaleExtras(
         tuning, pitches, metrics.fretCount
       )
     )
-    : ((scaleType.numPitches === 5)
-      ? get2NotePerStringScaleNotes(scaleType, rootPitch, metrics.stringCount)
-      : get3NotePerStringScaleNotes(scaleType, rootPitch, metrics.stringCount));
+    : getPreferredGuitarScaleShape(scaleType, rootPitch, tuning);
   const formulaStringParts = scaleType.formulaString.split(" ");
 
   const rootPitchFretDots = guitarNotes

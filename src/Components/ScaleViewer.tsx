@@ -48,6 +48,7 @@ interface IScaleViewerProps {
   scales?: Array<ScaleType>;
   renderAllScaleShapes: boolean;
   playSimultaneously?: boolean;
+  showPianoKeyboard?: boolean;
   showGuitarFretboard?: boolean;
   isEmbedded?: boolean;
 }
@@ -100,6 +101,9 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
       })
       : (pitch: Pitch) => PianoScaleDronePlayer.onKeyPress(this.state.scale, this.state.rootPitch, pitch);
     
+    const showPianoKeyboard = (this.props.showPianoKeyboard !== undefined)
+      ? this.props.showPianoKeyboard
+      : true;
     const showGuitarFretboard = (this.props.showGuitarFretboard !== undefined)
       ? this.props.showGuitarFretboard
       : true;
@@ -173,25 +177,26 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
 
             <div>
               <div>
-                <PianoKeyboard
-                  rect={new Rect2D(pianoSize, new Vector2D(0, 0))}
-                  lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-                  highestPitch={new Pitch(PitchLetter.B, 0, 5)}
-                  onKeyPress={onKeyPress}
-                  renderExtrasFn={metrics => PianoScaleDronePlayer.renderExtrasFn(metrics, pitches, this.state.rootPitch)}
-                  style={pianoGuitarStyle}
-                />
+                {showPianoKeyboard ? (
+                  <PianoKeyboard
+                    rect={new Rect2D(pianoSize, new Vector2D(0, 0))}
+                    lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
+                    highestPitch={new Pitch(PitchLetter.B, 0, 5)}
+                    onKeyPress={onKeyPress}
+                    renderExtrasFn={metrics => PianoScaleDronePlayer.renderExtrasFn(metrics, pitches, this.state.rootPitch)}
+                    style={pianoGuitarStyle}
+                  />
+                ) : null}
               </div>
 
               <div style={{marginTop: "1em"}}>
-                {(showGuitarFretboard && false) ? (
+                {showGuitarFretboard ? (
                   <GuitarScaleViewer
                     scaleType={this.state.scale}
                     rootPitch={guitarRootPitch}
                     size={guitarSize}
                     renderAllScaleShapes={this.props.renderAllScaleShapes} />
                 ) : null}
-                <p>Guitar scales coming soon!</p>
               </div>
             </div>
           </div>
