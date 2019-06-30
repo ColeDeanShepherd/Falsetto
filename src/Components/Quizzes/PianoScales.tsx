@@ -30,7 +30,7 @@ export function configDataToEnabledQuestionIds(configData: IConfigData): Array<n
 
   for (const rootPitchStr of rootPitchStrs) {
     for (const scale of ScaleType.All) {
-      const scaleType = scale.type;
+      const scaleType = scale.name;
       if (
         Utils.arrayContains(configData.enabledRootPitches, rootPitchStr) &&
         Utils.arrayContains(configData.enabledScaleTypes, scaleType)
@@ -82,13 +82,13 @@ export class PianoScalesFlashCardMultiSelect extends React.Component<IPianoScale
 
     const scaleTypeCheckboxTableRows = ScaleType.All
       .map((scale, i) => {
-        const isChecked = this.props.configData.enabledScaleTypes.indexOf(scale.type) >= 0;
+        const isChecked = this.props.configData.enabledScaleTypes.indexOf(scale.name) >= 0;
         const isEnabled = !isChecked || (this.props.configData.enabledScaleTypes.length > 1);
 
         return (
           <TableRow key={i}>
-            <TableCell><Checkbox checked={isChecked} onChange={event => this.toggleScaleEnabled(scale.type)} disabled={!isEnabled} /></TableCell>
-            <TableCell>{scale.type}</TableCell>
+            <TableCell><Checkbox checked={isChecked} onChange={event => this.toggleScaleEnabled(scale.name)} disabled={!isEnabled} /></TableCell>
+            <TableCell>{scale.name}</TableCell>
           </TableRow>
         );
       }, this);
@@ -171,7 +171,7 @@ export function createFlashCardGroup(): FlashCardGroup {
     enabledRootPitches: rootPitchStrs.slice(),
     enabledScaleTypes: ScaleType.All
       .filter((_, scaleIndex) => scaleIndex <= 8)
-      .map(scale => scale.type)
+      .map(scale => scale.name)
   };
 
   const group = new FlashCardGroup("Piano Scales", createFlashCards);
@@ -210,7 +210,7 @@ export function createFlashCards(): FlashCard[] {
             },
             pitches
           ),
-          new FlashCardSide(rootPitchStr + " " + scale.type)
+          new FlashCardSide(rootPitchStr + " " + scale.name)
         );
       })
     )

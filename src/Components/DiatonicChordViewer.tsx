@@ -52,7 +52,7 @@ export class DiatonicChordViewer extends React.Component<IDiatonicChordViewerPro
         return [
           (
             <TableRow>
-              <TableCell rowSpan={2}>{scale.type}</TableCell>
+              <TableCell rowSpan={2}>{scale.name}</TableCell>
               {triadCells}
             </TableRow>
           ),

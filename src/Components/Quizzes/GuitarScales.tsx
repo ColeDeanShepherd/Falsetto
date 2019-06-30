@@ -117,7 +117,7 @@ export function configDataToEnabledQuestionIds(configData: IConfigData): Array<n
   forEachScale((scaleType, rootPitch, rootPitchStr, i) => {
     if (
       Utils.arrayContains(configData.enabledRootPitches, rootPitchStr) &&
-      Utils.arrayContains(configData.enabledScaleTypes, scaleType.type)
+      Utils.arrayContains(configData.enabledScaleTypes, scaleType.name)
     ) {
       newEnabledFlashCardIndices.push(i);
     }
@@ -163,13 +163,13 @@ export class GuitarScalesFlashCardMultiSelect extends React.Component<IGuitarSca
 
     const scaleTypeCheckboxTableRows = ScaleType.All
       .map((scale, i) => {
-        const isChecked = this.props.configData.enabledScaleTypes.indexOf(scale.type) >= 0;
+        const isChecked = this.props.configData.enabledScaleTypes.indexOf(scale.name) >= 0;
         const isEnabled = !isChecked || (this.props.configData.enabledScaleTypes.length > 1);
 
         return (
           <TableRow key={i}>
-            <TableCell><Checkbox checked={isChecked} onChange={event => this.toggleScaleEnabled(scale.type)} disabled={!isEnabled} /></TableCell>
-            <TableCell>{scale.type}</TableCell>
+            <TableCell><Checkbox checked={isChecked} onChange={event => this.toggleScaleEnabled(scale.name)} disabled={!isEnabled} /></TableCell>
+            <TableCell>{scale.name}</TableCell>
           </TableRow>
         );
       }, this);
@@ -322,9 +322,9 @@ export function createFlashCardGroup(title?: string, initialScaleTypes?: Array<S
     enabledScaleTypes: !initialScaleTypes
       ? ScaleType.All
         .filter((_, scaleIndex) => scaleIndex <= 8)
-        .map(scale => scale.type)
+        .map(scale => scale.name)
       : initialScaleTypes
-        .map(scaleType => Utils.unwrapValueOrUndefined(ScaleType.All.find(st => st.equals(scaleType))).type)
+        .map(scaleType => Utils.unwrapValueOrUndefined(ScaleType.All.find(st => st.equals(scaleType))).name)
   };
 
   const group = new FlashCardGroup(title, createFlashCards);
@@ -356,7 +356,7 @@ export function createFlashCards(): Array<FlashCard> {
         },
         pitches
       ),
-      new FlashCardSide(rootPitchStr + " " + scaleType.type)
+      new FlashCardSide(rootPitchStr + " " + scaleType.name)
     ));
   });
 

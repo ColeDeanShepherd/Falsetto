@@ -64,7 +64,7 @@ export function configDataToEnabledQuestionIds(configData: IConfigData): Array<n
 
   for (const rootPitch of rootPitches) {
     for (const scale of ScaleType.All) {
-      const scaleType = scale.type;
+      const scaleType = scale.name;
       if (Utils.arrayContains(configData.enabledScaleTypes, scaleType)) {
         newEnabledFlashCardIndices.push(i);
       }
@@ -88,19 +88,19 @@ export class ScaleNotesFlashCardMultiSelect extends React.Component<IScaleNotesF
     super(props);
 
     this.state = {
-      enabledScaleTypes: ScaleType.All.map(c => c.type)
+      enabledScaleTypes: ScaleType.All.map(c => c.name)
     };
   }
   public render(): JSX.Element {
     const scaleTypeCheckboxTableRows = ScaleType.All
       .map((scale, i) => {
-        const isChecked = this.props.configData.enabledScaleTypes.indexOf(scale.type) >= 0;
+        const isChecked = this.props.configData.enabledScaleTypes.indexOf(scale.name) >= 0;
         const isEnabled = !isChecked || (this.props.configData.enabledScaleTypes.length > 1);
 
         return (
           <TableRow key={i}>
-            <TableCell><Checkbox checked={isChecked} onChange={event => this.toggleScaleEnabled(scale.type)} disabled={!isEnabled} /></TableCell>
-            <TableCell>{scale.type}</TableCell>
+            <TableCell><Checkbox checked={isChecked} onChange={event => this.toggleScaleEnabled(scale.name)} disabled={!isEnabled} /></TableCell>
+            <TableCell>{scale.name}</TableCell>
           </TableRow>
         );
       }, this);
@@ -163,7 +163,7 @@ export function createFlashCards(): Array<FlashCard> {
 
       flashCards.push(FlashCard.fromRenderFns(
         () => <FlashCardFrontSide key={iCopy} pitches={pitches} />,
-        scale.type
+        scale.name
       ));
     }
   }
@@ -191,7 +191,7 @@ export function createFlashCardGroup(): FlashCardGroup {
   const initialConfigData: IConfigData = {
     enabledScaleTypes: ScaleType.All
       .filter((_, scaleIndex) => scaleIndex <= 8)
-      .map(scale => scale.type)
+      .map(scale => scale.name)
   };
   
   const group = new FlashCardGroup(

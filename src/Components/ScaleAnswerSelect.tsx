@@ -82,19 +82,19 @@ export class ScaleAnswerSelect extends React.Component<IScaleAnswerSelectProps, 
           {this.props.scales.map(scale => {
             const style: any = { textTransform: "none" };
             
-            const isPressed = scale.type === this.state.selectedScaleType;
+            const isPressed = scale.name === this.state.selectedScaleType;
             if (isPressed) {
               style.backgroundColor = "#959595";
             }
             
             return (
               <Button
-                key={scale.type}
-                onClick={event => this.onScaleTypeClick(scale.type)}
+                key={scale.name}
+                onClick={event => this.onScaleTypeClick(scale.name)}
                 variant="contained"
                 style={style}
               >
-                {scale.type}
+                {scale.name}
               </Button>
             );
           })}

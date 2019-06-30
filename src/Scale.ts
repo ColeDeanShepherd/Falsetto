@@ -27,6 +27,12 @@ export function getIntervalsFromFormulaString(formulaString: string): Array<Inte
     });
 }
 
+export class ScaleTypeGroup {
+  public constructor(
+    public name: string,
+    public scaleTypes: Array<ScaleType>
+  ) {}
+}
 export class ScaleType {
   public static Ionian = new ScaleType("Major (Ionian)", [0, 2, 4, 5, 7, 9, 11], "1 2 3 4 5 6 7");
   public static Dorian = new ScaleType("Dorian", [0, 2, 3, 5, 7, 9, 10], "1 2 b3 4 5 6 b7");
@@ -85,49 +91,51 @@ export class ScaleType {
     ScaleType.MajorPentatonicMode3,
     ScaleType.MinorPentatonic,
   ];
-  public static All = [
-    ScaleType.Ionian,
-    ScaleType.Dorian,
-    ScaleType.Phrygian,
-    ScaleType.Lydian,
-    ScaleType.Mixolydian,
-    ScaleType.Aeolian,
-    ScaleType.Locrian,
-
+  public static MelodicMinorScaleModes = [
     ScaleType.MelodicMinor,
-    ScaleType.HarmonicMinor,
-
-    ScaleType.TonicDiminished,
-    ScaleType.DominantDiminished,
-
-    ScaleType.WholeTone,
-    ScaleType.Augmented,
-
-    ScaleType.MajorPentatonic,
-    ScaleType.MajorPentatonicMode2,
-    ScaleType.MajorPentatonicMode3,
-    ScaleType.MajorPentatonicMode4,
-    ScaleType.MinorPentatonic,
-
-    ScaleType.MajorBlues,
-    ScaleType.MinorBlues,
-    
     ScaleType.Dorianb2,
     ScaleType.LydianAug,
     ScaleType.MixolydianSharp11,
     ScaleType.Mixolydianb6,
     ScaleType.LocrianNat9,
-    ScaleType.AlteredDominant,
+    ScaleType.AlteredDominant
+  ];
+  public static HarmonicMinorScaleModes = [
+    ScaleType.HarmonicMinor,
     ScaleType.LocrianNat6,
     ScaleType.IonianAug,
     ScaleType.DorianSharp11,
     ScaleType.PhrygianMajor,
     ScaleType.LydianSharp9,
-    ScaleType.AlteredDominantbb7,
+    ScaleType.AlteredDominantbb7
   ];
+  public static DiminishedScales = [
+    ScaleType.TonicDiminished,
+    ScaleType.DominantDiminished
+  ];
+  public static Groups = [
+    new ScaleTypeGroup("Major Scale Modes", ScaleType.MajorScaleModes),
+    new ScaleTypeGroup("Melodic Minor Scale Modes", ScaleType.MelodicMinorScaleModes),
+    new ScaleTypeGroup("Harmonic Minor Scale Modes", ScaleType.HarmonicMinorScaleModes),
+    new ScaleTypeGroup("Diminished Scales", ScaleType.DiminishedScales),
+    new ScaleTypeGroup("Major Pentatonic Scale Modes", ScaleType.MajorPentatonicScaleModes),
+    new ScaleTypeGroup("Blues Scales", [
+        ScaleType.MajorBlues,
+        ScaleType.MinorBlues
+      ]
+    ),
+    new ScaleTypeGroup("Other Scales", [
+        ScaleType.WholeTone,
+        ScaleType.Augmented
+      ]
+    )
+  ];
+  public static All = Utils.flattenArrays<ScaleType>(
+    ScaleType.Groups.map(st => st.scaleTypes)
+  );
 
   public constructor(
-    public type: string,
+    public name: string,
     public pitchIntegers: Array<number>,
     public formulaString: string) {}
 

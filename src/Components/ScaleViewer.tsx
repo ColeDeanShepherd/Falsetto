@@ -5,12 +5,11 @@ import { Vector2D } from '../Vector2D';
 import { Size2D } from "../Size2D";
 import { Rect2D } from '../Rect2D';
 import { PitchLetter } from "../PitchLetter";
-import { ScaleType } from "../Scale";
+import { ScaleType, ScaleTypeGroup } from "../Scale";
 import { Pitch } from "../Pitch";
 import { Button, Card, CardContent, Typography } from "@material-ui/core";
 import { Chord } from "../Chord";
 import { PianoKeyboard } from "./PianoKeyboard";
-import { GuitarFretboard, renderGuitarFretboardScaleExtras } from "./GuitarFretboard";
 import { playPitchesSequentially, playPitches } from '../Piano';
 import * as PianoScaleDronePlayer from "./PianoScaleDronePlayer";
 import { GuitarScaleViewer } from './Quizzes/GuitarScales';
@@ -45,7 +44,7 @@ const validFlatKeyPitches = [
 
 interface IScaleViewerProps {
   title?: string;
-  scales?: Array<ScaleType>;
+  scaleTypeGroups?: Array<ScaleTypeGroup>;
   renderAllScaleShapes: boolean;
   playSimultaneously?: boolean;
   showPianoKeyboard?: boolean;
@@ -63,7 +62,7 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
 
     this.state = {
       rootPitch: new Pitch(PitchLetter.C, 0, 4),
-      scale: this.scales[0]
+      scale: this.scaleTypeGroups[0].scaleTypes[0]
     };
   }
 
@@ -137,28 +136,39 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
               Type
             </Typography>
             <div style={{padding: "1em 0"}}>
-              {this.scales.map(scale => {
-                const style: any = { textTransform: "none" };
-                
-                const isPressed = scale.type === this.state.scale.type;
-                if (isPressed) {
-                  style.backgroundColor = "#959595";
-                }
+              {this.scaleTypeGroups.map(scaleTypeGroup => {
+                const scaleTypeButtons = scaleTypeGroup.scaleTypes.map(scaleType => {
+                  const style: any = { textTransform: "none" };
+                  
+                  const isPressed = scaleType.name === this.state.scale.name;
+                  if (isPressed) {
+                    style.backgroundColor = "#959595";
+                  }
+
+                  return (
+                    <Button
+                      key={scaleType.name}
+                      onClick={event => this.onScaleTypeClick(scaleType)}
+                      variant="contained"
+                      style={style}
+                    >
+                      {scaleType.name}
+                    </Button>
+                  );
+                });
 
                 return (
-                  <Button
-                    key={scale.type}
-                    onClick={event => this.onScaleClick(scale)}
-                    variant="contained"
-                    style={style}
-                  >
-                    {scale.type}
-                  </Button>
+                  <div>
+                    <Typography gutterBottom={true} variant="h6" component="h4">
+                      {scaleTypeGroup.name}
+                    </Typography>
+                    {scaleTypeButtons}
+                  </div>
                 );
               })}
             </div>
             <div style={{fontSize: "1.5em"}}>
-              <p>{this.state.rootPitch.toString(false)} {this.state.scale.type}</p>
+              <p>{this.state.rootPitch.toString(false)} {this.state.scale.name}</p>
               <p>{pitchesString}</p>
               <p>{this.state.scale.formulaString}</p>
               <p>{intervalsString}</p>
@@ -205,10 +215,10 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
     );
   }
 
-  private get scales(): Array<ScaleType> {
-    return this.props.scales
-      ? this.props.scales
-      : ScaleType.All;
+  private get scaleTypeGroups(): Array<ScaleTypeGroup> {
+    return this.props.scaleTypeGroups
+      ? this.props.scaleTypeGroups
+      : ScaleType.Groups;
   }
   private renderRootPitchRow(rootPitches: Array<Pitch | null>): JSX.Element {
     return (
@@ -247,7 +257,7 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
   private onRootPitchClick(rootPitch: Pitch) {
     this.setState({ rootPitch: rootPitch }, this.onScaleChange.bind(this));
   }
-  private onScaleClick(scale: ScaleType) {
+  private onScaleTypeClick(scale: ScaleType) {
     this.setState({ scale: scale }, this.onScaleChange.bind(this));
   }
 
