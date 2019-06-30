@@ -4,6 +4,12 @@ import { VerticalDirection } from "./VerticalDirection";
 import { getIntervalsFromFormulaString } from './Scale';
 import { Interval } from './Interval';
 
+export class ChordTypeGroup {
+  public constructor(
+    public name: string,
+    public chordTypes: Array<ChordType>
+  ) {}
+}
 export class ChordType {
   public static Power = new ChordType("Power", [0, 7], "1 5", ["power"]);
   public static Major = new ChordType("Major", [0, 4, 7], "1 3 5", ["M"]);
@@ -28,36 +34,23 @@ export class ChordType {
   
   public static Quartal = new ChordType("Quartal", [0, 5, 10], "1 4 b7", ["quartal"]);
 
-  public static All = [
-    ChordType.Power,
-
-    ChordType.Major,
-    ChordType.Minor,
-    ChordType.Augmented,
-    ChordType.Diminished,
-    
-    ChordType.Sus2,
-    ChordType.Sus4,
-    
-    ChordType.Maj6,
-    ChordType.Min6,
-    
-    ChordType.Maj7,
-    ChordType.Dom7,
-    ChordType.MinMaj7,
-    ChordType.Min7,
-    ChordType.HalfDim7,
-    ChordType.Dim7,
-    ChordType.AugMaj7,
-    ChordType.Aug7,
-    
-    ChordType.Quartal,
-  ];
   public static BasicTriads = [
     ChordType.Major,
     ChordType.Minor,
     ChordType.Augmented,
     ChordType.Diminished
+  ];
+  public static Triads = [
+    ChordType.Major,
+    ChordType.Minor,
+    ChordType.Augmented,
+    ChordType.Diminished,
+    ChordType.Sus2,
+    ChordType.Sus4
+  ];
+  public static SixthChords = [
+    ChordType.Maj6,
+    ChordType.Min6
   ];
   public static SeventhChords = [
     ChordType.Maj7,
@@ -69,6 +62,22 @@ export class ChordType {
     ChordType.AugMaj7,
     ChordType.Aug7
   ];
+  public static OtherChords = [
+    ChordType.Power,
+    ChordType.Quartal
+  ];
+
+  public static Groups = [
+    new ChordTypeGroup("Triads", ChordType.Triads),
+    new ChordTypeGroup("Sixth Chords", ChordType.SixthChords),
+    new ChordTypeGroup("Seventh Chords", ChordType.SeventhChords),
+    new ChordTypeGroup("Other Chords", ChordType.OtherChords)
+  ];
+
+  public static All = Utils.flattenArrays<ChordType>(
+    ChordType.Groups.map(ct => ct.chordTypes)
+  );
+
   public constructor(
     public name: string,
     public pitchIntegers: Array<number>,

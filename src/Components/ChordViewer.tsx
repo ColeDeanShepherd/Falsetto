@@ -7,9 +7,8 @@ import { Rect2D } from '../Rect2D';
 import { PitchLetter } from "../PitchLetter";
 import { Pitch } from "../Pitch";
 import { Button, Card, CardContent, Typography } from "@material-ui/core";
-import { Chord, ChordType } from "../Chord";
+import { Chord, ChordType, ChordTypeGroup } from "../Chord";
 import { PianoKeyboard } from "./PianoKeyboard";
-import { GuitarFretboard, renderGuitarFretboardChordExtras } from "./GuitarFretboard";
 import { playPitches } from '../Piano';
 import * as PianoScaleDronePlayer from "./PianoScaleDronePlayer";
 import { GuitarChordViewer } from './Quizzes/GuitarScales';
@@ -44,12 +43,13 @@ const validFlatKeyPitches = [
 
 interface IChordViewerProps {
   title?: string;
-  chordTypes?: Array<ChordType>;
+  chordTypeGroups?: Array<ChordTypeGroup>;
   showGuitarFretboard?: boolean;
   isEmbedded?: boolean;
 }
 interface IChordViewerState {
   rootPitch: Pitch;
+  chordTypeGroup: ChordTypeGroup;
   chordType: ChordType;
 }
 
@@ -59,14 +59,15 @@ export class ChordViewer extends React.Component<IChordViewerProps, IChordViewer
 
     this.state = {
       rootPitch: new Pitch(PitchLetter.C, 0, 4),
-      chordType: this.chordTypes[0]
+      chordTypeGroup: this.chordTypeGroups[0],
+      chordType: this.chordTypeGroups[0].chordTypes[0]
     };
   }
 
   public render(): JSX.Element {
     const title = this.props.title
       ? this.props.title
-      : "Scale Viewer";
+      : "Chord Viewer";
       
     const pitches = Chord.fromPitchAndFormulaString(
       this.state.rootPitch,
@@ -104,6 +105,8 @@ export class ChordViewer extends React.Component<IChordViewerProps, IChordViewer
       this.state.rootPitch.signedAccidental,
       this.state.rootPitch.octaveNumber - 2
     );
+    
+    const baseButtonStyle: any = { textTransform: "none" };
 
     return (
       <Card>
@@ -124,12 +127,34 @@ export class ChordViewer extends React.Component<IChordViewerProps, IChordViewer
               {this.renderRootPitchRow(validFlatKeyPitches)}
             </div>
             
+            {(this.chordTypeGroups.length > 1) ? (
+              <div>
+                <Typography gutterBottom={true} variant="h6" component="h4">
+                  Category
+                </Typography>
+                <div style={{padding: "1em 0"}}>
+                  {this.chordTypeGroups.map(chordTypeGroup => {
+                    return (
+                      <Button
+                        key={chordTypeGroup.name}
+                        onClick={event => this.onChordTypeGroupClick(chordTypeGroup)}
+                        variant="contained"
+                        style={baseButtonStyle}
+                      >
+                        {chordTypeGroup.name}
+                      </Button>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : null}
+
             <Typography gutterBottom={true} variant="h6" component="h4">
               Type
             </Typography>
             <div style={{padding: "1em 0"}}>
-              {this.chordTypes.map(chordType => {
-                const style: any = { textTransform: "none" };
+              {this.state.chordTypeGroup.chordTypes.map(chordType => {
+                const style: any = { ...baseButtonStyle };
                 
                 const isPressed = chordType.name === this.state.chordType.name;
                 if (isPressed) {
@@ -194,10 +219,10 @@ export class ChordViewer extends React.Component<IChordViewerProps, IChordViewer
     );
   }
 
-  private get chordTypes(): Array<ChordType> {
-    return this.props.chordTypes
-      ? this.props.chordTypes
-      : ChordType.All;
+  private get chordTypeGroups(): Array<ChordTypeGroup> {
+    return this.props.chordTypeGroups
+      ? this.props.chordTypeGroups
+      : ChordType.Groups;
   }
   private renderRootPitchRow(rootPitches: Array<Pitch | null>): JSX.Element {
     return (
@@ -235,6 +260,9 @@ export class ChordViewer extends React.Component<IChordViewerProps, IChordViewer
 
   private onRootPitchClick(rootPitch: Pitch) {
     this.setState({ rootPitch: rootPitch }, this.onChordChange.bind(this));
+  }
+  private onChordTypeGroupClick(chordTypeGroup: ChordTypeGroup) {
+    this.setState({ chordTypeGroup: chordTypeGroup }, this.onChordChange.bind(this));
   }
   private onChordType(chordType: ChordType) {
     this.setState({ chordType: chordType }, this.onChordChange.bind(this));
