@@ -46,7 +46,36 @@ export class ScaleType {
   public static NaturalMinor = ScaleType.Aeolian;
 
   public static MelodicMinor = new ScaleType("Melodic Minor", [0, 2, 3, 5, 7, 9, 11], "1 2 b3 4 5 6 7");
+  public static Dorianb2 = new ScaleType("Dorian b2", [0, 1, 3, 5, 7, 9, 10], "1 b2 b3 4 5 6 b7");
+  public static LydianAug = new ScaleType("Lydian Aug.", [0, 2, 4, 6, 8, 9, 11], "1 2 3 #4 #5 6 7");
+  public static MixolydianSharp11 = new ScaleType("Mixolydian #11", [0, 2, 4, 6, 7, 9, 10], "1 2 3 #4 5 6 b7");
+  public static Mixolydianb6 = new ScaleType("Mixolydian b6", [0, 2, 4, 5, 7, 8, 10], "1 2 3 4 5 b6 b7");
+  public static LocrianNat9 = new ScaleType("Locrian Nat. 9", [0, 2, 3, 5, 6, 8, 10], "1 2 b3 4 b5 b6 b7");
+  public static AlteredDominant = new ScaleType("Altered Dominant", [0, 1, 3, 4, 6, 8, 10], "1 b2 b3 b4 b5 b6 b7");
+
   public static HarmonicMinor = new ScaleType("Harmonic Minor", [0, 2, 3, 5, 7, 8, 11], "1 2 b3 4 5 b6 7");
+  public static LocrianNat6 = new ScaleType("Locrian Nat. 6", [0, 1, 3, 5, 6, 9, 10], "1 b2 b3 4 b5 6 b7");
+  public static IonianAug = new ScaleType("Ionian Aug.", [0, 2, 4, 5, 8, 9, 11], "1 2 3 4 #5 6 7");
+  public static DorianSharp11 = new ScaleType("Dorian #11", [0, 2, 3, 6, 7, 9, 10], "1 2 b3 #4 5 6 b7");
+  public static PhrygianMajor = new ScaleType("Phrygian Dominant", [0, 1, 4, 5, 7, 8, 10], "1 b2 3 4 5 b6 b7");
+  public static LydianSharp9 = new ScaleType("Lydian #9", [0, 3, 4, 6, 7, 9, 11], "1 #2 3 #4 5 6 7");
+  public static AlteredDominantbb7 = new ScaleType("Altered Dominant bb7", [0, 1, 3, 4, 6, 8, 9], "1 b2 b3 b4 b5 b6 bb7");
+
+  public static HarmonicMajor = new ScaleType("Harmonic Major", [0, 2, 4, 5, 7, 8, 11], "1 2 3 4 5 b6 7");
+  public static Dorianb5 = new ScaleType("Dorian b5", [0, 2, 3, 5, 6, 9, 10], "1 2 b3 4 b5 6 b7");
+  public static Phrygianb4 = new ScaleType("Phrygian b4", [0, 1, 3, 4, 7, 8, 10], "1 b2 b3 b4 5 b6 b7");
+  public static Lydianb3 = new ScaleType("Lydian b3", [0, 2, 3, 6, 7, 9, 11], "1 2 b3 #4 5 6 7");
+  public static Mixolydianb2 = new ScaleType("Mixolydian b2", [0, 1, 4, 5, 7, 9, 10], "1 b2 3 4 5 6 b7");
+  public static LydianAugmentedSharp2 = new ScaleType("Lydian Augmented #2", [0, 3, 4, 6, 8, 9, 11], "1 #2 3 #4 #5 6 7");
+  public static Locrianbb7 = new ScaleType("Locrian bb7", [0, 1, 3, 5, 6, 8, 9], "1 b2 b3 4 b5 b6 bb7");
+
+  public static DoubleHarmonicMajor = new ScaleType("Double Harmonic Major", [0, 1, 4, 5, 7, 8, 11], "1 b2 3 4 5 b6 7");
+  public static LydianSharp2Sharp6 = new ScaleType("Lydian #2 #6", [0, 3, 4, 6, 7, 10, 11], "1 #2 3 #4 5 #6 7");
+  public static Ultraphrygian = new ScaleType("Ultraphrygian", [0, 1, 3, 4, 7, 8, 9], "1 b2 b3 b4 5 b6 bb7");
+  public static HungarianMinor = new ScaleType("Hungarian Minor", [0, 2, 3, 6, 7, 8, 11], "1 2 b3 #4 5 b6 7");
+  public static Oriental = new ScaleType("Oriental", [0, 1, 4, 5, 6, 9, 10], "1 b2 3 4 b5 6 b7");
+  public static IonianAugmentedSharp2 = new ScaleType("Ionian Augmented #2", [0, 3, 4, 5, 8, 9, 11], "1 #2 3 4 #5 6 7");
+  public static Locrianbb3bb7 = new ScaleType("Locrian bb3 bb7", [0, 1, 2, 5, 6, 8, 9], "1 b2 bb3 4 b5 b6 bb7");
 
   public static TonicDiminished = new ScaleType("Tonic Diminished", [0, 2, 3, 5, 6, 8, 9, 11], "1 2 b3 4 b5 b6 bb7 7");
   public static DominantDiminished = new ScaleType("Dominant Diminished", [0, 1, 3, 4, 6, 7, 9, 10], "1 b2 b3 b4 b5 5 6 b7");
@@ -62,18 +91,7 @@ export class ScaleType {
   public static MajorBlues = new ScaleType("Major Blues", [0, 2, 3, 4, 7, 9], "1 2 b3 3 5 6");
   public static MinorBlues = new ScaleType("Minor Blues", [0, 3, 5, 6, 7, 10], "1 b3 4 b5 5 b7");
 
-  public static Dorianb2 = new ScaleType("Dorian b2", [0, 1, 3, 5, 7, 9, 10], "1 b2 b3 4 5 6 b7");
-  public static LydianAug = new ScaleType("Lydian Aug.", [0, 2, 4, 6, 8, 9, 11], "1 2 3 #4 #5 6 7");
-  public static MixolydianSharp11 = new ScaleType("Mixolydian #11", [0, 2, 4, 6, 7, 9, 10], "1 2 3 #4 5 6 b7");
-  public static Mixolydianb6 = new ScaleType("Mixolydian b6", [0, 2, 4, 5, 7, 8, 10], "1 2 3 4 5 b6 b7");
-  public static LocrianNat9 = new ScaleType("Locrian Nat. 9", [0, 2, 3, 5, 6, 8, 10], "1 2 b3 4 b5 b6 b7");
-  public static AlteredDominant = new ScaleType("Altered Dominant", [0, 1, 3, 4, 6, 8, 10], "1 b2 b3 b4 b5 b6 b7");
-  public static LocrianNat6 = new ScaleType("Locrian Nat. 6", [0, 1, 3, 5, 6, 9, 10], "1 b2 b3 4 b5 6 b7");
-  public static IonianAug = new ScaleType("Ionian Aug.", [0, 2, 4, 5, 8, 9, 11], "1 2 3 4 #5 6 7");
-  public static DorianSharp11 = new ScaleType("Dorian #11", [0, 2, 3, 6, 7, 9, 10], "1 2 b3 #4 5 6 b7");
-  public static PhrygianMajor = new ScaleType("Phrygian Major", [0, 1, 4, 5, 7, 8, 10], "1 b2 3 4 5 b6 b7");
-  public static LydianSharp9 = new ScaleType("Lydian #9", [0, 3, 4, 6, 7, 9, 11], "1 #2 3 #4 5 6 7");
-  public static AlteredDominantbb7 = new ScaleType("Altered Dominant bb7", [0, 1, 3, 4, 6, 8, 9], "1 b2 b3 b4 b5 b6 bb7");
+  
 
   public static MajorScaleModes = [
     ScaleType.Ionian,
@@ -109,6 +127,24 @@ export class ScaleType {
     ScaleType.LydianSharp9,
     ScaleType.AlteredDominantbb7
   ];
+  public static HarmonicMajorScaleModes = [
+    ScaleType.HarmonicMajor,
+    ScaleType.Dorianb5,
+    ScaleType.Phrygianb4,
+    ScaleType.Lydianb3,
+    ScaleType.Mixolydianb2,
+    ScaleType.LydianAugmentedSharp2,
+    ScaleType.Locrianbb7
+  ];
+  public static DoubleHarmonicMajorScaleModes = [
+    ScaleType.DoubleHarmonicMajor,
+    ScaleType.LydianSharp2Sharp6,
+    ScaleType.Ultraphrygian,
+    ScaleType.HungarianMinor,
+    ScaleType.Oriental,
+    ScaleType.IonianAugmentedSharp2,
+    ScaleType.Locrianbb3bb7
+  ];
   public static DiminishedScales = [
     ScaleType.TonicDiminished,
     ScaleType.DominantDiminished
@@ -117,6 +153,8 @@ export class ScaleType {
     new ScaleTypeGroup("Major Scale Modes", ScaleType.MajorScaleModes),
     new ScaleTypeGroup("Melodic Minor Scale Modes", ScaleType.MelodicMinorScaleModes),
     new ScaleTypeGroup("Harmonic Minor Scale Modes", ScaleType.HarmonicMinorScaleModes),
+    new ScaleTypeGroup("Harmonic Major Scale Modes", ScaleType.HarmonicMajorScaleModes),
+    new ScaleTypeGroup("Double Harmonic Major Scale Modes", ScaleType.DoubleHarmonicMajorScaleModes),
     new ScaleTypeGroup("Diminished Scales", ScaleType.DiminishedScales),
     new ScaleTypeGroup("Major Pentatonic Scale Modes", ScaleType.MajorPentatonicScaleModes),
     new ScaleTypeGroup("Blues Scales", [
