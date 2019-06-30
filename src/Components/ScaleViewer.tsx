@@ -10,36 +10,38 @@ import { Pitch } from "../Pitch";
 import { Button, Card, CardContent, Typography } from "@material-ui/core";
 import { Chord } from "../Chord";
 import { PianoKeyboard } from "./PianoKeyboard";
-import { playPitchesSequentially, playPitches } from '../Piano';
+import { playPitches } from '../Piano';
 import * as PianoScaleDronePlayer from "./PianoScaleDronePlayer";
 import { GuitarScaleViewer } from './Quizzes/GuitarScales';
+import { getStandardGuitarTuning, getPreferredGuitarScaleShape } from './GuitarFretboard';
+import { ScaleAudioPlayer } from './ScaleAudioPlayer';
 
 const validSharpKeyPitches = [
   null,
   null,
-  new Pitch(PitchLetter.C, 1, 4),
+  new Pitch(PitchLetter.C, 1, 3),
   null,
   null,
-  new Pitch(PitchLetter.F, 1, 4),
+  new Pitch(PitchLetter.F, 1, 3),
   null
 ];
 const validNaturalKeyPitches = [
-  new Pitch(PitchLetter.A, 0, 4),
-  new Pitch(PitchLetter.B, 0, 4),
-  new Pitch(PitchLetter.C, 0, 4),
-  new Pitch(PitchLetter.D, 0, 4),
-  new Pitch(PitchLetter.E, 0, 4),
-  new Pitch(PitchLetter.F, 0, 4),
-  new Pitch(PitchLetter.G, 0, 4)
+  new Pitch(PitchLetter.A, 0, 3),
+  new Pitch(PitchLetter.B, 0, 3),
+  new Pitch(PitchLetter.C, 0, 3),
+  new Pitch(PitchLetter.D, 0, 3),
+  new Pitch(PitchLetter.E, 0, 3),
+  new Pitch(PitchLetter.F, 0, 3),
+  new Pitch(PitchLetter.G, 0, 3)
 ];
 const validFlatKeyPitches = [
-  new Pitch(PitchLetter.A, -1, 4),
-  new Pitch(PitchLetter.B, -1, 4),
-  new Pitch(PitchLetter.C, -1, 5),
-  new Pitch(PitchLetter.D, -1, 4),
-  new Pitch(PitchLetter.E, -1, 4),
+  new Pitch(PitchLetter.A, -1, 3),
+  new Pitch(PitchLetter.B, -1, 3),
+  new Pitch(PitchLetter.C, -1, 4),
+  new Pitch(PitchLetter.D, -1, 3),
+  new Pitch(PitchLetter.E, -1, 3),
   null,
-  new Pitch(PitchLetter.G, -1, 4)
+  new Pitch(PitchLetter.G, -1, 3)
 ];
 
 interface IScaleViewerProps {
@@ -117,6 +119,10 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
     
     const baseButtonStyle: any = { textTransform: "none" };
 
+    const numPitchesToPlay = showPianoKeyboard
+      ? pitches.length
+      : getPreferredGuitarScaleShape(this.state.scaleType, this.state.rootPitch, getStandardGuitarTuning(6)).length;
+
     return (
       <Card>
         <CardContent>
@@ -186,12 +192,7 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
 
             <div>
               <p>
-                <Button
-                  onClick={event => this.onListenClick()}
-                  variant="contained"
-                >
-                  Listen
-                </Button>
+                <ScaleAudioPlayer scale={this.state.scaleType} rootPitch={this.state.rootPitch} pitchCount={numPitchesToPlay} onGetExports={e => this.stopPlayingAudioFn = e.stopPlayingFn} />
               </p>
             </div>
 
@@ -231,12 +232,14 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
       : ScaleType.Groups;
   }
   private renderRootPitchRow(rootPitches: Array<Pitch | null>): JSX.Element {
+    const useGuitarRootPitches = this.props.showPianoKeyboard === false;
+
     return (
       <div>
         {rootPitches.map(pitch => {
           const style: any = { textTransform: "none" };
           
-          const isPressed = pitch && (pitch.equals(this.state.rootPitch));
+          const isPressed = pitch && (pitch.equalsNoOctave(this.state.rootPitch));
           if (isPressed) {
             style.backgroundColor = "#959595";
           }
@@ -274,40 +277,12 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
     this.setState({ scaleType: scaleType }, this.onScaleChange.bind(this));
   }
 
+  private stopPlayingAudioFn: (() => void) | null = null;
+
   private onScaleChange() {
-    if (this.playAudioCancelFn) {
-      this.playAudioCancelFn();
-      this.playAudioCancelFn = null;
-    }
-  }
-
-  private playAudioCancelFn: (() => void) | null = null;
-
-  private onListenClick() {
-    if (this.playAudioCancelFn) {
-      this.playAudioCancelFn();
-      this.playAudioCancelFn = null;
-    }
-
-    const playSimultaneously = (this.props.playSimultaneously !== undefined)
-      ? this.props.playSimultaneously
-      : false;
-
-    let pitches = Chord.fromPitchAndFormulaString(
-      this.state.rootPitch,
-      this.state.scaleType.formulaString
-    ).pitches;
-
-    if (playSimultaneously) {
-      playPitches(pitches);
-    } else {
-      pitches = pitches.concat(new Pitch(
-        this.state.rootPitch.letter,
-        this.state.rootPitch.signedAccidental,
-        this.state.rootPitch.octaveNumber + 1
-      ));
-      const cutOffSounds = true;
-      this.playAudioCancelFn = playPitchesSequentially(pitches, 500, cutOffSounds);
+    if (this.stopPlayingAudioFn) {
+      this.stopPlayingAudioFn();
+      this.stopPlayingAudioFn = null;
     }
   }
 }

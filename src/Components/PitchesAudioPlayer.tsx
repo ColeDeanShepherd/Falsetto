@@ -11,11 +11,17 @@ export enum PitchesAudioPlayerPlayState {
   LOADING
 }
 
+export class PitchesAudioPlayerExports {
+  public constructor(
+    public stopPlayingFn: () => void
+  ) {}
+}
 export interface IPitchesAudioPlayerProps {
   pitches: Array<Pitch>;
   playSequentially: boolean;
   delayInMs?: number;
   cutOffSounds?: boolean;
+  onGetExports?: (exports: PitchesAudioPlayerExports) => void;
 }
 export interface IPitchesAudioPlayerState {
   playState: PitchesAudioPlayerPlayState;
@@ -30,7 +36,11 @@ export class PitchesAudioPlayer extends React.Component<IPitchesAudioPlayerProps
 
     this.loadSoundsPromise = null;
     this.loadedSounds = null;
-    this.cancelPlayingFn = null
+    this.cancelPlayingFn = null;
+
+    props.onGetExports
+      ? props.onGetExports(new PitchesAudioPlayerExports(() => this.stopSounds()))
+      : null;
   }
   public render(): JSX.Element {
     const buttonStyle: any = { textTransform: "none" };

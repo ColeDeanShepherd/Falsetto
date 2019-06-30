@@ -2,6 +2,8 @@
 ## High Priority
 * Chord Progressions
   * Ensure it works on mobile.
+* Scale Viewer
+  * If only showing guitar, fix root note octaves.
 * Guitar Scales Lesson
   * Play guitar sounds?
   * Major scale repeating pattern game?

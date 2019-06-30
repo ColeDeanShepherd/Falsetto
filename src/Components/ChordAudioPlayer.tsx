@@ -2,11 +2,12 @@ import * as React from "react";
 
 import { Pitch } from '../Pitch';
 import { Chord, ChordType } from '../Chord';
-import { PitchesAudioPlayer } from './PitchesAudioPlayer';
+import { PitchesAudioPlayer, PitchesAudioPlayerExports } from './PitchesAudioPlayer';
 
 export interface IChordAudioPlayerProps {
   chordType: ChordType;
   rootPitch: Pitch;
+  onGetExports?: (exports: PitchesAudioPlayerExports) => void;
 }
 export class ChordAudioPlayer extends React.Component<IChordAudioPlayerProps, {}> {
   public render(): JSX.Element {

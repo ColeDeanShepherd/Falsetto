@@ -182,6 +182,12 @@ export class Pitch {
       (this.octaveNumber === pitch.octaveNumber)
     );
   }
+  public equalsNoOctave(pitch: Pitch): boolean {
+    return (
+      (this.letter === pitch.letter) &&
+      (this.signedAccidental === pitch.signedAccidental)
+    );
+  }
   public isEnharmonic(pitch: Pitch): boolean {
     return this.midiNumber === pitch.midiNumber;
   }

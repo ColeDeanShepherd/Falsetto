@@ -2,12 +2,13 @@ import * as React from "react";
 
 import { Pitch } from '../Pitch';
 import { ScaleType } from '../Scale';
-import { PitchesAudioPlayer } from './PitchesAudioPlayer';
+import { PitchesAudioPlayer, PitchesAudioPlayerExports } from './PitchesAudioPlayer';
 
 export interface IScaleAudioPlayerProps {
   scale: ScaleType;
   rootPitch: Pitch;
   pitchCount?: number;
+  onGetExports?: (exports: PitchesAudioPlayerExports) => void;
 }
 export class ScaleAudioPlayer extends React.Component<IScaleAudioPlayerProps, {}> {
   public render(): JSX.Element {
