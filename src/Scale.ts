@@ -91,8 +91,6 @@ export class ScaleType {
   public static MajorBlues = new ScaleType("Major Blues", [0, 2, 3, 4, 7, 9], "1 2 b3 3 5 6");
   public static MinorBlues = new ScaleType("Minor Blues", [0, 3, 5, 6, 7, 10], "1 b3 4 b5 5 b7");
 
-  
-
   public static MajorScaleModes = [
     ScaleType.Ionian,
     ScaleType.Dorian,
@@ -105,8 +103,8 @@ export class ScaleType {
   public static MajorPentatonicScaleModes = [
     ScaleType.MajorPentatonic,
     ScaleType.MajorPentatonicMode2,
-    ScaleType.MajorPentatonicMode2,
     ScaleType.MajorPentatonicMode3,
+    ScaleType.MajorPentatonicMode4,
     ScaleType.MinorPentatonic,
   ];
   public static MelodicMinorScaleModes = [

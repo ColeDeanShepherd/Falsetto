@@ -589,7 +589,7 @@ export class GuitarFretboard extends React.Component<IGuitarFretboardProps, {}> 
           return (
             <g>
               <circle key={fretNumber} cx={x} cy={metrics.fretDotY - fretDotYOffset} r={metrics.fretDotRadius} fill="black" strokeWidth="0" />
-              <circle key={fretNumber} cx={x} cy={metrics.fretDotY + fretDotYOffset} r={metrics.fretDotRadius} fill="black" strokeWidth="0" />
+              <circle key={`${fretNumber}_2`} cx={x} cy={metrics.fretDotY + fretDotYOffset} r={metrics.fretDotRadius} fill="black" strokeWidth="0" />
             </g>
           );
         }

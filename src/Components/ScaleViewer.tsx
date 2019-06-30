@@ -53,7 +53,8 @@ interface IScaleViewerProps {
 }
 interface IScaleViewerState {
   rootPitch: Pitch;
-  scale: ScaleType;
+  scaleTypeGroup: ScaleTypeGroup;
+  scaleType: ScaleType;
 }
 
 export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewerState> {
@@ -62,7 +63,8 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
 
     this.state = {
       rootPitch: new Pitch(PitchLetter.C, 0, 4),
-      scale: this.scaleTypeGroups[0].scaleTypes[0]
+      scaleTypeGroup: this.scaleTypeGroups[0],
+      scaleType: this.scaleTypeGroups[0].scaleTypes[0]
     };
   }
 
@@ -73,14 +75,14 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
       
     const pitches = Chord.fromPitchAndFormulaString(
       this.state.rootPitch,
-      this.state.scale.formulaString
+      this.state.scaleType.formulaString
     )
       .pitches;
     const pitchStrings = pitches
       .map(pitch => pitch.toString(false));
     const pitchesString = pitchStrings.join(", ");
 
-    const intervals = this.state.scale.getIntervals();
+    const intervals = this.state.scaleType.getIntervals();
     const intervalStrings = intervals
       .map((interval, i) => (i === 0) ? "R" : interval.toString());
     const intervalsString = intervalStrings.join(", ");
@@ -98,7 +100,7 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
           playPitches([pitch]);
         }
       })
-      : (pitch: Pitch) => PianoScaleDronePlayer.onKeyPress(this.state.scale, this.state.rootPitch, pitch);
+      : (pitch: Pitch) => PianoScaleDronePlayer.onKeyPress(this.state.scaleType, this.state.rootPitch, pitch);
     
     const showPianoKeyboard = (this.props.showPianoKeyboard !== undefined)
       ? this.props.showPianoKeyboard
@@ -112,6 +114,8 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
       this.state.rootPitch.signedAccidental,
       this.state.rootPitch.octaveNumber - 2
     );
+    
+    const baseButtonStyle: any = { textTransform: "none" };
 
     return (
       <Card>
@@ -133,44 +137,50 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
             </div>
             
             <Typography gutterBottom={true} variant="h6" component="h4">
-              Type
+              Category
             </Typography>
             <div style={{padding: "1em 0"}}>
               {this.scaleTypeGroups.map(scaleTypeGroup => {
-                const scaleTypeButtons = scaleTypeGroup.scaleTypes.map(scaleType => {
-                  const style: any = { textTransform: "none" };
-                  
-                  const isPressed = scaleType.name === this.state.scale.name;
-                  if (isPressed) {
-                    style.backgroundColor = "#959595";
-                  }
-
-                  return (
-                    <Button
-                      key={scaleType.name}
-                      onClick={event => this.onScaleTypeClick(scaleType)}
-                      variant="contained"
-                      style={style}
-                    >
-                      {scaleType.name}
-                    </Button>
-                  );
-                });
-
                 return (
-                  <div>
-                    <Typography gutterBottom={true} variant="h6" component="h4">
-                      {scaleTypeGroup.name}
-                    </Typography>
-                    {scaleTypeButtons}
-                  </div>
+                  <Button
+                    key={scaleTypeGroup.name}
+                    onClick={event => this.onScaleTypeGroupClick(scaleTypeGroup)}
+                    variant="contained"
+                    style={baseButtonStyle}
+                  >
+                    {scaleTypeGroup.name}
+                  </Button>
                 );
               })}
             </div>
+
+            <Typography gutterBottom={true} variant="h6" component="h4">
+              Type
+            </Typography>
+            <div style={{padding: "1em 0"}}>
+              {this.state.scaleTypeGroup.scaleTypes.map(scaleType => {
+                const buttonStyle: any = { ...baseButtonStyle };
+                const isPressed = scaleType.name === this.state.scaleType.name;
+                if (isPressed) {
+                  buttonStyle.backgroundColor = "#959595";
+                }
+
+                return (
+                  <Button
+                    key={scaleType.name}
+                    onClick={event => this.onScaleTypeClick(scaleType)}
+                    variant="contained"
+                    style={buttonStyle}
+                  >
+                    {scaleType.name}
+                  </Button>
+                );
+            })}
+            </div>
             <div style={{fontSize: "1.5em"}}>
-              <p>{this.state.rootPitch.toString(false)} {this.state.scale.name}</p>
+              <p>{this.state.rootPitch.toString(false)} {this.state.scaleType.name}</p>
               <p>{pitchesString}</p>
-              <p>{this.state.scale.formulaString}</p>
+              <p>{this.state.scaleType.formulaString}</p>
               <p>{intervalsString}</p>
             </div>
 
@@ -202,7 +212,7 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
               <div style={{marginTop: "1em"}}>
                 {showGuitarFretboard ? (
                   <GuitarScaleViewer
-                    scaleType={this.state.scale}
+                    scaleType={this.state.scaleType}
                     rootPitch={guitarRootPitch}
                     size={guitarSize}
                     renderAllScaleShapes={this.props.renderAllScaleShapes} />
@@ -257,8 +267,11 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
   private onRootPitchClick(rootPitch: Pitch) {
     this.setState({ rootPitch: rootPitch }, this.onScaleChange.bind(this));
   }
-  private onScaleTypeClick(scale: ScaleType) {
-    this.setState({ scale: scale }, this.onScaleChange.bind(this));
+  private onScaleTypeGroupClick(scaleTypeGroup: ScaleTypeGroup) {
+    this.setState({ scaleTypeGroup: scaleTypeGroup }, this.onScaleChange.bind(this));
+  }
+  private onScaleTypeClick(scaleType: ScaleType) {
+    this.setState({ scaleType: scaleType }, this.onScaleChange.bind(this));
   }
 
   private onScaleChange() {
@@ -282,7 +295,7 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
 
     let pitches = Chord.fromPitchAndFormulaString(
       this.state.rootPitch,
-      this.state.scale.formulaString
+      this.state.scaleType.formulaString
     ).pitches;
 
     if (playSimultaneously) {
