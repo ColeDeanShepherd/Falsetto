@@ -4,43 +4,57 @@
   * Ensure it works on mobile.
 * Scale Viewer
   * If only showing guitar, fix root note octaves.
+* Marketing Plan
+  * Integrate with Beato Book?
+  * Post on Reddit with text tutorial?
+  * Other YouTubers?
+* Monetization Plan
+  * Partnership, take cut of profits
+    * YouTube, schools
+  * Affiliate marketing
+* Chords
+  * Fix on portrait mobile.
+* Scale Viewer
+  * If only showing guitar, fix root note octaves.
 * Guitar Scales Lesson
-  * Play guitar sounds?
+  * Play **guitar** sounds?
   * Major scale repeating pattern game?
 * Make ear training exercises play automatically when you skip.
-* Add inversions to Piano Chords
+* Implement Guitar Chords
+* Lessons
+  * Sheet music notes
+  * Piano notes
+  * Guitar notes
+    * Start with "A" instead of "G"
+* Exercises
+  * Scale degree ear trainer
+* Interactive Diagrams
+  * Press piano keys, see notes, intervals, chords, scales
+  * Plain playable piano?
 * Add sheet music notes lesson.
-* Add piano notes lesson?
-* Guitar Notes Lesson
-  * Separate quizzes from diagrams more so there's less of an urge to "cheat"?
-  * Integrate knowledge of the circle of fifths?
-  * Integrate audio into guitar fretboard lesson?
-* Improve SVG rendering to be scalable.
-  * PianoKeyboard
-  * Everything else! (look for Utils.shrinkRectToFit)
-* Improve SVG text align
-  * Horizontal align
-  * dy
-* Essential Music Theory
-* Implement isEmbedded for ScaleViewer & RhythmTapper
-* Enable inversion on guitar scale viewer.
-* Rhythm tapper
-* Scale degree ear trainer
-* Playable piano?
+* Add "Next Steps"
+* SVG rendering improvements
+  * Improve SVG rendering to be scalable.
+    * look for Utils.shrinkRectToFit
+  * Improve SVG text align
+    * Horizontal align
+    * dy
+* Highlight root note in scale/chord viewers
 * Show scale degree #'s in piano scales.
-* Stop playing scale sounds when switching between exercises (on unmount).
-* Make next question cut off previous question's sounds.
 ## Medium Priority
-* Post to musictheory subreddit.
+* Global sound cutoffs
+* Reload page when switching?
+* Rhythm tapper
 ## Low Priority
-* Use actual flat symbols instead of 'b'
 * Improve button styling.
 * Use proper symbols.
+  * Flat, sharp, natural
 * Chord intervals.
 * Chord Symbols
 * Support enabled question indices when double-inverting.
-* Add support for dynamically generated flash card decks
+* Add support for dynamically generated flash card decks.
 * Share more code between interval recognition exercises.
 * Interval Type Changes When Lowering/Raising
+* Implement isEmbedded for ScaleViewer & RhythmTapper
 ## Refactoring
 * Use a higher-level construct for checkbox configs.
