@@ -17,7 +17,8 @@ import {
   IntervalsSection,
   ScalesAndModesSection,
   ChordsSection,
-  ChordProgressionsSection
+  ChordProgressionsSection,
+  NextStepsSection
 } from "./EssentialMusicTheory";
 import * as IntervalNamesToHalfSteps from "./Quizzes/IntervalNamesToHalfSteps";
 import * as IntervalQualitySymbolsToQualities from "./Quizzes/IntervalQualitySymbolsToQualities";
@@ -223,6 +224,7 @@ class App extends React.Component<IAppProps, IAppState> {
       <Route exact path="/essential-music-theory/scales-and-modes" component={() => <DocumentTitle title="Scales And Modes - Essential Music Theory - Falsetto"><SectionContainer section={ScalesAndModesSection}></SectionContainer></DocumentTitle>} />,
       <Route exact path="/essential-music-theory/chords" component={() => <DocumentTitle title="Chords - Essential Music Theory - Falsetto"><SectionContainer section={ChordsSection}></SectionContainer></DocumentTitle>} />,
       <Route exact path="/essential-music-theory/chord-progressions" component={() => <DocumentTitle title="Chord Progressions - Essential Music Theory - Falsetto"><SectionContainer section={ChordProgressionsSection}></SectionContainer></DocumentTitle>} />,
+      <Route exact path="/essential-music-theory/next-steps" component={() => <DocumentTitle title="Next Steps - Essential Music Theory - Falsetto"><SectionContainer section={NextStepsSection}></SectionContainer></DocumentTitle>} />,
       <Route path="/scale-viewer" component={() => <DocumentTitle title={"Scale Viewer - Falsetto"}><ScaleViewer renderAllScaleShapes={false} /></DocumentTitle>} />,
       <Route path="/chord-viewer" component={() => <DocumentTitle title={"Chord Viewer - Falsetto"}><ChordViewer /></DocumentTitle>} />,
       <Route path="/rhythm-tapper" component={() => <DocumentTitle title={"Rhythm Tapper - Falsetto"}><RhythmTapper /></DocumentTitle>} />,
@@ -254,7 +256,7 @@ class App extends React.Component<IAppProps, IAppState> {
           {this.renderNavLink("/essential-music-theory/scales-and-modes", "Scales & Modes")}
           {this.renderNavLink("/essential-music-theory/chords", "Chords")}
           {this.renderNavLink("/essential-music-theory/chord-progressions", "Chord Progressions")}
-          <p><em>Next steps (coming soon)</em></p>
+          {this.renderNavLink("/essential-music-theory/next-steps", "Next Steps")}
         </div>
         <div>
           <NavSectionSubTitle>Guitar</NavSectionSubTitle>
