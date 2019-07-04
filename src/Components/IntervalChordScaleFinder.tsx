@@ -70,13 +70,13 @@ export function findScales(pitches: Array<Pitch>): Array<ScaleType> {
     : new Array<ScaleType>();
 }
 
-interface IPianoMasterTheoryDiagramProps {}
-interface IPianoMasterTheoryDiagramState {
+interface IIntervalChordScaleFinderProps {}
+interface IIntervalChordScaleFinderState {
   pressedPitches: Array<Pitch>;
 }
 
-export class PianoMasterTheoryDiagram extends React.Component<IPianoMasterTheoryDiagramProps, IPianoMasterTheoryDiagramState> {
-  public constructor(props: IPianoMasterTheoryDiagramProps) {
+export class IntervalChordScaleFinder extends React.Component<IIntervalChordScaleFinderProps, IIntervalChordScaleFinderState> {
+  public constructor(props: IIntervalChordScaleFinderProps) {
     super(props);
 
     this.state = {
