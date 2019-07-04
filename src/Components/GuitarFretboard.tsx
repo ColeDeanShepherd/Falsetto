@@ -96,6 +96,20 @@ export function getPreferredGuitarScaleShape(
   return scaleShapes[0];
 }
 
+export function get1stGuitarNoteOnString(pitch: Pitch, stringIndex: number, tuning: GuitarTuning): GuitarNote {
+  Utils.precondition(stringIndex >= 0);
+  Utils.precondition(stringIndex < tuning.stringCount);
+
+  const openStringPitch = tuning.openStringPitches[stringIndex];
+
+  let notePitch = new Pitch(pitch.letter, pitch.signedAccidental, openStringPitch.octaveNumber);
+  if (notePitch.midiNumber < openStringPitch.midiNumber) {
+    notePitch.octaveNumber++;
+  }
+
+  return new GuitarNote(notePitch, stringIndex);
+}
+
 class GuitarScaleShapeFinderState {
   public guitarNotes: Array<GuitarNote> = new Array<GuitarNote>();
   public stringIndex: number = 0;
@@ -231,9 +245,11 @@ export class GuitarNote {
   public static allNotesOfPitches(
     tuning: GuitarTuning,
     pitches: Array<Pitch>,
+    minFretNumber: number,
     maxFretNumber: number
   ): Array<GuitarNote> {
-    Utils.precondition(maxFretNumber >= 0);
+    Utils.precondition(minFretNumber >= 0);
+    Utils.precondition(maxFretNumber >= minFretNumber);
 
     const fretNumbers = Utils.range(0, maxFretNumber);
     return Utils.flattenArrays<GuitarNote>(
@@ -394,7 +410,7 @@ export function renderGuitarFretboardScaleExtras(
   const guitarNotes = renderAllScaleShapes
     ? (
       GuitarNote.allNotesOfPitches(
-        tuning, pitches, metrics.fretCount
+        tuning, pitches, 0, metrics.fretCount
       )
     )
     : getPreferredGuitarScaleShape(scaleType, rootPitch, tuning);

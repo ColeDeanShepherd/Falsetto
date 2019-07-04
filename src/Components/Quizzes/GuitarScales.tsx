@@ -13,7 +13,7 @@ import { AnswerDifficulty } from "../../StudyAlgorithm";
 import { Pitch } from "../../Pitch";
 import { PitchLetter } from "../../PitchLetter";
 import { Chord, ChordType } from "../../Chord";
-import { GuitarFretboard, renderGuitarFretboardScaleExtras, getStandardGuitarTuning, findGuitarChordShape, renderGuitarFretboardChordExtras } from "../GuitarFretboard";
+import { GuitarFretboard, renderGuitarFretboardScaleExtras, getStandardGuitarTuning, findGuitarChordShape, renderGuitarFretboardChordExtras, GuitarNote, renderGuitarNoteHighlightsAndLabels, get1stGuitarNoteOnString } from "../GuitarFretboard";
 import { ScaleAnswerSelect } from "../ScaleAnswerSelect";
 import { getPreferredGuitarScaleShape } from "../GuitarFretboard";
 
@@ -74,18 +74,23 @@ export const GuitarChordViewer: React.FunctionComponent<{
     rootPitch.octaveNumber++;
   }
 
-  const guitarNotes = findGuitarChordShape(props.chordType, rootPitch, 1, 0, getStandardGuitarTuning(STRING_COUNT));
   const guitarTuning = getStandardGuitarTuning(STRING_COUNT);
-  const maxFretNumber = Utils.arrayMax(guitarNotes
-    .map(gn => gn.getFretNumber(guitarTuning))
+  const pitches = props.chordType.getPitches(rootPitch);
+  const minFretNumber = 0;
+  const fretCount = 11;
+  const maxFretNumber = minFretNumber + fretCount;
+  const guitarNotes = GuitarNote.allNotesOfPitches(
+    guitarTuning, pitches, minFretNumber, maxFretNumber
   );
-  const minFretNumber = Math.max(0, maxFretNumber - 11);
 
   return (
     <GuitarFretboard
       width={props.size.width} height={props.size.height}
-      minFretNumber={minFretNumber}
-      renderExtrasFn={metrics => renderGuitarFretboardChordExtras(metrics, rootPitch, props.chordType)}
+      minFretNumber={minFretNumber} fretCount={fretCount}
+      renderExtrasFn={metrics => renderGuitarNoteHighlightsAndLabels(
+        metrics, guitarNotes, "lightblue",
+        (n, i) => (1 + pitches.findIndex(p => p.equalsNoOctave(n.pitch))).toString()
+      )}
     />
   );
 }

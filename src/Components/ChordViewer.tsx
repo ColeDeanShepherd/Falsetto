@@ -204,13 +204,12 @@ export class ChordViewer extends React.Component<IChordViewerProps, IChordViewer
               </div>
 
               <div style={{marginTop: "1em"}}>
-                {(showGuitarFretboard && false) ? (
+                {(showGuitarFretboard) ? (
                   <GuitarChordViewer
                     chordType={this.state.chordType}
                     rootPitch={guitarRootPitch}
                     size={guitarSize} />
                 ) : null}
-                <p>Guitar chords coming soon!</p>
               </div>
             </div>
           </div>
