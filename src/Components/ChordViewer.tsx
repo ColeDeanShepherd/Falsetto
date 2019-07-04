@@ -107,7 +107,7 @@ export class ChordViewer extends React.Component<IChordViewerProps, IChordViewer
     );
     
     const baseButtonStyle: any = { textTransform: "none" };
-
+    
     return (
       <Card>
         <CardContent>

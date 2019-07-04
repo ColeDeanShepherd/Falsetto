@@ -89,7 +89,7 @@ export const GuitarChordViewer: React.FunctionComponent<{
       minFretNumber={minFretNumber} fretCount={fretCount}
       renderExtrasFn={metrics => renderGuitarNoteHighlightsAndLabels(
         metrics, guitarNotes, "lightblue",
-        (n, i) => (1 + pitches.findIndex(p => p.equalsNoOctave(n.pitch))).toString()
+        (n, i) => (1 + pitches.findIndex(p => p.midiNumberNoOctave == n.pitch.midiNumberNoOctave)).toString()
       )}
     />
   );

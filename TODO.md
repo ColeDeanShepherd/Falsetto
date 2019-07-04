@@ -2,6 +2,8 @@
 ## High Priority
 * Chord Progressions
   * Ensure it works on mobile.
+* Make sure pitches in GuitarNote.allNotesOfPitches use the right accidentals.
+* Make sure PianoScaleDronePlayer.renderExtrasFn uses the right accidentals.
 * Scale Viewer
   * If only showing guitar, fix root note octaves.
 * Marketing Plan

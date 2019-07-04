@@ -41,7 +41,7 @@ export function doesKeyUseSharps(pitchLetter: PitchLetter, signedAccidental: num
 
   switch (pitchLetter) {
     case PitchLetter.C:
-      return true;
+      return false;
     case PitchLetter.D:
       return true;
     case PitchLetter.E:
