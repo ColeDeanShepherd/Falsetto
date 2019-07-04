@@ -27,6 +27,27 @@ export function getIntervalsFromFormulaString(formulaString: string): Array<Inte
     });
 }
 
+export function getModePitchIntegers(
+  pitchIntegers: Array<number>, scaleDegree: number
+): Array<number> {
+  Utils.precondition(scaleDegree >= 1);
+
+  const halfStepsToSubtract = pitchIntegers[scaleDegree - 1];
+  const modePitchIntegers = new Array<number>(pitchIntegers.length);
+  for (let modeI = 0; modeI < modePitchIntegers.length; modeI++) {
+    const unwrappedBaseScaleI = (scaleDegree - 1) + modeI;
+    const baseScaleI = unwrappedBaseScaleI % pitchIntegers.length;
+    
+    modePitchIntegers[modeI] = Utils.mod(pitchIntegers[baseScaleI] - halfStepsToSubtract, 12);
+  }
+
+  return modePitchIntegers;
+}
+export function getAllModePitchIntegers(pitchIntegers: Array<number>): Array<Array<number>> {
+  return pitchIntegers
+    .map((_, i) => getModePitchIntegers(pitchIntegers, 1 + i));
+}
+
 export class ScaleTypeGroup {
   public constructor(
     public name: string,
@@ -194,15 +215,7 @@ export class ScaleType {
 
     if (scaleDegree === 1) { return this; }
 
-    const halfStepsToSubtract = this.pitchIntegers[scaleDegree - 1];
-    const modePitchIntegers = new Array<number>(this.numPitches);
-    for (let modeI = 0; modeI < modePitchIntegers.length; modeI++) {
-      const unwrappedBaseScaleI = (scaleDegree - 1) + modeI;
-      const baseScaleI = unwrappedBaseScaleI % this.numPitches;
-      
-      modePitchIntegers[modeI] = Utils.mod(this.pitchIntegers[baseScaleI] - halfStepsToSubtract, 12);
-    }
-
+    const modePitchIntegers = getModePitchIntegers(this.pitchIntegers, scaleDegree);
     const mode = ScaleType.All.find(scale => Utils.areArraysEqual(modePitchIntegers, scale.pitchIntegers));
     return Utils.unwrapValueOrUndefined(mode);
   }
