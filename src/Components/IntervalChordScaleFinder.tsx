@@ -13,6 +13,7 @@ import {  ChordType } from '../Chord';
 import { ScaleType, getAllModePitchIntegers } from '../Scale';
 
 // TODO: refactor Chord, Scale
+// TODO: add support for multiple chord names
 export function findIntervalsChordsScales(pitches: Array<Pitch>): {
   intervals: Array<Interval>,
   chords: Array<[ChordType, Pitch]>,
@@ -90,8 +91,6 @@ export class IntervalChordScaleFinder extends React.Component<IIntervalChordScal
     const pianoStyle = { width: "100%", maxWidth: "400px", height: "auto" };
     const pianoSize = new Size2D(200, 100);
     
-    // TODO: render key names
-    // TODO: render pressed pitches on piano
     const pressedPitchesStr = this.state.pressedPitches
       .map(p => p.toOneAccidentalAmbiguousString(false))
       .join(', ');
@@ -105,6 +104,13 @@ export class IntervalChordScaleFinder extends React.Component<IIntervalChordScal
     };
 
     const intervalsChordsScales = findIntervalsChordsScales(this.state.pressedPitches);
+
+    // TODO: remove
+    const sortedPitches = this.state.pressedPitches
+      .slice()
+      .sort((a, b) => (a.midiNumberNoOctave < b.midiNumberNoOctave) ? -1 : 1);
+    const basePitchIntegers = sortedPitches
+      .map(p => p.midiNumberNoOctave - sortedPitches[0].midiNumberNoOctave);
     
     return (
       <Card>
@@ -117,6 +123,7 @@ export class IntervalChordScaleFinder extends React.Component<IIntervalChordScal
         
           <div>
             <div>
+              <p>{basePitchIntegers.join(', ')}</p>
               <p><span style={{ fontWeight: "bold" }}>Notes: </span>{pressedPitchesStr}</p>
               <p>
                 <span style={{ fontWeight: "bold" }}>Interval: </span>
