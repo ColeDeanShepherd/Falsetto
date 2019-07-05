@@ -7,16 +7,16 @@ import { Rect2D } from '../Rect2D';
 import { PitchLetter } from "../PitchLetter";
 import { Pitch } from "../Pitch";
 import { Card, CardContent, Typography } from "@material-ui/core";
-import { PianoKeyboard, renderPianoKeyboardNoteNames } from "./PianoKeyboard";
+import { PianoKeyboard, renderPianoKeyboardNoteNames, PianoKeyboardMetrics, renderPressedPianoKeys } from "./PianoKeyboard";
 import { Interval } from '../Interval';
 import {  ChordType } from '../Chord';
-import { ScaleType, getModePitchIntegers, getAllModePitchIntegers } from '../Scale';
+import { ScaleType, getAllModePitchIntegers } from '../Scale';
 
-// TODO: show root notes for chords & scales...
+// TODO: refactor Chord, Scale
 export function findIntervalsChordsScales(pitches: Array<Pitch>): {
   intervals: Array<Interval>,
-  chords: Array<ChordType>,
-  scales: Array<ScaleType>
+  chords: Array<[ChordType, Pitch]>,
+  scales: Array<[ScaleType, Pitch]>
 } {
   return {
     intervals: findIntervals(pitches),
@@ -29,8 +29,8 @@ export function findIntervals(pitches: Array<Pitch>): Array<Interval> {
   ? [Pitch.getInterval(pitches[0], pitches[1])]
   : new Array<Interval>();
 }
-export function findChords(pitches: Array<Pitch>): Array<ChordType> {
-  if (pitches.length === 0) { return new Array<ChordType>(); }
+export function findChords(pitches: Array<Pitch>): Array<[ChordType, Pitch]> {
+  if (pitches.length === 0) { return new Array<[ChordType, Pitch]>(); }
 
   const sortedPitches = pitches
     .slice()
@@ -39,18 +39,19 @@ export function findChords(pitches: Array<Pitch>): Array<ChordType> {
     .map(p => p.midiNumberNoOctave - sortedPitches[0].midiNumberNoOctave);
   const allPitchIntegers = getAllModePitchIntegers(basePitchIntegers);
   const chordTypes = allPitchIntegers
-    .map(pi => ChordType.All
-      .find(ct => Utils.areArraysEqual(ct.pitchIntegers, pi))
-    )
-    .filter(ct => ct)
-    .map(ct => Utils.unwrapValueOrUndefined(ct));
+    .map((pis, i): [ChordType | undefined, Pitch] => [
+      ChordType.All.find(ct => Utils.areArraysEqual(ct.pitchIntegers, pis)),
+      pitches[i]
+    ])
+    .filter(t => t[0])
+    .map((t): [ChordType, Pitch] => [Utils.unwrapValueOrUndefined(t[0]), t[1]]);
 
   return chordTypes
     ? chordTypes
-    : new Array<ChordType>();
+    : new Array<[ChordType, Pitch]>();
 }
-export function findScales(pitches: Array<Pitch>): Array<ScaleType> {
-  if (pitches.length === 0) { return new Array<ScaleType>(); }
+export function findScales(pitches: Array<Pitch>): Array<[ScaleType, Pitch]> {
+  if (pitches.length === 0) { return new Array<[ScaleType, Pitch]>(); }
 
   const sortedPitches = pitches
     .slice()
@@ -59,15 +60,16 @@ export function findScales(pitches: Array<Pitch>): Array<ScaleType> {
     .map(p => p.midiNumberNoOctave - sortedPitches[0].midiNumberNoOctave);
   const allPitchIntegers = getAllModePitchIntegers(basePitchIntegers);
   const scaleTypes = allPitchIntegers
-    .map(pi => ScaleType.All
-      .find(ct => Utils.areArraysEqual(ct.pitchIntegers, pi))
-    )
-    .filter(ct => ct)
-    .map(ct => Utils.unwrapValueOrUndefined(ct));
+    .map((pis, i): [ScaleType | undefined, Pitch] => [
+      ScaleType.All.find(ct => Utils.areArraysEqual(ct.pitchIntegers, pis)),
+      pitches[i]
+    ])
+    .filter(t => t[0])
+    .map((t): [ScaleType, Pitch] => [Utils.unwrapValueOrUndefined(t[0]), t[1]]);
 
   return scaleTypes
     ? scaleTypes
-    : new Array<ScaleType>();
+    : new Array<[ScaleType, Pitch]>();
 }
 
 interface IIntervalChordScaleFinderProps {}
@@ -113,27 +115,36 @@ export class IntervalChordScaleFinder extends React.Component<IIntervalChordScal
             </Typography>
           </div>
         
-          <div style={{textAlign: "center"}}>
-            <div style={{fontSize: "1.5em"}}>
-              <p>{pressedPitchesStr}</p>
-              {(intervalsChordsScales.intervals.length > 0)
-                ? <p>Interval: {intervalsChordsScales.intervals.map(i => i.toString()).join(', ')}</p>
-                : null}
-              {(intervalsChordsScales.chords.length > 0)
-                ? <p>Chords: {intervalsChordsScales.chords.map(c => c.name).join(', ')}</p>
-                : null}
-              {(intervalsChordsScales.scales.length > 0)
-                ? <p>Scales: {intervalsChordsScales.scales.map(s => s.name).join(', ')}</p>
-                : null}
+          <div>
+            <div>
+              <p><span style={{ fontWeight: "bold" }}>Notes: </span>{pressedPitchesStr}</p>
+              <p>
+                <span style={{ fontWeight: "bold" }}>Interval: </span>
+                {(intervalsChordsScales.intervals.length > 0)
+                  ? intervalsChordsScales.intervals.map(i => i.toString()).join(', ')
+                  : null}
+              </p>
+              <p>
+                <span style={{ fontWeight: "bold" }}>Chords: </span>
+                {(intervalsChordsScales.chords.length > 0)
+                  ? intervalsChordsScales.chords.map(c => c[1].toOneAccidentalAmbiguousString(false) + " " + c[0].name).join(', ')
+                  : null}
+              </p>
+              <p>
+                <span style={{ fontWeight: "bold" }}>Scales: </span>
+                {(intervalsChordsScales.scales.length > 0)
+                  ? intervalsChordsScales.scales.map(s => s[1].toOneAccidentalAmbiguousString(false) + " " + s[0].name).join(', ')
+                  : null}
+              </p>
             </div>
 
-            <div>
+            <div style={{ textAlign: "center" }}>
               <PianoKeyboard
                 rect={new Rect2D(pianoSize, new Vector2D(0, 0))}
                 lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
                 highestPitch={new Pitch(PitchLetter.B, 0, 4)}
                 onKeyPress={onKeyPress}
-                renderExtrasFn={metrics => renderPianoKeyboardNoteNames(metrics)}
+                renderLayeredExtrasFn={metrics => this.renderExtras(metrics)}
                 style={pianoStyle}
               />
             </div>
@@ -141,5 +152,27 @@ export class IntervalChordScaleFinder extends React.Component<IIntervalChordScal
         </CardContent>
       </Card>
     );
+  }
+  public renderExtras(metrics: PianoKeyboardMetrics): { whiteKeyLayerExtras: JSX.Element, blackKeyLayerExtras: JSX.Element } {
+    const whitePressedPitches = this.state.pressedPitches
+      .filter(p => p.isWhiteKey);
+    const whiteKeyLayerExtras = (
+      <g>
+        {renderPressedPianoKeys(metrics, whitePressedPitches)}
+      </g>
+    );
+    const blackPressedPitches = this.state.pressedPitches
+      .filter(p => p.isBlackKey);
+    const blackKeyLayerExtras = (
+      <g>
+        {renderPressedPianoKeys(metrics, blackPressedPitches)}
+        {renderPianoKeyboardNoteNames(metrics)}
+      </g>
+    );
+
+    return {
+      whiteKeyLayerExtras: whiteKeyLayerExtras,
+      blackKeyLayerExtras: blackKeyLayerExtras
+    };
   }
 }

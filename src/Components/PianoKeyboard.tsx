@@ -148,6 +148,24 @@ export function renderPianoKeyboardKeyLabels(metrics: PianoKeyboardMetrics, useS
   
   return <g>{texts}</g>;
 }
+export function renderPressedPianoKeys(metrics: PianoKeyboardMetrics, pressedPitches: Array<Pitch>): JSX.Element {
+  return (
+    <g className="pass-through-click">
+      {pressedPitches.map(p => {
+        const keyRect = Utils.growRectAroundCenter(metrics.getKeyRect(p), -2);
+
+        return (
+          <rect
+            key={`p${p.midiNumber}`}
+            x={keyRect.position.x} y={keyRect.position.y}
+            width={keyRect.size.width} height={keyRect.size.height}
+            fill="gray"
+          />
+        );
+      })}
+    </g>
+  );
+}
 export function renderPianoKeyboardNoteNames(metrics: PianoKeyboardMetrics, useSharps?: boolean, showLetterPredicate?: (pitch: Pitch) => boolean): JSX.Element {
   return renderPianoKeyboardKeyLabels(metrics, useSharps, pitch => {
     if (showLetterPredicate && !showLetterPredicate(pitch)) {
@@ -170,6 +188,7 @@ export interface IPianoKeyboardProps {
   pressedPitches?: Array<Pitch>;
   onKeyPress?: (keyPitch: Pitch) => void;
   renderExtrasFn?: (metrics: PianoKeyboardMetrics) => JSX.Element;
+  renderLayeredExtrasFn?: (metrics: PianoKeyboardMetrics) => { whiteKeyLayerExtras: JSX.Element, blackKeyLayerExtras: JSX.Element };
   margin?: Margin;
   style?: any;
 }
@@ -234,6 +253,10 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
     const extraElements = this.props.renderExtrasFn
       ? this.props.renderExtrasFn(metrics)
       : null;
+    
+    const layeredExtraElements = this.props.renderLayeredExtrasFn
+      ? this.props.renderLayeredExtrasFn(metrics)
+      : null;
 
     return (
       <svg
@@ -244,7 +267,9 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
         style={this.props.style}>
         <g transform={`translate(${margin.left}, ${margin.top})`}>
           {whiteKeys}
+          {layeredExtraElements ? layeredExtraElements.whiteKeyLayerExtras : null}
           {blackKeys}
+          {layeredExtraElements ? layeredExtraElements.blackKeyLayerExtras : null}
           {noteHighlights}
           {extraElements}
         </g>

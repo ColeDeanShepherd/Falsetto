@@ -1,4 +1,6 @@
 import { Size2D } from './Size2D';
+import { Rect2D } from './Rect2D';
+import { Vector2D } from './Vector2D';
 
 export function identity<T>(value: T): T {
   return value;
@@ -436,6 +438,16 @@ export function takeCharsWhile(
   }
 
   return str.substring(startIndex, endIndexExclusive);
+}
+
+export function growRectAroundCenter(rect: Rect2D, growUnits: number): Rect2D {
+  growUnits = Math.max(growUnits, -Math.min(rect.size.width, rect.size.height));
+  const halfGrowUnits = growUnits / 2;
+
+  return new Rect2D(
+    new Size2D(rect.size.width + growUnits, rect.size.height + growUnits),
+    new Vector2D(rect.position.x - halfGrowUnits, rect.position.y - halfGrowUnits)
+  );
 }
 
 // TODO: add tests
