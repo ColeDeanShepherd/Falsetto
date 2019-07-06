@@ -11,9 +11,7 @@ import { AnswerDifficulty } from "../../StudyAlgorithm";
 import { Pitch } from "../../Pitch";
 import { PitchLetter } from "../../PitchLetter";
 import { TableRow, TableCell, Table, TableHead, TableBody, Grid, Checkbox, Button, Typography } from "@material-ui/core";
-import { Chord, ChordType } from "../../Chord";
-import { GuitarFretboard, GuitarNote, standard6StringGuitarTuning, renderGuitarFretboardScaleExtras, renderGuitarFretboardChordExtras } from "../GuitarFretboard";
-import { ScaleType } from '../../Scale';
+import { ChordType } from "../../Chord";
 import { GuitarChordViewer } from './GuitarScales';
 
 const chordTypes = ChordType.All;
