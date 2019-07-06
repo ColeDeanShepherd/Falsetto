@@ -7,10 +7,11 @@ import { FlashCard } from "../../FlashCard";
 import { FlashCardGroup } from "../../FlashCardGroup";
 import { Pitch } from "../../Pitch";
 import { Interval } from "../../Interval";
-import { standard6StringGuitarTuning, GuitarNote, GuitarFretboard, GuitarFretboardMetrics } from "../GuitarFretboard";
+import { standard6StringGuitarTuning, GuitarFretboard, GuitarFretboardMetrics } from "../GuitarFretboard";
 import { VerticalDirection } from "../../VerticalDirection";
 import { AnswerDifficulty } from "../../StudyAlgorithm";
 import { Size2D } from '../../Size2D';
+import { GuitarNote } from '../../GuitarNote';
 
 const intervals = [
   "m2",

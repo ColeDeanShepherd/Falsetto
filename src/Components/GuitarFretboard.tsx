@@ -8,6 +8,7 @@ import { Rect2D } from '../Rect2D';
 import { Vector2D } from '../Vector2D';
 import { ScaleType } from '../Scale';
 import { ChordType, Chord } from '../Chord';
+import { GuitarNote } from '../GuitarNote';
 
 export class GuitarTuning {
   public constructor(public openStringPitches: Array<Pitch>) {
@@ -65,6 +66,48 @@ export function getStandardGuitarTuning(stringCount: number): GuitarTuning {
     default:
       throw new Error(`No registered standard guitar tuning for ${stringCount} strings.`);
   }
+}
+
+export function generateGuitarScaleTextDiagram(scaleType: ScaleType, rootPitch: Pitch, stringCount: number): string {
+  const minFretNumber = 1;
+  const maxFretNumber = 24;
+  const tuning = getStandardGuitarTuning(stringCount);
+  const pitches = scaleType.getPitches(rootPitch);
+  const guitarNotes = getPreferredGuitarScaleShape(scaleType, rootPitch, tuning);
+  
+  let diagram = "";
+
+  // strings
+  for (let stringIndex = (stringCount - 1); stringIndex >= 0; stringIndex--) {
+    let stringText = tuning.openStringPitches[stringIndex].toOneAccidentalAmbiguousString(false);
+    stringText += " |";
+
+    for (let fretNumber = minFretNumber; fretNumber <= maxFretNumber; fretNumber++) {
+      if (guitarNotes.some(gn => (gn.stringIndex === stringIndex) && (gn.getFretNumber(tuning) === fretNumber))) {
+        const fretPitch = tuning.getNote(stringIndex, fretNumber).pitch;
+        const scaleDegreeNumber = 1 + pitches.findIndex(p => p.midiNumberNoOctave === fretPitch.midiNumberNoOctave);
+        stringText += `-${scaleDegreeNumber}-|`;
+      } else {
+        stringText += "---|";
+      }
+    }
+
+    diagram += stringText;
+    diagram += "\n";
+  }
+
+  // fret numbers
+  let fretNumbersText = "   ";
+
+  for (let fretNumber = minFretNumber; fretNumber <= maxFretNumber; fretNumber++) {
+    const fretNumberString = fretNumber.toString();
+    fretNumbersText += (fretNumberString.length == 2)
+      ? `${fretNumberString}  `
+      : ` ${fretNumberString}  `;
+  }
+  diagram += fretNumbersText;
+
+  return diagram;
 }
 
 export function getPreferredGuitarScaleShape(
@@ -239,43 +282,6 @@ export function findGuitarChordShape(
   }
 
   return guitarNotes;
-}
-
-export class GuitarNote {
-  public static allNotesOfPitches(
-    tuning: GuitarTuning,
-    pitches: Array<Pitch>,
-    minFretNumber: number,
-    maxFretNumber: number
-  ): Array<GuitarNote> {
-    Utils.precondition(minFretNumber >= 0);
-    Utils.precondition(maxFretNumber >= minFretNumber);
-
-    const fretNumbers = Utils.range(0, maxFretNumber);
-    return Utils.flattenArrays<GuitarNote>(
-      tuning.openStringPitches
-        .map((_, stringIndex) => fretNumbers
-          .map(fretNumber => new GuitarNote(
-            tuning.getNote(stringIndex, fretNumber).pitch,
-            stringIndex
-          ))
-          .filter(note => pitches.some(p => p.midiNumberNoOctave === note.pitch.midiNumberNoOctave))
-        )
-    );
-  }
-
-  public constructor(
-    public pitch: Pitch,
-    public stringIndex: number
-  ) {
-    Utils.invariant(stringIndex >= 0);
-  }
-
-  // TODO: add tests
-  public getFretNumber(tuning: GuitarTuning): number {
-    const openStringPitch = tuning.openStringPitches[this.stringIndex];
-    return this.pitch.midiNumber - openStringPitch.midiNumber;
-  }
 }
 
 export class GuitarFretboardMetrics {

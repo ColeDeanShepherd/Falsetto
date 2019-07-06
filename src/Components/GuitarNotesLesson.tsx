@@ -6,7 +6,6 @@ import * as Utils from "../Utils";
 import {
   GuitarFretboard,
   renderGuitarNoteHighlightsAndNoteNames,
-  GuitarNote,
   GuitarFretboardMetrics,
   renderFretNumbers
 } from './GuitarFretboard';
@@ -15,6 +14,7 @@ import { Pitch } from '../Pitch';
 import { PitchLetter } from '../PitchLetter';
 import { createStudyFlashCardGroupComponent } from './StudyFlashCards';
 import { MAX_MAIN_CARD_WIDTH } from './Style';
+import { GuitarNote } from '../GuitarNote';
 
 const noteGroups = [
   {

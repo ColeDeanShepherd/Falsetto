@@ -13,9 +13,10 @@ import { AnswerDifficulty } from "../../StudyAlgorithm";
 import { Pitch } from "../../Pitch";
 import { PitchLetter } from "../../PitchLetter";
 import { Chord, ChordType } from "../../Chord";
-import { GuitarFretboard, renderGuitarFretboardScaleExtras, getStandardGuitarTuning, findGuitarChordShape, renderGuitarFretboardChordExtras, GuitarNote, renderGuitarNoteHighlightsAndLabels, get1stGuitarNoteOnString } from "../GuitarFretboard";
+import { GuitarFretboard, renderGuitarFretboardScaleExtras, getStandardGuitarTuning, renderGuitarNoteHighlightsAndLabels } from "../GuitarFretboard";
 import { ScaleAnswerSelect } from "../ScaleAnswerSelect";
 import { getPreferredGuitarScaleShape } from "../GuitarFretboard";
+import { GuitarNote } from '../../GuitarNote';
 
 const rootPitchStrs = ["Ab", "A", "Bb", "B/Cb", "C", "C#/Db", "D", "Eb", "E", "F", "F#/Gb", "G"];
 const STRING_COUNT = 6;

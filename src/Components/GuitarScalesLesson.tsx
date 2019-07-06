@@ -4,9 +4,10 @@ import { Card, CardContent } from '@material-ui/core';
 import * as Utils from "../Utils";
 import App from './App';
 import {
-  GuitarFretboard, GuitarNote, GuitarFretboardMetrics,
+  GuitarFretboard, GuitarFretboardMetrics,
   renderGuitarNoteHighlightsAndLabels, renderFretNumbers, getStandardGuitarTuning,
-  getPreferredGuitarScaleShape } from './GuitarFretboard';
+  getPreferredGuitarScaleShape, 
+  generateGuitarScaleTextDiagram} from './GuitarFretboard';
 import { Pitch } from '../Pitch';
 import { PitchLetter } from '../PitchLetter';
 import { MAX_MAIN_CARD_WIDTH } from './Style';
@@ -16,6 +17,7 @@ import { ScaleAudioPlayer } from './ScaleAudioPlayer';
 import { createStudyFlashCardGroupComponent } from './StudyFlashCards';
 import * as GuitarScales from "./Quizzes/GuitarScales";
 import { ScaleViewer } from './ScaleViewer';
+import { GuitarNote } from '../GuitarNote';
 
 const fretCount = 11;
 const ionianRootPitch = new Pitch(PitchLetter.F, 0, 2);
@@ -62,6 +64,9 @@ const GuitarScalePatternDiagram: React.FunctionComponent<{
   const minFretNumber = Math.max(0, maxFretNumber - fretCount);
 
   const canListen = (props.canListen !== undefined) ? props.canListen : true;
+  
+  // TODO: remove
+  console.log(generateGuitarScaleTextDiagram(props.scaleType, props.rootPitch, stringCount));
 
   return (
     <div>

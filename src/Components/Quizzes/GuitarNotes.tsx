@@ -6,11 +6,11 @@ import { Size2D } from "../../Size2D";
 import * as FlashCardUtils from "./Utils";
 import {
   GuitarFretboard,
-  standard6StringGuitarTuning,
-  GuitarNote
+  standard6StringGuitarTuning
 } from "../GuitarFretboard";
 import { FlashCard } from "../../FlashCard";
 import { FlashCardGroup } from "../../FlashCardGroup";
+import { GuitarNote } from '../../GuitarNote';
 
 interface IConfigData {
   maxFret: number
