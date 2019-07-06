@@ -64,9 +64,6 @@ const GuitarScalePatternDiagram: React.FunctionComponent<{
   const minFretNumber = Math.max(0, maxFretNumber - fretCount);
 
   const canListen = (props.canListen !== undefined) ? props.canListen : true;
-  
-  // TODO: remove
-  console.log(generateGuitarScaleTextDiagram(props.scaleType, props.rootPitch, stringCount));
 
   return (
     <div>

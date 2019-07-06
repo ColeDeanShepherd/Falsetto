@@ -70,7 +70,7 @@ export function getStandardGuitarTuning(stringCount: number): GuitarTuning {
 
 export function generateGuitarScaleTextDiagram(scaleType: ScaleType, rootPitch: Pitch, stringCount: number): string {
   const minFretNumber = 1;
-  const maxFretNumber = 24;
+  const maxFretNumber = 17;
   const tuning = getStandardGuitarTuning(stringCount);
   const pitches = scaleType.getPitches(rootPitch);
   const guitarNotes = getPreferredGuitarScaleShape(scaleType, rootPitch, tuning);
