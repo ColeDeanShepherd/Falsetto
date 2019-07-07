@@ -26,9 +26,18 @@ export function findIntervalsChordsScales(pitches: Array<Pitch>): {
   };
 }
 export function findIntervals(pitches: Array<Pitch>): Array<Interval> {
-  return (pitches.length === 2)
-  ? [Pitch.getInterval(pitches[0], pitches[1])]
-  : new Array<Interval>();
+  if (pitches.length !== 2) { return new Array<Interval>(); }
+
+  const halfSteps = Math.max(pitches[0].midiNumber, pitches[1].midiNumber)
+    - Math.min(pitches[0].midiNumber, pitches[1].midiNumber);
+  let intervals = [Interval.fromHalfSteps(halfSteps)];
+
+  const invertedInterval = intervals[0].invertedSimple;
+  if (!invertedInterval.equals(intervals[0])) {
+    intervals.push(invertedInterval);
+  }
+
+  return intervals;
 }
 export function findChords(pitches: Array<Pitch>): Array<[ChordType, Pitch]> {
   if (pitches.length === 0) { return new Array<[ChordType, Pitch]>(); }
@@ -127,9 +136,7 @@ export class IntervalChordScaleFinder extends React.Component<IIntervalChordScal
               <p><span style={{ fontWeight: "bold" }}>Notes: </span>{pressedPitchesStr}</p>
               <p>
                 <span style={{ fontWeight: "bold" }}>Interval: </span>
-                {(intervalsChordsScales.intervals.length > 0)
-                  ? intervalsChordsScales.intervals.map(i => i.toString()).join(', ')
-                  : null}
+                {this.getIntervalsString(intervalsChordsScales.intervals)}
               </p>
               <p>
                 <span style={{ fontWeight: "bold" }}>Chords: </span>
@@ -160,7 +167,8 @@ export class IntervalChordScaleFinder extends React.Component<IIntervalChordScal
       </Card>
     );
   }
-  public renderExtras(metrics: PianoKeyboardMetrics): { whiteKeyLayerExtras: JSX.Element, blackKeyLayerExtras: JSX.Element } {
+
+  private renderExtras(metrics: PianoKeyboardMetrics): { whiteKeyLayerExtras: JSX.Element, blackKeyLayerExtras: JSX.Element } {
     const whitePressedPitches = this.state.pressedPitches
       .filter(p => p.isWhiteKey);
     const whiteKeyLayerExtras = (
@@ -181,5 +189,15 @@ export class IntervalChordScaleFinder extends React.Component<IIntervalChordScal
       whiteKeyLayerExtras: whiteKeyLayerExtras,
       blackKeyLayerExtras: blackKeyLayerExtras
     };
+  }
+  private getIntervalsString(intervals: Array<Interval>) {
+    switch (intervals.length) {
+      case 1:
+        return intervals[0].toString();
+      case 2:
+        return `${intervals[0].toString()} (inverted: ${intervals[1].toString()})`;
+      default:
+        return "";
+    }
   }
 }

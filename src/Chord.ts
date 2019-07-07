@@ -4,6 +4,53 @@ import { VerticalDirection } from "./VerticalDirection";
 import { getIntervalsFromFormulaString } from './Scale';
 import { Interval } from './Interval';
 
+export class ChordScaleFormula {
+  public static parse(formulaString: string): ChordScaleFormula {
+    Utils.precondition(!Utils.isNullOrWhiteSpace(formulaString));
+
+    return new ChordScaleFormula(
+      formulaString.split(" ").map(ChordScaleFormulaPart.parse)
+    );
+  }
+
+  public constructor(public parts: Array<ChordScaleFormulaPart>) {}
+
+  public get pitchIntegers(): Array<number> {
+    return this.parts.map(p => p.pitchInteger);
+  }
+}
+export class ChordScaleFormulaPart {
+  public static parse(formulaPartString: string): ChordScaleFormulaPart {
+    const accidentalString = Utils.takeCharsWhile(formulaPartString, 0, c => (c === "#") || (c === "b"));
+
+    let signedAccidental: number;
+    if (accidentalString.length === 0) {
+      signedAccidental = 0;
+    } else if (accidentalString[0] === "#") {
+      signedAccidental = accidentalString.length;
+    } else if (accidentalString[0] === "b") {
+      signedAccidental = -accidentalString.length;
+    } else {
+      throw new Error(`Invalid accidental character: ${accidentalString[0]}`);
+    }
+
+    const scaleDegreeNumberString = formulaPartString.substring(accidentalString.length);
+    const scaleDegreeNumber = parseInt(scaleDegreeNumberString, 10);
+
+    return new ChordScaleFormulaPart(scaleDegreeNumber, signedAccidental);
+  }
+
+  public constructor(
+    public scaleDegreeNumber: number,
+    public signedAccidental: number
+  ) {
+    Utils.invariant(scaleDegreeNumber >= 1);
+  }
+
+  public get pitchInteger(): number {
+    return Interval.getSimpleIntervalTypeHalfSteps(Interval.getSimpleIntervalType(this.scaleDegreeNumber)) + this.signedAccidental;
+  }
+}
 export class ChordTypeGroup {
   public constructor(
     public name: string,
@@ -23,7 +70,7 @@ export class ChordType {
   public static Maj6 = new ChordType("Major 6th", [0, 4, 7, 9], "1 3 5 6", ["6"]);
   public static Min6 = new ChordType("Minor 6th", [0, 3, 7, 9], "1 b3 5 6", ["m6"]);
   public static ItalianAug6 = new ChordType("Italian Augmented 6th", [0, 4, 10], "1 3 #6", ["Italian aug6"]);
-  public static FrenchAug6 = new ChordType("French Augmented 6th", [0, 4, 6, 10], "1 2 #4 #6", ["French aug6", "7b5"]);
+  public static FrenchAug6 = new ChordType("French Augmented 6th", [0, 4, 6, 10], "1 3 #4 #6", ["French aug6", "7b5"]);
   public static GermanAug6 = new ChordType("German Augmented 6th", [0, 4, 7, 10], "1 3 5 #6", ["German aug6"]);
 
   public static Maj7 = new ChordType("Major 7th", [0, 4, 7, 11], "1 3 5 7", ["M7"]);
@@ -41,12 +88,12 @@ export class ChordType {
   public static Min9 = new ChordType("Minor 9th", [0, 2, 3, 7, 10], "1 9 b3 5 b7", ["m9"]);
   public static DomMin9 = new ChordType("Dominant Minor 9th", [0, 1, 4, 7, 10], "1 b9 3 5 b7", ["domMin9"])
 
-  public static Dom11 = new ChordType("11th", [0, 2, 4, 5, 7, 10], "1 9 3 11 5 7", ["11"]);
-  public static Min11 = new ChordType("Minor 11th", [0, 2, 3, 5, 7, 10], "1 9 b3 11 5 7", ["m11"]);
-  public static Aug11 = new ChordType("Augmented 11th", [0, 2, 4, 6, 7, 10], "1 9 3 11 5 b7", ["+11"]);
+  public static Dom11 = new ChordType("11th", [0, 2, 4, 5, 7, 10], "1 9 3 11 5 b7", ["11"]);
+  public static Min11 = new ChordType("Minor 11th", [0, 2, 3, 5, 7, 11], "1 9 b3 11 5 7", ["m11"]);
+  public static Aug11 = new ChordType("Augmented 11th", [0, 2, 4, 5, 7, 10], "1 9 3 11 5 b7", ["+11"]);
 
-  public static Dom13 = new ChordType("13th", [0, 2, 4, 5, 7, 9, 10], "1 9 3 11 5 13 7", ["13"]);
-  public static Min13 = new ChordType("Minor 13th", [0, 2, 3, 5, 7, 9, 10], "1 9 b3 11 5 13 7", ["m13"]);
+  public static Dom13 = new ChordType("13th", [0, 2, 4, 5, 7, 9, 10], "1 9 3 11 5 13 b7", ["13"]);
+  public static Min13 = new ChordType("Minor 13th", [0, 2, 3, 5, 7, 9, 10], "1 9 b3 11 5 13 b7", ["m13"]);
 
   public static Add9 = new ChordType("Add 9", [0, 2, 4, 7], "1 9 3 5", ["add9"]);
   public static SixNine = new ChordType("6/9", [0, 2, 4, 7, 9], "1 9 3 5 6", ["6/9", "6add9"]);
@@ -130,7 +177,11 @@ export class ChordType {
     public name: string,
     public pitchIntegers: Array<number>,
     public formulaString: string,
-    public symbols: Array<string>) {}
+    public symbols: Array<string>) {
+      if (!Utils.areArraysEqual(pitchIntegers, ChordScaleFormula.parse(formulaString).pitchIntegers)) {
+        console.error(pitchIntegers, formulaString)
+      }
+    }
   
   public get isMajorType(): boolean {
     return !this.isMinorType;

@@ -100,32 +100,6 @@ export class Pitch {
     );
   }
 
-  public static getInterval(
-    pitch1: Pitch,
-    pitch2: Pitch
-  ): Interval {
-    let lowerPitch: Pitch;
-    let higherPitch: Pitch;
-
-    if (
-      (pitch1.midiNumber < pitch2.midiNumber) ||
-      (pitch1.lineOrSpaceOnStaffNumber < pitch2.lineOrSpaceOnStaffNumber)
-    ) {
-      lowerPitch = pitch1;
-      higherPitch = pitch2;
-    } else {
-      lowerPitch = pitch2;
-      higherPitch = pitch1;
-    }
-
-    const intervalType = higherPitch.lineOrSpaceOnStaffNumber - lowerPitch.lineOrSpaceOnStaffNumber + 1;
-    const interval = new Interval(intervalType, 0);
-
-    const halfSteps = (higherPitch.midiNumber - lowerPitch.midiNumber);
-    interval.quality = halfSteps - interval.halfSteps;
-    
-    return interval;
-  }
   public static addInterval(
     pitch: Pitch,
     direction: VerticalDirection,

@@ -52,7 +52,7 @@ export function reverseString(str: string): string {
 
 // TODO: add tests
 export function reverseInt(x: number): number {
-  return parseInt(reverseString(x.toString()));
+  return parseInt(reverseString(x.toString()), 10);
 }
 
 // TODO: add tests
