@@ -149,7 +149,7 @@ export class RandomChordGeneratorFlashCardMultiSelect extends React.Component<IR
 export function createFlashCards(): Array<FlashCard> {
   return Utils.flattenArrays<FlashCard>(chordRoots
     .map(chordRoot => ChordType.All
-      .map(chordType => FlashCard.fromRenderFns(chordRoot + chordType.name, chordType.formulaString))
+      .map(chordType => FlashCard.fromRenderFns(chordRoot + chordType.name, chordType.formula.toString()))
     )
   );
 }

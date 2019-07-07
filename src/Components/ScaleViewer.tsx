@@ -8,7 +8,7 @@ import { PitchLetter } from "../PitchLetter";
 import { ScaleType, ScaleTypeGroup } from "../Scale";
 import { Pitch } from "../Pitch";
 import { Button, Card, CardContent, Typography } from "@material-ui/core";
-import { Chord } from "../Chord";
+import { Chord, ChordScaleFormula } from "../Chord";
 import { PianoKeyboard } from "./PianoKeyboard";
 import { playPitches } from '../Piano';
 import * as PianoScaleDronePlayer from "./PianoScaleDronePlayer";
@@ -74,12 +74,8 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
     const title = this.props.title
       ? this.props.title
       : "Scale Viewer";
-      
-    const pitches = Chord.fromPitchAndFormulaString(
-      this.state.rootPitch,
-      this.state.scaleType.formulaString
-    )
-      .pitches;
+    
+    const pitches = ChordScaleFormula.parse(this.state.scaleType.formulaString).getPitches(this.state.rootPitch);
     const pitchStrings = pitches
       .map(pitch => pitch.toString(false));
     const pitchesString = pitchStrings.join(", ");

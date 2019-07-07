@@ -12,7 +12,7 @@ import { FlashCardGroup } from "../../FlashCardGroup";
 import { AnswerDifficulty } from "../../StudyAlgorithm";
 import { Pitch } from "../../Pitch";
 import { PitchLetter } from "../../PitchLetter";
-import { Chord, ChordType } from "../../Chord";
+import { Chord, ChordType, ChordScaleFormula } from "../../Chord";
 import { GuitarFretboard, renderGuitarFretboardScaleExtras, getStandardGuitarTuning, findGuitarChordShape, renderGuitarFretboardChordExtras, GuitarNote, renderGuitarNoteHighlightsAndLabels, get1stGuitarNoteOnString } from "../GuitarFretboard";
 import { ScaleAnswerSelect } from "../ScaleAnswerSelect";
 import { getPreferredGuitarScaleShape } from "../GuitarFretboard";
@@ -346,9 +346,8 @@ export function createFlashCards(): Array<FlashCard> {
   const flashCards = new Array<FlashCard>();
 
   forEachScale((scaleType, rootPitch, rootPitchStr, i) => {
-    const formulaString = scaleType.formulaString + " 8";
-    const pitches = Chord.fromPitchAndFormulaString(rootPitch, formulaString)
-      .pitches;
+    const chordFormula = ChordScaleFormula.parse(scaleType.formulaString + "8");
+    const pitches = chordFormula.getPitches(rootPitch);
 
     flashCards.push(new FlashCard(
       new FlashCardSide(

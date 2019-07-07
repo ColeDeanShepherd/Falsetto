@@ -67,7 +67,6 @@ import { IntervalChordScaleFinder } from "./IntervalChordScaleFinder";
 import { RhythmTapper } from "./RhythmTapper";
 import { FlashCardGroup } from "../FlashCardGroup";
 import { createStudyFlashCardGroupComponent } from "./StudyFlashCards";
-import * as TheJazzPianoSiteOverview from "./Quizzes/TheJazzPianoSite/TheBasics/Overview"
 import { AboutPage } from "./AboutPage";
 import { SupportUsPage } from "./SupportUs";
 import DocumentTitle from "react-document-title";
@@ -182,12 +181,6 @@ class App extends React.Component<IAppProps, IAppState> {
           GuitarChords.createFlashCardGroup(),
           ChordEarTraining.createFlashCardGroup(),
           RandomChordGenerator.createFlashCardGroup()
-        ]
-      },
-      {
-        title: "The Jazz Piano Site",
-        flashCardGroups: [
-          new FlashCardGroup("The Jazz Piano Site Overview", TheJazzPianoSiteOverview.createFlashCards)
         ]
       }
     ];

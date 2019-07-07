@@ -103,8 +103,8 @@ const FiveChordDiagram: React.FunctionComponent<{}> = props => {
   const height = 200;
   const margin = new Margin(0, 80, 0, 80);
   const style = { width: "100%", maxWidth: "300px", height: "auto" };
-  const chord = Chord.fromPitchAndFormulaString(new Pitch(PitchLetter.G, 0, 4), ChordType.Dom7.formulaString);
-  const pitches = chord.pitches;
+  const chord = new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4));
+  const pitches = chord.getPitches();
   const scaleDegreeLabels = ["5", "7", "2", "4"];
 
   function renderLabels(metrics: PianoKeyboardMetrics): JSX.Element {
@@ -298,7 +298,7 @@ export const ChordProgressionsSection: React.FunctionComponent<SectionProps> = p
     <p style={{textAlign: "center"}}><ChordDiagram pitches={[new Pitch(PitchLetter.A, 0, 4), new Pitch(PitchLetter.D, 0, 5), new Pitch(PitchLetter.F, 0, 5)]} scaleType={ScaleType.Ionian} scaleRootPitch={new Pitch(PitchLetter.C, 0, 4)} /></p>
     
     <p style={{fontSize: "1.25em", fontWeight: "bold", textDecoration: "underline", textAlign: "center"}}>V7</p>
-    <p style={{textAlign: "center"}}><ChordDiagram pitches={Chord.fromPitchAndFormulaString(new Pitch(PitchLetter.G, 0, 4), ChordType.Dom7.formulaString).pitches} scaleType={ScaleType.Ionian} scaleRootPitch={new Pitch(PitchLetter.C, 0, 4)} /></p>
+    <p style={{textAlign: "center"}}><ChordDiagram pitches={new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)).getPitches()} scaleType={ScaleType.Ionian} scaleRootPitch={new Pitch(PitchLetter.C, 0, 4)} /></p>
     
     <p style={{fontSize: "1.25em", fontWeight: "bold", textDecoration: "underline", textAlign: "center"}}>I</p>
     <p style={{textAlign: "center"}}><ChordDiagram pitches={[new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5), new Pitch(PitchLetter.E, 0, 5)]} scaleType={ScaleType.Ionian} scaleRootPitch={new Pitch(PitchLetter.C, 0, 4)} /></p>
@@ -345,7 +345,7 @@ export const ChordProgressionsSection: React.FunctionComponent<SectionProps> = p
     
     <p style={{textAlign: "center"}}>
       <ChordTransitionDiagram
-        chord1Pitches={Chord.fromPitchAndFormulaString(new Pitch(PitchLetter.G, 0, 4), ChordType.Dom7.formulaString).pitches}
+        chord1Pitches={new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)).getPitches()}
         chord1Name="V7"
         chord2Pitches={[new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]}
         chord2Name="I"
@@ -377,7 +377,7 @@ export const ChordProgressionsSection: React.FunctionComponent<SectionProps> = p
       Large jumps in the bass voice (the lowest notes) of chords are sometimes acceptable, as they are more pleasing to the ear than large jumps with other chord voices. The example below illustrates this: both the V7 chord and the I chord are in root position, and the bass voice jumps down by a P5, but the chord progression still sounds good.
       <p style={{textAlign: "center"}}>
         <ChordTransitionDiagram
-          chord1Pitches={Chord.fromPitchAndFormulaString(new Pitch(PitchLetter.G, 0, 4), ChordType.Dom7.formulaString).pitches}
+          chord1Pitches={new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)).getPitches()}
           chord1Name="V7"
           chord2Pitches={[new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5), new Pitch(PitchLetter.E, 0, 5)]}
           chord2Name="I"
@@ -1305,7 +1305,7 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
           <TableCell>R, M3, P5</TableCell>
           <TableCell>1, 3, 5</TableCell>
           <TableCell>
-            <ChordAudioPlayer rootPitch={defaultRootPitch} chordType={ChordType.Major} />
+            <ChordAudioPlayer chord={new Chord(ChordType.Major, defaultRootPitch)} />
           </TableCell>
         </TableRow>
         <TableRow>
@@ -1315,7 +1315,7 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
           <TableCell>R, m3, P5</TableCell>
           <TableCell>1, b3, 5</TableCell>
           <TableCell>
-            <ChordAudioPlayer rootPitch={defaultRootPitch} chordType={ChordType.Minor} />
+            <ChordAudioPlayer chord={new Chord(ChordType.Minor, defaultRootPitch)} />
           </TableCell>
         </TableRow>
         <TableRow>
@@ -1325,7 +1325,7 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
           <TableCell>R, m3, d5</TableCell>
           <TableCell>1, b3, b5</TableCell>
           <TableCell>
-            <ChordAudioPlayer rootPitch={defaultRootPitch} chordType={ChordType.Diminished} />
+            <ChordAudioPlayer chord={new Chord(ChordType.Diminished, defaultRootPitch)} />
           </TableCell>
         </TableRow>
         <TableRow>
@@ -1335,7 +1335,7 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
           <TableCell>R, M3, A5</TableCell>
           <TableCell>1, #3, #5</TableCell>
           <TableCell>
-            <ChordAudioPlayer rootPitch={defaultRootPitch} chordType={ChordType.Augmented} />
+            <ChordAudioPlayer chord={new Chord(ChordType.Augmented, defaultRootPitch)} />
           </TableCell>
         </TableRow>
       </TableBody>
@@ -1383,7 +1383,7 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
           <TableCell>Major</TableCell>
           <TableCell>1, 3, 5, b7</TableCell>
           <TableCell>
-            <ChordAudioPlayer rootPitch={defaultRootPitch} chordType={ChordType.Dom7} />
+            <ChordAudioPlayer chord={new Chord(ChordType.Dom7, defaultRootPitch)} />
           </TableCell>
         </TableRow>
         <TableRow>
@@ -1394,7 +1394,7 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
           <TableCell>Major</TableCell>
           <TableCell>1, 3, 5, 7</TableCell>
           <TableCell>
-            <ChordAudioPlayer rootPitch={defaultRootPitch} chordType={ChordType.Maj7} />
+            <ChordAudioPlayer chord={new Chord(ChordType.Maj7, defaultRootPitch)} />
           </TableCell>
         </TableRow>
         <TableRow>
@@ -1405,7 +1405,7 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
           <TableCell>Minor</TableCell>
           <TableCell>1, b3, 5, b7</TableCell>
           <TableCell>
-            <ChordAudioPlayer rootPitch={defaultRootPitch} chordType={ChordType.Min7} />
+            <ChordAudioPlayer chord={new Chord(ChordType.Min7, defaultRootPitch)} />
           </TableCell>
         </TableRow>
         <TableRow>
@@ -1416,7 +1416,7 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
           <TableCell>Minor</TableCell>
           <TableCell>1, b3, 5, 7</TableCell>
           <TableCell>
-            <ChordAudioPlayer rootPitch={defaultRootPitch} chordType={ChordType.MinMaj7} />
+            <ChordAudioPlayer chord={new Chord(ChordType.MinMaj7, defaultRootPitch)} />
           </TableCell>
         </TableRow>
         <TableRow>
@@ -1427,7 +1427,7 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
           <TableCell>Diminished</TableCell>
           <TableCell>1, b3, b5, bb7</TableCell>
           <TableCell>
-            <ChordAudioPlayer rootPitch={defaultRootPitch} chordType={ChordType.Dim7} />
+            <ChordAudioPlayer chord={new Chord(ChordType.Dim7, defaultRootPitch)} />
           </TableCell>
         </TableRow>
         <TableRow>
@@ -1438,7 +1438,7 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
           <TableCell>Diminished</TableCell>
           <TableCell>1, b3, b5, b7</TableCell>
           <TableCell>
-            <ChordAudioPlayer rootPitch={defaultRootPitch} chordType={ChordType.HalfDim7} />
+            <ChordAudioPlayer chord={new Chord(ChordType.HalfDim7, defaultRootPitch)} />
           </TableCell>
         </TableRow>
         <TableRow>
@@ -1449,7 +1449,7 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
           <TableCell>Augmented</TableCell>
           <TableCell>1, #3, #5, b7</TableCell>
           <TableCell>
-            <ChordAudioPlayer rootPitch={defaultRootPitch} chordType={ChordType.Aug7} />
+            <ChordAudioPlayer chord={new Chord(ChordType.Aug7, defaultRootPitch)} />
           </TableCell>
         </TableRow>
         <TableRow>
@@ -1460,7 +1460,7 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
           <TableCell>Augmented</TableCell>
           <TableCell>1, #3, #5, 7</TableCell>
           <TableCell>
-            <ChordAudioPlayer rootPitch={defaultRootPitch} chordType={ChordType.AugMaj7} />
+            <ChordAudioPlayer chord={new Chord(ChordType.AugMaj7, defaultRootPitch)} />
           </TableCell>
         </TableRow>
       </TableBody>

@@ -45,9 +45,9 @@ export class DiatonicChordViewer extends React.Component<IDiatonicChordViewerPro
         const scalePitches = scale.getPitches(scalesRootPitch);
 
         const triadCells = scale.getDiatonicChordTypes(3)
-          .map((chordType, i) => this.renderCell(scalesRootPitch, 1 + i, chordType, scalePitches[i]));
+          .map((chordType, i) => this.renderCell(scalesRootPitch, 1 + i, new Chord(chordType, scalePitches[i])));
         const seventhChordCells = scale.getDiatonicChordTypes(4)
-          .map((chordType, i) => this.renderCell(scalesRootPitch, 1 + i, chordType, scalePitches[i]));
+          .map((chordType, i) => this.renderCell(scalesRootPitch, 1 + i, new Chord(chordType, scalePitches[i])));
         
         return [
           (
@@ -113,13 +113,12 @@ export class DiatonicChordViewer extends React.Component<IDiatonicChordViewerPro
     );
   }
 
-  private renderCell(scaleRootPitch: Pitch, scaleDegree: number, chordType: ChordType, chordRootPitch: Pitch): JSX.Element {
-    const romanNumeral = chordType.isMajorType
+  private renderCell(scaleRootPitch: Pitch, scaleDegree: number, chord: Chord): JSX.Element {
+    const romanNumeral = chord.type.isMajorType
       ? Utils.getRomanNumerals(scaleDegree)
       : Utils.getRomanNumerals(scaleDegree).toLowerCase();
 
-    let pitches = Chord.fromPitchAndFormulaString(chordRootPitch, chordType.formulaString)
-      .pitches;
+    let pitches = chord.getPitches();
     if (this.state.playDrone) {
       pitches.push(new Pitch(
         scaleRootPitch.letter,
@@ -133,7 +132,7 @@ export class DiatonicChordViewer extends React.Component<IDiatonicChordViewerPro
         <PitchesAudioPlayer
           pitches={pitches}
           playSequentially={false}>
-          {romanNumeral}<sup>{chordType.symbols[0]}</sup>
+          {romanNumeral}<sup>{chord.type.symbols[0]}</sup>
         </PitchesAudioPlayer>
       </TableCell>
     );

@@ -304,11 +304,10 @@ export function createFlashCardGroup(): FlashCardGroup {
 export function createFlashCards(): FlashCard[] {
   return Utils.flattenArrays<FlashCard>(
     rootPitchStrs.map((rootPitchStr, i) =>
-      ChordType.All.map(chord => {
+      ChordType.All.map(chordType => {
         const halfStepsFromC = Utils.mod(i - 4, 12);
         const rootPitch = Pitch.createFromMidiNumber((new Pitch(PitchLetter.C, 0, 4)).midiNumber + halfStepsFromC);
-        const pitches = Chord.fromPitchAndFormulaString(rootPitch, chord.formulaString)
-          .pitches;
+        const pitches = new Chord(chordType, rootPitch).getPitches();
 
         return new FlashCard(
           new FlashCardSide(
@@ -326,7 +325,7 @@ export function createFlashCards(): FlashCard[] {
             },
             pitches
           ),
-          new FlashCardSide(rootPitchStr + " " + chord.name)
+          new FlashCardSide(rootPitchStr + " " + chordType.name)
         );
       })
     )

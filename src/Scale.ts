@@ -3,11 +3,16 @@ import { Pitch } from './Pitch';
 import { Chord, ChordType, ChordScaleFormulaPart, ChordScaleFormula } from './Chord';
 import { Interval } from './Interval';
 
+// TODO: remove helpers?
+export function getIntervalsFromFormula(formula: ChordScaleFormula): Array<Interval> {
+  return formula.parts
+    .map(p => new Interval(p.scaleDegreeNumber, p.signedAccidental));
+}
 export function getIntervalsFromFormulaString(formulaString: string): Array<Interval> {
   Utils.precondition(!Utils.isNullOrWhiteSpace(formulaString));
 
   return ChordScaleFormula.parse(formulaString).parts
-    .map(p => new Interval(p.scaleDegreeNumber, p.signedAccidental));
+    .map(p => p.getIntervalFromRootNote());
 }
 
 export function getModePitchIntegers(
@@ -190,7 +195,7 @@ export class ScaleType {
     return getIntervalsFromFormulaString(this.formulaString);
   }
   public getPitches(rootPitch: Pitch): Array<Pitch> {
-    return Chord.fromPitchAndFormulaString(rootPitch, this.formulaString).pitches;
+    return ChordScaleFormula.parse(this.formulaString).getPitches(rootPitch);
   }
   public getMode(scaleDegree: number): ScaleType {
     Utils.precondition(scaleDegree >= 1);

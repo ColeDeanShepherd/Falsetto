@@ -7,7 +7,7 @@ import { FlashCard } from "../../FlashCard";
 import { FlashCardGroup } from "../../FlashCardGroup";
 import { Pitch, pitchRange } from "../../Pitch";
 import { PitchLetter } from "../../PitchLetter";
-import { Chord } from "../../Chord";
+import { Chord, ChordScaleFormula } from "../../Chord";
 import { playPitchesSequentially } from "../../Piano";
 import { ScaleType } from "../../Scale";
 
@@ -153,10 +153,7 @@ export function createFlashCards(): Array<FlashCard> {
 
   for (const rootPitch of rootPitches) {
     for (const scale of ScaleType.All) {
-      const formulaString = scale.formulaString + " 8";
-
-      const pitches = Chord.fromPitchAndFormulaString(rootPitch, formulaString)
-        .pitches;
+      const pitches = ChordScaleFormula.parse(scale.formulaString + " 8").getPitches(rootPitch);
       
       const iCopy = i;
       i++;
