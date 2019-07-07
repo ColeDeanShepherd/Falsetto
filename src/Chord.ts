@@ -241,3 +241,27 @@ export class Chord {
       .join(" ");
   }
 }
+
+export function checkChordNames() {
+  const numPitchIntegerCombinations = 4096; // 2 ^ 12
+  
+  for (let i = 0; i < numPitchIntegerCombinations; i++) {
+    // The pitch integer '0' always needs to be present.
+    if ((i % 2) == 0) { continue; }
+
+    let pitchIntegers = new Array<number>();
+
+    for (let pitchInteger = 0; pitchInteger < 12; pitchInteger++) {
+      if ((i & (1 << pitchInteger)) !== 0) {
+        pitchIntegers.push(pitchInteger);
+      }
+    }
+
+    if (pitchIntegers.length < 2) { continue; }
+
+    const pitchIntegersString = pitchIntegers.join(' ');
+    const chordType = ChordType.All.find(ct => Utils.areArraysEqual(ct.pitchIntegers, pitchIntegers));
+    console.log(pitchIntegersString, chordType ? chordType.name : null);
+  }
+}
+//checkChordNames();
