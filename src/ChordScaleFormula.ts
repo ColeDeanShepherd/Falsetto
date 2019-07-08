@@ -93,15 +93,15 @@ export class ChordScaleFormula {
 
     // special cases
     if ((this.parts.length === 2) && (this.parts[1].chordNoteNumber === 5) && (this.parts[1].signedAccidental === 0)) {
-      return [new ChordName("Power", "", [])];
+      return [new ChordName(ChordQuality.Power, null, [])];
     }
 
     if (this.parts.length === 3) {
       if (
         (this.parts[1].chordNoteNumber === 4) && (this.parts[1].signedAccidental === 0) &&
-        (this.parts[2].chordNoteNumber === 7) && (this.parts[3].signedAccidental === -1)
+        (this.parts[2].chordNoteNumber === 7) && (this.parts[2].signedAccidental === -1)
       ) {
-        return [new ChordName("Quartal", "", [])];
+        return [new ChordName(ChordQuality.Quartal, null, [])];
       }
     } else if (this.parts.length === 4) {
       if (
@@ -109,7 +109,7 @@ export class ChordScaleFormula {
         (this.parts[2].chordNoteNumber === 3) && (this.parts[2].signedAccidental === -1) &&
         (this.parts[3].chordNoteNumber === 7) && (this.parts[3].signedAccidental === -1)
       ) {
-        return [new ChordName("Quartal", "", [])];
+        return [new ChordName(ChordQuality.Quartal, null, [])];
       }
     }
 
@@ -188,8 +188,9 @@ export class ChordScaleFormula {
     }
     
     // get possible qualities
-    function getPossibleQualities(this: ChordScaleFormula): Array<ChordQuality> {
+    const getPossibleQualities = (): Array<ChordQuality> => {
       if (fifthSignedAccidental === 1) {
+        // Augmented
         if (seventhSignedAccidental === 0) {
           return [ChordQuality.AugmentedMajor];
         } else if ((seventhSignedAccidental === -1) || (seventhSignedAccidental === null)) {
@@ -198,6 +199,7 @@ export class ChordScaleFormula {
           return [];
         }
       } else if (fifthSignedAccidental === -1) {
+        // Diminished
         if (seventhSignedAccidental === 0) {
           return [ChordQuality.DiminishedMajor];
         } else if (seventhSignedAccidental === -1) {
@@ -252,7 +254,7 @@ export class ChordScaleFormula {
     }
     
     // get extension string
-    function getExtension(this: ChordScaleFormula): number | null {
+    const getExtension = (): number | null => {
       if (seventhSignedAccidental !== null) {
         if (thirteenthSignedAccidental !== null) {
           if ((thirteenthSignedAccidental === 0) || (thirteenthSignedAccidental === -1)) {
@@ -301,14 +303,16 @@ export class ChordScaleFormula {
     const extension = getExtension();
     
     // get alterations
-    function getAlterations(this: ChordScaleFormula, chordQuality: ChordQuality): Array<string> {
+    const getAlterations =(chordQuality: ChordQuality): Array<string> => {
       const alterations = new Array<string>();
 
       // sharpened/flattened notes
-      if ((fifthSignedAccidental > 0) && (!isAugmented(chordQuality))) {
-        alterations.push("#5");
-      } else if ((fifthSignedAccidental < 0) && (!isDiminished(chordQuality))) {
-        alterations.push("b5");
+      if (fifthSignedAccidental !== null) {
+        if ((fifthSignedAccidental > 0) && (!isAugmentedChordQuality(chordQuality))) {
+          alterations.push("#5");
+        } else if ((fifthSignedAccidental < 0) && (!isDiminishedChordQuality(chordQuality))) {
+          alterations.push("b5");
+        }
       }
 
       if ((ninthSignedAccidental !== null) && (ninthSignedAccidental !== 0)) {
@@ -370,7 +374,14 @@ export class ChordScaleFormula {
     }
 
     // for each quality and alterations
-    return new ChordName(quality, extension, alterations);
+    const chordNames = new Array<ChordName>();
+
+    for (const quality of qualities) {
+      const alterations = getAlterations(quality);
+      chordNames.push(new ChordName(quality, extension, alterations))
+    }
+
+    return chordNames;
   }
 }
 export class ChordScaleFormulaPart {
@@ -415,17 +426,88 @@ export class ChordScaleFormulaPart {
 
 export enum ChordQuality {
   Major,
-  Minor,
-  Augmented,
-  Diminished,
   Dominant,
+
+  Minor,
   MinorMajor,
+
+  Diminished,
   HalfDiminished,
   DiminishedMajor,
+  
+  Augmented,
   AugmentedMajor,
+
+  Power,
+  Quartal
 }
+export function chordQualityToString(chordQuality: ChordQuality): string {
+  switch (chordQuality) {
+    case ChordQuality.Major:
+      return "Major"
+    case ChordQuality.Dominant:
+      return "Dominant";
+
+    case ChordQuality.Minor:
+        return "Minor";
+    case ChordQuality.MinorMajor:
+        return "Minor-Major";
+
+    case ChordQuality.Diminished:
+        return "Diminished";
+    case ChordQuality.HalfDiminished:
+        return "Half-Diminished";
+    case ChordQuality.DiminishedMajor:
+        return "Diminished Major";
+    
+    case ChordQuality.Augmented:
+        return "Augmented";
+    case ChordQuality.AugmentedMajor:
+        return "Augmented Major";
+
+    case ChordQuality.Power:
+        return "Power";
+    case ChordQuality.Quartal:
+        return "Quartal";
+    default:
+      throw new Error(`Unknown chord quality: ${chordQuality}`);
+  }
+}
+export function isAugmentedChordQuality(chordQuality: ChordQuality) {
+  switch (chordQuality) {
+    case ChordQuality.Augmented:
+    case ChordQuality.AugmentedMajor:
+      return true;
+    default:
+      return false;
+  }
+}
+export function isDiminishedChordQuality(chordQuality: ChordQuality) {
+  switch (chordQuality) {
+    case ChordQuality.Diminished:
+    case ChordQuality.HalfDiminished:
+    case ChordQuality.DiminishedMajor:
+      return true;
+    default:
+      return false;
+  }
+}
+
 export class ChordName {
   public constructor(
-    public quality: string, public extension: number, public alterations: Array<string>
+    public quality: ChordQuality,
+    public extension: number | null,
+    public alterations: Array<string>
   ) {}
+
+  public toString(): string {
+    const qualityString = chordQualityToString(this.quality);
+    const extensionString = (this.extension !== null)
+      ? ` ${this.extension.toString()}th`
+      : "";
+    const alterationsString = (this.alterations.length > 0)
+      ? " " + this.alterations.join()
+      : "";
+    return `${qualityString}${extensionString}${alterationsString}`;
+  }
 }
