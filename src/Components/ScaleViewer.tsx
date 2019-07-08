@@ -1,14 +1,13 @@
 import * as React from "react";
+import { Button, Card, CardContent, Typography } from "@material-ui/core";
 
 import * as Utils from "../Utils";
 import { Vector2D } from '../Vector2D';
 import { Size2D } from "../Size2D";
 import { Rect2D } from '../Rect2D';
 import { PitchLetter } from "../PitchLetter";
-import { ScaleType, ScaleTypeGroup } from "../Scale";
+import { ScaleType, ScaleTypeGroup, Scale } from "../Scale";
 import { Pitch } from "../Pitch";
-import { Button, Card, CardContent, Typography } from "@material-ui/core";
-import { Chord, ChordScaleFormula } from "../Chord";
 import { PianoKeyboard } from "./PianoKeyboard";
 import { playPitches } from '../Piano';
 import * as PianoScaleDronePlayer from "./PianoScaleDronePlayer";
@@ -54,9 +53,8 @@ interface IScaleViewerProps {
   isEmbedded?: boolean;
 }
 interface IScaleViewerState {
-  rootPitch: Pitch;
   scaleTypeGroup: ScaleTypeGroup;
-  scaleType: ScaleType;
+  scale: Scale;
 }
 
 export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewerState> {
@@ -64,9 +62,8 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
     super(props);
 
     this.state = {
-      rootPitch: new Pitch(PitchLetter.C, 0, 4),
       scaleTypeGroup: this.scaleTypeGroups[0],
-      scaleType: this.scaleTypeGroups[0].scaleTypes[0]
+      scale: new Scale(this.scaleTypeGroups[0].scaleTypes[0], new Pitch(PitchLetter.C, 0, 4))
     };
   }
 
@@ -75,12 +72,12 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
       ? this.props.title
       : "Scale Viewer";
     
-    const pitches = ChordScaleFormula.parse(this.state.scaleType.formulaString).getPitches(this.state.rootPitch);
+    const pitches = this.state.scale.type.formula.getPitches(this.state.scale.rootPitch);
     const pitchStrings = pitches
       .map(pitch => pitch.toString(false));
     const pitchesString = pitchStrings.join(", ");
 
-    const intervals = this.state.scaleType.getIntervals();
+    const intervals = this.state.scale.type.getIntervals();
     const intervalStrings = intervals
       .map((interval, i) => (i === 0) ? "R" : interval.toString());
     const intervalsString = intervalStrings.join(", ");
@@ -98,7 +95,7 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
           playPitches([pitch]);
         }
       })
-      : (pitch: Pitch) => PianoScaleDronePlayer.onKeyPress(this.state.scaleType, this.state.rootPitch, pitch);
+      : (pitch: Pitch) => PianoScaleDronePlayer.onKeyPress(this.state.scale, pitch);
     
     const showPianoKeyboard = (this.props.showPianoKeyboard !== undefined)
       ? this.props.showPianoKeyboard
@@ -108,16 +105,16 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
       : true;
 
     const guitarRootPitch = new Pitch(
-      this.state.rootPitch.letter,
-      this.state.rootPitch.signedAccidental,
-      this.state.rootPitch.octaveNumber - 2
+      this.state.scale.rootPitch.letter,
+      this.state.scale.rootPitch.signedAccidental,
+      this.state.scale.rootPitch.octaveNumber - 2
     );
     
     const baseButtonStyle: any = { textTransform: "none" };
 
     const numPitchesToPlay = showPianoKeyboard
       ? pitches.length
-      : getPreferredGuitarScaleShape(this.state.scaleType, this.state.rootPitch, getStandardGuitarTuning(6)).length;
+      : getPreferredGuitarScaleShape(this.state.scale, getStandardGuitarTuning(6)).length;
 
     return (
       <Card>
@@ -162,7 +159,7 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
             <div style={{padding: "1em 0"}}>
               {this.state.scaleTypeGroup.scaleTypes.map(scaleType => {
                 const buttonStyle: any = { ...baseButtonStyle };
-                const isPressed = scaleType.name === this.state.scaleType.name;
+                const isPressed = scaleType.name === this.state.scale.type.name;
                 if (isPressed) {
                   buttonStyle.backgroundColor = "#959595";
                 }
@@ -180,15 +177,15 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
             })}
             </div>
             <div style={{fontSize: "1.5em"}}>
-              <p>{this.state.rootPitch.toString(false)} {this.state.scaleType.name}</p>
+              <p>{this.state.scale.rootPitch.toString(false)} {this.state.scale.type.name}</p>
               <p>{pitchesString}</p>
-              <p>{this.state.scaleType.formulaString}</p>
+              <p>{this.state.scale.type.formula.toString()}</p>
               <p>{intervalsString}</p>
             </div>
 
             <div>
               <p>
-                <ScaleAudioPlayer scale={this.state.scaleType} rootPitch={this.state.rootPitch} pitchCount={numPitchesToPlay} onGetExports={e => this.stopPlayingAudioFn = e.stopPlayingFn} />
+                <ScaleAudioPlayer scale={this.state.scale} pitchCount={numPitchesToPlay} onGetExports={e => this.stopPlayingAudioFn = e.stopPlayingFn} />
               </p>
             </div>
 
@@ -200,7 +197,7 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
                     lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
                     highestPitch={new Pitch(PitchLetter.B, 0, 5)}
                     onKeyPress={onKeyPress}
-                    renderExtrasFn={metrics => PianoScaleDronePlayer.renderExtrasFn(metrics, pitches, this.state.rootPitch)}
+                    renderExtrasFn={metrics => PianoScaleDronePlayer.renderExtrasFn(metrics, pitches, this.state.scale.rootPitch)}
                     style={pianoGuitarStyle}
                   />
                 ) : null}
@@ -209,8 +206,7 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
               <div style={{marginTop: "1em"}}>
                 {showGuitarFretboard ? (
                   <GuitarScaleViewer
-                    scaleType={this.state.scaleType}
-                    rootPitch={guitarRootPitch}
+                    scale={this.state.scale}
                     size={guitarSize}
                     renderAllScaleShapes={this.props.renderAllScaleShapes} />
                 ) : null}
@@ -235,7 +231,7 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
         {rootPitches.map(pitch => {
           const style: any = { textTransform: "none" };
           
-          const isPressed = pitch && (pitch.equalsNoOctave(this.state.rootPitch));
+          const isPressed = pitch && (pitch.equalsNoOctave(this.state.scale.rootPitch));
           if (isPressed) {
             style.backgroundColor = "#959595";
           }
@@ -264,13 +260,15 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
   }
 
   private onRootPitchClick(rootPitch: Pitch) {
-    this.setState({ rootPitch: rootPitch }, this.onScaleChange.bind(this));
+    const newScale = new Scale(this.state.scale.type, rootPitch);
+    this.setState({ scale: newScale }, this.onScaleChange.bind(this));
   }
   private onScaleTypeGroupClick(scaleTypeGroup: ScaleTypeGroup) {
     this.setState({ scaleTypeGroup: scaleTypeGroup }, this.onScaleChange.bind(this));
   }
   private onScaleTypeClick(scaleType: ScaleType) {
-    this.setState({ scaleType: scaleType }, this.onScaleChange.bind(this));
+    const newScale = new Scale(scaleType, this.state.scale.rootPitch);
+    this.setState({ scale: newScale }, this.onScaleChange.bind(this));
   }
 
   private stopPlayingAudioFn: (() => void) | null = null;

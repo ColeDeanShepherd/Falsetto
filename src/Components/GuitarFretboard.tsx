@@ -6,7 +6,7 @@ import { PitchLetter } from "../PitchLetter";
 import { Size2D } from '../Size2D';
 import { Rect2D } from '../Rect2D';
 import { Vector2D } from '../Vector2D';
-import { ScaleType } from '../Scale';
+import { ScaleType, Scale } from '../Scale';
 import { ChordType, Chord } from '../Chord';
 
 export class GuitarTuning {
@@ -68,9 +68,9 @@ export function getStandardGuitarTuning(stringCount: number): GuitarTuning {
 }
 
 export function getPreferredGuitarScaleShape(
-  scaleType: ScaleType, rootPitch: Pitch, tuning: GuitarTuning
+  scale: Scale, tuning: GuitarTuning
 ) {
-  const scaleShapes = findGuitarScaleShapes(scaleType, rootPitch, tuning);
+  const scaleShapes = findGuitarScaleShapes(scale, tuning);
   scaleShapes.sort((shape1, shape2) => {
     // sort by fret range
     const shape1FretNumbers = shape1.map(gn => gn.getFretNumber(tuning));
@@ -125,9 +125,10 @@ class GuitarScaleShapeFinderState {
   }
 }
 export function findGuitarScaleShapes(
-  scaleType: ScaleType, rootPitch: Pitch, tuning: GuitarTuning): Array<Array<GuitarNote>> {
-    const { minNotesPerString, maxNotesPerString } = getPreferredNumNotesPerStringRange(scaleType);
-    const scalePitches = scaleType.getPitches(rootPitch);
+  scale: Scale, tuning: GuitarTuning
+): Array<Array<GuitarNote>> {
+    const { minNotesPerString, maxNotesPerString } = getPreferredNumNotesPerStringRange(scale.type);
+    const scalePitches = scale.getPitches();
 
     const state = new GuitarScaleShapeFinderState();
     const outShapes = new Array<Array<GuitarNote>>();
@@ -402,19 +403,19 @@ export function renderGuitarNoteHighlightsAndNoteNames(
   );
 }
 export function renderGuitarFretboardScaleExtras(
-  metrics: GuitarFretboardMetrics, rootPitch: Pitch, scaleType: ScaleType,
+  metrics: GuitarFretboardMetrics, scale: Scale,
   renderAllScaleShapes: boolean = false
 ): JSX.Element {
   const tuning = getStandardGuitarTuning(metrics.stringCount);
-  const pitches = scaleType.getPitches(rootPitch);
+  const pitches = scale.getPitches();
   const guitarNotes = renderAllScaleShapes
     ? (
       GuitarNote.allNotesOfPitches(
         tuning, pitches, 0, metrics.fretCount
       )
     )
-    : getPreferredGuitarScaleShape(scaleType, rootPitch, tuning);
-  const formulaStringParts = scaleType.formulaString.split(" ");
+    : getPreferredGuitarScaleShape(scale, tuning);
+  const formulaStringParts = scale.type.formula.parts.map(p => p.toString());
 
   const rootPitchFretDots = guitarNotes
     .map((guitarNote, _) => {

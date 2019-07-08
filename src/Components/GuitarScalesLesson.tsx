@@ -10,7 +10,7 @@ import {
 import { Pitch } from '../Pitch';
 import { PitchLetter } from '../PitchLetter';
 import { MAX_MAIN_CARD_WIDTH } from './Style';
-import { ScaleType } from '../Scale';
+import { ScaleType, Scale } from '../Scale';
 import { NoteText, BecomeAPatronSection } from './EssentialMusicTheory';
 import { ScaleAudioPlayer } from './ScaleAudioPlayer';
 import { createStudyFlashCardGroupComponent } from './StudyFlashCards';
@@ -27,8 +27,7 @@ const melodicMinorPitches = ScaleType.MelodicMinor.getPitches(melodicMinorRootPi
 const noteHighlightColor = "lightblue";
 
 const GuitarScalePatternDiagram: React.FunctionComponent<{
-  scaleType: ScaleType,
-  rootPitch: Pitch,
+  scale: Scale,
   stringCount?: number,
   dontShiftBetweenGAndBStrings?: boolean,
   canListen?: boolean
@@ -42,7 +41,7 @@ const GuitarScalePatternDiagram: React.FunctionComponent<{
     ? props.dontShiftBetweenGAndBStrings
     : false;
   const guitarTuning = getStandardGuitarTuning(stringCount);
-  const guitarNotes = getPreferredGuitarScaleShape(props.scaleType, props.rootPitch, guitarTuning);
+  const guitarNotes = getPreferredGuitarScaleShape(props.scale, guitarTuning);
 
   if (dontShiftBetweenGAndBStrings) {
     const gStringIndex = (props.stringCount === 6)
@@ -65,11 +64,11 @@ const GuitarScalePatternDiagram: React.FunctionComponent<{
 
   return (
     <div>
-      {canListen ? <p style={{ textAlign: "center" }}><ScaleAudioPlayer scale={props.scaleType} rootPitch={props.rootPitch} pitchCount={guitarNotes.length} /></p> : null}
+      {canListen ? <p style={{ textAlign: "center" }}><ScaleAudioPlayer scale={props.scale} pitchCount={guitarNotes.length} /></p> : null}
       <p style={{ textAlign: "center" }}>
         <GuitarFretboard
           width={fretboardWidth} height={fretboardHeight}
-          renderExtrasFn={metrics => renderGuitarScalePatternDiagramExtras(metrics, props.scaleType, guitarNotes)}
+          renderExtrasFn={metrics => renderGuitarScalePatternDiagramExtras(metrics, props.scale.type, guitarNotes)}
           stringCount={stringCount}
           minFretNumber={minFretNumber}
           fretCount={fretCount}
@@ -119,8 +118,7 @@ export class GuitarScalesLesson extends React.Component<IGuitarScalesLessonProps
           <p>The modes of each scale played with 3 notes per string on guitar follows a specific repeating pattern of shapes.</p>
           <p>For the modes of the major scale, there are 7 parts to the repeating pattern -- one for each note in the major scale -- so we will show the repeating pattern on a 7 string guitar. The diagram below just happens to start on the 5th fret, but the pattern will be shifted left or right depending on which scale or mode is being played.</p>
           <GuitarScalePatternDiagram
-            scaleType={ScaleType.Mixolydian}
-            rootPitch={ionianPitches[0]}
+            scale={new Scale(ScaleType.Mixolydian, ionianPitches[0])}
             stringCount={7}
             dontShiftBetweenGAndBStrings={true}
             canListen={false}
@@ -128,8 +126,7 @@ export class GuitarScalesLesson extends React.Component<IGuitarScalesLessonProps
           <NoteText>
             To clearly depict the repeating pattern, the diagram above does not shift 1 fret to the right when crossing from the G string to the B string as you always should. When actually playing the pattern you must include the shift as shown below:
             <GuitarScalePatternDiagram
-              scaleType={ScaleType.Mixolydian}
-              rootPitch={ionianPitches[0]}
+              scale={new Scale(ScaleType.Mixolydian, ionianPitches[0])}
               stringCount={7}
               canListen={false}
             />
@@ -147,50 +144,43 @@ export class GuitarScalesLesson extends React.Component<IGuitarScalesLessonProps
           <h3>Major Scale (Ionian Mode)</h3>
           <p>The F ionian mode is the 1st mode of the F major scale, and starts on the 2nd part of the repeating pattern above. Here is the F ionian scale:</p>
           <GuitarScalePatternDiagram
-            scaleType={ScaleType.Ionian}
-            rootPitch={ionianPitches[0]}
+            scale={new Scale(ScaleType.Ionian, ionianPitches[0])}
           />
           
           <h3>Dorian</h3>
           <p>The G dorian mode is the 2nd mode of the F major scale, and starts on the 7th part of the repeating pattern above. Here is the G dorian mode:</p>
           <GuitarScalePatternDiagram
-            scaleType={ScaleType.Dorian}
-            rootPitch={ionianPitches[1]}
+            scale={new Scale(ScaleType.Dorian, ionianPitches[1])}
           />
           
           <h3>Phrygian</h3>
           <p>The A phrygian mode is the 3rd mode of the F major scale, and starts on the 5th part of the repeating pattern. Here is the A phrygian mode:</p>
           <GuitarScalePatternDiagram
-            scaleType={ScaleType.Phrygian}
-            rootPitch={ionianPitches[2]}
+            scale={new Scale(ScaleType.Phrygian, ionianPitches[2])}
           />
 
           <h3>Lydian</h3>
           <p>The Bb lydian mode is the 4th mode of the F major scale, and starts on the 3rd part of the repeating pattern. Here is the Bb lydian mode:</p>
           <GuitarScalePatternDiagram
-            scaleType={ScaleType.Lydian}
-            rootPitch={ionianPitches[3]}
+            scale={new Scale(ScaleType.Lydian, ionianPitches[3])}
           />
 
           <h3>Mixolydian</h3>
           <p>The C mixolydian mode is the 5th mode of the F major scale, and starts on the 1st part of the repeating pattern. Here is the C mixolydian mode:</p>
           <GuitarScalePatternDiagram
-            scaleType={ScaleType.Mixolydian}
-            rootPitch={ionianPitches[4]}
+            scale={new Scale(ScaleType.Mixolydian, ionianPitches[4])}
           />
 
           <h3>Minor Scale (Aeolian Mode)</h3>
           <p>The D minor scale (aeolian mode) is the 6th mode of the F major scale, and starts on the 6th part of the repeating pattern. Here is the D minor scale (aeolian mode):</p>
           <GuitarScalePatternDiagram
-            scaleType={ScaleType.Aeolian}
-            rootPitch={ionianPitches[5]}
+            scale={new Scale(ScaleType.Aeolian, ionianPitches[5])}
           />
 
           <h3>Locrian</h3>
           <p>The E locrian mode is the 7th mode of the F major scale, and starts on the 4th part of the repeating pattern. Here is the E locrian mode:</p>
           <GuitarScalePatternDiagram
-            scaleType={ScaleType.Locrian}
-            rootPitch={ionianPitches[6]}
+            scale={new Scale(ScaleType.Locrian, ionianPitches[6])}
           />
           
           <h3>Major Scale Mode Exercises</h3>
@@ -210,36 +200,31 @@ export class GuitarScalesLesson extends React.Component<IGuitarScalesLessonProps
 
           <p>The first mode of the major pentatonic scale, simply called the "major pentatonic scale", starts with the 3rd 3-fret interval on the lowest string, then goes back to the beginning of the pattern starting on the 2nd-lowest string:</p>
           <GuitarScalePatternDiagram
-            scaleType={ScaleType.MajorPentatonic}
-            rootPitch={majorPentatonicPitches[0]}
+            scale={new Scale(ScaleType.MajorPentatonic, majorPentatonicPitches[0])}
           />
           
           <h3>Major Pentatonic Mode 2</h3>
           <p>The 2nd mode of the A major pentatonic scale starts with the 1st 3-fret interval, on the note B, and has the following shape:</p>
           <GuitarScalePatternDiagram
-            scaleType={ScaleType.MajorPentatonicMode2}
-            rootPitch={majorPentatonicPitches[1]}
+            scale={new Scale(ScaleType.MajorPentatonicMode2, majorPentatonicPitches[1])}
           />
           
           <h3>Major Pentatonic Mode 3</h3>
           <p>The 3rd mode of the A major pentatonic scale starts with the 1st 4-fret interval, on the note C#, and has the following shape:</p>
           <GuitarScalePatternDiagram
-            scaleType={ScaleType.MajorPentatonicMode3}
-            rootPitch={majorPentatonicPitches[2]}
+            scale={new Scale(ScaleType.MajorPentatonicMode3, majorPentatonicPitches[2])}
           />
 
           <h3>Major Pentatonic Mode 4</h3>
           <p>The 4th mode of the A major pentatonic scale starts with the 2nd 3-fret interval, on the note E, and has the following shape:</p>
           <GuitarScalePatternDiagram
-            scaleType={ScaleType.MajorPentatonicMode4}
-            rootPitch={majorPentatonicPitches[3]}
+            scale={new Scale(ScaleType.MajorPentatonicMode4, majorPentatonicPitches[3])}
           />
 
           <h3>Minor Pentatonic Scale</h3>
           <p>The 5th mode of the A major pentatonic scale is the F# minor pentatonic scale, which starts on the 2nd 4-fret interval and has the following shape:</p>
           <GuitarScalePatternDiagram
-            scaleType={ScaleType.MinorPentatonic}
-            rootPitch={majorPentatonicPitches[4]}
+            scale={new Scale(ScaleType.MinorPentatonic, majorPentatonicPitches[4])}
           />
 
           <h3>Exercises</h3>
@@ -249,8 +234,7 @@ export class GuitarScalesLesson extends React.Component<IGuitarScalesLessonProps
           <h3 style={{ marginTop: "3em" }}>Modes of the Melodic Minor Scale</h3>
           <p>For the modes of the melodic minor scale, there are 7 parts to the repeating pattern:</p>
           <GuitarScalePatternDiagram
-            scaleType={ScaleType.LocrianNat9}
-            rootPitch={melodicMinorPitches[0]}
+            scale={new Scale(ScaleType.LocrianNat9, melodicMinorPitches[0])}
             stringCount={7}
             dontShiftBetweenGAndBStrings={true}
             canListen={false}
@@ -258,8 +242,7 @@ export class GuitarScalesLesson extends React.Component<IGuitarScalesLessonProps
           <NoteText>
             To clearly depict the repeating pattern, the diagram above does not shift 1 fret to the right when crossing from the G string to the B string as you always should. When actually playing the pattern you must include the shift as shown below:
             <GuitarScalePatternDiagram
-              scaleType={ScaleType.LocrianNat9}
-              rootPitch={melodicMinorPitches[0]}
+              scale={new Scale(ScaleType.LocrianNat9, melodicMinorPitches[0])}
               stringCount={7}
               canListen={false}
             />
@@ -270,50 +253,43 @@ export class GuitarScalesLesson extends React.Component<IGuitarScalesLessonProps
           <h3>Melodic Minor</h3>
           <p>The F melodic minor scale starts on the 4th part of the repeating pattern above. Here is the F melodic minor scale:</p>
           <GuitarScalePatternDiagram
-            scaleType={ScaleType.MelodicMinor}
-            rootPitch={melodicMinorPitches[0]}
+            scale={new Scale(ScaleType.MelodicMinor, melodicMinorPitches[0])}
           />
           
           <h3>Dorian b2</h3>
           <p>The G dorian b2 mode is the 2nd mode of the F melodic minor scale, and starts on the 2nd part of the repeating pattern above. Here is the G dorian b2 mode:</p>
           <GuitarScalePatternDiagram
-            scaleType={ScaleType.Dorianb2}
-            rootPitch={melodicMinorPitches[1]}
+            scale={new Scale(ScaleType.Dorianb2, melodicMinorPitches[1])}
           />
           
           <h3>Lydian Augmented</h3>
           <p>The Ab lydian augmented mode is the 3rd mode of the F melodic minor scale, and starts on the 7th part of the repeating pattern. Here is the Ab lydian augmented mode:</p>
           <GuitarScalePatternDiagram
-            scaleType={ScaleType.LydianAug}
-            rootPitch={melodicMinorPitches[2]}
+            scale={new Scale(ScaleType.LydianAug, melodicMinorPitches[2])}
           />
 
           <h3>Mixolydian #11</h3>
           <p>The Bb mixolydian #11 mode is the 4th mode of the F melodic minor scale, and starts on the 5th part of the repeating pattern. Here is the Bb mixolydian #11:</p>
           <GuitarScalePatternDiagram
-            scaleType={ScaleType.MixolydianSharp11}
-            rootPitch={melodicMinorPitches[3]}
+            scale={new Scale(ScaleType.MixolydianSharp11, melodicMinorPitches[3])}
           />
 
           <h3>Mixolydian b6</h3>
           <p>The C mixolydian b6 mode is the 5th mode of the F melodic minor scale, and starts on the 3rd part of the repeating pattern. Here is the C mixolydian b6 mode:</p>
           <GuitarScalePatternDiagram
-            scaleType={ScaleType.Mixolydianb6}
-            rootPitch={melodicMinorPitches[4]}
+            scale={new Scale(ScaleType.Mixolydianb6, melodicMinorPitches[4])}
           />
 
           <h3>Locrian Natural 9</h3>
           <p>The D locrian natural 9 mode is the 6th mode of the F melodic minor scale, and starts on the 1st part of the repeating pattern. Here is the D locrian natural 9 mode:</p>
           <GuitarScalePatternDiagram
-            scaleType={ScaleType.LocrianNat9}
-            rootPitch={melodicMinorPitches[5]}
+            scale={new Scale(ScaleType.LocrianNat9, melodicMinorPitches[5])}
           />
 
           <h3>Altered Dominant</h3>
           <p>The E altered dominant mode is the 7th mode of the F melodic minor scale, and starts on the 6th part of the repeating pattern. Here is the E altered dominant mode:</p>
           <GuitarScalePatternDiagram
-            scaleType={ScaleType.AlteredDominant}
-            rootPitch={melodicMinorPitches[6]}
+            scale={new Scale(ScaleType.AlteredDominant, melodicMinorPitches[6])}
           />
           
           <h3>Melodic Minor Scale Mode Exercises</h3>

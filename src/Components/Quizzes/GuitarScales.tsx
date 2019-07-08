@@ -5,17 +5,18 @@ import * as Utils from "../../Utils";
 import { Vector2D } from "../../Vector2D";
 import { Size2D } from "../../Size2D";
 import { Rect2D } from "../../Rect2D";
-import { ScaleType } from "../../Scale";
+import { ScaleType, Scale } from "../../Scale";
 import { PianoKeyboard } from "../PianoKeyboard";
 import { FlashCard, FlashCardSide } from "../../FlashCard";
 import { FlashCardGroup } from "../../FlashCardGroup";
 import { AnswerDifficulty } from "../../StudyAlgorithm";
 import { Pitch } from "../../Pitch";
 import { PitchLetter } from "../../PitchLetter";
-import { Chord, ChordType, ChordScaleFormula } from "../../Chord";
+import { ChordType } from "../../Chord";
 import { GuitarFretboard, renderGuitarFretboardScaleExtras, getStandardGuitarTuning, findGuitarChordShape, renderGuitarFretboardChordExtras, GuitarNote, renderGuitarNoteHighlightsAndLabels, get1stGuitarNoteOnString } from "../GuitarFretboard";
 import { ScaleAnswerSelect } from "../ScaleAnswerSelect";
 import { getPreferredGuitarScaleShape } from "../GuitarFretboard";
+import { ChordScaleFormula, ChordScaleFormulaPart } from '../../ChordScaleFormula';
 
 const rootPitchStrs = ["Ab", "A", "Bb", "B/Cb", "C", "C#/Db", "D", "Eb", "E", "F", "F#/Gb", "G"];
 const STRING_COUNT = 6;
@@ -26,13 +27,12 @@ interface IConfigData {
 }
 
 export const GuitarScaleViewer: React.FunctionComponent<{
-  scaleType: ScaleType,
-  rootPitch: Pitch,
+  scale: Scale,
   renderAllScaleShapes: boolean,
   size: Size2D
 }> = props => {
   let rootPitch = Pitch.createFromMidiNumber(
-    (new Pitch(PitchLetter.C, 0, 2)).midiNumber + props.rootPitch.midiNumberNoOctave
+    (new Pitch(PitchLetter.C, 0, 2)).midiNumber + props.scale.rootPitch.midiNumberNoOctave
   );
 
   // If the root pitch is below the range of the guitar, add an octave.
@@ -42,7 +42,7 @@ export const GuitarScaleViewer: React.FunctionComponent<{
   }
 
   const guitarTuning = getStandardGuitarTuning(STRING_COUNT);
-  const guitarNotes = getPreferredGuitarScaleShape(props.scaleType, rootPitch, guitarTuning);
+  const guitarNotes = getPreferredGuitarScaleShape(props.scale, guitarTuning);
   const maxFretNumber = Utils.arrayMax(guitarNotes
     .map(gn => gn.getFretNumber(guitarTuning))
   );
@@ -54,7 +54,7 @@ export const GuitarScaleViewer: React.FunctionComponent<{
     <GuitarFretboard
       width={props.size.width} height={props.size.height}
       minFretNumber={minFretNumber}
-      renderExtrasFn={metrics => renderGuitarFretboardScaleExtras(metrics, rootPitch, props.scaleType, props.renderAllScaleShapes)}
+      renderExtrasFn={metrics => renderGuitarFretboardScaleExtras(metrics, props.scale, props.renderAllScaleShapes)}
       style={fretboardStyle}
     />
   );
@@ -95,7 +95,7 @@ export const GuitarChordViewer: React.FunctionComponent<{
   );
 }
 
-export function forEachScale(callbackFn: (scaleType: ScaleType, rootPitch: Pitch, rootPitchStr: string, i: number) => void) {
+export function forEachScale(callbackFn: (scale: Scale, rootPitchStr: string, i: number) => void) {
   let i = 0;
   const guitarLowestNoteMidiNumber = (new Pitch(PitchLetter.E, 0, 2)).midiNumber;
 
@@ -111,7 +111,7 @@ export function forEachScale(callbackFn: (scaleType: ScaleType, rootPitch: Pitch
 
     // Iterate through each scale type for the root pitch.
     for (const scaleType of ScaleType.All) {
-      callbackFn(scaleType, rootPitch, rootPitchStrs[rootPitchStrIndex], i);
+      callbackFn(new Scale(scaleType, rootPitch), rootPitchStrs[rootPitchStrIndex], i);
       i++;
     }
   }
@@ -119,10 +119,10 @@ export function forEachScale(callbackFn: (scaleType: ScaleType, rootPitch: Pitch
 export function configDataToEnabledQuestionIds(configData: IConfigData): Array<number> {
   const newEnabledFlashCardIndices = new Array<number>();
 
-  forEachScale((scaleType, rootPitch, rootPitchStr, i) => {
+  forEachScale((scale, rootPitchStr, i) => {
     if (
       Utils.arrayContains(configData.enabledRootPitches, rootPitchStr) &&
-      Utils.arrayContains(configData.enabledScaleTypes, scaleType.name)
+      Utils.arrayContains(configData.enabledScaleTypes, scale.type.name)
     ) {
       newEnabledFlashCardIndices.push(i);
     }
@@ -345,22 +345,21 @@ export function createFlashCardGroup(title?: string, initialScaleTypes?: Array<S
 export function createFlashCards(): Array<FlashCard> {
   const flashCards = new Array<FlashCard>();
 
-  forEachScale((scaleType, rootPitch, rootPitchStr, i) => {
-    const chordFormula = ChordScaleFormula.parse(scaleType.formulaString + "8");
-    const pitches = chordFormula.getPitches(rootPitch);
+  forEachScale((scale, rootPitchStr, i) => {
+    const pitches = new ChordScaleFormula(scale.type.formula.parts.concat(new ChordScaleFormulaPart(8, 0))).getPitches(scale.rootPitch);
 
     flashCards.push(new FlashCard(
       new FlashCardSide(
         (width, height) => {
           return (
             <div>
-              <GuitarScaleViewer scaleType={scaleType} rootPitch={rootPitch} renderAllScaleShapes={false} size={new Size2D(400, 140)} />
+              <GuitarScaleViewer scale={scale} renderAllScaleShapes={false} size={new Size2D(400, 140)} />
             </div>
           );
         },
         pitches
       ),
-      new FlashCardSide(rootPitchStr + " " + scaleType.name)
+      new FlashCardSide(rootPitchStr + " " + scale.type.name)
     ));
   });
 
