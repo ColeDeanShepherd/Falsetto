@@ -170,7 +170,7 @@ export class ChordViewer extends React.Component<IChordViewerProps, IChordViewer
             <div style={{fontSize: "1.5em"}}>
               <p>{this.state.chord.rootPitch.toString(false)} {this.state.chord.type.name}</p>
               <p>{pitchesString}</p>
-              <p>{this.state.chord.type.formula}</p>
+              <p>{this.state.chord.type.formula.toString()}</p>
               <p>{intervalsString}</p>
             </div>
 

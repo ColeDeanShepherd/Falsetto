@@ -1466,7 +1466,7 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
     <NoteText>Note that if you try to build a seventh chord with the root and 3 major thirds, you end up with an augmented triad with a repeated root an octave higher.</NoteText>
 
     <p>Use the interactive diagram below to explore the basic seventh chords:</p>
-    <ChordViewer title={"Seventh Chord Viewer"} chordTypeGroups={[new ChordTypeGroup("Seventh Chords", ChordType.SeventhChords)]} showGuitarFretboard={false} />
+    <ChordViewer title={"Seventh Chord Viewer"} chordTypeGroups={[new ChordTypeGroup("Seventh Chords", ChordType.SimpleSeventhChords)]} showGuitarFretboard={false} />
 
     <SubSectionTitle>Extended Chords &amp; Chord/Scale Relationships</SubSectionTitle>
     <p>You can continue to add 3rds to chords to form ninth chords (5 notes), eleventh chords (6 notes), and thirteenth (7 notes) chords. These chords are categorized as <Term>extended</Term> chords.</p>

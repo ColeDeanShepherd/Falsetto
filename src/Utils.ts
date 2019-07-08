@@ -340,6 +340,12 @@ export function arrayContains<T>(array: T[], element: T): boolean {
   return array.indexOf(element) >= 0;
 }
 
+export function newArraySplice<T>(array: T[], start: number, deleteCount: number, ...items: T[]): T[] {
+  const newArray = array.slice();
+  newArray.splice(start, deleteCount, ...items);
+  return newArray;
+}
+
 // TODO: add tests
 export function getRomanNumerals(x: number): string {
   switch (x) {

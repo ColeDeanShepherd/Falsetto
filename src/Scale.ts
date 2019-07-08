@@ -7,7 +7,7 @@ import { ChordScaleFormula } from './ChordScaleFormula';
 // TODO: remove helpers?
 export function getIntervalsFromFormula(formula: ChordScaleFormula): Array<Interval> {
   return formula.parts
-    .map(p => new Interval(p.scaleDegreeNumber, p.signedAccidental));
+    .map(p => new Interval(p.chordNoteNumber, p.signedAccidental));
 }
 export function getIntervalsFromFormulaString(formulaString: string): Array<Interval> {
   Utils.precondition(!Utils.isNullOrWhiteSpace(formulaString));
@@ -35,6 +35,10 @@ export function getModePitchIntegers(
 export function getAllModePitchIntegers(pitchIntegers: Array<number>): Array<Array<number>> {
   return pitchIntegers
     .map((_, i) => getModePitchIntegers(pitchIntegers, 1 + i));
+}
+
+export function getSimpleScaleDegree(scaleDegree: number): number {
+  return 1 + Utils.mod((scaleDegree - 1), 7);
 }
 
 export class ScaleTypeGroup {

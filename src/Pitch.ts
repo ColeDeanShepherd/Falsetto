@@ -33,6 +33,17 @@ export function pitchRange(
   return possibleNotes;
 }
 
+export function getAccidentalString(signedAccidental: number, useSymbols: boolean = false): string {
+  if (signedAccidental === 0) {
+    return "";
+  }
+
+  const accidentalCharacter = (signedAccidental > 0)
+    ? useSymbols ? "#" : "#"
+    : useSymbols ? "♭" : "b";
+  return accidentalCharacter.repeat(Math.abs(signedAccidental));
+}
+
 export const arePitchOffsetsFromCWhiteKeys = [
   true, // C
   false, // C#/Db
@@ -166,14 +177,7 @@ export class Pitch {
     return this.midiNumber === pitch.midiNumber;
   }
   public getAccidentalString(useSymbols: boolean = false): string {
-    if (this.signedAccidental === 0) {
-      return "";
-    }
-
-    const accidentalCharacter = (this.signedAccidental > 0)
-      ? useSymbols ? "#" : "#"
-      : useSymbols ? "♭" : "b";
-    return accidentalCharacter.repeat(Math.abs(this.signedAccidental));
+    return getAccidentalString(this.signedAccidental, useSymbols);
   }
   public toString(includeOctaveNumber: boolean = true, useSymbols: boolean = false): string {
     return PitchLetter[this.letter] + this.getAccidentalString(useSymbols) + (includeOctaveNumber ? this.octaveNumber.toString() : "");

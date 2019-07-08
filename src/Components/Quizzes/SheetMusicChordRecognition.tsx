@@ -38,7 +38,7 @@ const rootPitches = pitchRange(minPitch, maxPitch, -1, 1)
   );
 const chordTypes = [ChordType.Power]
   .concat(ChordType.Triads)
-  .concat(ChordType.SeventhChords);
+  .concat(ChordType.SimpleSeventhChords);
 
 interface IConfigData {
   enabledChordTypes: string[];

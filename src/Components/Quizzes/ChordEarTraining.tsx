@@ -14,7 +14,7 @@ const minPitch = new Pitch(PitchLetter.C, -1, 2);
 const maxPitch = new Pitch(PitchLetter.C, 1, 6);
 const rootPitches = pitchRange(minPitch, maxPitch, -1, 1);
 const chordTypes = ChordType.Triads
-  .concat(ChordType.SeventhChords);
+  .concat(ChordType.SimpleSeventhChords);
 
 export interface IFlashCardFrontSideProps {
   pitches: Array<Pitch>;
