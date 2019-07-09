@@ -3,6 +3,8 @@ import { Pitch, getAccidentalString } from "./Pitch";
 import { VerticalDirection } from "./VerticalDirection";
 import { Interval } from './Interval';
 import { getSimpleChordNoteNumber } from './Chord';
+import { ChordName } from './ChordName';
+import { ChordQuality, isAugmentedChordQuality, isDiminishedChordQuality } from './ChordQuality';
 
 export class ChordScaleFormula {
   public static parse(formulaString: string): ChordScaleFormula {
@@ -29,7 +31,6 @@ export class ChordScaleFormula {
       .map(p => p.toString())
       .join(" ");
   }
-
   
   public withAddedPart(chordNoteNumber: number, signedAccidental: number): ChordScaleFormula {
     Utils.precondition(chordNoteNumber >= 9);
@@ -421,93 +422,5 @@ export class ChordScaleFormulaPart {
   }
   public getIntervalFromRootNote(): Interval {
     return new Interval(this.chordNoteNumber, this.signedAccidental);
-  }
-}
-
-export enum ChordQuality {
-  Major,
-  Dominant,
-
-  Minor,
-  MinorMajor,
-
-  Diminished,
-  HalfDiminished,
-  DiminishedMajor,
-  
-  Augmented,
-  AugmentedMajor,
-
-  Power,
-  Quartal
-}
-export function chordQualityToString(chordQuality: ChordQuality): string {
-  switch (chordQuality) {
-    case ChordQuality.Major:
-      return "Major"
-    case ChordQuality.Dominant:
-      return "Dominant";
-
-    case ChordQuality.Minor:
-        return "Minor";
-    case ChordQuality.MinorMajor:
-        return "Minor-Major";
-
-    case ChordQuality.Diminished:
-        return "Diminished";
-    case ChordQuality.HalfDiminished:
-        return "Half-Diminished";
-    case ChordQuality.DiminishedMajor:
-        return "Diminished Major";
-    
-    case ChordQuality.Augmented:
-        return "Augmented";
-    case ChordQuality.AugmentedMajor:
-        return "Augmented Major";
-
-    case ChordQuality.Power:
-        return "Power";
-    case ChordQuality.Quartal:
-        return "Quartal";
-    default:
-      throw new Error(`Unknown chord quality: ${chordQuality}`);
-  }
-}
-export function isAugmentedChordQuality(chordQuality: ChordQuality) {
-  switch (chordQuality) {
-    case ChordQuality.Augmented:
-    case ChordQuality.AugmentedMajor:
-      return true;
-    default:
-      return false;
-  }
-}
-export function isDiminishedChordQuality(chordQuality: ChordQuality) {
-  switch (chordQuality) {
-    case ChordQuality.Diminished:
-    case ChordQuality.HalfDiminished:
-    case ChordQuality.DiminishedMajor:
-      return true;
-    default:
-      return false;
-  }
-}
-
-export class ChordName {
-  public constructor(
-    public quality: ChordQuality,
-    public extension: number | null,
-    public alterations: Array<string>
-  ) {}
-
-  public toString(): string {
-    const qualityString = chordQualityToString(this.quality);
-    const extensionString = (this.extension !== null)
-      ? ` ${this.extension.toString()}th`
-      : "";
-    const alterationsString = (this.alterations.length > 0)
-      ? " " + this.alterations.join()
-      : "";
-    return `${qualityString}${extensionString}${alterationsString}`;
   }
 }
