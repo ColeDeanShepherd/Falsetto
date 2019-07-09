@@ -11,6 +11,8 @@ import { PianoKeyboard, renderPianoKeyboardNoteNames, PianoKeyboardMetrics, rend
 import { Interval } from '../Interval';
 import { ChordType, Chord } from '../Chord';
 import { ScaleType, getAllModePitchIntegers } from '../Scale';
+import { generateChordNames } from '../ChordName';
+import { ChordScaleFormula } from '../ChordScaleFormula';
 
 // TODO: refactor Chord, Scale
 // TODO: add support for multiple chord names
@@ -48,15 +50,14 @@ export function findChords(pitches: Array<Pitch>): Array<Chord> {
   const basePitchIntegers = sortedPitches
     .map(p => p.midiNumberNoOctave - sortedPitches[0].midiNumberNoOctave);
   const allPitchIntegers = getAllModePitchIntegers(basePitchIntegers);
-  const chordTypes = Utils.flattenArrays<Chord>(allPitchIntegers
+  const chords = Utils.flattenArrays<Chord>(allPitchIntegers
     .map((pis, i) =>
-      ChordType.All
-        .filter(ct => Utils.areArraysEqual(ct.pitchIntegers, pis))
-        .map(ct => new Chord(ct, pitches[i]))
+      generateChordNames(pis)
+        .map(cn => new Chord(new ChordType(cn.toString(), new ChordScaleFormula([]), [cn.toString()]), pitches[i]))
     ));
 
-  return chordTypes
-    ? chordTypes
+  return chords
+    ? chords
     : new Array<Chord>();
 }
 export function findScales(pitches: Array<Pitch>): Array<[ScaleType, Pitch]> {

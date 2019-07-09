@@ -72,6 +72,8 @@ import { SupportUsPage } from "./SupportUs";
 import DocumentTitle from "react-document-title";
 import { HomePage } from "./HomePage";
 import ScrollToTop from './ScrollToTop';
+import { ChordType } from '../Chord';
+import { generateChordNames } from '../ChordName';
 
 async function getErrorDescription(msg: string | Event, file: string | undefined, line: number | undefined, col: number | undefined, error: Error | undefined): Promise<string> {
   return new Promise<string>((resolve, reject) => {

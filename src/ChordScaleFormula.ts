@@ -3,8 +3,31 @@ import { Pitch, getAccidentalString } from "./Pitch";
 import { VerticalDirection } from "./VerticalDirection";
 import { Interval } from './Interval';
 import { getSimpleChordNoteNumber } from './Chord';
-import { ChordName } from './ChordName';
-import { ChordQuality, isAugmentedChordQuality, isDiminishedChordQuality } from './ChordQuality';
+
+export class ScaleDegreePitchIntegers {
+  public static readonly _1 = 0;
+  
+  public static readonly _b3 = 3;
+  public static readonly _3 = 4;
+  
+  public static readonly _b5 = 6;
+  public static readonly _5 = 7;
+  public static readonly _Sharp5 = 8;
+  
+  public static readonly _bb7 = 9;
+  public static readonly _b7 = 10;
+  public static readonly _7 = 11;
+  
+  public static readonly _b9 = 1;
+  public static readonly _9 = 2;
+  public static readonly _Sharp9 = 3;
+  
+  public static readonly _11 = 5;
+  public static readonly _Sharp11 = 6;
+  
+  public static readonly _b13 = 8;
+  public static readonly _13 = 9;
+}
 
 export class ChordScaleFormula {
   public static parse(formulaString: string): ChordScaleFormula {
@@ -85,305 +108,6 @@ export class ChordScaleFormula {
     newFormulaParts[partIndex].signedAccidental = signedAccidental;
     return new ChordScaleFormula(newFormulaParts);
   }
-
-  public generateChordNames(): Array<ChordName> {
-    // universal preconditions
-    Utils.precondition(this.parts.length > 0);
-    Utils.precondition(this.parts[0].chordNoteNumber === 1);
-    Utils.precondition(this.parts[0].signedAccidental === 0);
-
-    // special cases
-    if ((this.parts.length === 2) && (this.parts[1].chordNoteNumber === 5) && (this.parts[1].signedAccidental === 0)) {
-      return [new ChordName(ChordQuality.Power, null, [])];
-    }
-
-    if (this.parts.length === 3) {
-      if (
-        (this.parts[1].chordNoteNumber === 4) && (this.parts[1].signedAccidental === 0) &&
-        (this.parts[2].chordNoteNumber === 7) && (this.parts[2].signedAccidental === -1)
-      ) {
-        return [new ChordName(ChordQuality.Quartal, null, [])];
-      }
-    } else if (this.parts.length === 4) {
-      if (
-        (this.parts[1].chordNoteNumber === 4) && (this.parts[1].signedAccidental === 0) &&
-        (this.parts[2].chordNoteNumber === 3) && (this.parts[2].signedAccidental === -1) &&
-        (this.parts[3].chordNoteNumber === 7) && (this.parts[3].signedAccidental === -1)
-      ) {
-        return [new ChordName(ChordQuality.Quartal, null, [])];
-      }
-    }
-
-    // general-case preconditions
-    if (this.parts.length < 3) {
-      return [];
-    }
-
-    // get signed accidentals
-    let firstSignedAccidental: number | null = null;
-    let secondSignedAccidental: number | null = null;
-    let thirdSignedAccidental: number | null = null;
-    let fourthSignedAccidental: number | null = null;
-    let fifthSignedAccidental: number | null = null;
-    let sixthSignedAccidental: number | null = null;
-    let seventhSignedAccidental: number | null = null;
-    let ninthSignedAccidental: number | null = null;
-    let eleventhSignedAccidental: number | null = null;
-    let thirteenthSignedAccidental: number | null = null;
-
-    for (const part of this.parts) {
-      switch (part.chordNoteNumber) {
-        case 1:
-          if ((firstSignedAccidental === null) || (part.signedAccidental === 0)) {
-            firstSignedAccidental = part.signedAccidental;
-          }
-          break;
-        case 2:
-          if ((secondSignedAccidental === null) || (part.signedAccidental === 0)) {
-            secondSignedAccidental = part.signedAccidental;
-          }
-          break;
-        case 3:
-          if ((thirdSignedAccidental === null) || (part.signedAccidental === 0)) {
-            thirdSignedAccidental = part.signedAccidental;
-          }
-          break;
-        case 4:
-          if ((fourthSignedAccidental === null) || (part.signedAccidental === 0)) {
-            fourthSignedAccidental = part.signedAccidental;
-          }
-          break;
-        case 5:
-          if ((fifthSignedAccidental === null) || (part.signedAccidental === 0)) {
-            fifthSignedAccidental = part.signedAccidental;
-          }
-          break;
-        case 6:
-          if ((sixthSignedAccidental === null) || (part.signedAccidental === 0)) {
-            sixthSignedAccidental = part.signedAccidental;
-          }
-          break;
-        case 7:
-          if ((seventhSignedAccidental === null) || (part.signedAccidental === 0)) {
-            seventhSignedAccidental = part.signedAccidental;
-          }
-          break;
-        case 9:
-          if ((ninthSignedAccidental === null) || (part.signedAccidental === 0)) {
-            ninthSignedAccidental = part.signedAccidental;
-          }
-          break;
-        case 11:
-          if ((eleventhSignedAccidental === null) || (part.signedAccidental === 0)) {
-            eleventhSignedAccidental = part.signedAccidental;
-          }
-          break;
-        case 13:
-          if ((thirteenthSignedAccidental === null) || (part.signedAccidental === 0)) {
-            thirteenthSignedAccidental = part.signedAccidental;
-          }
-          break;
-        default:
-          throw new Error(`Unknown chord note #: ${part.chordNoteNumber}`);
-      }
-    }
-    
-    // get possible qualities
-    const getPossibleQualities = (): Array<ChordQuality> => {
-      if (fifthSignedAccidental === 1) {
-        // Augmented
-        if (seventhSignedAccidental === 0) {
-          return [ChordQuality.AugmentedMajor];
-        } else if ((seventhSignedAccidental === -1) || (seventhSignedAccidental === null)) {
-          return [ChordQuality.Augmented];
-        } else {
-          return [];
-        }
-      } else if (fifthSignedAccidental === -1) {
-        // Diminished
-        if (seventhSignedAccidental === 0) {
-          return [ChordQuality.DiminishedMajor];
-        } else if (seventhSignedAccidental === -1) {
-          return [ChordQuality.HalfDiminished];
-        } else if ((seventhSignedAccidental === -2)) {
-          return [ChordQuality.Diminished];
-        } else if (seventhSignedAccidental === null) {
-          if (thirdSignedAccidental === -1) {
-            return [ChordQuality.Diminished];
-          } else {
-            return [];
-          }
-        } else {
-          return [];
-        }
-      } else if ((fifthSignedAccidental === null) || (fifthSignedAccidental === 0)) {
-        if (seventhSignedAccidental === 0) {
-          if (thirdSignedAccidental === 0) {
-            return [ChordQuality.Major];
-          } else if (thirdSignedAccidental === -1) {
-            return [ChordQuality.MinorMajor];
-          } else {
-            return [ChordQuality.Major, ChordQuality.MinorMajor];
-          }
-        } else if (seventhSignedAccidental === -1) {
-          if (thirdSignedAccidental === 0) {
-            return [ChordQuality.Dominant];
-          } else if (thirdSignedAccidental === -1) {
-            return [ChordQuality.Minor];
-          } else {
-            return [ChordQuality.Dominant, ChordQuality.Minor];
-          }
-        } else if (seventhSignedAccidental === null) {
-          if (thirdSignedAccidental === 0) {
-            return [ChordQuality.Major];
-          } else if (thirdSignedAccidental === -1) {
-            return [ChordQuality.Minor];
-          } else {
-            return [];
-          }
-        } else {
-          return [];
-        }
-      } else {
-        return [];
-      }
-    }
-    
-    const qualities = getPossibleQualities();
-    if (qualities.length === 0) {
-      return [];
-    }
-    
-    // get extension string
-    const getExtension = (): number | null => {
-      if (seventhSignedAccidental !== null) {
-        if (thirteenthSignedAccidental !== null) {
-          if ((thirteenthSignedAccidental === 0) || (thirteenthSignedAccidental === -1)) {
-            return 13;
-          } else {
-            throw new Error(`Invalid chord 13th signed accidental: ${thirteenthSignedAccidental}`);
-          }
-        } else if (eleventhSignedAccidental !== null) {
-          if ((eleventhSignedAccidental === 0) || (eleventhSignedAccidental === 1)) {
-            return 11;
-          } else {
-            throw new Error(`Invalid chord 11th signed accidental: ${thirteenthSignedAccidental}`);
-          }
-        } else if (ninthSignedAccidental !== null) {
-          if ((ninthSignedAccidental >= -1) && (ninthSignedAccidental <= 1)) {
-            return 9;
-          } else {
-            throw new Error(`Invalid chord 9th signed accidental: ${thirteenthSignedAccidental}`);
-          }
-        } else {
-          if ((seventhSignedAccidental >= -2) && (seventhSignedAccidental <= 0)) {
-            return 7;
-          } else {
-            throw new Error(`Invalid chord 7th signed accidental: ${thirteenthSignedAccidental}`);
-          }
-        }
-      } else if (fifthSignedAccidental !== null) {
-        if ((fifthSignedAccidental >= -1) && (fifthSignedAccidental <= 1)) {
-          if (sixthSignedAccidental !== null) {
-            if ((sixthSignedAccidental === 0) || (sixthSignedAccidental === 1)) {
-              return 6;
-            } else {
-              throw new Error(`Invalid chord 6th signed accidental: ${thirteenthSignedAccidental}`);
-            }
-          } else {
-            return null;
-          }
-        } else {
-          throw new Error(`Invalid chord 5th signed accidental: ${thirteenthSignedAccidental}`);
-        }
-      } else {
-        throw new Error(`Can't name chord formula ${this.toString()}`);
-      }
-    }
-
-    const extension = getExtension();
-    
-    // get alterations
-    const getAlterations =(chordQuality: ChordQuality): Array<string> => {
-      const alterations = new Array<string>();
-
-      // sharpened/flattened notes
-      if (fifthSignedAccidental !== null) {
-        if ((fifthSignedAccidental > 0) && (!isAugmentedChordQuality(chordQuality))) {
-          alterations.push("#5");
-        } else if ((fifthSignedAccidental < 0) && (!isDiminishedChordQuality(chordQuality))) {
-          alterations.push("b5");
-        }
-      }
-
-      if ((ninthSignedAccidental !== null) && (ninthSignedAccidental !== 0)) {
-        alterations.push(getAccidentalString(ninthSignedAccidental) + "9");
-      }
-      
-      if ((eleventhSignedAccidental !== null) && (eleventhSignedAccidental !== 0)) {
-        alterations.push(getAccidentalString(eleventhSignedAccidental) + "11");
-      }
-      
-      if ((thirteenthSignedAccidental !== null) && (thirteenthSignedAccidental !== 0)) {
-        alterations.push(getAccidentalString(thirteenthSignedAccidental) + "13");
-      }
-
-      // sus2/sus4
-      if ((extension === null) && (thirdSignedAccidental === null)) {
-        if (secondSignedAccidental === 0) {
-          alterations.push("sus2");
-        } else if (fourthSignedAccidental === 0) {
-          alterations.push("sus4");
-        }
-      }
-
-      // add
-      if (extension === null) {
-        // TODO: support multiple adds
-        if (ninthSignedAccidental !== null) {
-          alterations.push(`add${getAccidentalString(ninthSignedAccidental)}9`);
-        }
-        
-        if (eleventhSignedAccidental !== null) {
-          alterations.push(`add${getAccidentalString(eleventhSignedAccidental)}11`);
-        }
-        
-        if (thirteenthSignedAccidental !== null) {
-          alterations.push(`add${getAccidentalString(thirteenthSignedAccidental)}13`);
-        }
-      }
-
-      // dropped notes
-      if (extension === 13) {
-        // no 3
-        // no 5
-        // no 9
-        // no 11
-      } else if (extension === 11) {
-        // no 3
-        // no 5
-        // no 9
-      } else if (extension === 9) {
-        // no 3?
-        // no 5
-      } else if (extension === 7) {
-        // no 3?
-        // no 5
-      }
-
-      return alterations;
-    }
-
-    // for each quality and alterations
-    const chordNames = new Array<ChordName>();
-
-    for (const quality of qualities) {
-      const alterations = getAlterations(quality);
-      chordNames.push(new ChordName(quality, extension, alterations))
-    }
-
-    return chordNames;
-  }
 }
 export class ChordScaleFormulaPart {
   public static parse(formulaPartString: string): ChordScaleFormulaPart {
@@ -418,7 +142,7 @@ export class ChordScaleFormulaPart {
   }
 
   public toString(): string {
-    return this.chordNoteNumber.toString + getAccidentalString(this.signedAccidental);
+    return this.chordNoteNumber.toString() + getAccidentalString(this.signedAccidental);
   }
   public getIntervalFromRootNote(): Interval {
     return new Interval(this.chordNoteNumber, this.signedAccidental);
