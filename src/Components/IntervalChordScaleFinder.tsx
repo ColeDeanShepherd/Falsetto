@@ -135,7 +135,7 @@ export class IntervalChordScaleFinder extends React.Component<IIntervalChordScal
                 <span style={{ fontWeight: "bold" }}>Chords: </span>
                 {(intervalsChordsScales.chords.length > 0)
                   //? intervalsChordsScales.chords.map(c => c.rootPitch.toOneAccidentalAmbiguousString(false) + " " + c.chordType.name).join(', ')
-                  ? intervalsChordsScales.chords.map(c => c.getSymbol()).join(', ')
+                  ? intervalsChordsScales.chords.map(c => c.getSymbol(true)).join(', ')
                   : null}
               </p>
               <p>

@@ -270,8 +270,11 @@ export class Chord {
     public rootPitch: Pitch
   ) {}
 
-  public getSymbol(): string {
-    return `${this.rootPitch.toString(false)}${this.type.symbols[0]}`;
+  public getSymbol(useOneAccidentalAmbiguousPitch: boolean): string {
+    const rootPitchString = useOneAccidentalAmbiguousPitch
+      ? this.rootPitch.toOneAccidentalAmbiguousString(false)
+      : this.rootPitch.toString(false);
+    return `${rootPitchString}${this.type.symbols[0]}`;
   }
   public getPitches(): Array<Pitch> {
     return this.type.formula.getPitches(this.rootPitch);
