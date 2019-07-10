@@ -7,9 +7,9 @@ import { FlashCard } from "../../FlashCard";
 import { FlashCardGroup } from "../../FlashCardGroup";
 import { Pitch, pitchRange } from "../../Pitch";
 import { PitchLetter } from "../../PitchLetter";
-import { Chord } from "../../Chord";
 import { playPitchesSequentially } from "../../Piano";
 import { ScaleType } from "../../Scale";
+import { ChordScaleFormula, ChordScaleFormulaPart } from '../../ChordScaleFormula';
 
 const minPitch = new Pitch(PitchLetter.C, -1, 2);
 const maxPitch = new Pitch(PitchLetter.C, 1, 6);
@@ -152,18 +152,15 @@ export function createFlashCards(): Array<FlashCard> {
   const flashCards = new Array<FlashCard>();
 
   for (const rootPitch of rootPitches) {
-    for (const scale of ScaleType.All) {
-      const formulaString = scale.formulaString + " 8";
-
-      const pitches = Chord.fromPitchAndFormulaString(rootPitch, formulaString)
-        .pitches;
+    for (const scaleType of ScaleType.All) {
+      const pitches = new ChordScaleFormula(scaleType.formula.parts.concat(new ChordScaleFormulaPart(8, 0, false))).getPitches(rootPitch);
       
       const iCopy = i;
       i++;
 
       flashCards.push(FlashCard.fromRenderFns(
         () => <FlashCardFrontSide key={iCopy} pitches={pitches} />,
-        scale.name
+        scaleType.name
       ));
     }
   }

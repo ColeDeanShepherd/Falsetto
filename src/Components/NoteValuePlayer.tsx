@@ -278,7 +278,7 @@ export class NoteValuePlayer extends React.Component<INoteValuePlayerProps, INot
   }
   
   private onNoteValueChange(newValueStr: string) {
-    const notesPerBeat = parseInt(newValueStr);
+    const notesPerBeat = parseInt(newValueStr, 10);
     const stateDelta = { notesPerBeat: notesPerBeat };
 
     const wasPlaying = this.rhythmPlayer.isPlaying;

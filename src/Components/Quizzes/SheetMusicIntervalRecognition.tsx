@@ -139,7 +139,7 @@ function forEachInterval(fn: (pitches: Array<Pitch>, interval: Interval) => void
   for (let note1Index = 0; note1Index < notes.length; note1Index++) {
     for (let note2Index = note1Index + 1; note2Index < notes.length; note2Index++) {
       const pitches = [notes[note1Index], notes[note2Index]];
-      const interval = Pitch.getInterval(pitches[0], pitches[1]);
+      const interval = Interval.fromPitches(pitches[0], pitches[1]);
 
       if (Utils.arrayContains(intervals, interval.toString())) {
         fn(pitches, interval);

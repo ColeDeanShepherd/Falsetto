@@ -84,7 +84,7 @@ import { Vector2D } from '../Vector2D';
 import { Size2D } from '../Size2D';
 import { Margin } from '../Margin';
 import { NavLink } from 'react-router-dom';
-import { ScaleType } from '../Scale';
+import { ScaleType, Scale } from '../Scale';
 import { doesKeyUseSharps } from '../Key';
 import { PianoScaleDronePlayer } from './PianoScaleDronePlayer';
 import { Chord, ChordType, ChordTypeGroup } from "../Chord";
@@ -103,8 +103,8 @@ const FiveChordDiagram: React.FunctionComponent<{}> = props => {
   const height = 200;
   const margin = new Margin(0, 80, 0, 80);
   const style = { width: "100%", maxWidth: "300px", height: "auto" };
-  const chord = Chord.fromPitchAndFormulaString(new Pitch(PitchLetter.G, 0, 4), ChordType.Dom7.formulaString);
-  const pitches = chord.pitches;
+  const chord = new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4));
+  const pitches = chord.getPitches();
   const scaleDegreeLabels = ["5", "7", "2", "4"];
 
   function renderLabels(metrics: PianoKeyboardMetrics): JSX.Element {
@@ -147,7 +147,7 @@ const FiveChordDiagram: React.FunctionComponent<{}> = props => {
     </div>
   );
 };
-const ChordDiagram: React.FunctionComponent<{ pitches: Array<Pitch>, scaleType: ScaleType, scaleRootPitch: Pitch, canListen?: boolean}> = props => {
+const ChordDiagram: React.FunctionComponent<{ pitches: Array<Pitch>, scale: Scale, canListen?: boolean}> = props => {
   const canListen = (props.canListen !== undefined) ? props.canListen : true;
 
   return (
@@ -157,13 +157,13 @@ const ChordDiagram: React.FunctionComponent<{ pitches: Array<Pitch>, scaleType: 
     </div>
   );
 }
-const ChordDiagramInternal: React.FunctionComponent<{ pitches: Array<Pitch>, scaleType: ScaleType, scaleRootPitch: Pitch, canListen?: boolean, position?: Vector2D, lowestPitch?: Pitch }> = props => {
+const ChordDiagramInternal: React.FunctionComponent<{ pitches: Array<Pitch>, scale: Scale, canListen?: boolean, position?: Vector2D, lowestPitch?: Pitch }> = props => {
   const width = 600;
   const height = 200;
   const margin = new Margin(0, 0, 0, 0);
   const style = { width: "100%", maxWidth: "300px", height: "auto" };
-  const { pitches, scaleType, scaleRootPitch } = props;
-  const scalePitches = scaleType.getPitches(scaleRootPitch);
+  const { pitches, scale } = props;
+  const scalePitches = scale.getPitches();
   const scaleDegreeLabels = pitches
     .map(p => 1 + scalePitches.findIndex(sp => sp.midiNumberNoOctave == p.midiNumberNoOctave));
   const position = (props.position !== undefined) ? props.position : new Vector2D(0, 0);
@@ -204,7 +204,7 @@ const ChordDiagramInternal: React.FunctionComponent<{ pitches: Array<Pitch>, sca
   );
 };
 
-const ChordTransitionDiagram: React.FunctionComponent<{ chord1Pitches: Array<Pitch>, chord1Name: string, chord2Pitches: Array<Pitch>, chord2Name: string, scaleType: ScaleType, scaleRootPitch: Pitch, lowestPitch?: Pitch }> = props => {
+const ChordTransitionDiagram: React.FunctionComponent<{ chord1Pitches: Array<Pitch>, chord1Name: string, chord2Pitches: Array<Pitch>, chord2Name: string, scale: Scale, lowestPitch?: Pitch }> = props => {
   const width = 600;
   const height = 500;
   const chordDiagram2Position = new Vector2D(0, 300);
@@ -262,8 +262,8 @@ const ChordTransitionDiagram: React.FunctionComponent<{ chord1Pitches: Array<Pit
           </marker>
         </defs>.
 
-        <ChordDiagramInternal pitches={props.chord1Pitches} scaleType={props.scaleType} scaleRootPitch={props.scaleRootPitch} canListen={false} lowestPitch={props.lowestPitch} />
-        <ChordDiagramInternal pitches={props.chord2Pitches} scaleType={props.scaleType} scaleRootPitch={props.scaleRootPitch} canListen={false} position={chordDiagram2Position} lowestPitch={props.lowestPitch} />
+        <ChordDiagramInternal pitches={props.chord1Pitches} scale={props.scale} canListen={false} lowestPitch={props.lowestPitch} />
+        <ChordDiagramInternal pitches={props.chord2Pitches} scale={props.scale} canListen={false} position={chordDiagram2Position} lowestPitch={props.lowestPitch} />
         {arrows}
       </svg>
     </div>
@@ -290,18 +290,18 @@ export const ChordProgressionsSection: React.FunctionComponent<SectionProps> = p
     <p>The I chord releases the tension because it resolves the tritone by moving the leading tone to the scale's root note, and moving the 4th scale degree down to the 3rd scale degree to form a major 3rd:</p>
     
     <p style={{fontSize: "1.25em", fontWeight: "bold", textDecoration: "underline", textAlign: "center"}}>I (2nd inversion)</p>
-    <p style={{textAlign: "center"}}><ChordDiagram pitches={[new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5), new Pitch(PitchLetter.E, 0, 5)]} scaleType={ScaleType.Ionian} scaleRootPitch={new Pitch(PitchLetter.C, 0, 4)} /></p>
+    <p style={{textAlign: "center"}}><ChordDiagram pitches={[new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5), new Pitch(PitchLetter.E, 0, 5)]} scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))} /></p>
 
     <p>This dominant - tonic resolution can be used between scale degrees other than 5 &amp; 1 as well. For example, another common chord progression is II - V - I, which works because II is the dominant chord of V (because scale degree 2 is a perfect fifth above scale degree 5), and because V is the dominant chord of I. So, a II - V - I chord progression is essentially two successive V - I chord progressions:</p>
     
     <p style={{fontSize: "1.25em", fontWeight: "bold", textDecoration: "underline", textAlign: "center"}}>ii (2nd inversion)</p>
-    <p style={{textAlign: "center"}}><ChordDiagram pitches={[new Pitch(PitchLetter.A, 0, 4), new Pitch(PitchLetter.D, 0, 5), new Pitch(PitchLetter.F, 0, 5)]} scaleType={ScaleType.Ionian} scaleRootPitch={new Pitch(PitchLetter.C, 0, 4)} /></p>
+    <p style={{textAlign: "center"}}><ChordDiagram pitches={[new Pitch(PitchLetter.A, 0, 4), new Pitch(PitchLetter.D, 0, 5), new Pitch(PitchLetter.F, 0, 5)]} scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))} /></p>
     
     <p style={{fontSize: "1.25em", fontWeight: "bold", textDecoration: "underline", textAlign: "center"}}>V7</p>
-    <p style={{textAlign: "center"}}><ChordDiagram pitches={Chord.fromPitchAndFormulaString(new Pitch(PitchLetter.G, 0, 4), ChordType.Dom7.formulaString).pitches} scaleType={ScaleType.Ionian} scaleRootPitch={new Pitch(PitchLetter.C, 0, 4)} /></p>
+    <p style={{textAlign: "center"}}><ChordDiagram pitches={new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)).getPitches()} scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))} /></p>
     
     <p style={{fontSize: "1.25em", fontWeight: "bold", textDecoration: "underline", textAlign: "center"}}>I</p>
-    <p style={{textAlign: "center"}}><ChordDiagram pitches={[new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5), new Pitch(PitchLetter.E, 0, 5)]} scaleType={ScaleType.Ionian} scaleRootPitch={new Pitch(PitchLetter.C, 0, 4)} /></p>
+    <p style={{textAlign: "center"}}><ChordDiagram pitches={[new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5), new Pitch(PitchLetter.E, 0, 5)]} scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))} /></p>
 
     <p>Just about every chord progression there is can be analyzed in terms of V - I progressions when combined with the next important concept: chord substitution.</p>
 
@@ -310,15 +310,15 @@ export const ChordProgressionsSection: React.FunctionComponent<SectionProps> = p
     <p>The simplest chord substitutions change only one note in a chord. A common way to change one note in a diatonic chord is to instead use a diatonic chord up or down a 3rd.</p>
     <p>In C major, for example, the I triad consists of the notes C, E, &amp; G:</p>
     <p style={{fontSize: "1.25em", fontWeight: "bold", textDecoration: "underline", textAlign: "center"}}>I</p>
-    <p style={{textAlign: "center"}}><ChordDiagram pitches={[new Pitch(PitchLetter.C, 0, 5), new Pitch(PitchLetter.E, 0, 5), new Pitch(PitchLetter.G, 0, 5)]} scaleType={ScaleType.Ionian} scaleRootPitch={new Pitch(PitchLetter.C, 0, 4)} /></p>
+    <p style={{textAlign: "center"}}><ChordDiagram pitches={[new Pitch(PitchLetter.C, 0, 5), new Pitch(PitchLetter.E, 0, 5), new Pitch(PitchLetter.G, 0, 5)]} scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))} /></p>
 
     <p>The iii triad, a 3rd up from I, consists of the notes E, G, &amp; B, which shares the E and the G with I triad:</p>
     <p style={{fontSize: "1.25em", fontWeight: "bold", textDecoration: "underline", textAlign: "center"}}>iii (2nd inversion)</p>
-    <p style={{textAlign: "center"}}><ChordDiagram pitches={[new Pitch(PitchLetter.B, 0, 4), new Pitch(PitchLetter.E, 0, 5), new Pitch(PitchLetter.G, 0, 5)]} scaleType={ScaleType.Ionian} scaleRootPitch={new Pitch(PitchLetter.C, 0, 4)} /></p>
+    <p style={{textAlign: "center"}}><ChordDiagram pitches={[new Pitch(PitchLetter.B, 0, 4), new Pitch(PitchLetter.E, 0, 5), new Pitch(PitchLetter.G, 0, 5)]} scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))} /></p>
 
     <p>The vi triad, a 3rd down from I, consists of the notes A, C, &amp; E, which shares the C and the E with the I triad:</p>
     <p style={{fontSize: "1.25em", fontWeight: "bold", textDecoration: "underline", textAlign: "center"}}>vi (1st inversion)</p>
-    <p style={{textAlign: "center"}}><ChordDiagram pitches={[new Pitch(PitchLetter.C, 0, 5), new Pitch(PitchLetter.E, 0, 5), new Pitch(PitchLetter.A, 0, 5)]} scaleType={ScaleType.Ionian} scaleRootPitch={new Pitch(PitchLetter.C, 0, 4)} /></p>
+    <p style={{textAlign: "center"}}><ChordDiagram pitches={[new Pitch(PitchLetter.C, 0, 5), new Pitch(PitchLetter.E, 0, 5), new Pitch(PitchLetter.A, 0, 5)]} scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))} /></p>
 
     <p>Because both the iii chord and the vi chord share 2 of 3 notes with the I chord, they can both substitute for the I chord, and they are all categorized as "tonic" chords. The same can be applied other chords that are a 3rd apart, like the ii &amp; IV chords (considered "pre-dominant" chord because they generally lead to "dominant" chords), the V &amp; vii chords ("dominant" chords), and so on.</p>
 
@@ -345,12 +345,11 @@ export const ChordProgressionsSection: React.FunctionComponent<SectionProps> = p
     
     <p style={{textAlign: "center"}}>
       <ChordTransitionDiagram
-        chord1Pitches={Chord.fromPitchAndFormulaString(new Pitch(PitchLetter.G, 0, 4), ChordType.Dom7.formulaString).pitches}
+        chord1Pitches={new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)).getPitches()}
         chord1Name="V7"
         chord2Pitches={[new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]}
         chord2Name="I"
-        scaleType={ScaleType.Ionian}
-        scaleRootPitch={new Pitch(PitchLetter.C, 0, 4)} />
+        scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))} />
     </p>
 
     <p>Contrast this with a better example of voice leading, where V7 is in 2nd inversion and I is in root position, allowing for small movements between the voices in each chord:</p>
@@ -367,8 +366,7 @@ export const ChordProgressionsSection: React.FunctionComponent<SectionProps> = p
         chord1Name="V7"
         chord2Pitches={[new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]}
         chord2Name="I"
-        scaleType={ScaleType.Ionian}
-        scaleRootPitch={new Pitch(PitchLetter.C, 0, 4)} />
+        scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))} />
     </p>
 
     <p>You can hear that this voicing is much smoother, because the individual chord voices move small distances.</p>
@@ -377,12 +375,11 @@ export const ChordProgressionsSection: React.FunctionComponent<SectionProps> = p
       Large jumps in the bass voice (the lowest notes) of chords are sometimes acceptable, as they are more pleasing to the ear than large jumps with other chord voices. The example below illustrates this: both the V7 chord and the I chord are in root position, and the bass voice jumps down by a P5, but the chord progression still sounds good.
       <p style={{textAlign: "center"}}>
         <ChordTransitionDiagram
-          chord1Pitches={Chord.fromPitchAndFormulaString(new Pitch(PitchLetter.G, 0, 4), ChordType.Dom7.formulaString).pitches}
+          chord1Pitches={new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)).getPitches()}
           chord1Name="V7"
           chord2Pitches={[new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5), new Pitch(PitchLetter.E, 0, 5)]}
           chord2Name="I"
-          scaleType={ScaleType.Ionian}
-          scaleRootPitch={new Pitch(PitchLetter.C, 0, 4)} />
+          scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))} />
       </p>
     </NoteText>
     
@@ -1179,7 +1176,7 @@ export const ScalesAndModesSection: React.FunctionComponent<SectionProps> = prop
     <p>C Major scale formula: R, M2, M3, P4, P5, M6, M7</p>
 
     <p>Major scales often sound "happy" or "bright". Try playing the piano keyboard below to hear each note of the C major scale at the same time as the root note to internalize the sound of the major scale yourself.</p>
-    <p style={{ textAlign: "center" }}><PianoScaleDronePlayer scaleType={ScaleType.Ionian} rootPitch={new Pitch(PitchLetter.C, 0, 4)} style={pianoKeyboardStyle} /></p>
+    <p style={{ textAlign: "center" }}><PianoScaleDronePlayer scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))} style={pianoKeyboardStyle} /></p>
     
     <SubSectionTitle>Scale Degrees</SubSectionTitle>
     <p>Each note in a scale is sometimes called a <Term>scale degree</Term>, with the first note (the <Term>root note</Term>) called the 1st scale degree (C in C major), the next note above that called the 2nd scale degree (D in C major), the next note above that called the 3rd scale degree (E in C major), and so on.</p>
@@ -1187,7 +1184,7 @@ export const ScalesAndModesSection: React.FunctionComponent<SectionProps> = prop
     <p>The <Term>natural minor scale</Term> (commonly referred to simply as the <Term>minor scale</Term>) is another common scale with a "darker" sound. Relative to the major scale, the natural minor scale has the following formula: 1 2 b3 4 5 b6 b7, meaning the natural minor scale is a major scale with the 3rd, 6th, and 7th scale degrees flattened. So, a C natural minor scale is comprised of the notes C, D, Eb, F, G, Ab, Bb.</p>
     
     <p>Try playing the piano keyboard below to get a feel for the natural minor scale.</p>
-    <p style={{ textAlign: "center" }}><PianoScaleDronePlayer scaleType={ScaleType.Aeolian} rootPitch={new Pitch(PitchLetter.C, 0, 4)} style={pianoKeyboardStyle} /></p>
+    <p style={{ textAlign: "center" }}><PianoScaleDronePlayer scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))} style={pianoKeyboardStyle} /></p>
 
     <SubSectionTitle>Modes</SubSectionTitle>
     <p>The <Term>modes</Term> of a scale are the different scales you get when you start on different notes of a "base" scale, and consider those starting notes the new <Term>root notes</Term>.</p>
@@ -1208,49 +1205,49 @@ export const ScalesAndModesSection: React.FunctionComponent<SectionProps> = prop
           <TableCell>C D E F G A B</TableCell>
           <TableCell>Ionian (a.k.a "Major")</TableCell>
           <TableCell>1 2 3 4 5 6 7</TableCell>
-          <TableCell><ScaleAudioPlayer scale={ScaleType.Ionian} rootPitch={defaultRootPitch} /></TableCell>
+          <TableCell><ScaleAudioPlayer scale={new Scale(ScaleType.Ionian, defaultRootPitch)} /></TableCell>
         </TableRow>
         <TableRow>
           <TableCell>D</TableCell>
           <TableCell>D E F G A B C</TableCell>
           <TableCell>Dorian</TableCell>
           <TableCell>1 2 b3 4 5 6 b7</TableCell>
-          <TableCell><ScaleAudioPlayer scale={ScaleType.Dorian} rootPitch={defaultRootPitch} /></TableCell>
+          <TableCell><ScaleAudioPlayer scale={new Scale(ScaleType.Ionian, defaultRootPitch)} /></TableCell>
         </TableRow>
         <TableRow>
           <TableCell>E</TableCell>
           <TableCell>E F G A B C D</TableCell>
           <TableCell>Phrygian</TableCell>
           <TableCell>1 b2 b3 4 5 b6 b7</TableCell>
-          <TableCell><ScaleAudioPlayer scale={ScaleType.Phrygian} rootPitch={defaultRootPitch} /></TableCell>
+          <TableCell><ScaleAudioPlayer scale={new Scale(ScaleType.Ionian, defaultRootPitch)} /></TableCell>
         </TableRow>
         <TableRow>
           <TableCell>F</TableCell>
           <TableCell>F G A B C D E</TableCell>
           <TableCell>Lydian</TableCell>
           <TableCell>1 2 3 #4 5 6 7</TableCell>
-          <TableCell><ScaleAudioPlayer scale={ScaleType.Lydian} rootPitch={defaultRootPitch} /></TableCell>
+          <TableCell><ScaleAudioPlayer scale={new Scale(ScaleType.Ionian, defaultRootPitch)} /></TableCell>
         </TableRow>
         <TableRow>
           <TableCell>G</TableCell>
           <TableCell>G A B C D E F</TableCell>
           <TableCell>Mixolydian</TableCell>
           <TableCell>1 2 3 4 5 6 b7</TableCell>
-          <TableCell><ScaleAudioPlayer scale={ScaleType.Mixolydian} rootPitch={defaultRootPitch} /></TableCell>
+          <TableCell><ScaleAudioPlayer scale={new Scale(ScaleType.Ionian, defaultRootPitch)} /></TableCell>
         </TableRow>
         <TableRow>
           <TableCell>A</TableCell>
           <TableCell>A B C D E F G</TableCell>
           <TableCell>Aeolian (a.k.a "Natural Minor")</TableCell>
           <TableCell>1 2 b3 4 5 b6 b7</TableCell>
-          <TableCell><ScaleAudioPlayer scale={ScaleType.Aeolian} rootPitch={defaultRootPitch} /></TableCell>
+          <TableCell><ScaleAudioPlayer scale={new Scale(ScaleType.Ionian, defaultRootPitch)} /></TableCell>
         </TableRow>
         <TableRow>
           <TableCell>B</TableCell>
           <TableCell>B C D E F G A</TableCell>
           <TableCell>Locrian</TableCell>
           <TableCell>1 b2 b3 4 b5 b6 b7</TableCell>
-          <TableCell><ScaleAudioPlayer scale={ScaleType.Locrian} rootPitch={defaultRootPitch} /></TableCell>
+          <TableCell><ScaleAudioPlayer scale={new Scale(ScaleType.Ionian, defaultRootPitch)} /></TableCell>
         </TableRow>
       </TableBody>
     </Table>
@@ -1305,7 +1302,7 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
           <TableCell>R, M3, P5</TableCell>
           <TableCell>1, 3, 5</TableCell>
           <TableCell>
-            <ChordAudioPlayer rootPitch={defaultRootPitch} chordType={ChordType.Major} />
+            <ChordAudioPlayer chord={new Chord(ChordType.Major, defaultRootPitch)} />
           </TableCell>
         </TableRow>
         <TableRow>
@@ -1315,7 +1312,7 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
           <TableCell>R, m3, P5</TableCell>
           <TableCell>1, b3, 5</TableCell>
           <TableCell>
-            <ChordAudioPlayer rootPitch={defaultRootPitch} chordType={ChordType.Minor} />
+            <ChordAudioPlayer chord={new Chord(ChordType.Minor, defaultRootPitch)} />
           </TableCell>
         </TableRow>
         <TableRow>
@@ -1325,7 +1322,7 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
           <TableCell>R, m3, d5</TableCell>
           <TableCell>1, b3, b5</TableCell>
           <TableCell>
-            <ChordAudioPlayer rootPitch={defaultRootPitch} chordType={ChordType.Diminished} />
+            <ChordAudioPlayer chord={new Chord(ChordType.Diminished, defaultRootPitch)} />
           </TableCell>
         </TableRow>
         <TableRow>
@@ -1335,7 +1332,7 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
           <TableCell>R, M3, A5</TableCell>
           <TableCell>1, #3, #5</TableCell>
           <TableCell>
-            <ChordAudioPlayer rootPitch={defaultRootPitch} chordType={ChordType.Augmented} />
+            <ChordAudioPlayer chord={new Chord(ChordType.Augmented, defaultRootPitch)} />
           </TableCell>
         </TableRow>
       </TableBody>
@@ -1383,7 +1380,7 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
           <TableCell>Major</TableCell>
           <TableCell>1, 3, 5, b7</TableCell>
           <TableCell>
-            <ChordAudioPlayer rootPitch={defaultRootPitch} chordType={ChordType.Dom7} />
+            <ChordAudioPlayer chord={new Chord(ChordType.Dom7, defaultRootPitch)} />
           </TableCell>
         </TableRow>
         <TableRow>
@@ -1394,7 +1391,7 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
           <TableCell>Major</TableCell>
           <TableCell>1, 3, 5, 7</TableCell>
           <TableCell>
-            <ChordAudioPlayer rootPitch={defaultRootPitch} chordType={ChordType.Maj7} />
+            <ChordAudioPlayer chord={new Chord(ChordType.Maj7, defaultRootPitch)} />
           </TableCell>
         </TableRow>
         <TableRow>
@@ -1405,7 +1402,7 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
           <TableCell>Minor</TableCell>
           <TableCell>1, b3, 5, b7</TableCell>
           <TableCell>
-            <ChordAudioPlayer rootPitch={defaultRootPitch} chordType={ChordType.Min7} />
+            <ChordAudioPlayer chord={new Chord(ChordType.Min7, defaultRootPitch)} />
           </TableCell>
         </TableRow>
         <TableRow>
@@ -1416,7 +1413,7 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
           <TableCell>Minor</TableCell>
           <TableCell>1, b3, 5, 7</TableCell>
           <TableCell>
-            <ChordAudioPlayer rootPitch={defaultRootPitch} chordType={ChordType.MinMaj7} />
+            <ChordAudioPlayer chord={new Chord(ChordType.MinMaj7, defaultRootPitch)} />
           </TableCell>
         </TableRow>
         <TableRow>
@@ -1427,7 +1424,7 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
           <TableCell>Diminished</TableCell>
           <TableCell>1, b3, b5, bb7</TableCell>
           <TableCell>
-            <ChordAudioPlayer rootPitch={defaultRootPitch} chordType={ChordType.Dim7} />
+            <ChordAudioPlayer chord={new Chord(ChordType.Dim7, defaultRootPitch)} />
           </TableCell>
         </TableRow>
         <TableRow>
@@ -1438,7 +1435,7 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
           <TableCell>Diminished</TableCell>
           <TableCell>1, b3, b5, b7</TableCell>
           <TableCell>
-            <ChordAudioPlayer rootPitch={defaultRootPitch} chordType={ChordType.HalfDim7} />
+            <ChordAudioPlayer chord={new Chord(ChordType.HalfDim7, defaultRootPitch)} />
           </TableCell>
         </TableRow>
         <TableRow>
@@ -1449,7 +1446,7 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
           <TableCell>Augmented</TableCell>
           <TableCell>1, #3, #5, b7</TableCell>
           <TableCell>
-            <ChordAudioPlayer rootPitch={defaultRootPitch} chordType={ChordType.Aug7} />
+            <ChordAudioPlayer chord={new Chord(ChordType.Aug7, defaultRootPitch)} />
           </TableCell>
         </TableRow>
         <TableRow>
@@ -1460,7 +1457,7 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
           <TableCell>Augmented</TableCell>
           <TableCell>1, #3, #5, 7</TableCell>
           <TableCell>
-            <ChordAudioPlayer rootPitch={defaultRootPitch} chordType={ChordType.AugMaj7} />
+            <ChordAudioPlayer chord={new Chord(ChordType.AugMaj7, defaultRootPitch)} />
           </TableCell>
         </TableRow>
       </TableBody>
@@ -1469,7 +1466,7 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
     <NoteText>Note that if you try to build a seventh chord with the root and 3 major thirds, you end up with an augmented triad with a repeated root an octave higher.</NoteText>
 
     <p>Use the interactive diagram below to explore the basic seventh chords:</p>
-    <ChordViewer title={"Seventh Chord Viewer"} chordTypeGroups={[new ChordTypeGroup("Seventh Chords", ChordType.SeventhChords)]} showGuitarFretboard={false} />
+    <ChordViewer title={"Seventh Chord Viewer"} chordTypeGroups={[new ChordTypeGroup("Seventh Chords", ChordType.SimpleSeventhChords)]} showGuitarFretboard={false} />
 
     <SubSectionTitle>Extended Chords &amp; Chord/Scale Relationships</SubSectionTitle>
     <p>You can continue to add 3rds to chords to form ninth chords (5 notes), eleventh chords (6 notes), and thirteenth (7 notes) chords. These chords are categorized as <Term>extended</Term> chords.</p>

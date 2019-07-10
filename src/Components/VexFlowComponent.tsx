@@ -18,7 +18,7 @@ export class VexFlowComponent extends React.Component<IVexFlowComponentProps, {}
       return;
     }
 
-    this.vexFlowRenderer = new Vex.Flow.Renderer(div, Vex.Flow.Renderer.Backends.SVG);
+    this.vexFlowRenderer = new Vex.Flow.Renderer(div, (Vex.Flow.Renderer as any).Backends.SVG);
     this.vexFlowRenderer.resize(this.props.width, this.props.height);
 
     this.vexFlowContext = this.vexFlowRenderer.getContext();

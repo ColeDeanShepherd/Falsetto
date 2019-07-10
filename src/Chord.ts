@@ -1,8 +1,13 @@
 import * as Utils from "./Utils";
 import { Pitch } from "./Pitch";
-import { VerticalDirection } from "./VerticalDirection";
-import { getIntervalsFromFormulaString } from './Scale';
+import { getIntervalsFromFormula, getSimpleScaleDegree } from './Scale';
 import { Interval } from './Interval';
+import { ChordScaleFormula } from './ChordScaleFormula';
+import { number } from 'prop-types';
+
+export function getSimpleChordNoteNumber(chordNoteNumber: number) {
+  return getSimpleScaleDegree(chordNoteNumber);
+}
 
 export class ChordTypeGroup {
   public constructor(
@@ -11,28 +16,14 @@ export class ChordTypeGroup {
   ) {}
 }
 export class ChordType {
-  public static Power = new ChordType("Power", [0, 7], "1 5", ["power"]);
-  public static Major = new ChordType("Major", [0, 4, 7], "1 3 5", ["M"]);
-  public static Minor = new ChordType("Minor", [0, 3, 7], "1 b3 5", ["m"]);
-  public static Augmented = new ChordType("Augmented", [0, 4, 8], "1 3 #5", ["+"]);
-  public static Diminished = new ChordType("Diminished", [0, 3, 6], "1 b3 b5", ["°"]);
-  
-  public static Sus2 = new ChordType("Sus2", [0, 2, 7], "1 2 5", ["sus2"]);
-  public static Sus4 = new ChordType("Sus4", [0, 5, 7], "1 4 5", ["sus4"]);
-  
-  public static Maj6 = new ChordType("Major 6th", [0, 4, 7, 9], "1 3 5 6", ["6"]);
-  public static Min6 = new ChordType("Minor 6th", [0, 3, 7, 9], "1 b3 5 6", ["m6"]);
+  // Triads
+  public static Major = new ChordType("Major", ChordScaleFormula.parse("1 3 5"), ["", "M", "maj", "Δ"]);
+  public static Minor = new ChordType("Minor", ChordScaleFormula.parse("1 b3 5"), ["m", "min", "-"]);
+  public static Augmented = new ChordType("Augmented", ChordScaleFormula.parse("1 3 #5"), ["+", "aug"]);
+  public static Diminished = new ChordType("Diminished", ChordScaleFormula.parse("1 b3 b5"), ["°", "dim"]);
 
-  public static Maj7 = new ChordType("Major 7th", [0, 4, 7, 11], "1 3 5 7", ["M7"]);
-  public static Dom7 = new ChordType("Dominant 7th", [0, 4, 7, 10], "1 3 5 b7", ["7"]);
-  public static MinMaj7 = new ChordType("Minor-Major 7th", [0, 3, 7, 11], "1 b3 5 7", ["mM7"]);
-  public static Min7 = new ChordType("Minor 7th", [0, 3, 7, 10], "1 b3 5 b7", ["m7"]);
-  public static HalfDim7 = new ChordType("Half-Diminished 7th", [0, 3, 6, 10], "1 b3 b5 b7", ["ø7"]);
-  public static Dim7 = new ChordType("Diminished 7th", [0, 3, 6, 9], "1 b3 b5 bb7", ["°7"]);
-  public static AugMaj7 = new ChordType("Augmented Major 7th", [0, 4, 8, 11], "1 3 #5 7", ["+M7"]);
-  public static Aug7 = new ChordType("Augmented 7th", [0, 4, 8, 10], "1 3 #5 b7", ["+7"]);
-  
-  public static Quartal = new ChordType("Quartal", [0, 5, 10], "1 4 b7", ["quartal"]);
+  public static Sus2 = new ChordType("sus2", ChordScaleFormula.parse("1 2 5"), ["sus2"]);
+  public static Sus4 = new ChordType("sus4", ChordScaleFormula.parse("1 4 5"), ["sus4", "sus"]);
 
   public static BasicTriads = [
     ChordType.Major,
@@ -40,55 +31,155 @@ export class ChordType {
     ChordType.Augmented,
     ChordType.Diminished
   ];
-  public static Triads = [
-    ChordType.Major,
-    ChordType.Minor,
-    ChordType.Augmented,
-    ChordType.Diminished,
-    ChordType.Sus2,
-    ChordType.Sus4
-  ];
+  public static Triads = new Array<ChordType>()
+    .concat(ChordType.BasicTriads)  
+    .concat([
+      ChordType.Sus2,
+      ChordType.Sus4
+    ]);
+
+  // Sixth Chords
+  public static Maj6 = new ChordType("Major 6th", ChordScaleFormula.parse("1 3 5 6"), ["6"]);
+  public static Min6 = new ChordType("Minor 6th", ChordScaleFormula.parse("1 b3 5 6"), ["m6"]);
+
   public static SixthChords = [
     ChordType.Maj6,
     ChordType.Min6
   ];
-  public static SeventhChords = [
+  
+  // Seventh Chords
+  public static Maj7 = new ChordType("Major 7th", ChordScaleFormula.parse("1 3 (5) 7"), ["M7"]);
+  public static Dom7 = new ChordType("Dominant 7th", ChordScaleFormula.parse("1 3 (5) b7"), ["7"]);
+  public static MinMaj7 = new ChordType("Minor-Major 7th", ChordScaleFormula.parse("1 b3 (5) 7"), ["mM7"]);
+  public static Min7 = new ChordType("Minor 7th", ChordScaleFormula.parse("1 b3 (5) b7"), ["m7"]);
+  public static DimMaj7 = new ChordType("Diminished Major 7th", ChordScaleFormula.parse("1 b3 b5 7"), ["dimMaj7"]);
+  public static HalfDim7 = new ChordType("Half-Diminished 7th", ChordScaleFormula.parse("1 b3 b5 b7"), ["ø7"]);
+  public static Dim7 = new ChordType("Diminished 7th", ChordScaleFormula.parse("1 b3 b5 bb7"), ["°7", "dim7"]);
+  public static AugMaj7 = new ChordType("Augmented Major 7th", ChordScaleFormula.parse("1 3 #5 7"), ["+M7"]);
+  public static Aug7 = new ChordType("Augmented 7th", ChordScaleFormula.parse("1 3 #5 b7"), ["+7"]);
+
+  public static SimpleSeventhChords = [
     ChordType.Maj7,
     ChordType.Dom7,
     ChordType.MinMaj7,
     ChordType.Min7,
+    ChordType.DimMaj7,
     ChordType.HalfDim7,
     ChordType.Dim7,
     ChordType.AugMaj7,
-    ChordType.Aug7
+    ChordType.Aug7,
   ];
-  public static OtherChords = [
-    ChordType.Power,
-    ChordType.Quartal
+  
+  // Ninth Chords
+  public static Maj9 = new ChordType("Major 9th", ChordScaleFormula.parse("1 9 3 (5) 7"), ["M9"]);
+  public static Dom9 = new ChordType("Dominant 9th", ChordScaleFormula.parse("1 9 3 (5) b7"), ["9"]);
+  public static MinMaj9 = new ChordType("Minor-Major 9th", ChordScaleFormula.parse("1 9 b3 (5) 7"), ["mM9"]);
+  public static Min9 = new ChordType("Minor 9th", ChordScaleFormula.parse("1 9 b3 (5) b7"), ["m9"]);
+  public static DimMaj9 = new ChordType("Diminished Major 9th", ChordScaleFormula.parse("1 9 b3 b5 7"), ["dimMaj9"]);
+  public static HalfDim9 = new ChordType("Half-Diminished 9th", ChordScaleFormula.parse("1 9 b3 b5 b7"), ["ø9"]);
+  public static Dim9 = new ChordType("Diminished 9th", ChordScaleFormula.parse("1 9 b3 b5 bb7"), ["°9", "dim9"]);
+  public static AugMaj9 = new ChordType("Augmented Major 9th", ChordScaleFormula.parse("1 9 3 #5 7"), ["+M9"]);
+  public static Aug9 = new ChordType("Augmented 9th", ChordScaleFormula.parse("1 9 3 #5 b7"), ["+9"]);
+
+  public static SimpleNinthChords = [
+    ChordType.Maj9,
+    ChordType.Dom9,
+    ChordType.MinMaj9,
+    ChordType.Min9,
+    ChordType.DimMaj9,
+    ChordType.HalfDim9,
+    ChordType.Dim9,
+    ChordType.AugMaj9,
+    ChordType.Aug9
+  ];
+  
+  // Eleventh Chords
+  public static Maj11 = new ChordType("Major 11th", ChordScaleFormula.parse("1 (9) (3) 11 (5) 7"), ["M11"]);
+  public static Dom11 = new ChordType("Dominant 11th", ChordScaleFormula.parse("1 (9) (3) 11 (5) b7"), ["11"]);
+  public static MinMaj11 = new ChordType("Minor-Major 11th", ChordScaleFormula.parse("1 (9) b3 11 (5) 7"), ["mM11"]);
+  public static Min11 = new ChordType("Minor 11th", ChordScaleFormula.parse("1 (9) b3 11 (5) b7"), ["m11"]);
+  public static DimMaj11 = new ChordType("Diminished Major 11th", ChordScaleFormula.parse("1 (9) b3 11 b5 7"), ["dimMaj11"]);
+  public static AugMaj11 = new ChordType("Augmented Major 11th", ChordScaleFormula.parse("1 (9) (3) 11 #5 7"), ["+M11"]);
+  public static Aug11 = new ChordType("Augmented 11th", ChordScaleFormula.parse("1 (9) (3) 11 #5 b7"), ["+11"]);
+  public static HalfDim11 = new ChordType("Half-Diminished 11th", ChordScaleFormula.parse("1 (9) b3 11 b5 b7"), ["ø11"]);
+  public static Dim11 = new ChordType("Diminished 11th", ChordScaleFormula.parse("1 (9) b3 11 b5 bb7"), ["°11", "dim11"]);
+
+  public static SimpleEleventhChords = [
+    ChordType.Maj11,
+    ChordType.Dom11,
+    ChordType.MinMaj11,
+    ChordType.Min11,
+    ChordType.DimMaj11,
+    ChordType.AugMaj11,
+    ChordType.Aug11,
+    ChordType.HalfDim11,
+    ChordType.Dim11
+  ];
+  
+  // Thirteenth Chords
+  public static Maj13 = new ChordType("Major 13th", ChordScaleFormula.parse("1 (9) 3 (11) (5) 13 7"), ["M13"]);
+  public static Dom13 = new ChordType("Dominant 13th", ChordScaleFormula.parse("1 (9) 3 (11) (5) 13 b7"), ["13"]);
+  public static MinMaj13 = new ChordType("Minor-Major 13th", ChordScaleFormula.parse("1 (9) b3 (11) (5) 13 7"), ["mM13"]);
+  public static Min13 = new ChordType("Minor 13th", ChordScaleFormula.parse("1 (9) b3 (11) (5) 13 b7"), ["m13"]);
+  public static DimMaj13 = new ChordType("Diminished Major 13th", ChordScaleFormula.parse("1 (9) b3 (11) b5 13 7"), ["dimMaj13"]);
+  public static AugMaj13 = new ChordType("Augmented Major 13th", ChordScaleFormula.parse("1 (9) 3 (11) #5 13 7"), ["+M13"]);
+  public static Aug13 = new ChordType("Augmented 13th", ChordScaleFormula.parse("1 (9) 3 (11) #5 13 b7"), ["+13"]);
+  public static HalfDim13 = new ChordType("Half-Diminished 13th", ChordScaleFormula.parse("1 (9) b3 (11) b5 13 b7"), ["ø13"]);
+
+  public static SimpleThirteenthChords = [
+    ChordType.Maj13,
+    ChordType.Dom13,
+    ChordType.MinMaj13,
+    ChordType.Min13,
+    ChordType.DimMaj13,
+    ChordType.AugMaj13,
+    ChordType.Aug13,
+    ChordType.HalfDim13,
   ];
 
+  // Other Chords
+  public static Power = new ChordType("Power", ChordScaleFormula.parse("1 5"), [" power"]);
+  public static QuartalTriad = new ChordType("Quartal", ChordScaleFormula.parse("1 4 b7"), ["quartal"]);
+  public static Quartal4Notes = new ChordType("Quartal", ChordScaleFormula.parse("1 b3 4 b7"), ["quartal"]);
+    
+  public static OtherChords = [
+    ChordType.Power,
+    ChordType.QuartalTriad
+  ];
+
+  // All Chords
   public static Groups = [
     new ChordTypeGroup("Triads", ChordType.Triads),
     new ChordTypeGroup("Sixth Chords", ChordType.SixthChords),
-    new ChordTypeGroup("Seventh Chords", ChordType.SeventhChords),
+    new ChordTypeGroup("Seventh Chords", ChordType.SimpleSeventhChords),
+    new ChordTypeGroup("Ninth Chords", ChordType.SimpleNinthChords),
+    new ChordTypeGroup("Eleventh Chords", ChordType.SimpleEleventhChords),
+    new ChordTypeGroup("Thirteenth Chords", ChordType.SimpleThirteenthChords),
     new ChordTypeGroup("Other Chords", ChordType.OtherChords)
   ];
 
   public static All = Utils.flattenArrays<ChordType>(
     ChordType.Groups.map(ct => ct.chordTypes)
-  );
+  ).concat(ChordType.Quartal4Notes);
+  public static AllByNumNotesDescending = ChordType.All
+    .slice()
+    .sort((a, b) => (a.pitchCount > b.pitchCount) ? -1 : 1);
+
+  public pitchIntegers: Array<number>;
 
   public constructor(
     public name: string,
-    public pitchIntegers: Array<number>,
-    public formulaString: string,
-    public symbols: Array<string>) {}
+    public formula: ChordScaleFormula,
+    public symbols: Array<string>
+  ) {
+    this.pitchIntegers = this.formula.parts.map(p => p.pitchInteger);
+  }
   
   public get isMajorType(): boolean {
     return !this.isMinorType;
   }
   public get isMinorType(): boolean {
-    return Utils.stringContains(this.formulaString, "b3");
+    return this.formula.parts.some(p => (p.chordNoteNumber === 3) && (p.signedAccidental === -1));
   }
   
   public get pitchCount(): number {
@@ -112,33 +203,77 @@ export class ChordType {
   }
   
   public getPitches(rootPitch: Pitch): Array<Pitch> {
-    return Chord.fromPitchAndFormulaString(rootPitch, this.formulaString).pitches;
+    return this.formula.getPitches(rootPitch);
   }
   public getIntervals(): Array<Interval> {
-    return getIntervalsFromFormulaString(this.formulaString);
+    return getIntervalsFromFormula(this.formula);
+  }
+
+  public matchPitchIntegers(pitchIntegers: Set<number>): Array<string> | null {
+    const requiredPitchIntegers = new Set<number>(this.formula.parts
+      .filter(p => !p.isOptional)
+      .map(p => p.pitchInteger));
+    
+    let remainingPitchIntegers = Utils.setDifference(pitchIntegers, requiredPitchIntegers);
+    if (remainingPitchIntegers.size !== (pitchIntegers.size - requiredPitchIntegers.size)) { return null; }
+
+    const optionalPitchIntegers = new Set<number>(this.formula.parts
+      .filter(p => p.isOptional)
+      .map(p => p.pitchInteger));
+    remainingPitchIntegers = Utils.setDifference(remainingPitchIntegers, optionalPitchIntegers);
+
+    return (remainingPitchIntegers.size === 0) ? [] : null;
+
+    // TODO: add support for alterations.
+    /*const alterations = new Array<string>();
+
+    const extension = Utils.arrayMax(this.formula.parts.map(p => p.chordNoteNumber));
+    
+    for (const pi of remainingPitchIntegers) {
+      switch (pi) {
+        case 1:
+          alterations.push("addb9");
+          break;
+        case 2:
+          alterations.push("add9");
+          break;
+        case 3:
+          alterations.push("add#9");
+          break;
+        case 5:
+          alterations.push("add11");
+          break;
+        case 6:
+          alterations.push("add#11");
+          break;
+        case 8:
+          alterations.push("addb13");
+          break;
+        case 9:
+          alterations.push("add13");
+          break;
+        case 10:
+          alterations.push("add#13");
+          break;
+        default:
+          return null;
+      }
+    }
+    
+    return alterations;*/
   }
 }
 
 export class Chord {
-  public static fromPitchAndFormulaString(pitch: Pitch, formulaString: string): Chord {
-    Utils.precondition(!Utils.isNullOrWhiteSpace(formulaString));
+  public constructor(
+    public type: ChordType,
+    public rootPitch: Pitch
+  ) {}
 
-    const intervals = getIntervalsFromFormulaString(formulaString);
-
-    const pitches = intervals
-      .map(interval => Pitch.addInterval(pitch, VerticalDirection.Up, interval));
-    return new Chord(pitches);
+  public getSymbol(): string {
+    return `${this.rootPitch.toString(false)}${this.type.symbols[0]}`;
   }
-  public constructor(public pitches: Array<Pitch>) {
-    Utils.invariant(this.pitches.length > 1);
-  }
-
-  public equals(other: Chord): boolean {
-    return Utils.areArraysEqualComparer(this.pitches, other.pitches, (a, b) => a.equals(b));
-  }
-  public toPitchString(): string {
-    return this.pitches
-      .map(p => p.toString(false))
-      .join(" ");
+  public getPitches(): Array<Pitch> {
+    return this.type.formula.getPitches(this.rootPitch);
   }
 }

@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import * as Utils from "../Utils";
-import { ScaleType } from '../Scale';
+import { Scale } from '../Scale';
 import { Pitch } from '../Pitch';
 import { playPitches } from '../Piano';
 import { Rect2D } from '../Rect2D';
@@ -11,15 +11,15 @@ import { PitchLetter } from '../PitchLetter';
 import { renderPianoKeyboardNoteNames, PianoKeyboard, PianoKeyboardMetrics } from './PianoKeyboard';
 import { doesKeyUseSharps } from '../Key';
 
-export function onKeyPress(scaleType: ScaleType, rootPitch: Pitch, keyPitch: Pitch) {
-  const pitches = scaleType.getPitches(rootPitch);
+export function onKeyPress(scale: Scale, keyPitch: Pitch) {
+  const pitches = scale.getPitches();
   const pitchMidiNumberNoOctaves = pitches.map(p => p.midiNumberNoOctave);
 
   if (Utils.arrayContains(pitchMidiNumberNoOctaves, keyPitch.midiNumberNoOctave)) {
-    if (keyPitch.midiNumber === rootPitch.midiNumber) {
-      playPitches([rootPitch]);
+    if (keyPitch.midiNumber === scale.rootPitch.midiNumber) {
+      playPitches([scale.rootPitch]);
     } else {
-      playPitches([rootPitch, keyPitch]);
+      playPitches([scale.rootPitch, keyPitch]);
     }
   }
 }
@@ -29,8 +29,8 @@ export function renderExtrasFn(metrics: PianoKeyboardMetrics, pitches: Array<Pit
   return renderPianoKeyboardNoteNames(metrics, doesKeyUseSharps(rootPitch.letter, rootPitch.signedAccidental), p => Utils.arrayContains(pitchMidiNumberNoOctaves, p.midiNumberNoOctave));
 }
 
-export const PianoScaleDronePlayer: React.FunctionComponent<{ scaleType: ScaleType, rootPitch: Pitch, style?: any }> = props => {
-  const pitches = props.scaleType.getPitches(props.rootPitch);
+export const PianoScaleDronePlayer: React.FunctionComponent<{ scale: Scale, style?: any }> = props => {
+  const pitches = props.scale.getPitches();
 
   return (
     <PianoKeyboard
@@ -38,8 +38,8 @@ export const PianoScaleDronePlayer: React.FunctionComponent<{ scaleType: ScaleTy
       lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
       highestPitch={new Pitch(PitchLetter.C, 0, 5)}
       pressedPitches={[]}
-      renderExtrasFn={metrics => renderExtrasFn(metrics, pitches, props.rootPitch)}
-      onKeyPress={pitch => onKeyPress(props.scaleType, props.rootPitch, pitch)}
+      renderExtrasFn={metrics => renderExtrasFn(metrics, pitches, props.scale.rootPitch)}
+      onKeyPress={pitch => onKeyPress(props.scale, pitch)}
       style={props.style} />
   );
 };

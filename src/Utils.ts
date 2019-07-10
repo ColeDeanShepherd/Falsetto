@@ -1,4 +1,6 @@
 import { Size2D } from './Size2D';
+import { Rect2D } from './Rect2D';
+import { Vector2D } from './Vector2D';
 
 export function identity<T>(value: T): T {
   return value;
@@ -50,7 +52,7 @@ export function reverseString(str: string): string {
 
 // TODO: add tests
 export function reverseInt(x: number): number {
-  return parseInt(reverseString(x.toString()));
+  return parseInt(reverseString(x.toString()), 10);
 }
 
 // TODO: add tests
@@ -185,6 +187,22 @@ export function min<T>(array: Array<T>, callbackFn: (value: T) => number): numbe
 // TODO: add tests
 export function uniq<T>(array: Array<T>) {
   return array.filter((x, index) => array.indexOf(x) === index);
+}
+
+// TODO: add tests
+export function uniqWithSelector<T, R>(array: Array<T>, selector: (e: T) => R) {
+  const result = new Array<T>();
+  const selectors = new Array<R>();
+
+  for (const e of array) {
+    const s = selector(e);
+    if (!arrayContains(selectors, s)) {
+      result.push(e);
+      selectors.push(s);
+    }
+  }
+
+  return result;
 }
 
 // TODO: add tests
@@ -338,6 +356,12 @@ export function arrayContains<T>(array: T[], element: T): boolean {
   return array.indexOf(element) >= 0;
 }
 
+export function newArraySplice<T>(array: T[], start: number, deleteCount: number, ...items: T[]): T[] {
+  const newArray = array.slice();
+  newArray.splice(start, deleteCount, ...items);
+  return newArray;
+}
+
 // TODO: add tests
 export function getRomanNumerals(x: number): string {
   switch (x) {
@@ -438,6 +462,16 @@ export function takeCharsWhile(
   return str.substring(startIndex, endIndexExclusive);
 }
 
+export function growRectAroundCenter(rect: Rect2D, growUnits: number): Rect2D {
+  growUnits = Math.max(growUnits, -Math.min(rect.size.width, rect.size.height));
+  const halfGrowUnits = growUnits / 2;
+
+  return new Rect2D(
+    new Size2D(rect.size.width + growUnits, rect.size.height + growUnits),
+    new Vector2D(rect.position.x - halfGrowUnits, rect.position.y - halfGrowUnits)
+  );
+}
+
 // TODO: add tests
 export function shrinkRectToFit(containerSize: Size2D, rectSize: Size2D): Size2D {
   // try to reduce width and see if height fits
@@ -464,4 +498,46 @@ export function shrinkRectToFit(containerSize: Size2D, rectSize: Size2D): Size2D
   
   // If we get here, the rect doesn't need to be resized.
   return rectSize;
+}
+
+export function isSuperset<T>(a: Set<T>, b: Set<T>): boolean {
+  for (const e of b) {
+    if (!a.has(e)) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+export function setDifference<T>(a: Set<T>, b: Set<T>): Set<T> {
+  const difference = new Set<T>(a);
+
+  for (const e of b) {
+    difference.delete(e);
+  }
+
+  return difference;
+}
+
+export function mapSet<T, R>(set: Set<T>, selector: (t: T) => R): Array<R> {
+  const result = new Array<R>(set.size);
+
+  for (const e of set) {
+    result.push(selector(e));
+  }
+
+  return result;
+}
+
+export function mapFilter<T>(set: Set<T>, predicate: (t: T) => boolean): Array<T> {
+  const result = new Array<T>();
+
+  for (const e of set) {
+    if (predicate(e)) {
+      result.push(e);
+    }
+  }
+
+  return result;
 }

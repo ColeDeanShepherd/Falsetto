@@ -6,7 +6,7 @@ import { PitchLetter } from "../PitchLetter";
 import { Size2D } from '../Size2D';
 import { Rect2D } from '../Rect2D';
 import { Vector2D } from '../Vector2D';
-import { ScaleType } from '../Scale';
+import { ScaleType, Scale } from '../Scale';
 import { ChordType, Chord } from '../Chord';
 import { GuitarNote } from '../GuitarNote';
 
@@ -68,12 +68,12 @@ export function getStandardGuitarTuning(stringCount: number): GuitarTuning {
   }
 }
 
-export function generateGuitarScaleTextDiagram(scaleType: ScaleType, rootPitch: Pitch, stringCount: number): string {
+export function generateGuitarScaleTextDiagram(scale: Scale, stringCount: number): string {
   const minFretNumber = 1;
   const maxFretNumber = 17;
   const tuning = getStandardGuitarTuning(stringCount);
-  const pitches = scaleType.getPitches(rootPitch);
-  const guitarNotes = getPreferredGuitarScaleShape(scaleType, rootPitch, tuning);
+  const pitches = scale.getPitches();
+  const guitarNotes = getPreferredGuitarScaleShape(scale, tuning);
   
   let diagram = "";
 
@@ -111,9 +111,9 @@ export function generateGuitarScaleTextDiagram(scaleType: ScaleType, rootPitch: 
 }
 
 export function getPreferredGuitarScaleShape(
-  scaleType: ScaleType, rootPitch: Pitch, tuning: GuitarTuning
+  scale: Scale, tuning: GuitarTuning
 ) {
-  const scaleShapes = findGuitarScaleShapes(scaleType, rootPitch, tuning);
+  const scaleShapes = findGuitarScaleShapes(scale, tuning);
   scaleShapes.sort((shape1, shape2) => {
     // sort by fret range
     const shape1FretNumbers = shape1.map(gn => gn.getFretNumber(tuning));
@@ -168,9 +168,10 @@ class GuitarScaleShapeFinderState {
   }
 }
 export function findGuitarScaleShapes(
-  scaleType: ScaleType, rootPitch: Pitch, tuning: GuitarTuning): Array<Array<GuitarNote>> {
-    const { minNotesPerString, maxNotesPerString } = getPreferredNumNotesPerStringRange(scaleType);
-    const scalePitches = scaleType.getPitches(rootPitch);
+  scale: Scale, tuning: GuitarTuning
+): Array<Array<GuitarNote>> {
+    const { minNotesPerString, maxNotesPerString } = getPreferredNumNotesPerStringRange(scale.type);
+    const scalePitches = scale.getPitches();
 
     const state = new GuitarScaleShapeFinderState();
     const outShapes = new Array<Array<GuitarNote>>();
@@ -264,13 +265,13 @@ export function getPreferredNumNotesPerStringRange(scaleType: ScaleType): ({ min
 }
 
 export function findGuitarChordShape(
-  chordType: ChordType, rootPitch: Pitch, inversion: number, firstStringIndex: number,
+  chord: Chord, inversion: number, firstStringIndex: number,
   tuning: GuitarTuning
 ): Array<GuitarNote> {
-  Utils.precondition((inversion >= 0) && (inversion < chordType.pitchCount));
+  Utils.precondition((inversion >= 0) && (inversion < chord.type.pitchCount));
   Utils.precondition((firstStringIndex >= 0) && (firstStringIndex < tuning.stringCount));
 
-  const pitches = Chord.fromPitchAndFormulaString(rootPitch, chordType.formulaString).pitches;
+  const pitches = chord.getPitches();
 
   let guitarNotes = new Array<GuitarNote>();
 
@@ -408,19 +409,19 @@ export function renderGuitarNoteHighlightsAndNoteNames(
   );
 }
 export function renderGuitarFretboardScaleExtras(
-  metrics: GuitarFretboardMetrics, rootPitch: Pitch, scaleType: ScaleType,
+  metrics: GuitarFretboardMetrics, scale: Scale,
   renderAllScaleShapes: boolean = false
 ): JSX.Element {
   const tuning = getStandardGuitarTuning(metrics.stringCount);
-  const pitches = scaleType.getPitches(rootPitch);
+  const pitches = scale.getPitches();
   const guitarNotes = renderAllScaleShapes
     ? (
       GuitarNote.allNotesOfPitches(
         tuning, pitches, 0, metrics.fretCount
       )
     )
-    : getPreferredGuitarScaleShape(scaleType, rootPitch, tuning);
-  const formulaStringParts = scaleType.formulaString.split(" ");
+    : getPreferredGuitarScaleShape(scale, tuning);
+  const formulaStringParts = scale.type.formula.parts.map(p => p.toString());
 
   const rootPitchFretDots = guitarNotes
     .map((guitarNote, _) => {
@@ -472,12 +473,12 @@ export function renderGuitarFretboardScaleExtras(
   );
 }
 export function renderGuitarFretboardChordExtras(
-  metrics: GuitarFretboardMetrics, rootPitch: Pitch, chordType: ChordType
+  metrics: GuitarFretboardMetrics, chord: Chord
 ): JSX.Element {
   const tuning = getStandardGuitarTuning(metrics.stringCount);
-  const pitches = chordType.getPitches(rootPitch);
-  const guitarNotes = findGuitarChordShape(chordType, rootPitch, 1, 0, tuning);
-  const formulaStringParts = chordType.formulaString.split(" ");
+  const pitches = chord.type.getPitches(chord.rootPitch);
+  const guitarNotes = findGuitarChordShape(chord, 1, 0, tuning);
+  const formulaStringParts = chord.type.formula.parts.map(p => p.toString());
 
   const rootPitchFretDots = guitarNotes
     .map((guitarNote, _) => {

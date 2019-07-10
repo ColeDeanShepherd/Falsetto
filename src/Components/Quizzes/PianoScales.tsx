@@ -7,7 +7,6 @@ import { Size2D } from "../../Size2D";
 import { Rect2D } from '../../Rect2D';
 import { Pitch } from "../../Pitch";
 import { PitchLetter } from "../../PitchLetter";
-import { Chord } from "../../Chord";
 import { ScaleType } from "../../Scale";
 import { PianoKeyboard } from "../PianoKeyboard";
 import { FlashCard, FlashCardSide } from "../../FlashCard";
@@ -15,6 +14,7 @@ import { FlashCardGroup } from "../../FlashCardGroup";
 import { AnswerDifficulty } from "../../StudyAlgorithm";
 import { PianoKeysAnswerSelect } from "../PianoKeysAnswerSelect";
 import { ScaleAnswerSelect } from "../ScaleAnswerSelect";
+import { ChordScaleFormula, ChordScaleFormulaPart } from '../../ChordScaleFormula';
 
 const rootPitchStrs = ["Ab", "A", "Bb", "B/Cb", "C", "C#/Db", "D", "Eb", "E", "F", "F#/Gb", "G"];
 
@@ -187,12 +187,10 @@ export function createFlashCardGroup(): FlashCardGroup {
 export function createFlashCards(): FlashCard[] {
   return Utils.flattenArrays<FlashCard>(
     rootPitchStrs.map((rootPitchStr, i) =>
-      ScaleType.All.map(scale => {
+      ScaleType.All.map(scaleType => {
         const halfStepsFromC = Utils.mod(i - 4, 12);
         const rootPitch = Pitch.createFromMidiNumber((new Pitch(PitchLetter.C, 0, 4)).midiNumber + halfStepsFromC);
-        const formulaString = scale.formulaString + " 8";
-        const pitches = Chord.fromPitchAndFormulaString(rootPitch, formulaString)
-          .pitches;
+        const pitches = new ChordScaleFormula(scaleType.formula.parts.concat(new ChordScaleFormulaPart(8, 0, false))).getPitches(rootPitch);
 
         return new FlashCard(
           new FlashCardSide(
@@ -210,7 +208,7 @@ export function createFlashCards(): FlashCard[] {
             },
             pitches
           ),
-          new FlashCardSide(rootPitchStr + " " + scale.name)
+          new FlashCardSide(rootPitchStr + " " + scaleType.name)
         );
       })
     )

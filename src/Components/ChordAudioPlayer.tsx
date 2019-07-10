@@ -1,20 +1,14 @@
 import * as React from "react";
-
-import { Pitch } from '../Pitch';
-import { Chord, ChordType } from '../Chord';
+import { Chord, } from '../Chord';
 import { PitchesAudioPlayer, PitchesAudioPlayerExports } from './PitchesAudioPlayer';
 
 export interface IChordAudioPlayerProps {
-  chordType: ChordType;
-  rootPitch: Pitch;
+  chord: Chord;
   onGetExports?: (exports: PitchesAudioPlayerExports) => void;
 }
 export class ChordAudioPlayer extends React.Component<IChordAudioPlayerProps, {}> {
   public render(): JSX.Element {
-    const pitches = Chord.fromPitchAndFormulaString(
-      this.props.rootPitch, this.props.chordType.formulaString
-    ).pitches;
-
+    const pitches = this.props.chord.getPitches();
     return <PitchesAudioPlayer pitches={pitches} playSequentially={false} />;
   }
 }

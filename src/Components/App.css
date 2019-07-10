@@ -66,6 +66,10 @@ sup {
   user-select: none;
 }
 
+.pass-through-click {
+  pointer-events: none;
+}
+
 /* Mobile */
 @media (max-width: 800px) {
   .hide-on-mobile {

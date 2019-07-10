@@ -48,9 +48,8 @@ interface IChordViewerProps {
   isEmbedded?: boolean;
 }
 interface IChordViewerState {
-  rootPitch: Pitch;
   chordTypeGroup: ChordTypeGroup;
-  chordType: ChordType;
+  chord: Chord;
 }
 
 export class ChordViewer extends React.Component<IChordViewerProps, IChordViewerState> {
@@ -58,9 +57,8 @@ export class ChordViewer extends React.Component<IChordViewerProps, IChordViewer
     super(props);
 
     this.state = {
-      rootPitch: new Pitch(PitchLetter.C, 0, 4),
       chordTypeGroup: this.chordTypeGroups[0],
-      chordType: this.chordTypeGroups[0].chordTypes[0]
+      chord: new Chord(this.chordTypeGroups[0].chordTypes[0], new Pitch(PitchLetter.C, 0, 4))
     };
   }
 
@@ -69,16 +67,12 @@ export class ChordViewer extends React.Component<IChordViewerProps, IChordViewer
       ? this.props.title
       : "Chord Viewer";
       
-    const pitches = Chord.fromPitchAndFormulaString(
-      this.state.rootPitch,
-      this.state.chordType.formulaString
-    )
-      .pitches;
+    const pitches = this.state.chord.getPitches();
     const pitchStrings = pitches
       .map(pitch => pitch.toString(false));
     const pitchesString = pitchStrings.join(", ");
 
-    const intervals = this.state.chordType.getIntervals();
+    const intervals = this.state.chord.type.getIntervals();
     const intervalStrings = intervals
       .map((interval, i) => (i === 0) ? "R" : interval.toString());
     const intervalsString = intervalStrings.join(", ");
@@ -101,9 +95,9 @@ export class ChordViewer extends React.Component<IChordViewerProps, IChordViewer
       : true;
 
     const guitarRootPitch = new Pitch(
-      this.state.rootPitch.letter,
-      this.state.rootPitch.signedAccidental,
-      this.state.rootPitch.octaveNumber - 2
+      this.state.chord.rootPitch.letter,
+      this.state.chord.rootPitch.signedAccidental,
+      this.state.chord.rootPitch.octaveNumber - 2
     );
     
     const baseButtonStyle: any = { textTransform: "none" };
@@ -156,7 +150,7 @@ export class ChordViewer extends React.Component<IChordViewerProps, IChordViewer
               {this.state.chordTypeGroup.chordTypes.map(chordType => {
                 const style: any = { ...baseButtonStyle };
                 
-                const isPressed = chordType.name === this.state.chordType.name;
+                const isPressed = chordType.name === this.state.chord.type.name;
                 if (isPressed) {
                   style.backgroundColor = "#959595";
                 }
@@ -174,9 +168,9 @@ export class ChordViewer extends React.Component<IChordViewerProps, IChordViewer
               })}
             </div>
             <div style={{fontSize: "1.5em"}}>
-              <p>{this.state.rootPitch.toString(false)} {this.state.chordType.name}</p>
+              <p>{this.state.chord.rootPitch.toString(false)} {this.state.chord.type.name}</p>
               <p>{pitchesString}</p>
-              <p>{this.state.chordType.formulaString}</p>
+              <p>{this.state.chord.type.formula.toString()}</p>
               <p>{intervalsString}</p>
             </div>
 
@@ -198,7 +192,7 @@ export class ChordViewer extends React.Component<IChordViewerProps, IChordViewer
                   lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
                   highestPitch={new Pitch(PitchLetter.B, 0, 5)}
                   onKeyPress={onKeyPress}
-                  renderExtrasFn={metrics => PianoScaleDronePlayer.renderExtrasFn(metrics, pitches, this.state.rootPitch)}
+                  renderExtrasFn={metrics => PianoScaleDronePlayer.renderExtrasFn(metrics, pitches, this.state.chord.rootPitch)}
                   style={pianoGuitarStyle}
                 />
               </div>
@@ -206,7 +200,7 @@ export class ChordViewer extends React.Component<IChordViewerProps, IChordViewer
               <div style={{marginTop: "1em"}}>
                 {(showGuitarFretboard) ? (
                   <GuitarChordViewer
-                    chordType={this.state.chordType}
+                    chordType={this.state.chord.type}
                     rootPitch={guitarRootPitch}
                     size={guitarSize} />
                 ) : null}
@@ -229,7 +223,7 @@ export class ChordViewer extends React.Component<IChordViewerProps, IChordViewer
         {rootPitches.map(pitch => {
           const style: any = { textTransform: "none" };
           
-          const isPressed = pitch && (pitch.equals(this.state.rootPitch));
+          const isPressed = pitch && (pitch.equals(this.state.chord.rootPitch));
           if (isPressed) {
             style.backgroundColor = "#959595";
           }
@@ -258,13 +252,15 @@ export class ChordViewer extends React.Component<IChordViewerProps, IChordViewer
   }
 
   private onRootPitchClick(rootPitch: Pitch) {
-    this.setState({ rootPitch: rootPitch }, this.onChordChange.bind(this));
+    const newChord = new Chord(this.state.chord.type, rootPitch);
+    this.setState({ chord: newChord }, this.onChordChange.bind(this));
   }
   private onChordTypeGroupClick(chordTypeGroup: ChordTypeGroup) {
     this.setState({ chordTypeGroup: chordTypeGroup }, this.onChordChange.bind(this));
   }
   private onChordType(chordType: ChordType) {
-    this.setState({ chordType: chordType }, this.onChordChange.bind(this));
+    const newChord = new Chord(chordType, this.state.chord.rootPitch);
+    this.setState({ chord: newChord }, this.onChordChange.bind(this));
   }
 
   private onChordChange() {
@@ -282,11 +278,6 @@ export class ChordViewer extends React.Component<IChordViewerProps, IChordViewer
       this.playAudioCancelFn = null;
     }
 
-    let pitches = Chord.fromPitchAndFormulaString(
-      this.state.rootPitch,
-      this.state.chordType.formulaString
-    ).pitches;
-
-    playPitches(pitches);
+    playPitches(this.state.chord.getPitches());
   }
 }

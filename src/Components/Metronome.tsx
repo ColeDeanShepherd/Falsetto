@@ -122,7 +122,7 @@ export class Metronome extends React.Component<IMetronomeProps, IMetronomeState>
     return (
       <div>
         {this.renderTempoText(this.state.bpm)}
-        <input type="range" min={this.MIN_BPM} max={this.MAX_BPM} value={this.state.bpm} onChange={e => this.onBpmChange(parseInt(e.target.value))} style={this.SLIDER_STYLE} />
+        <input type="range" min={this.MIN_BPM} max={this.MAX_BPM} value={this.state.bpm} onChange={e => this.onBpmChange(parseInt(e.target.value, 10))} style={this.SLIDER_STYLE} />
         <div>
           {!this.state.isPlaying ? (
             <Button variant="contained" onClick={e => this.play()} disabled={this.state.isLoadingSounds}>

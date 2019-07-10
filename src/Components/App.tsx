@@ -63,15 +63,17 @@ import { GuitarNotesLesson } from "./GuitarNotesLesson";
 import { GuitarScalesLesson } from "./GuitarScalesLesson";
 import { ScaleViewer } from "./ScaleViewer";
 import { ChordViewer } from "./ChordViewer";
+import { IntervalChordScaleFinder } from "./IntervalChordScaleFinder";
 import { RhythmTapper } from "./RhythmTapper";
 import { FlashCardGroup } from "../FlashCardGroup";
 import { createStudyFlashCardGroupComponent } from "./StudyFlashCards";
-import * as TheJazzPianoSiteOverview from "./Quizzes/TheJazzPianoSite/TheBasics/Overview"
 import { AboutPage } from "./AboutPage";
 import { SupportUsPage } from "./SupportUs";
 import DocumentTitle from "react-document-title";
 import { HomePage } from "./HomePage";
 import ScrollToTop from './ScrollToTop';
+import { ChordType } from '../Chord';
+import { generateChordNames } from '../ChordName';
 
 async function getErrorDescription(msg: string | Event, file: string | undefined, line: number | undefined, col: number | undefined, error: Error | undefined): Promise<string> {
   return new Promise<string>((resolve, reject) => {
@@ -182,12 +184,6 @@ class App extends React.Component<IAppProps, IAppState> {
           ChordEarTraining.createFlashCardGroup(),
           RandomChordGenerator.createFlashCardGroup()
         ]
-      },
-      {
-        title: "The Jazz Piano Site",
-        flashCardGroups: [
-          new FlashCardGroup("The Jazz Piano Site Overview", TheJazzPianoSiteOverview.createFlashCards)
-        ]
       }
     ];
 
@@ -227,6 +223,7 @@ class App extends React.Component<IAppProps, IAppState> {
       <Route exact path="/essential-music-theory/next-steps" component={() => <DocumentTitle title="Next Steps - Essential Music Theory - Falsetto"><SectionContainer section={NextStepsSection}></SectionContainer></DocumentTitle>} />,
       <Route path="/scale-viewer" component={() => <DocumentTitle title={"Scale Viewer - Falsetto"}><ScaleViewer renderAllScaleShapes={false} /></DocumentTitle>} />,
       <Route path="/chord-viewer" component={() => <DocumentTitle title={"Chord Viewer - Falsetto"}><ChordViewer /></DocumentTitle>} />,
+      <Route path="/interval-chord-scale-finder" component={() => <DocumentTitle title={"Interval/Chord/Scale Finder - Falsetto"}><IntervalChordScaleFinder /></DocumentTitle>} />,
       <Route path="/rhythm-tapper" component={() => <DocumentTitle title={"Rhythm Tapper - Falsetto"}><RhythmTapper /></DocumentTitle>} />,
       <Route path="/learn-guitar-notes-in-10-steps" component={() => <DocumentTitle title={"Learn the Guitar Notes in 10 Easy Steps - Falsetto"}><GuitarNotesLesson /></DocumentTitle>} />,
       <Route path="/learn-guitar-scales" component={() => <DocumentTitle title={"Learn the Guitar Scales - Falsetto"}><GuitarScalesLesson /></DocumentTitle>} />
@@ -264,6 +261,11 @@ class App extends React.Component<IAppProps, IAppState> {
           <NavLink to="/learn-guitar-scales" className="nav-link">Learn Guitar Scale Shapes</NavLink>
         </div>
 
+        <NavSectionTitle>Tools</NavSectionTitle>
+        <div>
+          <NavLink to="/interval-chord-scale-finder" className="nav-link">Interval/Chord/Scale Finder</NavLink>
+        </div>
+        
         <NavSectionTitle>Exercises</NavSectionTitle>
         <div>
           <NavSectionSubTitle>Notes</NavSectionSubTitle>

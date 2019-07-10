@@ -125,7 +125,7 @@ function forEachInterval(fn: (pitches: Array<GuitarNote>, interval: Interval) =>
           const halfSteps = Math.abs(note2.pitch.midiNumber - note1.pitch.midiNumber);
           if ((halfSteps === 0) || (halfSteps > 12)) { continue; }
 
-          const interval = Pitch.getInterval(note1.pitch, note2.pitch);
+          const interval = Interval.fromPitches(note1.pitch, note2.pitch);
           
           fn([note1, note2], interval);
         }

@@ -116,7 +116,7 @@ test("addInterval(C4 + M11) is F5", () => {
 
 test("getInterval(B3, B3) is P1", () => {
   expect(
-    Pitch.getInterval(
+    Interval.fromPitches(
       new Pitch(PitchLetter.B, 0, 3),
       new Pitch(PitchLetter.B, 0, 3)
     )
@@ -125,7 +125,7 @@ test("getInterval(B3, B3) is P1", () => {
 });
 test("getInterval(C4, G4) is P5", () => {
   expect(
-    Pitch.getInterval(
+    Interval.fromPitches(
       new Pitch(PitchLetter.C, 0, 4),
       new Pitch(PitchLetter.G, 0, 4)
     )
@@ -134,7 +134,7 @@ test("getInterval(C4, G4) is P5", () => {
 });
 test("getInterval(C4, Gb3) is A4", () => {
   expect(
-    Pitch.getInterval(
+    Interval.fromPitches(
       new Pitch(PitchLetter.C, 0, 4),
       new Pitch(PitchLetter.G, -1, 3)
     )
@@ -143,7 +143,7 @@ test("getInterval(C4, Gb3) is A4", () => {
 });
 test("getInterval(A2, Ebb4) is dd12", () => {
   expect(
-    Pitch.getInterval(
+    Interval.fromPitches(
       new Pitch(PitchLetter.E, -2, 4),
       new Pitch(PitchLetter.A, 0, 2)
     )
