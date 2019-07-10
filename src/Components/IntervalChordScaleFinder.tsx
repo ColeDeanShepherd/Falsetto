@@ -53,7 +53,7 @@ export function findChords(pitches: Array<Pitch>): Array<Chord> {
   const chords = Utils.flattenArrays<Chord>(allPitchIntegers
     .map((pis, i) =>
       generateChordNames(new Set<number>(pis))
-        .map(cn => new Chord(new ChordType(cn, new ChordScaleFormula([]), [cn]), pitches[i]))
+        .map(cn => new Chord(new ChordType(cn, new ChordScaleFormula([]), [cn]), sortedPitches[i]))
     ));
 
   return chords
@@ -114,13 +114,6 @@ export class IntervalChordScaleFinder extends React.Component<IIntervalChordScal
     const pressedPitchesStr = uniquePressedPitches
       .map(p => p.toOneAccidentalAmbiguousString(false))
       .join(', ');
-    
-    // TODO: remove
-    const sortedPitches = this.state.pressedPitches
-      .slice()
-      .sort((a, b) => (a.midiNumberNoOctave < b.midiNumberNoOctave) ? -1 : 1);
-    const basePitchIntegers = sortedPitches
-      .map(p => p.midiNumberNoOctave - sortedPitches[0].midiNumberNoOctave);
     
     return (
       <Card>
