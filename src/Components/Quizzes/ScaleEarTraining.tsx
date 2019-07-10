@@ -153,7 +153,7 @@ export function createFlashCards(): Array<FlashCard> {
 
   for (const rootPitch of rootPitches) {
     for (const scaleType of ScaleType.All) {
-      const pitches = new ChordScaleFormula(scaleType.formula.parts.concat(new ChordScaleFormulaPart(8, 0))).getPitches(rootPitch);
+      const pitches = new ChordScaleFormula(scaleType.formula.parts.concat(new ChordScaleFormulaPart(8, 0, false))).getPitches(rootPitch);
       
       const iCopy = i;
       i++;

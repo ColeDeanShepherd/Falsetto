@@ -190,7 +190,7 @@ export function createFlashCards(): FlashCard[] {
       ScaleType.All.map(scaleType => {
         const halfStepsFromC = Utils.mod(i - 4, 12);
         const rootPitch = Pitch.createFromMidiNumber((new Pitch(PitchLetter.C, 0, 4)).midiNumber + halfStepsFromC);
-        const pitches = new ChordScaleFormula(scaleType.formula.parts.concat(new ChordScaleFormulaPart(8, 0))).getPitches(rootPitch);
+        const pitches = new ChordScaleFormula(scaleType.formula.parts.concat(new ChordScaleFormulaPart(8, 0, false))).getPitches(rootPitch);
 
         return new FlashCard(
           new FlashCardSide(

@@ -52,8 +52,8 @@ export function findChords(pitches: Array<Pitch>): Array<Chord> {
   const allPitchIntegers = getAllModePitchIntegers(basePitchIntegers);
   const chords = Utils.flattenArrays<Chord>(allPitchIntegers
     .map((pis, i) =>
-      generateChordNames(pis)
-        .map(cn => new Chord(new ChordType(cn.toString(), new ChordScaleFormula([]), [cn.toString()]), pitches[i]))
+      generateChordNames(new Set<number>(pis))
+        .map(cn => new Chord(new ChordType(cn, new ChordScaleFormula([]), [cn]), pitches[i]))
     ));
 
   return chords
@@ -98,22 +98,23 @@ export class IntervalChordScaleFinder extends React.Component<IIntervalChordScal
 
   public render(): JSX.Element {
     const pianoStyle = { width: "100%", maxWidth: "400px", height: "auto" };
-    const pianoSize = new Size2D(200, 100);
+    const pianoSize = new Size2D(400, 100);
     
-    const pressedPitchesStr = this.state.pressedPitches
-      .map(p => p.toOneAccidentalAmbiguousString(false))
-      .join(', ');
-
     const onKeyPress = (pitch: Pitch) => {
       const newPressedPitches = Utils.toggleArrayElementCustomEquals(
-        this.state.pressedPitches, pitch, (a, b) => a.midiNumberNoOctave === b.midiNumberNoOctave
+        this.state.pressedPitches, pitch, (a, b) => a.midiNumber === b.midiNumber
       );
-      newPressedPitches.sort((a, b) => (a.midiNumberNoOctave < b.midiNumberNoOctave) ? -1 : 1);
       this.setState({ pressedPitches: newPressedPitches });
     };
 
-    const intervalsChordsScales = findIntervalsChordsScales(this.state.pressedPitches);
+    const uniquePressedPitches = Utils.uniqWithSelector(this.state.pressedPitches, p => p.midiNumberNoOctave);
+    uniquePressedPitches.sort((a, b) => (a.midiNumber < b.midiNumber) ? -1 : 1);
+    const intervalsChordsScales = findIntervalsChordsScales(uniquePressedPitches);
 
+    const pressedPitchesStr = uniquePressedPitches
+      .map(p => p.toOneAccidentalAmbiguousString(false))
+      .join(', ');
+    
     // TODO: remove
     const sortedPitches = this.state.pressedPitches
       .slice()
@@ -132,7 +133,6 @@ export class IntervalChordScaleFinder extends React.Component<IIntervalChordScal
         
           <div>
             <div>
-              <p>{basePitchIntegers.join(', ')}</p>
               <p><span style={{ fontWeight: "bold" }}>Notes: </span>{pressedPitchesStr}</p>
               <p>
                 <span style={{ fontWeight: "bold" }}>Interval: </span>
@@ -157,7 +157,7 @@ export class IntervalChordScaleFinder extends React.Component<IIntervalChordScal
               <PianoKeyboard
                 rect={new Rect2D(pianoSize, new Vector2D(0, 0))}
                 lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-                highestPitch={new Pitch(PitchLetter.B, 0, 4)}
+                highestPitch={new Pitch(PitchLetter.B, 0, 5)}
                 onKeyPress={onKeyPress}
                 renderLayeredExtrasFn={metrics => this.renderExtras(metrics)}
                 style={pianoStyle}

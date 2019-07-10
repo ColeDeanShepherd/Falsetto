@@ -346,7 +346,7 @@ export function createFlashCards(): Array<FlashCard> {
   const flashCards = new Array<FlashCard>();
 
   forEachScale((scale, rootPitchStr, i) => {
-    const pitches = new ChordScaleFormula(scale.type.formula.parts.concat(new ChordScaleFormulaPart(8, 0))).getPitches(scale.rootPitch);
+    const pitches = new ChordScaleFormula(scale.type.formula.parts.concat(new ChordScaleFormulaPart(8, 0, false))).getPitches(scale.rootPitch);
 
     flashCards.push(new FlashCard(
       new FlashCardSide(

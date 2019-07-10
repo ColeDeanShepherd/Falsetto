@@ -103,6 +103,16 @@ export class PianoKeyboardMetrics {
       )
     );
   }
+
+  public getPitches(): Array<Pitch> {
+    const pitches = new Array<Pitch>();
+
+    for (let midiNumber = this.lowestPitch.midiNumber; midiNumber <= this.highestPitch.midiNumber; midiNumber++) {
+      pitches.push(Pitch.createFromMidiNumber(midiNumber));
+    }
+
+    return pitches;
+  }
 }
 
 export function renderPianoKeyboardKeyLabels(metrics: PianoKeyboardMetrics, useSharps?: boolean, getLabels?: (pitch: Pitch) => Array<string> | null): JSX.Element {
@@ -137,7 +147,7 @@ export function renderPianoKeyboardKeyLabels(metrics: PianoKeyboardMetrics, useS
     for (let i = 0; i < labels.length; i++) {
       texts.push(
         <text
-          key={pitch.midiNumber}
+          key={`${i}${pitch.midiNumber}`}
           x={highlightedNoteX}
           y={highlightedNoteY + textYOffset + (i * fontSize)}
           style={textStyle}>

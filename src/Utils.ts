@@ -190,6 +190,22 @@ export function uniq<T>(array: Array<T>) {
 }
 
 // TODO: add tests
+export function uniqWithSelector<T, R>(array: Array<T>, selector: (e: T) => R) {
+  const result = new Array<T>();
+  const selectors = new Array<R>();
+
+  for (const e of array) {
+    const s = selector(e);
+    if (!arrayContains(selectors, s)) {
+      result.push(e);
+      selectors.push(s);
+    }
+  }
+
+  return result;
+}
+
+// TODO: add tests
 export function isUniqueArrayElement<T>(value: T, index: number, array: Array<T>) {
   return array.indexOf(value) === index;
 }
@@ -482,4 +498,46 @@ export function shrinkRectToFit(containerSize: Size2D, rectSize: Size2D): Size2D
   
   // If we get here, the rect doesn't need to be resized.
   return rectSize;
+}
+
+export function isSuperset<T>(a: Set<T>, b: Set<T>): boolean {
+  for (const e of b) {
+    if (!a.has(e)) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+export function setDifference<T>(a: Set<T>, b: Set<T>): Set<T> {
+  const difference = new Set<T>(a);
+
+  for (const e of b) {
+    difference.delete(e);
+  }
+
+  return difference;
+}
+
+export function mapSet<T, R>(set: Set<T>, selector: (t: T) => R): Array<R> {
+  const result = new Array<R>(set.size);
+
+  for (const e of set) {
+    result.push(selector(e));
+  }
+
+  return result;
+}
+
+export function mapFilter<T>(set: Set<T>, predicate: (t: T) => boolean): Array<T> {
+  const result = new Array<T>();
+
+  for (const e of set) {
+    if (predicate(e)) {
+      result.push(e);
+    }
+  }
+
+  return result;
 }
