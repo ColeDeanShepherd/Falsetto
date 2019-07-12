@@ -1184,7 +1184,7 @@ export const ScalesAndModesSection: React.FunctionComponent<SectionProps> = prop
     <p>The <Term>natural minor scale</Term> (commonly referred to simply as the <Term>minor scale</Term>) is another common scale with a "darker" sound. Relative to the major scale, the natural minor scale has the following formula: 1 2 b3 4 5 b6 b7, meaning the natural minor scale is a major scale with the 3rd, 6th, and 7th scale degrees flattened. So, a C natural minor scale is comprised of the notes C, D, Eb, F, G, Ab, Bb.</p>
     
     <p>Try playing the piano keyboard below to get a feel for the natural minor scale.</p>
-    <p style={{ textAlign: "center" }}><PianoScaleDronePlayer scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))} style={pianoKeyboardStyle} /></p>
+    <p style={{ textAlign: "center" }}><PianoScaleDronePlayer scale={new Scale(ScaleType.Aeolian, new Pitch(PitchLetter.C, 0, 4))} style={pianoKeyboardStyle} /></p>
 
     <SubSectionTitle>Modes</SubSectionTitle>
     <p>The <Term>modes</Term> of a scale are the different scales you get when you start on different notes of a "base" scale, and consider those starting notes the new <Term>root notes</Term>.</p>
@@ -1212,42 +1212,42 @@ export const ScalesAndModesSection: React.FunctionComponent<SectionProps> = prop
           <TableCell>D E F G A B C</TableCell>
           <TableCell>Dorian</TableCell>
           <TableCell>1 2 b3 4 5 6 b7</TableCell>
-          <TableCell><ScaleAudioPlayer scale={new Scale(ScaleType.Ionian, defaultRootPitch)} /></TableCell>
+          <TableCell><ScaleAudioPlayer scale={new Scale(ScaleType.Dorian, defaultRootPitch)} /></TableCell>
         </TableRow>
         <TableRow>
           <TableCell>E</TableCell>
           <TableCell>E F G A B C D</TableCell>
           <TableCell>Phrygian</TableCell>
           <TableCell>1 b2 b3 4 5 b6 b7</TableCell>
-          <TableCell><ScaleAudioPlayer scale={new Scale(ScaleType.Ionian, defaultRootPitch)} /></TableCell>
+          <TableCell><ScaleAudioPlayer scale={new Scale(ScaleType.Phrygian, defaultRootPitch)} /></TableCell>
         </TableRow>
         <TableRow>
           <TableCell>F</TableCell>
           <TableCell>F G A B C D E</TableCell>
           <TableCell>Lydian</TableCell>
           <TableCell>1 2 3 #4 5 6 7</TableCell>
-          <TableCell><ScaleAudioPlayer scale={new Scale(ScaleType.Ionian, defaultRootPitch)} /></TableCell>
+          <TableCell><ScaleAudioPlayer scale={new Scale(ScaleType.Lydian, defaultRootPitch)} /></TableCell>
         </TableRow>
         <TableRow>
           <TableCell>G</TableCell>
           <TableCell>G A B C D E F</TableCell>
           <TableCell>Mixolydian</TableCell>
           <TableCell>1 2 3 4 5 6 b7</TableCell>
-          <TableCell><ScaleAudioPlayer scale={new Scale(ScaleType.Ionian, defaultRootPitch)} /></TableCell>
+          <TableCell><ScaleAudioPlayer scale={new Scale(ScaleType.Mixolydian, defaultRootPitch)} /></TableCell>
         </TableRow>
         <TableRow>
           <TableCell>A</TableCell>
           <TableCell>A B C D E F G</TableCell>
           <TableCell>Aeolian (a.k.a "Natural Minor")</TableCell>
           <TableCell>1 2 b3 4 5 b6 b7</TableCell>
-          <TableCell><ScaleAudioPlayer scale={new Scale(ScaleType.Ionian, defaultRootPitch)} /></TableCell>
+          <TableCell><ScaleAudioPlayer scale={new Scale(ScaleType.Aeolian, defaultRootPitch)} /></TableCell>
         </TableRow>
         <TableRow>
           <TableCell>B</TableCell>
           <TableCell>B C D E F G A</TableCell>
           <TableCell>Locrian</TableCell>
           <TableCell>1 b2 b3 4 b5 b6 b7</TableCell>
-          <TableCell><ScaleAudioPlayer scale={new Scale(ScaleType.Ionian, defaultRootPitch)} /></TableCell>
+          <TableCell><ScaleAudioPlayer scale={new Scale(ScaleType.Locrian, defaultRootPitch)} /></TableCell>
         </TableRow>
       </TableBody>
     </Table>
