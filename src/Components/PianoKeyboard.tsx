@@ -156,7 +156,7 @@ export function renderPianoKeyboardKeyLabels(metrics: PianoKeyboardMetrics, useS
     }
   }
   
-  return <g>{texts}</g>;
+  return <g className="pass-through-click">{texts}</g>;
 }
 export function renderPressedPianoKeys(metrics: PianoKeyboardMetrics, pressedPitches: Array<Pitch>): JSX.Element {
   return (
@@ -220,7 +220,7 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
           key={i}
           x={metrics.keyLeftXs[i]} y={0}
           width={metrics.whiteKeyWidth} height={metrics.whiteKeyHeight}
-          fill="white" stroke="black" strokeWidth="2" className="cursor-pointer-on-hover"
+          fill="white" stroke="black" strokeWidth="2" className="cursor-pointer"
           onMouseDown={event => {
             if (this.props.onKeyPress) {
               this.props.onKeyPress(pitch);
@@ -233,7 +233,7 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
           key={i}
           x={metrics.keyLeftXs[i]} y={0}
           width={metrics.blackKeyWidth} height={metrics.blackKeyHeight}
-          fill="black" strokeWidth="0" className="cursor-pointer-on-hover"
+          fill="black" strokeWidth="0" className="cursor-pointer"
           onMouseDown={event => {
             if (this.props.onKeyPress) {
               this.props.onKeyPress(pitch);
@@ -264,7 +264,7 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
               key={pressedPitch.toString(true)}
               cx={highlightedNoteX} cy={highlightedNoteY}
               r={noteDotRadius}
-              fill="red" strokeWidth="0" className="cursor-pointer-on-hover"
+              fill="red" strokeWidth="0" className="cursor-pointer"
               onMouseDown={event => this.props.onKeyPress ? this.props.onKeyPress(pressedPitch) : null}
             />;
           })
