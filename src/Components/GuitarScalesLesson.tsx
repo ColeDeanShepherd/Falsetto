@@ -7,7 +7,7 @@ import {
   GuitarFretboard, GuitarFretboardMetrics,
   renderGuitarNoteHighlightsAndLabels, renderFretNumbers, getStandardGuitarTuning,
   getPreferredGuitarScaleShape, 
-  generateGuitarScaleTextDiagram} from './GuitarFretboard';
+} from './GuitarFretboard';
 import { Pitch } from '../Pitch';
 import { PitchLetter } from '../PitchLetter';
 import { MAX_MAIN_CARD_WIDTH } from './Style';

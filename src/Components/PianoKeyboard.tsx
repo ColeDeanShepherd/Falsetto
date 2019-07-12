@@ -221,7 +221,12 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
           x={metrics.keyLeftXs[i]} y={0}
           width={metrics.whiteKeyWidth} height={metrics.whiteKeyHeight}
           fill="white" stroke="black" strokeWidth="2" className="cursor-pointer-on-hover"
-          onMouseDown={event => this.props.onKeyPress ? this.props.onKeyPress(pitch) : null}
+          onMouseDown={event => {
+            if (this.props.onKeyPress) {
+              this.props.onKeyPress(pitch);
+              event.preventDefault();
+            }
+          }}
         />);
       } else {
         blackKeys.push(<rect
@@ -229,7 +234,12 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
           x={metrics.keyLeftXs[i]} y={0}
           width={metrics.blackKeyWidth} height={metrics.blackKeyHeight}
           fill="black" strokeWidth="0" className="cursor-pointer-on-hover"
-          onMouseDown={event => this.props.onKeyPress ? this.props.onKeyPress(pitch) : null}
+          onMouseDown={event => {
+            if (this.props.onKeyPress) {
+              this.props.onKeyPress(pitch);
+              event.preventDefault();
+            }
+          }}
         />);
       }
     }
