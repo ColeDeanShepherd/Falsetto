@@ -41,10 +41,14 @@ export class ChordType {
   // Sixth Chords
   public static Maj6 = new ChordType("Major 6th", ChordScaleFormula.parse("1 3 5 6"), ["6"]);
   public static Min6 = new ChordType("Minor 6th", ChordScaleFormula.parse("1 b3 5 6"), ["m6"]);
+  public static Maj69 = new ChordType("6/9", ChordScaleFormula.parse("1 9 3 5 6"), ["6/9"]);
+  public static Min69 = new ChordType("Minor 6/9", ChordScaleFormula.parse("1 9 b3 5 6"), ["m6/9"]);
 
   public static SixthChords = [
     ChordType.Maj6,
-    ChordType.Min6
+    ChordType.Min6,
+    ChordType.Maj69,
+    ChordType.Min69
   ];
   
   // Seventh Chords
@@ -222,45 +226,64 @@ export class ChordType {
       .map(p => p.pitchInteger));
     remainingPitchIntegers = Utils.setDifference(remainingPitchIntegers, optionalPitchIntegers);
 
-    return (remainingPitchIntegers.size === 0) ? [] : null;
-
-    // TODO: add support for alterations.
-    /*const alterations = new Array<string>();
-
+    const alterations = new Array<string>();
     const extension = Utils.arrayMax(this.formula.parts.map(p => p.chordNoteNumber));
-    
+
     for (const pi of remainingPitchIntegers) {
       switch (pi) {
         case 1:
-          alterations.push("addb9");
+          if ((extension < 7) ) {
+            alterations.push("addb9");
+          } else {
+            alterations.push("b9");
+          }
           break;
         case 2:
-          alterations.push("add9");
+          if (extension < 7) {
+            alterations.push("add9");
+          }
           break;
         case 3:
-          alterations.push("add#9");
+          if (extension < 7) {
+            alterations.push("add#9");
+          } else {
+            alterations.push("#9");
+          }
           break;
         case 5:
-          alterations.push("add11");
+          if (extension < 7) {
+            alterations.push("add11");
+          }
           break;
         case 6:
-          alterations.push("add#11");
+          if (extension < 7) {
+            alterations.push("add#11");
+          } else {
+            alterations.push("#11");
+          }
           break;
         case 8:
-          alterations.push("addb13");
-          break;
-        case 9:
-          alterations.push("add13");
+          if (extension < 7) {
+            alterations.push("addb13");
+          } else {
+            alterations.push("b13");
+          }
           break;
         case 10:
-          alterations.push("add#13");
+          if (extension < 7) {
+            alterations.push("add#13");
+          } else {
+            alterations.push("#13");
+          }
           break;
         default:
           return null;
       }
     }
-    
-    return alterations;*/
+
+    return (alterations.length === remainingPitchIntegers.size)
+      ? alterations
+      : null;
   }
 }
 

@@ -44,17 +44,8 @@ export function findIntervals(pitches: Array<Pitch>): Array<Interval> {
 export function findChords(pitches: Array<Pitch>): Array<Chord> {
   if (pitches.length === 0) { return new Array<Chord>(); }
 
-  const sortedPitches = pitches
-    .slice()
-    .sort((a, b) => (a.midiNumberNoOctave < b.midiNumberNoOctave) ? -1 : 1);
-  const basePitchIntegers = sortedPitches
-    .map(p => p.midiNumberNoOctave - sortedPitches[0].midiNumberNoOctave);
-  const allPitchIntegers = getAllModePitchIntegers(basePitchIntegers);
-  const chords = Utils.flattenArrays<Chord>(allPitchIntegers
-    .map((pis, i) =>
-      generateChordNames(new Set<number>(pis))
-        .map(cn => new Chord(new ChordType(cn, new ChordScaleFormula([]), [cn]), sortedPitches[i]))
-    ));
+  const chords = generateChordNames(pitches)
+    .map(cn => new Chord(new ChordType(cn[1], new ChordScaleFormula([]), [cn[1]]), cn[0]));
 
   return chords
     ? chords

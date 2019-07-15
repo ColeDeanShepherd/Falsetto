@@ -1,6 +1,8 @@
 import * as Utils from "./Utils";
 import { ChordQuality, chordQualityToString } from './ChordQuality';
 import { ChordType } from './Chord';
+import { Pitch } from './Pitch';
+import { getAllModePitchIntegers } from './Scale';
 
 export class ChordName {
   public constructor(
@@ -26,23 +28,40 @@ export class ChordName {
   }
 }
 
-export function generateChordNames(pitchIntegers: Set<number>): Array<string> {
-  // universal preconditions
-  Utils.precondition(pitchIntegers.size > 0);
-  Utils.precondition(pitchIntegers.has(0));
+export function generateChordNames(pitches: Array<Pitch>): Array<[Pitch, string]> {
+  Utils.precondition(pitches.length > 0);
+  
+  const sortedPitches = pitches
+    .slice()
+    .sort((a, b) => (a.midiNumberNoOctave < b.midiNumberNoOctave) ? -1 : 1);
+  const basePitchIntegers = sortedPitches
+    .map(p => p.midiNumberNoOctave - sortedPitches[0].midiNumberNoOctave);
+  const allPitchIntegers = getAllModePitchIntegers(basePitchIntegers);
 
-  const chordNames = new Array<string>();
+  let chordNames = new Array<[Pitch, string]>();
   let minPitchCount: number | null = null;
+  let maxAlterationCount = 9999;
 
-  for (const chordType of ChordType.AllByNumNotesDescending) {
-    if ((minPitchCount !== null) && (chordType.pitchCount < minPitchCount)) {
-      break;
-    }
+  for (let i = 0; i < allPitchIntegers.length; i++) {
+    const pitchIntegers = new Set<number>(allPitchIntegers[i]);
 
-    const alterations = chordType.matchPitchIntegers(pitchIntegers);
-    if (alterations !== null) {
+    for (const chordType of ChordType.AllByNumNotesDescending) {
+      if ((minPitchCount !== null) && (chordType.pitchCount < minPitchCount)) {
+        break;
+      }
+
+      const alterations = chordType.matchPitchIntegers(pitchIntegers);
+      if ((alterations === null) || (alterations.length > maxAlterationCount)) {
+        continue;
+      }
+
+      if (alterations.length < maxAlterationCount) {
+        chordNames = [];
+        maxAlterationCount = alterations.length;
+      }
+
       const alterationsString = (alterations.length > 0) ? (" " + alterations.join("")) : "";
-      chordNames.push(chordType.symbols[0] + alterationsString);
+      chordNames.push([sortedPitches[i], chordType.symbols[0] + alterationsString]);
       
       minPitchCount = chordType.pitchCount;
     }

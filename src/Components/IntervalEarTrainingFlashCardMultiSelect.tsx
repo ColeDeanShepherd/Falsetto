@@ -5,8 +5,6 @@ import * as Utils from "../Utils";
 import { FlashCard } from "../FlashCard";
 import { Pitch } from "../Pitch";
 import { PitchLetter } from "../PitchLetter";
-import { intervalQualityStringToNumber, Interval } from '../Interval';
-import { VerticalDirection } from '../VerticalDirection';
 
 // TODO: move this somewhere else
 export const rootNotes = [

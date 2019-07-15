@@ -104,6 +104,7 @@ export class ScaleType {
 
   public static MajorBlues = new ScaleType("Major Blues", ChordScaleFormula.parse("1 2 b3 3 5 6"));
   public static MinorBlues = new ScaleType("Minor Blues", ChordScaleFormula.parse("1 b3 4 b5 5 b7"));
+  public static Chromatic = new ScaleType("Chromatic", ChordScaleFormula.parse("1 b2 2 b3 3 4 b5 5 b6 6 b7 7"));
 
   public static MajorScaleModes = [
     ScaleType.Ionian,
@@ -176,7 +177,8 @@ export class ScaleType {
     ),
     new ScaleTypeGroup("Other Scales", [
         ScaleType.WholeTone,
-        ScaleType.Augmented
+        ScaleType.Augmented,
+        ScaleType.Chromatic
       ]
     )
   ];
