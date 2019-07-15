@@ -185,8 +185,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
           {this.props.renderAnswerSelect
             ? (
               <p style={{marginBottom: "0", marginTop: "0"}}>
-                <span style={{paddingRight: "2em"}}>{this.studyAlgorithm.quizStats.numCorrectGuesses} / {this.studyAlgorithm.quizStats.numIncorrectGuesses}</span>
-                <span style={{paddingRight: "2em"}}>{(100 * percentCorrect).toFixed(2)}%</span>
+                <span style={{paddingRight: "2em"}}>{this.studyAlgorithm.quizStats.numCorrectGuesses} / {this.studyAlgorithm.quizStats.numIncorrectGuesses} correct ({(100 * percentCorrect).toFixed(2)}%)</span>
               </p>
             )
             : null
