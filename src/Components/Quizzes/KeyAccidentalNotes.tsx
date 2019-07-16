@@ -12,7 +12,8 @@ export function renderAnswerSelect(
   areFlashCardsInverted: boolean,
   flashCardIndex: number,
   flashCard: FlashCard,
-  onAnswer: (answerDifficulty: AnswerDifficulty) => void
+  onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void,
+  lastCorrectAnswer: any
 ): JSX.Element {
   const row0 = ["none"];
   const row1 = ["F♯", "F♯, C♯", "F♯, C♯, G♯", "F♯, C♯, G♯, D♯", "F♯, C♯, G♯, D♯, A♯", "F♯, C♯, G♯, D♯, A♯, E♯", "F♯, C♯, G♯, D♯, A♯, E♯, B♯"];
@@ -20,9 +21,9 @@ export function renderAnswerSelect(
 
   return (
     <div>
-      {FlashCardUtils.renderStringAnswerSelectInternal(`${flashCardIndex}.0`, row0, flashCard, onAnswer)}
-      {FlashCardUtils.renderStringAnswerSelectInternal(`${flashCardIndex}.1`, row1, flashCard, onAnswer)}
-      {FlashCardUtils.renderStringAnswerSelectInternal(`${flashCardIndex}.2`, row2, flashCard, onAnswer)}
+      {FlashCardUtils.renderStringAnswerSelectInternal(`${flashCardIndex}.0`, row0, flashCard, onAnswer, lastCorrectAnswer)}
+      {FlashCardUtils.renderStringAnswerSelectInternal(`${flashCardIndex}.1`, row1, flashCard, onAnswer, lastCorrectAnswer)}
+      {FlashCardUtils.renderStringAnswerSelectInternal(`${flashCardIndex}.2`, row2, flashCard, onAnswer, lastCorrectAnswer)}
     </div>
   );
 }

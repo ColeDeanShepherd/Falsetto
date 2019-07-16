@@ -239,7 +239,8 @@ export class GuitarScalesFlashCardMultiSelect extends React.Component<IGuitarSca
 
 export interface IGuitarNotesAnswerSelectProps {
   correctAnswer: Array<Pitch>;
-  onAnswer: (answerDifficulty: AnswerDifficulty) => void;
+  onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void;
+  lastCorrectAnswer: any;
 }
 export interface IGuitarNotesAnswerSelectState {
   selectedPitches: Array<Pitch>;
@@ -253,6 +254,7 @@ export class GuitarNotesAnswerSelect extends React.Component<IGuitarNotesAnswerS
     };
   }
   public render(): JSX.Element {
+    // TODO: use lastCorrectAnswer
     return (
       <div>
         <PianoKeyboard
@@ -300,7 +302,7 @@ export class GuitarNotesAnswerSelect extends React.Component<IGuitarNotesAnswerS
           guess === answer
         )
       ));
-    this.props.onAnswer(isCorrect ? AnswerDifficulty.Easy : AnswerDifficulty.Incorrect);
+    this.props.onAnswer(isCorrect ? AnswerDifficulty.Easy : AnswerDifficulty.Incorrect, selectedPitchMidiNumbersNoOctave);
   }
 }
 
@@ -373,16 +375,17 @@ export function renderAnswerSelect(
   areFlashCardsInverted: boolean,
   flashCardIndex: number,
   flashCard: FlashCard,
-  onAnswer: (answerDifficulty: AnswerDifficulty) => void
+  onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void,
+  lastCorrectAnswer: any
 ) {
   if (!areFlashCardsInverted) {
     const correctAnswer = flashCard.backSide.renderFn as string;
     const activeScales = ScaleType.All
       .filter((_, i) => Utils.arrayContains(enabledFlashCardIndices, i));
-    return <ScaleAnswerSelect key={correctAnswer} scales={activeScales} correctAnswer={correctAnswer} onAnswer={onAnswer} />;
+    return <ScaleAnswerSelect key={correctAnswer} scales={activeScales} correctAnswer={correctAnswer} onAnswer={onAnswer} lastCorrectAnswer={lastCorrectAnswer} />;
   } else {
     const key = flashCard.frontSide.renderFn as string;
     const correctAnswer = flashCard.backSide.data[0] as Array<Pitch>;
-    return <GuitarNotesAnswerSelect key={key} correctAnswer={correctAnswer} onAnswer={onAnswer} />;
+    return <GuitarNotesAnswerSelect key={key} correctAnswer={correctAnswer} onAnswer={onAnswer} lastCorrectAnswer={lastCorrectAnswer} />;
   }
 }

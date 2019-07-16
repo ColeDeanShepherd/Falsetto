@@ -151,7 +151,8 @@ export class GuitarChordsFlashCardMultiSelect extends React.Component<IGuitarCho
 
 export interface IGuitarChordsAnswerSelectProps {
   correctAnswer: string;
-  onAnswer: (answerDifficulty: AnswerDifficulty) => void;
+  onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void;
+  lastCorrectAnswer: any;
 }
 export interface IGuitarChordsAnswerSelectState {
   selectedRootPitch: string | undefined;
@@ -167,6 +168,8 @@ export class GuitarChordsAnswerSelect extends React.Component<IGuitarChordsAnswe
     };
   }
   public render(): JSX.Element {
+    // TODO: use lastCorrectAnswer
+
     return (
       <div>
         <Typography gutterBottom={true} variant="h6" component="h4">
@@ -262,15 +265,19 @@ export class GuitarChordsAnswerSelect extends React.Component<IGuitarChordsAnswe
     this.setState({ selectedChordType: chordType });
   }
   private confirmAnswer() {
-    const selectedAnswer = this.state.selectedRootPitch + " " + this.state.selectedChordType;
+    const selectedAnswer = this.getSelectedAnswer();
     const isCorrect = selectedAnswer === this.props.correctAnswer;
-    this.props.onAnswer(isCorrect ? AnswerDifficulty.Easy : AnswerDifficulty.Incorrect);
+    this.props.onAnswer(isCorrect ? AnswerDifficulty.Easy : AnswerDifficulty.Incorrect, selectedAnswer);
+  }
+  private getSelectedAnswer(): string {
+    return this.state.selectedRootPitch + " " + this.state.selectedChordType;
   }
 }
 
 export interface IGuitarNotesAnswerSelectProps {
   correctAnswer: Array<Pitch>;
-  onAnswer: (answerDifficulty: AnswerDifficulty) => void;
+  onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void;
+  lastCorrectAnswer: any;
 }
 export interface IGuitarNotesAnswerSelectState {
   selectedPitches: Array<Pitch>;
@@ -284,6 +291,7 @@ export class GuitarNotesAnswerSelect extends React.Component<IGuitarNotesAnswerS
     };
   }
   public render(): JSX.Element {
+    // TODO: lastCorrectAnswer
     return (
       <div>
         <PianoKeyboard
@@ -331,7 +339,7 @@ export class GuitarNotesAnswerSelect extends React.Component<IGuitarNotesAnswerS
           guess === answer
         )
       ));
-    this.props.onAnswer(isCorrect ? AnswerDifficulty.Easy : AnswerDifficulty.Incorrect);
+    this.props.onAnswer(isCorrect ? AnswerDifficulty.Easy : AnswerDifficulty.Incorrect, selectedPitchMidiNumbersNoOctave);
   }
 }
 
@@ -404,14 +412,15 @@ export function renderAnswerSelect(
   areFlashCardsInverted: boolean,
   flashCardIndex: number,
   flashCard: FlashCard,
-  onAnswer: (answerDifficulty: AnswerDifficulty) => void
+  onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void,
+  lastCorrectAnswer: any
 ) {
   if (!areFlashCardsInverted) {
     const correctAnswer = flashCard.backSide.renderFn as string;
-    return <GuitarChordsAnswerSelect key={correctAnswer} correctAnswer={correctAnswer} onAnswer={onAnswer} />;
+    return <GuitarChordsAnswerSelect key={correctAnswer} correctAnswer={correctAnswer} onAnswer={onAnswer} lastCorrectAnswer={lastCorrectAnswer} />;
   } else {
     const key = flashCard.frontSide.renderFn as string;
     const correctAnswer = flashCard.backSide.data[0] as Array<Pitch>;
-    return <GuitarNotesAnswerSelect key={key} correctAnswer={correctAnswer} onAnswer={onAnswer} />;
+    return <GuitarNotesAnswerSelect key={key} correctAnswer={correctAnswer} onAnswer={onAnswer} lastCorrectAnswer={lastCorrectAnswer} />;
   }
 }

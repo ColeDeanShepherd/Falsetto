@@ -66,6 +66,21 @@ sup {
   pointer-events: none;
 }
 
+/* Animations */
+.background-green-to-initial {
+  animation: background-green-to-initial;
+  animation-duration: 3s;
+}
+@keyframes background-green-to-initial {
+  from {
+    background-color: #669942;
+  }
+
+  to {
+    background-color: #d5d5d5;
+  }
+}
+
 /* Mobile */
 @media (max-width: 800px) {
   .hide-on-mobile {

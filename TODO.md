@@ -2,6 +2,12 @@
 ## High Priority
 * Chord Progressions
   * Ensure it works on mobile.
+* Implement button colors for
+  * GuitarChordsAnswerSelect
+  * GuitarNotesAnswerSelect
+  * PianoKeysAnswerSelect
+  * PianoChordsAnswerSelect
+  * ScaleAnswerSelect
 * Make sure pitches in GuitarNote.allNotesOfPitches use the right accidentals.
 * Make sure PianoScaleDronePlayer.renderExtrasFn uses the right accidentals.
 * Scale Viewer

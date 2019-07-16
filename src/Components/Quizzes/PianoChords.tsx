@@ -150,7 +150,8 @@ export class PianoChordsFlashCardMultiSelect extends React.Component<IPianoChord
 
 export interface IPianoChordsAnswerSelectProps {
   correctAnswer: string;
-  onAnswer: (answerDifficulty: AnswerDifficulty) => void;
+  onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void;
+  lastCorrectAnswer: any;
 }
 export interface IPianoChordsAnswerSelectState {
   selectedRootPitch: string | undefined;
@@ -166,6 +167,7 @@ export class PianoChordsAnswerSelect extends React.Component<IPianoChordsAnswerS
     };
   }
   public render(): JSX.Element {
+    // TODO: use lastCorrectAnswer
     return (
       <div>
         <Typography gutterBottom={true} variant="h6" component="h4">
@@ -263,7 +265,7 @@ export class PianoChordsAnswerSelect extends React.Component<IPianoChordsAnswerS
   private confirmAnswer() {
     const selectedAnswer = this.state.selectedRootPitch + " " + this.state.selectedChordType;
     const isCorrect = selectedAnswer === this.props.correctAnswer;
-    this.props.onAnswer(isCorrect ? AnswerDifficulty.Easy : AnswerDifficulty.Incorrect);
+    this.props.onAnswer(isCorrect ? AnswerDifficulty.Easy : AnswerDifficulty.Incorrect, selectedAnswer);
   }
 }
 
@@ -338,14 +340,15 @@ export function renderAnswerSelect(
   areFlashCardsInverted: boolean,
   flashCardIndex: number,
   flashCard: FlashCard,
-  onAnswer: (answerDifficulty: AnswerDifficulty) => void
+  onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void,
+  lastCorrectAnswer: any
 ) {
   if (!areFlashCardsInverted) {
     const correctAnswer = flashCard.backSide.renderFn as string;
-    return <PianoChordsAnswerSelect key={correctAnswer} correctAnswer={correctAnswer} onAnswer={onAnswer} />;
+    return <PianoChordsAnswerSelect key={correctAnswer} correctAnswer={correctAnswer} onAnswer={onAnswer} lastCorrectAnswer={lastCorrectAnswer} />;
   } else {
     const key = flashCard.frontSide.renderFn as string;
     const correctAnswer = flashCard.backSide.data[0] as Array<Pitch>;
-    return <PianoKeysAnswerSelect key={key} width={width} height={height} correctAnswer={correctAnswer} onAnswer={onAnswer} />;
+    return <PianoKeysAnswerSelect key={key} width={width} height={height} correctAnswer={correctAnswer} onAnswer={onAnswer} lastCorrectAnswer={lastCorrectAnswer} />;
   }
 }

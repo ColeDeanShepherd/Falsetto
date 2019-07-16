@@ -164,11 +164,12 @@ export function renderAnswerSelect(
   areFlashCardsInverted: boolean,
   flashCardIndex: number,
   flashCard: FlashCard,
-  onAnswer: (answerDifficulty: AnswerDifficulty) => void
+  onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void,
+  lastCorrectAnswer: any
 ): JSX.Element {
   return (
     <div>
-      {FlashCardUtils.renderStringAnswerSelect(width, height, intervals, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCardIndex, flashCard, onAnswer)}
+      {FlashCardUtils.renderStringAnswerSelect(width, height, intervals, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCardIndex, flashCard, onAnswer, lastCorrectAnswer)}
     </div>
   );
 }

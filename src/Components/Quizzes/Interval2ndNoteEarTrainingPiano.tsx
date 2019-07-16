@@ -191,13 +191,14 @@ export function renderAnswerSelect(
   areFlashCardsInverted: boolean,
   flashCardIndex: number,
   flashCard: FlashCard,
-  onAnswer: (answerDifficulty: AnswerDifficulty) => void
+  onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void,
+  lastCorrectAnswer: any
 ) {
   const key = flashCards.indexOf(flashCard);
   const correctAnswer = [flashCard.backSide.data as Pitch];
   const size = Utils.shrinkRectToFit(new Size2D(width, height), new Size2D(400, 100));
   
-  return <PianoKeysAnswerSelect key={key} width={size.width} height={size.height} correctAnswer={correctAnswer} onAnswer={onAnswer} maxNumPitches={1} />;
+  return <PianoKeysAnswerSelect key={key} width={size.width} height={size.height} correctAnswer={correctAnswer} onAnswer={onAnswer} maxNumPitches={1} lastCorrectAnswer={lastCorrectAnswer} />;
 }
 
 export function createFlashCards(): Array<FlashCard> {

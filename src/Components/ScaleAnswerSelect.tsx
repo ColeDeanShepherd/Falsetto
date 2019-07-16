@@ -9,7 +9,8 @@ const rootPitchStrs = ["Ab", "A", "Bb", "B/Cb", "C", "C#/Db", "D", "Eb", "E", "F
 export interface IScaleAnswerSelectProps {
   scales: Array<ScaleType>;
   correctAnswer: string;
-  onAnswer: (answerDifficulty: AnswerDifficulty) => void;
+  onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void;
+  lastCorrectAnswer: any;
 }
 export interface IScaleAnswerSelectState {
   selectedRootPitch: string | undefined;
@@ -122,6 +123,6 @@ export class ScaleAnswerSelect extends React.Component<IScaleAnswerSelectProps, 
   private confirmAnswer() {
     const selectedAnswer = this.state.selectedRootPitch + " " + this.state.selectedScaleType;
     const isCorrect = selectedAnswer === this.props.correctAnswer;
-    this.props.onAnswer(isCorrect ? AnswerDifficulty.Easy : AnswerDifficulty.Incorrect);
+    this.props.onAnswer(isCorrect ? AnswerDifficulty.Easy : AnswerDifficulty.Incorrect, selectedAnswer);
   }
 }

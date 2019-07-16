@@ -12,7 +12,8 @@ export function renderAnswerSelect(
   areFlashCardsInverted: boolean,
   flashCardIndex: number,
   flashCard: FlashCard,
-  onAnswer: (answerDifficulty: AnswerDifficulty) => void
+  onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void,
+  lastCorrectAnswer: any
 ): JSX.Element {
   const row0 = ["0 sharps/flats"];
   const row1 = ["1 sharp", "2 sharps", "3 sharps", "4 sharps", "5 sharps", "6 sharps", "7 sharps"];
@@ -20,9 +21,9 @@ export function renderAnswerSelect(
 
   return (
     <div>
-      {FlashCardUtils.renderStringAnswerSelectInternal(`${flashCardIndex}.0`, row0, flashCard, onAnswer)}
-      {FlashCardUtils.renderStringAnswerSelectInternal(`${flashCardIndex}.1`, row1, flashCard, onAnswer)}
-      {FlashCardUtils.renderStringAnswerSelectInternal(`${flashCardIndex}.2`, row2, flashCard, onAnswer)}
+      {FlashCardUtils.renderStringAnswerSelectInternal(`${flashCardIndex}.0`, row0, flashCard, onAnswer, lastCorrectAnswer)}
+      {FlashCardUtils.renderStringAnswerSelectInternal(`${flashCardIndex}.1`, row1, flashCard, onAnswer, lastCorrectAnswer)}
+      {FlashCardUtils.renderStringAnswerSelectInternal(`${flashCardIndex}.2`, row2, flashCard, onAnswer, lastCorrectAnswer)}
     </div>
   );
 }

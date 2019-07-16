@@ -15,7 +15,8 @@ export interface IPianoKeysAnswerSelectProps {
   height: number;
   correctAnswer: Array<Pitch>;
   maxNumPitches?: number;
-  onAnswer: (answerDifficulty: AnswerDifficulty) => void;
+  onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void;
+  lastCorrectAnswer: any;
 }
 export interface IPianoKeysAnswerSelectState {
   selectedPitches: Array<Pitch>;
@@ -29,6 +30,7 @@ export class PianoKeysAnswerSelect extends React.Component<IPianoKeysAnswerSelec
     };
   }
   public render(): JSX.Element {
+    // TODO: use lastCorrectAnswer
     return (
       <div>
         <PianoKeyboard
@@ -81,6 +83,6 @@ export class PianoKeysAnswerSelect extends React.Component<IPianoKeysAnswerSelec
           guess === answer
         )
       ));
-    this.props.onAnswer(isCorrect ? AnswerDifficulty.Easy : AnswerDifficulty.Incorrect);
+    this.props.onAnswer(isCorrect ? AnswerDifficulty.Easy : AnswerDifficulty.Incorrect, selectedPitchMidiNumbersNoOctave);
   }
 }

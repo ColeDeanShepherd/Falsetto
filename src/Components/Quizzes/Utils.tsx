@@ -13,14 +13,15 @@ export function renderNoteAnswerSelect(
   areFlashCardsInverted: boolean,
   flashCardIndex: number,
   flashCard: FlashCard,
-  onAnswer: (answerDifficulty: AnswerDifficulty) => void
+  onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void,
+  lastCorrectAnswer: any
 ): JSX.Element {
   const naturalNotes = ["A", "B", "C", "D", "E", "F", "G"];
   const accidentalNotes = ["A#/B♭", "C#/D♭", "D#/E♭", "F#/G♭", "G#/A♭"];
   return (
     <div>
-      {renderStringAnswerSelectInternal(`${flashCardIndex}.0`, accidentalNotes, flashCard, onAnswer)}
-      {renderStringAnswerSelectInternal(`${flashCardIndex}.1`, naturalNotes, flashCard, onAnswer)}
+      {renderStringAnswerSelectInternal(`${flashCardIndex}.0`, accidentalNotes, flashCard, onAnswer, lastCorrectAnswer)}
+      {renderStringAnswerSelectInternal(`${flashCardIndex}.1`, naturalNotes, flashCard, onAnswer, lastCorrectAnswer)}
     </div>
   );
 }
@@ -32,24 +33,27 @@ export function renderStringAnswerSelect(
   areFlashCardsInverted: boolean,
   flashCardIndex: number,
   flashCard: FlashCard,
-  onAnswer: (answerDifficulty: AnswerDifficulty) => void
+  onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void,
+  lastCorrectAnswer: any
 ): JSX.Element {
-  return renderStringAnswerSelectInternal(flashCardIndex.toString(), answers, flashCard, onAnswer);
+  return renderStringAnswerSelectInternal(flashCardIndex.toString(), answers, flashCard, onAnswer, lastCorrectAnswer);
 }
 
 export function renderStringAnswerSelectInternal(
   key: string,
   answers: string[],
   flashCard: FlashCard,
-  onAnswer: (answerDifficulty: AnswerDifficulty) => void
+  onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void,
+  lastCorrectAnswer: any
 ): JSX.Element {
-  return <StringAnswerSelect key={key} answers={answers} flashCard={flashCard} onAnswer={onAnswer} />;
+  return <StringAnswerSelect key={key} answers={answers} flashCard={flashCard} onAnswer={onAnswer} lastCorrectAnswer={lastCorrectAnswer} />;
 }
 
 export interface StringAnswerSelectProps {
   answers: string[],
   flashCard: FlashCard,
-  onAnswer: (answerDifficulty: AnswerDifficulty) => void
+  onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void,
+  lastCorrectAnswer: any
 }
 export interface StringAnswerSelectState {
   incorrectAnswers: Array<string>;
@@ -65,16 +69,21 @@ export class StringAnswerSelect extends React.Component<StringAnswerSelectProps,
   public render(): JSX.Element {
     return (
       <div>
-        {this.props.answers.map(a => (
-          <Button
-            key={a}
-            variant="contained"
-            color={!Utils.arrayContains(this.state.incorrectAnswers, a) ? "default" : "secondary"}
-            onClick={_ => this.onAnswerClick(a)}
-            style={{ textTransform: "none" }}
-          >
-            {a}
-          </Button>))}
+        {this.props.answers.map(a => {
+          const isIncorrectAnswer = Utils.arrayContains(this.state.incorrectAnswers, a);
+
+          return (
+            <Button
+              key={a}
+              variant="contained"
+              color={!Utils.arrayContains(this.state.incorrectAnswers, a) ? "default" : "secondary"}
+              onClick={_ => this.onAnswerClick(a)}
+              className={((a === this.props.lastCorrectAnswer) && !isIncorrectAnswer) ? "background-green-to-initial" : ""}
+              style={{ textTransform: "none" }}
+            >
+              {a}
+            </Button>);
+        })}
       </div>
     );
   }
@@ -83,20 +92,21 @@ export class StringAnswerSelect extends React.Component<StringAnswerSelectProps,
     const correctAnswer = this.props.flashCard.backSide.renderFn as string;
 
     if (answer === correctAnswer) {
-      this.props.onAnswer(AnswerDifficulty.Easy);
+      this.props.onAnswer(AnswerDifficulty.Easy, correctAnswer);
     }
     else {
       this.setState({ incorrectAnswers: this.state.incorrectAnswers.concat([answer]) });
-      this.props.onAnswer(AnswerDifficulty.Incorrect);
+      this.props.onAnswer(AnswerDifficulty.Incorrect, correctAnswer);
     }
   }
 }
 
 export interface FlashCardSideAnswerSelectProps {
-  flashCards: FlashCard[],
-  enabledFlashCardIndices: number[],
-  flashCard: FlashCard,
-  onAnswer: (answerDifficulty: AnswerDifficulty) => void
+  flashCards: FlashCard[];
+  enabledFlashCardIndices: number[];
+  flashCard: FlashCard;
+  onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void;
+  lastCorrectAnswer: any;
 }
 export interface FlashCardSideAnswerSelectState {
   incorrectAnswers: Array<FlashCardSideRenderFn>;
@@ -122,16 +132,21 @@ export class FlashCardSideAnswerSelect extends React.Component<FlashCardSideAnsw
   
     return (
       <div>
-        {distinctFlashCardSideRenderFns.map((fcs, i) => (
-          <Button
-            key={i}
-            variant="contained"
-            color={!Utils.arrayContains(this.state.incorrectAnswers, fcs) ? "default" : "secondary"}
-            onClick={_ => this.onAnswerClick(fcs)}
-            style={{ textTransform: "none" }}
-          >
-            {callFlashCardSideRenderFn(maxButtonWidth, maxButtonHeight, fcs)}
-          </Button>))}
+        {distinctFlashCardSideRenderFns.map((fcs, i) => {
+          const isIncorrectAnswer = Utils.arrayContains(this.state.incorrectAnswers, fcs);
+
+          return (
+            <Button
+              key={i}
+              variant="contained"
+              color={!isIncorrectAnswer ? "default" : "secondary"}
+              onClick={_ => this.onAnswerClick(fcs)}
+              className={((fcs === this.props.lastCorrectAnswer) && !isIncorrectAnswer) ? "background-green-to-initial" : ""}
+              style={{ textTransform: "none" }}
+            >
+              {callFlashCardSideRenderFn(maxButtonWidth, maxButtonHeight, fcs)}
+            </Button>);
+        })}
       </div>
     );
   }
@@ -140,11 +155,11 @@ export class FlashCardSideAnswerSelect extends React.Component<FlashCardSideAnsw
     const flashCardSideRenderFn = this.props.flashCard.backSide.renderFn;
     
     if (fcs === flashCardSideRenderFn) {
-      this.props.onAnswer(AnswerDifficulty.Easy);
+      this.props.onAnswer(AnswerDifficulty.Easy, flashCardSideRenderFn);
     }
     else {
       this.setState({ incorrectAnswers: this.state.incorrectAnswers.concat([fcs]) });
-      this.props.onAnswer(AnswerDifficulty.Incorrect);
+      this.props.onAnswer(AnswerDifficulty.Incorrect, flashCardSideRenderFn);
     }
   }
 }
@@ -156,14 +171,16 @@ export function renderDistinctFlashCardSideAnswerSelect(
   areFlashCardsInverted: boolean,
   flashCardIndex: number,
   flashCard: FlashCard,
-  onAnswer: (answerDifficulty: AnswerDifficulty) => void
+  onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void,
+  lastCorrectAnswer: any
 ): JSX.Element {
   return renderDistinctFlashCardSideAnswerSelectInternal(
     flashCardIndex.toString(),
     flashCards,
     enabledFlashCardIndices,
     flashCard,
-    onAnswer
+    onAnswer,
+    lastCorrectAnswer
   );
 }
 export function renderDistinctFlashCardSideAnswerSelectInternal(
@@ -171,7 +188,8 @@ export function renderDistinctFlashCardSideAnswerSelectInternal(
   flashCards: FlashCard[],
   enabledFlashCardIndices: number[],
   flashCard: FlashCard,
-  onAnswer: (answerDifficulty: AnswerDifficulty) => void
+  onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void,
+  lastCorrectAnswer: any
 ): JSX.Element {
   return <FlashCardSideAnswerSelect
     key={key}
@@ -179,5 +197,6 @@ export function renderDistinctFlashCardSideAnswerSelectInternal(
     enabledFlashCardIndices={enabledFlashCardIndices}
     flashCard={flashCard}
     onAnswer={onAnswer}
+    lastCorrectAnswer={lastCorrectAnswer}
   />;
 }

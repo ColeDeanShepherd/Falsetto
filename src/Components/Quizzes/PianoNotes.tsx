@@ -42,12 +42,13 @@ export function renderAnswerSelect(
   areFlashCardsInverted: boolean,
   flashCardIndex: number,
   flashCard: FlashCard,
-  onAnswer: (answerDifficulty: AnswerDifficulty) => void
+  onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void,
+  lastCorrectAnswer: any
 ) {
   return (
     <div>
-      {!areFlashCardsInverted ? FlashCardUtils.renderNoteAnswerSelect(width, height, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCardIndex, flashCard, onAnswer) : null}
-      {areFlashCardsInverted ? FlashCardUtils.renderDistinctFlashCardSideAnswerSelect(width, height, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCardIndex, flashCard, onAnswer) : null}
+      {!areFlashCardsInverted ? FlashCardUtils.renderNoteAnswerSelect(width, height, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCardIndex, flashCard, onAnswer, lastCorrectAnswer) : null}
+      {areFlashCardsInverted ? FlashCardUtils.renderDistinctFlashCardSideAnswerSelect(width, height, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCardIndex, flashCard, onAnswer, lastCorrectAnswer) : null}
     </div>
   );
 }

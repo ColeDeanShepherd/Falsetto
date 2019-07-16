@@ -142,7 +142,8 @@ export function renderAnswerSelect(
   areFlashCardsInverted: boolean,
   flashCardIndex: number,
   flashCard: FlashCard,
-  onAnswer: (answerDifficulty: AnswerDifficulty) => void
+  onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void,
+  lastCorrectAnswer: any
 ): JSX.Element {
   const ascendingIntervals = intervals
     .map(i => "↑ " + i);
@@ -150,8 +151,8 @@ export function renderAnswerSelect(
     .map(i => "↓ " + i);
   return (
     <div>
-      {FlashCardUtils.renderStringAnswerSelectInternal(`${flashCardIndex}.0`, ascendingIntervals, flashCard, onAnswer)}
-      {FlashCardUtils.renderStringAnswerSelectInternal(`${flashCardIndex}.1`, descendingIntervals, flashCard, onAnswer)}
+      {FlashCardUtils.renderStringAnswerSelectInternal(`${flashCardIndex}.0`, ascendingIntervals, flashCard, onAnswer, lastCorrectAnswer)}
+      {FlashCardUtils.renderStringAnswerSelectInternal(`${flashCardIndex}.1`, descendingIntervals, flashCard, onAnswer, lastCorrectAnswer)}
     </div>
   );
 }
