@@ -143,16 +143,26 @@ export function renderNoteAnswerSelect(
   flashCardIndex: number,
   flashCard: FlashCard,
   onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void,
-  lastCorrectAnswer: any
+  lastCorrectAnswer: any,
+  incorrectAnswers: Array<any>
 ): JSX.Element {
   const sharpNotes = ["A#", "B#", "C#", "D#", "E#", "F#", "G#"];
   const naturalNotes = ["A", "B", "C", "D", "E", "F", "G"];
   const flatNotes = ["Ab", "Bb", "Cb", "Db", "Eb", "Fb", "Gb"];
   return (
     <div>
-      {FlashCardUtils.renderStringAnswerSelectInternal(`${flashCardIndex}.0`, sharpNotes, flashCard, onAnswer, lastCorrectAnswer)}
-      {FlashCardUtils.renderStringAnswerSelectInternal(`${flashCardIndex}.1`, naturalNotes, flashCard, onAnswer, lastCorrectAnswer)}
-      {FlashCardUtils.renderStringAnswerSelectInternal(`${flashCardIndex}.2`, flatNotes, flashCard, onAnswer, lastCorrectAnswer)}
+      {FlashCardUtils.renderStringAnswerSelectInternal(
+        `${flashCardIndex}.0`, sharpNotes, flashCard, onAnswer, lastCorrectAnswer,
+        incorrectAnswers
+      )}
+      {FlashCardUtils.renderStringAnswerSelectInternal(
+        `${flashCardIndex}.1`, naturalNotes, flashCard, onAnswer, lastCorrectAnswer,
+        incorrectAnswers
+      )}
+      {FlashCardUtils.renderStringAnswerSelectInternal(
+        `${flashCardIndex}.2`, flatNotes, flashCard, onAnswer, lastCorrectAnswer,
+        incorrectAnswers
+      )}
     </div>
   );
 }

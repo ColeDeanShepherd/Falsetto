@@ -8,6 +8,8 @@
   * PianoKeysAnswerSelect
   * PianoChordsAnswerSelect
   * ScaleAnswerSelect
+* Fix notes to intervals A4 d5
+* Fix not being able to click on some buttons in Sheet Music Intervals
 * Make sure pitches in GuitarNote.allNotesOfPitches use the right accidentals.
 * Make sure PianoScaleDronePlayer.renderExtrasFn uses the right accidentals.
 * Scale Viewer

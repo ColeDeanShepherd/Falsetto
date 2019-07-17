@@ -17,6 +17,7 @@ export interface IPianoKeysAnswerSelectProps {
   maxNumPitches?: number;
   onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void;
   lastCorrectAnswer: any;
+  incorrectAnswers: Array<any>;
 }
 export interface IPianoKeysAnswerSelectState {
   selectedPitches: Array<Pitch>;

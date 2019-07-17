@@ -241,6 +241,7 @@ export interface IGuitarNotesAnswerSelectProps {
   correctAnswer: Array<Pitch>;
   onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void;
   lastCorrectAnswer: any;
+  incorrectAnswers: Array<any>;
 }
 export interface IGuitarNotesAnswerSelectState {
   selectedPitches: Array<Pitch>;
@@ -376,16 +377,21 @@ export function renderAnswerSelect(
   flashCardIndex: number,
   flashCard: FlashCard,
   onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void,
-  lastCorrectAnswer: any
+  lastCorrectAnswer: any,
+  incorrectAnswers: Array<any>
 ) {
   if (!areFlashCardsInverted) {
     const correctAnswer = flashCard.backSide.renderFn as string;
     const activeScales = ScaleType.All
       .filter((_, i) => Utils.arrayContains(enabledFlashCardIndices, i));
-    return <ScaleAnswerSelect key={correctAnswer} scales={activeScales} correctAnswer={correctAnswer} onAnswer={onAnswer} lastCorrectAnswer={lastCorrectAnswer} />;
+    return <ScaleAnswerSelect
+      key={correctAnswer} scales={activeScales} correctAnswer={correctAnswer}
+      onAnswer={onAnswer} lastCorrectAnswer={lastCorrectAnswer} incorrectAnswers={incorrectAnswers} />;
   } else {
     const key = flashCard.frontSide.renderFn as string;
     const correctAnswer = flashCard.backSide.data[0] as Array<Pitch>;
-    return <GuitarNotesAnswerSelect key={key} correctAnswer={correctAnswer} onAnswer={onAnswer} lastCorrectAnswer={lastCorrectAnswer} />;
+    return <GuitarNotesAnswerSelect
+      key={key} correctAnswer={correctAnswer} onAnswer={onAnswer}
+      lastCorrectAnswer={lastCorrectAnswer} incorrectAnswers={incorrectAnswers} />;
   }
 }

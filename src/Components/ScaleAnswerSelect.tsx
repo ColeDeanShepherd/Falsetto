@@ -11,6 +11,7 @@ export interface IScaleAnswerSelectProps {
   correctAnswer: string;
   onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void;
   lastCorrectAnswer: any;
+  incorrectAnswers: Array<any>;
 }
 export interface IScaleAnswerSelectState {
   selectedRootPitch: string | undefined;

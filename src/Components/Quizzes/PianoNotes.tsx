@@ -43,12 +43,17 @@ export function renderAnswerSelect(
   flashCardIndex: number,
   flashCard: FlashCard,
   onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void,
-  lastCorrectAnswer: any
+  lastCorrectAnswer: any,
+  incorrectAnswers: Array<any>
 ) {
   return (
     <div>
-      {!areFlashCardsInverted ? FlashCardUtils.renderNoteAnswerSelect(width, height, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCardIndex, flashCard, onAnswer, lastCorrectAnswer) : null}
-      {areFlashCardsInverted ? FlashCardUtils.renderDistinctFlashCardSideAnswerSelect(width, height, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCardIndex, flashCard, onAnswer, lastCorrectAnswer) : null}
+      {!areFlashCardsInverted ? FlashCardUtils.renderNoteAnswerSelect(
+        width, height, flashCards, enabledFlashCardIndices, areFlashCardsInverted,
+        flashCardIndex, flashCard, onAnswer, lastCorrectAnswer, incorrectAnswers) : null}
+      {areFlashCardsInverted ? FlashCardUtils.renderDistinctFlashCardSideAnswerSelect(
+        width, height, flashCards, enabledFlashCardIndices, areFlashCardsInverted,
+        flashCardIndex, flashCard, onAnswer, lastCorrectAnswer, incorrectAnswers) : null}
     </div>
   );
 }

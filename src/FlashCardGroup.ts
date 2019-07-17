@@ -9,7 +9,8 @@ export type RenderAnswerSelectFunc = (
   flashCardIndex: number,
   flashCard: FlashCard,
   onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void,
-  lastCorrectAnswer: any
+  lastCorrectAnswer: any,
+  incorrectAnswers: Array<any>
 ) => JSX.Element;
 
 export type RenderFlashCardMultiSelectFunc = (

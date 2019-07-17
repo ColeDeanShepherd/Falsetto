@@ -165,11 +165,15 @@ export function renderAnswerSelect(
   flashCardIndex: number,
   flashCard: FlashCard,
   onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void,
-  lastCorrectAnswer: any
+  lastCorrectAnswer: any,
+  incorrectAnswers: Array<any>
 ): JSX.Element {
   return (
     <div>
-      {FlashCardUtils.renderStringAnswerSelect(width, height, intervals, flashCards, enabledFlashCardIndices, areFlashCardsInverted, flashCardIndex, flashCard, onAnswer, lastCorrectAnswer)}
+      {FlashCardUtils.renderStringAnswerSelect(
+        width, height, intervals, flashCards, enabledFlashCardIndices,
+        areFlashCardsInverted, flashCardIndex, flashCard, onAnswer,
+        lastCorrectAnswer, incorrectAnswers)}
     </div>
   );
 }

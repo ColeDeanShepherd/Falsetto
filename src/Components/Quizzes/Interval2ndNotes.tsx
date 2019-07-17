@@ -224,7 +224,8 @@ export function renderNoteAnswerSelect(
   flashCardIndex: number,
   flashCard: FlashCard,
   onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void,
-  lastCorrectAnswer: any
+  lastCorrectAnswer: any,
+  incorrectAnswers: Array<any>
 ): JSX.Element {
   const doubleSharpNotes = ["A##", "B##", "C##", "D##", "E##", "F##", "G##"];
   const sharpNotes = ["A#", "B#", "C#", "D#", "E#", "F#", "G#"];
@@ -234,11 +235,26 @@ export function renderNoteAnswerSelect(
 
   return (
     <div>
-      {FlashCardUtils.renderStringAnswerSelectInternal(`${flashCardIndex}.0`, doubleSharpNotes, flashCard, onAnswer, lastCorrectAnswer)}
-      {FlashCardUtils.renderStringAnswerSelectInternal(`${flashCardIndex}.1`, sharpNotes, flashCard, onAnswer, lastCorrectAnswer)}
-      {FlashCardUtils.renderStringAnswerSelectInternal(`${flashCardIndex}.2`, naturalNotes, flashCard, onAnswer, lastCorrectAnswer)}
-      {FlashCardUtils.renderStringAnswerSelectInternal(`${flashCardIndex}.3`, flatNotes, flashCard, onAnswer, lastCorrectAnswer)}
-      {FlashCardUtils.renderStringAnswerSelectInternal(`${flashCardIndex}.4`, doubleFlatNotes, flashCard, onAnswer, lastCorrectAnswer)}
+      {FlashCardUtils.renderStringAnswerSelectInternal(
+        `${flashCardIndex}.0`, doubleSharpNotes, flashCard, onAnswer, lastCorrectAnswer,
+        incorrectAnswers
+      )}
+      {FlashCardUtils.renderStringAnswerSelectInternal(
+        `${flashCardIndex}.1`, sharpNotes, flashCard, onAnswer, lastCorrectAnswer,
+        incorrectAnswers
+      )}
+      {FlashCardUtils.renderStringAnswerSelectInternal(
+        `${flashCardIndex}.2`, naturalNotes, flashCard, onAnswer, lastCorrectAnswer,
+        incorrectAnswers
+      )}
+      {FlashCardUtils.renderStringAnswerSelectInternal(
+        `${flashCardIndex}.3`, flatNotes, flashCard, onAnswer, lastCorrectAnswer,
+        incorrectAnswers
+      )}
+      {FlashCardUtils.renderStringAnswerSelectInternal(
+        `${flashCardIndex}.4`, doubleFlatNotes, flashCard, onAnswer, lastCorrectAnswer,
+        incorrectAnswers
+      )}
     </div>
   );
 }

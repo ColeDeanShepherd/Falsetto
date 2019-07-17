@@ -152,6 +152,7 @@ export interface IPianoChordsAnswerSelectProps {
   correctAnswer: string;
   onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void;
   lastCorrectAnswer: any;
+  incorrectAnswers: Array<any>;
 }
 export interface IPianoChordsAnswerSelectState {
   selectedRootPitch: string | undefined;
@@ -341,14 +342,20 @@ export function renderAnswerSelect(
   flashCardIndex: number,
   flashCard: FlashCard,
   onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void,
-  lastCorrectAnswer: any
+  lastCorrectAnswer: any,
+  incorrectAnswers: Array<any>
 ) {
   if (!areFlashCardsInverted) {
     const correctAnswer = flashCard.backSide.renderFn as string;
-    return <PianoChordsAnswerSelect key={correctAnswer} correctAnswer={correctAnswer} onAnswer={onAnswer} lastCorrectAnswer={lastCorrectAnswer} />;
+    return <PianoChordsAnswerSelect
+      key={correctAnswer} correctAnswer={correctAnswer} onAnswer={onAnswer}
+      lastCorrectAnswer={lastCorrectAnswer} incorrectAnswers={incorrectAnswers} />;
   } else {
     const key = flashCard.frontSide.renderFn as string;
     const correctAnswer = flashCard.backSide.data[0] as Array<Pitch>;
-    return <PianoKeysAnswerSelect key={key} width={width} height={height} correctAnswer={correctAnswer} onAnswer={onAnswer} lastCorrectAnswer={lastCorrectAnswer} />;
+    return <PianoKeysAnswerSelect
+      key={key} width={width} height={height} correctAnswer={correctAnswer}
+      onAnswer={onAnswer} lastCorrectAnswer={lastCorrectAnswer}
+      incorrectAnswers={incorrectAnswers} />;
   }
 }

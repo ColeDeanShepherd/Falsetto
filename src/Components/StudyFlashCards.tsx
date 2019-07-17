@@ -55,6 +55,7 @@ export interface IStudyFlashCardsState {
   currentFlashCardIndex: number;
   haveGottenCurrentFlashCardWrong: boolean;
   lastCorrectAnswer: any;
+  incorrectAnswers: Array<any>;
   configData: any;
   enabledFlashCardIndices: number[];
   showConfiguration: boolean;
@@ -203,7 +204,12 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
 
           <div style={{textAlign: "center"}}>
             {this.props.renderAnswerSelect ? (
-              this.props.renderAnswerSelect(containerWidth, containerHeight, flashCards, this.state.enabledFlashCardIndices, this.state.invertFlashCards, this.state.currentFlashCardIndex, currentFlashCard, boundOnAnswer, this.state.lastCorrectAnswer)
+              this.props.renderAnswerSelect(
+                containerWidth, containerHeight, flashCards,
+                this.state.enabledFlashCardIndices, this.state.invertFlashCards,
+                this.state.currentFlashCardIndex, currentFlashCard, boundOnAnswer,
+                this.state.lastCorrectAnswer, this.state.incorrectAnswers
+              )
              ) : null}
 
             <div style={{marginTop: "1em"}}>
@@ -275,6 +281,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
       currentFlashCardIndex: this.studyAlgorithm.getNextQuestionId(),
       haveGottenCurrentFlashCardWrong: false,
       lastCorrectAnswer: null,
+      incorrectAnswers: [],
       enabledFlashCardIndices: this.studyAlgorithm.enabledQuestionIds
     };
   }
@@ -295,7 +302,10 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
     if (isAnswerDifficultyCorrect(answerDifficulty)) {
       this.moveToNextFlashCard(answer);
     } else {
-      this.setState({ haveGottenCurrentFlashCardWrong: true });
+      this.setState({
+        haveGottenCurrentFlashCardWrong: true,
+        incorrectAnswers: Utils.uniq(this.state.incorrectAnswers.concat(answer))
+      });
     }
   }
 
@@ -344,7 +354,8 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
       currentFlashCardIndex: this.studyAlgorithm.getNextQuestionId(),
       haveGottenCurrentFlashCardWrong: false,
       isShowingBackSide: false,
-      lastCorrectAnswer: lastCorrectAnswer
+      lastCorrectAnswer: lastCorrectAnswer,
+      incorrectAnswers: []
     });
   }
 }
