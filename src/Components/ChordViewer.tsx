@@ -11,7 +11,7 @@ import { Chord, ChordType, ChordTypeGroup } from "../Chord";
 import { PianoKeyboard } from "./PianoKeyboard";
 import { playPitches } from '../Piano';
 import * as PianoScaleDronePlayer from "./PianoScaleDronePlayer";
-import { GuitarChordViewer } from './Quizzes/GuitarScales';
+import { GuitarChordViewer } from './Quizzes/Scales/GuitarScales';
 
 const validSharpKeyPitches = [
   null,

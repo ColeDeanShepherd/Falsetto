@@ -2,17 +2,17 @@ import * as React from "react";
 import { CardContent, Card, Typography } from "@material-ui/core";
 
 import App from './App';
-import * as GuitarNotes from "./Quizzes/GuitarNotes";
-import * as PianoNotes from "./Quizzes/PianoNotes";
-import * as PianoIntervals from "./Quizzes/PianoIntervals";
-import * as GuitarIntervals from "./Quizzes/GuitarIntervals";
-import * as IntervalEarTraining from "./Quizzes/IntervalEarTraining";
-import * as ScaleNotes from "./Quizzes/ScaleNotes";
-import * as PianoScales from "./Quizzes/PianoScales";
-import * as GuitarScales from "./Quizzes/GuitarScales";
-import * as ScaleEarTraining from "./Quizzes/ScaleEarTraining";
-import * as PianoChords from "./Quizzes/PianoChords";
-import * as GuitarChords from "./Quizzes/GuitarChords";
+import * as GuitarNotes from "./Quizzes/Notes/GuitarNotes";
+import * as PianoNotes from "./Quizzes/Notes/PianoNotes";
+import * as PianoIntervals from "./Quizzes/Intervals/PianoIntervals";
+import * as GuitarIntervals from "./Quizzes/Intervals/GuitarIntervals";
+import * as IntervalEarTraining from "./Quizzes/Intervals/IntervalEarTraining";
+import * as ScaleNotes from "./Quizzes/Scales/ScaleNotes";
+import * as PianoScales from "./Quizzes/Scales/PianoScales";
+import * as GuitarScales from "./Quizzes/Scales/GuitarScales";
+import * as ScaleEarTraining from "./Quizzes/Scales/ScaleEarTraining";
+import * as PianoChords from "./Quizzes/Chords/PianoChords";
+import * as GuitarChords from "./Quizzes/Chords/GuitarChords";
 
 export class HomePage extends React.Component<{}, {}> {
   public render(): JSX.Element {

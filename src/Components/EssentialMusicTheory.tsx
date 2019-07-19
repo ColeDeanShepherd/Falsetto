@@ -14,41 +14,41 @@ import { PianoKeyboard, renderPianoKeyboardNoteNames, PianoKeyboardMetrics, rend
 import { Pitch } from '../Pitch';
 import { PitchLetter } from '../PitchLetter';
 
-import * as PianoNotes from "./Quizzes/PianoNotes";
-import * as GuitarNotes from "./Quizzes/GuitarNotes";
-import * as SheetMusicNotes from "./Quizzes/SheetMusicNotes";
+import * as PianoNotes from "./Quizzes/Notes/PianoNotes";
+import * as GuitarNotes from "./Quizzes/Notes/GuitarNotes";
+import * as SheetMusicNotes from "./Quizzes/Sheet Music/SheetMusicNotes";
 
 import { createStudyFlashCardGroupComponent } from './StudyFlashCards';
 
 import { Metronome } from "./Metronome";
 
 import * as RhythmQuiz from "./Quizzes/RhythmQuiz";
-import * as NoteDurations from "./Quizzes/NoteDurations";
-import * as NoteValueNumbers from "./Quizzes/NoteValueNumbers";
+import * as NoteDurations from "./Quizzes/Sheet Music/SheetMusicNoteDurations";
+import * as NoteValueNumbers from "./Quizzes/Notes/NoteValueNumbers";
 
 import intervalQualityChart from "../img/interval-qualities.svg";
 
-import * as IntervalNamesToHalfSteps from "./Quizzes/IntervalNamesToHalfSteps";
-import * as IntervalEarTraining from "./Quizzes/IntervalEarTraining";
-import * as IntervalQualitySymbols from "./Quizzes/IntervalQualitySymbolsToQualities";
-import * as IntervalsToConsonanceDissonance from "./Quizzes/IntervalsToConsonanceDissonance";
-import * as IntervalNotes from "./Quizzes/IntervalNotes";
-import * as SheetMusicIntervalRecognition from "./Quizzes/SheetMusicIntervalRecognition";
-import * as GuitarIntervals from "./Quizzes/GuitarIntervals";
-import * as Interval2ndNotes from "./Quizzes/Interval2ndNotes";
-import * as Interval2ndNoteEarTraining from "./Quizzes/Interval2ndNoteEarTraining";
-import * as Interval2ndNoteEarTrainingPiano from "./Quizzes/Interval2ndNoteEarTrainingPiano";
+import * as IntervalNamesToHalfSteps from "./Quizzes/Intervals/IntervalNamesToHalfSteps";
+import * as IntervalEarTraining from "./Quizzes/Intervals/IntervalEarTraining";
+import * as IntervalQualitySymbols from "./Quizzes/Intervals/IntervalQualitySymbolsToQualities";
+import * as IntervalsToConsonanceDissonance from "./Quizzes/Intervals/IntervalsToConsonanceDissonance";
+import * as IntervalNotes from "./Quizzes/Intervals/IntervalNotes";
+import * as SheetMusicIntervalRecognition from "./Quizzes/Sheet Music/SheetMusicIntervalRecognition";
+import * as GuitarIntervals from "./Quizzes/Intervals/GuitarIntervals";
+import * as Interval2ndNotes from "./Quizzes/Intervals/Interval2ndNotes";
+import * as Interval2ndNoteEarTraining from "./Quizzes/Intervals/Interval2ndNoteEarTraining";
+import * as Interval2ndNoteEarTrainingPiano from "./Quizzes/Intervals/Interval2ndNoteEarTrainingPiano";
 
-import * as ScaleNotes from "./Quizzes/ScaleNotes";
-import * as PianoScales from "./Quizzes/PianoScales";
-import * as PianoChords from "./Quizzes/PianoChords";
-import * as ScaleEarTraining from "./Quizzes/ScaleEarTraining";
+import * as ScaleNotes from "./Quizzes/Scales/ScaleNotes";
+import * as PianoScales from "./Quizzes/Scales/PianoScales";
+import * as PianoChords from "./Quizzes/Chords/PianoChords";
+import * as ScaleEarTraining from "./Quizzes/Scales/ScaleEarTraining";
 import { ScaleViewer } from "./ScaleViewer";
 
-import * as ChordNotes from "./Quizzes/ChordNotes";
-import * as GuitarScales from "./Quizzes/GuitarScales";
-import * as GuitarChords from "./Quizzes/GuitarChords";
-import * as ChordEarTraining from "./Quizzes/ChordEarTraining";
+import * as ChordNotes from "./Quizzes/Chords/ChordNotes";
+import * as GuitarScales from "./Quizzes/Scales/GuitarScales";
+import * as GuitarChords from "./Quizzes/Chords/GuitarChords";
+import * as ChordEarTraining from "./Quizzes/Chords/ChordEarTraining";
 import { ChordViewer } from "./ChordViewer";
 
 import measures from "../img/sheet-music/measures.svg";
@@ -76,7 +76,7 @@ import becomeAPatronButton from "../img/become_a_patron_button.png";
 import { TimeSignaturePlayer } from './TimeSignaturePlayer';
 import { NoteValuePlayer } from './NoteValuePlayer';
 
-import * as NotesQuiz from "./Quizzes/NotesQuiz";
+import * as NotesQuiz from "./Quizzes/Notes/NotesQuiz";
 
 import { MAX_MAIN_CARD_WIDTH } from './Style';
 import { Rect2D } from '../Rect2D';
@@ -95,8 +95,8 @@ import { PitchesAudioPlayer } from './PitchesAudioPlayer';
 
 // #region Chord Progressions
 
-import * as ChordProgressionsQuiz from "./Quizzes/ChordProgressionsQuiz";
-import * as ChordHarmonicFunctions from "./Quizzes/ChordFamilies";
+import * as ChordProgressionsQuiz from "./Quizzes/Chords/ChordProgressionsQuiz";
+import * as ChordHarmonicFunctions from "./Quizzes/Chords/ChordFamilies";
 
 const FiveChordDiagram: React.FunctionComponent<{}> = props => {
   const width = 600;

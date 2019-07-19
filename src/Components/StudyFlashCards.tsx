@@ -175,7 +175,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
           </div>
 
           {this.state.showConfiguration ? (
-            <Paper style={{margin: "1em 0"}}>
+            <Paper style={{padding: "1em", margin: "1em 0"}}>
               {this.props.enableInvertFlashCards ? <div><Checkbox checked={this.state.invertFlashCards} onChange={event => this.toggleInvertFlashCards()} /> Invert Flash Cards</div> : null}
               {false ? <p>{flashCards.length} Flash Cards</p> : null}
               {this.renderFlashCardMultiSelect(flashCards)}

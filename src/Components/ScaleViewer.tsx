@@ -11,7 +11,7 @@ import { Pitch } from "../Pitch";
 import { PianoKeyboard } from "./PianoKeyboard";
 import { playPitches } from '../Piano';
 import * as PianoScaleDronePlayer from "./PianoScaleDronePlayer";
-import { GuitarScaleViewer } from './Quizzes/GuitarScales';
+import { GuitarScaleViewer } from './Quizzes/Scales/GuitarScales';
 import { getStandardGuitarTuning, getPreferredGuitarScaleShape } from './GuitarFretboard';
 import { ScaleAudioPlayer } from './ScaleAudioPlayer';
 

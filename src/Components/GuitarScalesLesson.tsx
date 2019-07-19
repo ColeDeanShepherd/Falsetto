@@ -15,7 +15,7 @@ import { ScaleType, Scale } from '../Scale';
 import { NoteText, BecomeAPatronSection } from './EssentialMusicTheory';
 import { ScaleAudioPlayer } from './ScaleAudioPlayer';
 import { createStudyFlashCardGroupComponent } from './StudyFlashCards';
-import * as GuitarScales from "./Quizzes/GuitarScales";
+import * as GuitarScales from "./Quizzes/Scales/GuitarScales";
 import { ScaleViewer } from './ScaleViewer';
 import { GuitarNote } from '../GuitarNote';
 

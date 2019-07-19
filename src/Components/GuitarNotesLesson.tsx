@@ -9,7 +9,7 @@ import {
   GuitarFretboardMetrics,
   renderFretNumbers
 } from './GuitarFretboard';
-import * as GuitarNotes from "./Quizzes/GuitarNotes";
+import * as GuitarNotes from "./Quizzes/Notes/GuitarNotes";
 import { Pitch } from '../Pitch';
 import { PitchLetter } from '../PitchLetter';
 import { createStudyFlashCardGroupComponent } from './StudyFlashCards';
