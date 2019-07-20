@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Router, Route, NavLink } from "react-router-dom";
-import { Paper, AppBar, Typography, Toolbar } from "@material-ui/core";
+import { Paper } from "@material-ui/core";
 import { History, createBrowserHistory, Location, Action, UnregisterCallback } from "history";
 import StackTrace from "stacktrace-js";
 
@@ -330,23 +330,24 @@ class App extends React.Component<IAppProps, IAppState> {
     const app = !this.isEmbedded
       ? (
         <div className="app">
-          <AppBar position="static" className="top-pane">
-            <Toolbar className="nav top-nav">
-              <Typography variant="h6" color="inherit">
-                <NavLink to="/" onClick={event => this.onNavLinkClick()} className="nav-link" activeClassName="" style={{ display: "inline-block" }}><img src="/logo-white.svg" style={{width: "24px", verticalAlign: "text-bottom"}} /><span style={{paddingLeft: "0.5em"}} className="hide-on-mobile">Falsetto</span></NavLink>
-                <NavLink to="/support-us" onClick={event => this.onNavLinkClick()} className="nav-link" activeClassName="" style={{ fontSize: "1.1rem", fontWeight: "normal", display: "inline-block" }}>Support Us</NavLink>
-                <a
-                  href="https://docs.google.com/forms/d/e/1FAIpQLSfHT8tJTdmW_hCjxMPUf14wchM6GBPQAaq8PSMW05C01gBW4g/viewform"
-                  target="_blank"
-                  className="nav-link"
-                  style={{ fontSize: "1.1rem", fontWeight: "normal", display: "inline-block" }}
-                >
-                  Contact
-                </a>
-                <i onClick={event => this.toggleMenu()} className="cursor-pointer material-icons hide-on-desktop" style={{ verticalAlign: "sub", display: "inline-block"}}>menu</i>
-              </Typography>
-            </Toolbar>
-          </AppBar>
+          <div className="nav-bar">
+            <NavLink to="/" onClick={event => this.onNavLinkClick()} activeClassName="">
+              <img src="/logo-white.svg" style={{height: "24px", verticalAlign: "sub"}} />
+              <span style={{paddingLeft: "0.5em"}} className="hide-on-mobile">Falsetto</span>
+            </NavLink>
+            <NavLink to="/support-us" onClick={event => this.onNavLinkClick()} activeClassName="" style={{ fontWeight: "normal" }}>
+              Support Us
+            </NavLink>
+            <a
+              href="https://docs.google.com/forms/d/e/1FAIpQLSfHT8tJTdmW_hCjxMPUf14wchM6GBPQAaq8PSMW05C01gBW4g/viewform"
+              target="_blank"
+              className="nav-link"
+              style={{ fontWeight: "normal" }}
+            >
+              Contact
+            </a>
+            <i onClick={event => this.toggleMenu()} className="cursor-pointer material-icons hide-on-desktop">menu</i>
+          </div>
           <div className="bottom-pane horizontal-panes">
             <Paper className={"left-pane" + (!this.state.isMenuVisibleOnMobile ? " hide-on-mobile" : "")}>
               {nav}
