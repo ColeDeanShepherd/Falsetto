@@ -72,8 +72,7 @@ import { SupportUsPage } from "./SupportUs";
 import DocumentTitle from "react-document-title";
 import { HomePage } from "./HomePage";
 import ScrollToTop from './ScrollToTop';
-import { ChordType } from '../Chord';
-import { generateChordNames } from '../ChordName';
+import { MAX_MAIN_CARD_WIDTH } from './Style';
 
 async function getErrorDescription(msg: string | Event, file: string | undefined, line: number | undefined, col: number | undefined, error: Error | undefined): Promise<string> {
   return new Promise<string>((resolve, reject) => {
@@ -97,13 +96,20 @@ async function getErrorDescription(msg: string | Event, file: string | undefined
 }
 
 const NavSectionTitle: React.FunctionComponent<{ style?: any }> = props => <p style={Object.assign({ fontSize: "1.2em", fontWeight: "bold", textDecoration: "underline" }, props.style)}>{props.children}</p>;
-const NavSectionSubTitle: React.FunctionComponent<{ style?: any }> = props => <p style={Object.assign({ fontWeight: "bold" }, props.style)}>{props.children}</p>;
+const NavSectionSubTitle: React.FunctionComponent<{ style?: any }> = props => <p style={Object.assign({ textDecoration: "underline" }, props.style)}>{props.children}</p>;
+
+const MenuCategory: React.FunctionComponent<{ title: string }> = props => (
+  <div className="menu-category">
+    <NavSectionSubTitle>{props.title}</NavSectionSubTitle>
+    {props.children}
+  </div>
+);
 
 interface IAppProps {
   isEmbedded: boolean;
 }
 interface IAppState {
-  isMenuVisibleOnMobile: boolean;
+  isMenuVisible: boolean;
 }
 class App extends React.Component<IAppProps, IAppState> {
   public static instance: App;
@@ -192,7 +198,7 @@ class App extends React.Component<IAppProps, IAppState> {
     this.rightPaneRef = React.createRef();
 
     this.state = {
-      isMenuVisibleOnMobile: false
+      isMenuVisible: false
     };
 
     App.instance = this;
@@ -211,8 +217,8 @@ class App extends React.Component<IAppProps, IAppState> {
   public renderRoutes(): Array<JSX.Element> {
     return [
       <Route exact path="/" component={() => <DocumentTitle title="Falsetto"><HomePage /></DocumentTitle>} />,
-      <Route path="/about" component={() => <DocumentTitle title="About - Falsetto"><AboutPage /></DocumentTitle>} />,
-      <Route path="/support-us" component={() => <DocumentTitle title="Support Us - Falsetto"><SupportUsPage /></DocumentTitle>} />,
+      <Route exact path="/about" component={() => <DocumentTitle title="About - Falsetto"><AboutPage /></DocumentTitle>} />,
+      <Route exact path="/support-us" component={() => <DocumentTitle title="Support Us - Falsetto"><SupportUsPage /></DocumentTitle>} />,
       <Route exact path="/essential-music-theory" component={() => <DocumentTitle title="Essential Music Theory - Falsetto"><SectionContainer section={IntroSection}></SectionContainer></DocumentTitle>} />,
       <Route exact path="/essential-music-theory/rhythm" component={() => <DocumentTitle title="Rhythm - Essential Music Theory - Falsetto"><SectionContainer section={RhythmSection}></SectionContainer></DocumentTitle>} />,
       <Route exact path="/essential-music-theory/notes" component={() => <DocumentTitle title="Notes - Essential Music Theory - Falsetto"><SectionContainer section={NotesSection}></SectionContainer></DocumentTitle>} />,
@@ -221,14 +227,14 @@ class App extends React.Component<IAppProps, IAppState> {
       <Route exact path="/essential-music-theory/chords" component={() => <DocumentTitle title="Chords - Essential Music Theory - Falsetto"><SectionContainer section={ChordsSection}></SectionContainer></DocumentTitle>} />,
       <Route exact path="/essential-music-theory/chord-progressions" component={() => <DocumentTitle title="Chord Progressions - Essential Music Theory - Falsetto"><SectionContainer section={ChordProgressionsSection}></SectionContainer></DocumentTitle>} />,
       <Route exact path="/essential-music-theory/next-steps" component={() => <DocumentTitle title="Next Steps - Essential Music Theory - Falsetto"><SectionContainer section={NextStepsSection}></SectionContainer></DocumentTitle>} />,
-      <Route path="/scale-viewer" component={() => <DocumentTitle title={"Scale Viewer - Falsetto"}><ScaleViewer renderAllScaleShapes={false} /></DocumentTitle>} />,
-      <Route path="/chord-viewer" component={() => <DocumentTitle title={"Chord Viewer - Falsetto"}><ChordViewer /></DocumentTitle>} />,
-      <Route path="/interval-chord-scale-finder" component={() => <DocumentTitle title={"Interval/Chord/Scale Finder - Falsetto"}><IntervalChordScaleFinder /></DocumentTitle>} />,
-      <Route path="/rhythm-tapper" component={() => <DocumentTitle title={"Rhythm Tapper - Falsetto"}><RhythmTapper /></DocumentTitle>} />,
-      <Route path="/learn-guitar-notes-in-10-steps" component={() => <DocumentTitle title={"Learn the Guitar Notes in 10 Easy Steps - Falsetto"}><GuitarNotesLesson /></DocumentTitle>} />,
-      <Route path="/learn-guitar-scales" component={() => <DocumentTitle title={"Learn the Guitar Scales - Falsetto"}><GuitarScalesLesson /></DocumentTitle>} />
+      <Route exact path="/scale-viewer" component={() => <DocumentTitle title={"Scale Viewer - Falsetto"}><ScaleViewer renderAllScaleShapes={false} /></DocumentTitle>} />,
+      <Route exact path="/chord-viewer" component={() => <DocumentTitle title={"Chord Viewer - Falsetto"}><ChordViewer /></DocumentTitle>} />,
+      <Route exact path="/interval-chord-scale-finder" component={() => <DocumentTitle title={"Interval/Chord/Scale Finder - Falsetto"}><IntervalChordScaleFinder /></DocumentTitle>} />,
+      <Route exact path="/rhythm-tapper" component={() => <DocumentTitle title={"Rhythm Tapper - Falsetto"}><RhythmTapper /></DocumentTitle>} />,
+      <Route exact path="/learn-guitar-notes-in-10-steps" component={() => <DocumentTitle title={"Learn the Guitar Notes in 10 Easy Steps - Falsetto"}><GuitarNotesLesson /></DocumentTitle>} />,
+      <Route exact path="/learn-guitar-scales" component={() => <DocumentTitle title={"Learn the Guitar Scales - Falsetto"}><GuitarScalesLesson /></DocumentTitle>} />
     ].concat(
-      this.flashCardGroups.map(fcg => <Route key={fcg.route} path={fcg.route} component={this.createStudyFlashCardGroupComponent(fcg)} />)
+      this.flashCardGroups.map(fcg => <Route key={fcg.route} exact path={fcg.route} component={this.createStudyFlashCardGroupComponent(fcg)} />)
     );
   }
   public render(): JSX.Element {
@@ -237,126 +243,131 @@ class App extends React.Component<IAppProps, IAppState> {
     /*
     <div>
       <p style={{marginTop: 0}}>Rhythms</p>
-      <NavLink to="rhythm-tapper" className="nav-link">Rhythm Tapper</NavLink>
+      <NavLink to="rhythm-tapper" onClick={event => this.onNavLinkClick()} className="menu-link">Rhythm Tapper</NavLink>
     </div>
     */
+   
+    const menu = this.state.isMenuVisible ? (
+      <Paper className={"menu-container"}>
+        <div className="menu">
+          <div className="row">
+            <div className="column">
+              <MenuCategory title="Essential Music Theory Course">
+                {this.renderNavLink("/essential-music-theory", "Introduction")}
+                {this.renderNavLink("/essential-music-theory/rhythm", "Rhythm")}
+                {this.renderNavLink("/essential-music-theory/notes", "Notes")}
+                {this.renderNavLink("/essential-music-theory/intervals", "Intervals")}
+                {this.renderNavLink("/essential-music-theory/scales-and-modes", "Scales & Modes")}
+                {this.renderNavLink("/essential-music-theory/chords", "Chords")}
+                {this.renderNavLink("/essential-music-theory/chord-progressions", "Chord Progressions")}
+                {this.renderNavLink("/essential-music-theory/next-steps", "Next Steps")}
+              </MenuCategory>
+              <MenuCategory title="Guitar Lessons">
+                <NavLink to="/learn-guitar-notes-in-10-steps" onClick={event => this.onNavLinkClick()} className="menu-link">Learn the Notes on Guitar in 10 Easy Steps</NavLink>
+                <NavLink to="/learn-guitar-scales" onClick={event => this.onNavLinkClick()} className="menu-link">Learn Guitar Scale Shapes</NavLink>
+              </MenuCategory>
+            </div>
+            <div className="column">
+              <MenuCategory title="Tools">
+                <NavLink to="/interval-chord-scale-finder" onClick={event => this.onNavLinkClick()} className="menu-link">Interval/Chord/Scale Finder</NavLink>
+                <NavLink to="/scale-viewer" onClick={event => this.onNavLinkClick()} className="menu-link">Scale Viewer</NavLink>
+                <NavLink to="/chord-viewer" onClick={event => this.onNavLinkClick()} className="menu-link">Chord Viewer</NavLink>
+                {renderFlashCardGroupLink(RandomChordGenerator.createFlashCardGroup())}
+              </MenuCategory>
+              <MenuCategory title="Note Exercises">
+                {renderFlashCardGroupLink(PianoNotes.createFlashCardGroup())}
+                {renderFlashCardGroupLink(GuitarNotes.createFlashCardGroup())}
+                {renderFlashCardGroupLink(NoteDurations.createFlashCardGroup())}
+                {renderFlashCardGroupLink(SheetMusicNotes.createFlashCardGroup())}
+              </MenuCategory>
+            </div>
+            <div className="column">
+              <MenuCategory title="Interval Exercises">
+                {renderFlashCardGroupLink(IntervalQualitySymbolsToQualities.createFlashCardGroup())}
+                {renderFlashCardGroupLink(IntervalNamesToHalfSteps.createFlashCardGroup())}
+                {renderFlashCardGroupLink(IntervalsToConsonanceDissonance.createFlashCardGroup())}
+                {renderFlashCardGroupLink(Interval2ndNotes.createFlashCardGroup())}
+                {renderFlashCardGroupLink(IntervalNotes.createFlashCardGroup())}
+                {renderFlashCardGroupLink(SheetMusicIntervalRecognition.createFlashCardGroup())}
+                {renderFlashCardGroupLink(PianoIntervals.createFlashCardGroup())}
+                {renderFlashCardGroupLink(GuitarIntervals.createFlashCardGroup())}
+                {renderFlashCardGroupLink(IntervalEarTraining.createFlashCardGroup())}
+                {renderFlashCardGroupLink(Interval2ndNoteEarTraining.createFlashCardGroup())}
+                {renderFlashCardGroupLink(Interval2ndNoteEarTrainingPiano.createFlashCardGroup())}
+              </MenuCategory>
+            </div>
+            <div className="column">
+              <MenuCategory title="Scale Exercises">
+                {renderFlashCardGroupLink(ScaleDegreeNames.createFlashCardGroup())}
+                {renderFlashCardGroupLink(ScaleNotes.createFlashCardGroup())}
+                {renderFlashCardGroupLink(PianoScales.createFlashCardGroup())}
+                {renderFlashCardGroupLink(GuitarScales.createFlashCardGroup())}
+                {renderFlashCardGroupLink(ScaleDegreeModes.createFlashCardGroup())}
+                {renderFlashCardGroupLink(ScaleChords.createFlashCardGroup())}
+                {renderFlashCardGroupLink(ScaleEarTraining.createFlashCardGroup())}
+              </MenuCategory>
+              <MenuCategory title="Key Exercises">
+                {renderFlashCardGroupLink(KeyAccidentalCounts.createFlashCardGroup())}
+                {renderFlashCardGroupLink(KeyAccidentalNotes.createFlashCardGroup())}
+                {renderFlashCardGroupLink(KeySignatureIdentification.createFlashCardGroup())}
+              </MenuCategory>
+            </div>
+            <div className="column">
+              <MenuCategory title="Chord Exercises">
+                {renderFlashCardGroupLink(ChordFamilies.createFlashCardGroup())}
+                {renderFlashCardGroupLink(ChordNotes.createFlashCardGroup())}
+                {renderFlashCardGroupLink(AvailableChordTensions.createFlashCardGroup())}
+                {renderFlashCardGroupLink(DiatonicTriads.createFlashCardGroup())}
+                {renderFlashCardGroupLink(DiatonicSeventhChords.createFlashCardGroup())}
+                {renderFlashCardGroupLink(SheetMusicChordRecognition.createFlashCardGroup())}
+                {renderFlashCardGroupLink(PianoChords.createFlashCardGroup())}
+                {renderFlashCardGroupLink(GuitarChords.createFlashCardGroup())}
+                {renderFlashCardGroupLink(ChordEarTraining.createFlashCardGroup())}
+              </MenuCategory>
+            </div>
+          </div>
+        </div>
+      </Paper>
+    ) : null;
 
-    const nav = (
-      <div className="nav left-nav">
-        <NavSectionTitle>Lessons</NavSectionTitle>
-        <div>
-          <NavSectionSubTitle style={{marginTop: 0}}>Essential Music Theory</NavSectionSubTitle>
-          {this.renderNavLink("/essential-music-theory", "Introduction")}
-          {this.renderNavLink("/essential-music-theory/rhythm", "Rhythm")}
-          {this.renderNavLink("/essential-music-theory/notes", "Notes")}
-          {this.renderNavLink("/essential-music-theory/intervals", "Intervals")}
-          {this.renderNavLink("/essential-music-theory/scales-and-modes", "Scales & Modes")}
-          {this.renderNavLink("/essential-music-theory/chords", "Chords")}
-          {this.renderNavLink("/essential-music-theory/chord-progressions", "Chord Progressions")}
-          {this.renderNavLink("/essential-music-theory/next-steps", "Next Steps")}
+    const mainContent = (
+      <div ref={this.rightPaneRef} className={!this.isEmbedded ? "main" : "main embedded"}>
+        <div style={{ maxWidth: MAX_MAIN_CARD_WIDTH, margin: "0 auto" }}>
+          {this.renderRoutes()}
         </div>
-        <div>
-          <NavSectionSubTitle>Guitar</NavSectionSubTitle>
-          <NavLink to="/learn-guitar-notes-in-10-steps" className="nav-link">Learn the Notes on Guitar in 10 Easy Steps</NavLink>
-          <NavLink to="/learn-guitar-scales" className="nav-link">Learn Guitar Scale Shapes</NavLink>
-        </div>
-
-        <NavSectionTitle>Tools</NavSectionTitle>
-        <div>
-          <NavLink to="/interval-chord-scale-finder" className="nav-link">Interval/Chord/Scale Finder</NavLink>
-        </div>
-        
-        <NavSectionTitle>Exercises</NavSectionTitle>
-        <div>
-          <NavSectionSubTitle>Notes</NavSectionSubTitle>
-          {renderFlashCardGroupLink(PianoNotes.createFlashCardGroup())}
-          {renderFlashCardGroupLink(GuitarNotes.createFlashCardGroup())}
-          {renderFlashCardGroupLink(NoteDurations.createFlashCardGroup())}
-          {renderFlashCardGroupLink(SheetMusicNotes.createFlashCardGroup())}
-        </div>
-        <div>
-          <NavSectionSubTitle>Intervals</NavSectionSubTitle>
-          {renderFlashCardGroupLink(IntervalQualitySymbolsToQualities.createFlashCardGroup())}
-          {renderFlashCardGroupLink(IntervalNamesToHalfSteps.createFlashCardGroup())}
-          {renderFlashCardGroupLink(IntervalsToConsonanceDissonance.createFlashCardGroup())}
-          {renderFlashCardGroupLink(Interval2ndNotes.createFlashCardGroup())}
-          {renderFlashCardGroupLink(IntervalNotes.createFlashCardGroup())}
-          {renderFlashCardGroupLink(SheetMusicIntervalRecognition.createFlashCardGroup())}
-          {renderFlashCardGroupLink(PianoIntervals.createFlashCardGroup())}
-          {renderFlashCardGroupLink(GuitarIntervals.createFlashCardGroup())}
-          {renderFlashCardGroupLink(IntervalEarTraining.createFlashCardGroup())}
-          {renderFlashCardGroupLink(Interval2ndNoteEarTraining.createFlashCardGroup())}
-          {renderFlashCardGroupLink(Interval2ndNoteEarTrainingPiano.createFlashCardGroup())}
-        </div>
-        <div>
-          <NavSectionSubTitle>Scales</NavSectionSubTitle>
-          {renderFlashCardGroupLink(ScaleDegreeNames.createFlashCardGroup())}
-          {renderFlashCardGroupLink(ScaleNotes.createFlashCardGroup())}
-          {renderFlashCardGroupLink(PianoScales.createFlashCardGroup())}
-          {renderFlashCardGroupLink(GuitarScales.createFlashCardGroup())}
-          {renderFlashCardGroupLink(ScaleDegreeModes.createFlashCardGroup())}
-          {renderFlashCardGroupLink(ScaleChords.createFlashCardGroup())}
-          {renderFlashCardGroupLink(ScaleEarTraining.createFlashCardGroup())}
-          <NavLink to="/scale-viewer" className="nav-link">Scale Viewer</NavLink>
-        </div>
-        <div>
-          <NavSectionSubTitle>Keys</NavSectionSubTitle>
-          {renderFlashCardGroupLink(KeyAccidentalCounts.createFlashCardGroup())}
-          {renderFlashCardGroupLink(KeyAccidentalNotes.createFlashCardGroup())}
-          {renderFlashCardGroupLink(KeySignatureIdentification.createFlashCardGroup())}
-        </div>
-        <div>
-          <NavSectionSubTitle>Chords</NavSectionSubTitle>
-          {renderFlashCardGroupLink(ChordFamilies.createFlashCardGroup())}
-          {renderFlashCardGroupLink(ChordNotes.createFlashCardGroup())}
-          {renderFlashCardGroupLink(AvailableChordTensions.createFlashCardGroup())}
-          {renderFlashCardGroupLink(DiatonicTriads.createFlashCardGroup())}
-          {renderFlashCardGroupLink(DiatonicSeventhChords.createFlashCardGroup())}
-          {renderFlashCardGroupLink(SheetMusicChordRecognition.createFlashCardGroup())}
-          {renderFlashCardGroupLink(PianoChords.createFlashCardGroup())}
-          {renderFlashCardGroupLink(GuitarChords.createFlashCardGroup())}
-          {renderFlashCardGroupLink(ChordEarTraining.createFlashCardGroup())}
-          <NavLink to="/chord-viewer" className="nav-link">Chord Viewer</NavLink>
-          {renderFlashCardGroupLink(RandomChordGenerator.createFlashCardGroup())}
-        </div>
-      </div>
-    );
-
-    const rightPane = (
-      <div ref={this.rightPaneRef} className={!this.isEmbedded ? "right-pane" : "right-pane embedded"}>
-        {this.renderRoutes()}
       </div>
     );
     const app = !this.isEmbedded
       ? (
         <div className="app">
-          <div className="nav-bar">
-            <NavLink to="/" onClick={event => this.onNavLinkClick()} activeClassName="">
-              <img src="/logo-white.svg" style={{height: "24px", verticalAlign: "sub"}} />
-              <span style={{paddingLeft: "0.5em"}} className="hide-on-mobile">Falsetto</span>
-            </NavLink>
-            <NavLink to="/support-us" onClick={event => this.onNavLinkClick()} activeClassName="" style={{ fontWeight: "normal" }}>
-              Support Us
-            </NavLink>
-            <a
-              href="https://docs.google.com/forms/d/e/1FAIpQLSfHT8tJTdmW_hCjxMPUf14wchM6GBPQAaq8PSMW05C01gBW4g/viewform"
-              target="_blank"
-              className="nav-link"
-              style={{ fontWeight: "normal" }}
-            >
-              Contact
-            </a>
-            <i onClick={event => this.toggleMenu()} className="cursor-pointer material-icons hide-on-desktop">menu</i>
+          <div className="nav-container">
+            <div className="nav-bar">
+              <NavLink to="/" onClick={event => this.onNavLinkClick()} activeClassName="">
+                <img src="/logo-white.svg" style={{height: "24px", verticalAlign: "sub"}} />
+                <span style={{paddingLeft: "0.5em"}} className="hide-on-mobile">Falsetto</span>
+              </NavLink>
+              <NavLink to="/support-us" onClick={event => this.onNavLinkClick()} activeClassName="" style={{ fontWeight: "normal" }}>
+                Support Us
+              </NavLink>
+              <a
+                href="https://docs.google.com/forms/d/e/1FAIpQLSfHT8tJTdmW_hCjxMPUf14wchM6GBPQAaq8PSMW05C01gBW4g/viewform"
+                target="_blank"
+                className="menu-link"
+                style={{ fontWeight: "normal" }}
+              >
+                Contact
+              </a>
+              <i onClick={event => this.toggleMenu()} className="cursor-pointer material-icons no-select">menu</i>
+            </div>
+            {menu}
           </div>
-          <div className="bottom-pane horizontal-panes">
-            <Paper className={"left-pane" + (!this.state.isMenuVisibleOnMobile ? " hide-on-mobile" : "")}>
-              {nav}
-            </Paper>
-            {rightPane}
+
+          <div className="main-container">
+            {mainContent}
           </div>
         </div>
       )
-      : <div className="app">{rightPane}</div>;
+      : <div className="app">{mainContent}</div>;
    
     return (
       <Router history={this.history}>
@@ -368,16 +379,16 @@ class App extends React.Component<IAppProps, IAppState> {
   }
 
   public renderNavLink(route: string, text: string): JSX.Element {
-    return <NavLink exact to={route} onClick={event => this.onNavLinkClick()} className="nav-link">{text}</NavLink>;
+    return <NavLink exact to={route} onClick={event => this.onNavLinkClick()} className="menu-link">{text}</NavLink>;
   }
   public renderFlashCardGroupLink(flashCardGroup: FlashCardGroup): JSX.Element {
-    return <NavLink exact to={flashCardGroup.route} onClick={event => this.onNavLinkClick()} className="nav-link">{flashCardGroup.name}</NavLink>;
+    return <NavLink exact to={flashCardGroup.route} onClick={event => this.onNavLinkClick()} className="menu-link">{flashCardGroup.name}</NavLink>;
   }
   public toggleMenu() {
-    this.setState({ isMenuVisibleOnMobile: !this.state.isMenuVisibleOnMobile });
+    this.setState({ isMenuVisible: !this.state.isMenuVisible });
   }
   public setMenuIsVisibleOnMobile(value: boolean) {
-    this.setState({ isMenuVisibleOnMobile: value });
+    this.setState({ isMenuVisible: value });
   }
   public scrollBodyToTop() {
     (this.rightPaneRef as any).current.scrollTo(0, 0);
@@ -407,7 +418,7 @@ class App extends React.Component<IAppProps, IAppState> {
     );
   }
   private onNavLinkClick() {
-    this.setState({ isMenuVisibleOnMobile: false });
+    this.setState({ isMenuVisible: false });
   }
 }
 
