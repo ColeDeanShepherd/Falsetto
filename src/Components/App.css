@@ -1,20 +1,17 @@
 /* All screen sizes */
-.nav-container {
+.app {
   display: flex;
   flex-direction: column;
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  max-height: 100vh;
-  z-index: 2200;
+  height: 100vh;
 }
+
 .nav-bar {
   position: relative;
   color: white;
   background-color: #3f51b5;
   box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12);
   padding: 0 1em;
+  z-index: 3000;
 }
 .nav-bar > * {
   display: inline-block;
@@ -41,9 +38,13 @@
 }
 
 .menu-container {
-  padding: 0 1em 1em 1em;
-  max-height: 100vh;
   overflow-y: auto;
+  box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12);
+  z-index: 2000;
+}
+.menu {
+  display: flex;
+  padding-bottom: 1em;
 }
 
 .menu a,
@@ -60,29 +61,24 @@
 }
 
 .main-container {
-  padding-top: 42px;
-  position: relative;
+  overflow-y: auto;
+  flex-shrink: 9999;
+}
+.main {
+  padding: 1em 0;
 }
 
 /* Mobile */
 @media (max-width: 800px) {
-  .top-nav {
-    min-height: 48px !important;
-  }
 }
 
 /* Desktop */
 @media (min-width: 801px) {
-  .main {
-    padding: 1em;
-  }
   .main.embedded {
     padding: 0;
   }
 
-  
   .menu {
-    display: flex;
     flex-wrap: wrap;
   }
 

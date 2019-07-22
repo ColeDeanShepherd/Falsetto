@@ -247,127 +247,129 @@ class App extends React.Component<IAppProps, IAppState> {
     </div>
     */
    
-    const menu = this.state.isMenuVisible ? (
-      <Paper className={"menu-container"}>
-        <div className="menu">
-          <div className="row">
-            <div className="column">
-              <MenuCategory title="Essential Music Theory Course">
-                {this.renderNavLink("/essential-music-theory", "Introduction")}
-                {this.renderNavLink("/essential-music-theory/rhythm", "Rhythm")}
-                {this.renderNavLink("/essential-music-theory/notes", "Notes")}
-                {this.renderNavLink("/essential-music-theory/intervals", "Intervals")}
-                {this.renderNavLink("/essential-music-theory/scales-and-modes", "Scales & Modes")}
-                {this.renderNavLink("/essential-music-theory/chords", "Chords")}
-                {this.renderNavLink("/essential-music-theory/chord-progressions", "Chord Progressions")}
-                {this.renderNavLink("/essential-music-theory/next-steps", "Next Steps")}
-              </MenuCategory>
-              <MenuCategory title="Guitar Lessons">
-                <NavLink to="/learn-guitar-notes-in-10-steps" onClick={event => this.onNavLinkClick()} className="menu-link">Learn the Notes on Guitar in 10 Easy Steps</NavLink>
-                <NavLink to="/learn-guitar-scales" onClick={event => this.onNavLinkClick()} className="menu-link">Learn Guitar Scale Shapes</NavLink>
-              </MenuCategory>
-            </div>
-            <div className="column">
-              <MenuCategory title="Tools">
-                <NavLink to="/interval-chord-scale-finder" onClick={event => this.onNavLinkClick()} className="menu-link">Interval/Chord/Scale Finder</NavLink>
-                <NavLink to="/scale-viewer" onClick={event => this.onNavLinkClick()} className="menu-link">Scale Viewer</NavLink>
-                <NavLink to="/chord-viewer" onClick={event => this.onNavLinkClick()} className="menu-link">Chord Viewer</NavLink>
-                {renderFlashCardGroupLink(RandomChordGenerator.createFlashCardGroup())}
-              </MenuCategory>
-              <MenuCategory title="Note Exercises">
-                {renderFlashCardGroupLink(PianoNotes.createFlashCardGroup())}
-                {renderFlashCardGroupLink(GuitarNotes.createFlashCardGroup())}
-                {renderFlashCardGroupLink(NoteDurations.createFlashCardGroup())}
-                {renderFlashCardGroupLink(SheetMusicNotes.createFlashCardGroup())}
-              </MenuCategory>
-            </div>
-            <div className="column">
-              <MenuCategory title="Interval Exercises">
-                {renderFlashCardGroupLink(IntervalQualitySymbolsToQualities.createFlashCardGroup())}
-                {renderFlashCardGroupLink(IntervalNamesToHalfSteps.createFlashCardGroup())}
-                {renderFlashCardGroupLink(IntervalsToConsonanceDissonance.createFlashCardGroup())}
-                {renderFlashCardGroupLink(Interval2ndNotes.createFlashCardGroup())}
-                {renderFlashCardGroupLink(IntervalNotes.createFlashCardGroup())}
-                {renderFlashCardGroupLink(SheetMusicIntervalRecognition.createFlashCardGroup())}
-                {renderFlashCardGroupLink(PianoIntervals.createFlashCardGroup())}
-                {renderFlashCardGroupLink(GuitarIntervals.createFlashCardGroup())}
-                {renderFlashCardGroupLink(IntervalEarTraining.createFlashCardGroup())}
-                {renderFlashCardGroupLink(Interval2ndNoteEarTraining.createFlashCardGroup())}
-                {renderFlashCardGroupLink(Interval2ndNoteEarTrainingPiano.createFlashCardGroup())}
-              </MenuCategory>
-            </div>
-            <div className="column">
-              <MenuCategory title="Scale Exercises">
-                {renderFlashCardGroupLink(ScaleDegreeNames.createFlashCardGroup())}
-                {renderFlashCardGroupLink(ScaleNotes.createFlashCardGroup())}
-                {renderFlashCardGroupLink(PianoScales.createFlashCardGroup())}
-                {renderFlashCardGroupLink(GuitarScales.createFlashCardGroup())}
-                {renderFlashCardGroupLink(ScaleDegreeModes.createFlashCardGroup())}
-                {renderFlashCardGroupLink(ScaleChords.createFlashCardGroup())}
-                {renderFlashCardGroupLink(ScaleEarTraining.createFlashCardGroup())}
-              </MenuCategory>
-              <MenuCategory title="Key Exercises">
-                {renderFlashCardGroupLink(KeyAccidentalCounts.createFlashCardGroup())}
-                {renderFlashCardGroupLink(KeyAccidentalNotes.createFlashCardGroup())}
-                {renderFlashCardGroupLink(KeySignatureIdentification.createFlashCardGroup())}
-              </MenuCategory>
-            </div>
-            <div className="column">
-              <MenuCategory title="Chord Exercises">
-                {renderFlashCardGroupLink(ChordFamilies.createFlashCardGroup())}
-                {renderFlashCardGroupLink(ChordNotes.createFlashCardGroup())}
-                {renderFlashCardGroupLink(AvailableChordTensions.createFlashCardGroup())}
-                {renderFlashCardGroupLink(DiatonicTriads.createFlashCardGroup())}
-                {renderFlashCardGroupLink(DiatonicSeventhChords.createFlashCardGroup())}
-                {renderFlashCardGroupLink(SheetMusicChordRecognition.createFlashCardGroup())}
-                {renderFlashCardGroupLink(PianoChords.createFlashCardGroup())}
-                {renderFlashCardGroupLink(GuitarChords.createFlashCardGroup())}
-                {renderFlashCardGroupLink(ChordEarTraining.createFlashCardGroup())}
-              </MenuCategory>
-            </div>
-          </div>
-        </div>
-      </Paper>
-    ) : null;
-
-    const mainContent = (
-      <div ref={this.rightPaneRef} className={!this.isEmbedded ? "main" : "main embedded"}>
-        <div style={{ maxWidth: MAX_MAIN_CARD_WIDTH, margin: "0 auto" }}>
-          {this.renderRoutes()}
+    const navBar = (
+      <div className="nav-container">
+        <div className="nav-bar">
+          <NavLink to="/" onClick={event => this.onNavLinkClick()} activeClassName="">
+            <img src="/logo-white.svg" style={{height: "24px", verticalAlign: "sub"}} />
+            <span style={{paddingLeft: "0.5em"}} className="hide-on-mobile">Falsetto</span>
+          </NavLink>
+          <NavLink to="/support-us" onClick={event => this.onNavLinkClick()} activeClassName="" style={{ fontWeight: "normal" }}>
+            Support Us
+          </NavLink>
+          <a
+            href="https://docs.google.com/forms/d/e/1FAIpQLSfHT8tJTdmW_hCjxMPUf14wchM6GBPQAaq8PSMW05C01gBW4g/viewform"
+            target="_blank"
+            className="menu-link"
+            style={{ fontWeight: "normal" }}
+          >
+            Contact
+          </a>
+          <i onClick={event => this.toggleMenu()} className="cursor-pointer material-icons no-select">menu</i>
         </div>
       </div>
     );
-    const app = !this.isEmbedded
-      ? (
-        <div className="app">
-          <div className="nav-container">
-            <div className="nav-bar">
-              <NavLink to="/" onClick={event => this.onNavLinkClick()} activeClassName="">
-                <img src="/logo-white.svg" style={{height: "24px", verticalAlign: "sub"}} />
-                <span style={{paddingLeft: "0.5em"}} className="hide-on-mobile">Falsetto</span>
-              </NavLink>
-              <NavLink to="/support-us" onClick={event => this.onNavLinkClick()} activeClassName="" style={{ fontWeight: "normal" }}>
-                Support Us
-              </NavLink>
-              <a
-                href="https://docs.google.com/forms/d/e/1FAIpQLSfHT8tJTdmW_hCjxMPUf14wchM6GBPQAaq8PSMW05C01gBW4g/viewform"
-                target="_blank"
-                className="menu-link"
-                style={{ fontWeight: "normal" }}
-              >
-                Contact
-              </a>
-              <i onClick={event => this.toggleMenu()} className="cursor-pointer material-icons no-select">menu</i>
+    const menu = this.state.isMenuVisible ? (
+      <div className="menu-container">
+        <Paper>
+          <div className="menu">
+            <div className="row">
+              <div className="column">
+                <MenuCategory title="Essential Music Theory Course">
+                  {this.renderNavLink("/essential-music-theory", "Introduction")}
+                  {this.renderNavLink("/essential-music-theory/rhythm", "Rhythm")}
+                  {this.renderNavLink("/essential-music-theory/notes", "Notes")}
+                  {this.renderNavLink("/essential-music-theory/intervals", "Intervals")}
+                  {this.renderNavLink("/essential-music-theory/scales-and-modes", "Scales & Modes")}
+                  {this.renderNavLink("/essential-music-theory/chords", "Chords")}
+                  {this.renderNavLink("/essential-music-theory/chord-progressions", "Chord Progressions")}
+                  {this.renderNavLink("/essential-music-theory/next-steps", "Next Steps")}
+                </MenuCategory>
+                <MenuCategory title="Guitar Lessons">
+                  <NavLink to="/learn-guitar-notes-in-10-steps" onClick={event => this.onNavLinkClick()} className="menu-link">Learn the Notes on Guitar in 10 Easy Steps</NavLink>
+                  <NavLink to="/learn-guitar-scales" onClick={event => this.onNavLinkClick()} className="menu-link">Learn Guitar Scale Shapes</NavLink>
+                </MenuCategory>
+              </div>
+              <div className="column">
+                <MenuCategory title="Tools">
+                  <NavLink to="/interval-chord-scale-finder" onClick={event => this.onNavLinkClick()} className="menu-link">Interval/Chord/Scale Finder</NavLink>
+                  <NavLink to="/scale-viewer" onClick={event => this.onNavLinkClick()} className="menu-link">Scale Viewer</NavLink>
+                  <NavLink to="/chord-viewer" onClick={event => this.onNavLinkClick()} className="menu-link">Chord Viewer</NavLink>
+                  {renderFlashCardGroupLink(RandomChordGenerator.createFlashCardGroup())}
+                </MenuCategory>
+                <MenuCategory title="Note Exercises">
+                  {renderFlashCardGroupLink(PianoNotes.createFlashCardGroup())}
+                  {renderFlashCardGroupLink(GuitarNotes.createFlashCardGroup())}
+                  {renderFlashCardGroupLink(NoteDurations.createFlashCardGroup())}
+                  {renderFlashCardGroupLink(SheetMusicNotes.createFlashCardGroup())}
+                </MenuCategory>
+              </div>
+              <div className="column">
+                <MenuCategory title="Interval Exercises">
+                  {renderFlashCardGroupLink(IntervalQualitySymbolsToQualities.createFlashCardGroup())}
+                  {renderFlashCardGroupLink(IntervalNamesToHalfSteps.createFlashCardGroup())}
+                  {renderFlashCardGroupLink(IntervalsToConsonanceDissonance.createFlashCardGroup())}
+                  {renderFlashCardGroupLink(Interval2ndNotes.createFlashCardGroup())}
+                  {renderFlashCardGroupLink(IntervalNotes.createFlashCardGroup())}
+                  {renderFlashCardGroupLink(SheetMusicIntervalRecognition.createFlashCardGroup())}
+                  {renderFlashCardGroupLink(PianoIntervals.createFlashCardGroup())}
+                  {renderFlashCardGroupLink(GuitarIntervals.createFlashCardGroup())}
+                  {renderFlashCardGroupLink(IntervalEarTraining.createFlashCardGroup())}
+                  {renderFlashCardGroupLink(Interval2ndNoteEarTraining.createFlashCardGroup())}
+                  {renderFlashCardGroupLink(Interval2ndNoteEarTrainingPiano.createFlashCardGroup())}
+                </MenuCategory>
+              </div>
+              <div className="column">
+                <MenuCategory title="Scale Exercises">
+                  {renderFlashCardGroupLink(ScaleDegreeNames.createFlashCardGroup())}
+                  {renderFlashCardGroupLink(ScaleNotes.createFlashCardGroup())}
+                  {renderFlashCardGroupLink(PianoScales.createFlashCardGroup())}
+                  {renderFlashCardGroupLink(GuitarScales.createFlashCardGroup())}
+                  {renderFlashCardGroupLink(ScaleDegreeModes.createFlashCardGroup())}
+                  {renderFlashCardGroupLink(ScaleChords.createFlashCardGroup())}
+                  {renderFlashCardGroupLink(ScaleEarTraining.createFlashCardGroup())}
+                </MenuCategory>
+                <MenuCategory title="Key Exercises">
+                  {renderFlashCardGroupLink(KeyAccidentalCounts.createFlashCardGroup())}
+                  {renderFlashCardGroupLink(KeyAccidentalNotes.createFlashCardGroup())}
+                  {renderFlashCardGroupLink(KeySignatureIdentification.createFlashCardGroup())}
+                </MenuCategory>
+              </div>
+              <div className="column">
+                <MenuCategory title="Chord Exercises">
+                  {renderFlashCardGroupLink(ChordFamilies.createFlashCardGroup())}
+                  {renderFlashCardGroupLink(ChordNotes.createFlashCardGroup())}
+                  {renderFlashCardGroupLink(AvailableChordTensions.createFlashCardGroup())}
+                  {renderFlashCardGroupLink(DiatonicTriads.createFlashCardGroup())}
+                  {renderFlashCardGroupLink(DiatonicSeventhChords.createFlashCardGroup())}
+                  {renderFlashCardGroupLink(SheetMusicChordRecognition.createFlashCardGroup())}
+                  {renderFlashCardGroupLink(PianoChords.createFlashCardGroup())}
+                  {renderFlashCardGroupLink(GuitarChords.createFlashCardGroup())}
+                  {renderFlashCardGroupLink(ChordEarTraining.createFlashCardGroup())}
+                </MenuCategory>
+              </div>
             </div>
-            {menu}
           </div>
+        </Paper>
+      </div>
+    ) : null;
 
-          <div className="main-container">
-            {mainContent}
+    const mainContent = (
+      <div className="main-container">
+        <div ref={this.rightPaneRef} className={!this.isEmbedded ? "main" : "main embedded"}>
+          <div style={{ maxWidth: MAX_MAIN_CARD_WIDTH, margin: "0 auto" }}>
+            {this.renderRoutes()}
           </div>
         </div>
-      )
-      : <div className="app">{mainContent}</div>;
+      </div>
+    );
+    const app = (
+      <div className="app">
+        {!this.isEmbedded ? navBar : null}
+        {!this.isEmbedded ? menu : null}
+        {mainContent}
+      </div>
+    );
    
     return (
       <Router history={this.history}>
