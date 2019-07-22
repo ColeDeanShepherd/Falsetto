@@ -44,6 +44,10 @@ sup {
   pointer-events: none;
 }
 
+.row {
+  width: 100%;
+}
+
 /* Mobile */
 @media (max-width: 800px) {
   .hide-on-mobile {
@@ -59,7 +63,6 @@ sup {
 
   .row {
     display: flex;
-    width: 100%;
   }
   .column {
     flex-basis: 100%;
