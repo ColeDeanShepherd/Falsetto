@@ -12,7 +12,7 @@ import { Pitch } from '../Pitch';
 import { PitchLetter } from '../PitchLetter';
 import { MAX_MAIN_CARD_WIDTH } from './Style';
 import { ScaleType, Scale } from '../Scale';
-import { NoteText, BecomeAPatronSection } from './EssentialMusicTheory';
+import { NoteText } from './EssentialMusicTheory';
 import { ScaleAudioPlayer } from './ScaleAudioPlayer';
 import { createStudyFlashCardGroupComponent } from './StudyFlashCards';
 import * as GuitarScales from "./Quizzes/Scales/GuitarScales";
@@ -109,7 +109,7 @@ export class GuitarScalesLesson extends React.Component<IGuitarScalesLessonProps
   public render(): JSX.Element {
 
     return (
-      <Card style={{ maxWidth: MAX_MAIN_CARD_WIDTH, marginBottom: "6em" }}>
+      <Card style={{ maxWidth: MAX_MAIN_CARD_WIDTH }}>
         <CardContent>
           <h1>Learn Guitar Scale Shapes</h1>
           <p>Knowing common scales &amp; modes on your instrument is vital to becoming a skilled musician. There are countless scales &amp; modes to learn, but we will leverage some repeating patterns that arise on the guitar fretboard to quickly and easily learn some common scales &amp; modes on guitar.</p>
@@ -188,8 +188,6 @@ export class GuitarScalesLesson extends React.Component<IGuitarScalesLessonProps
           <h3>Major Scale Mode Exercises</h3>
           <p>We have now learned the 7 modes of the F major scale, and with that knowledge, we can now play any mode of any other major scale, simply by shifting the patterns to the left or right to start on the desired note. Use the interactive exercises below to test your knowledge:</p>
           <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(GuitarScales.createFlashCardGroup("Modes of the Major Scale", ScaleType.MajorScaleModes), false, true)}</div>
-
-          <p style={{ margin: "8em 0" }}><BecomeAPatronSection /></p>
 
           <h3 style={{ marginTop: "3em" }}>Major Pentatonic Scale</h3>
           <p>Now let's take a look at the shapes for the 5 modes of the A major pentatonic scale.</p>

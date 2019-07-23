@@ -261,7 +261,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
     const fretboardStyle = { width: "100%", maxWidth: "400px", height: "auto" };
 
     return (
-      <Card style={{ maxWidth: MAX_MAIN_CARD_WIDTH, marginBottom: "6em" }}>
+      <Card style={{ maxWidth: MAX_MAIN_CARD_WIDTH }}>
         <CardContent>
           <h1>Learn the Notes on Guitar in 10 Easy Steps</h1>
 

@@ -382,8 +382,6 @@ export const ChordProgressionsSection: React.FunctionComponent<SectionProps> = p
           scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))} />
       </p>
     </NoteText>
-    
-    <BecomeAPatronSection />
 
     <SubSectionTitle>Interactive Exercises</SubSectionTitle>
     <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(ChordProgressionsQuiz.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
@@ -439,8 +437,6 @@ export const NextStepsSection: React.FunctionComponent<SectionProps> = props => 
       <li><a href="https://www.image-line.com/flstudio/" target="_blank">FL Studio - Digital Audio Workstation</a></li>
     </ul>
 
-    <BecomeAPatronSection />
-
     <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory/chord-progressions", "<< Previous: Chord Progressions")}</p>
   </div>
 );
@@ -470,17 +466,6 @@ const OctavesPlayer: React.FunctionComponent<{}> = props => {
 };
 
 const Term: React.FunctionComponent<{}> = props => <span style={{ fontWeight: "bold" }}>{props.children}</span>;
-
-export const BecomeAPatronSection: React.FunctionComponent<{}> = props => (
-  <div style={{ margin: "2em 0" }}>
-    <p style={{ textAlign: "center", marginBottom: "0.5em", fontWeight: "bold" }}>Enjoying these lessons? Help support us and</p>
-    <p style={{ textAlign: "center", marginTop: 0 }}>
-      <a href="https://www.patreon.com/bePatron?u=4644571" target="_blank">
-        <img src={becomeAPatronButton} alt="Become a Patron!" style={{width: "176px", borderRadius: "9999px"}} />
-      </a>
-    </p>
-  </div>
-);
 
 const HalfStepsDiagram: React.FunctionComponent<{}> = props => {
   const width = 300;
@@ -993,8 +978,6 @@ export const RhythmSection: React.FunctionComponent<SectionProps> = props => (
 
     <NoteValuePlayer notesPerBeat={3} maxNotesPerBeat={5} showNotesPerBeatSelect={true} />
     
-    <BecomeAPatronSection />
-    
     <SubSectionTitle>Interactive Exercises</SubSectionTitle>
     <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(RhythmQuiz.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
     <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(NoteDurations.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
@@ -1028,8 +1011,6 @@ export const NotesSection: React.FunctionComponent<SectionProps> = props => (
     <p>It is <strong>vitally</strong> important to learn where all the notes are on your instrument of choice. Please take some time to do so before moving on to the next lesson!</p>
     <p>If your instrument of choice is piano, there is an interactive exercise below. If your instrument of choise is guitar, there is an interactive exercise below, and a comprehensive lesson: <NavLink to="/learn-guitar-notes-in-10-steps" className="menu-link">Learn the Notes on Guitar in 10 Easy Steps</NavLink></p>
 
-    <BecomeAPatronSection />
-    
     <SubSectionTitle>Interactive Exercises</SubSectionTitle>
     <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(NotesQuiz.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
     <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(PianoNotes.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
@@ -1138,8 +1119,6 @@ export const IntervalsSection: React.FunctionComponent<SectionProps> = props => 
     </ul>
     <p>When training your ear to recognize intervals using the table below, pay close attention to how consonant or dissonant each interval is, and how each interval makes you feel.</p>
     <IntervalsTable />
-
-    <BecomeAPatronSection />
   
     <SubSectionTitle>Interactive Exercises</SubSectionTitle>
     <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(IntervalQualitySymbols.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
@@ -1257,8 +1236,6 @@ export const ScalesAndModesSection: React.FunctionComponent<SectionProps> = prop
     <SubSectionTitle>Other Common Scales &amp; Modes</SubSectionTitle>
     <p>There are many other common, named scales (and keep in mind that a mode can be built off each scale degree in each scale). Explore them below with the interactive diagram below:</p>
     <ScaleViewer renderAllScaleShapes={false} isEmbedded={props.isEmbedded} />
-
-    <BecomeAPatronSection />
 
     <SubSectionTitle>Interactive Exercises</SubSectionTitle>
     <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(ScaleNotes.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
@@ -1493,8 +1470,6 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
     <SubSectionTitle>Arpeggios</SubSectionTitle>
     <p>Though chords are groups of notes played simultaneously, you can also choose to play the notes of a chord individually in a melody, to create something called an <Term>arpeggio</Term>. Arpeggios are another way to add harmonic content to music by <strong>implying</strong> the chords instead of playing them outright.</p>
 
-    <BecomeAPatronSection />
-    
     <SubSectionTitle>Interactive Exercises</SubSectionTitle>
     <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(ChordNotes.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
     <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(PianoChords.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
@@ -1515,7 +1490,7 @@ export interface ISectionProps {
 export class SectionContainer extends React.Component<ISectionProps, {}> {
   public render(): JSX.Element {
     return (
-      <Card style={{ maxWidth: MAX_MAIN_CARD_WIDTH, marginBottom: "6em" }}>
+      <Card style={{ maxWidth: MAX_MAIN_CARD_WIDTH }}>
         <CardContent>
           {React.createElement(this.props.section, { isEmbedded: this.isEmbedded, hideMoreInfoUri: this.hideMoreInfoUri })}
         </CardContent>

@@ -67,6 +67,15 @@
   padding: 1em 0;
 }
 
+.footer {
+  text-align: center;
+  padding: 4em 0 1em 0;
+}
+
+.patreon-button:hover {
+  opacity: 0.8;
+}
+
 /* Mobile */
 @media (max-width: 800px) {
 }

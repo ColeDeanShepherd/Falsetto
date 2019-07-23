@@ -74,6 +74,7 @@ import ScrollToTop from './ScrollToTop';
 import { MAX_MAIN_CARD_WIDTH } from './Style';
 import { MainMenu } from './MainMenu';
 import { Paper } from '@material-ui/core';
+import { BecomeAPatronButton } from './BecomeAPatronButton';
 
 async function getErrorDescription(msg: string | Event, file: string | undefined, line: number | undefined, col: number | undefined, error: Error | undefined): Promise<string> {
   return new Promise<string>((resolve, reject) => {
@@ -186,7 +187,7 @@ class App extends React.Component<IAppProps, IAppState> {
 
     this.flashCardGroups = Utils.flattenArrays<FlashCardGroup>(this.groupedFlashCardGroups.map(g => g.flashCardGroups));
 
-    this.rightPaneRef = React.createRef();
+    this.mainContainerRef = React.createRef();
 
     this.state = {
       isMenuVisible: false
@@ -269,10 +270,13 @@ class App extends React.Component<IAppProps, IAppState> {
     ) : null;
 
     const mainContent = (
-      <div className="main-container">
-        <div ref={this.rightPaneRef} className={!this.isEmbedded ? "main" : "main embedded"}>
+      <div className="main-container" ref={this.mainContainerRef}>
+        <div className={!this.isEmbedded ? "main" : "main embedded"}>
           <div style={{ maxWidth: MAX_MAIN_CARD_WIDTH, margin: "0 auto" }}>
             {this.renderRoutes()}
+          </div>
+          <div className="footer">
+            <BecomeAPatronButton />
           </div>
         </div>
       </div>
@@ -307,7 +311,7 @@ class App extends React.Component<IAppProps, IAppState> {
     this.setState({ isMenuVisible: value });
   }
   public scrollBodyToTop() {
-    (this.rightPaneRef as any).current.scrollTo(0, 0);
+    (this.mainContainerRef as any).current.scrollTo(0, 0);
     window.scrollTo(0, 0); // Needed for mobile devices.
   }
   public onNavLinkClick() {
@@ -318,7 +322,7 @@ class App extends React.Component<IAppProps, IAppState> {
   private unregisterHistoryListener: UnregisterCallback;
   private groupedFlashCardGroups: { title: string; flashCardGroups: FlashCardGroup[]; }[];
   private flashCardGroups: FlashCardGroup[];
-  private rightPaneRef: React.Ref<HTMLDivElement>;
+  private mainContainerRef: React.Ref<HTMLDivElement>;
 
   private get isEmbedded(): boolean {
     return this.props.isEmbedded || this.history.location.search.includes("isEmbedded=true");
