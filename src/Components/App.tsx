@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Router, Route, NavLink } from "react-router-dom";
-import { Paper } from "@material-ui/core";
 import { History, createBrowserHistory, Location, Action, UnregisterCallback } from "history";
 import StackTrace from "stacktrace-js";
 
@@ -73,6 +72,8 @@ import DocumentTitle from "react-document-title";
 import { HomePage } from "./HomePage";
 import ScrollToTop from './ScrollToTop';
 import { MAX_MAIN_CARD_WIDTH } from './Style';
+import { MainMenu } from './MainMenu';
+import { Paper } from '@material-ui/core';
 
 async function getErrorDescription(msg: string | Event, file: string | undefined, line: number | undefined, col: number | undefined, error: Error | undefined): Promise<string> {
   return new Promise<string>((resolve, reject) => {
@@ -94,16 +95,6 @@ async function getErrorDescription(msg: string | Event, file: string | undefined
     }
   });
 }
-
-const NavSectionTitle: React.FunctionComponent<{ style?: any }> = props => <p style={Object.assign({ fontSize: "1.2em", fontWeight: "bold", textDecoration: "underline" }, props.style)}>{props.children}</p>;
-const NavSectionSubTitle: React.FunctionComponent<{ style?: any }> = props => <p style={Object.assign({ textDecoration: "underline" }, props.style)}>{props.children}</p>;
-
-const MenuCategory: React.FunctionComponent<{ title: string }> = props => (
-  <div className="menu-category">
-    <NavSectionSubTitle>{props.title}</NavSectionSubTitle>
-    {props.children}
-  </div>
-);
 
 interface IAppProps {
   isEmbedded: boolean;
@@ -271,85 +262,8 @@ class App extends React.Component<IAppProps, IAppState> {
     );
     const menu = this.state.isMenuVisible ? (
       <div className="menu-container">
-        <Paper>
-          <div className="menu">
-            <div className="row">
-              <div className="column">
-                <MenuCategory title="Essential Music Theory Course">
-                  {this.renderNavLink("/essential-music-theory", "Introduction")}
-                  {this.renderNavLink("/essential-music-theory/rhythm", "Rhythm")}
-                  {this.renderNavLink("/essential-music-theory/notes", "Notes")}
-                  {this.renderNavLink("/essential-music-theory/intervals", "Intervals")}
-                  {this.renderNavLink("/essential-music-theory/scales-and-modes", "Scales & Modes")}
-                  {this.renderNavLink("/essential-music-theory/chords", "Chords")}
-                  {this.renderNavLink("/essential-music-theory/chord-progressions", "Chord Progressions")}
-                  {this.renderNavLink("/essential-music-theory/next-steps", "Next Steps")}
-                </MenuCategory>
-                <MenuCategory title="Guitar Lessons">
-                  <NavLink to="/learn-guitar-notes-in-10-steps" onClick={event => this.onNavLinkClick()} className="menu-link">Learn the Notes on Guitar in 10 Easy Steps</NavLink>
-                  <NavLink to="/learn-guitar-scales" onClick={event => this.onNavLinkClick()} className="menu-link">Learn Guitar Scale Shapes</NavLink>
-                </MenuCategory>
-              </div>
-              <div className="column">
-                <MenuCategory title="Tools">
-                  <NavLink to="/interval-chord-scale-finder" onClick={event => this.onNavLinkClick()} className="menu-link">Interval/Chord/Scale Finder</NavLink>
-                  <NavLink to="/scale-viewer" onClick={event => this.onNavLinkClick()} className="menu-link">Scale Viewer</NavLink>
-                  <NavLink to="/chord-viewer" onClick={event => this.onNavLinkClick()} className="menu-link">Chord Viewer</NavLink>
-                  {renderFlashCardGroupLink(RandomChordGenerator.createFlashCardGroup())}
-                </MenuCategory>
-                <MenuCategory title="Note Exercises">
-                  {renderFlashCardGroupLink(PianoNotes.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(GuitarNotes.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(NoteDurations.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(SheetMusicNotes.createFlashCardGroup())}
-                </MenuCategory>
-              </div>
-              <div className="column">
-                <MenuCategory title="Interval Exercises">
-                  {renderFlashCardGroupLink(IntervalQualitySymbolsToQualities.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(IntervalNamesToHalfSteps.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(IntervalsToConsonanceDissonance.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(Interval2ndNotes.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(IntervalNotes.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(SheetMusicIntervalRecognition.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(PianoIntervals.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(GuitarIntervals.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(IntervalEarTraining.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(Interval2ndNoteEarTraining.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(Interval2ndNoteEarTrainingPiano.createFlashCardGroup())}
-                </MenuCategory>
-              </div>
-              <div className="column">
-                <MenuCategory title="Scale Exercises">
-                  {renderFlashCardGroupLink(ScaleDegreeNames.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(ScaleNotes.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(PianoScales.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(GuitarScales.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(ScaleDegreeModes.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(ScaleChords.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(ScaleEarTraining.createFlashCardGroup())}
-                </MenuCategory>
-                <MenuCategory title="Key Exercises">
-                  {renderFlashCardGroupLink(KeyAccidentalCounts.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(KeyAccidentalNotes.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(KeySignatureIdentification.createFlashCardGroup())}
-                </MenuCategory>
-              </div>
-              <div className="column">
-                <MenuCategory title="Chord Exercises">
-                  {renderFlashCardGroupLink(ChordFamilies.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(ChordNotes.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(AvailableChordTensions.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(DiatonicTriads.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(DiatonicSeventhChords.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(SheetMusicChordRecognition.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(PianoChords.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(GuitarChords.createFlashCardGroup())}
-                  {renderFlashCardGroupLink(ChordEarTraining.createFlashCardGroup())}
-                </MenuCategory>
-              </div>
-            </div>
-          </div>
+        <Paper style={{ padding: "0 1em 1em 1em" }}>
+          <MainMenu />
         </Paper>
       </div>
     ) : null;
@@ -396,6 +310,9 @@ class App extends React.Component<IAppProps, IAppState> {
     (this.rightPaneRef as any).current.scrollTo(0, 0);
     window.scrollTo(0, 0); // Needed for mobile devices.
   }
+  public onNavLinkClick() {
+    this.setState({ isMenuVisible: false });
+  }
 
   private history: History<any>;
   private unregisterHistoryListener: UnregisterCallback;
@@ -418,9 +335,6 @@ class App extends React.Component<IAppProps, IAppState> {
         {createStudyFlashCardGroupComponent(currentFlashCardGroup, this.isEmbedded, false)}
       </DocumentTitle>
     );
-  }
-  private onNavLinkClick() {
-    this.setState({ isMenuVisible: false });
   }
 }
 

@@ -1,51 +1,17 @@
 import * as React from "react";
-import { CardContent, Card, Typography } from "@material-ui/core";
+import { CardContent, Card } from "@material-ui/core";
 
-import App from './App';
-import * as GuitarNotes from "./Quizzes/Notes/GuitarNotes";
-import * as PianoNotes from "./Quizzes/Notes/PianoNotes";
-import * as PianoIntervals from "./Quizzes/Intervals/PianoIntervals";
-import * as GuitarIntervals from "./Quizzes/Intervals/GuitarIntervals";
-import * as IntervalEarTraining from "./Quizzes/Intervals/IntervalEarTraining";
-import * as ScaleNotes from "./Quizzes/Scales/ScaleNotes";
-import * as PianoScales from "./Quizzes/Scales/PianoScales";
-import * as GuitarScales from "./Quizzes/Scales/GuitarScales";
-import * as ScaleEarTraining from "./Quizzes/Scales/ScaleEarTraining";
-import * as PianoChords from "./Quizzes/Chords/PianoChords";
-import * as GuitarChords from "./Quizzes/Chords/GuitarChords";
+import { MainMenu } from './MainMenu';
 
 export class HomePage extends React.Component<{}, {}> {
   public render(): JSX.Element {
     return (
       <Card>
         <CardContent>
-          <p>Falsetto is a collection of free, interactive music theory exercises. Get started by clicking one of the exercises below, or in the menu!</p>
-          <ul style={{ listStyleType: "none", margin: 0, padding: 0 }}>
-            <li>{App.instance.renderNavLink("/essential-music-theory", "Essential Music Theory (Comprehensive Lesson)")}</li>
-            <li>{App.instance.renderNavLink("/learn-guitar-notes-in-10-steps", "Learn the Notes on Guitar in 10 Easy Steps")}</li>
-            <li>{App.instance.renderNavLink("/learn-guitar-scales", "Learn the Guitar Scale Shapes")}</li>
-            <li>{App.instance.renderFlashCardGroupLink(PianoNotes.createFlashCardGroup())}</li>
-            <li>{App.instance.renderFlashCardGroupLink(GuitarNotes.createFlashCardGroup())}</li>
-            <li>{App.instance.renderFlashCardGroupLink(PianoIntervals.createFlashCardGroup())}</li>
-            <li>{App.instance.renderFlashCardGroupLink(GuitarIntervals.createFlashCardGroup())}</li>
-            <li>{App.instance.renderFlashCardGroupLink(IntervalEarTraining.createFlashCardGroup())}</li>
-            <li>{App.instance.renderFlashCardGroupLink(ScaleNotes.createFlashCardGroup())}</li>
-            <li>{App.instance.renderFlashCardGroupLink(PianoScales.createFlashCardGroup())}</li>
-            <li>{App.instance.renderFlashCardGroupLink(GuitarScales.createFlashCardGroup())}</li>
-            <li>{App.instance.renderFlashCardGroupLink(ScaleEarTraining.createFlashCardGroup())}</li>
-            <li>{App.instance.renderFlashCardGroupLink(PianoChords.createFlashCardGroup())}</li>
-            <li>{App.instance.renderFlashCardGroupLink(GuitarChords.createFlashCardGroup())}</li>
-            <li><a href="" onClick={event => this.onMoreExercisesClick(event)}>More exercises...</a></li>
-          </ul>
+          <p>Falsetto is a collection of free, interactive music theory lessons &amp; exercises. Get started by clicking a link below!</p>
+          <MainMenu />
         </CardContent>
       </Card>
     );
-  }
-
-  private onMoreExercisesClick(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
-    App.instance.setMenuIsVisibleOnMobile(true);
-
-    event.preventDefault();
-    event.stopPropagation();
   }
 }
