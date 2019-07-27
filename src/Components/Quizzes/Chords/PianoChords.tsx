@@ -153,6 +153,7 @@ export interface IPianoChordsAnswerSelectProps {
   onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void;
   lastCorrectAnswer: any;
   incorrectAnswers: Array<any>;
+  enabledChordTypeNames: Array<string>;
 }
 export interface IPianoChordsAnswerSelectState {
   selectedRootPitch: string | undefined;
@@ -223,25 +224,27 @@ export class PianoChordsAnswerSelect extends React.Component<IPianoChordsAnswerS
           Chord
         </Typography>
         <div style={{padding: "1em 0"}}>
-          {ChordType.All.map(chord => {
-            const style: any = { textTransform: "none" };
-            
-            const isPressed = chord.name === this.state.selectedChordType;
-            if (isPressed) {
-              style.backgroundColor = "#959595";
-            }
-            
-            return (
-              <Button
-                key={chord.name}
-                onClick={event => this.onChordTypeClick(chord.name)}
-                variant="contained"
-                style={style}
-              >
-                {chord.name}
-              </Button>
-            );
-          })}
+          {ChordType.All
+            .filter(ct => Utils.arrayContains(this.props.enabledChordTypeNames, ct.name))
+            .map(chord => {
+              const style: any = { textTransform: "none" };
+              
+              const isPressed = chord.name === this.state.selectedChordType;
+              if (isPressed) {
+                style.backgroundColor = "#959595";
+              }
+              
+              return (
+                <Button
+                  key={chord.name}
+                  onClick={event => this.onChordTypeClick(chord.name)}
+                  variant="contained"
+                  style={style}
+                >
+                  {chord.name}
+                </Button>
+              );
+            })}
         </div>
 
         <div style={{padding: "1em 0"}}>
@@ -341,12 +344,13 @@ export function renderAnswerSelect(
     const correctAnswer = state.currentFlashCard.backSide.renderFn as string;
     return <PianoChordsAnswerSelect
       key={correctAnswer} correctAnswer={correctAnswer} onAnswer={state.onAnswer}
-      lastCorrectAnswer={state.lastCorrectAnswer} incorrectAnswers={state.incorrectAnswers} />;
+      lastCorrectAnswer={state.lastCorrectAnswer} incorrectAnswers={state.incorrectAnswers}
+      enabledChordTypeNames={(state.configData as IConfigData).enabledChordTypes} />;
   } else {
     const key = state.currentFlashCard.frontSide.renderFn as string;
     const correctAnswer = state.currentFlashCard.backSide.data[0] as Array<Pitch>;
     return <PianoKeysAnswerSelect
-      key={key} width={state.width} height={state.height} correctAnswer={correctAnswer}
+      key={key} width={400} height={100} correctAnswer={correctAnswer}
       onAnswer={state.onAnswer} lastCorrectAnswer={state.lastCorrectAnswer}
       incorrectAnswers={state.incorrectAnswers} />;
   }

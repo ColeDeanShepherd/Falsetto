@@ -40,6 +40,7 @@ export class PianoKeysAnswerSelect extends React.Component<IPianoKeysAnswerSelec
           highestPitch={new Pitch(PitchLetter.B, 0, 5)}
           pressedPitches={this.state.selectedPitches}
           onKeyPress={pitch => this.onPitchClick(pitch)}
+          style={{ maxWidth: `${this.props.width}px` }}
         />
         
         <div style={{padding: "1em 0"}}>
