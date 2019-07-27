@@ -74,6 +74,21 @@ sup {
 }
 
 /* Animations */
+.fade-out {
+  animation: fade-out;
+  animation-duration: 2s;
+  opacity: 0;
+}
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
 .background-green-to-initial {
   animation: background-green-to-initial;
   animation-duration: 3s;

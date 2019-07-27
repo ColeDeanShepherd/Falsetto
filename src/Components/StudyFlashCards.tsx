@@ -52,9 +52,10 @@ export interface IStudyFlashCardsProps {
   style?: any;
 }
 export interface IStudyFlashCardsState {
-  currentFlashCardIndex: number;
+  currentFlashCardId: number;
   haveGottenCurrentFlashCardWrong: boolean;
   lastCorrectAnswer: any;
+  wasCorrect: boolean;
   incorrectAnswers: Array<any>;
   configData: any;
   enabledFlashCardIds: number[];
@@ -104,7 +105,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
         return <p key={i}>{renderedFlashCard} {qs.numCorrectGuesses} / {qs.numIncorrectGuesses}</p>;
       }, this);
     
-    const currentFlashCard = flashCards[this.state.currentFlashCardIndex];
+    const currentFlashCard = flashCards[this.state.currentFlashCardId];
 
     let renderedFlashCardSide: JSX.Element | null;
     let containerWidth = 0;
@@ -187,7 +188,25 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
           {this.props.renderAnswerSelect
             ? (
               <p style={{marginBottom: "0", marginTop: "0"}}>
-                <span style={{paddingRight: "2em"}}>{this.studyAlgorithm.quizStats.numCorrectGuesses} / {this.studyAlgorithm.quizStats.numIncorrectGuesses} correct ({(100 * percentCorrect).toFixed(2)}%)</span>
+                <span style={{paddingRight: "1em"}}>{this.studyAlgorithm.quizStats.numCorrectGuesses} / {this.studyAlgorithm.quizStats.numIncorrectGuesses} correct ({(100 * percentCorrect).toFixed(2)}%)</span>
+                {(this.state.wasCorrect && !this.state.haveGottenCurrentFlashCardWrong) ? (
+                  <span key={this.state.currentFlashCardId}>
+                    <i
+                      className="material-icons fade-out"
+                      style={{ color: "green", verticalAlign: "bottom" }}>
+                      check_circle
+                    </i>
+                  </span>
+                ) : null}
+                {this.state.haveGottenCurrentFlashCardWrong ? (
+                  <span key={this.state.incorrectAnswers.length}>
+                    <i
+                      className="material-icons fade-out"
+                      style={{ color: "red", verticalAlign: "bottom" }}>
+                      cancel
+                    </i>
+                  </span>
+                ) : null}
               </p>
             )
             : null
@@ -208,7 +227,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
                 new RenderAnswerSelectArgs(
                   containerWidth, containerHeight, flashCards,
                   this.state.enabledFlashCardIds, this.state.configData,
-                  this.state.invertFlashCards, this.state.currentFlashCardIndex,
+                  this.state.invertFlashCards, this.state.currentFlashCardId,
                   currentFlashCard, boundOnAnswer, this.state.lastCorrectAnswer,
                   this.state.incorrectAnswers
                 )
@@ -223,7 +242,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
                 Show {this.state.isShowingBackSide ? "Question" : "Answer"}
               </Button>
               <Button
-                onClick={event => this.moveToNextFlashCard(null)}
+                onClick={event => this.moveToNextFlashCard(null, false)}
                 variant="contained"
               >
                 {!this.props.renderAnswerSelect ? "Next" : "Skip"}
@@ -281,9 +300,10 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
     }
     
     return {
-      currentFlashCardIndex: this.studyAlgorithm.getNextQuestionId(),
+      currentFlashCardId: this.studyAlgorithm.getNextQuestionId(),
       haveGottenCurrentFlashCardWrong: false,
       lastCorrectAnswer: null,
+      wasCorrect: false,
       incorrectAnswers: [],
       enabledFlashCardIds: this.studyAlgorithm.enabledQuestionIds
     };
@@ -293,8 +313,8 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
     if (!this.state.haveGottenCurrentFlashCardWrong) {
       this.studyAlgorithm.onAnswer(answerDifficulty);
 
-      const eventId = (answerDifficulty !== AnswerDifficulty.Incorrect) ? "answer_correct" : "answer_incorrect";
-      const eventLabel = this.state.currentFlashCardIndex.toString();
+      const eventId = isAnswerDifficultyCorrect(answerDifficulty) ? "answer_correct" : "answer_incorrect";
+      const eventLabel = this.state.currentFlashCardId.toString();
       const eventValue = undefined;
       const eventCategory = this.props.title;
       Analytics.trackCustomEvent(
@@ -303,7 +323,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
     }
 
     if (isAnswerDifficultyCorrect(answerDifficulty)) {
-      this.moveToNextFlashCard(answer);
+      this.moveToNextFlashCard(answer, !this.state.haveGottenCurrentFlashCardWrong);
     } else {
       this.setState({
         haveGottenCurrentFlashCardWrong: true,
@@ -319,8 +339,8 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
     this.studyAlgorithm.enabledQuestionIds = newValue;
 
     const stateDelta: any = { enabledFlashCardIds: newValue, configData: newConfigData };
-    const onStateChanged = !Utils.arrayContains(newValue, this.state.currentFlashCardIndex)
-      ? () => this.moveToNextFlashCard(null)
+    const onStateChanged = !Utils.arrayContains(newValue, this.state.currentFlashCardId)
+      ? () => this.moveToNextFlashCard(null, false)
       : undefined;
 
     this.setState(stateDelta, onStateChanged);
@@ -352,13 +372,14 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
     this.onAnswer(AnswerDifficulty.Incorrect, null);
     this.setState({ isShowingBackSide: !this.state.isShowingBackSide });
   }
-  private moveToNextFlashCard(lastCorrectAnswer: any) {
+  private moveToNextFlashCard(lastCorrectAnswer: any, wasCorrect: boolean) {
     this.setState({
-      currentFlashCardIndex: this.studyAlgorithm.getNextQuestionId(),
+      currentFlashCardId: this.studyAlgorithm.getNextQuestionId(),
       haveGottenCurrentFlashCardWrong: false,
       isShowingBackSide: false,
       lastCorrectAnswer: lastCorrectAnswer,
-      incorrectAnswers: []
+      incorrectAnswers: [],
+      wasCorrect: wasCorrect
     });
   }
 }

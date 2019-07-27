@@ -164,16 +164,12 @@ export class GuitarChordsAnswerSelect extends React.Component<IGuitarChordsAnswe
   public constructor(props: IGuitarChordsAnswerSelectProps) {
     super(props);
     
-    this.state = {
-      selectedRootPitch: undefined,
-      selectedChordType: undefined
-    };
+    this.state = this.getInitialState();
   }
   public render(): JSX.Element {
     // TODO: use lastCorrectAnswer
     const selectedAnswer = this.getSelectedAnswer();
-    const isIncorrectAnswer = Utils.arrayContains(this.props.incorrectAnswers, selectedAnswer);
-
+    
     return (
       <div>
         <Typography gutterBottom={true} variant="h6" component="h4">
@@ -254,29 +250,25 @@ export class GuitarChordsAnswerSelect extends React.Component<IGuitarChordsAnswe
 
         <div style={{padding: "1em 0"}}>
           <AnswerButton
+            key={this.props.correctAnswer}
             answer={selectedAnswer}
             incorrectAnswers={this.props.incorrectAnswers}
             lastCorrectAnswer={this.props.lastCorrectAnswer}
             onClick={() => this.confirmAnswer()}
-            disabled={!this.state.selectedRootPitch || !this.state.selectedChordType}
-          >
+            disabled={!this.state.selectedRootPitch || !this.state.selectedChordType} >
             Confirm Answer
           </AnswerButton>
-          <Button
-            variant="contained"
-            color={!isIncorrectAnswer ? "default" : "secondary"}
-            onClick={event => this.confirmAnswer()}
-            disabled={!this.state.selectedRootPitch || !this.state.selectedChordType}
-            className={((selectedAnswer === this.props.lastCorrectAnswer) && !isIncorrectAnswer) ? "background-green-to-initial" : ""}
-            style={{ textTransform: "none" }}
-          >
-            Confirm Answer
-          </Button>
         </div>
       </div>
     );
   }
 
+  private getInitialState(): IGuitarChordsAnswerSelectState {
+    return {
+      selectedRootPitch: undefined,
+      selectedChordType: undefined
+    };
+  }
   private onRootPitchClick(rootPitch: string) {
     this.setState({ selectedRootPitch: rootPitch });
   }
@@ -286,6 +278,11 @@ export class GuitarChordsAnswerSelect extends React.Component<IGuitarChordsAnswe
   private confirmAnswer() {
     const selectedAnswer = this.getSelectedAnswer();
     const isCorrect = selectedAnswer === this.props.correctAnswer;
+
+    if (isCorrect) {
+      this.setState(this.getInitialState());
+    }
+
     this.props.onAnswer(isCorrect ? AnswerDifficulty.Easy : AnswerDifficulty.Incorrect, selectedAnswer);
   }
   private getSelectedAnswer(): string {
@@ -431,7 +428,7 @@ export function renderAnswerSelect(
   if (!state.areFlashCardsInverted) {
     const correctAnswer = state.currentFlashCard.backSide.renderFn as string;
     return <GuitarChordsAnswerSelect
-      key={correctAnswer} correctAnswer={correctAnswer} onAnswer={state.onAnswer}
+      correctAnswer={correctAnswer} onAnswer={state.onAnswer}
       lastCorrectAnswer={state.lastCorrectAnswer} incorrectAnswers={state.incorrectAnswers}
       enabledChordTypeNames={(state.configData as IConfigData).enabledChordTypes} />;
   } else {
