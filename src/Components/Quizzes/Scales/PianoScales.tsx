@@ -10,7 +10,7 @@ import { PitchLetter } from "../../../PitchLetter";
 import { ScaleType } from "../../../Scale";
 import { PianoKeyboard } from "../../PianoKeyboard";
 import { FlashCard, FlashCardSide } from "../../../FlashCard";
-import { FlashCardGroup } from "../../../FlashCardGroup";
+import { FlashCardGroup, RenderAnswerSelectArgs } from "../../../FlashCardGroup";
 import { AnswerDifficulty } from "../../../StudyAlgorithm";
 import { PianoKeysAnswerSelect } from "../../PianoKeysAnswerSelect";
 import { ScaleAnswerSelect } from "../../ScaleAnswerSelect";
@@ -215,30 +215,22 @@ export function createFlashCards(): FlashCard[] {
   );
 }
 export function renderAnswerSelect(
-  width: number, height: number,
-  flashCards: FlashCard[],
-  enabledFlashCardIndices: number[],
-  areFlashCardsInverted: boolean,
-  flashCardIndex: number,
-  flashCard: FlashCard,
-  onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void,
-  lastCorrectAnswer: any,
-  incorrectAnswers: Array<any>
+  state: RenderAnswerSelectArgs
 ) {
-  if (!areFlashCardsInverted) {
-    const correctAnswer = flashCard.backSide.renderFn as string;
+  if (!state.areFlashCardsInverted) {
+    const correctAnswer = state.currentFlashCard.backSide.renderFn as string;
     const activeScales = ScaleType.All
-      .filter((_, i) => Utils.arrayContains(enabledFlashCardIndices, i));
+      .filter((_, i) => Utils.arrayContains(state.enabledFlashCardIds, i));
     return <ScaleAnswerSelect
       key={correctAnswer} scales={activeScales} correctAnswer={correctAnswer}
-      onAnswer={onAnswer} lastCorrectAnswer={lastCorrectAnswer}
-      incorrectAnswers={incorrectAnswers} />;
+      onAnswer={state.onAnswer} lastCorrectAnswer={state.lastCorrectAnswer}
+      incorrectAnswers={state.incorrectAnswers} />;
   } else {
-    const key = flashCard.frontSide.renderFn as string;
-    const correctAnswer = flashCard.backSide.data[0] as Array<Pitch>;
+    const key = state.currentFlashCard.frontSide.renderFn as string;
+    const correctAnswer = state.currentFlashCard.backSide.data[0] as Array<Pitch>;
     return <PianoKeysAnswerSelect
-      key={key} width={width} height={height} correctAnswer={correctAnswer}
-      onAnswer={onAnswer} lastCorrectAnswer={lastCorrectAnswer}
-      incorrectAnswers={incorrectAnswers} />;
+      key={key} width={state.width} height={state.height} correctAnswer={correctAnswer}
+      onAnswer={state.onAnswer} lastCorrectAnswer={state.lastCorrectAnswer}
+      incorrectAnswers={state.incorrectAnswers} />;
   }
 }

@@ -2,19 +2,11 @@ import * as React from "react";
 
 import * as FlashCardUtils from "../../Components/Quizzes/Utils";
 import { FlashCard } from "../../FlashCard";
-import { FlashCardGroup } from "../../FlashCardGroup";
+import { FlashCardGroup, RenderAnswerSelectArgs } from "../../FlashCardGroup";
 import { AnswerDifficulty } from "../../StudyAlgorithm";
 
 export function renderAnswerSelect(
-  width: number, height: number,
-  flashCards: FlashCard[],
-  enabledFlashCardIndices: number[],
-  areFlashCardsInverted: boolean,
-  flashCardIndex: number,
-  flashCard: FlashCard,
-  onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void,
-  lastCorrectAnswer: any,
-  incorrectAnswers: Array<any>
+  state: RenderAnswerSelectArgs
 ): JSX.Element {
   const row0 = ["0 sharps/flats"];
   const row1 = ["1 sharp", "2 sharps", "3 sharps", "4 sharps", "5 sharps", "6 sharps", "7 sharps"];
@@ -23,13 +15,13 @@ export function renderAnswerSelect(
   return (
     <div>
       {FlashCardUtils.renderStringAnswerSelectInternal(
-        `${flashCardIndex}.0`, row0, flashCard, onAnswer, lastCorrectAnswer, incorrectAnswers
+        `${state.currentFlashCardId}.0`, row0, state
       )}
       {FlashCardUtils.renderStringAnswerSelectInternal(
-        `${flashCardIndex}.1`, row1, flashCard, onAnswer, lastCorrectAnswer, incorrectAnswers
+        `${state.currentFlashCardId}.1`, row1, state
       )}
       {FlashCardUtils.renderStringAnswerSelectInternal(
-        `${flashCardIndex}.2`, row2, flashCard, onAnswer, lastCorrectAnswer, incorrectAnswers
+        `${state.currentFlashCardId}.2`, row2, state
       )}
     </div>
   );

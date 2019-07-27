@@ -1,5 +1,6 @@
 # To-Do
 ## High Priority
+* Each flash card has its own ID
 * Chord Progressions
   * Ensure it works on mobile.
 * Implement button colors for

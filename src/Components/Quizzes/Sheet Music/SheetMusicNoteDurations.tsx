@@ -5,28 +5,15 @@ import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
 import { VexFlowComponent } from "../../VexFlowComponent";
-import { FlashCardGroup } from "../../../FlashCardGroup";
-import { AnswerDifficulty } from '../../../StudyAlgorithm';
+import { FlashCardGroup, RenderAnswerSelectArgs } from "../../../FlashCardGroup";
 
 const width = 100;
 const height = 65;
 
 export function renderAnswerSelect(
-  width: number, height: number,
-  flashCards: FlashCard[],
-  enabledFlashCardIndices: number[],
-  areFlashCardsInverted: boolean,
-  flashCardIndex: number,
-  flashCard: FlashCard,
-  onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void,
-  lastCorrectAnswer: any,
-  incorrectAnswers: Array<any>
+  state: RenderAnswerSelectArgs
 ): JSX.Element {
-  return FlashCardUtils.renderMultiRowDistinctFlashCardSideAnswerSelect(
-    width, height, flashCards, enabledFlashCardIndices, areFlashCardsInverted,
-    flashCardIndex, flashCard, onAnswer, lastCorrectAnswer, incorrectAnswers,
-    [5, 5]
-  );
+  return FlashCardUtils.renderMultiRowDistinctFlashCardSideAnswerSelect(state, [5, 5]);
 }
 
 export function createFlashCardGroup(): FlashCardGroup {

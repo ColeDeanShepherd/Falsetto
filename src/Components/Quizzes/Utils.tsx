@@ -5,62 +5,41 @@ import * as Utils from "../../Utils";
 import { FlashCard, FlashCardSide, FlashCardSideRenderFn } from "../../FlashCard";
 import { callFlashCardSideRenderFn } from "../../Components/FlashCard";
 import { AnswerDifficulty } from "../../StudyAlgorithm";
+import { RenderAnswerSelectArgs } from '../../FlashCardGroup';
 
 export function renderNoteAnswerSelect(
-  width: number, height: number,
-  flashCards: FlashCard[],
-  enabledFlashCardIndices: number[],
-  areFlashCardsInverted: boolean,
-  flashCardIndex: number,
-  flashCard: FlashCard,
-  onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void,
-  lastCorrectAnswer: any,
-  incorrectAnswers: Array<any>
+  state: RenderAnswerSelectArgs
 ): JSX.Element {
   const naturalNotes = ["A", "B", "C", "D", "E", "F", "G"];
   const accidentalNotes = ["A#/B♭", "C#/D♭", "D#/E♭", "F#/G♭", "G#/A♭"];
   return (
     <div>
       {renderStringAnswerSelectInternal(
-        `${flashCardIndex}.0`, accidentalNotes, flashCard, onAnswer, lastCorrectAnswer,
-        incorrectAnswers
+        `${state.currentFlashCardId}.0`, accidentalNotes, state
       )}
       {renderStringAnswerSelectInternal(
-        `${flashCardIndex}.1`, naturalNotes, flashCard, onAnswer, lastCorrectAnswer,
-        incorrectAnswers
+        `${state.currentFlashCardId}.1`, naturalNotes, state
         )}
     </div>
   );
 }
 export function renderStringAnswerSelect(
-  width: number, height: number,
   answers: string[],
-  flashCards: FlashCard[],
-  enabledFlashCardIndices: number[],
-  areFlashCardsInverted: boolean,
-  flashCardIndex: number,
-  flashCard: FlashCard,
-  onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void,
-  lastCorrectAnswer: any,
-  incorrectAnswers: Array<any>
+  state: RenderAnswerSelectArgs
 ): JSX.Element {
   return renderStringAnswerSelectInternal(
-    flashCardIndex.toString(), answers, flashCard, onAnswer, lastCorrectAnswer,
-    incorrectAnswers
+    state.currentFlashCardId.toString(), answers, state
   );
 }
 
 export function renderStringAnswerSelectInternal(
   key: string,
   answers: string[],
-  flashCard: FlashCard,
-  onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void,
-  lastCorrectAnswer: any,
-  incorrectAnswers: Array<any>
+  state: RenderAnswerSelectArgs
 ): JSX.Element {
   return <StringAnswerSelect
-    key={key} answers={answers} flashCard={flashCard} onAnswer={onAnswer}
-    lastCorrectAnswer={lastCorrectAnswer} incorrectAnswers={incorrectAnswers} />;
+    key={key} answers={answers} flashCard={state.currentFlashCard} onAnswer={state.onAnswer}
+    lastCorrectAnswer={state.lastCorrectAnswer} incorrectAnswers={state.incorrectAnswers} />;
 }
 
 export interface StringAnswerSelectProps {
@@ -116,9 +95,32 @@ export class StringAnswerSelect extends React.Component<StringAnswerSelectProps,
   }
 }
 
+export const AnswerButton: React.FunctionComponent<{
+  answer: any,
+  incorrectAnswers: Array<any>,
+  lastCorrectAnswer: any,
+  onClick: () => void,
+  disabled?: boolean
+}> = props => {
+  const isIncorrectAnswer = Utils.arrayContains(props.incorrectAnswers, props.answer);
+  
+  return (
+    <Button
+      variant="contained"
+      color={!isIncorrectAnswer ? "default" : "secondary"}
+      onClick={props.onClick}
+      className={((props.answer === props.lastCorrectAnswer) && !isIncorrectAnswer) ? "background-green-to-initial" : ""}
+      style={{ textTransform: "none" }}
+      disabled={(props.disabled !== undefined) ? props.disabled : false}
+    >
+      {props.children}
+    </Button>
+  );
+};
+
 export interface FlashCardSideAnswerSelectProps {
   answers: Array<FlashCardSideRenderFn>;
-  enabledFlashCardIndices: number[];
+  enabledFlashCardIds: number[];
   flashCard: FlashCard;
   onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void;
   lastCorrectAnswer: any;
@@ -145,7 +147,8 @@ export class FlashCardSideAnswerSelect extends React.Component<FlashCardSideAnsw
               style={{ textTransform: "none" }}
             >
               {callFlashCardSideRenderFn(maxButtonWidth, maxButtonHeight, fcs)}
-            </Button>);
+            </Button>
+          );
         })}
       </div>
     );
@@ -164,20 +167,12 @@ export class FlashCardSideAnswerSelect extends React.Component<FlashCardSideAnsw
 }
 
 export function renderMultiRowDistinctFlashCardSideAnswerSelect(
-  width: number, height: number,
-  flashCards: FlashCard[],
-  enabledFlashCardIndices: number[],
-  areFlashCardsInverted: boolean,
-  flashCardIndex: number,
-  flashCard: FlashCard,
-  onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void,
-  lastCorrectAnswer: any,
-  incorrectAnswers: Array<any>,
+  state: RenderAnswerSelectArgs,
   rowLengths: Array<number>
 ): JSX.Element {
   const answers = Utils.uniq(
-    flashCards
-      .filter((_, i) => Utils.arrayContains(enabledFlashCardIndices, i))
+    state.flashCards
+      .filter((_, i) => Utils.arrayContains(state.enabledFlashCardIds, i))
       .map(fc => fc.backSide.renderFn)
   );
 
@@ -191,13 +186,9 @@ export function renderMultiRowDistinctFlashCardSideAnswerSelect(
       : answers.slice(answers.length - startIndex);
 
     answerRows.push(renderDistinctFlashCardSideAnswerSelectInternal(
-      `${flashCardIndex}.${rowIndex}`,
+      `${state.currentFlashCardId}.${rowIndex}`,
       rowAnswers,
-      enabledFlashCardIndices,
-      flashCard,
-      onAnswer,
-      lastCorrectAnswer,
-      incorrectAnswers
+      state
     ));
 
     rowIndex++;
@@ -212,48 +203,32 @@ export function renderMultiRowDistinctFlashCardSideAnswerSelect(
 }
 
 export function renderDistinctFlashCardSideAnswerSelect(
-  width: number, height: number,
-  flashCards: FlashCard[],
-  enabledFlashCardIndices: number[],
-  areFlashCardsInverted: boolean,
-  flashCardIndex: number,
-  flashCard: FlashCard,
-  onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void,
-  lastCorrectAnswer: any,
-  incorrectAnswers: Array<any>
+  state: RenderAnswerSelectArgs
 ): JSX.Element {
   const distinctFlashCardSideRenderFns = Utils.uniq(
-    flashCards
-      .filter((_, i) => Utils.arrayContains(enabledFlashCardIndices, i))
+    state.flashCards
+      .filter((_, i) => Utils.arrayContains(state.enabledFlashCardIds, i))
       .map(fc => fc.backSide.renderFn)
   );
 
   return renderDistinctFlashCardSideAnswerSelectInternal(
-    flashCardIndex.toString(),
+    state.currentFlashCardId.toString(),
     distinctFlashCardSideRenderFns,
-    enabledFlashCardIndices,
-    flashCard,
-    onAnswer,
-    lastCorrectAnswer,
-    incorrectAnswers
+    state
   );
 }
 export function renderDistinctFlashCardSideAnswerSelectInternal(
   key: string,
   answers: Array<FlashCardSideRenderFn>,
-  enabledFlashCardIndices: number[],
-  flashCard: FlashCard,
-  onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void,
-  lastCorrectAnswer: any,
-  incorrectAnswers: Array<any>
+  state: RenderAnswerSelectArgs
 ): JSX.Element {
   return <FlashCardSideAnswerSelect
     key={key}
     answers={answers}
-    enabledFlashCardIndices={enabledFlashCardIndices}
-    flashCard={flashCard}
-    onAnswer={onAnswer}
-    lastCorrectAnswer={lastCorrectAnswer}
-    incorrectAnswers={incorrectAnswers}
+    enabledFlashCardIds={state.enabledFlashCardIds}
+    flashCard={state.currentFlashCard}
+    onAnswer={state.onAnswer}
+    lastCorrectAnswer={state.lastCorrectAnswer}
+    incorrectAnswers={state.incorrectAnswers}
   />;
 }

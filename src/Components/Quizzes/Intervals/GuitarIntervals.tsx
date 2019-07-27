@@ -4,8 +4,7 @@ import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody } from "@mat
 import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
-import { FlashCardGroup } from "../../../FlashCardGroup";
-import { Pitch } from "../../../Pitch";
+import { FlashCardGroup, RenderAnswerSelectArgs } from "../../../FlashCardGroup";
 import { Interval } from "../../../Interval";
 import { standard6StringGuitarTuning, GuitarFretboard, GuitarFretboardMetrics } from "../../GuitarFretboard";
 import { VerticalDirection } from "../../../VerticalDirection";
@@ -136,15 +135,7 @@ function forEachInterval(fn: (pitches: Array<GuitarNote>, interval: Interval) =>
 
 
 export function renderAnswerSelect(
-  width: number, height: number,
-  flashCards: FlashCard[],
-  enabledFlashCardIndices: number[],
-  areFlashCardsInverted: boolean,
-  flashCardIndex: number,
-  flashCard: FlashCard,
-  onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void,
-  lastCorrectAnswer: any,
-  incorrectAnswers: Array<any>
+  state: RenderAnswerSelectArgs
 ): JSX.Element {
   const ascendingIntervals = intervals
     .map(i => "↑ " + i);
@@ -153,12 +144,10 @@ export function renderAnswerSelect(
   return (
     <div>
       {FlashCardUtils.renderStringAnswerSelectInternal(
-        `${flashCardIndex}.0`, ascendingIntervals, flashCard, onAnswer,
-        lastCorrectAnswer, incorrectAnswers
+        `${state.currentFlashCardId}.0`, ascendingIntervals, state
       )}
       {FlashCardUtils.renderStringAnswerSelectInternal(
-        `${flashCardIndex}.1`, descendingIntervals, flashCard, onAnswer,
-        lastCorrectAnswer, incorrectAnswers
+        `${state.currentFlashCardId}.1`, descendingIntervals, state
       )}
     </div>
   );

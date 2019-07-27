@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Card, CardContent, Typography, Button, Checkbox } from "@material-ui/core";
+import { Typography, Checkbox } from "@material-ui/core";
 import * as Vex from "vexflow";
 
 import * as Utils from "../../../Utils";
@@ -7,9 +7,8 @@ import * as FlashCardUtils from "../Utils";
 import { VexFlowComponent } from "../../VexFlowComponent";
 import { PitchLetter } from "../../../PitchLetter";
 import { FlashCard } from "../../../FlashCard";
-import { renderFlashCardSide } from "../../FlashCard";
 import { Pitch } from "../../../Pitch";
-import { FlashCardGroup } from "../../../FlashCardGroup";
+import { FlashCardGroup, RenderAnswerSelectArgs } from "../../../FlashCardGroup";
 import { AnswerDifficulty } from "../../../StudyAlgorithm";
 
 const clefs = [
@@ -136,15 +135,7 @@ function configDataToEnabledQuestionIds(configData: IConfigData): Array<number> 
     .filter(i => i >= 0);
 }
 export function renderNoteAnswerSelect(
-  width: number, height: number,
-  flashCards: FlashCard[],
-  enabledFlashCardIndices: number[],
-  areFlashCardsInverted: boolean,
-  flashCardIndex: number,
-  flashCard: FlashCard,
-  onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void,
-  lastCorrectAnswer: any,
-  incorrectAnswers: Array<any>
+  state: RenderAnswerSelectArgs
 ): JSX.Element {
   const sharpNotes = ["A#", "B#", "C#", "D#", "E#", "F#", "G#"];
   const naturalNotes = ["A", "B", "C", "D", "E", "F", "G"];
@@ -152,16 +143,13 @@ export function renderNoteAnswerSelect(
   return (
     <div>
       {FlashCardUtils.renderStringAnswerSelectInternal(
-        `${flashCardIndex}.0`, sharpNotes, flashCard, onAnswer, lastCorrectAnswer,
-        incorrectAnswers
+        `${state.currentFlashCardId}.0`, sharpNotes, state
       )}
       {FlashCardUtils.renderStringAnswerSelectInternal(
-        `${flashCardIndex}.1`, naturalNotes, flashCard, onAnswer, lastCorrectAnswer,
-        incorrectAnswers
+        `${state.currentFlashCardId}.1`, naturalNotes, state
       )}
       {FlashCardUtils.renderStringAnswerSelectInternal(
-        `${flashCardIndex}.2`, flatNotes, flashCard, onAnswer, lastCorrectAnswer,
-        incorrectAnswers
+        `${state.currentFlashCardId}.2`, flatNotes, state
       )}
     </div>
   );

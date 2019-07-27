@@ -7,7 +7,7 @@ import { Size2D } from "../../../Size2D";
 import { Rect2D } from '../../../Rect2D';
 import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
-import { FlashCardGroup } from "../../../FlashCardGroup";
+import { FlashCardGroup, RenderAnswerSelectArgs } from "../../../FlashCardGroup";
 import { Pitch } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 import { PianoKeyboard } from "../../PianoKeyboard";
@@ -158,22 +158,11 @@ function forEachInterval(fn: (pitches: Array<Pitch>, intervalString: string) => 
 }
 
 export function renderAnswerSelect(
-  width: number, height: number,
-  flashCards: FlashCard[],
-  enabledFlashCardIndices: number[],
-  areFlashCardsInverted: boolean,
-  flashCardIndex: number,
-  flashCard: FlashCard,
-  onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void,
-  lastCorrectAnswer: any,
-  incorrectAnswers: Array<any>
+  state: RenderAnswerSelectArgs
 ): JSX.Element {
   return (
     <div>
-      {FlashCardUtils.renderStringAnswerSelect(
-        width, height, intervals, flashCards, enabledFlashCardIndices,
-        areFlashCardsInverted, flashCardIndex, flashCard, onAnswer,
-        lastCorrectAnswer, incorrectAnswers)}
+      {FlashCardUtils.renderStringAnswerSelect(intervals, state)}
     </div>
   );
 }

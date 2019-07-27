@@ -6,7 +6,7 @@ import { Rect2D } from '../../../Rect2D';
 import * as FlashCardUtils from "../Utils";
 import { PianoKeyboard } from "../../PianoKeyboard";
 import { FlashCard } from "../../../FlashCard";
-import { FlashCardGroup } from "../../../FlashCardGroup";
+import { FlashCardGroup, RenderAnswerSelectArgs } from "../../../FlashCardGroup";
 import { AnswerDifficulty } from "../../../StudyAlgorithm";
 import { Pitch } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
@@ -36,24 +36,12 @@ export function createFlashCards(): FlashCard[] {
     ));
 }
 export function renderAnswerSelect(
-  width: number, height: number,
-  flashCards: FlashCard[],
-  enabledFlashCardIndices: number[],
-  areFlashCardsInverted: boolean,
-  flashCardIndex: number,
-  flashCard: FlashCard,
-  onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void,
-  lastCorrectAnswer: any,
-  incorrectAnswers: Array<any>
+  state: RenderAnswerSelectArgs
 ) {
   return (
     <div>
-      {!areFlashCardsInverted ? FlashCardUtils.renderNoteAnswerSelect(
-        width, height, flashCards, enabledFlashCardIndices, areFlashCardsInverted,
-        flashCardIndex, flashCard, onAnswer, lastCorrectAnswer, incorrectAnswers) : null}
-      {areFlashCardsInverted ? FlashCardUtils.renderDistinctFlashCardSideAnswerSelect(
-        width, height, flashCards, enabledFlashCardIndices, areFlashCardsInverted,
-        flashCardIndex, flashCard, onAnswer, lastCorrectAnswer, incorrectAnswers) : null}
+      {!state.areFlashCardsInverted ? FlashCardUtils.renderNoteAnswerSelect(state) : null}
+      {state.areFlashCardsInverted ? FlashCardUtils.renderDistinctFlashCardSideAnswerSelect(state) : null}
     </div>
   );
 }

@@ -29,7 +29,7 @@ export class FlashCard {
 
 export function invertFlashCards(
   flashCards: Array<FlashCard>,
-  enabledFlashCardIndices: Array<number> | undefined
+  enabledFlashCardIds: Array<number> | undefined
 ): ({
   invertedFlashCards: Array<FlashCard>,
   invertedEnabledFlashCardIndices: Array<number> | undefined
@@ -39,7 +39,7 @@ export function invertFlashCards(
 
   const result = {
     invertedFlashCards: new Array<FlashCard>(),
-    invertedEnabledFlashCardIndices: enabledFlashCardIndices ? new Array<number>() : undefined
+    invertedEnabledFlashCardIndices: enabledFlashCardIds ? new Array<number>() : undefined
   };
 
   for (const oldBackSide of distinctOldBackSides) {
@@ -83,8 +83,8 @@ export function invertFlashCards(
     );
 
     // add new enabled flash card indices
-    if (enabledFlashCardIndices && result.invertedEnabledFlashCardIndices) {
-      if (matchingOldFrontSideIndices.some(i => Utils.arrayContains(enabledFlashCardIndices, i))) {
+    if (enabledFlashCardIds && result.invertedEnabledFlashCardIndices) {
+      if (matchingOldFrontSideIndices.some(i => Utils.arrayContains(enabledFlashCardIds, i))) {
         const newInvertedFlashCardIndex = result.invertedFlashCards.length - 1;
         result.invertedEnabledFlashCardIndices.push(newInvertedFlashCardIndex);
       }

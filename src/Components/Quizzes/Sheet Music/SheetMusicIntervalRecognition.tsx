@@ -1,10 +1,10 @@
 import * as React from "react";
-import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid, Typography } from "@material-ui/core";
+import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody } from "@material-ui/core";
 
 import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
-import { FlashCardGroup } from "../../../FlashCardGroup";
+import { FlashCardGroup, RenderAnswerSelectArgs } from "../../../FlashCardGroup";
 import { Pitch, pitchRange } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 import { SheetMusicChord } from "./SheetMusicChords";
@@ -150,22 +150,11 @@ function forEachInterval(fn: (pitches: Array<Pitch>, interval: Interval) => void
 }
 
 export function renderAnswerSelect(
-  width: number, height: number,
-  flashCards: FlashCard[],
-  enabledFlashCardIndices: number[],
-  areFlashCardsInverted: boolean,
-  flashCardIndex: number,
-  flashCard: FlashCard,
-  onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void,
-  lastCorrectAnswer: any,
-  incorrectAnswers: Array<any>
+  state: RenderAnswerSelectArgs
 ): JSX.Element {
   return (
     <div>
-      {FlashCardUtils.renderStringAnswerSelect(
-        width, height, intervals, flashCards, enabledFlashCardIndices,
-        areFlashCardsInverted, flashCardIndex, flashCard, onAnswer,
-        lastCorrectAnswer, incorrectAnswers)}
+      {FlashCardUtils.renderStringAnswerSelect(intervals, state)}
     </div>
   );
 }

@@ -5,7 +5,7 @@ import { Vector2D } from '../../../Vector2D';
 import { Size2D } from "../../../Size2D";
 import { Rect2D } from '../../../Rect2D';
 import { FlashCard, FlashCardSide } from "../../../FlashCard";
-import { FlashCardGroup } from "../../../FlashCardGroup";
+import { FlashCardGroup, RenderAnswerSelectArgs } from "../../../FlashCardGroup";
 import { Pitch } from "../../../Pitch";
 import { playPitchesSequentially } from "../../../Piano";
 import {
@@ -185,24 +185,16 @@ export class FlashCardMultiSelect extends React.Component<IFlashCardMultiSelectP
 }
 
 export function renderAnswerSelect(
-  width: number, height: number,
-  flashCards: FlashCard[],
-  enabledFlashCardIndices: number[],
-  areFlashCardsInverted: boolean,
-  flashCardIndex: number,
-  flashCard: FlashCard,
-  onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void,
-  lastCorrectAnswer: any,
-  incorrectAnswers: Array<any>
+  state: RenderAnswerSelectArgs
 ) {
-  const key = flashCards.indexOf(flashCard);
-  const correctAnswer = [flashCard.backSide.data as Pitch];
-  const size = Utils.shrinkRectToFit(new Size2D(width, height), new Size2D(400, 100));
+  const key = state.flashCards.indexOf(state.currentFlashCard);
+  const correctAnswer = [state.currentFlashCard.backSide.data as Pitch];
+  const size = Utils.shrinkRectToFit(new Size2D(state.width, state.height), new Size2D(400, 100));
   
   return <PianoKeysAnswerSelect
     key={key} width={size.width} height={size.height} correctAnswer={correctAnswer}
-    onAnswer={onAnswer} maxNumPitches={1} lastCorrectAnswer={lastCorrectAnswer}
-    incorrectAnswers={incorrectAnswers} />;
+    onAnswer={state.onAnswer} maxNumPitches={1} lastCorrectAnswer={state.lastCorrectAnswer}
+    incorrectAnswers={state.incorrectAnswers} />;
 }
 
 export function createFlashCards(): Array<FlashCard> {

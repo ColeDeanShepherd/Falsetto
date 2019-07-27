@@ -10,7 +10,7 @@ import { FlashCard, invertFlashCards } from "../FlashCard";
 import { renderFlashCardSide } from "./FlashCard";
 import { DefaultFlashCardMultiSelect } from "./DefaultFlashCardMultiSelect";
 import { StudyAlgorithm, AnswerDifficulty, isAnswerDifficultyCorrect, LeitnerStudyAlgorithm } from "../StudyAlgorithm";
-import { RenderAnswerSelectFunc, RenderFlashCardMultiSelectFunc, CustomNextFlashCardIdFilter, FlashCardGroup } from '../FlashCardGroup';
+import { RenderAnswerSelectFunc, RenderFlashCardMultiSelectFunc, CustomNextFlashCardIdFilter, FlashCardGroup, RenderAnswerSelectArgs } from '../FlashCardGroup';
 import { MAX_MAIN_CARD_WIDTH } from './Style';
 
 export function createStudyFlashCardGroupComponent(
@@ -57,7 +57,7 @@ export interface IStudyFlashCardsState {
   lastCorrectAnswer: any;
   incorrectAnswers: Array<any>;
   configData: any;
-  enabledFlashCardIndices: number[];
+  enabledFlashCardIds: number[];
   showConfiguration: boolean;
   showDetailedStats: boolean;
   isShowingBackSide: boolean;
@@ -205,10 +205,13 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
           <div style={{textAlign: "center"}}>
             {this.props.renderAnswerSelect ? (
               this.props.renderAnswerSelect(
-                containerWidth, containerHeight, flashCards,
-                this.state.enabledFlashCardIndices, this.state.invertFlashCards,
-                this.state.currentFlashCardIndex, currentFlashCard, boundOnAnswer,
-                this.state.lastCorrectAnswer, this.state.incorrectAnswers
+                new RenderAnswerSelectArgs(
+                  containerWidth, containerHeight, flashCards,
+                  this.state.enabledFlashCardIds, this.state.configData,
+                  this.state.invertFlashCards, this.state.currentFlashCardIndex,
+                  currentFlashCard, boundOnAnswer, this.state.lastCorrectAnswer,
+                  this.state.incorrectAnswers
+                )
               )
              ) : null}
 
@@ -257,12 +260,12 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
 
     return this.props.renderFlashCardMultiSelect
       ? this.props.renderFlashCardMultiSelect(
-        flashCards, this.state.enabledFlashCardIndices, this.state.configData, onEnabledFlashCardIndicesChange
+        flashCards, this.state.enabledFlashCardIds, this.state.configData, onEnabledFlashCardIndicesChange
       )
       : <DefaultFlashCardMultiSelect
           flashCards={flashCards}
           configData={this.state.configData}
-          selectedFlashCardIndices={this.state.enabledFlashCardIndices}
+          selectedFlashCardIndices={this.state.enabledFlashCardIds}
           onChange={onEnabledFlashCardIndicesChange}
         />;
   }
@@ -282,7 +285,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
       haveGottenCurrentFlashCardWrong: false,
       lastCorrectAnswer: null,
       incorrectAnswers: [],
-      enabledFlashCardIndices: this.studyAlgorithm.enabledQuestionIds
+      enabledFlashCardIds: this.studyAlgorithm.enabledQuestionIds
     };
   }
 
@@ -315,7 +318,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
   private onEnabledFlashCardIndicesChange(newValue: number[], newConfigData: any) {
     this.studyAlgorithm.enabledQuestionIds = newValue;
 
-    const stateDelta: any = { enabledFlashCardIndices: newValue, configData: newConfigData };
+    const stateDelta: any = { enabledFlashCardIds: newValue, configData: newConfigData };
     const onStateChanged = !Utils.arrayContains(newValue, this.state.currentFlashCardIndex)
       ? () => this.moveToNextFlashCard(null)
       : undefined;
@@ -331,7 +334,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
       newFlashCards = this.props.flashCards;
       newEnabledQuestionIds = this.props.initialSelectedFlashCardIndices;
     } else {
-      const inversion = invertFlashCards(this.props.flashCards, this.state.enabledFlashCardIndices);
+      const inversion = invertFlashCards(this.props.flashCards, this.state.enabledFlashCardIds);
       newFlashCards = inversion.invertedFlashCards;
       newEnabledQuestionIds = inversion.invertedEnabledFlashCardIndices;
     }

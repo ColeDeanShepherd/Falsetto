@@ -4,12 +4,11 @@ import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid } from
 import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
-import { FlashCardGroup } from "../../../FlashCardGroup";
+import { FlashCardGroup, RenderAnswerSelectArgs } from "../../../FlashCardGroup";
 import { Pitch } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 import { VerticalDirection } from "../../../VerticalDirection";
 import { Interval } from "../../../Interval";
-import { AnswerDifficulty } from "../../../StudyAlgorithm";
 
 const rootNotes = [
   new Pitch(PitchLetter.C, -1, 4),
@@ -217,15 +216,7 @@ export class IntervalNotesFlashCardMultiSelect extends React.Component<IInterval
 }
 
 export function renderNoteAnswerSelect(
-  width: number, height: number,
-  flashCards: FlashCard[],
-  enabledFlashCardIndices: number[],
-  areFlashCardsInverted: boolean,
-  flashCardIndex: number,
-  flashCard: FlashCard,
-  onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void,
-  lastCorrectAnswer: any,
-  incorrectAnswers: Array<any>
+  state: RenderAnswerSelectArgs
 ): JSX.Element {
   const doubleSharpNotes = ["A##", "B##", "C##", "D##", "E##", "F##", "G##"];
   const sharpNotes = ["A#", "B#", "C#", "D#", "E#", "F#", "G#"];
@@ -236,24 +227,19 @@ export function renderNoteAnswerSelect(
   return (
     <div>
       {FlashCardUtils.renderStringAnswerSelectInternal(
-        `${flashCardIndex}.0`, doubleSharpNotes, flashCard, onAnswer, lastCorrectAnswer,
-        incorrectAnswers
+        `${state.currentFlashCardId}.0`, doubleSharpNotes, state
       )}
       {FlashCardUtils.renderStringAnswerSelectInternal(
-        `${flashCardIndex}.1`, sharpNotes, flashCard, onAnswer, lastCorrectAnswer,
-        incorrectAnswers
+        `${state.currentFlashCardId}.1`, sharpNotes, state
       )}
       {FlashCardUtils.renderStringAnswerSelectInternal(
-        `${flashCardIndex}.2`, naturalNotes, flashCard, onAnswer, lastCorrectAnswer,
-        incorrectAnswers
+        `${state.currentFlashCardId}.2`, naturalNotes, state
       )}
       {FlashCardUtils.renderStringAnswerSelectInternal(
-        `${flashCardIndex}.3`, flatNotes, flashCard, onAnswer, lastCorrectAnswer,
-        incorrectAnswers
+        `${state.currentFlashCardId}.3`, flatNotes, state
       )}
       {FlashCardUtils.renderStringAnswerSelectInternal(
-        `${flashCardIndex}.4`, doubleFlatNotes, flashCard, onAnswer, lastCorrectAnswer,
-        incorrectAnswers
+        `${state.currentFlashCardId}.4`, doubleFlatNotes, state
       )}
     </div>
   );

@@ -21,14 +21,14 @@ const STRING_COUNT = 6;
 export function configDataToEnabledQuestionIds(configData: IConfigData): Array<number> {
   const notesPerString = 12;
 
-  const enabledFlashCardIndices = new Array<number>();
+  const enabledFlashCardIds = new Array<number>();
   for (let stringIndex = 0; stringIndex < STRING_COUNT; stringIndex++) {
     for (let fretNumber = 0; fretNumber <= configData.maxFret; fretNumber++) {
-      enabledFlashCardIndices.push((notesPerString * stringIndex) + fretNumber);
+      enabledFlashCardIds.push((notesPerString * stringIndex) + fretNumber);
     }
   }
 
-  return enabledFlashCardIndices;
+  return enabledFlashCardIds;
 }
 
 export interface IGuitarNotesFlashCardMultiSelectProps {
