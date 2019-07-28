@@ -1,19 +1,19 @@
 import * as React from "react";
 import { Button, Card, CardContent, Typography } from "@material-ui/core";
 
-import * as Utils from "../Utils";
-import { Vector2D } from '../Vector2D';
-import { Size2D } from "../Size2D";
-import { Rect2D } from '../Rect2D';
-import { PitchLetter } from "../PitchLetter";
-import { ScaleType, ScaleTypeGroup, Scale } from "../Scale";
-import { Pitch } from "../Pitch";
-import { PianoKeyboard } from "./PianoKeyboard";
-import { playPitches } from '../Piano';
-import * as PianoScaleDronePlayer from "./PianoScaleDronePlayer";
-import { GuitarScaleViewer } from './Quizzes/Scales/GuitarScales';
-import { getStandardGuitarTuning, getPreferredGuitarScaleShape } from './GuitarFretboard';
-import { ScaleAudioPlayer } from './ScaleAudioPlayer';
+import * as Utils from "../../Utils";
+import { Vector2D } from '../../Vector2D';
+import { Size2D } from "../../Size2D";
+import { Rect2D } from '../../Rect2D';
+import { PitchLetter } from "../../PitchLetter";
+import { ScaleType, ScaleTypeGroup, Scale } from "../../Scale";
+import { Pitch } from "../../Pitch";
+import { PianoKeyboard } from "../Utils/PianoKeyboard";
+import { playPitches } from '../../Piano';
+import * as PianoScaleDronePlayer from "../Utils/PianoScaleDronePlayer";
+import { GuitarScaleViewer } from '../Quizzes/Scales/GuitarScales';
+import { getStandardGuitarTuning, getPreferredGuitarScaleShape } from '../Utils/GuitarFretboard';
+import { ScaleAudioPlayer } from '../Utils/ScaleAudioPlayer';
 
 const validSharpKeyPitches = [
   null,

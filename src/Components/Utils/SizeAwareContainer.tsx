@@ -1,6 +1,6 @@
 import * as React from "react";
 import ResizeObserver from "resize-observer-polyfill";
-import { Size2D } from '../Size2D';
+import { Size2D } from '../../Size2D';
 
 export interface ISizeAwareContainerProps {
   height: number;

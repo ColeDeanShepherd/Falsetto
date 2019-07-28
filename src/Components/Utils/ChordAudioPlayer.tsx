@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Chord, } from '../Chord';
+import { Chord, } from '../../Chord';
 import { PitchesAudioPlayer, PitchesAudioPlayerExports } from './PitchesAudioPlayer';
 
 export interface IChordAudioPlayerProps {

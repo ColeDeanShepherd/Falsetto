@@ -2,15 +2,15 @@ import * as React from "react";
 import * as Vex from "vexflow";
 import { Button, Card, CardContent, Typography, Select, CircularProgress } from "@material-ui/core";
 
-import * as Utils from "../Utils";
-import { TimeSignature } from "../TimeSignature";
-import * as Audio from "../Audio";
-import { VexFlowComponent } from "./VexFlowComponent";
-import { Rational } from "../Rational";
-import { noteDurationToVexFlowStr, getTimeSignatureStr } from '../VexFlowUtils';
-import { RhythmPlayer, IRhythmNote } from '../Rhythm';
-import { SizeAwareContainer } from './SizeAwareContainer';
-import { Size2D } from '../Size2D';
+import * as Utils from "../../Utils";
+import { TimeSignature } from "../../TimeSignature";
+import * as Audio from "../../Audio";
+import { VexFlowComponent } from "../Utils/VexFlowComponent";
+import { Rational } from "../../Rational";
+import { noteDurationToVexFlowStr, getTimeSignatureStr } from '../../VexFlowUtils';
+import { RhythmPlayer, IRhythmNote } from '../../Rhythm';
+import { SizeAwareContainer } from '../Utils/SizeAwareContainer';
+import { Size2D } from '../../Size2D';
 
 const clickAudioPath = "/audio/metronome_click.wav";
 

@@ -1,13 +1,13 @@
 import * as React from "react";
 import * as Vex from "vexflow";
 
-import * as Utils from "../Utils";
-import { IRhythmNote, RhythmPlayer } from "../Rhythm";
+import * as Utils from "../../Utils";
+import { IRhythmNote, RhythmPlayer } from "../../Rhythm";
 import { Button, Card, CardContent, Typography } from "@material-ui/core";
-import { VexFlowComponent } from "./VexFlowComponent";
-import { Rational } from "../Rational";
-import { noteDurationToVexFlowStr } from '../VexFlowUtils';
-import { TimeSignature } from '../TimeSignature';
+import { VexFlowComponent } from "../Utils/VexFlowComponent";
+import { Rational } from "../../Rational";
+import { noteDurationToVexFlowStr } from '../../VexFlowUtils';
+import { TimeSignature } from '../../TimeSignature';
 
 const width = 800;
 const height = 100;

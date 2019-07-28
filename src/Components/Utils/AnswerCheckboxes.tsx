@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Checkbox, Button } from "@material-ui/core";
 
-import * as Utils from "../Utils";
+import * as Utils from "../../Utils";
 
 export interface IAnswerCheckboxesProps {
   answers: string[];

@@ -4,7 +4,7 @@ import * as Vex from "vexflow";
 import * as Utils from "../../../Utils";
 import { Pitch } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
-import { VexFlowComponent } from "../../VexFlowComponent";
+import { VexFlowComponent } from "../../Utils/VexFlowComponent";
 
 export interface ISheetMusicChordProps {
   width: number;

@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as Vex from "vexflow";
 import { VexFlowComponent } from './VexFlowComponent';
-import { TimeSignature as TimeSignatureModel } from "../TimeSignature";
+import { TimeSignature as TimeSignatureModel } from "../../TimeSignature";
 
 export interface TimeSignatureProps {
   timeSignature: TimeSignatureModel;

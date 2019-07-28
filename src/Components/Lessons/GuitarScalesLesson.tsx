@@ -1,23 +1,23 @@
 import * as React from "react";
 import { Card, CardContent } from '@material-ui/core';
 
-import * as Utils from "../Utils";
-import App from './App';
+import * as Utils from "../../Utils";
+import App from '../App';
 import {
   GuitarFretboard, GuitarFretboardMetrics,
   renderGuitarNoteHighlightsAndLabels, renderFretNumbers, getStandardGuitarTuning,
   getPreferredGuitarScaleShape, 
-} from './GuitarFretboard';
-import { Pitch } from '../Pitch';
-import { PitchLetter } from '../PitchLetter';
-import { MAX_MAIN_CARD_WIDTH } from './Style';
-import { ScaleType, Scale } from '../Scale';
+} from '../Utils/GuitarFretboard';
+import { Pitch } from '../../Pitch';
+import { PitchLetter } from '../../PitchLetter';
+import { MAX_MAIN_CARD_WIDTH } from '../Style';
+import { ScaleType, Scale } from '../../Scale';
 import { NoteText } from './EssentialMusicTheory';
-import { ScaleAudioPlayer } from './ScaleAudioPlayer';
-import { createStudyFlashCardGroupComponent } from './StudyFlashCards';
-import * as GuitarScales from "./Quizzes/Scales/GuitarScales";
-import { ScaleViewer } from './ScaleViewer';
-import { GuitarNote } from '../GuitarNote';
+import { ScaleAudioPlayer } from '../Utils/ScaleAudioPlayer';
+import { createStudyFlashCardGroupComponent } from '../StudyFlashCards';
+import * as GuitarScales from "../Quizzes/Scales/GuitarScales";
+import { ScaleViewer } from '../Tools/ScaleViewer';
+import { GuitarNote } from '../../GuitarNote';
 
 const fretCount = 11;
 const ionianRootPitch = new Pitch(PitchLetter.F, 0, 2);

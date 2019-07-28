@@ -4,7 +4,7 @@ import * as Utils from "../../../Utils";
 import { Vector2D } from '../../../Vector2D';
 import { Size2D } from "../../../Size2D";
 import { Rect2D } from '../../../Rect2D';
-import { PianoKeyboard } from "../../PianoKeyboard";
+import { PianoKeyboard } from "../../Utils/PianoKeyboard";
 import { FlashCard, FlashCardSide } from "../../../FlashCard";
 import { FlashCardGroup, RenderAnswerSelectArgs } from "../../../FlashCardGroup";
 import { AnswerDifficulty } from "../../../StudyAlgorithm";
@@ -12,7 +12,7 @@ import { Pitch } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 import { TableRow, TableCell, Table, TableHead, TableBody, Grid, Checkbox, Button, Typography } from "@material-ui/core";
 import { Chord, ChordType } from "../../../Chord";
-import { PianoKeysAnswerSelect } from "../../PianoKeysAnswerSelect";
+import { PianoKeysAnswerSelect } from "../../Utils/PianoKeysAnswerSelect";
 
 const rootPitchStrs = ["Ab", "A", "Bb", "B/Cb", "C", "C#/Db", "D", "Eb", "E", "F", "F#/Gb", "G"];
 

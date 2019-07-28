@@ -10,7 +10,7 @@ import { FlashCard } from "../../../FlashCard";
 import { FlashCardGroup, RenderAnswerSelectArgs } from "../../../FlashCardGroup";
 import { Pitch } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
-import { PianoKeyboard } from "../../PianoKeyboard";
+import { PianoKeyboard } from "../../Utils/PianoKeyboard";
 import { AnswerDifficulty } from '../../../StudyAlgorithm';
 
 const minPitch = new Pitch(PitchLetter.C, 0, 4);

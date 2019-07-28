@@ -1,20 +1,20 @@
 import * as React from "react";
 import { Card, CardContent } from '@material-ui/core';
 
-import App from "./App";
-import * as Utils from "../Utils";
+import App from "../App";
+import * as Utils from "../../Utils";
 import {
   GuitarFretboard,
   renderGuitarNoteHighlightsAndNoteNames,
   GuitarFretboardMetrics,
   renderFretNumbers
-} from './GuitarFretboard';
-import * as GuitarNotes from "./Quizzes/Notes/GuitarNotes";
-import { Pitch } from '../Pitch';
-import { PitchLetter } from '../PitchLetter';
-import { createStudyFlashCardGroupComponent } from './StudyFlashCards';
-import { MAX_MAIN_CARD_WIDTH } from './Style';
-import { GuitarNote } from '../GuitarNote';
+} from '../Utils/GuitarFretboard';
+import * as GuitarNotes from "../Quizzes/Notes/GuitarNotes";
+import { Pitch } from '../../Pitch';
+import { PitchLetter } from '../../PitchLetter';
+import { createStudyFlashCardGroupComponent } from '../StudyFlashCards';
+import { MAX_MAIN_CARD_WIDTH } from '../Style';
+import { GuitarNote } from '../../GuitarNote';
 
 const noteGroups = [
   {

@@ -11,12 +11,12 @@ import { playPitchesSequentially } from "../../../Piano";
 import {
   intervals,
   forEachInterval
-} from "../../IntervalEarTrainingFlashCardMultiSelect";
+} from "../../Utils/IntervalEarTrainingFlashCardMultiSelect";
 import { Button, TableRow, TableCell, Checkbox, Table, TableHead, TableBody, Grid } from "@material-ui/core";
-import { PianoKeyboard } from "../../PianoKeyboard";
+import { PianoKeyboard } from "../../Utils/PianoKeyboard";
 import { PitchLetter } from "../../../PitchLetter";
 import { AnswerDifficulty } from "../../../StudyAlgorithm";
-import { PianoKeysAnswerSelect } from "../../PianoKeysAnswerSelect";
+import { PianoKeysAnswerSelect } from "../../Utils/PianoKeysAnswerSelect";
 
 const minPitch = new Pitch(PitchLetter.C, 0, 4);
 const maxPitch = new Pitch(PitchLetter.B, 0, 5);

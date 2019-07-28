@@ -4,7 +4,7 @@ import * as Vex from "vexflow";
 import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
 import { FlashCardGroup } from "../../../FlashCardGroup";
-import { VexFlowComponent } from "../../VexFlowComponent";
+import { VexFlowComponent } from "../../Utils/VexFlowComponent";
 import { Pitch } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 

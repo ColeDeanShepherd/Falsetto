@@ -3,9 +3,9 @@ import {
   Checkbox, Table, TableHead, TableBody, TableRow, TableCell
 } from "@material-ui/core";
 
-import { FlashCard } from "../FlashCard";
-import { renderFlashCardSide } from "./FlashCard";
-import * as Utils from "../Utils";
+import { FlashCard } from "../../FlashCard";
+import { renderFlashCardSide } from "../FlashCard";
+import * as Utils from "../../Utils";
 
 export interface IDefaultFlashCardMultiSelectProps {
   flashCards: FlashCard[];

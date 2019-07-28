@@ -13,7 +13,7 @@ import {
   IntervalEarTrainingFlashCardMultiSelect,
   configDataToEnabledQuestionIds,
   forEachInterval
-} from "../../IntervalEarTrainingFlashCardMultiSelect";
+} from "../../Utils/IntervalEarTrainingFlashCardMultiSelect";
 import { Button } from "@material-ui/core";
 
 export interface IFlashCardFrontSideProps {

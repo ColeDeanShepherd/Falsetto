@@ -1,6 +1,6 @@
 import * as Utils from "./Utils";
 import { Pitch } from "./Pitch";
-import { GuitarTuning } from './Components/GuitarFretboard';
+import { GuitarTuning } from './Components/Utils/GuitarFretboard';
 
 export class GuitarNote {
   public static allNotesOfPitches(

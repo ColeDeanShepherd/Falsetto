@@ -12,7 +12,7 @@ import {
   ChordsSection,
   ChordProgressionsSection,
   NextStepsSection
-} from "./EssentialMusicTheory";
+} from "./Lessons/EssentialMusicTheory";
 import * as IntervalNamesToHalfSteps from "./Quizzes/Intervals/IntervalNamesToHalfSteps";
 import * as IntervalQualitySymbolsToQualities from "./Quizzes/Intervals/IntervalQualitySymbolsToQualities";
 import * as GenericIntervalsToIntervalQualities from "./Quizzes/Intervals/GenericIntervalsToIntervalQualities";
@@ -29,7 +29,7 @@ import * as ChordFamilyDefinitions from "./Quizzes/Chords/ChordFamilyDefinitions
 import * as AvailableChordTensions from "./Quizzes/Chords/AvailableChordTensions";
 import * as DiatonicTriads from "./Quizzes/Chords/DiatonicTriads";
 import * as DiatonicSeventhChords from "./Quizzes/Chords/DiatonicSeventhChords";
-import * as RandomChordGenerator from "./RandomChordGenerator";
+import * as RandomChordGenerator from "./Tools/RandomChordGenerator";
 import * as GuitarNotes from "./Quizzes/Notes/GuitarNotes";
 import * as PianoNotes from "./Quizzes/Notes/PianoNotes";
 import * as PianoScales from "./Quizzes/Scales/PianoScales";
@@ -52,19 +52,19 @@ import * as GuitarIntervals from "./Quizzes/Intervals/GuitarIntervals";
 import * as SheetMusicChordRecognition from "./Quizzes/Sheet Music/SheetMusicChordRecognition";
 import * as ChordEarTraining from "./Quizzes/Chords/ChordEarTraining";
 import * as ScaleEarTraining from "./Quizzes/Scales/ScaleEarTraining";
-import { GuitarNotesLesson } from "./GuitarNotesLesson";
-import { GuitarScalesLesson } from "./GuitarScalesLesson";
-import { ScaleViewer } from "./ScaleViewer";
-import { ChordViewer } from "./ChordViewer";
-import { IntervalChordScaleFinder } from "./IntervalChordScaleFinder";
-import { RhythmTapper } from "./RhythmTapper";
+import { GuitarNotesLesson } from "./Lessons/GuitarNotesLesson";
+import { GuitarScalesLesson } from "./Lessons/GuitarScalesLesson";
+import { ScaleViewer } from "./Tools/ScaleViewer";
+import { ChordViewer } from "./Tools/ChordViewer";
+import { IntervalChordScaleFinder } from "./Tools/IntervalChordScaleFinder";
+import { RhythmTapper } from "./Tools/RhythmTapper";
 import { FlashCardGroup } from "../FlashCardGroup";
 import { createStudyFlashCardGroupComponent } from "./StudyFlashCards";
 import { AboutPage } from "./AboutPage";
 import { SupportUsPage } from "./SupportUs";
 import DocumentTitle from "react-document-title";
 import { HomePage } from "./HomePage";
-import ScrollToTop from './ScrollToTop';
+import ScrollToTop from './Utils/ScrollToTop';
 import { MAX_MAIN_CARD_WIDTH } from './Style';
 
 const NavSectionTitle: React.FunctionComponent<{ style?: any }> = props => <p style={Object.assign({ fontSize: "1.2em", fontWeight: "bold", textDecoration: "underline" }, props.style)}>{props.children}</p>;
@@ -101,6 +101,8 @@ export const MainMenu : React.FunctionComponent<{}> = props => (
           <NavLink to="/interval-chord-scale-finder" onClick={event => App.instance.onNavLinkClick()} className="menu-link">Interval/Chord/Scale Finder</NavLink>
           <NavLink to="/scale-viewer" onClick={event => App.instance.onNavLinkClick()} className="menu-link">Scale Viewer</NavLink>
           <NavLink to="/chord-viewer" onClick={event => App.instance.onNavLinkClick()} className="menu-link">Chord Viewer</NavLink>
+          <NavLink to="/diatonic-chord-player" onClick={event => App.instance.onNavLinkClick()} className="menu-link">Diatonic Chord Player</NavLink>
+          <NavLink to="/metronome" onClick={event => App.instance.onNavLinkClick()} className="menu-link">Metronome</NavLink>
           {App.instance.renderFlashCardGroupLink(RandomChordGenerator.createFlashCardGroup())}
         </MenuCategory>
         <MenuCategory title="Note Exercises">

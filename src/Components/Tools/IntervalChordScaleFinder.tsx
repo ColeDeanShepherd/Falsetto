@@ -1,18 +1,18 @@
 import * as React from "react";
 
-import * as Utils from "../Utils";
-import { Vector2D } from '../Vector2D';
-import { Size2D } from "../Size2D";
-import { Rect2D } from '../Rect2D';
-import { PitchLetter } from "../PitchLetter";
-import { Pitch } from "../Pitch";
+import * as Utils from "../../Utils";
+import { Vector2D } from '../../Vector2D';
+import { Size2D } from "../../Size2D";
+import { Rect2D } from '../../Rect2D';
+import { PitchLetter } from "../../PitchLetter";
+import { Pitch } from "../../Pitch";
 import { Card, CardContent, Typography, Button } from "@material-ui/core";
-import { PianoKeyboard, renderPianoKeyboardNoteNames, PianoKeyboardMetrics, renderPressedPianoKeys } from "./PianoKeyboard";
-import { Interval } from '../Interval';
-import { ChordType, Chord } from '../Chord';
-import { ScaleType, getAllModePitchIntegers } from '../Scale';
-import { generateChordNames } from '../ChordName';
-import { ChordScaleFormula } from '../ChordScaleFormula';
+import { PianoKeyboard, renderPianoKeyboardNoteNames, PianoKeyboardMetrics, renderPressedPianoKeys } from "../Utils/PianoKeyboard";
+import { Interval } from '../../Interval';
+import { ChordType, Chord } from '../../Chord';
+import { ScaleType, getAllModePitchIntegers } from '../../Scale';
+import { generateChordNames } from '../../ChordName';
+import { ChordScaleFormula } from '../../ChordScaleFormula';
 
 // TODO: refactor Chord, Scale
 // TODO: add support for multiple chord names

@@ -8,7 +8,7 @@ import * as Utils from "../Utils";
 import * as Analytics from "../Analytics";
 import { FlashCard, invertFlashCards } from "../FlashCard";
 import { renderFlashCardSide } from "./FlashCard";
-import { DefaultFlashCardMultiSelect } from "./DefaultFlashCardMultiSelect";
+import { DefaultFlashCardMultiSelect } from "./Utils/DefaultFlashCardMultiSelect";
 import { StudyAlgorithm, AnswerDifficulty, isAnswerDifficultyCorrect, LeitnerStudyAlgorithm } from "../StudyAlgorithm";
 import { RenderAnswerSelectFunc, RenderFlashCardMultiSelectFunc, CustomNextFlashCardIdFilter, FlashCardGroup, RenderAnswerSelectArgs } from '../FlashCardGroup';
 import { MAX_MAIN_CARD_WIDTH } from './Style';
@@ -189,24 +189,28 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
             ? (
               <p style={{marginBottom: "0", marginTop: "0"}}>
                 <span style={{paddingRight: "1em"}}>{this.studyAlgorithm.quizStats.numCorrectGuesses} / {this.studyAlgorithm.quizStats.numIncorrectGuesses} correct ({(100 * percentCorrect).toFixed(2)}%)</span>
-                {(this.state.wasCorrect && !this.state.haveGottenCurrentFlashCardWrong) ? (
-                  <span key={this.state.currentFlashCardId}>
-                    <i
-                      className="material-icons fade-out"
-                      style={{ color: "green", verticalAlign: "bottom" }}>
-                      check_circle
-                    </i>
-                  </span>
-                ) : null}
-                {this.state.haveGottenCurrentFlashCardWrong ? (
-                  <span key={this.state.incorrectAnswers.length}>
-                    <i
-                      className="material-icons fade-out"
-                      style={{ color: "red", verticalAlign: "bottom" }}>
-                      cancel
-                    </i>
-                  </span>
-                ) : null}
+                <span key={this.state.currentFlashCardId}>
+                  <i
+                    className="material-icons fade-out"
+                    style={{
+                      color: "green",
+                      verticalAlign: "bottom",
+                      visibility: (this.state.wasCorrect && !this.state.haveGottenCurrentFlashCardWrong) ? "visible" : "hidden"
+                    }}>
+                    check_circle
+                  </i>
+                </span>
+                <span key={this.state.incorrectAnswers.length}>
+                  <i
+                    className="material-icons fade-out"
+                    style={{
+                      color: "red",
+                      verticalAlign: "bottom",
+                      visibility: this.state.haveGottenCurrentFlashCardWrong ? "visible" : "hidden"
+                    }}>
+                    cancel
+                  </i>
+                </span>
               </p>
             )
             : null

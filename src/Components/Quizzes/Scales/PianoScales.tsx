@@ -8,12 +8,12 @@ import { Rect2D } from '../../../Rect2D';
 import { Pitch } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 import { ScaleType } from "../../../Scale";
-import { PianoKeyboard } from "../../PianoKeyboard";
+import { PianoKeyboard } from "../../Utils/PianoKeyboard";
 import { FlashCard, FlashCardSide } from "../../../FlashCard";
 import { FlashCardGroup, RenderAnswerSelectArgs } from "../../../FlashCardGroup";
 import { AnswerDifficulty } from "../../../StudyAlgorithm";
-import { PianoKeysAnswerSelect } from "../../PianoKeysAnswerSelect";
-import { ScaleAnswerSelect } from "../../ScaleAnswerSelect";
+import { PianoKeysAnswerSelect } from "../../Utils/PianoKeysAnswerSelect";
+import { ScaleAnswerSelect } from "../../Utils/ScaleAnswerSelect";
 import { ChordScaleFormula, ChordScaleFormulaPart } from '../../../ChordScaleFormula';
 
 const rootPitchStrs = ["Ab", "A", "Bb", "B/Cb", "C", "C#/Db", "D", "Eb", "E", "F", "F#/Gb", "G"];

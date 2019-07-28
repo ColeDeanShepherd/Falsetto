@@ -1,15 +1,15 @@
 import * as React from "react";
 
-import * as Utils from "../Utils";
-import { Scale } from '../Scale';
-import { Pitch } from '../Pitch';
-import { playPitches } from '../Piano';
-import { Rect2D } from '../Rect2D';
-import { Size2D } from '../Size2D';
-import { Vector2D } from '../Vector2D';
-import { PitchLetter } from '../PitchLetter';
+import * as Utils from "../../Utils";
+import { Scale } from '../../Scale';
+import { Pitch } from '../../Pitch';
+import { playPitches } from '../../Piano';
+import { Rect2D } from '../../Rect2D';
+import { Size2D } from '../../Size2D';
+import { Vector2D } from '../../Vector2D';
+import { PitchLetter } from '../../PitchLetter';
 import { renderPianoKeyboardNoteNames, PianoKeyboard, PianoKeyboardMetrics } from './PianoKeyboard';
-import { doesKeyUseSharps } from '../Key';
+import { doesKeyUseSharps } from '../../Key';
 
 export function onKeyPress(scale: Scale, keyPitch: Pitch) {
   const pitches = scale.getPitches();

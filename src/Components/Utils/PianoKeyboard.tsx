@@ -1,11 +1,11 @@
 import * as React from "react";
 
-import * as Utils from "../Utils";
-import { Pitch } from "../Pitch";
-import { Rect2D } from '../Rect2D';
-import { Margin } from '../Margin';
-import { Size2D } from '../Size2D';
-import { Vector2D } from '../Vector2D';
+import * as Utils from "../../Utils";
+import { Pitch } from "../../Pitch";
+import { Rect2D } from '../../Rect2D';
+import { Margin } from '../../Margin';
+import { Size2D } from '../../Size2D';
+import { Vector2D } from '../../Vector2D';
 
 export class PianoKeyboardMetrics {
   public constructor(

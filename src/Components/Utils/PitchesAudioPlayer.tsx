@@ -1,10 +1,10 @@
 import * as React from "react";
 import { Button, CircularProgress } from "@material-ui/core";
 
-import * as Utils from "../Utils";
-import * as Audio from "../Audio";
-import { getPitchAudioFilePath } from '../Piano';
-import { Pitch } from '../Pitch';
+import * as Utils from "../../Utils";
+import * as Audio from "../../Audio";
+import { getPitchAudioFilePath } from '../../Piano';
+import { Pitch } from '../../Pitch';
 
 export enum PitchesAudioPlayerPlayState {
   PLAYABLE,

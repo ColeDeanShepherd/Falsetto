@@ -1,13 +1,13 @@
 import * as React from "react";
 import { CardContent, Typography, Card, Table, TableHead, TableBody, TableRow, TableCell, Button, Checkbox } from '@material-ui/core';
 
-import * as Utils from "../Utils";
-import { Chord, ChordType } from '../Chord';
-import { PitchesAudioPlayer } from './PitchesAudioPlayer';
-import { Pitch } from '../Pitch';
-import { PitchLetter } from '../PitchLetter';
-import { ScaleType } from '../Scale';
-import { validSharpKeyPitches, validNaturalKeyPitches, validFlatKeyPitches } from '../Key';
+import * as Utils from "../../Utils";
+import { Chord } from '../../Chord';
+import { PitchesAudioPlayer } from '../Utils/PitchesAudioPlayer';
+import { Pitch } from '../../Pitch';
+import { PitchLetter } from '../../PitchLetter';
+import { ScaleType } from '../../Scale';
+import { validSharpKeyPitches, validNaturalKeyPitches, validFlatKeyPitches } from '../../Key';
 
 export const defaultScales = [
   ScaleType.Ionian,
@@ -21,15 +21,15 @@ export const defaultScales = [
   ScaleType.HarmonicMinor
 ];
 
-export interface IDiatonicChordViewerProps {
+export interface IDiatonicChordPlayerProps {
   scales?: Array<ScaleType>;
 }
-export interface IDiatonicChordViewerState {
+export interface IDiatonicChordPlayerState {
   rootPitch: Pitch;
   playDrone: boolean;
 }
-export class DiatonicChordViewer extends React.Component<IDiatonicChordViewerProps, IDiatonicChordViewerState> {
-  public constructor(props: IDiatonicChordViewerProps) {
+export class DiatonicChordPlayer extends React.Component<IDiatonicChordPlayerProps, IDiatonicChordPlayerState> {
+  public constructor(props: IDiatonicChordPlayerProps) {
     super(props);
 
     this.state = {
@@ -69,7 +69,7 @@ export class DiatonicChordViewer extends React.Component<IDiatonicChordViewerPro
         <CardContent>
           <div style={{display: "flex"}}>
             <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
-              Diatonic Chord Viewer
+              Diatonic Chord Player
             </Typography>
           </div>
 

@@ -1,10 +1,10 @@
 import * as React from "react";
 import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid } from "@material-ui/core";
 
-import * as Utils from "../Utils";
-import { FlashCard } from "../FlashCard";
-import { Pitch } from "../Pitch";
-import { PitchLetter } from "../PitchLetter";
+import * as Utils from "../../Utils";
+import { FlashCard } from "../../FlashCard";
+import { Pitch } from "../../Pitch";
+import { PitchLetter } from "../../PitchLetter";
 
 // TODO: move this somewhere else
 export const rootNotes = [

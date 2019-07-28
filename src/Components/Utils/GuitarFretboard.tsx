@@ -1,14 +1,14 @@
 import * as React from "react";
 
-import * as Utils from "../Utils";
-import { Pitch } from "../Pitch";
-import { PitchLetter } from "../PitchLetter";
-import { Size2D } from '../Size2D';
-import { Rect2D } from '../Rect2D';
-import { Vector2D } from '../Vector2D';
-import { ScaleType, Scale } from '../Scale';
-import { ChordType, Chord } from '../Chord';
-import { GuitarNote } from '../GuitarNote';
+import * as Utils from "../../Utils";
+import { Pitch } from "../../Pitch";
+import { PitchLetter } from "../../PitchLetter";
+import { Size2D } from '../../Size2D';
+import { Rect2D } from '../../Rect2D';
+import { Vector2D } from '../../Vector2D';
+import { ScaleType, Scale } from '../../Scale';
+import { ChordType, Chord } from '../../Chord';
+import { GuitarNote } from '../../GuitarNote';
 
 export class GuitarTuning {
   public constructor(public openStringPitches: Array<Pitch>) {

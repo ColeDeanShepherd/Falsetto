@@ -1,17 +1,17 @@
 import * as React from "react";
 
-import * as Utils from "../Utils";
-import { Vector2D } from '../Vector2D';
-import { Size2D } from "../Size2D";
-import { Rect2D } from '../Rect2D';
-import { PitchLetter } from "../PitchLetter";
-import { Pitch } from "../Pitch";
+import * as Utils from "../../Utils";
+import { Vector2D } from '../../Vector2D';
+import { Size2D } from "../../Size2D";
+import { Rect2D } from '../../Rect2D';
+import { PitchLetter } from "../../PitchLetter";
+import { Pitch } from "../../Pitch";
 import { Button, Card, CardContent, Typography } from "@material-ui/core";
-import { Chord, ChordType, ChordTypeGroup } from "../Chord";
-import { PianoKeyboard } from "./PianoKeyboard";
-import { playPitches } from '../Piano';
-import * as PianoScaleDronePlayer from "./PianoScaleDronePlayer";
-import { GuitarChordViewer } from './Quizzes/Scales/GuitarScales';
+import { Chord, ChordType, ChordTypeGroup } from "../../Chord";
+import { PianoKeyboard } from "../Utils/PianoKeyboard";
+import { playPitches } from '../../Piano';
+import * as PianoScaleDronePlayer from "../Utils/PianoScaleDronePlayer";
+import { GuitarChordViewer } from '../Quizzes/Scales/GuitarScales';
 
 const validSharpKeyPitches = [
   null,

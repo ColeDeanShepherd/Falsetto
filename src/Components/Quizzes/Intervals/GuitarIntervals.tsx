@@ -6,7 +6,7 @@ import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
 import { FlashCardGroup, RenderAnswerSelectArgs } from "../../../FlashCardGroup";
 import { Interval } from "../../../Interval";
-import { standard6StringGuitarTuning, GuitarFretboard, GuitarFretboardMetrics } from "../../GuitarFretboard";
+import { standard6StringGuitarTuning, GuitarFretboard, GuitarFretboardMetrics } from "../../Utils/GuitarFretboard";
 import { VerticalDirection } from "../../../VerticalDirection";
 import { AnswerDifficulty } from "../../../StudyAlgorithm";
 import { Size2D } from '../../../Size2D';

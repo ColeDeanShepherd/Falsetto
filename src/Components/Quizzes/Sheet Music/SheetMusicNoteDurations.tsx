@@ -4,7 +4,7 @@ import * as Vex from "vexflow";
 import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
-import { VexFlowComponent } from "../../VexFlowComponent";
+import { VexFlowComponent } from "../../Utils/VexFlowComponent";
 import { FlashCardGroup, RenderAnswerSelectArgs } from "../../../FlashCardGroup";
 
 const width = 100;

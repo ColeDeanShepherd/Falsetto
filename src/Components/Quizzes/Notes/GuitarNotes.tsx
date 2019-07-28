@@ -7,7 +7,7 @@ import * as FlashCardUtils from "../Utils";
 import {
   GuitarFretboard,
   standard6StringGuitarTuning
-} from "../../GuitarFretboard";
+} from "../../Utils/GuitarFretboard";
 import { FlashCard } from "../../../FlashCard";
 import { FlashCardGroup } from "../../../FlashCardGroup";
 import { GuitarNote } from '../../../GuitarNote';

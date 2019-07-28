@@ -18,7 +18,7 @@ import {
   ChordsSection,
   ChordProgressionsSection,
   NextStepsSection
-} from "./EssentialMusicTheory";
+} from "./Lessons/EssentialMusicTheory";
 import * as IntervalNamesToHalfSteps from "./Quizzes/Intervals/IntervalNamesToHalfSteps";
 import * as IntervalQualitySymbolsToQualities from "./Quizzes/Intervals/IntervalQualitySymbolsToQualities";
 import * as GenericIntervalsToIntervalQualities from "./Quizzes/Intervals/GenericIntervalsToIntervalQualities";
@@ -35,7 +35,7 @@ import * as ChordFamilyDefinitions from "./Quizzes/Chords/ChordFamilyDefinitions
 import * as AvailableChordTensions from "./Quizzes/Chords/AvailableChordTensions";
 import * as DiatonicTriads from "./Quizzes/Chords/DiatonicTriads";
 import * as DiatonicSeventhChords from "./Quizzes/Chords/DiatonicSeventhChords";
-import * as RandomChordGenerator from "./RandomChordGenerator";
+import * as RandomChordGenerator from "./Tools/RandomChordGenerator";
 import * as GuitarNotes from "./Quizzes/Notes/GuitarNotes";
 import * as PianoNotes from "./Quizzes/Notes/PianoNotes";
 import * as PianoScales from "./Quizzes/Scales/PianoScales";
@@ -58,23 +58,25 @@ import * as GuitarIntervals from "./Quizzes/Intervals/GuitarIntervals";
 import * as SheetMusicChordRecognition from "./Quizzes/Sheet Music/SheetMusicChordRecognition";
 import * as ChordEarTraining from "./Quizzes/Chords/ChordEarTraining";
 import * as ScaleEarTraining from "./Quizzes/Scales/ScaleEarTraining";
-import { GuitarNotesLesson } from "./GuitarNotesLesson";
-import { GuitarScalesLesson } from "./GuitarScalesLesson";
-import { ScaleViewer } from "./ScaleViewer";
-import { ChordViewer } from "./ChordViewer";
-import { IntervalChordScaleFinder } from "./IntervalChordScaleFinder";
-import { RhythmTapper } from "./RhythmTapper";
+import { GuitarNotesLesson } from "./Lessons/GuitarNotesLesson";
+import { GuitarScalesLesson } from "./Lessons/GuitarScalesLesson";
+import { ScaleViewer } from "./Tools/ScaleViewer";
+import { ChordViewer } from "./Tools/ChordViewer";
+import { IntervalChordScaleFinder } from "./Tools/IntervalChordScaleFinder";
+import { RhythmTapper } from "./Tools/RhythmTapper";
 import { FlashCardGroup } from "../FlashCardGroup";
 import { createStudyFlashCardGroupComponent } from "./StudyFlashCards";
 import { AboutPage } from "./AboutPage";
 import { SupportUsPage } from "./SupportUs";
 import DocumentTitle from "react-document-title";
 import { HomePage } from "./HomePage";
-import ScrollToTop from './ScrollToTop';
+import ScrollToTop from './Utils/ScrollToTop';
 import { MAX_MAIN_CARD_WIDTH } from './Style';
 import { MainMenu } from './MainMenu';
 import { Paper } from '@material-ui/core';
-import { BecomeAPatronButton } from './BecomeAPatronButton';
+import { BecomeAPatronButton } from './Utils/BecomeAPatronButton';
+import { Metronome } from './Tools/Metronome';
+import { DiatonicChordPlayer } from './Tools/DiatonicChordPlayer';
 
 async function getErrorDescription(msg: string | Event, file: string | undefined, line: number | undefined, col: number | undefined, error: Error | undefined): Promise<string> {
   return new Promise<string>((resolve, reject) => {
@@ -221,6 +223,8 @@ class App extends React.Component<IAppProps, IAppState> {
       <Route exact path="/essential-music-theory/next-steps" component={() => <DocumentTitle title="Next Steps - Essential Music Theory - Falsetto"><SectionContainer section={NextStepsSection}></SectionContainer></DocumentTitle>} />,
       <Route exact path="/scale-viewer" component={() => <DocumentTitle title={"Scale Viewer - Falsetto"}><ScaleViewer renderAllScaleShapes={false} /></DocumentTitle>} />,
       <Route exact path="/chord-viewer" component={() => <DocumentTitle title={"Chord Viewer - Falsetto"}><ChordViewer /></DocumentTitle>} />,
+      <Route exact path="/metronome" component={() => <DocumentTitle title={"Metronome - Falsetto"}><Metronome /></DocumentTitle>} />,
+      <Route exact path="/diatonic-chord-player" component={() => <DocumentTitle title={"Diatonic Chord Player - Falsetto"}><DiatonicChordPlayer /></DocumentTitle>} />,
       <Route exact path="/interval-chord-scale-finder" component={() => <DocumentTitle title={"Interval/Chord/Scale Finder - Falsetto"}><IntervalChordScaleFinder /></DocumentTitle>} />,
       <Route exact path="/rhythm-tapper" component={() => <DocumentTitle title={"Rhythm Tapper - Falsetto"}><RhythmTapper /></DocumentTitle>} />,
       <Route exact path="/learn-guitar-notes-in-10-steps" component={() => <DocumentTitle title={"Learn the Guitar Notes in 10 Easy Steps - Falsetto"}><GuitarNotesLesson /></DocumentTitle>} />,

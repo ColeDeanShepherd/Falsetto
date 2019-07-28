@@ -1,10 +1,10 @@
 import * as React from "react";
 import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid } from "@material-ui/core";
 
-import * as Utils from "../Utils";
-import { FlashCard } from "../FlashCard";
-import { FlashCardGroup } from "../FlashCardGroup";
-import { ChordType } from '../Chord';
+import * as Utils from "../../Utils";
+import { FlashCard } from "../../FlashCard";
+import { FlashCardGroup } from "../../FlashCardGroup";
+import { ChordType } from '../../Chord';
 
 const chordRoots = [
   "Cb",

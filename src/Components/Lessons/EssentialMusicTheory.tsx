@@ -1,102 +1,102 @@
 import * as React from "react";
 import { CardContent, Card, Table, TableHead, TableBody, TableRow, TableCell } from "@material-ui/core";
 
-import App from './App';
+import App from '../App';
 
-import * as Utils from "../Utils";
+import * as Utils from "../../Utils";
 
-import { playPitches, playPitchesSequentially } from "../Piano";
+import { playPitches, playPitchesSequentially } from "../../Piano";
 
-import { YouTubeVideo } from "./YouTubeVideo";
-import { TimeSignature } from "../TimeSignature";
+import { YouTubeVideo } from "../Utils/YouTubeVideo";
+import { TimeSignature } from "../../TimeSignature";
 
-import { PianoKeyboard, renderPianoKeyboardNoteNames, PianoKeyboardMetrics, renderPianoKeyboardKeyLabels } from "./PianoKeyboard";
-import { Pitch } from '../Pitch';
-import { PitchLetter } from '../PitchLetter';
+import { PianoKeyboard, renderPianoKeyboardNoteNames, PianoKeyboardMetrics, renderPianoKeyboardKeyLabels } from "../Utils/PianoKeyboard";
+import { Pitch } from '../../Pitch';
+import { PitchLetter } from '../../PitchLetter';
 
-import * as PianoNotes from "./Quizzes/Notes/PianoNotes";
-import * as GuitarNotes from "./Quizzes/Notes/GuitarNotes";
-import * as SheetMusicNotes from "./Quizzes/Sheet Music/SheetMusicNotes";
+import * as PianoNotes from "../Quizzes/Notes/PianoNotes";
+import * as GuitarNotes from "../Quizzes/Notes/GuitarNotes";
+import * as SheetMusicNotes from "../Quizzes/Sheet Music/SheetMusicNotes";
 
-import { createStudyFlashCardGroupComponent } from './StudyFlashCards';
+import { createStudyFlashCardGroupComponent } from '../StudyFlashCards';
 
-import { Metronome } from "./Metronome";
+import { Metronome } from "../Tools/Metronome";
 
-import * as RhythmQuiz from "./Quizzes/RhythmQuiz";
-import * as NoteDurations from "./Quizzes/Sheet Music/SheetMusicNoteDurations";
-import * as NoteValueNumbers from "./Quizzes/Notes/NoteValueNumbers";
+import * as RhythmQuiz from "../Quizzes/RhythmQuiz";
+import * as NoteDurations from "../Quizzes/Sheet Music/SheetMusicNoteDurations";
+import * as NoteValueNumbers from "../Quizzes/Notes/NoteValueNumbers";
 
-import intervalQualityChart from "../img/interval-qualities.svg";
+import intervalQualityChart from "../../img/interval-qualities.svg";
 
-import * as IntervalNamesToHalfSteps from "./Quizzes/Intervals/IntervalNamesToHalfSteps";
-import * as IntervalEarTraining from "./Quizzes/Intervals/IntervalEarTraining";
-import * as IntervalQualitySymbols from "./Quizzes/Intervals/IntervalQualitySymbolsToQualities";
-import * as IntervalsToConsonanceDissonance from "./Quizzes/Intervals/IntervalsToConsonanceDissonance";
-import * as IntervalNotes from "./Quizzes/Intervals/IntervalNotes";
-import * as SheetMusicIntervalRecognition from "./Quizzes/Sheet Music/SheetMusicIntervalRecognition";
-import * as GuitarIntervals from "./Quizzes/Intervals/GuitarIntervals";
-import * as Interval2ndNotes from "./Quizzes/Intervals/Interval2ndNotes";
-import * as Interval2ndNoteEarTraining from "./Quizzes/Intervals/Interval2ndNoteEarTraining";
-import * as Interval2ndNoteEarTrainingPiano from "./Quizzes/Intervals/Interval2ndNoteEarTrainingPiano";
+import * as IntervalNamesToHalfSteps from "../Quizzes/Intervals/IntervalNamesToHalfSteps";
+import * as IntervalEarTraining from "../Quizzes/Intervals/IntervalEarTraining";
+import * as IntervalQualitySymbols from "../Quizzes/Intervals/IntervalQualitySymbolsToQualities";
+import * as IntervalsToConsonanceDissonance from "../Quizzes/Intervals/IntervalsToConsonanceDissonance";
+import * as IntervalNotes from "../Quizzes/Intervals/IntervalNotes";
+import * as SheetMusicIntervalRecognition from "../Quizzes/Sheet Music/SheetMusicIntervalRecognition";
+import * as GuitarIntervals from "../Quizzes/Intervals/GuitarIntervals";
+import * as Interval2ndNotes from "../Quizzes/Intervals/Interval2ndNotes";
+import * as Interval2ndNoteEarTraining from "../Quizzes/Intervals/Interval2ndNoteEarTraining";
+import * as Interval2ndNoteEarTrainingPiano from "../Quizzes/Intervals/Interval2ndNoteEarTrainingPiano";
 
-import * as ScaleNotes from "./Quizzes/Scales/ScaleNotes";
-import * as PianoScales from "./Quizzes/Scales/PianoScales";
-import * as PianoChords from "./Quizzes/Chords/PianoChords";
-import * as ScaleEarTraining from "./Quizzes/Scales/ScaleEarTraining";
-import { ScaleViewer } from "./ScaleViewer";
+import * as ScaleNotes from "../Quizzes/Scales/ScaleNotes";
+import * as PianoScales from "../Quizzes/Scales/PianoScales";
+import * as PianoChords from "../Quizzes/Chords/PianoChords";
+import * as ScaleEarTraining from "../Quizzes/Scales/ScaleEarTraining";
+import { ScaleViewer } from "../Tools/ScaleViewer";
 
-import * as ChordNotes from "./Quizzes/Chords/ChordNotes";
-import * as GuitarScales from "./Quizzes/Scales/GuitarScales";
-import * as GuitarChords from "./Quizzes/Chords/GuitarChords";
-import * as ChordEarTraining from "./Quizzes/Chords/ChordEarTraining";
-import { ChordViewer } from "./ChordViewer";
+import * as ChordNotes from "../Quizzes/Chords/ChordNotes";
+import * as GuitarScales from "../Quizzes/Scales/GuitarScales";
+import * as GuitarChords from "../Quizzes/Chords/GuitarChords";
+import * as ChordEarTraining from "../Quizzes/Chords/ChordEarTraining";
+import { ChordViewer } from "../Tools/ChordViewer";
 
-import measures from "../img/sheet-music/measures.svg";
-import timeSignatureDiagram from "../img/sheet-music/time-signature.svg";
-import notesRestsDiagram from "../img/sheet-music/notes-and-rests.svg";
+import measures from "../../img/sheet-music/measures.svg";
+import timeSignatureDiagram from "../../img/sheet-music/time-signature.svg";
+import notesRestsDiagram from "../../img/sheet-music/notes-and-rests.svg";
 
-import wholeNote from "../img/sheet-music/whole-note.svg";
-import wholeRest from "../img/sheet-music/whole-rest.svg";
-import halfNote from "../img/sheet-music/half-note.svg";
-import halfRest from "../img/sheet-music/half-rest.svg";
-import quarterNote from "../img/sheet-music/quarter-note.svg";
-import quarterRest from "../img/sheet-music/quarter-rest.svg";
-import eighthNote from "../img/sheet-music/eighth-note.svg";
-import eighthRest from "../img/sheet-music/eighth-rest.svg";
-import sixteenthNote from "../img/sheet-music/sixteenth-note.svg";
-import sixteenthRest from "../img/sheet-music/sixteenth-rest.svg";
-import _32ndNote from "../img/sheet-music/32nd-note.svg";
-import _32ndRest from "../img/sheet-music/32nd-rest.svg";
+import wholeNote from "../../img/sheet-music/whole-note.svg";
+import wholeRest from "../../img/sheet-music/whole-rest.svg";
+import halfNote from "../../img/sheet-music/half-note.svg";
+import halfRest from "../../img/sheet-music/half-rest.svg";
+import quarterNote from "../../img/sheet-music/quarter-note.svg";
+import quarterRest from "../../img/sheet-music/quarter-rest.svg";
+import eighthNote from "../../img/sheet-music/eighth-note.svg";
+import eighthRest from "../../img/sheet-music/eighth-rest.svg";
+import sixteenthNote from "../../img/sheet-music/sixteenth-note.svg";
+import sixteenthRest from "../../img/sheet-music/sixteenth-rest.svg";
+import _32ndNote from "../../img/sheet-music/32nd-note.svg";
+import _32ndRest from "../../img/sheet-music/32nd-rest.svg";
 
-import timeSignature44 from "../img/sheet-music/time-signature-4-4.svg";
-import timeSignature34 from "../img/sheet-music/time-signature-3-4.svg";
+import timeSignature44 from "../../img/sheet-music/time-signature-4-4.svg";
+import timeSignature34 from "../../img/sheet-music/time-signature-3-4.svg";
 
-import becomeAPatronButton from "../img/become_a_patron_button.png";
+import becomeAPatronButton from "../../img/become_a_patron_button.png";
 
-import { TimeSignaturePlayer } from './TimeSignaturePlayer';
-import { NoteValuePlayer } from './NoteValuePlayer';
+import { TimeSignaturePlayer } from '../Tools/TimeSignaturePlayer';
+import { NoteValuePlayer } from '../Tools/NoteValuePlayer';
 
-import * as NotesQuiz from "./Quizzes/Notes/NotesQuiz";
+import * as NotesQuiz from "../Quizzes/Notes/NotesQuiz";
 
-import { MAX_MAIN_CARD_WIDTH } from './Style';
-import { Rect2D } from '../Rect2D';
-import { Vector2D } from '../Vector2D';
-import { Size2D } from '../Size2D';
-import { Margin } from '../Margin';
+import { MAX_MAIN_CARD_WIDTH } from '../Style';
+import { Rect2D } from '../../Rect2D';
+import { Vector2D } from '../../Vector2D';
+import { Size2D } from '../../Size2D';
+import { Margin } from '../../Margin';
 import { NavLink } from 'react-router-dom';
-import { ScaleType, Scale } from '../Scale';
-import { doesKeyUseSharps } from '../Key';
-import { PianoScaleDronePlayer } from './PianoScaleDronePlayer';
-import { Chord, ChordType, ChordTypeGroup } from "../Chord";
-import { DiatonicChordViewer } from './DiatonicChordViewer';
-import { ChordAudioPlayer } from "./ChordAudioPlayer";
-import { ScaleAudioPlayer } from './ScaleAudioPlayer';
-import { PitchesAudioPlayer } from './PitchesAudioPlayer';
+import { ScaleType, Scale } from '../../Scale';
+import { doesKeyUseSharps } from '../../Key';
+import { PianoScaleDronePlayer } from '../Utils/PianoScaleDronePlayer';
+import { Chord, ChordType, ChordTypeGroup } from "../../Chord";
+import { DiatonicChordPlayer } from '../Tools/DiatonicChordPlayer';
+import { ChordAudioPlayer } from "../Utils/ChordAudioPlayer";
+import { ScaleAudioPlayer } from '../Utils/ScaleAudioPlayer';
+import { PitchesAudioPlayer } from '../Utils/PitchesAudioPlayer';
 
 // #region Chord Progressions
 
-import * as ChordProgressionsQuiz from "./Quizzes/Chords/ChordProgressionsQuiz";
-import * as ChordHarmonicFunctions from "./Quizzes/Chords/ChordFamilies";
+import * as ChordProgressionsQuiz from "../Quizzes/Chords/ChordProgressionsQuiz";
+import * as ChordHarmonicFunctions from "../Quizzes/Chords/ChordFamilies";
 
 const FiveChordDiagram: React.FunctionComponent<{}> = props => {
   const width = 600;
@@ -1465,7 +1465,7 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
     <p>There is one more thing to know about roman numeral notation &mdash; minor and diminished chords are written with lower case roman numerals. So, because a chord built with the 2nd, 4th, and 6th notes of a major scale is a minor chord, it would be written as ii, <strong>not</strong> II.</p>
     <p>Use the interactive diagram below to explore diatonic triads and seventh chords in common scales:</p>
     
-    <DiatonicChordViewer />
+    <DiatonicChordPlayer />
 
     <SubSectionTitle>Arpeggios</SubSectionTitle>
     <p>Though chords are groups of notes played simultaneously, you can also choose to play the notes of a chord individually in a melody, to create something called an <Term>arpeggio</Term>. Arpeggios are another way to add harmonic content to music by <strong>implying</strong> the chords instead of playing them outright.</p>
