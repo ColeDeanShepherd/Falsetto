@@ -31,6 +31,7 @@ import * as DiatonicTriads from "./Quizzes/Chords/DiatonicTriads";
 import * as DiatonicSeventhChords from "./Quizzes/Chords/DiatonicSeventhChords";
 import * as RandomChordGenerator from "./Tools/RandomChordGenerator";
 import * as GuitarNotes from "./Quizzes/Notes/GuitarNotes";
+import * as ViolinNotes from "./Quizzes/Notes/ViolinNotes";
 import * as PianoNotes from "./Quizzes/Notes/PianoNotes";
 import * as PianoScales from "./Quizzes/Scales/PianoScales";
 import * as PianoChords from "./Quizzes/Chords/PianoChords";
@@ -108,6 +109,7 @@ export const MainMenu : React.FunctionComponent<{}> = props => (
         <MenuCategory title="Note Exercises">
           {App.instance.renderFlashCardGroupLink(PianoNotes.createFlashCardGroup())}
           {App.instance.renderFlashCardGroupLink(GuitarNotes.createFlashCardGroup())}
+          {App.instance.renderFlashCardGroupLink(ViolinNotes.createFlashCardGroup())}
           {App.instance.renderFlashCardGroupLink(NoteDurations.createFlashCardGroup())}
           {App.instance.renderFlashCardGroupLink(SheetMusicNotes.createFlashCardGroup())}
         </MenuCategory>

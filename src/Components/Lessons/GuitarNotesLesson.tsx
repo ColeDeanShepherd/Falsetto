@@ -6,125 +6,126 @@ import * as Utils from "../../Utils";
 import {
   GuitarFretboard,
   renderGuitarNoteHighlightsAndNoteNames,
-  GuitarFretboardMetrics,
-  renderFretNumbers
+  StringedInstrumentMetrics,
+  renderFretNumbers,
+  standard6StringGuitarTuning
 } from '../Utils/GuitarFretboard';
 import * as GuitarNotes from "../Quizzes/Notes/GuitarNotes";
 import { Pitch } from '../../Pitch';
 import { PitchLetter } from '../../PitchLetter';
 import { createStudyFlashCardGroupComponent } from '../StudyFlashCards';
 import { MAX_MAIN_CARD_WIDTH } from '../Style';
-import { GuitarNote } from '../../GuitarNote';
+import { StringedInstrumentNote } from '../../GuitarNote';
 
 const noteGroups = [
   {
     color: "lightgreen",
     notes: [
-      new GuitarNote(new Pitch(PitchLetter.G, 0, 2), 0),
-      new GuitarNote(new Pitch(PitchLetter.A, 0, 2), 0),
-      new GuitarNote(new Pitch(PitchLetter.B, 0, 2), 0),
-      new GuitarNote(new Pitch(PitchLetter.C, 0, 3), 1),
-      new GuitarNote(new Pitch(PitchLetter.D, 0, 3), 1),
-      new GuitarNote(new Pitch(PitchLetter.E, 0, 3), 1),
-      new GuitarNote(new Pitch(PitchLetter.F, 0, 3), 2),
+      new StringedInstrumentNote(new Pitch(PitchLetter.G, 0, 2), 0),
+      new StringedInstrumentNote(new Pitch(PitchLetter.A, 0, 2), 0),
+      new StringedInstrumentNote(new Pitch(PitchLetter.B, 0, 2), 0),
+      new StringedInstrumentNote(new Pitch(PitchLetter.C, 0, 3), 1),
+      new StringedInstrumentNote(new Pitch(PitchLetter.D, 0, 3), 1),
+      new StringedInstrumentNote(new Pitch(PitchLetter.E, 0, 3), 1),
+      new StringedInstrumentNote(new Pitch(PitchLetter.F, 0, 3), 2),
       
-      new GuitarNote(new Pitch(PitchLetter.G, 0, 4), 5),
-      new GuitarNote(new Pitch(PitchLetter.A, 0, 4), 5),
-      new GuitarNote(new Pitch(PitchLetter.B, 0, 4), 5)
+      new StringedInstrumentNote(new Pitch(PitchLetter.G, 0, 4), 5),
+      new StringedInstrumentNote(new Pitch(PitchLetter.A, 0, 4), 5),
+      new StringedInstrumentNote(new Pitch(PitchLetter.B, 0, 4), 5)
     ]
   },
   {
     color: "lightsalmon",
     notes: [
-      new GuitarNote(new Pitch(PitchLetter.G, 0, 3), 2),
-      new GuitarNote(new Pitch(PitchLetter.A, 0, 3), 2),
-      new GuitarNote(new Pitch(PitchLetter.B, 0, 3), 2),
-      new GuitarNote(new Pitch(PitchLetter.C, 0, 4), 3),
-      new GuitarNote(new Pitch(PitchLetter.D, 0, 4), 3),
-      new GuitarNote(new Pitch(PitchLetter.E, 0, 4), 3),
-      new GuitarNote(new Pitch(PitchLetter.F, 0, 4), 4)
+      new StringedInstrumentNote(new Pitch(PitchLetter.G, 0, 3), 2),
+      new StringedInstrumentNote(new Pitch(PitchLetter.A, 0, 3), 2),
+      new StringedInstrumentNote(new Pitch(PitchLetter.B, 0, 3), 2),
+      new StringedInstrumentNote(new Pitch(PitchLetter.C, 0, 4), 3),
+      new StringedInstrumentNote(new Pitch(PitchLetter.D, 0, 4), 3),
+      new StringedInstrumentNote(new Pitch(PitchLetter.E, 0, 4), 3),
+      new StringedInstrumentNote(new Pitch(PitchLetter.F, 0, 4), 4)
     ]
   },
   {
     color: "lightblue",
     notes: [
-      new GuitarNote(new Pitch(PitchLetter.G, 0, 4), 4),
-      new GuitarNote(new Pitch(PitchLetter.A, 0, 4), 4),
-      new GuitarNote(new Pitch(PitchLetter.B, 0, 3), 4),
-      new GuitarNote(new Pitch(PitchLetter.C, 0, 3), 0),
-      new GuitarNote(new Pitch(PitchLetter.D, 0, 3), 0),
-      new GuitarNote(new Pitch(PitchLetter.E, 0, 2), 0),
-      new GuitarNote(new Pitch(PitchLetter.F, 0, 3), 1),
+      new StringedInstrumentNote(new Pitch(PitchLetter.G, 0, 4), 4),
+      new StringedInstrumentNote(new Pitch(PitchLetter.A, 0, 4), 4),
+      new StringedInstrumentNote(new Pitch(PitchLetter.B, 0, 3), 4),
+      new StringedInstrumentNote(new Pitch(PitchLetter.C, 0, 3), 0),
+      new StringedInstrumentNote(new Pitch(PitchLetter.D, 0, 3), 0),
+      new StringedInstrumentNote(new Pitch(PitchLetter.E, 0, 2), 0),
+      new StringedInstrumentNote(new Pitch(PitchLetter.F, 0, 3), 1),
       
-      new GuitarNote(new Pitch(PitchLetter.C, 0, 5), 5),
-      new GuitarNote(new Pitch(PitchLetter.D, 0, 5), 5),
-      new GuitarNote(new Pitch(PitchLetter.E, 0, 4), 5)
+      new StringedInstrumentNote(new Pitch(PitchLetter.C, 0, 5), 5),
+      new StringedInstrumentNote(new Pitch(PitchLetter.D, 0, 5), 5),
+      new StringedInstrumentNote(new Pitch(PitchLetter.E, 0, 4), 5)
     ]
   },
   {
     color: "yellow",
     notes: [
-      new GuitarNote(new Pitch(PitchLetter.G, 0, 3), 1),
-      new GuitarNote(new Pitch(PitchLetter.A, 0, 2), 1),
-      new GuitarNote(new Pitch(PitchLetter.B, 0, 2), 1),
-      new GuitarNote(new Pitch(PitchLetter.C, 0, 4), 2),
-      new GuitarNote(new Pitch(PitchLetter.D, 0, 3), 2),
-      new GuitarNote(new Pitch(PitchLetter.E, 0, 3), 2),
-      new GuitarNote(new Pitch(PitchLetter.F, 0, 4), 3)
+      new StringedInstrumentNote(new Pitch(PitchLetter.G, 0, 3), 1),
+      new StringedInstrumentNote(new Pitch(PitchLetter.A, 0, 2), 1),
+      new StringedInstrumentNote(new Pitch(PitchLetter.B, 0, 2), 1),
+      new StringedInstrumentNote(new Pitch(PitchLetter.C, 0, 4), 2),
+      new StringedInstrumentNote(new Pitch(PitchLetter.D, 0, 3), 2),
+      new StringedInstrumentNote(new Pitch(PitchLetter.E, 0, 3), 2),
+      new StringedInstrumentNote(new Pitch(PitchLetter.F, 0, 4), 3)
     ]
   },
   {
     color: "turquoise",
     notes: [
-      new GuitarNote(new Pitch(PitchLetter.G, 0, 3), 3),
-      new GuitarNote(new Pitch(PitchLetter.A, 0, 3), 3),
-      new GuitarNote(new Pitch(PitchLetter.B, 0, 3), 3),
-      new GuitarNote(new Pitch(PitchLetter.C, 0, 4), 4),
-      new GuitarNote(new Pitch(PitchLetter.D, 0, 4), 4),
-      new GuitarNote(new Pitch(PitchLetter.E, 0, 4), 4),
-      new GuitarNote(new Pitch(PitchLetter.F, 0, 2), 0),
+      new StringedInstrumentNote(new Pitch(PitchLetter.G, 0, 3), 3),
+      new StringedInstrumentNote(new Pitch(PitchLetter.A, 0, 3), 3),
+      new StringedInstrumentNote(new Pitch(PitchLetter.B, 0, 3), 3),
+      new StringedInstrumentNote(new Pitch(PitchLetter.C, 0, 4), 4),
+      new StringedInstrumentNote(new Pitch(PitchLetter.D, 0, 4), 4),
+      new StringedInstrumentNote(new Pitch(PitchLetter.E, 0, 4), 4),
+      new StringedInstrumentNote(new Pitch(PitchLetter.F, 0, 2), 0),
       
-      new GuitarNote(new Pitch(PitchLetter.F, 0, 4), 5)
+      new StringedInstrumentNote(new Pitch(PitchLetter.F, 0, 4), 5)
     ]
   },
   {
     color: "lightgray",
     notes: [
-      new GuitarNote(new Pitch(PitchLetter.F, 1, 2), 0),
-      new GuitarNote(new Pitch(PitchLetter.G, 1, 2), 0),
-      new GuitarNote(new Pitch(PitchLetter.A, 1, 2), 0),
-      new GuitarNote(new Pitch(PitchLetter.C, 1, 3), 0),
-      new GuitarNote(new Pitch(PitchLetter.D, 1, 3), 0),
+      new StringedInstrumentNote(new Pitch(PitchLetter.F, 1, 2), 0),
+      new StringedInstrumentNote(new Pitch(PitchLetter.G, 1, 2), 0),
+      new StringedInstrumentNote(new Pitch(PitchLetter.A, 1, 2), 0),
+      new StringedInstrumentNote(new Pitch(PitchLetter.C, 1, 3), 0),
+      new StringedInstrumentNote(new Pitch(PitchLetter.D, 1, 3), 0),
       
-      new GuitarNote(new Pitch(PitchLetter.F, 1, 3), 1),
-      new GuitarNote(new Pitch(PitchLetter.G, 1, 3), 1),
-      new GuitarNote(new Pitch(PitchLetter.A, 1, 2), 1),
-      new GuitarNote(new Pitch(PitchLetter.C, 1, 3), 1),
-      new GuitarNote(new Pitch(PitchLetter.D, 1, 3), 1),
+      new StringedInstrumentNote(new Pitch(PitchLetter.F, 1, 3), 1),
+      new StringedInstrumentNote(new Pitch(PitchLetter.G, 1, 3), 1),
+      new StringedInstrumentNote(new Pitch(PitchLetter.A, 1, 2), 1),
+      new StringedInstrumentNote(new Pitch(PitchLetter.C, 1, 3), 1),
+      new StringedInstrumentNote(new Pitch(PitchLetter.D, 1, 3), 1),
 
-      new GuitarNote(new Pitch(PitchLetter.F, 1, 3), 2),
-      new GuitarNote(new Pitch(PitchLetter.G, 1, 3), 2),
-      new GuitarNote(new Pitch(PitchLetter.A, 1, 3), 2),
-      new GuitarNote(new Pitch(PitchLetter.C, 1, 4), 2),
-      new GuitarNote(new Pitch(PitchLetter.D, 1, 3), 2),
+      new StringedInstrumentNote(new Pitch(PitchLetter.F, 1, 3), 2),
+      new StringedInstrumentNote(new Pitch(PitchLetter.G, 1, 3), 2),
+      new StringedInstrumentNote(new Pitch(PitchLetter.A, 1, 3), 2),
+      new StringedInstrumentNote(new Pitch(PitchLetter.C, 1, 4), 2),
+      new StringedInstrumentNote(new Pitch(PitchLetter.D, 1, 3), 2),
 
-      new GuitarNote(new Pitch(PitchLetter.F, 1, 4), 3),
-      new GuitarNote(new Pitch(PitchLetter.G, 1, 3), 3),
-      new GuitarNote(new Pitch(PitchLetter.A, 1, 3), 3),
-      new GuitarNote(new Pitch(PitchLetter.C, 1, 4), 3),
-      new GuitarNote(new Pitch(PitchLetter.D, 1, 4), 3),
+      new StringedInstrumentNote(new Pitch(PitchLetter.F, 1, 4), 3),
+      new StringedInstrumentNote(new Pitch(PitchLetter.G, 1, 3), 3),
+      new StringedInstrumentNote(new Pitch(PitchLetter.A, 1, 3), 3),
+      new StringedInstrumentNote(new Pitch(PitchLetter.C, 1, 4), 3),
+      new StringedInstrumentNote(new Pitch(PitchLetter.D, 1, 4), 3),
       
-      new GuitarNote(new Pitch(PitchLetter.F, 1, 4), 4),
-      new GuitarNote(new Pitch(PitchLetter.G, 1, 4), 4),
-      new GuitarNote(new Pitch(PitchLetter.A, 1, 4), 4),
-      new GuitarNote(new Pitch(PitchLetter.C, 1, 4), 4),
-      new GuitarNote(new Pitch(PitchLetter.D, 1, 4), 4),
+      new StringedInstrumentNote(new Pitch(PitchLetter.F, 1, 4), 4),
+      new StringedInstrumentNote(new Pitch(PitchLetter.G, 1, 4), 4),
+      new StringedInstrumentNote(new Pitch(PitchLetter.A, 1, 4), 4),
+      new StringedInstrumentNote(new Pitch(PitchLetter.C, 1, 4), 4),
+      new StringedInstrumentNote(new Pitch(PitchLetter.D, 1, 4), 4),
       
-      new GuitarNote(new Pitch(PitchLetter.F, 1, 4), 5),
-      new GuitarNote(new Pitch(PitchLetter.G, 1, 4), 5),
-      new GuitarNote(new Pitch(PitchLetter.A, 1, 4), 5),
-      new GuitarNote(new Pitch(PitchLetter.C, 1, 5), 5),
-      new GuitarNote(new Pitch(PitchLetter.D, 1, 5), 5)
+      new StringedInstrumentNote(new Pitch(PitchLetter.F, 1, 4), 5),
+      new StringedInstrumentNote(new Pitch(PitchLetter.G, 1, 4), 5),
+      new StringedInstrumentNote(new Pitch(PitchLetter.A, 1, 4), 5),
+      new StringedInstrumentNote(new Pitch(PitchLetter.C, 1, 5), 5),
+      new StringedInstrumentNote(new Pitch(PitchLetter.D, 1, 5), 5)
     ]
   }
 ];
@@ -135,7 +136,7 @@ const step3Diagram1NoteGroups = [
     notes: noteGroups[0].notes.slice(0, 7)
   }
 ];
-const step3Diagram1Notes = Utils.flattenArrays<GuitarNote>(step3Diagram1NoteGroups
+const step3Diagram1Notes = Utils.flattenArrays<StringedInstrumentNote>(step3Diagram1NoteGroups
   .map(ng => ng.notes));
 
 const step4Diagram1NoteGroups = step3Diagram1NoteGroups.concat([
@@ -144,7 +145,7 @@ const step4Diagram1NoteGroups = step3Diagram1NoteGroups.concat([
     notes: noteGroups[1].notes.slice(0, 6)
   }
 ]);
-const step4Diagram1Notes = Utils.flattenArrays<GuitarNote>(step4Diagram1NoteGroups
+const step4Diagram1Notes = Utils.flattenArrays<StringedInstrumentNote>(step4Diagram1NoteGroups
   .map(ng => ng.notes));
 
 const step5Diagram1NoteGroups = step4Diagram1NoteGroups.concat([
@@ -157,7 +158,7 @@ const step5Diagram1NoteGroups = step4Diagram1NoteGroups.concat([
     notes: noteGroups[2].notes.slice(0, 2)
   }
 ]);
-const step5Diagram1Notes = Utils.flattenArrays<GuitarNote>(step5Diagram1NoteGroups
+const step5Diagram1Notes = Utils.flattenArrays<StringedInstrumentNote>(step5Diagram1NoteGroups
   .map(ng => ng.notes));
 
 const step6Diagram1NoteGroups = step5Diagram1NoteGroups.concat([
@@ -166,7 +167,7 @@ const step6Diagram1NoteGroups = step5Diagram1NoteGroups.concat([
     notes: noteGroups[4].notes.slice(0, 6)
   }
 ]);
-const step6Diagram1Notes = Utils.flattenArrays<GuitarNote>(step6Diagram1NoteGroups
+const step6Diagram1Notes = Utils.flattenArrays<StringedInstrumentNote>(step6Diagram1NoteGroups
   .map(ng => ng.notes));
 
 const step7Diagram1NoteGroups = step6Diagram1NoteGroups.concat([
@@ -185,7 +186,7 @@ const step7Diagram1NoteGroups = step6Diagram1NoteGroups.concat([
     ]
   }
 ]);
-const step7Diagram1Notes = Utils.flattenArrays<GuitarNote>(step7Diagram1NoteGroups
+const step7Diagram1Notes = Utils.flattenArrays<StringedInstrumentNote>(step7Diagram1NoteGroups
   .map(ng => ng.notes));
 
 const step8Diagram1NoteGroups = step7Diagram1NoteGroups.concat([
@@ -212,7 +213,7 @@ const step8Diagram1NoteGroups = step7Diagram1NoteGroups.concat([
     ]
   }
 ]);
-const step8Diagram1Notes = Utils.flattenArrays<GuitarNote>(step8Diagram1NoteGroups
+const step8Diagram1Notes = Utils.flattenArrays<StringedInstrumentNote>(step8Diagram1NoteGroups
   .map(ng => ng.notes));
 
 const step9Diagram1NoteGroups = step8Diagram1NoteGroups.concat([
@@ -229,7 +230,7 @@ const step9Diagram1NoteGroups = step8Diagram1NoteGroups.concat([
     ]
   }
 ]);
-const step9Diagram1Notes = Utils.flattenArrays<GuitarNote>(step9Diagram1NoteGroups
+const step9Diagram1Notes = Utils.flattenArrays<StringedInstrumentNote>(step9Diagram1NoteGroups
   .map(ng => ng.notes));
 
 const step10Diagram1NoteGroups = step9Diagram1NoteGroups.concat([
@@ -238,11 +239,11 @@ const step10Diagram1NoteGroups = step9Diagram1NoteGroups.concat([
     notes: noteGroups[5].notes.slice(0, 25)
   }
 ]);;
-const step10Diagram1Notes = Utils.flattenArrays<GuitarNote>(step10Diagram1NoteGroups
+const step10Diagram1Notes = Utils.flattenArrays<StringedInstrumentNote>(step10Diagram1NoteGroups
   .map(ng => ng.notes));
   
 const step10Diagram2NoteGroups = noteGroups;
-const step10Diagram2Notes = Utils.flattenArrays<GuitarNote>(step10Diagram2NoteGroups
+const step10Diagram2Notes = Utils.flattenArrays<StringedInstrumentNote>(step10Diagram2NoteGroups
   .map(ng => ng.notes));
 
 export interface IGuitarNotesLessonProps {
@@ -272,6 +273,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           <p style={{ textAlign: "center" }}>
             <GuitarFretboard
               width={fretboardWidth} height={0.8 * fretboardHeight}
+              tuning={standard6StringGuitarTuning}
               fretCount={24}
               style={fretboardStyle}
             />
@@ -284,6 +286,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           <p style={{ textAlign: "center" }}>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
+              tuning={standard6StringGuitarTuning}
               renderExtrasFn={metrics => renderFretNumbers(metrics)}
               style={fretboardStyle}
             />
@@ -294,6 +297,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           <p style={{ textAlign: "center" }}>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
+              tuning={standard6StringGuitarTuning}
               renderExtrasFn={metrics => {
                 const y = 0.75 * metrics.stringSpacing;
 
@@ -318,6 +322,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           <p style={{ textAlign: "center" }}>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
+              tuning={standard6StringGuitarTuning}
               renderExtrasFn={metrics => this.renderDiagramExtras(metrics, step3Diagram1NoteGroups)}
               style={fretboardStyle}
             />
@@ -332,6 +337,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           <p style={{ textAlign: "center" }}>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
+              tuning={standard6StringGuitarTuning}
               renderExtrasFn={metrics => this.renderDiagramExtras(metrics, step4Diagram1NoteGroups)}
               style={fretboardStyle}
             />
@@ -346,6 +352,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           <p style={{ textAlign: "center" }}>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
+              tuning={standard6StringGuitarTuning}
               renderExtrasFn={metrics => this.renderDiagramExtras(metrics, step5Diagram1NoteGroups)}
               style={fretboardStyle}
             />
@@ -364,6 +371,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           <p style={{ textAlign: "center" }}>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
+              tuning={standard6StringGuitarTuning}
               renderExtrasFn={metrics => this.renderDiagramExtras(metrics, step6Diagram1NoteGroups)}
               style={fretboardStyle}
             />
@@ -378,6 +386,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           <p style={{ textAlign: "center" }}>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
+              tuning={standard6StringGuitarTuning}
               renderExtrasFn={metrics => this.renderDiagramExtras(metrics, step7Diagram1NoteGroups)}
               style={fretboardStyle}
             />
@@ -392,6 +401,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           <p style={{ textAlign: "center" }}>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
+              tuning={standard6StringGuitarTuning}
               renderExtrasFn={metrics => this.renderDiagramExtras(metrics, step8Diagram1NoteGroups)}
               style={fretboardStyle}
             />
@@ -407,6 +417,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           <p style={{ textAlign: "center" }}>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
+              tuning={standard6StringGuitarTuning}
               renderExtrasFn={metrics => this.renderDiagramExtras(metrics, step9Diagram1NoteGroups)}
               style={fretboardStyle}
             />
@@ -424,6 +435,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           <p style={{ textAlign: "center" }}>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
+              tuning={standard6StringGuitarTuning}
               renderExtrasFn={metrics => this.renderDiagramExtras(metrics, step10Diagram1NoteGroups)}
               style={fretboardStyle}
             />
@@ -432,6 +444,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           <p style={{ textAlign: "center" }}>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}
+              tuning={standard6StringGuitarTuning}
               renderExtrasFn={metrics => this.renderDiagramExtras(metrics, step10Diagram2NoteGroups)}
               style={fretboardStyle}
             />
@@ -448,8 +461,8 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
     );
   }
   private renderDiagramExtras(
-    metrics: GuitarFretboardMetrics,
-    diagramNoteGroups: Array<{ color: string, notes: Array<GuitarNote> }>
+    metrics: StringedInstrumentMetrics,
+    diagramNoteGroups: Array<{ color: string, notes: Array<StringedInstrumentNote> }>
   ): JSX.Element {
     return (
       <g>

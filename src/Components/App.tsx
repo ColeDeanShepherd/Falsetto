@@ -38,6 +38,7 @@ import * as DiatonicSeventhChords from "./Quizzes/Chords/DiatonicSeventhChords";
 import * as RandomChordGenerator from "./Tools/RandomChordGenerator";
 import * as GuitarNotes from "./Quizzes/Notes/GuitarNotes";
 import * as PianoNotes from "./Quizzes/Notes/PianoNotes";
+import * as ViolinNotes from "./Quizzes/Notes/ViolinNotes";
 import * as PianoScales from "./Quizzes/Scales/PianoScales";
 import * as PianoChords from "./Quizzes/Chords/PianoChords";
 import * as GuitarScales from "./Quizzes/Scales/GuitarScales";
@@ -126,6 +127,7 @@ class App extends React.Component<IAppProps, IAppState> {
         flashCardGroups: [
           PianoNotes.createFlashCardGroup(),
           GuitarNotes.createFlashCardGroup(),
+          ViolinNotes.createFlashCardGroup(),
           NoteDurations.createFlashCardGroup(),
           SheetMusicNotes.createFlashCardGroup()
         ]

@@ -12,7 +12,7 @@ import { FlashCardGroup, RenderAnswerSelectArgs } from "../../../FlashCardGroup"
 import { AnswerDifficulty } from "../../../StudyAlgorithm";
 import { Pitch } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
-import { GuitarNote } from '../../../GuitarNote';
+import { StringedInstrumentNote } from '../../../GuitarNote';
 import { ChordType } from "../../../Chord";
 import { GuitarFretboard, renderGuitarFretboardScaleExtras, getStandardGuitarTuning, renderGuitarNoteHighlightsAndLabels } from "../../Utils/GuitarFretboard";
 import { ScaleAnswerSelect } from "../../Utils/ScaleAnswerSelect";
@@ -54,6 +54,7 @@ export const GuitarScaleViewer: React.FunctionComponent<{
   return (
     <GuitarFretboard
       width={props.size.width} height={props.size.height}
+      tuning={guitarTuning}
       minFretNumber={minFretNumber}
       renderExtrasFn={metrics => renderGuitarFretboardScaleExtras(metrics, props.scale, props.renderAllScaleShapes)}
       style={fretboardStyle}
@@ -80,13 +81,14 @@ export const GuitarChordViewer: React.FunctionComponent<{
   const minFretNumber = 0;
   const fretCount = 11;
   const maxFretNumber = minFretNumber + fretCount;
-  const guitarNotes = GuitarNote.allNotesOfPitches(
+  const guitarNotes = StringedInstrumentNote.allNotesOfPitches(
     guitarTuning, pitches, minFretNumber, maxFretNumber
   );
 
   return (
     <GuitarFretboard
       width={props.size.width} height={props.size.height}
+      tuning={guitarTuning}
       minFretNumber={minFretNumber} fretCount={fretCount}
       renderExtrasFn={metrics => renderGuitarNoteHighlightsAndLabels(
         metrics, guitarNotes, "lightblue",

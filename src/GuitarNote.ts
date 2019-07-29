@@ -1,22 +1,22 @@
 import * as Utils from "./Utils";
 import { Pitch } from "./Pitch";
-import { GuitarTuning } from './Components/Utils/GuitarFretboard';
+import { StringedInstrumentTuning as StringedInstrumentTuning } from './Components/Utils/GuitarFretboard';
 
-export class GuitarNote {
+export class StringedInstrumentNote {
   public static allNotesOfPitches(
-    tuning: GuitarTuning,
+    tuning: StringedInstrumentTuning,
     pitches: Array<Pitch>,
     minFretNumber: number,
     maxFretNumber: number
-  ): Array<GuitarNote> {
+  ): Array<StringedInstrumentNote> {
     Utils.precondition(minFretNumber >= 0);
     Utils.precondition(maxFretNumber >= minFretNumber);
 
     const fretNumbers = Utils.range(0, maxFretNumber);
-    return Utils.flattenArrays<GuitarNote>(
+    return Utils.flattenArrays<StringedInstrumentNote>(
       tuning.openStringPitches
         .map((_, stringIndex) => fretNumbers
-          .map(fretNumber => new GuitarNote(
+          .map(fretNumber => new StringedInstrumentNote(
             tuning.getNote(stringIndex, fretNumber).pitch,
             stringIndex
           ))
@@ -33,7 +33,7 @@ export class GuitarNote {
   }
 
   // TODO: add tests
-  public getFretNumber(tuning: GuitarTuning): number {
+  public getFretNumber(tuning: StringedInstrumentTuning): number {
     const openStringPitch = tuning.openStringPitches[this.stringIndex];
     return this.pitch.midiNumber - openStringPitch.midiNumber;
   }

@@ -6,11 +6,10 @@ import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
 import { FlashCardGroup, RenderAnswerSelectArgs } from "../../../FlashCardGroup";
 import { Interval } from "../../../Interval";
-import { standard6StringGuitarTuning, GuitarFretboard, GuitarFretboardMetrics } from "../../Utils/GuitarFretboard";
+import { standard6StringGuitarTuning, GuitarFretboard, StringedInstrumentMetrics } from "../../Utils/GuitarFretboard";
 import { VerticalDirection } from "../../../VerticalDirection";
-import { AnswerDifficulty } from "../../../StudyAlgorithm";
 import { Size2D } from '../../../Size2D';
-import { GuitarNote } from '../../../GuitarNote';
+import { StringedInstrumentNote } from '../../../GuitarNote';
 
 const intervals = [
   "m2",
@@ -113,7 +112,7 @@ export class IntervalsFlashCardMultiSelect extends React.Component<IIntervalsFla
   }
 }
 
-function forEachInterval(fn: (pitches: Array<GuitarNote>, interval: Interval) => void) {
+function forEachInterval(fn: (pitches: Array<StringedInstrumentNote>, interval: Interval) => void) {
   for (let stringIndex1 = 0; stringIndex1 < 6; stringIndex1++) {
     for (let fretNumber1 = 0; fretNumber1 < 12; fretNumber1++) {
       for (let stringIndex2 = 0; stringIndex2 < 6; stringIndex2++) {
@@ -164,7 +163,7 @@ export function createFlashCards(): Array<FlashCard> {
       ? "↑"
       : "↓";
     
-    const renderExtras = (metrics: GuitarFretboardMetrics) => {
+    const renderExtras = (metrics: StringedInstrumentMetrics) => {
       const fontSize = 16;
       const textStyle = {
         fontSize: `${fontSize}px`
@@ -213,6 +212,7 @@ export function createFlashCards(): Array<FlashCard> {
           <div>
             <GuitarFretboard
               width={size.width} height={size.height}
+              tuning={standard6StringGuitarTuning}
               renderExtrasFn={renderExtras}
             />
           </div>

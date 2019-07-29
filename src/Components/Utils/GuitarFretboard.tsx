@@ -7,10 +7,10 @@ import { Size2D } from '../../Size2D';
 import { Rect2D } from '../../Rect2D';
 import { Vector2D } from '../../Vector2D';
 import { ScaleType, Scale } from '../../Scale';
-import { ChordType, Chord } from '../../Chord';
-import { GuitarNote } from '../../GuitarNote';
+import { Chord } from '../../Chord';
+import { StringedInstrumentNote } from '../../GuitarNote';
 
-export class GuitarTuning {
+export class StringedInstrumentTuning {
   public constructor(public openStringPitches: Array<Pitch>) {
     Utils.invariant(this.openStringPitches.length > 0);
   }
@@ -19,16 +19,16 @@ export class GuitarTuning {
     return this.openStringPitches.length;
   }
 
-  public getNote(stringIndex: number, fretNumber: number): GuitarNote {
+  public getNote(stringIndex: number, fretNumber: number): StringedInstrumentNote {
     Utils.precondition((stringIndex >= 0) && (stringIndex < this.stringCount));
 
     const pitch = Pitch.createFromMidiNumber(
       this.openStringPitches[stringIndex].midiNumber + fretNumber
     );
-    return new GuitarNote(pitch, stringIndex);
+    return new StringedInstrumentNote(pitch, stringIndex);
   }
 }
-export const standard6StringGuitarTuning = new GuitarTuning([
+export const standard6StringGuitarTuning = new StringedInstrumentTuning([
   new Pitch(PitchLetter.E, 0, 2),
   new Pitch(PitchLetter.A, 0, 2),
   new Pitch(PitchLetter.D, 0, 3),
@@ -36,7 +36,7 @@ export const standard6StringGuitarTuning = new GuitarTuning([
   new Pitch(PitchLetter.B, 0, 3),
   new Pitch(PitchLetter.E, 0, 4)
 ]);
-export const standard7StringGuitarTuning = new GuitarTuning([
+export const standard7StringGuitarTuning = new StringedInstrumentTuning([
   new Pitch(PitchLetter.B, 0, 1),
   new Pitch(PitchLetter.E, 0, 2),
   new Pitch(PitchLetter.A, 0, 2),
@@ -45,7 +45,7 @@ export const standard7StringGuitarTuning = new GuitarTuning([
   new Pitch(PitchLetter.B, 0, 3),
   new Pitch(PitchLetter.E, 0, 4)
 ]);
-export const standard8StringGuitarTuning = new GuitarTuning([
+export const standard8StringGuitarTuning = new StringedInstrumentTuning([
   new Pitch(PitchLetter.F, 1, 1),
   new Pitch(PitchLetter.B, 0, 1),
   new Pitch(PitchLetter.E, 0, 2),
@@ -55,7 +55,15 @@ export const standard8StringGuitarTuning = new GuitarTuning([
   new Pitch(PitchLetter.B, 0, 3),
   new Pitch(PitchLetter.E, 0, 4)
 ]);
-export function getStandardGuitarTuning(stringCount: number): GuitarTuning {
+
+export const standardViolinTuning = new StringedInstrumentTuning([
+  new Pitch(PitchLetter.G, 0, 3),
+  new Pitch(PitchLetter.D, 0, 4),
+  new Pitch(PitchLetter.A, 0, 4),
+  new Pitch(PitchLetter.E, 0, 5)
+]);
+
+export function getStandardGuitarTuning(stringCount: number): StringedInstrumentTuning {
   switch (stringCount) {
     case 6:
       return standard6StringGuitarTuning;
@@ -111,7 +119,7 @@ export function generateGuitarScaleTextDiagram(scale: Scale, stringCount: number
 }
 
 export function getPreferredGuitarScaleShape(
-  scale: Scale, tuning: GuitarTuning
+  scale: Scale, tuning: StringedInstrumentTuning
 ) {
   const scaleShapes = findGuitarScaleShapes(scale, tuning);
   scaleShapes.sort((shape1, shape2) => {
@@ -139,7 +147,7 @@ export function getPreferredGuitarScaleShape(
   return scaleShapes[0];
 }
 
-export function get1stGuitarNoteOnString(pitch: Pitch, stringIndex: number, tuning: GuitarTuning): GuitarNote {
+export function get1stStringedInstrumentNoteOnString(pitch: Pitch, stringIndex: number, tuning: StringedInstrumentTuning): StringedInstrumentNote {
   Utils.precondition(stringIndex >= 0);
   Utils.precondition(stringIndex < tuning.stringCount);
 
@@ -150,11 +158,11 @@ export function get1stGuitarNoteOnString(pitch: Pitch, stringIndex: number, tuni
     notePitch.octaveNumber++;
   }
 
-  return new GuitarNote(notePitch, stringIndex);
+  return new StringedInstrumentNote(notePitch, stringIndex);
 }
 
 class GuitarScaleShapeFinderState {
-  public guitarNotes: Array<GuitarNote> = new Array<GuitarNote>();
+  public guitarNotes: Array<StringedInstrumentNote> = new Array<StringedInstrumentNote>();
   public stringIndex: number = 0;
   public numNotesOnCurrentString: number = 0;
 
@@ -168,23 +176,23 @@ class GuitarScaleShapeFinderState {
   }
 }
 export function findGuitarScaleShapes(
-  scale: Scale, tuning: GuitarTuning
-): Array<Array<GuitarNote>> {
+  scale: Scale, tuning: StringedInstrumentTuning
+): Array<Array<StringedInstrumentNote>> {
     const { minNotesPerString, maxNotesPerString } = getPreferredNumNotesPerStringRange(scale.type);
     const scalePitches = scale.getPitches();
 
     const state = new GuitarScaleShapeFinderState();
-    const outShapes = new Array<Array<GuitarNote>>();
+    const outShapes = new Array<Array<StringedInstrumentNote>>();
     findGuitarScaleShapesRecursive(scalePitches, tuning, minNotesPerString, maxNotesPerString, state, outShapes);
 
     return outShapes;
 }
 export function findGuitarScaleShapesRecursive(
-  scalePitches: Array<Pitch>, tuning: GuitarTuning,  minNotesPerString: number, maxNotesPerString: number,
+  scalePitches: Array<Pitch>, tuning: StringedInstrumentTuning,  minNotesPerString: number, maxNotesPerString: number,
   state: GuitarScaleShapeFinderState,
-  outShapes: Array<Array<GuitarNote>>
+  outShapes: Array<Array<StringedInstrumentNote>>
 ) {
-  function addNoteToString(state: GuitarScaleShapeFinderState, note: GuitarNote) {
+  function addNoteToString(state: GuitarScaleShapeFinderState, note: StringedInstrumentNote) {
     state.guitarNotes.push(note);
     state.numNotesOnCurrentString++;
   }
@@ -198,7 +206,7 @@ export function findGuitarScaleShapesRecursive(
     const scalePitch = scalePitches[i % scalePitches.length];
     const deltaOctave = Math.floor(i / scalePitches.length);
     const pitch = new Pitch(scalePitch.letter, scalePitch.signedAccidental, scalePitch.octaveNumber + deltaOctave);
-    const guitarNoteSameString = new GuitarNote(pitch, state.stringIndex);
+    const guitarNoteSameString = new StringedInstrumentNote(pitch, state.stringIndex);
 
     // On all string, add notes until at the min.
     // Until at max:
@@ -266,26 +274,26 @@ export function getPreferredNumNotesPerStringRange(scaleType: ScaleType): ({ min
 
 export function findGuitarChordShape(
   chord: Chord, inversion: number, firstStringIndex: number,
-  tuning: GuitarTuning
-): Array<GuitarNote> {
+  tuning: StringedInstrumentTuning
+): Array<StringedInstrumentNote> {
   Utils.precondition((inversion >= 0) && (inversion < chord.type.pitchCount));
   Utils.precondition((firstStringIndex >= 0) && (firstStringIndex < tuning.stringCount));
 
   const pitches = chord.getPitches();
 
-  let guitarNotes = new Array<GuitarNote>();
+  let guitarNotes = new Array<StringedInstrumentNote>();
 
   for (let i = 0; i < pitches.length; i++) {
     const pitch = pitches[Utils.mod(i + (inversion - 1), pitches.length)];
     const stringIndex = firstStringIndex + i;
 
-    guitarNotes.push(new GuitarNote(pitch, stringIndex));
+    guitarNotes.push(new StringedInstrumentNote(pitch, stringIndex));
   }
 
   return guitarNotes;
 }
 
-export class GuitarFretboardMetrics {
+export class StringedInstrumentMetrics {
   public constructor(
     public width: number,
     public height: number,
@@ -347,8 +355,8 @@ export class GuitarFretboardMetrics {
 }
 
 export function renderGuitarNoteHighlightsAndLabels(
-  metrics: GuitarFretboardMetrics, notes: Array<GuitarNote>, highlightStyle: string,
-  getLabelsFn: (n: GuitarNote, i: number) => string
+  metrics: StringedInstrumentMetrics, notes: Array<StringedInstrumentNote>, highlightStyle: string,
+  getLabelsFn: (n: StringedInstrumentNote, i: number) => string
 ) {
   const rootPitchFretDots = notes
     .map((note, noteIndex) => {
@@ -402,21 +410,21 @@ export function renderGuitarNoteHighlightsAndLabels(
   return <g>{rootPitchFretDots}</g>;
 }
 export function renderGuitarNoteHighlightsAndNoteNames(
-  metrics: GuitarFretboardMetrics, notes: Array<GuitarNote>, highlightStyle: string
+  metrics: StringedInstrumentMetrics, notes: Array<StringedInstrumentNote>, highlightStyle: string
 ) {
   return renderGuitarNoteHighlightsAndLabels(
     metrics, notes, highlightStyle, (n, _) => n.pitch.toOneAccidentalAmbiguousString(false, false)
   );
 }
 export function renderGuitarFretboardScaleExtras(
-  metrics: GuitarFretboardMetrics, scale: Scale,
+  metrics: StringedInstrumentMetrics, scale: Scale,
   renderAllScaleShapes: boolean = false
 ): JSX.Element {
   const tuning = getStandardGuitarTuning(metrics.stringCount);
   const pitches = scale.getPitches();
   const guitarNotes = renderAllScaleShapes
     ? (
-      GuitarNote.allNotesOfPitches(
+      StringedInstrumentNote.allNotesOfPitches(
         tuning, pitches, 0, metrics.fretCount
       )
     )
@@ -473,7 +481,7 @@ export function renderGuitarFretboardScaleExtras(
   );
 }
 export function renderGuitarFretboardChordExtras(
-  metrics: GuitarFretboardMetrics, chord: Chord
+  metrics: StringedInstrumentMetrics, chord: Chord
 ): JSX.Element {
   const tuning = getStandardGuitarTuning(metrics.stringCount);
   const pitches = chord.type.getPitches(chord.rootPitch);
@@ -534,7 +542,7 @@ export function renderGuitarFretboardChordExtras(
 }
 
 export function renderFretNumber(
-  metrics: GuitarFretboardMetrics, fretNumber: number
+  metrics: StringedInstrumentMetrics, fretNumber: number
 ): JSX.Element {
   const fontSize = 12;
   let x = metrics.getNoteX(fretNumber) - (0.4 * fontSize);
@@ -556,7 +564,7 @@ export function renderFretNumber(
     </text>
   );
 }
-export function renderFretNumbers(metrics: GuitarFretboardMetrics): JSX.Element {
+export function renderFretNumbers(metrics: StringedInstrumentMetrics): JSX.Element {
   const fretNumbers = Utils.range(metrics.minFretNumber, metrics.minFretNumber + metrics.fretCount);
   return (
     <g>
@@ -568,26 +576,84 @@ export function renderFretNumbers(metrics: GuitarFretboardMetrics): JSX.Element 
 export interface IGuitarFretboardProps {
   width: number;
   height: number;
+  tuning: StringedInstrumentTuning;
   minFretNumber?: number;
   fretCount?: number;
-  stringCount?: number;
-  pressedNotes?: Array<GuitarNote>;
-  renderExtrasFn?: (metrics: GuitarFretboardMetrics) => JSX.Element;
+  pressedNotes?: Array<StringedInstrumentNote>;
+  renderExtrasFn?: (metrics: StringedInstrumentMetrics) => JSX.Element;
   style?: any;
 }
 export class GuitarFretboard extends React.Component<IGuitarFretboardProps, {}> {
   public render(): JSX.Element {
+    return (
+      <StringedInstrumentFingerboard
+        width={this.props.width} height={this.props.height}
+        tuning={this.props.tuning}
+        hasFrets={true}
+        minFretNumber={this.props.minFretNumber}
+        fretCount={this.props.fretCount}
+        dottedFretNumbers={this.dottedFretNumbers}
+        pressedNotes={this.props.pressedNotes}
+        renderExtrasFn={this.props.renderExtrasFn}
+        style={this.props.style} />
+    );
+  }
+
+  private dottedFretNumbers = [3, 5, 7, 9, 12, 15, 17, 19, 21, 24];
+}
+
+export interface IViolinFingerboardProps {
+  width: number;
+  height: number;
+  tuning: StringedInstrumentTuning;
+  minFretNumber?: number;
+  fretCount?: number;
+  pressedNotes?: Array<StringedInstrumentNote>;
+  renderExtrasFn?: (metrics: StringedInstrumentMetrics) => JSX.Element;
+  style?: any;
+}
+export class ViolinFingerboard extends React.Component<IViolinFingerboardProps, {}> {
+  public render(): JSX.Element {
+    return (
+      <StringedInstrumentFingerboard
+        width={this.props.width} height={this.props.height}
+        tuning={this.props.tuning}
+        hasFrets={false}
+        minFretNumber={this.props.minFretNumber}
+        fretCount={this.props.fretCount}
+        dottedFretNumbers={[]}
+        pressedNotes={this.props.pressedNotes}
+        renderExtrasFn={this.props.renderExtrasFn}
+        style={this.props.style} />
+    );
+  }
+}
+
+export interface IStringedInstrumentFingerboardProps {
+  width: number;
+  height: number;
+  tuning: StringedInstrumentTuning;
+  hasFrets: boolean;
+  dottedFretNumbers: Array<number>;
+  minFretNumber?: number;
+  fretCount?: number;
+  pressedNotes?: Array<StringedInstrumentNote>;
+  renderExtrasFn?: (metrics: StringedInstrumentMetrics) => JSX.Element;
+  style?: any;
+}
+export class StringedInstrumentFingerboard extends React.Component<IStringedInstrumentFingerboardProps, {}> {
+  public render(): JSX.Element {
     const margin = 20;
 
-    const metrics = new GuitarFretboardMetrics(
+    const metrics = new StringedInstrumentMetrics(
       this.props.width - (2 * margin),
       this.props.height - (2 * margin),
       (this.props.minFretNumber !== undefined) ? this.props.minFretNumber : 0,
       (this.props.fretCount !== undefined) ? this.props.fretCount : 11,
-      this.props.stringCount
+      this.props.tuning.stringCount
     );
     
-    const tuning = getStandardGuitarTuning(metrics.stringCount);
+    const tuning = this.props.tuning;
 
     const nut = <line x1={metrics.nutX} x2={metrics.nutX} y1={0} y2={metrics.height} stroke="black" strokeWidth={metrics.nutWidth} />;
     const strings = Utils.range(0, metrics.stringCount - 1)
@@ -595,28 +661,32 @@ export class GuitarFretboard extends React.Component<IGuitarFretboardProps, {}> 
         const y = metrics.getStringY(i);
         return <line key={i} x1={metrics.stringsLeft} x2={metrics.width} y1={y} y2={y} stroke="black" strokeWidth={metrics.getStringWidth(i)} />;
       });
-    const frets = Utils.range(1, metrics.fretCount)
-      .map(i => {
-        const x = metrics.stringsLeft + (i * metrics.fretSpacing);
-        return <line key={i} x1={x} x2={x} y1={0} y2={metrics.height} stroke="black" strokeWidth={metrics.fretWidth} />;
-      });
-    const fretDots = this.dottedFretNumbers
-      .filter(fretNumber => (fretNumber > metrics.minFretNumber) && ((fretNumber - metrics.minFretNumber) <= metrics.fretCount))
-      .map(fretNumber => {
-        const x = metrics.getFretSpaceCenterX(fretNumber);
+    const frets = this.props.hasFrets ? (
+        Utils.range(1, metrics.fretCount)
+        .map(i => {
+          const x = metrics.stringsLeft + (i * metrics.fretSpacing);
+          return <line key={i} x1={x} x2={x} y1={0} y2={metrics.height} stroke="black" strokeWidth={metrics.fretWidth} />;
+        })
+      ) : null;
+    const fretDots = this.props.hasFrets ? (
+      this.props.dottedFretNumbers
+        .filter(fretNumber => (fretNumber > metrics.minFretNumber) && ((fretNumber - metrics.minFretNumber) <= metrics.fretCount))
+        .map(fretNumber => {
+          const x = metrics.getFretSpaceCenterX(fretNumber);
 
-        if ((fretNumber % 12) != 0) {
-          return <circle key={fretNumber} cx={x} cy={metrics.fretDotY} r={metrics.fretDotRadius} fill="black" strokeWidth="0" />;
-        } else {
-          const fretDotYOffset = metrics.stringSpacing;
-          return (
-            <g>
-              <circle key={fretNumber} cx={x} cy={metrics.fretDotY - fretDotYOffset} r={metrics.fretDotRadius} fill="black" strokeWidth="0" />
-              <circle key={`${fretNumber}_2`} cx={x} cy={metrics.fretDotY + fretDotYOffset} r={metrics.fretDotRadius} fill="black" strokeWidth="0" />
-            </g>
-          );
-        }
-      });
+          if ((fretNumber % 12) != 0) {
+            return <circle key={fretNumber} cx={x} cy={metrics.fretDotY} r={metrics.fretDotRadius} fill="black" strokeWidth="0" />;
+          } else {
+            const fretDotYOffset = metrics.stringSpacing;
+            return (
+              <g>
+                <circle key={fretNumber} cx={x} cy={metrics.fretDotY - fretDotYOffset} r={metrics.fretDotRadius} fill="black" strokeWidth="0" />
+                <circle key={`${fretNumber}_2`} cx={x} cy={metrics.fretDotY + fretDotYOffset} r={metrics.fretDotRadius} fill="black" strokeWidth="0" />
+              </g>
+            );
+          }
+        })
+    ) : null;
     const noteHighlights = this.props.pressedNotes ? (
         this.props.pressedNotes
         .map((note, i) => {
@@ -646,6 +716,4 @@ export class GuitarFretboard extends React.Component<IGuitarFretboardProps, {}> 
       </svg>
     );
   }
-
-  private dottedFretNumbers = [3, 5, 7, 9, 12, 15, 17, 19, 21, 24];
 }

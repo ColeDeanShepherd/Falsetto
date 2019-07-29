@@ -4,7 +4,7 @@ import { Card, CardContent } from '@material-ui/core';
 import * as Utils from "../../Utils";
 import App from '../App';
 import {
-  GuitarFretboard, GuitarFretboardMetrics,
+  GuitarFretboard, StringedInstrumentMetrics,
   renderGuitarNoteHighlightsAndLabels, renderFretNumbers, getStandardGuitarTuning,
   getPreferredGuitarScaleShape, 
 } from '../Utils/GuitarFretboard';
@@ -17,7 +17,7 @@ import { ScaleAudioPlayer } from '../Utils/ScaleAudioPlayer';
 import { createStudyFlashCardGroupComponent } from '../StudyFlashCards';
 import * as GuitarScales from "../Quizzes/Scales/GuitarScales";
 import { ScaleViewer } from '../Tools/ScaleViewer';
-import { GuitarNote } from '../../GuitarNote';
+import { StringedInstrumentNote } from '../../GuitarNote';
 
 const fretCount = 11;
 const ionianRootPitch = new Pitch(PitchLetter.F, 0, 2);
@@ -70,8 +70,8 @@ const GuitarScalePatternDiagram: React.FunctionComponent<{
       <p style={{ textAlign: "center" }}>
         <GuitarFretboard
           width={fretboardWidth} height={fretboardHeight}
+          tuning={getStandardGuitarTuning(stringCount)}
           renderExtrasFn={metrics => renderGuitarScalePatternDiagramExtras(metrics, props.scale.type, guitarNotes)}
-          stringCount={stringCount}
           minFretNumber={minFretNumber}
           fretCount={fretCount}
           style={fretboardStyle}
@@ -82,9 +82,9 @@ const GuitarScalePatternDiagram: React.FunctionComponent<{
 };
 
 function renderGuitarScalePatternDiagramExtras(
-  metrics: GuitarFretboardMetrics,
+  metrics: StringedInstrumentMetrics,
   scaleType: ScaleType,
-  notes: Array<GuitarNote>
+  notes: Array<StringedInstrumentNote>
 ): JSX.Element {
   return (
     <g>

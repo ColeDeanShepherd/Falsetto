@@ -5,8 +5,8 @@ import * as Utils from "../../../Utils";
 import { Size2D } from "../../../Size2D";
 import * as FlashCardUtils from "../Utils";
 import {
-  GuitarFretboard,
-  standard6StringGuitarTuning
+  ViolinFingerboard,
+  standardViolinTuning
 } from "../../Utils/GuitarFretboard";
 import { FlashCard } from "../../../FlashCard";
 import { FlashCardGroup } from "../../../FlashCardGroup";
@@ -20,7 +20,7 @@ export function configDataToEnabledQuestionIds(configData: IConfigData): Array<n
   const notesPerString = 12;
 
   const enabledFlashCardIds = new Array<number>();
-  for (let stringIndex = 0; stringIndex < standard6StringGuitarTuning.stringCount; stringIndex++) {
+  for (let stringIndex = 0; stringIndex < standardViolinTuning.stringCount; stringIndex++) {
     for (let fretNumber = 0; fretNumber <= configData.maxFret; fretNumber++) {
       enabledFlashCardIds.push((notesPerString * stringIndex) + fretNumber);
     }
@@ -29,14 +29,14 @@ export function configDataToEnabledQuestionIds(configData: IConfigData): Array<n
   return enabledFlashCardIds;
 }
 
-export interface IGuitarNotesFlashCardMultiSelectProps {
+export interface IViolinNotesFlashCardMultiSelectProps {
   flashCards: FlashCard[];
   configData: IConfigData;
   selectedFlashCardIndices: number[];
   onChange?: (newValue: number[], newConfigData: any) => void;
 }
-export interface IGuitarNotesFlashCardMultiSelectState {}
-export class GuitarNotesFlashCardMultiSelect extends React.Component<IGuitarNotesFlashCardMultiSelectProps, IGuitarNotesFlashCardMultiSelectState> {
+export interface IViolinNotesFlashCardMultiSelectState {}
+export class ViolinNotesFlashCardMultiSelect extends React.Component<IViolinNotesFlashCardMultiSelectProps, IViolinNotesFlashCardMultiSelectState> {
   public render(): JSX.Element {
     return (
       <TextField
@@ -68,14 +68,14 @@ export class GuitarNotesFlashCardMultiSelect extends React.Component<IGuitarNote
   }
 }
 
-export function createFlashCardGroup(guitarNotes?: Array<StringedInstrumentNote>): FlashCardGroup {
+export function createFlashCardGroup(notes?: Array<StringedInstrumentNote>): FlashCardGroup {
   const renderFlashCardMultiSelect = (
     flashCards: Array<FlashCard>,
     selectedFlashCardIndices: number[],
     configData: any,
     onChange: (newValue: number[], newConfigData: any) => void
   ): JSX.Element => {
-    return <GuitarNotesFlashCardMultiSelect
+    return <ViolinNotesFlashCardMultiSelect
       flashCards={flashCards}
       configData={configData}
       selectedFlashCardIndices={selectedFlashCardIndices}
@@ -87,33 +87,33 @@ export function createFlashCardGroup(guitarNotes?: Array<StringedInstrumentNote>
     maxFret: 11
   };
 
-  const group = new FlashCardGroup("Guitar Notes", () => createFlashCards(guitarNotes));
+  const group = new FlashCardGroup("Violin Notes", () => createFlashCards(notes));
   group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
   group.initialConfigData = initialConfigData;
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   group.renderAnswerSelect = FlashCardUtils.renderNoteAnswerSelect;
   group.enableInvertFlashCards = false;
-  group.moreInfoUri = "https://medium.com/@aslushnikov/memorizing-fretboard-a9f4f28dbf03";
+  //group.moreInfoUri = "https://medium.com/@aslushnikov/memorizing-fretboard-a9f4f28dbf03";
   group.containerHeight = "120px";
 
   return group;
 }
 
-export function createFlashCards(guitarNotes?: Array<StringedInstrumentNote>): FlashCard[] {
+export function createFlashCards(notes?: Array<StringedInstrumentNote>): FlashCard[] {
   const MAX_FRET_NUMBER = 11;
-  guitarNotes = !guitarNotes
-    ? Utils.flattenArrays(Utils.range(0, standard6StringGuitarTuning.stringCount - 1)
+  notes = !notes
+    ? Utils.flattenArrays(Utils.range(0, standardViolinTuning.stringCount - 1)
     .map(stringIndex => Utils.range(0, MAX_FRET_NUMBER)
       .map(fretNumber => {
-        return standard6StringGuitarTuning.getNote(
+        return standardViolinTuning.getNote(
           stringIndex, fretNumber
         );
       })
     ))
-    : guitarNotes;
+    : notes;
 
-  return guitarNotes
-    .map(guitarNote => FlashCard.fromRenderFns(
+  return notes
+    .map(note => FlashCard.fromRenderFns(
       (width, height) => {
         const size = Utils.shrinkRectToFit(
           new Size2D(width, height),
@@ -121,13 +121,13 @@ export function createFlashCards(guitarNotes?: Array<StringedInstrumentNote>): F
         );
 
         return (
-          <GuitarFretboard
+          <ViolinFingerboard
             width={size.width} height={size.height}
-            tuning={standard6StringGuitarTuning}
-            pressedNotes={[guitarNote]}
+            tuning={standardViolinTuning}
+            pressedNotes={[note]}
           />
         );
       },
-      guitarNote.pitch.toOneAccidentalAmbiguousString(false, true)
+      note.pitch.toOneAccidentalAmbiguousString(false, true)
     ));
 }
