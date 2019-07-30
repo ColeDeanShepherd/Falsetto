@@ -297,6 +297,7 @@ export class StringedInstrumentMetrics {
   public constructor(
     public width: number,
     public height: number,
+    public hasFrets: boolean,
     public minFretNumber: number = 0,
     public fretCount: number = 11,
     public stringCount: number = 6
@@ -335,14 +336,18 @@ export class StringedInstrumentMetrics {
   public getStringWidth(stringIndex: number): number {
     return this.lowestStringWidth / (1 + (stringIndex / 4));
   }
+  public getFretX(fretNumber: number): number {
+    return this.stringsLeft + ((fretNumber - this.minFretNumber) * this.fretSpacing);
+  }
   public getFretSpaceCenterX(fretNumber: number): number {
     return this.stringsLeft + ((fretNumber - 1 - this.minFretNumber) * this.fretSpacing) + (this.fretSpacing / 2);
   }
   public getNoteX(fretNumber: number) {
-    return Math.max(
-      this.getFretSpaceCenterX(fretNumber),
-      this.nutWidth / 2
-    );
+    return this.hasFrets
+      ? Math.max(
+        this.getFretSpaceCenterX(fretNumber),
+        this.nutWidth / 2
+      ) : this.getFretX(fretNumber);
   }
   public getTextXOffset(fontSize: number): number {
     return -(0.3 * fontSize);
@@ -621,12 +626,14 @@ export class ViolinFingerboard extends React.Component<IViolinFingerboardProps, 
         hasFrets={false}
         minFretNumber={this.props.minFretNumber}
         fretCount={this.props.fretCount}
-        dottedFretNumbers={[]}
+        positionLineFretNumbers={this.positionLineFretNumbers}
         pressedNotes={this.props.pressedNotes}
         renderExtrasFn={this.props.renderExtrasFn}
         style={this.props.style} />
     );
   }
+
+  private positionLineFretNumbers = [2, 3, 5, 7, 8];
 }
 
 export interface IStringedInstrumentFingerboardProps {
@@ -634,7 +641,8 @@ export interface IStringedInstrumentFingerboardProps {
   height: number;
   tuning: StringedInstrumentTuning;
   hasFrets: boolean;
-  dottedFretNumbers: Array<number>;
+  dottedFretNumbers?: Array<number>;
+  positionLineFretNumbers?: Array<number>;
   minFretNumber?: number;
   fretCount?: number;
   pressedNotes?: Array<StringedInstrumentNote>;
@@ -648,6 +656,7 @@ export class StringedInstrumentFingerboard extends React.Component<IStringedInst
     const metrics = new StringedInstrumentMetrics(
       this.props.width - (2 * margin),
       this.props.height - (2 * margin),
+      this.props.hasFrets,
       (this.props.minFretNumber !== undefined) ? this.props.minFretNumber : 0,
       (this.props.fretCount !== undefined) ? this.props.fretCount : 11,
       this.props.tuning.stringCount
@@ -661,15 +670,40 @@ export class StringedInstrumentFingerboard extends React.Component<IStringedInst
         const y = metrics.getStringY(i);
         return <line key={i} x1={metrics.stringsLeft} x2={metrics.width} y1={y} y2={y} stroke="black" strokeWidth={metrics.getStringWidth(i)} />;
       });
+
     const frets = this.props.hasFrets ? (
-        Utils.range(1, metrics.fretCount)
+      Utils.range(1, metrics.fretCount)
         .map(i => {
           const x = metrics.stringsLeft + (i * metrics.fretSpacing);
           return <line key={i} x1={x} x2={x} y1={0} y2={metrics.height} stroke="black" strokeWidth={metrics.fretWidth} />;
         })
       ) : null;
+    
+    const positionFontSize = 12;
+    const positionTextStyle: any = {
+      fontSize: `${positionFontSize}px`,
+      fontWeight: "bold",
+      textAnchor: "middle"
+    };
+    const positionLineFretNumbers = (this.props.positionLineFretNumbers !== undefined) ? this.props.positionLineFretNumbers : [];
+    const positionLines = (
+      positionLineFretNumbers
+        .map((fretNumber, positionIndex) => {
+          const x = metrics.getNoteX(fretNumber);;
+          return (
+            <g>
+              <line key={fretNumber} x1={x} x2={x} y1={0} y2={metrics.height} stroke="black" strokeWidth="2" />
+              <text
+                x={x} y={metrics.height + (1.6 * positionFontSize)}
+                style={positionTextStyle}>{1 + positionIndex}</text>
+            </g>
+          );
+        })
+    );
+
+    const dottedFretNumbers = (this.props.dottedFretNumbers !== undefined) ? this.props.dottedFretNumbers : [];
     const fretDots = this.props.hasFrets ? (
-      this.props.dottedFretNumbers
+      dottedFretNumbers
         .filter(fretNumber => (fretNumber > metrics.minFretNumber) && ((fretNumber - metrics.minFretNumber) <= metrics.fretCount))
         .map(fretNumber => {
           const x = metrics.getFretSpaceCenterX(fretNumber);
@@ -687,6 +721,20 @@ export class StringedInstrumentFingerboard extends React.Component<IStringedInst
           }
         })
     ) : null;
+
+    const noteCircles = !this.props.hasFrets ? (
+      Utils.range(0, 3)
+        .map(stringIndex => Utils.range(0, metrics.fretCount)
+          .map(fretNumber => {
+            const position = new Vector2D(
+              metrics.getNoteX(fretNumber),
+              metrics.getStringY(stringIndex)
+            );
+
+            return <circle key={fretNumber} cx={position.x} cy={position.y} r={metrics.fretDotRadius} fill="none" stroke="black" strokeWidth="2" />;
+          }))
+    ) : null;
+
     const noteHighlights = this.props.pressedNotes ? (
         this.props.pressedNotes
         .map((note, i) => {
@@ -710,6 +758,8 @@ export class StringedInstrumentFingerboard extends React.Component<IStringedInst
           {strings}
           {frets}
           {fretDots}
+          {positionLines}
+          {noteCircles}
           {noteHighlights}
           {extraElements}
         </g>

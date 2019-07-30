@@ -187,7 +187,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
 
           {this.props.renderAnswerSelect
             ? (
-              <p style={{marginBottom: "0", marginTop: "0"}}>
+              <p style={{marginBottom: "0", marginTop: "0", lineHeight: "1.5"}}>
                 <span style={{paddingRight: "1em"}}>{this.studyAlgorithm.quizStats.numCorrectGuesses} / {this.studyAlgorithm.quizStats.numIncorrectGuesses} correct ({(100 * percentCorrect).toFixed(2)}%)</span>
                 <span key={this.state.currentFlashCardId}>
                   <i
@@ -195,7 +195,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
                     style={{
                       color: "green",
                       verticalAlign: "bottom",
-                      visibility: (this.state.wasCorrect && !this.state.haveGottenCurrentFlashCardWrong) ? "visible" : "hidden"
+                      display: (this.state.wasCorrect && !this.state.haveGottenCurrentFlashCardWrong) ? "inline-block" : "none"
                     }}>
                     check_circle
                   </i>
@@ -206,7 +206,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
                     style={{
                       color: "red",
                       verticalAlign: "bottom",
-                      visibility: this.state.haveGottenCurrentFlashCardWrong ? "visible" : "hidden"
+                      display: this.state.haveGottenCurrentFlashCardWrong ? "inline-block" : "none"
                     }}>
                     cancel
                   </i>

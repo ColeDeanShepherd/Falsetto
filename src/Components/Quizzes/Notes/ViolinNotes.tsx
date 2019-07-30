@@ -12,12 +12,14 @@ import { FlashCard } from "../../../FlashCard";
 import { FlashCardGroup } from "../../../FlashCardGroup";
 import { StringedInstrumentNote } from '../../../GuitarNote';
 
+const DEFAULT_MAX_FRET_NUMBER = 13;
+
 interface IConfigData {
   maxFret: number
 };
 
 export function configDataToEnabledQuestionIds(configData: IConfigData): Array<number> {
-  const notesPerString = 12;
+  const notesPerString = DEFAULT_MAX_FRET_NUMBER + 1;
 
   const enabledFlashCardIds = new Array<number>();
   for (let stringIndex = 0; stringIndex < standardViolinTuning.stringCount; stringIndex++) {
@@ -40,7 +42,7 @@ export class ViolinNotesFlashCardMultiSelect extends React.Component<IViolinNote
   public render(): JSX.Element {
     return (
       <TextField
-        label="Max. Fret"
+        label={"Max. \"Fret\""}
         value={this.props.configData.maxFret}
         onChange={event => this.onMaxFretStringChange(event.target.value)}
         type="number"
@@ -58,7 +60,7 @@ export class ViolinNotesFlashCardMultiSelect extends React.Component<IViolinNote
     const maxFret = parseInt(newValue, 10);
     if (isNaN(maxFret)) { return; }
 
-    const clampedMaxFret = Utils.clamp(maxFret, 0, 11);
+    const clampedMaxFret = Utils.clamp(maxFret, 0, DEFAULT_MAX_FRET_NUMBER);
 
     const newConfigData: IConfigData = {
       maxFret: clampedMaxFret
@@ -84,7 +86,7 @@ export function createFlashCardGroup(notes?: Array<StringedInstrumentNote>): Fla
   };
 
   const initialConfigData: IConfigData = {
-    maxFret: 11
+    maxFret: DEFAULT_MAX_FRET_NUMBER
   };
 
   const group = new FlashCardGroup("Violin Notes", () => createFlashCards(notes));
@@ -94,16 +96,15 @@ export function createFlashCardGroup(notes?: Array<StringedInstrumentNote>): Fla
   group.renderAnswerSelect = FlashCardUtils.renderNoteAnswerSelect;
   group.enableInvertFlashCards = false;
   //group.moreInfoUri = "https://medium.com/@aslushnikov/memorizing-fretboard-a9f4f28dbf03";
-  group.containerHeight = "120px";
+  group.containerHeight = "160px";
 
   return group;
 }
 
 export function createFlashCards(notes?: Array<StringedInstrumentNote>): FlashCard[] {
-  const MAX_FRET_NUMBER = 11;
   notes = !notes
     ? Utils.flattenArrays(Utils.range(0, standardViolinTuning.stringCount - 1)
-    .map(stringIndex => Utils.range(0, MAX_FRET_NUMBER)
+    .map(stringIndex => Utils.range(0, DEFAULT_MAX_FRET_NUMBER)
       .map(fretNumber => {
         return standardViolinTuning.getNote(
           stringIndex, fretNumber
@@ -115,16 +116,16 @@ export function createFlashCards(notes?: Array<StringedInstrumentNote>): FlashCa
   return notes
     .map(note => FlashCard.fromRenderFns(
       (width, height) => {
-        const size = Utils.shrinkRectToFit(
-          new Size2D(width, height),
-          new Size2D(400, 140)
-        );
+        const size = new Size2D(500, 140);
+        const style: any = { width: "100%", maxWidth: `${size.width}px` };
 
         return (
           <ViolinFingerboard
             width={size.width} height={size.height}
             tuning={standardViolinTuning}
+            fretCount={DEFAULT_MAX_FRET_NUMBER}
             pressedNotes={[note]}
+            style={style}
           />
         );
       },
