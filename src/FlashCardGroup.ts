@@ -66,6 +66,13 @@ export type CustomNextFlashCardIdFilter = (
   enabledFlashCardIds: number[]
 ) => number[];
 
+export class FlashCardLevel {
+  public constructor(
+    public name: string,
+    public flashCardIds: Array<number>
+  ) {}
+}
+
 export class FlashCardGroup {
   public containerHeight: string = "240px";
   public initialSelectedFlashCardIndices: number[] | undefined;
@@ -75,6 +82,7 @@ export class FlashCardGroup {
   public enableInvertFlashCards: boolean = true;
   public moreInfoUri: string = "";
   public customNextFlashCardIdFilter?: CustomNextFlashCardIdFilter;
+  public createFlashCardLevels?: (flashCardGroup: FlashCardGroup, flashCards: Array<FlashCard>) => Array<FlashCardLevel>;
 
   public get route(): string {
     return "/" + this.name.toLowerCase().replace(/( )|(\/)|(\\)/g, "-");

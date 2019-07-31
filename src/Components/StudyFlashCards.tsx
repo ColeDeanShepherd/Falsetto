@@ -10,17 +10,23 @@ import { FlashCard, invertFlashCards } from "../FlashCard";
 import { renderFlashCardSide } from "./FlashCard";
 import { DefaultFlashCardMultiSelect } from "./Utils/DefaultFlashCardMultiSelect";
 import { StudyAlgorithm, AnswerDifficulty, isAnswerDifficultyCorrect, LeitnerStudyAlgorithm } from "../StudyAlgorithm";
-import { RenderAnswerSelectFunc, RenderFlashCardMultiSelectFunc, CustomNextFlashCardIdFilter, FlashCardGroup, RenderAnswerSelectArgs } from '../FlashCardGroup';
+import { RenderAnswerSelectFunc, RenderFlashCardMultiSelectFunc, CustomNextFlashCardIdFilter, FlashCardGroup, RenderAnswerSelectArgs, FlashCardLevel } from '../FlashCardGroup';
 import { MAX_MAIN_CARD_WIDTH } from './Style';
 
 export function createStudyFlashCardGroupComponent(
   flashCardGroup: FlashCardGroup, isEmbedded: boolean, hideMoreInfoUri: boolean,
-  title?: string, style?: any, enableSettings?: boolean): JSX.Element {
+  title?: string, style?: any, enableSettings?: boolean
+): JSX.Element {
+  const flashCards = flashCardGroup.createFlashCards();
+  const flashCardLevels = (flashCardGroup.createFlashCardLevels !== undefined)
+    ? flashCardGroup.createFlashCardLevels(flashCardGroup, flashCards)
+    : [];
+
   return (
     <StudyFlashCards
       key={flashCardGroup.route}
       title={title ? title : flashCardGroup.name}
-      flashCards={flashCardGroup.createFlashCards()}
+      flashCards={flashCards}
       containerHeight={flashCardGroup.containerHeight}
       initialSelectedFlashCardIndices={flashCardGroup.initialSelectedFlashCardIndices}
       initialConfigData={flashCardGroup.initialConfigData}
@@ -30,6 +36,7 @@ export function createStudyFlashCardGroupComponent(
       enableSettings={enableSettings}
       enableInvertFlashCards={flashCardGroup.enableInvertFlashCards}
       customNextFlashCardIdFilter={flashCardGroup.customNextFlashCardIdFilter}
+      flashCardLevels={flashCardLevels}
       isEmbedded={isEmbedded}
       style={style}
     />
@@ -48,6 +55,7 @@ export interface IStudyFlashCardsProps {
   enableInvertFlashCards?: boolean;
   moreInfoUri?: string;
   customNextFlashCardIdFilter?: CustomNextFlashCardIdFilter;
+  flashCardLevels: Array<FlashCardLevel>;
   isEmbedded?: boolean;
   style?: any;
 }
@@ -177,7 +185,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
 
           {this.state.showConfiguration ? (
             <Paper style={{padding: "1em", margin: "1em 0"}}>
-              {this.props.enableInvertFlashCards ? <div><Checkbox checked={this.state.invertFlashCards} onChange={event => this.toggleInvertFlashCards()} /> Invert Flash Cards</div> : null}
+              {(this.props.enableInvertFlashCards && false) ? <div><Checkbox checked={this.state.invertFlashCards} onChange={event => this.toggleInvertFlashCards()} /> Invert Flash Cards</div> : null}
               {false ? <p>{flashCards.length} Flash Cards</p> : null}
               {this.renderFlashCardMultiSelect(flashCards)}
             </Paper>
@@ -288,6 +296,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
       : <DefaultFlashCardMultiSelect
           flashCards={flashCards}
           configData={this.state.configData}
+          flashCardLevels={this.props.flashCardLevels}
           selectedFlashCardIndices={this.state.enabledFlashCardIds}
           onChange={onEnabledFlashCardIndicesChange}
         />;

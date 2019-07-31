@@ -1,5 +1,6 @@
 # To-Do
 ## High Priority
+* Figure out flash card inverting with levels, re-enable.
 * Each flash card has its own ID
 * Chord Progressions
   * Ensure it works on mobile.
