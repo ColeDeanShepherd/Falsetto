@@ -12,6 +12,7 @@ import { DefaultFlashCardMultiSelect } from "./Utils/DefaultFlashCardMultiSelect
 import { StudyAlgorithm, AnswerDifficulty, isAnswerDifficultyCorrect, LeitnerStudyAlgorithm } from "../StudyAlgorithm";
 import { RenderAnswerSelectFunc, RenderFlashCardMultiSelectFunc, CustomNextFlashCardIdFilter, FlashCardGroup, RenderAnswerSelectArgs, FlashCardLevel } from '../FlashCardGroup';
 import { MAX_MAIN_CARD_WIDTH } from './Style';
+import { QuizStats } from '../QuizStats';
 
 export function createStudyFlashCardGroupComponent(
   flashCardGroup: FlashCardGroup, isEmbedded: boolean, hideMoreInfoUri: boolean,
@@ -41,6 +42,13 @@ export function createStudyFlashCardGroupComponent(
       style={style}
     />
   );
+}
+
+export function getPercentToNextLevel(currentFlashCardLevel: FlashCardLevel, quizStats: QuizStats): number {
+  const percentCorrects = quizStats.questionStats
+    .filter(qs => Utils.arrayContains(currentFlashCardLevel.flashCardIds, qs.questionId))
+    .map(qs => qs.percentCorrect);
+  return Utils.sum(percentCorrects, p => Math.min(p, 0.85) / percentCorrects.length) / 0.849;
 }
 
 export interface IStudyFlashCardsProps {
@@ -163,6 +171,13 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
 
     const enableSettings = (this.props.enableSettings === undefined) || this.props.enableSettings;
 
+    const activeFlashCardLevel = this.getCurrentLevel();
+    const nextFlashCardLevel = this.getNextLevel();
+
+    const percentToNextLevel = (activeFlashCardLevel !== undefined)
+      ? getPercentToNextLevel(activeFlashCardLevel, this.studyAlgorithm.quizStats)
+      : undefined;
+
     return (
       <Card style={cardStyle}>
         <CardContent style={{position: "relative"}}>
@@ -220,6 +235,32 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
                   </i>
                 </span>
               </p>
+            )
+            : null
+          }
+          {(activeFlashCardLevel !== undefined)
+            ? (
+              <p style={{marginBottom: "0", marginTop: "0", lineHeight: "1.5"}}>
+                <span style={{paddingRight: "1em"}}>Level: {activeFlashCardLevel.name}</span>
+              </p>
+            )
+            : null
+          }
+          
+          {(nextFlashCardLevel !== undefined)
+            ? (
+              <p style={{marginBottom: "0", marginTop: "0", lineHeight: "1.5"}}>
+                <span style={{paddingRight: "1em"}}>Next level: {nextFlashCardLevel.name}</span>
+              </p>
+            )
+            : null
+          }
+
+          {((percentToNextLevel !== undefined) && (nextFlashCardLevel !== undefined))
+            ? (
+              <div style={{ width: "100%", height: "0.25em", backgroundColor: "gray" }}>
+                <div style={{ width: `${Math.round(100 * percentToNextLevel)}%`, height: "100%", backgroundColor: "green" }} />
+              </div>
             )
             : null
           }
@@ -285,6 +326,39 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
   private flashCardContainerRef: React.Ref<HTMLDivElement>;
   private flashCardContainerResizeObserver: ResizeObserver | null;
   private studyAlgorithm: StudyAlgorithm = new LeitnerStudyAlgorithm(5);
+
+  private getCurrentLevel(): FlashCardLevel | undefined {
+    if (this.props.flashCardLevels.length === 0) {
+      return undefined;
+    }
+
+    if (this.state.enabledFlashCardIds.length === this.props.flashCards.length) {
+      return new FlashCardLevel(DefaultFlashCardMultiSelect.FINAL_FLASH_CARD_LEVEL_NAME, this.state.enabledFlashCardIds);
+    }
+
+    return this.props.flashCardLevels
+      .find(level => Utils.areArraysEqual(this.state.enabledFlashCardIds, level.flashCardIds));
+  }
+  private getNextLevel(): FlashCardLevel | undefined {
+    const currentLevel = this.getCurrentLevel();
+    if (currentLevel === undefined) {
+      return undefined;
+    }
+    
+    if (currentLevel.flashCardIds.length === this.props.flashCards.length) {
+      return undefined;
+    }
+    
+    const currentLevelIndex = this.props.flashCardLevels
+      .findIndex(level => level === currentLevel);
+    if (currentLevelIndex < 0) {
+      return undefined;
+    } else if (currentLevelIndex === (this.props.flashCardLevels.length - 1)) {
+      return new FlashCardLevel(DefaultFlashCardMultiSelect.FINAL_FLASH_CARD_LEVEL_NAME, this.state.enabledFlashCardIds);
+    }
+
+    return this.props.flashCardLevels[currentLevelIndex + 1];
+  }
 
   private renderFlashCardMultiSelect(flashCards: FlashCard[]): JSX.Element {
     const onEnabledFlashCardIndicesChange = this.onEnabledFlashCardIndicesChange.bind(this);
