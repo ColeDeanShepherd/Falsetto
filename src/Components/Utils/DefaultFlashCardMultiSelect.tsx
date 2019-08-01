@@ -16,17 +16,27 @@ export interface IDefaultFlashCardMultiSelectProps {
   onChange?: (newValue: number[], newConfigData: any) => void;
 }
 export class DefaultFlashCardMultiSelect extends React.Component<IDefaultFlashCardMultiSelectProps, {}> {
-  private static readonly FINAL_FLASH_CARD_LEVEL_NAME = "All";
+  public static readonly FINAL_FLASH_CARD_LEVEL_NAME = "All";
 
   public render(): JSX.Element {
+    const allFlashCardIds = this.props.flashCards.map((fc, i) => i);
     const levelButtons = (this.props.flashCardLevels.length > 0)
       ? (this.props.flashCardLevels
-          .concat([new FlashCardLevel(DefaultFlashCardMultiSelect.FINAL_FLASH_CARD_LEVEL_NAME, [])])
-          .map((level, levelIndex) => (
-            <Button variant="contained" onClick={event => this.activateLevel(levelIndex)}>
-              {level.name}
-            </Button>
-          ))
+          .concat([new FlashCardLevel(DefaultFlashCardMultiSelect.FINAL_FLASH_CARD_LEVEL_NAME, allFlashCardIds)])
+          .map((level, levelIndex) => {
+            const style: any = { textTransform: "none" };
+                    
+            const isPressed = Utils.areArraysEqual(this.props.selectedFlashCardIndices, level.flashCardIds);
+            if (isPressed) {
+              style.backgroundColor = "#959595";
+            }
+
+            return (
+              <Button variant="contained" onClick={event => this.activateLevel(levelIndex)} style={style}>
+                {level.name}
+              </Button>
+            );
+          })
       ) : null;
 
     // TODO: calculate

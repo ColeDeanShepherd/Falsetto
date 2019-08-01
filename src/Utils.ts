@@ -356,6 +356,18 @@ export function arrayContains<T>(array: T[], element: T): boolean {
   return array.indexOf(element) >= 0;
 }
 
+export function arrayCountPassing<T>(array: T[], predicate: (element: T) => boolean) {
+  let countPassing = 0;
+
+  for (let i = 0; i < array.length; i++) {
+    if (predicate(array[i])) {
+      countPassing++;
+    }
+  }
+
+  return countPassing;
+}
+
 export function newArraySplice<T>(array: T[], start: number, deleteCount: number, ...items: T[]): T[] {
   const newArray = array.slice();
   newArray.splice(start, deleteCount, ...items);
