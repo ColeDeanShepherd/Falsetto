@@ -1,11 +1,11 @@
 import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
-import { FlashCardGroup } from "../../../FlashCardGroup";
+import { FlashCardSet } from "../../../FlashCardSet";
 
 const flashCardSetId = "chordProgressionsQuiz";
 
-export function createFlashCardGroup(): FlashCardGroup {
-  const flashCardGroup = new FlashCardGroup(flashCardSetId, "Chord Progressions Quiz", createFlashCards);
+export function createFlashCardGroup(): FlashCardSet {
+  const flashCardGroup = new FlashCardSet(flashCardSetId, "Chord Progressions Quiz", createFlashCards);
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardGroup.containerHeight = "160px";
 

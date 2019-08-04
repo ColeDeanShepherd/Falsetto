@@ -1,11 +1,11 @@
 import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
-import { FlashCardGroup } from "../../../FlashCardGroup";
+import { FlashCardSet } from "../../../FlashCardSet";
 
 const flashCardSetId = "intConsDiss";
 
-export function createFlashCardGroup(): FlashCardGroup {
-  const flashCardGroup = new FlashCardGroup(flashCardSetId, "Intervals Consonance/Dissonance", createFlashCards);
+export function createFlashCardGroup(): FlashCardSet {
+  const flashCardGroup = new FlashCardSet(flashCardSetId, "Intervals Consonance/Dissonance", createFlashCards);
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardGroup.moreInfoUri = "https://sites.google.com/site/nebironamsmusictheory/chords/1-01intervals";
   flashCardGroup.containerHeight = "80px";

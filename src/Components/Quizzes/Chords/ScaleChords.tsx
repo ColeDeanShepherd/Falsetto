@@ -1,12 +1,12 @@
 import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
-import { FlashCardGroup } from "../../../FlashCardGroup";
+import { FlashCardSet } from "../../../FlashCardSet";
 
 const flashCardSetId = "scalesAsChords";
 
-export function createFlashCardGroup(): FlashCardGroup {
-  const flashCardGroup = new FlashCardGroup(flashCardSetId, "Scale Chords", createFlashCards);
+export function createFlashCardGroup(): FlashCardSet {
+  const flashCardGroup = new FlashCardSet(flashCardSetId, "Scale Chords", createFlashCards);
   flashCardGroup.initialSelectedFlashCardIndices = Utils.range(0, 8);
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardGroup.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/jazz-scales/chord-scale-system/";

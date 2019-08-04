@@ -10,7 +10,7 @@ import { PitchLetter } from "../../../PitchLetter";
 import { ScaleType } from "../../../Scale";
 import { PianoKeyboard } from "../../Utils/PianoKeyboard";
 import { FlashCard, FlashCardSide } from "../../../FlashCard";
-import { FlashCardGroup, RenderAnswerSelectArgs } from "../../../FlashCardGroup";
+import { FlashCardSet, RenderAnswerSelectArgs } from "../../../FlashCardSet";
 import { AnswerDifficulty } from "../../../StudyAlgorithm";
 import { PianoKeysAnswerSelect } from "../../Utils/PianoKeysAnswerSelect";
 import { ScaleAnswerSelect } from "../../Utils/ScaleAnswerSelect";
@@ -152,7 +152,7 @@ export class PianoScalesFlashCardMultiSelect extends React.Component<IPianoScale
   }
 }
 
-export function createFlashCardGroup(): FlashCardGroup {
+export function createFlashCardSet(): FlashCardSet {
   const renderFlashCardMultiSelect = (
     flashCards: Array<FlashCard>,
     selectedFlashCardIndices: number[],
@@ -176,15 +176,15 @@ export function createFlashCardGroup(): FlashCardGroup {
       .map(scale => scale.name)
   };
 
-  const group = new FlashCardGroup(flashCardSetId, "Piano Scales", createFlashCards);
-  group.enableInvertFlashCards = true;
-  group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
-  group.initialConfigData = initialConfigData;
-  group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
-  group.renderAnswerSelect = renderAnswerSelect;
-  group.containerHeight = "110px";
+  const flashCardSet = new FlashCardSet(flashCardSetId, "Piano Scales", createFlashCards);
+  flashCardSet.enableInvertFlashCards = true;
+  flashCardSet.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
+  flashCardSet.initialConfigData = initialConfigData;
+  flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
+  flashCardSet.renderAnswerSelect = renderAnswerSelect;
+  flashCardSet.containerHeight = "110px";
 
-  return group;
+  return flashCardSet;
 }
 export function createFlashCards(): FlashCard[] {
   return Utils.flattenArrays<FlashCard>(

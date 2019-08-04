@@ -2,7 +2,7 @@ import * as React from "react";
 
 import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
-import { FlashCardGroup } from "../../../FlashCardGroup";
+import { FlashCardSet } from "../../../FlashCardSet";
 import { Pitch } from "../../../Pitch";
 import { playPitchesSequentially } from "../../../Piano";
 import {
@@ -77,7 +77,7 @@ export function createFlashCards(): Array<FlashCard> {
 
   return flashCards;
 }
-export function createFlashCardGroup(): FlashCardGroup {
+export function createFlashCardSet(): FlashCardSet {
   const renderFlashCardMultiSelect = (
     flashCards: Array<FlashCard>,
     selectedFlashCardIndices: number[],
@@ -100,16 +100,16 @@ export function createFlashCardGroup(): FlashCardGroup {
     enabledDirections: directions.slice()
   };
   
-  const group = new FlashCardGroup(flashCardSetId,
+  const flashCardSet = new FlashCardSet(flashCardSetId,
     "Interval 2nd Note Ear Training",
     createFlashCards
   );
-  group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(false, initialConfigData);
-  group.initialConfigData = initialConfigData;
-  group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
-  group.enableInvertFlashCards = false;
-  group.renderAnswerSelect = FlashCardUtils.renderNoteAnswerSelect;
-  group.containerHeight = "120px";
+  flashCardSet.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(false, initialConfigData);
+  flashCardSet.initialConfigData = initialConfigData;
+  flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
+  flashCardSet.enableInvertFlashCards = false;
+  flashCardSet.renderAnswerSelect = FlashCardUtils.renderNoteAnswerSelect;
+  flashCardSet.containerHeight = "120px";
   
-  return group;
+  return flashCardSet;
 }

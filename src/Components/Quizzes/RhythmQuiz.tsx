@@ -1,11 +1,11 @@
 import * as FlashCardUtils from "./Utils";
 import { FlashCard } from "../../FlashCard";
-import { FlashCardGroup } from "../../FlashCardGroup";
+import { FlashCardSet } from "../../FlashCardSet";
 
 const flashCardSetId = "esmRhythmQuiz";
 
-export function createFlashCardGroup(): FlashCardGroup {
-  const flashCardGroup = new FlashCardGroup(flashCardSetId, "Rhythm Quiz", createFlashCards);
+export function createFlashCardGroup(): FlashCardSet {
+  const flashCardGroup = new FlashCardSet(flashCardSetId, "Rhythm Quiz", createFlashCards);
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardGroup.containerHeight = "160px";
 

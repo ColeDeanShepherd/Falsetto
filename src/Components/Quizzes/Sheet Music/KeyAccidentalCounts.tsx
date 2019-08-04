@@ -2,7 +2,7 @@ import * as React from "react";
 
 import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
-import { FlashCardGroup, RenderAnswerSelectArgs } from "../../../FlashCardGroup";
+import { FlashCardSet, RenderAnswerSelectArgs } from "../../../FlashCardSet";
 import { AnswerDifficulty } from "../../../StudyAlgorithm";
 
 const flashCardSetId = "keyAccCounts";
@@ -29,8 +29,8 @@ export function renderAnswerSelect(
   );
 }
 
-export function createFlashCardGroup(): FlashCardGroup {
-  const flashCardGroup = new FlashCardGroup(flashCardSetId, "Key Accidental Counts", createFlashCards);
+export function createFlashCardGroup(): FlashCardSet {
+  const flashCardGroup = new FlashCardSet(flashCardSetId, "Key Accidental Counts", createFlashCards);
   flashCardGroup.renderAnswerSelect = renderAnswerSelect;
   flashCardGroup.moreInfoUri = "https://www.musicnotes.com/now/tips/circle-of-fifths-guide/";
   flashCardGroup.containerHeight = "80px";

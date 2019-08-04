@@ -66,7 +66,7 @@ import { ScaleViewer } from "./Tools/ScaleViewer";
 import { ChordViewer } from "./Tools/ChordViewer";
 import { IntervalChordScaleFinder } from "./Tools/IntervalChordScaleFinder";
 import { RhythmTapper } from "./Tools/RhythmTapper";
-import { FlashCardGroup } from "../FlashCardGroup";
+import { FlashCardSet } from "../FlashCardSet";
 import { createStudyFlashCardGroupComponent } from "./StudyFlashCards";
 import { AboutPage } from "./AboutPage";
 import { SupportUsPage } from "./SupportUs";
@@ -191,7 +191,7 @@ class App extends React.Component<IAppProps, IAppState> {
       }
     ];
 
-    this.flashCardSets = Utils.flattenArrays<FlashCardGroup>(this.groupedFlashCardSets.map(g => g.flashCardSets));
+    this.flashCardSets = Utils.flattenArrays<FlashCardSet>(this.groupedFlashCardSets.map(g => g.flashCardSets));
     
     if (isDevelopment()) {
       this.checkFlashCardSetIds();
@@ -315,7 +315,7 @@ class App extends React.Component<IAppProps, IAppState> {
   public renderNavLink(route: string, text: string): JSX.Element {
     return <NavLink exact to={route} onClick={event => this.onNavLinkClick()} className="menu-link">{text}</NavLink>;
   }
-  public renderFlashCardGroupLink(flashCardGroup: FlashCardGroup): JSX.Element {
+  public renderFlashCardGroupLink(flashCardGroup: FlashCardSet): JSX.Element {
     return <NavLink exact to={flashCardGroup.route} onClick={event => this.onNavLinkClick()} className="menu-link">{flashCardGroup.name}</NavLink>;
   }
   public toggleMenu() {
@@ -334,8 +334,8 @@ class App extends React.Component<IAppProps, IAppState> {
 
   private history: History<any>;
   private unregisterHistoryListener: UnregisterCallback;
-  private groupedFlashCardSets: { title: string; flashCardSets: FlashCardGroup[]; }[];
-  private flashCardSets: FlashCardGroup[];
+  private groupedFlashCardSets: { title: string; flashCardSets: FlashCardSet[]; }[];
+  private flashCardSets: FlashCardSet[];
   private mainContainerRef: React.Ref<HTMLDivElement>;
 
   private get isEmbedded(): boolean {
@@ -347,7 +347,7 @@ class App extends React.Component<IAppProps, IAppState> {
       Analytics.trackPageView();
     }
   }
-  private createStudyFlashCardGroupComponent(currentFlashCardGroup: FlashCardGroup): () => JSX.Element {
+  private createStudyFlashCardGroupComponent(currentFlashCardGroup: FlashCardSet): () => JSX.Element {
     return () => (
       <DocumentTitle title={currentFlashCardGroup.name + " - Falsetto"}>
         {createStudyFlashCardGroupComponent(currentFlashCardGroup, this.isEmbedded, false)}

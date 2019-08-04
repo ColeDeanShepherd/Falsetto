@@ -5,7 +5,7 @@ import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
 import { VexFlowComponent } from "../../Utils/VexFlowComponent";
-import { FlashCardGroup, RenderAnswerSelectArgs } from "../../../FlashCardGroup";
+import { FlashCardSet, RenderAnswerSelectArgs } from "../../../FlashCardSet";
 
 const flashCardSetId = "noteDurationSymbols";
 
@@ -18,8 +18,8 @@ export function renderAnswerSelect(
   return FlashCardUtils.renderMultiRowDistinctFlashCardSideAnswerSelect(state, [5, 5]);
 }
 
-export function createFlashCardGroup(): FlashCardGroup {
-  const flashCardGroup = new FlashCardGroup(flashCardSetId, "Sheet Music Note Durations", createFlashCards);
+export function createFlashCardGroup(): FlashCardSet {
+  const flashCardGroup = new FlashCardSet(flashCardSetId, "Sheet Music Note Durations", createFlashCards);
   flashCardGroup.initialSelectedFlashCardIndices = Utils.range(0, 4).concat(Utils.range(8, 12));
   flashCardGroup.renderAnswerSelect = renderAnswerSelect;
   flashCardGroup.containerHeight = "80px";

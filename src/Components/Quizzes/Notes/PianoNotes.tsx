@@ -6,7 +6,7 @@ import { Rect2D } from '../../../Rect2D';
 import * as FlashCardUtils from "../Utils";
 import { PianoKeyboard } from "../../Utils/PianoKeyboard";
 import { FlashCard, FlashCardSide } from "../../../FlashCard";
-import { FlashCardGroup, RenderAnswerSelectArgs, FlashCardLevel } from "../../../FlashCardGroup";
+import { FlashCardSet, RenderAnswerSelectArgs, FlashCardLevel } from "../../../FlashCardSet";
 import { Pitch } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 
@@ -14,12 +14,12 @@ const flashCardSetId = "pianoNotesOneOctave";
 
 const notes = ["C", "C#/D♭", "D", "D#/E♭", "E", "F", "F#/G♭", "G", "G#/A♭", "A", "A#/B♭", "B"];
 
-export function createFlashCardGroup(): FlashCardGroup {
-  const group = new FlashCardGroup(flashCardSetId, "Piano Notes", createFlashCards);
-  group.containerHeight = "120px";
-  group.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/the-basics/overview/";
-  group.renderAnswerSelect = renderAnswerSelect;
-  group.createFlashCardLevels = (group: FlashCardGroup, flashCards: Array<FlashCard>) => (
+export function createFlashCardSet(): FlashCardSet {
+  const flashCardSet = new FlashCardSet(flashCardSetId, "Piano Notes", createFlashCards);
+  flashCardSet.containerHeight = "120px";
+  flashCardSet.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/the-basics/overview/";
+  flashCardSet.renderAnswerSelect = renderAnswerSelect;
+  flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (
     [
       new FlashCardLevel(
         "Natural Notes",
@@ -31,7 +31,7 @@ export function createFlashCardGroup(): FlashCardGroup {
     ]
   );
 
-  return group;
+  return flashCardSet;
 }
 export function createFlashCards(): FlashCard[] {
   return notes

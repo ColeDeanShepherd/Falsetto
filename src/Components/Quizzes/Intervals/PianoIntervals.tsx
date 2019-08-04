@@ -7,7 +7,7 @@ import { Size2D } from "../../../Size2D";
 import { Rect2D } from '../../../Rect2D';
 import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
-import { FlashCardGroup, RenderAnswerSelectArgs } from "../../../FlashCardGroup";
+import { FlashCardSet, RenderAnswerSelectArgs } from "../../../FlashCardSet";
 import { Pitch } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 import { PianoKeyboard } from "../../Utils/PianoKeyboard";
@@ -204,7 +204,7 @@ export function createFlashCards(): Array<FlashCard> {
 
   return flashCards;
 }
-export function createFlashCardGroup(): FlashCardGroup {
+export function createFlashCardSet(): FlashCardSet {
 
   const renderFlashCardMultiSelect = (
     flashCards: Array<FlashCard>,
@@ -227,16 +227,16 @@ export function createFlashCardGroup(): FlashCardGroup {
     allowAccidentals: true
   };
   
-  const group = new FlashCardGroup(flashCardSetId,
+  const flashCardSet = new FlashCardSet(flashCardSetId,
     "Piano Intervals",
     createFlashCards
   );
-  group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
-  group.initialConfigData = initialConfigData;
-  group.enableInvertFlashCards = false;
-  group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
-  group.renderAnswerSelect = renderAnswerSelect;
-  group.containerHeight = "100px";
+  flashCardSet.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
+  flashCardSet.initialConfigData = initialConfigData;
+  flashCardSet.enableInvertFlashCards = false;
+  flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
+  flashCardSet.renderAnswerSelect = renderAnswerSelect;
+  flashCardSet.containerHeight = "100px";
 
-  return group;
+  return flashCardSet;
 }

@@ -59,7 +59,7 @@ import { ScaleViewer } from "./Tools/ScaleViewer";
 import { ChordViewer } from "./Tools/ChordViewer";
 import { IntervalChordScaleFinder } from "./Tools/IntervalChordScaleFinder";
 import { RhythmTapper } from "./Tools/RhythmTapper";
-import { FlashCardGroup } from "../FlashCardGroup";
+import { FlashCardSet } from "../FlashCardSet";
 import { createStudyFlashCardGroupComponent } from "./StudyFlashCards";
 import { AboutPage } from "./AboutPage";
 import { SupportUsPage } from "./SupportUs";

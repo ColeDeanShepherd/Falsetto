@@ -4,7 +4,7 @@ import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody } from "@mat
 import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
-import { FlashCardGroup, RenderAnswerSelectArgs } from "../../../FlashCardGroup";
+import { FlashCardSet, RenderAnswerSelectArgs } from "../../../FlashCardSet";
 import { Pitch, pitchRange } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 import { SheetMusicChord } from "./SheetMusicChords";
@@ -180,7 +180,7 @@ export function createFlashCards(): Array<FlashCard> {
 
   return flashCards;
 }
-export function createFlashCardGroup(): FlashCardGroup {
+export function createFlashCardSet(): FlashCardSet {
   const renderFlashCardMultiSelect = (
     flashCards: Array<FlashCard>,
     selectedFlashCardIndices: number[],
@@ -202,15 +202,15 @@ export function createFlashCardGroup(): FlashCardGroup {
     allowAccidentals: true
   };
   
-  const group = new FlashCardGroup(flashCardSetId,
+  const flashCardSet = new FlashCardSet(flashCardSetId,
     "Sheet Music Intervals",
     createFlashCards
   );
-  group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
-  group.initialConfigData = initialConfigData;
-  group.enableInvertFlashCards = false;
-  group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
-  group.renderAnswerSelect = renderAnswerSelect;
+  flashCardSet.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
+  flashCardSet.initialConfigData = initialConfigData;
+  flashCardSet.enableInvertFlashCards = false;
+  flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
+  flashCardSet.renderAnswerSelect = renderAnswerSelect;
 
-  return group;
+  return flashCardSet;
 }

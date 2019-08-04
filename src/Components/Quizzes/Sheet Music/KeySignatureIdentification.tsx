@@ -3,7 +3,7 @@ import * as Vex from "vexflow";
 
 import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
-import { FlashCardGroup } from "../../../FlashCardGroup";
+import { FlashCardSet } from "../../../FlashCardSet";
 import { VexFlowComponent } from "../../Utils/VexFlowComponent";
 import { Pitch } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
@@ -95,8 +95,8 @@ export function createFlashCards(): Array<FlashCard> {
       answers[i]
     ));
 }
-export function createFlashCardGroup(): FlashCardGroup {
-  const flashCardGroup = new FlashCardGroup(flashCardSetId, "Key Signature Identification", createFlashCards);
+export function createFlashCardGroup(): FlashCardSet {
+  const flashCardGroup = new FlashCardSet(flashCardSetId, "Key Signature Identification", createFlashCards);
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardGroup.moreInfoUri = "https://method-behind-the-music.com/theory/scalesandkeys/#sigs";
   flashCardGroup.containerHeight = "160px";

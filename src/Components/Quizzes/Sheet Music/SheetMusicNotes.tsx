@@ -8,7 +8,7 @@ import { VexFlowComponent } from "../../Utils/VexFlowComponent";
 import { PitchLetter } from "../../../PitchLetter";
 import { FlashCard } from "../../../FlashCard";
 import { Pitch } from "../../../Pitch";
-import { FlashCardGroup, RenderAnswerSelectArgs } from "../../../FlashCardGroup";
+import { FlashCardSet, RenderAnswerSelectArgs } from "../../../FlashCardSet";
 import { AnswerDifficulty } from "../../../StudyAlgorithm";
 
 const flashCardSetId = "sheetMusicNotes";
@@ -24,7 +24,7 @@ const clefs = [
   }
 ];
 
-export function createFlashCardGroup(): FlashCardGroup {
+export function createFlashCardGroup(): FlashCardSet {
   const initialConfigData: IConfigData = {
     isTrebleClefEnabled: true,
     isBassClefEnabled: true,
@@ -44,7 +44,7 @@ export function createFlashCardGroup(): FlashCardGroup {
     />;
   }
 
-  const flashCardGroup = new FlashCardGroup(flashCardSetId, "Sheet Music Notes", createFlashCards);
+  const flashCardGroup = new FlashCardSet(flashCardSetId, "Sheet Music Notes", createFlashCards);
   flashCardGroup.enableInvertFlashCards = false;
   flashCardGroup.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
   flashCardGroup.initialConfigData = initialConfigData;

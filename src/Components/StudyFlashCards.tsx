@@ -10,12 +10,12 @@ import { FlashCard, invertFlashCards } from "../FlashCard";
 import { renderFlashCardSide } from "./FlashCard";
 import { DefaultFlashCardMultiSelect } from "./Utils/DefaultFlashCardMultiSelect";
 import { StudyAlgorithm, AnswerDifficulty, isAnswerDifficultyCorrect, LeitnerStudyAlgorithm } from "../StudyAlgorithm";
-import { RenderAnswerSelectFunc, RenderFlashCardMultiSelectFunc, CustomNextFlashCardIdFilter, FlashCardGroup, RenderAnswerSelectArgs, FlashCardLevel } from '../FlashCardGroup';
+import { RenderAnswerSelectFunc, RenderFlashCardMultiSelectFunc, CustomNextFlashCardIdFilter, FlashCardSet, RenderAnswerSelectArgs, FlashCardLevel } from '../FlashCardSet';
 import { MAX_MAIN_CARD_WIDTH } from './Style';
 import { QuizStats } from '../QuizStats';
 
 export function createStudyFlashCardGroupComponent(
-  flashCardGroup: FlashCardGroup, isEmbedded: boolean, hideMoreInfoUri: boolean,
+  flashCardGroup: FlashCardSet, isEmbedded: boolean, hideMoreInfoUri: boolean,
   title?: string, style?: any, enableSettings?: boolean
 ): JSX.Element {
   const flashCards = flashCardGroup.createFlashCards();

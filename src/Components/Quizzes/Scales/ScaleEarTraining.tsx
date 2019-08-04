@@ -4,7 +4,7 @@ import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid, Butto
 import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
-import { FlashCardGroup } from "../../../FlashCardGroup";
+import { FlashCardSet } from "../../../FlashCardSet";
 import { Pitch, pitchRange } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 import { playPitchesSequentially } from "../../../Piano";
@@ -177,7 +177,7 @@ export function createFlashCards(): Array<FlashCard> {
 
   return flashCards;
 }
-export function createFlashCardGroup(): FlashCardGroup {
+export function createFlashCardSet(): FlashCardSet {
 
   const renderFlashCardMultiSelect = (
     flashCards: Array<FlashCard>,
@@ -201,16 +201,16 @@ export function createFlashCardGroup(): FlashCardGroup {
       .map(scale => scale.name)
   };
   
-  const group = new FlashCardGroup(flashCardSetId,
+  const flashCardSet = new FlashCardSet(flashCardSetId,
     "Scale Ear Training",
     createFlashCards
   );
-  group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
-  group.initialConfigData = initialConfigData;
-  group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
-  group.enableInvertFlashCards = false;
-  group.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
-  group.containerHeight = "110px";
+  flashCardSet.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
+  flashCardSet.initialConfigData = initialConfigData;
+  flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
+  flashCardSet.enableInvertFlashCards = false;
+  flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+  flashCardSet.containerHeight = "110px";
 
-  return group;
+  return flashCardSet;
 }

@@ -8,7 +8,7 @@ import { Rect2D } from "../../../Rect2D";
 import { ScaleType, Scale } from "../../../Scale";
 import { PianoKeyboard } from "../../Utils/PianoKeyboard";
 import { FlashCard, FlashCardSide } from "../../../FlashCard";
-import { FlashCardGroup, RenderAnswerSelectArgs } from "../../../FlashCardGroup";
+import { FlashCardSet, RenderAnswerSelectArgs } from "../../../FlashCardSet";
 import { AnswerDifficulty } from "../../../StudyAlgorithm";
 import { Pitch } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
@@ -311,7 +311,7 @@ export class GuitarNotesAnswerSelect extends React.Component<IGuitarNotesAnswerS
   }
 }
 
-export function createFlashCardGroup(title?: string, initialScaleTypes?: Array<ScaleType>): FlashCardGroup {
+export function createFlashCardSet(title?: string, initialScaleTypes?: Array<ScaleType>): FlashCardSet {
   title = (title !== undefined) ? title : "Guitar Scales";
 
   const renderFlashCardMultiSelect = (
@@ -340,15 +340,15 @@ export function createFlashCardGroup(title?: string, initialScaleTypes?: Array<S
         .map(scaleType => Utils.unwrapValueOrUndefined(ScaleType.All.find(st => st.equals(scaleType))).name)
   };
 
-  const group = new FlashCardGroup(flashCardSetId, title, createFlashCards);
-  group.enableInvertFlashCards = false;
-  group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
-  group.initialConfigData = initialConfigData;
-  group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
-  group.renderAnswerSelect = renderAnswerSelect;
-  group.containerHeight = "110px";
+  const flashCardSet = new FlashCardSet(flashCardSetId, title, createFlashCards);
+  flashCardSet.enableInvertFlashCards = false;
+  flashCardSet.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
+  flashCardSet.initialConfigData = initialConfigData;
+  flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
+  flashCardSet.renderAnswerSelect = renderAnswerSelect;
+  flashCardSet.containerHeight = "110px";
 
-  return group;
+  return flashCardSet;
 }
 export function createFlashCards(): Array<FlashCard> {
   const flashCards = new Array<FlashCard>();

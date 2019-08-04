@@ -1,7 +1,7 @@
 import * as Utils from "./Utils";
 import { QuizStats } from "./QuizStats";
 import { QuestionStats } from "./QuestionStats";
-import { CustomNextFlashCardIdFilter as CustomNextFlashCardIdFilterFn } from './FlashCardGroup';
+import { CustomNextFlashCardIdFilter as CustomNextFlashCardIdFilterFn } from './FlashCardSet';
 import { FlashCard } from './FlashCard';
 
 export enum AnswerDifficulty {
