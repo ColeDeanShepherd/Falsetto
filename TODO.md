@@ -1,6 +1,7 @@
 # To-Do
 ## High Priority
 * Figure out flash card inverting with levels, re-enable.
+* Add harmonic major to scale degree modes
 * Each flash card has its own ID
 * Chord Progressions
   * Ensure it works on mobile.

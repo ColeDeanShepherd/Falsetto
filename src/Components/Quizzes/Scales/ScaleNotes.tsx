@@ -6,14 +6,14 @@ import { Scale, ScaleType } from '../../../Scale';
 
 const flashCardSetId = "scaleFormulasMajor";
 
-export function createFlashCardGroup(): FlashCardSet {
-  const flashCardGroup = new FlashCardSet(flashCardSetId, "Scale Notes", createFlashCards);
-  flashCardGroup.initialSelectedFlashCardIndices = Utils.range(0, 8);
-  flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
-  flashCardGroup.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/the-basics/modes";
-  flashCardGroup.containerHeight = "80px";
+export function createFlashCardSet(): FlashCardSet {
+  const flashCardSet = new FlashCardSet(flashCardSetId, "Scale Notes", createFlashCards);
+  flashCardSet.initialSelectedFlashCardIndices = Utils.range(0, 8);
+  flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+  flashCardSet.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/the-basics/modes";
+  flashCardSet.containerHeight = "80px";
 
-  return flashCardGroup;
+  return flashCardSet;
 }
 
 export function createFlashCards(): FlashCard[] {

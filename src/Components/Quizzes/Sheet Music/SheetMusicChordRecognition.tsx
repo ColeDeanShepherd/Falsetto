@@ -194,7 +194,7 @@ export function createFlashCards(): Array<FlashCard> {
       const pitches = new Chord(chordType, rootPitch).getPitches();
 
       flashCards.push(FlashCard.fromRenderFns(
-        JSON.stringify({ set: flashCardSetId, pitches: pitches.map(p => p.toString(true)) }),
+        JSON.stringify({ set: flashCardSetId, chord: `${rootPitch.toString(true)} ${chordType.name}` }),
         (width, height) => (
           <div>
             <SheetMusicChord

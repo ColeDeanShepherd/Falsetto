@@ -14,29 +14,29 @@ import { RenderAnswerSelectFunc, RenderFlashCardMultiSelectFunc, CustomNextFlash
 import { MAX_MAIN_CARD_WIDTH } from './Style';
 import { QuizStats } from '../QuizStats';
 
-export function createStudyFlashCardGroupComponent(
-  flashCardGroup: FlashCardSet, isEmbedded: boolean, hideMoreInfoUri: boolean,
+export function createStudyFlashCardSetComponent(
+  flashCardSet: FlashCardSet, isEmbedded: boolean, hideMoreInfoUri: boolean,
   title?: string, style?: any, enableSettings?: boolean
 ): JSX.Element {
-  const flashCards = flashCardGroup.createFlashCards();
-  const flashCardLevels = (flashCardGroup.createFlashCardLevels !== undefined)
-    ? flashCardGroup.createFlashCardLevels(flashCardGroup, flashCards)
+  const flashCards = flashCardSet.createFlashCards();
+  const flashCardLevels = (flashCardSet.createFlashCardLevels !== undefined)
+    ? flashCardSet.createFlashCardLevels(flashCardSet, flashCards)
     : [];
 
   return (
     <StudyFlashCards
-      key={flashCardGroup.route}
-      title={title ? title : flashCardGroup.name}
+      key={flashCardSet.route}
+      title={title ? title : flashCardSet.name}
       flashCards={flashCards}
-      containerHeight={flashCardGroup.containerHeight}
-      initialSelectedFlashCardIndices={flashCardGroup.initialSelectedFlashCardIndices}
-      initialConfigData={flashCardGroup.initialConfigData}
-      renderFlashCardMultiSelect={flashCardGroup.renderFlashCardMultiSelect}
-      renderAnswerSelect={flashCardGroup.renderAnswerSelect}
-      moreInfoUri={!hideMoreInfoUri ? flashCardGroup.moreInfoUri : ""}
+      containerHeight={flashCardSet.containerHeight}
+      initialSelectedFlashCardIndices={flashCardSet.initialSelectedFlashCardIndices}
+      initialConfigData={flashCardSet.initialConfigData}
+      renderFlashCardMultiSelect={flashCardSet.renderFlashCardMultiSelect}
+      renderAnswerSelect={flashCardSet.renderAnswerSelect}
+      moreInfoUri={!hideMoreInfoUri ? flashCardSet.moreInfoUri : ""}
       enableSettings={enableSettings}
-      enableInvertFlashCards={flashCardGroup.enableInvertFlashCards}
-      customNextFlashCardIdFilter={flashCardGroup.customNextFlashCardIdFilter}
+      enableInvertFlashCards={flashCardSet.enableInvertFlashCards}
+      customNextFlashCardIdFilter={flashCardSet.customNextFlashCardIdFilter}
       flashCardLevels={flashCardLevels}
       isEmbedded={isEmbedded}
       style={style}

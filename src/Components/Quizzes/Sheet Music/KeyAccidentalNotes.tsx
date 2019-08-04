@@ -29,13 +29,13 @@ export function renderAnswerSelect(
   );
 }
 
-export function createFlashCardGroup(): FlashCardSet {
-  const flashCardGroup = new FlashCardSet(flashCardSetId, "Key Accidental Notes", createFlashCards);
-  flashCardGroup.renderAnswerSelect = renderAnswerSelect;
-  flashCardGroup.moreInfoUri = "http://myguitarpal.com/the-order-of-sharps-and-flats/";
-  flashCardGroup.containerHeight = "80px";
+export function createFlashCardSet(): FlashCardSet {
+  const flashCardSet = new FlashCardSet(flashCardSetId, "Key Accidental Notes", createFlashCards);
+  flashCardSet.renderAnswerSelect = renderAnswerSelect;
+  flashCardSet.moreInfoUri = "http://myguitarpal.com/the-order-of-sharps-and-flats/";
+  flashCardSet.containerHeight = "80px";
 
-  return flashCardGroup;
+  return flashCardSet;
 }
 
 export function createFlashCards(): FlashCard[] {

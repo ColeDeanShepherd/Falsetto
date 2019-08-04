@@ -18,14 +18,14 @@ export function renderAnswerSelect(
   return FlashCardUtils.renderMultiRowDistinctFlashCardSideAnswerSelect(state, [5, 5]);
 }
 
-export function createFlashCardGroup(): FlashCardSet {
-  const flashCardGroup = new FlashCardSet(flashCardSetId, "Sheet Music Note Durations", createFlashCards);
-  flashCardGroup.initialSelectedFlashCardIndices = Utils.range(0, 4).concat(Utils.range(8, 12));
-  flashCardGroup.renderAnswerSelect = renderAnswerSelect;
-  flashCardGroup.containerHeight = "80px";
-  flashCardGroup.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/the-basics/overview/";
+export function createFlashCardSet(): FlashCardSet {
+  const flashCardSet = new FlashCardSet(flashCardSetId, "Sheet Music Note Durations", createFlashCards);
+  flashCardSet.initialSelectedFlashCardIndices = Utils.range(0, 4).concat(Utils.range(8, 12));
+  flashCardSet.renderAnswerSelect = renderAnswerSelect;
+  flashCardSet.containerHeight = "80px";
+  flashCardSet.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/the-basics/overview/";
 
-  return flashCardGroup;
+  return flashCardSet;
 }
 export function createFlashCards(): FlashCard[] {
   return [

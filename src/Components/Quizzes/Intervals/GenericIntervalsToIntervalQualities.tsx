@@ -4,38 +4,38 @@ import { FlashCardSet } from "../../../FlashCardSet";
 
 const flashCardSetId = "genericIntervalQualities";
 
-export function createFlashCardGroup(): FlashCardSet {
-  const flashCardGroup = new FlashCardSet(flashCardSetId, "Generic Intervals To Interval Qualities", createFlashCards);
-  flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+export function createFlashCardSet(): FlashCardSet {
+  const flashCardSet = new FlashCardSet(flashCardSetId, "Generic Intervals To Interval Qualities", createFlashCards);
+  flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
 
-  return flashCardGroup;
+  return flashCardSet;
 }
 
 export function createFlashCards(): FlashCard[] {
   return [
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, int: 1 }),
+      JSON.stringify({ set: flashCardSetId, interval: 1 }),
       "1st", "perfect"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, int: 2 }),
+      JSON.stringify({ set: flashCardSetId, interval: 2 }),
       "2nd", "imperfect"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, int: 3 }),
+      JSON.stringify({ set: flashCardSetId, interval: 3 }),
       "3rd", "imperfect"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, int: 4 }),
+      JSON.stringify({ set: flashCardSetId, interval: 4 }),
       "4th", "perfect"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, int: 5 }),
+      JSON.stringify({ set: flashCardSetId, interval: 5 }),
       "5th", "perfect"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, int: 6 }),
+      JSON.stringify({ set: flashCardSetId, interval: 6 }),
       "6th", "imperfect"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, int: 7 }),
+      JSON.stringify({ set: flashCardSetId, interval: 7 }),
       "7th", "imperfect"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, int: 8 }),
+      JSON.stringify({ set: flashCardSetId, interval: 8 }),
       "8th", "perfect"),
   ];
 }

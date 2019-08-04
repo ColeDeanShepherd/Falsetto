@@ -4,13 +4,13 @@ import { FlashCardSet } from "../../../FlashCardSet";
 
 const flashCardSetId = "diatonicChordFamilies";
 
-export function createFlashCardGroup(): FlashCardSet {
-  const flashCardGroup = new FlashCardSet(flashCardSetId, "Chord Harmonic Functions", createFlashCards);
-  flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
-  flashCardGroup.moreInfoUri = "https://davidkulma.com/musictheory/harmonicfunction";
-  flashCardGroup.containerHeight = "80px";
+export function createFlashCardSet(): FlashCardSet {
+  const flashCardSet = new FlashCardSet(flashCardSetId, "Chord Harmonic Functions", createFlashCards);
+  flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+  flashCardSet.moreInfoUri = "https://davidkulma.com/musictheory/harmonicfunction";
+  flashCardSet.containerHeight = "80px";
 
-  return flashCardGroup;
+  return flashCardSet;
 }
 export function createFlashCards(): FlashCard[] {
   return [

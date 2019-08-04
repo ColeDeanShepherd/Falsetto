@@ -5,12 +5,12 @@ import { FlashCardSet } from "../../../FlashCardSet";
 
 const flashCardSetId = "scaleCharacteristics";
 
-export function createFlashCardGroup(): FlashCardSet {
-  const flashCardGroup = new FlashCardSet(flashCardSetId, "Scale Characteristics", createFlashCards);
-  flashCardGroup.initialSelectedFlashCardIndices = Utils.range(0, 8);
-  flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+export function createFlashCardSet(): FlashCardSet {
+  const flashCardSet = new FlashCardSet(flashCardSetId, "Scale Characteristics", createFlashCards);
+  flashCardSet.initialSelectedFlashCardIndices = Utils.range(0, 8);
+  flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
 
-  return flashCardGroup;
+  return flashCardSet;
 }
 
 export function createFlashCards(): FlashCard[] {

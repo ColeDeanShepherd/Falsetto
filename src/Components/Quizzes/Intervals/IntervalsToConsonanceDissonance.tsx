@@ -2,15 +2,15 @@ import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
 import { FlashCardSet } from "../../../FlashCardSet";
 
-const flashCardSetId = "intConsDiss";
+const flashCardSetId = "intervalConsonances";
 
-export function createFlashCardGroup(): FlashCardSet {
-  const flashCardGroup = new FlashCardSet(flashCardSetId, "Intervals Consonance/Dissonance", createFlashCards);
-  flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
-  flashCardGroup.moreInfoUri = "https://sites.google.com/site/nebironamsmusictheory/chords/1-01intervals";
-  flashCardGroup.containerHeight = "80px";
+export function createFlashCardSet(): FlashCardSet {
+  const flashCardSet = new FlashCardSet(flashCardSetId, "Intervals Consonance/Dissonance", createFlashCards);
+  flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+  flashCardSet.moreInfoUri = "https://sites.google.com/site/nebironamsmusictheory/chords/1-01intervals";
+  flashCardSet.containerHeight = "80px";
 
-  return flashCardGroup;
+  return flashCardSet;
 }
 
 export function createFlashCards(): FlashCard[] {

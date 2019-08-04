@@ -4,13 +4,13 @@ import { FlashCardSet } from "../../../FlashCardSet";
 
 const flashCardSetId = "intervalQualitySymbols";
 
-export function createFlashCardGroup(): FlashCardSet {
-  const flashCardGroup = new FlashCardSet(flashCardSetId, "Interval Quality Symbols", createFlashCards);
-  flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
-  flashCardGroup.moreInfoUri = "https://method-behind-the-music.com/theory/intervals/";
-  flashCardGroup.containerHeight = "80px";
+export function createFlashCardSet(): FlashCardSet {
+  const flashCardSet = new FlashCardSet(flashCardSetId, "Interval Quality Symbols", createFlashCards);
+  flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+  flashCardSet.moreInfoUri = "https://method-behind-the-music.com/theory/intervals/";
+  flashCardSet.containerHeight = "80px";
 
-  return flashCardGroup;
+  return flashCardSet;
 }
 export function createFlashCards(): FlashCard[] {
   return [

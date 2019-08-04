@@ -405,7 +405,7 @@ export function createFlashCards(): FlashCard[] {
         const pitches = chordType.getPitches(rootPitch);
         const deserializedId = {
           set: flashCardSetId,
-          midiNumberNoOctaves: pitches.map(p => p.midiNumberNoOctave)
+          chord: `${rootPitch.toString(false)} ${chordType.name}`
         };
         const id = JSON.stringify(deserializedId);
         return new FlashCard(

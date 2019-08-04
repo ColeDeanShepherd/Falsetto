@@ -74,7 +74,7 @@ export function createFlashCards(): Array<FlashCard> {
       const deserializedId = {
         set: flashCardSetId,
         isHarmonic: isHarmonicInterval,
-        midiNumbers: [pitch1.toString(true), pitch2.toString(true)]
+        pitches: [pitch1.toString(true), pitch2.toString(true)]
       };
       const id = JSON.stringify(deserializedId);
 

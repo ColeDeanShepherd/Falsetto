@@ -4,12 +4,12 @@ import { FlashCardSet } from "../../../FlashCardSet";
 
 const flashCardSetId = "esmNotesQuiz";
 
-export function createFlashCardGroup(): FlashCardSet {
-  const flashCardGroup = new FlashCardSet(flashCardSetId, "Notes Quiz", createFlashCards);
-  flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
-  flashCardGroup.containerHeight = "160px";
+export function createFlashCardSet(): FlashCardSet {
+  const flashCardSet = new FlashCardSet(flashCardSetId, "Notes Quiz", createFlashCards);
+  flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+  flashCardSet.containerHeight = "160px";
 
-  return flashCardGroup;
+  return flashCardSet;
 }
 export function createFlashCards(): FlashCard[] {
   return [

@@ -5,7 +5,7 @@ import { FlashCard } from "../../../FlashCard";
 import { FlashCardSet, RenderAnswerSelectArgs } from "../../../FlashCardSet";
 import { AnswerDifficulty } from "../../../StudyAlgorithm";
 
-const flashCardSetId = "keyAccCounts";
+const flashCardSetId = "keyAccidentalCounts";
 
 export function renderAnswerSelect(
   state: RenderAnswerSelectArgs
@@ -29,13 +29,13 @@ export function renderAnswerSelect(
   );
 }
 
-export function createFlashCardGroup(): FlashCardSet {
-  const flashCardGroup = new FlashCardSet(flashCardSetId, "Key Accidental Counts", createFlashCards);
-  flashCardGroup.renderAnswerSelect = renderAnswerSelect;
-  flashCardGroup.moreInfoUri = "https://www.musicnotes.com/now/tips/circle-of-fifths-guide/";
-  flashCardGroup.containerHeight = "80px";
+export function createFlashCardSet(): FlashCardSet {
+  const flashCardSet = new FlashCardSet(flashCardSetId, "Key Accidental Counts", createFlashCards);
+  flashCardSet.renderAnswerSelect = renderAnswerSelect;
+  flashCardSet.moreInfoUri = "https://www.musicnotes.com/now/tips/circle-of-fifths-guide/";
+  flashCardSet.containerHeight = "80px";
 
-  return flashCardGroup;
+  return flashCardSet;
 }
 
 export function createFlashCards(): FlashCard[] {

@@ -10,7 +10,7 @@ import { FlashCardSet, RenderAnswerSelectArgs, FlashCardLevel } from "../../../F
 import { Pitch } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 
-const flashCardSetId = "pianoNotesOneOctave";
+const flashCardSetId = "pianoNotes1Octave";
 
 const notes = ["C", "C#/D♭", "D", "D#/E♭", "E", "F", "F#/G♭", "G", "G#/A♭", "A", "A#/B♭", "B"];
 
@@ -39,7 +39,7 @@ export function createFlashCards(): FlashCard[] {
       const pitch = Pitch.createFromMidiNumber((new Pitch(PitchLetter.C, 0, 4)).midiNumber + i);
       const deserializedId = {
         set: flashCardSetId,
-        midiNumberNoOctave: pitch.midiNumberNoOctave
+        note: pitch.toOneAccidentalAmbiguousString(false, false)
       };
       const id = JSON.stringify(deserializedId);
 

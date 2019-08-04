@@ -196,7 +196,7 @@ export function createFlashCards(): FlashCard[] {
         
         const deserializedId = {
           set: flashCardSetId,
-          midiNumberNoOctaves: pitches.map(p => p.midiNumberNoOctave)
+          scale: `${rootPitch.toString(false)} ${scaleType.name}`
         };
         const id = JSON.stringify(deserializedId);
 

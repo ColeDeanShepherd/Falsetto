@@ -24,7 +24,7 @@ const clefs = [
   }
 ];
 
-export function createFlashCardGroup(): FlashCardSet {
+export function createFlashCardSet(): FlashCardSet {
   const initialConfigData: IConfigData = {
     isTrebleClefEnabled: true,
     isBassClefEnabled: true,
@@ -44,16 +44,16 @@ export function createFlashCardGroup(): FlashCardSet {
     />;
   }
 
-  const flashCardGroup = new FlashCardSet(flashCardSetId, "Sheet Music Notes", createFlashCards);
-  flashCardGroup.enableInvertFlashCards = false;
-  flashCardGroup.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
-  flashCardGroup.initialConfigData = initialConfigData;
-  flashCardGroup.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
-  flashCardGroup.renderAnswerSelect = renderNoteAnswerSelect;
-  flashCardGroup.containerHeight = "200px";
-  flashCardGroup.moreInfoUri = "https://www.joytunes.com/blog/music-fun/best-way-memorize-piano-notes/";
+  const flashCardSet = new FlashCardSet(flashCardSetId, "Sheet Music Notes", createFlashCards);
+  flashCardSet.enableInvertFlashCards = false;
+  flashCardSet.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
+  flashCardSet.initialConfigData = initialConfigData;
+  flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
+  flashCardSet.renderAnswerSelect = renderNoteAnswerSelect;
+  flashCardSet.containerHeight = "200px";
+  flashCardSet.moreInfoUri = "https://www.joytunes.com/blog/music-fun/best-way-memorize-piano-notes/";
 
-  return flashCardGroup;
+  return flashCardSet;
 }
 export function createFlashCards(): FlashCard[] {
   return allPitchesMap((clef, pitch) => {
@@ -89,7 +89,7 @@ export function createFlashCards(): FlashCard[] {
     }
 
     return FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, clef: isTrebleNote ? "t" : "b", pitch: pitch.toString(true) }),
+      JSON.stringify({ set: flashCardSetId, clef: clef, pitch: pitch.toString(true) }),
       () => (  
         <SheetMusicSingleNote
           width={150} height={200}

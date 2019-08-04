@@ -4,55 +4,55 @@ import { FlashCardSet } from "../../../FlashCardSet";
 
 const flashCardSetId = "intervalHalfSteps";
 
-export function createFlashCardGroup(): FlashCardSet {
-  const flashCardGroup = new FlashCardSet(flashCardSetId, "Interval Semitones", createFlashCards);
-  flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
-  flashCardGroup.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/the-basics/chords-intervals/";
-  flashCardGroup.containerHeight = "80px";
+export function createFlashCardSet(): FlashCardSet {
+  const flashCardSet = new FlashCardSet(flashCardSetId, "Interval Semitones", createFlashCards);
+  flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+  flashCardSet.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/the-basics/chords-intervals/";
+  flashCardSet.containerHeight = "80px";
 
-  return flashCardGroup;
+  return flashCardSet;
 }
 
 export function createFlashCards(): FlashCard[] {
   return [
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, answer: 0 }),
+      JSON.stringify({ set: flashCardSetId, interval: "P0" }),
       "Unison", "0"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, answer: 1 }),
+      JSON.stringify({ set: flashCardSetId, interval: "m2" }),
       "m2", "1"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, answer: 2 }),
+      JSON.stringify({ set: flashCardSetId, interval: "M2" }),
       "M2", "2"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, answer: 3 }),
+      JSON.stringify({ set: flashCardSetId, interval: "m3" }),
       "m3", "3"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, answer: 4 }),
+      JSON.stringify({ set: flashCardSetId, interval: "M3" }),
       "M3", "4"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, answer: 5 }),
+      JSON.stringify({ set: flashCardSetId, interval: "P4" }),
       "P4", "5"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, answer: 6 }),
+      JSON.stringify({ set: flashCardSetId, interval: "A4/d5" }),
       "A4/d5", "6"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, answer: 7 }),
+      JSON.stringify({ set: flashCardSetId, interval: "P5" }),
       "P5", "7"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, answer: 8 }),
+      JSON.stringify({ set: flashCardSetId, interval: "m6" }),
       "m6", "8"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, answer: 9 }),
+      JSON.stringify({ set: flashCardSetId, interval: "M6" }),
       "M6", "9"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, answer: 10 }),
+      JSON.stringify({ set: flashCardSetId, interval: "m7" }),
       "m7", "10"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, answer: 11 }),
+      JSON.stringify({ set: flashCardSetId, interval: "M7" }),
       "M7", "11"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, answer: 12 }),
+      JSON.stringify({ set: flashCardSetId, interval: "P8" }),
       "P8", "12"),
   ];
 }

@@ -2,42 +2,42 @@ import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
 import { FlashCardSet } from "../../../FlashCardSet";
 
-const flashCardSetId = "scaleDegNames";
+const flashCardSetId = "scaleDegreeNames";
 
-export function createFlashCardGroup(): FlashCardSet {
-  const flashCardGroup = new FlashCardSet(flashCardSetId, "Scale Degree Names", createFlashCards);
-  flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
-  flashCardGroup.moreInfoUri = "http://musictheoryblog.blogspot.com/2007/01/scale-degrees.html";
-  flashCardGroup.containerHeight = "80px";
+export function createFlashCardSet(): FlashCardSet {
+  const flashCardSet = new FlashCardSet(flashCardSetId, "Scale Degree Names", createFlashCards);
+  flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+  flashCardSet.moreInfoUri = "http://musictheoryblog.blogspot.com/2007/01/scale-degrees.html";
+  flashCardSet.containerHeight = "80px";
 
-  return flashCardGroup;
+  return flashCardSet;
 }
 
 export function createFlashCards(): FlashCard[] {
   return [
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scaleDeg: "1" }),
+      JSON.stringify({ set: flashCardSetId, scaleDegree: "1" }),
       "1", "Tonic"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scaleDeg: "2" }),
+      JSON.stringify({ set: flashCardSetId, scaleDegree: "2" }),
       "2", "Supertonic"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scaleDeg: "3" }),
+      JSON.stringify({ set: flashCardSetId, scaleDegree: "3" }),
       "3", "Mediant"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scaleDeg: "4" }),
+      JSON.stringify({ set: flashCardSetId, scaleDegree: "4" }),
       "4", "Subdominant"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scaleDeg: "5" }),
+      JSON.stringify({ set: flashCardSetId, scaleDegree: "5" }),
       "5", "Dominant"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scaleDeg: "6" }),
+      JSON.stringify({ set: flashCardSetId, scaleDegree: "6" }),
       "6", "Submediant"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scaleDeg: "7" }),
+      JSON.stringify({ set: flashCardSetId, scaleDegree: "7" }),
       "7 (in major)", "Leading Tone"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scaleDeg: "7min" }),
+      JSON.stringify({ set: flashCardSetId, scaleDegree: "7min" }),
       "7 (in minor)", "Subtonic"),
   ];
 }

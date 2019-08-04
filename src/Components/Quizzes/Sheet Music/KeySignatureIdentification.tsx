@@ -87,7 +87,7 @@ export class SheetMusicKeySignature extends React.Component<ISheetMusicKeySignat
 export function createFlashCards(): Array<FlashCard> {
   return allowedPitches
     .map((pitch, i) => FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, ans: answers[i] }),
+      JSON.stringify({ set: flashCardSetId, keys: answers[i] }),
       (width, height) => <SheetMusicKeySignature
         width={300} height={200}
         keySignature={pitch.toVexFlowKeySignatureString()}
@@ -95,11 +95,11 @@ export function createFlashCards(): Array<FlashCard> {
       answers[i]
     ));
 }
-export function createFlashCardGroup(): FlashCardSet {
-  const flashCardGroup = new FlashCardSet(flashCardSetId, "Key Signature Identification", createFlashCards);
-  flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
-  flashCardGroup.moreInfoUri = "https://method-behind-the-music.com/theory/scalesandkeys/#sigs";
-  flashCardGroup.containerHeight = "160px";
+export function createFlashCardSet(): FlashCardSet {
+  const flashCardSet = new FlashCardSet(flashCardSetId, "Key Signature Identification", createFlashCards);
+  flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+  flashCardSet.moreInfoUri = "https://method-behind-the-music.com/theory/scalesandkeys/#sigs";
+  flashCardSet.containerHeight = "160px";
 
-  return flashCardGroup;
+  return flashCardSet;
 }

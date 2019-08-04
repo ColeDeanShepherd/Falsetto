@@ -18,7 +18,7 @@ import * as PianoNotes from "../Quizzes/Notes/PianoNotes";
 import * as GuitarNotes from "../Quizzes/Notes/GuitarNotes";
 import * as SheetMusicNotes from "../Quizzes/Sheet Music/SheetMusicNotes";
 
-import { createStudyFlashCardGroupComponent } from '../StudyFlashCards';
+import { createStudyFlashCardSetComponent } from '../StudyFlashCards';
 
 import { Metronome } from "../Tools/Metronome";
 
@@ -384,8 +384,8 @@ export const ChordProgressionsSection: React.FunctionComponent<SectionProps> = p
     </NoteText>
 
     <SubSectionTitle>Interactive Exercises</SubSectionTitle>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(ChordProgressionsQuiz.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "2em"}}>{createStudyFlashCardGroupComponent(ChordHarmonicFunctions.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(ChordProgressionsQuiz.createFlashCardSet(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em"}}>{createStudyFlashCardSetComponent(ChordHarmonicFunctions.createFlashCardSet(), props.isEmbedded, props.hideMoreInfoUri)}</div>
 
     <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory/chords", "<< Previous: Chords")} | Next: Next Steps (coming soon) >></p>
   </div>
@@ -979,9 +979,9 @@ export const RhythmSection: React.FunctionComponent<SectionProps> = props => (
     <NoteValuePlayer notesPerBeat={3} maxNotesPerBeat={5} showNotesPerBeatSelect={true} />
     
     <SubSectionTitle>Interactive Exercises</SubSectionTitle>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(RhythmQuiz.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(NoteDurations.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(NoteValueNumbers.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(RhythmQuiz.createFlashCardSet(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(NoteDurations.createFlashCardSet(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(NoteValueNumbers.createFlashCardSet(), props.isEmbedded, props.hideMoreInfoUri)}</div>
 
     <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory", "<< Previous: Introduction")} | {App.instance.renderNavLink("/essential-music-theory/notes", "Next: Notes >>")}</p>
   </div>
@@ -1012,10 +1012,10 @@ export const NotesSection: React.FunctionComponent<SectionProps> = props => (
     <p>If your instrument of choice is piano, there is an interactive exercise below. If your instrument of choise is guitar, there is an interactive exercise below, and a comprehensive lesson: <NavLink to="/learn-guitar-notes-in-10-steps" className="menu-link">Learn the Notes on Guitar in 10 Easy Steps</NavLink></p>
 
     <SubSectionTitle>Interactive Exercises</SubSectionTitle>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(NotesQuiz.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(PianoNotes.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(GuitarNotes.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(SheetMusicNotes.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(NotesQuiz.createFlashCardSet(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(PianoNotes.createFlashCardSet(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(GuitarNotes.createFlashCardSet(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(SheetMusicNotes.createFlashCardSet(), props.isEmbedded, props.hideMoreInfoUri)}</div>
     
     <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory/rhythm", "<< Previous: Rhythm")} | {App.instance.renderNavLink("/essential-music-theory/intervals", "Next: Intervals >>")}</p>
   </div>
@@ -1121,16 +1121,16 @@ export const IntervalsSection: React.FunctionComponent<SectionProps> = props => 
     <IntervalsTable />
   
     <SubSectionTitle>Interactive Exercises</SubSectionTitle>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(IntervalQualitySymbols.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(IntervalNamesToHalfSteps.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(IntervalNotes.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(Interval2ndNotes.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(SheetMusicIntervalRecognition.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(GuitarIntervals.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(IntervalsToConsonanceDissonance.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(IntervalEarTraining.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(Interval2ndNoteEarTraining.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(Interval2ndNoteEarTrainingPiano.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(IntervalQualitySymbols.createFlashCardSet(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(IntervalNamesToHalfSteps.createFlashCardSet(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(IntervalNotes.createFlashCardSet(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(Interval2ndNotes.createFlashCardSet(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(SheetMusicIntervalRecognition.createFlashCardSet(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(GuitarIntervals.createFlashCardSet(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(IntervalsToConsonanceDissonance.createFlashCardSet(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(IntervalEarTraining.createFlashCardSet(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(Interval2ndNoteEarTraining.createFlashCardSet(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(Interval2ndNoteEarTrainingPiano.createFlashCardSet(), props.isEmbedded, props.hideMoreInfoUri)}</div>
     
     <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory/notes", "<< Previous: Notes")} | {App.instance.renderNavLink("/essential-music-theory/scales-and-modes", "Next: Scales & Modes >>")}</p>
   </div>
@@ -1238,10 +1238,10 @@ export const ScalesAndModesSection: React.FunctionComponent<SectionProps> = prop
     <ScaleViewer renderAllScaleShapes={false} isEmbedded={props.isEmbedded} />
 
     <SubSectionTitle>Interactive Exercises</SubSectionTitle>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(ScaleNotes.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(PianoScales.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(GuitarScales.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(ScaleEarTraining.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(ScaleNotes.createFlashCardSet(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(PianoScales.createFlashCardSet(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(GuitarScales.createFlashCardSet(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(ScaleEarTraining.createFlashCardSet(), props.isEmbedded, props.hideMoreInfoUri)}</div>
 
     <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory/intervals", "<< Previous: Intervals")} | {App.instance.renderNavLink("/essential-music-theory/chords", "Next: Chords >>")}</p>
   </div>
@@ -1471,10 +1471,10 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
     <p>Though chords are groups of notes played simultaneously, you can also choose to play the notes of a chord individually in a melody, to create something called an <Term>arpeggio</Term>. Arpeggios are another way to add harmonic content to music by <strong>implying</strong> the chords instead of playing them outright.</p>
 
     <SubSectionTitle>Interactive Exercises</SubSectionTitle>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(ChordNotes.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(PianoChords.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(GuitarChords.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardGroupComponent(ChordEarTraining.createFlashCardGroup(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(ChordNotes.createFlashCardSet(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(PianoChords.createFlashCardSet(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(GuitarChords.createFlashCardSet(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(ChordEarTraining.createFlashCardSet(), props.isEmbedded, props.hideMoreInfoUri)}</div>
 
     <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory/scales-and-modes", "<< Previous: Scales & Modes")} | {App.instance.renderNavLink("/essential-music-theory/chord-progressions", "Next: Chord Progressions >>")}</p>
   </div>

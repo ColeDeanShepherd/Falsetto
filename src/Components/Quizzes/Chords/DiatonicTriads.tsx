@@ -5,15 +5,15 @@ import { FlashCardSet } from "../../../FlashCardSet";
 
 const flashCardSetId = "diatonicTriads";
 
-export function createFlashCardGroup(): FlashCardSet {
-  const flashCardGroup = new FlashCardSet(flashCardSetId, "Diatonic Triads", createFlashCards);
-  flashCardGroup.enableInvertFlashCards = false;
-  flashCardGroup.initialSelectedFlashCardIndices = Utils.range(0, 13);
-  flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
-  flashCardGroup.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/the-basics/keys/";
-  flashCardGroup.containerHeight = "80px";
+export function createFlashCardSet(): FlashCardSet {
+  const flashCardSet = new FlashCardSet(flashCardSetId, "Diatonic Triads", createFlashCards);
+  flashCardSet.enableInvertFlashCards = false;
+  flashCardSet.initialSelectedFlashCardIndices = Utils.range(0, 13);
+  flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+  flashCardSet.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/the-basics/keys/";
+  flashCardSet.containerHeight = "80px";
 
-  return flashCardGroup;
+  return flashCardSet;
 }
 
 export function createFlashCards(): FlashCard[] {

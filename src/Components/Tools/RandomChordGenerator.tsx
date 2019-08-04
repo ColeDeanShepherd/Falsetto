@@ -152,8 +152,8 @@ export function createFlashCards(): Array<FlashCard> {
   return Utils.flattenArrays<FlashCard>(chordRoots
     .map(chordRoot => ChordType.All
       .map(chordType => FlashCard.fromRenderFns(
-        JSON.stringify({ set: flashCardSetId, chord: chordRoot + chordType.name }),
-        chordRoot + chordType.name,
+        JSON.stringify({ set: flashCardSetId, chord: chordRoot + " " + chordType.name }),
+        chordRoot + " " + chordType.name,
         chordType.formula.toString())
       )
     )
