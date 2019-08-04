@@ -12,6 +12,8 @@ import { FlashCard } from "../../../FlashCard";
 import { FlashCardGroup } from "../../../FlashCardGroup";
 import { StringedInstrumentNote } from '../../../GuitarNote';
 
+const flashCardSetId = "guitarNotes";
+
 interface IConfigData {
   maxFret: number
 };
@@ -87,7 +89,7 @@ export function createFlashCardGroup(guitarNotes?: Array<StringedInstrumentNote>
     maxFret: 11
   };
 
-  const group = new FlashCardGroup("Guitar Notes", () => createFlashCards(guitarNotes));
+  const group = new FlashCardGroup(flashCardSetId, "Guitar Notes", () => createFlashCards(guitarNotes));
   group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
   group.initialConfigData = initialConfigData;
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
@@ -100,8 +102,6 @@ export function createFlashCardGroup(guitarNotes?: Array<StringedInstrumentNote>
 }
 
 export function createFlashCards(guitarNotes?: Array<StringedInstrumentNote>): FlashCard[] {
-  const flashCardSetId = "guitarNotes";
-
   const MAX_FRET_NUMBER = 11;
   guitarNotes = !guitarNotes
     ? Utils.flattenArrays(Utils.range(0, standard6StringGuitarTuning.stringCount - 1)

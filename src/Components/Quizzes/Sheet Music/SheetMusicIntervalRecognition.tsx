@@ -9,7 +9,8 @@ import { Pitch, pitchRange } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 import { SheetMusicChord } from "./SheetMusicChords";
 import { Interval } from "../../../Interval";
-import { AnswerDifficulty } from '../../../StudyAlgorithm';
+
+const flashCardSetId = "sheetIntervals";
 
 const minPitch = new Pitch(PitchLetter.C, -1, 2);
 const maxPitch = new Pitch(PitchLetter.C, 1, 6);
@@ -160,8 +161,6 @@ export function renderAnswerSelect(
 }
 
 export function createFlashCards(): Array<FlashCard> {
-  const flashCardSetId = "sheetIntervals";
-
   const flashCards = new Array<FlashCard>();
 
   forEachInterval((pitches, interval) => {
@@ -203,7 +202,7 @@ export function createFlashCardGroup(): FlashCardGroup {
     allowAccidentals: true
   };
   
-  const group = new FlashCardGroup(
+  const group = new FlashCardGroup(flashCardSetId,
     "Sheet Music Intervals",
     createFlashCards
   );

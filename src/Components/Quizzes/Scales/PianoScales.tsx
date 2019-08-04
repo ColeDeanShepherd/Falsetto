@@ -16,6 +16,8 @@ import { PianoKeysAnswerSelect } from "../../Utils/PianoKeysAnswerSelect";
 import { ScaleAnswerSelect } from "../../Utils/ScaleAnswerSelect";
 import { ChordScaleFormula, ChordScaleFormulaPart } from '../../../ChordScaleFormula';
 
+const flashCardSetId = "pianoScalesOrderedNotes";
+
 const rootPitchStrs = ["Ab", "A", "Bb", "B/Cb", "C", "C#/Db", "D", "Eb", "E", "F", "F#/Gb", "G"];
 
 interface IConfigData {
@@ -174,7 +176,7 @@ export function createFlashCardGroup(): FlashCardGroup {
       .map(scale => scale.name)
   };
 
-  const group = new FlashCardGroup("Piano Scales", createFlashCards);
+  const group = new FlashCardGroup(flashCardSetId, "Piano Scales", createFlashCards);
   group.enableInvertFlashCards = true;
   group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
   group.initialConfigData = initialConfigData;
@@ -193,7 +195,7 @@ export function createFlashCards(): FlashCard[] {
         const pitches = new ChordScaleFormula(scaleType.formula.parts.concat(new ChordScaleFormulaPart(8, 0, false))).getPitches(rootPitch);
         
         const deserializedId = {
-          set: "pianoScalesOrderedNotes",
+          set: flashCardSetId,
           midiNumberNoOctaves: pitches.map(p => p.midiNumberNoOctave)
         };
         const id = JSON.stringify(deserializedId);

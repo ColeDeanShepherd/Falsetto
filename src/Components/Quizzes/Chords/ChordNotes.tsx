@@ -4,8 +4,10 @@ import { FlashCard } from "../../../FlashCard";
 import { FlashCardGroup } from "../../../FlashCardGroup";
 import { ChordType } from '../../../Chord';
 
+const flashCardSetId = "chordFormulasMajorScale";
+
 export function createFlashCardGroup(): FlashCardGroup {
-  const flashCardGroup = new FlashCardGroup("Chord Notes", createFlashCards);
+  const flashCardGroup = new FlashCardGroup(flashCardSetId, "Chord Notes", createFlashCards);
   flashCardGroup.initialSelectedFlashCardIndices = Utils.range(1, 16);
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardGroup.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/jazz-chords/extensions-alterations/";
@@ -15,7 +17,6 @@ export function createFlashCardGroup(): FlashCardGroup {
 }
 
 export function createFlashCard(chordType: ChordType): FlashCard {
-  const flashCardSetId = "chordFormulasMajorScale";
   const deserializedId = { "set": flashCardSetId, name: chordType.symbols[0] };
   const id = JSON.stringify(deserializedId);
   return FlashCard.fromRenderFns(id, "power", "1 5");

@@ -5,6 +5,8 @@ import { FlashCard } from "../../../FlashCard";
 import { FlashCardGroup, RenderAnswerSelectArgs } from "../../../FlashCardGroup";
 import { AnswerDifficulty } from "../../../StudyAlgorithm";
 
+const flashCardSetId = "keyAccidentalNotes";
+
 export function renderAnswerSelect(
   state: RenderAnswerSelectArgs
 ): JSX.Element {
@@ -28,7 +30,7 @@ export function renderAnswerSelect(
 }
 
 export function createFlashCardGroup(): FlashCardGroup {
-  const flashCardGroup = new FlashCardGroup("Key Accidental Notes", createFlashCards);
+  const flashCardGroup = new FlashCardGroup(flashCardSetId, "Key Accidental Notes", createFlashCards);
   flashCardGroup.renderAnswerSelect = renderAnswerSelect;
   flashCardGroup.moreInfoUri = "http://myguitarpal.com/the-order-of-sharps-and-flats/";
   flashCardGroup.containerHeight = "80px";
@@ -37,8 +39,6 @@ export function createFlashCardGroup(): FlashCardGroup {
 }
 
 export function createFlashCards(): FlashCard[] {
-  const flashCardSetId = "keyAccidentalNotes";
-
   return [
     FlashCard.fromRenderFns(
       JSON.stringify({ set: flashCardSetId, key: "C" }),

@@ -3,8 +3,10 @@ import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
 import { FlashCardGroup } from "../../../FlashCardGroup";
 
+const flashCardSetId = "scaleDegModes";
+
 export function createFlashCardGroup(): FlashCardGroup {
-  const flashCardGroup = new FlashCardGroup("Scale Degree Modes", createFlashCards);
+  const flashCardGroup = new FlashCardGroup(flashCardSetId, "Scale Degree Modes", createFlashCards);
   flashCardGroup.initialSelectedFlashCardIndices = Utils.range(0, 6);
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardGroup.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/the-basics/modes";
@@ -14,8 +16,6 @@ export function createFlashCardGroup(): FlashCardGroup {
 }
 
 export function createFlashCards(): FlashCard[] {
-  const flashCardSetId = "scaleDegModes";
-
   return [
     FlashCard.fromRenderFns(
       JSON.stringify({ set: flashCardSetId, id: "M1" }),

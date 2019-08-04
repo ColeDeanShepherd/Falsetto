@@ -19,6 +19,8 @@ import { ScaleAnswerSelect } from "../../Utils/ScaleAnswerSelect";
 import { getPreferredGuitarScaleShape } from "../../Utils/GuitarFretboard";
 import { ChordScaleFormula, ChordScaleFormulaPart } from '../../../ChordScaleFormula';
 
+const flashCardSetId = "guitarScalesOrderedNotes";
+
 const rootPitchStrs = ["Ab", "A", "Bb", "B/Cb", "C", "C#/Db", "D", "Eb", "E", "F", "F#/Gb", "G"];
 const STRING_COUNT = 6;
 
@@ -338,7 +340,7 @@ export function createFlashCardGroup(title?: string, initialScaleTypes?: Array<S
         .map(scaleType => Utils.unwrapValueOrUndefined(ScaleType.All.find(st => st.equals(scaleType))).name)
   };
 
-  const group = new FlashCardGroup(title, createFlashCards);
+  const group = new FlashCardGroup(flashCardSetId, title, createFlashCards);
   group.enableInvertFlashCards = false;
   group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
   group.initialConfigData = initialConfigData;
@@ -354,7 +356,7 @@ export function createFlashCards(): Array<FlashCard> {
   forEachScale((scale, rootPitchStr, i) => {
     const pitches = new ChordScaleFormula(scale.type.formula.parts.concat(new ChordScaleFormulaPart(8, 0, false))).getPitches(scale.rootPitch);
     const deserializedId = {
-      set: "guitarScalesOrderedNotes",
+      set: flashCardSetId,
       midiNumberNoOctaves: pitches.map(p => p.midiNumberNoOctave)
     };
     const id = JSON.stringify(deserializedId);

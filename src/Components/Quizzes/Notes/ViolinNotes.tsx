@@ -12,6 +12,8 @@ import { FlashCard } from "../../../FlashCard";
 import { FlashCardGroup } from "../../../FlashCardGroup";
 import { StringedInstrumentNote } from '../../../GuitarNote';
 
+const flashCardSetId = "violinNotes";
+
 const DEFAULT_MAX_FRET_NUMBER = 13;
 
 interface IConfigData {
@@ -89,7 +91,7 @@ export function createFlashCardGroup(notes?: Array<StringedInstrumentNote>): Fla
     maxFret: DEFAULT_MAX_FRET_NUMBER
   };
 
-  const group = new FlashCardGroup("Violin Notes", () => createFlashCards(notes));
+  const group = new FlashCardGroup(flashCardSetId, "Violin Notes", () => createFlashCards(notes));
   group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
   group.initialConfigData = initialConfigData;
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
@@ -102,8 +104,6 @@ export function createFlashCardGroup(notes?: Array<StringedInstrumentNote>): Fla
 }
 
 export function createFlashCards(notes?: Array<StringedInstrumentNote>): FlashCard[] {
-  const flashCardSetId = "violinNotes";
-
   notes = !notes
     ? Utils.flattenArrays(Utils.range(0, standardViolinTuning.stringCount - 1)
     .map(stringIndex => Utils.range(0, DEFAULT_MAX_FRET_NUMBER)

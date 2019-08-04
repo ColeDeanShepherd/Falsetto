@@ -10,6 +10,7 @@ import { PitchLetter } from "../../../PitchLetter";
 import { VerticalDirection } from "../../../VerticalDirection";
 import { Interval } from "../../../Interval";
 
+const flashCardSetId = "notesToIntervals";
 const rootNotes = [
   new Pitch(PitchLetter.C, -1, 4),
   new Pitch(PitchLetter.C, 0, 4),
@@ -225,8 +226,6 @@ export class IntervalNotesFlashCardMultiSelect extends React.Component<IInterval
 }
 
 export function createFlashCards(): Array<FlashCard> {
-  const flashCardSetId = "notesToIntervals";
-
   return Utils.flattenArrays<FlashCard>(rootNotes
     .map(rootPitch => intervals
       .map(interval => signs
@@ -282,7 +281,7 @@ export function createFlashCardGroup(): FlashCardGroup {
     enabledSigns: signs.slice()
   };
   
-  const group = new FlashCardGroup(
+  const group = new FlashCardGroup(flashCardSetId,
     "Notes To Intervals",
     createFlashCards
   );

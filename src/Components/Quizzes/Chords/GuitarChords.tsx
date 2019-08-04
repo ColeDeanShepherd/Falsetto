@@ -15,6 +15,7 @@ import { ChordType } from "../../../Chord";
 import { GuitarChordViewer } from '../Scales/GuitarScales';
 import { AnswerButton } from '../Utils';
 
+const flashCardSetId = "guitarChordOrderedNotes";
 const rootPitchStrs = ["Ab", "A", "Bb", "B/Cb", "C", "C#/Db", "D", "Eb", "E", "F", "F#/Gb", "G"];
 
 interface IConfigData {
@@ -384,7 +385,7 @@ export function createFlashCardGroup(): FlashCardGroup {
       .map(chord => chord.name)
   };
 
-  const group = new FlashCardGroup("Guitar Chords", createFlashCards);
+  const group = new FlashCardGroup(flashCardSetId, "Guitar Chords", createFlashCards);
   group.enableInvertFlashCards = false;
   group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
   group.initialConfigData = initialConfigData;
@@ -403,7 +404,7 @@ export function createFlashCards(): FlashCard[] {
       return ChordType.All.map(chordType => {
         const pitches = chordType.getPitches(rootPitch);
         const deserializedId = {
-          set: "guitarChordOrderedNotes",
+          set: flashCardSetId,
           midiNumberNoOctaves: pitches.map(p => p.midiNumberNoOctave)
         };
         const id = JSON.stringify(deserializedId);

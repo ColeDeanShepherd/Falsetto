@@ -3,8 +3,10 @@ import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
 import { FlashCardGroup } from "../../../FlashCardGroup";
 
+const flashCardSetId = "scaleFamilies";
+
 export function createFlashCardGroup(): FlashCardGroup {
-  const flashCardGroup = new FlashCardGroup("Scale Families", createFlashCards);
+  const flashCardGroup = new FlashCardGroup(flashCardSetId, "Scale Families", createFlashCards);
   flashCardGroup.initialSelectedFlashCardIndices = Utils.range(0, 8);
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
 
@@ -12,8 +14,6 @@ export function createFlashCardGroup(): FlashCardGroup {
 }
 
 export function createFlashCards(): FlashCard[] {
-  const flashCardSetId = "scaleFamilies";
-
   return [
     FlashCard.fromRenderFns(
       JSON.stringify({ set: flashCardSetId, scale: "ionian" }),

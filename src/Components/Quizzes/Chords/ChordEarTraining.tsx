@@ -10,6 +10,8 @@ import { PitchLetter } from "../../../PitchLetter";
 import { Chord, ChordType } from "../../../Chord";
 import { playPitches } from "../../../Piano";
 
+const flashCardSetId = "chordEarTraining";
+
 const minPitch = new Pitch(PitchLetter.C, -1, 2);
 const maxPitch = new Pitch(PitchLetter.C, 1, 6);
 const rootPitches = Utils.range(minPitch.midiNumber, maxPitch.midiNumber)
@@ -134,7 +136,6 @@ export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesF
 export function createFlashCards(): Array<FlashCard> {
   let i = 0;
 
-  const flashCardSetId = "chordEarTraining";
   const flashCards = new Array<FlashCard>();
 
   for (const rootPitch of rootPitches) {
@@ -181,7 +182,7 @@ export function createFlashCardGroup(): FlashCardGroup {
     enabledChordTypes: chordTypes.map(c => c.name)
   };
   
-  const group = new FlashCardGroup(
+  const group = new FlashCardGroup(flashCardSetId,
     "Chord Ear Training",
     createFlashCards
   );

@@ -8,6 +8,8 @@ import { VexFlowComponent } from "../../Utils/VexFlowComponent";
 import { Pitch } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 
+const flashCardSetId = "keySignatureIdentification";
+
 const allowedPitches = [
   new Pitch(PitchLetter.C, -1, 0),
   new Pitch(PitchLetter.C, 0, 0),
@@ -83,8 +85,6 @@ export class SheetMusicKeySignature extends React.Component<ISheetMusicKeySignat
 }
 
 export function createFlashCards(): Array<FlashCard> {
-  const flashCardSetId = "keySignatureIdentification";
-
   return allowedPitches
     .map((pitch, i) => FlashCard.fromRenderFns(
       JSON.stringify({ set: flashCardSetId, ans: answers[i] }),
@@ -96,7 +96,7 @@ export function createFlashCards(): Array<FlashCard> {
     ));
 }
 export function createFlashCardGroup(): FlashCardGroup {
-  const flashCardGroup = new FlashCardGroup("Key Signature Identification", createFlashCards);
+  const flashCardGroup = new FlashCardGroup(flashCardSetId, "Key Signature Identification", createFlashCards);
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardGroup.moreInfoUri = "https://method-behind-the-music.com/theory/scalesandkeys/#sigs";
   flashCardGroup.containerHeight = "160px";

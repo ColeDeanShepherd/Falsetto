@@ -10,6 +10,8 @@ import { PitchLetter } from "../../../PitchLetter";
 import { SheetMusicChord } from "./SheetMusicChords";
 import { Chord, ChordType } from "../../../Chord";
 
+const flashCardSetId = "sheetChords";
+
 const allowedPitches = [
   new Pitch(PitchLetter.C, -1, 0),
   new Pitch(PitchLetter.C, 0, 0),
@@ -185,8 +187,6 @@ export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesF
 }
 
 export function createFlashCards(): Array<FlashCard> {
-  const flashCardSetId = "sheetChords";
-
   const flashCards = new Array<FlashCard>();
 
   for (const rootPitch of rootPitches) {
@@ -232,7 +232,7 @@ export function createFlashCardGroup(): FlashCardGroup {
     enabledChordTypes: chordTypes.map(chordType => chordType.name)
   };
   
-  const group = new FlashCardGroup(
+  const group = new FlashCardGroup(flashCardSetId,
     "Sheet Music Chords",
     createFlashCards
   );

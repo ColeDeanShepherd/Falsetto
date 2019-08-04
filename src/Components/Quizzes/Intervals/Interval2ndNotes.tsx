@@ -10,6 +10,8 @@ import { PitchLetter } from "../../../PitchLetter";
 import { VerticalDirection } from "../../../VerticalDirection";
 import { Interval } from "../../../Interval";
 
+const flashCardSetId = "interval2ndNotes";
+
 const rootNotes = [
   new Pitch(PitchLetter.C, -1, 4),
   new Pitch(PitchLetter.C, 0, 4),
@@ -246,8 +248,6 @@ export function renderNoteAnswerSelect(
 }
 
 export function createFlashCards(): Array<FlashCard> {
-  const flashCardSetId = "interval2ndNotes";
-
   return Utils.flattenArrays<FlashCard>(rootNotes
     .map(rootNote => intervals
       .map(interval => directions
@@ -303,7 +303,7 @@ export function createFlashCardGroup(): FlashCardGroup {
     enabledDirections: directions.slice()
   };
   
-  const group = new FlashCardGroup(
+  const group = new FlashCardGroup(flashCardSetId,
     "Interval 2nd Notes",
     createFlashCards
   );

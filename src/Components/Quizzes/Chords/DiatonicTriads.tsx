@@ -3,8 +3,10 @@ import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
 import { FlashCardGroup } from "../../../FlashCardGroup";
 
+const flashCardSetId = "diatonicTriads";
+
 export function createFlashCardGroup(): FlashCardGroup {
-  const flashCardGroup = new FlashCardGroup("Diatonic Triads", createFlashCards);
+  const flashCardGroup = new FlashCardGroup(flashCardSetId, "Diatonic Triads", createFlashCards);
   flashCardGroup.enableInvertFlashCards = false;
   flashCardGroup.initialSelectedFlashCardIndices = Utils.range(0, 13);
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
@@ -15,8 +17,6 @@ export function createFlashCardGroup(): FlashCardGroup {
 }
 
 export function createFlashCards(): FlashCard[] {
-  const flashCardSetId = "diatonicTriads";
-
   return new Array<FlashCard>()
     .concat([
       FlashCard.fromRenderFns(

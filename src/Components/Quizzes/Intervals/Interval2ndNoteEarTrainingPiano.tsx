@@ -15,8 +15,9 @@ import {
 import { Button, TableRow, TableCell, Checkbox, Table, TableHead, TableBody, Grid } from "@material-ui/core";
 import { PianoKeyboard } from "../../Utils/PianoKeyboard";
 import { PitchLetter } from "../../../PitchLetter";
-import { AnswerDifficulty } from "../../../StudyAlgorithm";
 import { PianoKeysAnswerSelect } from "../../Utils/PianoKeysAnswerSelect";
+
+const flashCardSetId = "pianoNextNoteEarTraining";
 
 const minPitch = new Pitch(PitchLetter.C, 0, 4);
 const maxPitch = new Pitch(PitchLetter.B, 0, 5);
@@ -202,7 +203,7 @@ export function createFlashCards(): Array<FlashCard> {
   forEachInterval(rootNotes,
     (interval, p1, p2, _, i) => {
       const deserializedId = {
-        set: "pianoNextNoteEarTraining",
+        set: flashCardSetId,
         pitches: [p1.toString(true), p2.toString(true)]
       };
       const id = JSON.stringify(deserializedId);
@@ -238,7 +239,7 @@ export function createFlashCardGroup(): FlashCardGroup {
     enabledIntervals: intervals.slice()
   };
   
-  const group = new FlashCardGroup(
+  const group = new FlashCardGroup(flashCardSetId,
     "Interval 2nd Note Ear Training Piano",
     createFlashCards
   );

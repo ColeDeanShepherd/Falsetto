@@ -2,16 +2,16 @@ import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
 import { FlashCardGroup } from "../../../FlashCardGroup";
 
+const flashCardSetId = "genericIntervalQualities";
+
 export function createFlashCardGroup(): FlashCardGroup {
-  const flashCardGroup = new FlashCardGroup("Generic Intervals To Interval Qualities", createFlashCards);
+  const flashCardGroup = new FlashCardGroup(flashCardSetId, "Generic Intervals To Interval Qualities", createFlashCards);
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
 
   return flashCardGroup;
 }
 
 export function createFlashCards(): FlashCard[] {
-  const flashCardSetId = "genericIntervalQualities";
-
   return [
     FlashCard.fromRenderFns(
       JSON.stringify({ set: flashCardSetId, int: 1 }),

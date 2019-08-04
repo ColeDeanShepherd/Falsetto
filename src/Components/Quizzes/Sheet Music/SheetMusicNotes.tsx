@@ -11,6 +11,8 @@ import { Pitch } from "../../../Pitch";
 import { FlashCardGroup, RenderAnswerSelectArgs } from "../../../FlashCardGroup";
 import { AnswerDifficulty } from "../../../StudyAlgorithm";
 
+const flashCardSetId = "sheetMusicNotes";
+
 const clefs = [
   {
     name: "treble",
@@ -42,7 +44,7 @@ export function createFlashCardGroup(): FlashCardGroup {
     />;
   }
 
-  const flashCardGroup = new FlashCardGroup("Sheet Music Notes", createFlashCards);
+  const flashCardGroup = new FlashCardGroup(flashCardSetId, "Sheet Music Notes", createFlashCards);
   flashCardGroup.enableInvertFlashCards = false;
   flashCardGroup.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
   flashCardGroup.initialConfigData = initialConfigData;
@@ -54,8 +56,6 @@ export function createFlashCardGroup(): FlashCardGroup {
   return flashCardGroup;
 }
 export function createFlashCards(): FlashCard[] {
-  const flashCardSetId = "sheetMusicNotes";
-
   return allPitchesMap((clef, pitch) => {
     const pitchAccidentalString = pitch.getAccidentalString();
     const vexFlowPitchString = pitch.toVexFlowString();

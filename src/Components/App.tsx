@@ -356,7 +356,7 @@ class App extends React.Component<IAppProps, IAppState> {
   }
 
   private checkFlashCardSetIds() {
-    /*var flashCardSetIds: StringDictionary<boolean> = {};
+    var flashCardSetIds: StringDictionary<boolean> = {};
 
     for (const set of this.flashCardSets) {
       if (flashCardSetIds[set.id] === undefined) {
@@ -365,7 +365,7 @@ class App extends React.Component<IAppProps, IAppState> {
         debugger;
         console.error(`Duplicate flash card set ID: ${set.id}`);
       }
-    }*/
+    }
   }
   private checkFlashCardIds() {
     var flashCardIds: StringDictionary<boolean> = {};

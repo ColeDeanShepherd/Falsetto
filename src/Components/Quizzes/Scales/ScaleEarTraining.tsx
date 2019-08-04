@@ -11,6 +11,8 @@ import { playPitchesSequentially } from "../../../Piano";
 import { ScaleType } from "../../../Scale";
 import { ChordScaleFormula, ChordScaleFormulaPart } from '../../../ChordScaleFormula';
 
+const flashCardSetId = "scaleEarTraining";
+
 const minPitch = new Pitch(PitchLetter.C, -1, 2);
 const maxPitch = new Pitch(PitchLetter.C, 1, 6);
 const rootPitches = Utils.range(minPitch.midiNumber, maxPitch.midiNumber)
@@ -148,8 +150,6 @@ export class ScaleNotesFlashCardMultiSelect extends React.Component<IScaleNotesF
 }
 
 export function createFlashCards(): Array<FlashCard> {
-  const flashCardSetId = "scaleEarTraining";
-
   let i = 0;
 
   const flashCards = new Array<FlashCard>();
@@ -201,7 +201,7 @@ export function createFlashCardGroup(): FlashCardGroup {
       .map(scale => scale.name)
   };
   
-  const group = new FlashCardGroup(
+  const group = new FlashCardGroup(flashCardSetId,
     "Scale Ear Training",
     createFlashCards
   );

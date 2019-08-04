@@ -2,8 +2,10 @@ import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
 import { FlashCardGroup } from "../../../FlashCardGroup";
 
+const flashCardSetId = "diatonicChordFamilies";
+
 export function createFlashCardGroup(): FlashCardGroup {
-  const flashCardGroup = new FlashCardGroup("Chord Harmonic Functions", createFlashCards);
+  const flashCardGroup = new FlashCardGroup(flashCardSetId, "Chord Harmonic Functions", createFlashCards);
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardGroup.moreInfoUri = "https://davidkulma.com/musictheory/harmonicfunction";
   flashCardGroup.containerHeight = "80px";
@@ -11,8 +13,6 @@ export function createFlashCardGroup(): FlashCardGroup {
   return flashCardGroup;
 }
 export function createFlashCards(): FlashCard[] {
-  const flashCardSetId = "diatonicChordFamilies";
-
   return [
     FlashCard.fromRenderFns(
       JSON.stringify({ set: flashCardSetId, scaleDegree: 1 }),

@@ -16,6 +16,8 @@ import {
 } from "../../Utils/IntervalEarTrainingFlashCardMultiSelect";
 import { Button } from "@material-ui/core";
 
+const flashCardSetId = "intervalEarTraining";
+
 export interface IFlashCardFrontSideProps {
   pitch1: Pitch;
   pitch2: Pitch;
@@ -64,8 +66,6 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
 }
 
 export function createFlashCards(): Array<FlashCard> {
-  const flashCardSetId = "intervalEarTraining";
-
   let flashCards = new Array<FlashCard>();
 
   const includeHarmonicIntervals = true;
@@ -112,7 +112,7 @@ export function createFlashCardGroup(): FlashCardGroup {
     enabledDirections: directions.slice()
   };
   
-  const group = new FlashCardGroup(
+  const group = new FlashCardGroup(flashCardSetId,
     "Interval Ear Training",
     createFlashCards
   );

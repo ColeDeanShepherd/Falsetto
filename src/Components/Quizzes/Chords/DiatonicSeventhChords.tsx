@@ -3,8 +3,10 @@ import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
 import { FlashCardGroup } from "../../../FlashCardGroup";
 
+const flashCardSetId = "diatonic7Chords";
+
 export function createFlashCardGroup(): FlashCardGroup {
-  const flashCardGroup = new FlashCardGroup("Diatonic Seventh Chords", createFlashCards);
+  const flashCardGroup = new FlashCardGroup(flashCardSetId, "Diatonic Seventh Chords", createFlashCards);
   flashCardGroup.enableInvertFlashCards = false;
   flashCardGroup.initialSelectedFlashCardIndices = Utils.range(0, 13);
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
@@ -14,8 +16,6 @@ export function createFlashCardGroup(): FlashCardGroup {
   return flashCardGroup;
 }
 export function createFlashCards(): FlashCard[] {
-  const flashCardSetId = "diatonic7Chords";
-
   return new Array<FlashCard>()
     .concat([
       FlashCard.fromRenderFns(

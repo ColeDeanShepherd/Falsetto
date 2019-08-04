@@ -2,8 +2,10 @@ import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
 import { FlashCardGroup } from "../../../FlashCardGroup";
 
+const flashCardSetId = "scaleDegNames";
+
 export function createFlashCardGroup(): FlashCardGroup {
-  const flashCardGroup = new FlashCardGroup("Scale Degree Names", createFlashCards);
+  const flashCardGroup = new FlashCardGroup(flashCardSetId, "Scale Degree Names", createFlashCards);
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardGroup.moreInfoUri = "http://musictheoryblog.blogspot.com/2007/01/scale-degrees.html";
   flashCardGroup.containerHeight = "80px";
@@ -12,8 +14,6 @@ export function createFlashCardGroup(): FlashCardGroup {
 }
 
 export function createFlashCards(): FlashCard[] {
-  const flashCardSetId = "scaleDegNames";
-
   return [
     FlashCard.fromRenderFns(
       JSON.stringify({ set: flashCardSetId, scaleDeg: "1" }),

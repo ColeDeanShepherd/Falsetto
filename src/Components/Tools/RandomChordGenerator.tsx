@@ -6,6 +6,8 @@ import { FlashCard } from "../../FlashCard";
 import { FlashCardGroup } from "../../FlashCardGroup";
 import { ChordType } from '../../Chord';
 
+const flashCardSetId = "randomChords";
+
 const chordRoots = [
   "Cb",
   "C",
@@ -147,8 +149,6 @@ export class RandomChordGeneratorFlashCardMultiSelect extends React.Component<IR
 }
 
 export function createFlashCards(): Array<FlashCard> {
-  const flashCardSetId = "randomChords";
-
   return Utils.flattenArrays<FlashCard>(chordRoots
     .map(chordRoot => ChordType.All
       .map(chordType => FlashCard.fromRenderFns(
@@ -183,7 +183,7 @@ export function createFlashCardGroup(): FlashCardGroup {
       .filter((_, i) => (i >= 1) && (i <= 16))
   };
   
-  const group = new FlashCardGroup(
+  const group = new FlashCardGroup(flashCardSetId,
     "Random Chord Generator",
     createFlashCards
   );

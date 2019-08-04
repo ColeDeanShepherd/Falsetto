@@ -14,6 +14,8 @@ import { TableRow, TableCell, Table, TableHead, TableBody, Grid, Checkbox, Butto
 import { Chord, ChordType } from "../../../Chord";
 import { PianoKeysAnswerSelect } from "../../Utils/PianoKeysAnswerSelect";
 
+const flashCardSetId = "pianoChords";
+
 const rootPitchStrs = ["Ab", "A", "Bb", "B/Cb", "C", "C#/Db", "D", "Eb", "E", "F", "F#/Gb", "G"];
 
 interface IConfigData {
@@ -297,7 +299,7 @@ export function createFlashCardGroup(): FlashCardGroup {
       .map(chord => chord.name)
   };
 
-  const group = new FlashCardGroup("Piano Chords", createFlashCards);
+  const group = new FlashCardGroup(flashCardSetId, "Piano Chords", createFlashCards);
   group.enableInvertFlashCards = true;
   group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
   group.initialConfigData = initialConfigData;
@@ -315,7 +317,7 @@ export function createFlashCards(): FlashCard[] {
         const rootPitch = Pitch.createFromMidiNumber((new Pitch(PitchLetter.C, 0, 4)).midiNumber + halfStepsFromC);
         const pitches = new Chord(chordType, rootPitch).getPitches();
         const deserializedId = {
-          set: "pianoChords",
+          set: flashCardSetId,
           midiNumberNoOctaves: pitches.map(p => p.midiNumberNoOctave)
         };
         const id = JSON.stringify(deserializedId);

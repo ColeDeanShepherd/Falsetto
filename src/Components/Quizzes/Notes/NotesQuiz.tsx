@@ -2,16 +2,16 @@ import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
 import { FlashCardGroup } from "../../../FlashCardGroup";
 
+const flashCardSetId = "esmNotesQuiz";
+
 export function createFlashCardGroup(): FlashCardGroup {
-  const flashCardGroup = new FlashCardGroup("Notes Quiz", createFlashCards);
+  const flashCardGroup = new FlashCardGroup(flashCardSetId, "Notes Quiz", createFlashCards);
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardGroup.containerHeight = "160px";
 
   return flashCardGroup;
 }
 export function createFlashCards(): FlashCard[] {
-  const flashCardSetId = "esmNotesQuiz";
-
   return [
     FlashCard.fromRenderFns(
       JSON.stringify({ set: flashCardSetId, id: "noteDef" }),

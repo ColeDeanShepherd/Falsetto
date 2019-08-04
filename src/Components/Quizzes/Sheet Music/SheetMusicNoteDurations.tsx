@@ -7,6 +7,8 @@ import { FlashCard } from "../../../FlashCard";
 import { VexFlowComponent } from "../../Utils/VexFlowComponent";
 import { FlashCardGroup, RenderAnswerSelectArgs } from "../../../FlashCardGroup";
 
+const flashCardSetId = "noteDurationSymbols";
+
 const width = 100;
 const height = 65;
 
@@ -17,7 +19,7 @@ export function renderAnswerSelect(
 }
 
 export function createFlashCardGroup(): FlashCardGroup {
-  const flashCardGroup = new FlashCardGroup("Sheet Music Note Durations", createFlashCards);
+  const flashCardGroup = new FlashCardGroup(flashCardSetId, "Sheet Music Note Durations", createFlashCards);
   flashCardGroup.initialSelectedFlashCardIndices = Utils.range(0, 4).concat(Utils.range(8, 12));
   flashCardGroup.renderAnswerSelect = renderAnswerSelect;
   flashCardGroup.containerHeight = "80px";
@@ -26,8 +28,6 @@ export function createFlashCardGroup(): FlashCardGroup {
   return flashCardGroup;
 }
 export function createFlashCards(): FlashCard[] {
-  const flashCardSetId = "noteDurationSymbols";
-
   return [
     FlashCard.fromRenderFns(
       JSON.stringify({ set: flashCardSetId, id: "w" }),

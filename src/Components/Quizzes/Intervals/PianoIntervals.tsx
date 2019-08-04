@@ -31,6 +31,8 @@ const intervals = [
   "P8"
 ];
 
+const flashCardSetId = "pianoIntervals";
+
 interface IConfigData {
   enabledIntervals: string[];
   allowAccidentals: boolean;
@@ -168,8 +170,6 @@ export function renderAnswerSelect(
 }
 
 export function createFlashCards(): Array<FlashCard> {
-  const flashCardSetId = "pianoIntervals";
-
   const flashCards = new Array<FlashCard>();
 
   forEachInterval((pitches, intervalString) => {
@@ -227,7 +227,7 @@ export function createFlashCardGroup(): FlashCardGroup {
     allowAccidentals: true
   };
   
-  const group = new FlashCardGroup(
+  const group = new FlashCardGroup(flashCardSetId,
     "Piano Intervals",
     createFlashCards
   );

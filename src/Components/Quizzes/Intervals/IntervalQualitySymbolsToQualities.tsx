@@ -2,8 +2,10 @@ import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
 import { FlashCardGroup } from "../../../FlashCardGroup";
 
+const flashCardSetId = "intervalQualitySymbols";
+
 export function createFlashCardGroup(): FlashCardGroup {
-  const flashCardGroup = new FlashCardGroup("Interval Quality Symbols", createFlashCards);
+  const flashCardGroup = new FlashCardGroup(flashCardSetId, "Interval Quality Symbols", createFlashCards);
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardGroup.moreInfoUri = "https://method-behind-the-music.com/theory/intervals/";
   flashCardGroup.containerHeight = "80px";
@@ -11,8 +13,6 @@ export function createFlashCardGroup(): FlashCardGroup {
   return flashCardGroup;
 }
 export function createFlashCards(): FlashCard[] {
-  const flashCardSetId = "intervalQualitySymbols";
-
   return [
     FlashCard.fromRenderFns(
       JSON.stringify({ set: flashCardSetId, id: "m" }),

@@ -10,10 +10,12 @@ import { FlashCardGroup, RenderAnswerSelectArgs, FlashCardLevel } from "../../..
 import { Pitch } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 
+const flashCardSetId = "pianoNotesOneOctave";
+
 const notes = ["C", "C#/D♭", "D", "D#/E♭", "E", "F", "F#/G♭", "G", "G#/A♭", "A", "A#/B♭", "B"];
 
 export function createFlashCardGroup(): FlashCardGroup {
-  const group = new FlashCardGroup("Piano Notes", createFlashCards);
+  const group = new FlashCardGroup(flashCardSetId, "Piano Notes", createFlashCards);
   group.containerHeight = "120px";
   group.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/the-basics/overview/";
   group.renderAnswerSelect = renderAnswerSelect;
@@ -36,7 +38,7 @@ export function createFlashCards(): FlashCard[] {
     .map((_, i) => {
       const pitch = Pitch.createFromMidiNumber((new Pitch(PitchLetter.C, 0, 4)).midiNumber + i);
       const deserializedId = {
-        set: "pianoNotesOneOctave",
+        set: flashCardSetId,
         midiNumberNoOctave: pitch.midiNumberNoOctave
       };
       const id = JSON.stringify(deserializedId);

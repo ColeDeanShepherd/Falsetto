@@ -2,8 +2,10 @@ import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
 import { FlashCardGroup } from "../../../FlashCardGroup";
 
+const flashCardSetId = "availableChordTensions";
+
 export function createFlashCardGroup(): FlashCardGroup {
-  const flashCardGroup = new FlashCardGroup("Available Chord Tensions", createFlashCards);
+  const flashCardGroup = new FlashCardGroup(flashCardSetId, "Available Chord Tensions", createFlashCards);
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardGroup.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/jazz-chords/extensions-alterations/";
   flashCardGroup.containerHeight = "80px";
@@ -11,8 +13,6 @@ export function createFlashCardGroup(): FlashCardGroup {
   return flashCardGroup;
 }
 export function createFlashCards(): FlashCard[] {
-  const flashCardSetId = "availableChordTensions";
-
   return [
     FlashCard.fromRenderFns(
       JSON.stringify({ "set": flashCardSetId, chordType: "maj7" }),

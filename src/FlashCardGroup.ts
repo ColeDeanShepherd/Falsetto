@@ -89,6 +89,7 @@ export class FlashCardGroup {
   }
   
   public constructor(
+    public id: string,
     public name: string,
     public createFlashCards: () => FlashCard[]
   ) {}

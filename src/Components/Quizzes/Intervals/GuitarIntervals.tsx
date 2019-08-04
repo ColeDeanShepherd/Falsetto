@@ -11,6 +11,8 @@ import { VerticalDirection } from "../../../VerticalDirection";
 import { Size2D } from '../../../Size2D';
 import { StringedInstrumentNote } from '../../../GuitarNote';
 
+const flashCardSetId = "guitarIntervals";
+
 const intervals = [
   "m2",
   "M2",
@@ -153,7 +155,6 @@ export function renderAnswerSelect(
 }
 
 export function createFlashCards(): Array<FlashCard> {
-  const flashCardSetId = "guitarIntervals";
   const flashCards = new Array<FlashCard>();
 
   forEachInterval((notes, interval) => {
@@ -253,7 +254,7 @@ export function createFlashCardGroup(): FlashCardGroup {
     enabledIntervals: intervals.slice()
   };
   
-  const group = new FlashCardGroup(
+  const group = new FlashCardGroup(flashCardSetId,
     "Guitar Intervals",
     createFlashCards
   );createFlashCards

@@ -2,8 +2,10 @@ import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
 import { FlashCardGroup } from "../../../FlashCardGroup";
 
+const flashCardSetId = "intConsDiss";
+
 export function createFlashCardGroup(): FlashCardGroup {
-  const flashCardGroup = new FlashCardGroup("Intervals Consonance/Dissonance", createFlashCards);
+  const flashCardGroup = new FlashCardGroup(flashCardSetId, "Intervals Consonance/Dissonance", createFlashCards);
   flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardGroup.moreInfoUri = "https://sites.google.com/site/nebironamsmusictheory/chords/1-01intervals";
   flashCardGroup.containerHeight = "80px";
@@ -12,8 +14,6 @@ export function createFlashCardGroup(): FlashCardGroup {
 }
 
 export function createFlashCards(): FlashCard[] {
-  const flashCardSetId = "intConsDiss";
-
   return [
     FlashCard.fromRenderFns(
       JSON.stringify({ set: flashCardSetId, int: "m2" }),
