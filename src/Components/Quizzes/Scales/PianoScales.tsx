@@ -191,8 +191,15 @@ export function createFlashCards(): FlashCard[] {
         const halfStepsFromC = Utils.mod(i - 4, 12);
         const rootPitch = Pitch.createFromMidiNumber((new Pitch(PitchLetter.C, 0, 4)).midiNumber + halfStepsFromC);
         const pitches = new ChordScaleFormula(scaleType.formula.parts.concat(new ChordScaleFormulaPart(8, 0, false))).getPitches(rootPitch);
+        
+        const deserializedId = {
+          set: "pianoScalesOrderedNotes",
+          midiNumberNoOctaves: pitches.map(p => p.midiNumberNoOctave)
+        };
+        const id = JSON.stringify(deserializedId);
 
         return new FlashCard(
+          id,
           new FlashCardSide(
             (width, height) => {
               const size = Utils.shrinkRectToFit(new Size2D(width, height), new Size2D(400, 100));

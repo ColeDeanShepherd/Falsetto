@@ -11,11 +11,23 @@ export function createFlashCardGroup(): FlashCardGroup {
   return flashCardGroup;
 }
 export function createFlashCards(): FlashCard[] {
+  const flashCardSetId = "intervalQualitySymbols";
+
   return [
-    FlashCard.fromRenderFns("m", "minor"),
-    FlashCard.fromRenderFns("M", "major"),
-    FlashCard.fromRenderFns("A", "augmented"),
-    FlashCard.fromRenderFns("d", "diminished"),
-    FlashCard.fromRenderFns("P", "perfect"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, id: "m" }),
+      "m", "minor"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, id: "M" }),
+      "M", "major"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, id: "A" }),
+      "A", "augmented"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, id: "d" }),
+      "d", "diminished"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, id: "P" }),
+      "P", "perfect"),
   ];
 }

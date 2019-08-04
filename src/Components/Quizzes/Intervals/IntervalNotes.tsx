@@ -225,6 +225,8 @@ export class IntervalNotesFlashCardMultiSelect extends React.Component<IInterval
 }
 
 export function createFlashCards(): Array<FlashCard> {
+  const flashCardSetId = "notesToIntervals";
+
   return Utils.flattenArrays<FlashCard>(rootNotes
     .map(rootNote => intervals
       .map(interval => signs
@@ -241,7 +243,14 @@ export function createFlashCards(): Array<FlashCard> {
             new Interval(genericIntervalNum, intervalQualityNum)
           );
           
+          const deserializedId = {
+            set: flashCardSetId,
+            midiNumbers: [rootNote.midiNumber, newPitch.midiNumber]
+          };
+          const id = JSON.stringify(deserializedId);
+          
           return FlashCard.fromRenderFns(
+            id,
             rootNote.toString(true) + ", " + newPitch.toString(true),
             interval
           );

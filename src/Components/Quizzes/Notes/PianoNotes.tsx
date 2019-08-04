@@ -33,22 +33,32 @@ export function createFlashCardGroup(): FlashCardGroup {
 }
 export function createFlashCards(): FlashCard[] {
   return notes
-    .map((_, i) => new FlashCard(
-      new FlashCardSide(
-        () => (
-          <PianoKeyboard
-            rect={new Rect2D(new Size2D(200, 100), new Vector2D(0, 0))}
-            lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-            highestPitch={new Pitch(PitchLetter.B, 0, 4)}
-            pressedPitches={[Pitch.createFromMidiNumber((new Pitch(PitchLetter.C, 0, 4)).midiNumber + i)]}
-          />
+    .map((_, i) => {
+      const pitch = Pitch.createFromMidiNumber((new Pitch(PitchLetter.C, 0, 4)).midiNumber + i);
+      const deserializedId = {
+        set: "pianoNotesOneOctave",
+        midiNumberNoOctave: pitch.midiNumberNoOctave
+      };
+      const id = JSON.stringify(deserializedId);
+
+      return new FlashCard(
+        id,
+        new FlashCardSide(
+          () => (
+            <PianoKeyboard
+              rect={new Rect2D(new Size2D(200, 100), new Vector2D(0, 0))}
+              lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
+              highestPitch={new Pitch(PitchLetter.B, 0, 4)}
+              pressedPitches={[pitch]}
+            />
+          )
+        ),
+        new FlashCardSide(
+          notes[i],
+          notes[i]
         )
-      ),
-      new FlashCardSide(
-        notes[i],
-        notes[i]
-      )
-    )
+      );
+    }
   );
 }
 export function renderAnswerSelect(

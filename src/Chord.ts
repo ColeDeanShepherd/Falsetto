@@ -3,7 +3,6 @@ import { Pitch } from "./Pitch";
 import { getIntervalsFromFormula, getSimpleScaleDegree } from './Scale';
 import { Interval } from './Interval';
 import { ChordScaleFormula } from './ChordScaleFormula';
-import { number } from 'prop-types';
 
 export function getSimpleChordNoteNumber(chordNoteNumber: number) {
   return getSimpleScaleDegree(chordNoteNumber);

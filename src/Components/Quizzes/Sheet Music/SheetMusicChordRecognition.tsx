@@ -185,6 +185,8 @@ export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesF
 }
 
 export function createFlashCards(): Array<FlashCard> {
+  const flashCardSetId = "sheetChords";
+
   const flashCards = new Array<FlashCard>();
 
   for (const rootPitch of rootPitches) {
@@ -192,6 +194,7 @@ export function createFlashCards(): Array<FlashCard> {
       const pitches = new Chord(chordType, rootPitch).getPitches();
 
       flashCards.push(FlashCard.fromRenderFns(
+        JSON.stringify({ set: flashCardSetId, midiNumbers: pitches.map(p => p.midiNumber) }),
         (width, height) => (
           <div>
             <SheetMusicChord

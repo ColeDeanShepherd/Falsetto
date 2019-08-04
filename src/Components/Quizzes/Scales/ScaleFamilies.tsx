@@ -12,36 +12,94 @@ export function createFlashCardGroup(): FlashCardGroup {
 }
 
 export function createFlashCards(): FlashCard[] {
+  const flashCardSetId = "scaleFamilies";
+
   return [
-    FlashCard.fromRenderFns("Ionian (Major)", "Major7"),
-    FlashCard.fromRenderFns("Dorian", "Minor7"),
-    FlashCard.fromRenderFns("Phrygian", "Minor7"),
-    FlashCard.fromRenderFns("Lydian", "Major7"),
-    FlashCard.fromRenderFns("Mixolydian", "Dom7"),
-    FlashCard.fromRenderFns("Aeolian (Natural Minor)", "Minor7"),
-    FlashCard.fromRenderFns("Locrian", "Minor7b5"),
-    FlashCard.fromRenderFns("Melodic Minor", "Minor7"),
-    FlashCard.fromRenderFns("Harmonic Minor", "Minor7"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scale: "ionian" }),
+      "Ionian (Major)", "Major7"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scale: "dorian" }),
+      "Dorian", "Minor7"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scale: "phrygian" }),
+      "Phrygian", "Minor7"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scale: "lydian" }),
+      "Lydian", "Major7"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scale: "mixolydian" }),
+      "Mixolydian", "Dom7"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scale: "aeolian" }),
+      "Aeolian (Natural Minor)", "Minor7"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scale: "locrian" }),
+      "Locrian", "Minor7b5"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scale: "melodicMinor" }),
+      "Melodic Minor", "Minor7"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scale: "harmonicMinor" }),
+      "Harmonic Minor", "Minor7"),
 
-    FlashCard.fromRenderFns("Tonic Diminished", "Diminished"),
-    FlashCard.fromRenderFns("Dominant Diminished", "Dom7"),
-    FlashCard.fromRenderFns("Whole Tone", "Dom7, Augmented"),
-    FlashCard.fromRenderFns("Augmented", "Augmented, Major7"),
-    FlashCard.fromRenderFns("Major Pentatonic", "Dom7, Major7"),
-    FlashCard.fromRenderFns("Minor Pentatonic", "Dom7, Minor7"),
-    FlashCard.fromRenderFns("Major Blues", "Dom7, Major7"),
-    FlashCard.fromRenderFns("Minor Blues", "Dom7, Minor7"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scale: "tonicDiminished" }),
+      "Tonic Diminished", "Diminished"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scale: "dominantDiminished" }),
+      "Dominant Diminished", "Dom7"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scale: "wholeTone" }),
+      "Whole Tone", "Dom7, Augmented"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scale: "augmented" }),
+      "Augmented", "Augmented, Major7"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scale: "majorPentatonic" }),
+      "Major Pentatonic", "Dom7, Major7"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scale: "minorPentatonic" }),
+      "Minor Pentatonic", "Dom7, Minor7"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scale: "majorBlues" }),
+      "Major Blues", "Dom7, Major7"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scale: "minorBlues" }),
+      "Minor Blues", "Dom7, Minor7"),
 
-    FlashCard.fromRenderFns("Lydian aug", "Major7"),
-    FlashCard.fromRenderFns("Ionian aug", "Major7"),
-    FlashCard.fromRenderFns("Dorian b2", "Minor7"),
-    FlashCard.fromRenderFns("Dorian #4", "Minor7"),
-    FlashCard.fromRenderFns("Locrian nat2", "Minor7b5"),
-    FlashCard.fromRenderFns("Locrian nat6", "Minor7b5"),
-    FlashCard.fromRenderFns("Mixolydian #11", "Dom7"),
-    FlashCard.fromRenderFns("Mixolydian b6", "Dom7"),
-    FlashCard.fromRenderFns("Altered Dominant", "Dom7"),
-    FlashCard.fromRenderFns("Phrygian Major", "Dom7"),
-    FlashCard.fromRenderFns("Altered Dominant bb7", "Diminished"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scale: "lydianAugmented" }),
+      "Lydian aug", "Major7"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scale: "ionianAugmented" }),
+      "Ionian aug", "Major7"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scale: "dorianb2" }),
+      "Dorian b2", "Minor7"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scale: "dorian#4" }),
+      "Dorian #4", "Minor7"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scale: "locrianNat2" }),
+      "Locrian nat2", "Minor7b5"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scale: "locrianNat6" }),
+      "Locrian nat6", "Minor7b5"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scale: "mixolydian#11" }),
+      "Mixolydian #11", "Dom7"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scale: "mixolydianb6" }),
+      "Mixolydian b6", "Dom7"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scale: "alteredDominant" }),
+      "Altered Dominant", "Dom7"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scale: "phrygianMajor" }),
+      "Phrygian Major", "Dom7"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scale: "alteredDominantbb7" }),
+      "Altered Dominant bb7", "Diminished"),
   ];
 }

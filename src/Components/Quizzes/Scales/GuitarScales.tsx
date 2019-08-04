@@ -353,8 +353,14 @@ export function createFlashCards(): Array<FlashCard> {
 
   forEachScale((scale, rootPitchStr, i) => {
     const pitches = new ChordScaleFormula(scale.type.formula.parts.concat(new ChordScaleFormulaPart(8, 0, false))).getPitches(scale.rootPitch);
+    const deserializedId = {
+      set: "guitarScalesOrderedNotes",
+      midiNumberNoOctaves: pitches.map(p => p.midiNumberNoOctave)
+    };
+    const id = JSON.stringify(deserializedId);
 
     flashCards.push(new FlashCard(
+      id,
       new FlashCardSide(
         (width, height) => {
           return (

@@ -10,14 +10,32 @@ export function createFlashCardGroup(): FlashCardGroup {
 }
 
 export function createFlashCards(): FlashCard[] {
+  const flashCardSetId = "genericIntervalQualities";
+
   return [
-    FlashCard.fromRenderFns("1st", "perfect"),
-    FlashCard.fromRenderFns("2nd", "imperfect"),
-    FlashCard.fromRenderFns("3rd", "imperfect"),
-    FlashCard.fromRenderFns("4th", "perfect"),
-    FlashCard.fromRenderFns("5th", "perfect"),
-    FlashCard.fromRenderFns("6th", "imperfect"),
-    FlashCard.fromRenderFns("7th", "imperfect"),
-    FlashCard.fromRenderFns("8th", "perfect"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, int: 1 }),
+      "1st", "perfect"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, int: 2 }),
+      "2nd", "imperfect"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, int: 3 }),
+      "3rd", "imperfect"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, int: 4 }),
+      "4th", "perfect"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, int: 5 }),
+      "5th", "perfect"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, int: 6 }),
+      "6th", "imperfect"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, int: 7 }),
+      "7th", "imperfect"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, int: 8 }),
+      "8th", "perfect"),
   ];
 }

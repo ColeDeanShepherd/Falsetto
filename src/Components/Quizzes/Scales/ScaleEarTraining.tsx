@@ -147,6 +147,8 @@ export class ScaleNotesFlashCardMultiSelect extends React.Component<IScaleNotesF
 }
 
 export function createFlashCards(): Array<FlashCard> {
+  const flashCardSetId = "scaleEarTraining";
+
   let i = 0;
 
   const flashCards = new Array<FlashCard>();
@@ -158,7 +160,14 @@ export function createFlashCards(): Array<FlashCard> {
       const iCopy = i;
       i++;
 
+      const deserializedId = {
+        set: flashCardSetId,
+        midiNumbers: pitches.map(p => p.midiNumber)
+      };
+      const id = JSON.stringify(deserializedId);
+
       flashCards.push(FlashCard.fromRenderFns(
+        id,
         () => <FlashCardFrontSide key={iCopy} pitches={pitches} />,
         scaleType.name
       ));

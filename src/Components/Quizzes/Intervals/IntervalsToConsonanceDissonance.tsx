@@ -12,18 +12,44 @@ export function createFlashCardGroup(): FlashCardGroup {
 }
 
 export function createFlashCards(): FlashCard[] {
+  const flashCardSetId = "intConsDiss";
+
   return [
-    FlashCard.fromRenderFns("m2", "sharp dissonance"),
-    FlashCard.fromRenderFns("M2", "mild dissonance"),
-    FlashCard.fromRenderFns("m3", "soft consonance"),
-    FlashCard.fromRenderFns("M3", "soft consonance"),
-    FlashCard.fromRenderFns("P4", "consonance or dissonance"),
-    FlashCard.fromRenderFns("A4/d5", "neutral or restless"),
-    FlashCard.fromRenderFns("P5", "open consonance"),
-    FlashCard.fromRenderFns("m6", "soft consonance"),
-    FlashCard.fromRenderFns("M6", "soft consonance"),
-    FlashCard.fromRenderFns("m7", "mild dissonance"),
-    FlashCard.fromRenderFns("M7", "sharp dissonance"),
-    FlashCard.fromRenderFns("P8", "open consonance"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, int: "m2" }),
+      "m2", "sharp dissonance"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, int: "M2" }),
+      "M2", "mild dissonance"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, int: "m3" }),
+      "m3", "soft consonance"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, int: "M3" }),
+      "M3", "soft consonance"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, int: "P4" }),
+      "P4", "consonance or dissonance"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, int: "A4/d5" }),
+      "A4/d5", "neutral or restless"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, int: "P5" }),
+      "P5", "open consonance"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, int: "m6" }),
+      "m6", "soft consonance"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, int: "M6" }),
+      "M6", "soft consonance"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, int: "m7" }),
+      "m7", "mild dissonance"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, int: "M7" }),
+      "M7", "sharp dissonance"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, int: "P8" }),
+      "P8", "open consonance"),
   ];
 }

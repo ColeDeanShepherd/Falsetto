@@ -201,13 +201,21 @@ export function createFlashCards(): Array<FlashCard> {
   const flashCards = new Array<FlashCard>();
   forEachInterval(rootNotes,
     (interval, p1, p2, isHarmonicInterval, i) => {
-    flashCards.push(
-      new FlashCard(
-        new FlashCardSide((width, height) => <FlashCardFrontSide key={i} width={width} height={height} pitch1={p1} pitch2={p2} />, p1),
-        new FlashCardSide(p2.toOneAccidentalAmbiguousString(false), p2)
-      )
-    );
-  }, includeHarmonicIntervals, minPitch, maxPitch);
+      const deserializedId = {
+        set: "pianoNextNoteEarTraining",
+        curMidiNumber: p1.midiNumber,
+        nextMidiNumber: p2.midiNumber
+      };
+      const id = JSON.stringify(deserializedId);
+
+      flashCards.push(
+        new FlashCard(
+          id,
+          new FlashCardSide((width, height) => <FlashCardFrontSide key={i} width={width} height={height} pitch1={p1} pitch2={p2} />, p1),
+          new FlashCardSide(p2.toOneAccidentalAmbiguousString(false), p2)
+        )
+      );
+    }, includeHarmonicIntervals, minPitch, maxPitch);
   return flashCards;
 }
 export function createFlashCardGroup(): FlashCardGroup {

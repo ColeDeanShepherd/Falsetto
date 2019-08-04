@@ -102,6 +102,8 @@ export function createFlashCardGroup(notes?: Array<StringedInstrumentNote>): Fla
 }
 
 export function createFlashCards(notes?: Array<StringedInstrumentNote>): FlashCard[] {
+  const flashCardSetId = "violinNotes";
+
   notes = !notes
     ? Utils.flattenArrays(Utils.range(0, standardViolinTuning.stringCount - 1)
     .map(stringIndex => Utils.range(0, DEFAULT_MAX_FRET_NUMBER)
@@ -114,21 +116,30 @@ export function createFlashCards(notes?: Array<StringedInstrumentNote>): FlashCa
     : notes;
 
   return notes
-    .map(note => FlashCard.fromRenderFns(
-      (width, height) => {
-        const size = new Size2D(500, 140);
-        const style: any = { width: "100%", maxWidth: `${size.width}px` };
+    .map(note => {
+      const deserializedId = {
+        set: flashCardSetId,
+        note: [note.stringIndex, note.pitch.midiNumber]
+      };
+      const id = JSON.stringify(deserializedId);
 
-        return (
-          <ViolinFingerboard
-            width={size.width} height={size.height}
-            tuning={standardViolinTuning}
-            fretCount={DEFAULT_MAX_FRET_NUMBER}
-            pressedNotes={[note]}
-            style={style}
-          />
-        );
-      },
-      note.pitch.toOneAccidentalAmbiguousString(false, true)
-    ));
+      return FlashCard.fromRenderFns(
+        id,
+        (width, height) => {
+          const size = new Size2D(500, 140);
+          const style: any = { width: "100%", maxWidth: `${size.width}px` };
+  
+          return (
+            <ViolinFingerboard
+              width={size.width} height={size.height}
+              tuning={standardViolinTuning}
+              fretCount={DEFAULT_MAX_FRET_NUMBER}
+              pressedNotes={[note]}
+              style={style}
+            />
+          );
+        },
+        note.pitch.toOneAccidentalAmbiguousString(false, true)
+      );
+    });
 }

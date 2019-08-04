@@ -133,6 +133,7 @@ export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesF
 export function createFlashCards(): Array<FlashCard> {
   let i = 0;
 
+  const flashCardSetId = "chordEarTraining";
   const flashCards = new Array<FlashCard>();
 
   for (const rootPitch of rootPitches) {
@@ -142,7 +143,14 @@ export function createFlashCards(): Array<FlashCard> {
       const iCopy = i;
       i++;
 
+      const deserializedId = {
+        set: "chordEarTraining",
+        midiNumberNoOctaves: pitches.map(p => p.midiNumberNoOctave)
+      };
+      const id = JSON.stringify(deserializedId);
+
       flashCards.push(FlashCard.fromRenderFns(
+        id,
         () => <FlashCardFrontSide key={iCopy} pitches={pitches} />,
         chordType.name
       ));

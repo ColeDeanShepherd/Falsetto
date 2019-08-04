@@ -168,10 +168,19 @@ export function renderAnswerSelect(
 }
 
 export function createFlashCards(): Array<FlashCard> {
+  const flashCardSetId = "pianoIntervals";
+
   const flashCards = new Array<FlashCard>();
 
   forEachInterval((pitches, intervalString) => {
+    const deserializedId = {
+      set: flashCardSetId,
+      midiNumbers: pitches.map(p => p.midiNumber)
+    };
+    const id = JSON.stringify(deserializedId);
+
     flashCards.push(FlashCard.fromRenderFns(
+      id,
       (width, height) => {
         const size = Utils.shrinkRectToFit(
           new Size2D(width, height),

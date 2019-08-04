@@ -12,14 +12,32 @@ export function createFlashCardGroup(): FlashCardGroup {
 }
 
 export function createFlashCards(): FlashCard[] {
+  const flashCardSetId = "scaleDegNames";
+
   return [
-    FlashCard.fromRenderFns("1", "Tonic"),
-    FlashCard.fromRenderFns("2", "Supertonic"),
-    FlashCard.fromRenderFns("3", "Mediant"),
-    FlashCard.fromRenderFns("4", "Subdominant"),
-    FlashCard.fromRenderFns("5", "Dominant"),
-    FlashCard.fromRenderFns("6", "Submediant"),
-    FlashCard.fromRenderFns("7 (in major)", "Leading Tone"),
-    FlashCard.fromRenderFns("7 (in minor)", "Subtonic"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scaleDeg: "1" }),
+      "1", "Tonic"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scaleDeg: "2" }),
+      "2", "Supertonic"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scaleDeg: "3" }),
+      "3", "Mediant"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scaleDeg: "4" }),
+      "4", "Subdominant"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scaleDeg: "5" }),
+      "5", "Dominant"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scaleDeg: "6" }),
+      "6", "Submediant"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scaleDeg: "7" }),
+      "7 (in major)", "Leading Tone"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scaleDeg: "7min" }),
+      "7 (in minor)", "Subtonic"),
   ];
 }

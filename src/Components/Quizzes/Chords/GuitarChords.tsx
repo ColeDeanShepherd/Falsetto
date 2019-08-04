@@ -402,7 +402,13 @@ export function createFlashCards(): FlashCard[] {
       
       return ChordType.All.map(chordType => {
         const pitches = chordType.getPitches(rootPitch);
+        const deserializedId = {
+          set: "guitarChordOrderedNotes",
+          midiNumberNoOctaves: pitches.map(p => p.midiNumberNoOctave)
+        };
+        const id = JSON.stringify(deserializedId);
         return new FlashCard(
+          id,
           new FlashCardSide(
             (width, height) => {
               const size = Utils.shrinkRectToFit(new Size2D(width, height), new Size2D(400, 140));

@@ -53,12 +53,21 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
 }
 
 export function createFlashCards(): Array<FlashCard> {
+  const flashCardSetId = "nextNoteEarTraining";
+
   let flashCards = new Array<FlashCard>();
 
   const includeHarmonicIntervals = false;
   forEachInterval(rootNotes,
     (interval, pitch1, pitch2, isHarmonicInterval, i) => {
+      const deserializedId = {
+        set: flashCardSetId,
+        midiNumbers: [pitch1.midiNumber, pitch2.midiNumber]
+      };
+      const id = JSON.stringify(deserializedId);
+
       flashCards.push(FlashCard.fromRenderFns(
+        id,
         () => <FlashCardFrontSide key={i} pitch1={pitch1} pitch2={pitch2} />,
         pitch2.toOneAccidentalAmbiguousString(false, true)
       ));

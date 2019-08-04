@@ -54,6 +54,8 @@ export function createFlashCardGroup(): FlashCardGroup {
   return flashCardGroup;
 }
 export function createFlashCards(): FlashCard[] {
+  const flashCardSetId = "sheetMusicNotes";
+
   return allPitchesMap((clef, pitch) => {
     const pitchAccidentalString = pitch.getAccidentalString();
     const vexFlowPitchString = pitch.toVexFlowString();
@@ -87,6 +89,7 @@ export function createFlashCards(): FlashCard[] {
     }
 
     return FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, pitch: pitch.toString(true) }),
       () => (  
         <SheetMusicSingleNote
           width={150} height={200}

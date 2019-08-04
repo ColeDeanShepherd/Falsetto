@@ -26,8 +26,11 @@ export function createFlashCardGroup(): FlashCardGroup {
   return flashCardGroup;
 }
 export function createFlashCards(): FlashCard[] {
+  const flashCardSetId = "noteDurationSymbols";
+
   return [
     FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, id: "w" }),
       () => (
         <VexFlowComponent
           width={width} height={height}
@@ -37,6 +40,7 @@ export function createFlashCards(): FlashCard[] {
       "Whole Note"
     ),
     FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, id: "h" }),
       () => (
         <VexFlowComponent
           width={width} height={height}
@@ -46,6 +50,7 @@ export function createFlashCards(): FlashCard[] {
       "Half Note"
     ),
     FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, id: "q" }),
       () => (
         <VexFlowComponent
           width={width} height={height}
@@ -55,6 +60,7 @@ export function createFlashCards(): FlashCard[] {
       "Quarter Note"
     ),
     FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, id: "8" }),
       () => (
         <VexFlowComponent
           width={width} height={height}
@@ -64,6 +70,7 @@ export function createFlashCards(): FlashCard[] {
       "Eighth Note"
     ),
     FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, id: "16" }),
       () => (
         <VexFlowComponent
           width={width} height={height}
@@ -73,6 +80,7 @@ export function createFlashCards(): FlashCard[] {
       "Sixteenth Note"
     ),
     FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, id: "32" }),
       () => (
         <VexFlowComponent
           width={width} height={height}
@@ -82,6 +90,7 @@ export function createFlashCards(): FlashCard[] {
       "32nd Note"
     ),
     FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, id: "64" }),
       () => (
         <VexFlowComponent
           width={width} height={height}
@@ -91,6 +100,7 @@ export function createFlashCards(): FlashCard[] {
       "64th Note"
     ),
     FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, id: "128" }),
       () => (
         <VexFlowComponent
           width={width} height={height}
@@ -100,6 +110,7 @@ export function createFlashCards(): FlashCard[] {
       "128th Note"
     ),
     FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, id: "wr" }),
       () => (
         <VexFlowComponent
           width={width} height={height}
@@ -109,6 +120,7 @@ export function createFlashCards(): FlashCard[] {
       "Whole Rest"
     ),
     FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, id: "h4" }),
       () => (
         <VexFlowComponent
           width={width} height={height}
@@ -118,6 +130,7 @@ export function createFlashCards(): FlashCard[] {
       "Half Rest"
     ),
     FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, id: "qr" }),
       () => (
         <VexFlowComponent
           width={width} height={height}
@@ -127,6 +140,7 @@ export function createFlashCards(): FlashCard[] {
       "Quarter Rest"
     ),
     FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, id: "8r" }),
       () => (
         <VexFlowComponent
           width={width} height={height}
@@ -136,6 +150,7 @@ export function createFlashCards(): FlashCard[] {
       "Eighth Rest"
     ),
     FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, id: "16r" }),
       () => (
         <VexFlowComponent
           width={width} height={height}
@@ -145,6 +160,7 @@ export function createFlashCards(): FlashCard[] {
       "Sixteenth Rest"
     ),
     FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, id: "32r" }),
       () => (
         <VexFlowComponent
           width={width} height={height}
@@ -154,6 +170,7 @@ export function createFlashCards(): FlashCard[] {
       "32nd Rest"
     ),
     FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, id: "64r" }),
       () => (
         <VexFlowComponent
           width={width} height={height}
@@ -163,6 +180,7 @@ export function createFlashCards(): FlashCard[] {
       "64th Rest"
     ),
     FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, id: "128r" }),
       () => (
         <VexFlowComponent
           width={width} height={height}

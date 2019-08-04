@@ -100,6 +100,8 @@ export function createFlashCardGroup(guitarNotes?: Array<StringedInstrumentNote>
 }
 
 export function createFlashCards(guitarNotes?: Array<StringedInstrumentNote>): FlashCard[] {
+  const flashCardSetId = "guitarNotes";
+
   const MAX_FRET_NUMBER = 11;
   guitarNotes = !guitarNotes
     ? Utils.flattenArrays(Utils.range(0, standard6StringGuitarTuning.stringCount - 1)
@@ -113,21 +115,30 @@ export function createFlashCards(guitarNotes?: Array<StringedInstrumentNote>): F
     : guitarNotes;
 
   return guitarNotes
-    .map(guitarNote => FlashCard.fromRenderFns(
-      (width, height) => {
-        const size = Utils.shrinkRectToFit(
-          new Size2D(width, height),
-          new Size2D(400, 140)
-        );
+    .map(guitarNote => {
+      const deserializedId = {
+        set: flashCardSetId,
+        note: [guitarNote.stringIndex, guitarNote.pitch.midiNumber]
+      };
+      const id = JSON.stringify(deserializedId);
 
-        return (
-          <GuitarFretboard
-            width={size.width} height={size.height}
-            tuning={standard6StringGuitarTuning}
-            pressedNotes={[guitarNote]}
-          />
-        );
-      },
-      guitarNote.pitch.toOneAccidentalAmbiguousString(false, true)
-    ));
+      return FlashCard.fromRenderFns(
+        id,
+        (width, height) => {
+          const size = Utils.shrinkRectToFit(
+            new Size2D(width, height),
+            new Size2D(400, 140)
+          );
+  
+          return (
+            <GuitarFretboard
+              width={size.width} height={size.height}
+              tuning={standard6StringGuitarTuning}
+              pressedNotes={[guitarNote]}
+            />
+          );
+        },
+        guitarNote.pitch.toOneAccidentalAmbiguousString(false, true)
+      );
+    });
 }

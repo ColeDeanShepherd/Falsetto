@@ -10,9 +10,17 @@ export function createFlashCardGroup(): FlashCardGroup {
   return flashCardGroup;
 }
 export function createFlashCards(): FlashCard[] {
+  const flashCardSetId = "diatonicChordFamilyDefinitions";
+
   return [
-    FlashCard.fromRenderFns("Tonic", "doesn't contain the 4th scale degree"),
-    FlashCard.fromRenderFns("Pre-Dominant", "contains only 4th scale degree"),
-    FlashCard.fromRenderFns("Dominant", "contains the 4th and 7th scale degrees"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, family: "tonic" }),
+      "Tonic", "doesn't contain the 4th scale degree"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, family: "preDominant" }),
+      "Pre-Dominant", "contains only 4th scale degree"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, family: "dominant" }),
+      "Dominant", "contains the 4th and 7th scale degrees"),
   ];
 }

@@ -153,6 +153,7 @@ export function renderAnswerSelect(
 }
 
 export function createFlashCards(): Array<FlashCard> {
+  const flashCardSetId = "guitarIntervals";
   const flashCards = new Array<FlashCard>();
 
   forEachInterval((notes, interval) => {
@@ -201,7 +202,14 @@ export function createFlashCards(): Array<FlashCard> {
       );
     };
 
+    const deserializedId = {
+      set: flashCardSetId,
+      notes: notes.map(n => [n.stringIndex, n.pitch.midiNumber])
+    };
+    const id = JSON.stringify(deserializedId);
+
     flashCards.push(FlashCard.fromRenderFns(
+      id,
       (width, height) => {
         const size = Utils.shrinkRectToFit(
           new Size2D(width, height),

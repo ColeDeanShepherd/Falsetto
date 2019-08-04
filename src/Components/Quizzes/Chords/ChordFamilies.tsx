@@ -11,13 +11,29 @@ export function createFlashCardGroup(): FlashCardGroup {
   return flashCardGroup;
 }
 export function createFlashCards(): FlashCard[] {
+  const flashCardSetId = "diatonicChordFamilies";
+
   return [
-    FlashCard.fromRenderFns("1", "Tonic"),
-    FlashCard.fromRenderFns("2", "Pre-Dominant"),
-    FlashCard.fromRenderFns("3", "Tonic"),
-    FlashCard.fromRenderFns("4", "Pre-Dominant"),
-    FlashCard.fromRenderFns("5", "Dominant"),
-    FlashCard.fromRenderFns("6", "Tonic"),
-    FlashCard.fromRenderFns("7", "Dominant"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scaleDegree: 1 }),
+      "1", "Tonic"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scaleDegree: 2 }),
+      "2", "Pre-Dominant"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scaleDegree: 3 }),
+      "3", "Tonic"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scaleDegree: 4 }),
+      "4", "Pre-Dominant"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scaleDegree: 5 }),
+      "5", "Dominant"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scaleDegree: 6 }),
+      "6", "Tonic"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, scaleDegree: 7 }),
+      "7", "Dominant"),
   ];
 }

@@ -11,15 +11,35 @@ export function createFlashCardGroup(): FlashCardGroup {
   return flashCardGroup;
 }
 export function createFlashCards(): FlashCard[] {
+  const flashCardSetId = "availableChordTensions";
+
   return [
-    FlashCard.fromRenderFns("Maj7", "9, #11, 13"),
-    FlashCard.fromRenderFns("m7", "9, 11, 13"),
-    FlashCard.fromRenderFns("ø7", "9, 11, b13"),
-    FlashCard.fromRenderFns("mMaj7", "9, 11, 13"),
-    FlashCard.fromRenderFns("Maj+7", "9, #11"),
-    FlashCard.fromRenderFns("o", "9, 11, b13, 7"),
-    FlashCard.fromRenderFns("7", "b9, 9, #9, #11, b13, 13"),
-    FlashCard.fromRenderFns("7sus", "b9, 9, #9, b11, b13, 13"),
-    FlashCard.fromRenderFns("+7", "b9, 9, #9, #11, 13"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ "set": flashCardSetId, chordType: "maj7" }),
+      "Maj7", "9, #11, 13"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ "set": flashCardSetId, chordType: "m7" }),
+      "m7", "9, 11, 13"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ "set": flashCardSetId, chordType: "halfDim7" }),
+      "ø7", "9, 11, b13"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ "set": flashCardSetId, chordType: "mMaj7" }),
+      "mMaj7", "9, 11, 13"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ "set": flashCardSetId, chordType: "augMaj7" }),
+      "Maj+7", "9, #11"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ "set": flashCardSetId, chordType: "dim7" }),
+      "o", "9, 11, b13, 7"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ "set": flashCardSetId, chordType: "7" }),
+      "7", "b9, 9, #9, #11, b13, 13"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ "set": flashCardSetId, chordType: "7sus" }),
+      "7sus", "b9, 9, #9, b11, b13, 13"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ "set": flashCardSetId, chordType: "aug7" }),
+      "+7", "b9, 9, #9, #11, 13"),
   ];
 }

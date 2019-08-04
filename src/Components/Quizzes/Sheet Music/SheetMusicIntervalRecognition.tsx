@@ -160,10 +160,13 @@ export function renderAnswerSelect(
 }
 
 export function createFlashCards(): Array<FlashCard> {
+  const flashCardSetId = "sheetIntervals";
+
   const flashCards = new Array<FlashCard>();
 
   forEachInterval((pitches, interval) => {
     flashCards.push(FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, midiNumbers: pitches.map(p => p.midiNumber) }),
       (width, height) => (
         <div>
           <SheetMusicChord
