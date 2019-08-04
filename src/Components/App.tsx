@@ -7,6 +7,7 @@ import "./App.css";
 
 import * as Utils from "../Utils";
 import * as Analytics from "../Analytics";
+import { StringDictionary } from "../StringDictionary";
 
 import {
   SectionContainer,
@@ -78,6 +79,7 @@ import { Paper } from '@material-ui/core';
 import { BecomeAPatronButton } from './Utils/BecomeAPatronButton';
 import { Metronome } from './Tools/Metronome';
 import { DiatonicChordPlayer } from './Tools/DiatonicChordPlayer';
+import { isDevelopment } from '../Config';
 
 async function getErrorDescription(msg: string | Event, file: string | undefined, line: number | undefined, col: number | undefined, error: Error | undefined): Promise<string> {
   return new Promise<string>((resolve, reject) => {
@@ -121,10 +123,10 @@ class App extends React.Component<IAppProps, IAppState> {
     this.history = createBrowserHistory();
     this.unregisterHistoryListener = this.history.listen(this.historyListener.bind(this));
 
-    this.groupedFlashCardGroups = [
+    this.groupedFlashCardSets = [
       {
         title: "Notes",
-        flashCardGroups: [
+        flashCardSets: [
           PianoNotes.createFlashCardGroup(),
           GuitarNotes.createFlashCardGroup(),
           ViolinNotes.createFlashCardGroup(),
@@ -134,7 +136,7 @@ class App extends React.Component<IAppProps, IAppState> {
       },
       {
         title: "Intervals",
-        flashCardGroups: [
+        flashCardSets: [
           IntervalQualitySymbolsToQualities.createFlashCardGroup(),
           GenericIntervalsToIntervalQualities.createFlashCardGroup(),
           IntervalNamesToHalfSteps.createFlashCardGroup(),
@@ -151,7 +153,7 @@ class App extends React.Component<IAppProps, IAppState> {
       },
       {
         title: "Scales",
-        flashCardGroups: [
+        flashCardSets: [
           ScaleDegreeNames.createFlashCardGroup(),
           ScaleNotes.createFlashCardGroup(),
           PianoScales.createFlashCardGroup(),
@@ -165,7 +167,7 @@ class App extends React.Component<IAppProps, IAppState> {
       },
       {
         title: "Keys",
-        flashCardGroups: [
+        flashCardSets: [
           KeyAccidentalCounts.createFlashCardGroup(),
           KeyAccidentalNotes.createFlashCardGroup(),
           KeySignatureIdentification.createFlashCardGroup()
@@ -173,7 +175,7 @@ class App extends React.Component<IAppProps, IAppState> {
       },
       {
         title: "Chords",
-        flashCardGroups: [
+        flashCardSets: [
           ChordFamilyDefinitions.createFlashCardGroup(),
           ChordFamilies.createFlashCardGroup(),
           ChordNotes.createFlashCardGroup(),
@@ -189,7 +191,12 @@ class App extends React.Component<IAppProps, IAppState> {
       }
     ];
 
-    this.flashCardGroups = Utils.flattenArrays<FlashCardGroup>(this.groupedFlashCardGroups.map(g => g.flashCardGroups));
+    this.flashCardSets = Utils.flattenArrays<FlashCardGroup>(this.groupedFlashCardSets.map(g => g.flashCardSets));
+    
+    if (isDevelopment()) {
+      this.checkFlashCardSetIds();
+      this.checkFlashCardIds();
+    }
 
     this.mainContainerRef = React.createRef();
 
@@ -232,7 +239,7 @@ class App extends React.Component<IAppProps, IAppState> {
       <Route exact path="/learn-guitar-notes-in-10-steps" component={() => <DocumentTitle title={"Learn the Guitar Notes in 10 Easy Steps - Falsetto"}><GuitarNotesLesson /></DocumentTitle>} />,
       <Route exact path="/learn-guitar-scales" component={() => <DocumentTitle title={"Learn the Guitar Scales - Falsetto"}><GuitarScalesLesson /></DocumentTitle>} />
     ].concat(
-      this.flashCardGroups.map(fcg => <Route key={fcg.route} exact path={fcg.route} component={this.createStudyFlashCardGroupComponent(fcg)} />)
+      this.flashCardSets.map(fcg => <Route key={fcg.route} exact path={fcg.route} component={this.createStudyFlashCardGroupComponent(fcg)} />)
     );
   }
   public render(): JSX.Element {
@@ -280,6 +287,7 @@ class App extends React.Component<IAppProps, IAppState> {
         <div className={!this.isEmbedded ? "main" : "main embedded"}>
           <div style={{ maxWidth: MAX_MAIN_CARD_WIDTH, margin: "0 auto" }}>
             {this.renderRoutes()}
+            <textarea>{Utils.flattenArrays(this.flashCardSets.map(fcs => fcs.createFlashCards().map(fc => fc.id))).join("\n")}</textarea>
           </div>
           <div className="footer">
             <BecomeAPatronButton />
@@ -326,8 +334,8 @@ class App extends React.Component<IAppProps, IAppState> {
 
   private history: History<any>;
   private unregisterHistoryListener: UnregisterCallback;
-  private groupedFlashCardGroups: { title: string; flashCardGroups: FlashCardGroup[]; }[];
-  private flashCardGroups: FlashCardGroup[];
+  private groupedFlashCardSets: { title: string; flashCardSets: FlashCardGroup[]; }[];
+  private flashCardSets: FlashCardGroup[];
   private mainContainerRef: React.Ref<HTMLDivElement>;
 
   private get isEmbedded(): boolean {
@@ -345,6 +353,35 @@ class App extends React.Component<IAppProps, IAppState> {
         {createStudyFlashCardGroupComponent(currentFlashCardGroup, this.isEmbedded, false)}
       </DocumentTitle>
     );
+  }
+
+  private checkFlashCardSetIds() {
+    /*var flashCardSetIds: StringDictionary<boolean> = {};
+
+    for (const set of this.flashCardSets) {
+      if (flashCardSetIds[set.id] === undefined) {
+        flashCardSetIds[set.id] = true;
+      } else {
+        debugger;
+        console.error(`Duplicate flash card set ID: ${set.id}`);
+      }
+    }*/
+  }
+  private checkFlashCardIds() {
+    var flashCardIds: StringDictionary<boolean> = {};
+
+    for (const set of this.flashCardSets) {
+      const flashCards = set.createFlashCards();
+
+      for (const flashCard of flashCards) {
+        if (flashCardIds[flashCard.id] === undefined) {
+          flashCardIds[flashCard.id] = true;
+        } else {
+          debugger;
+          console.error(`Duplicate flash card ID: ${flashCard.id}`);
+        }
+      }
+    }
   }
 }
 

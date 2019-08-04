@@ -12,7 +12,8 @@ import { playPitches } from "../../../Piano";
 
 const minPitch = new Pitch(PitchLetter.C, -1, 2);
 const maxPitch = new Pitch(PitchLetter.C, 1, 6);
-const rootPitches = pitchRange(minPitch, maxPitch, -1, 1);
+const rootPitches = Utils.range(minPitch.midiNumber, maxPitch.midiNumber)
+  .map(midiNumber => Pitch.createFromMidiNumber(midiNumber));
 const chordTypes = ChordType.Triads
   .concat(ChordType.SimpleSeventhChords);
 
@@ -144,8 +145,8 @@ export function createFlashCards(): Array<FlashCard> {
       i++;
 
       const deserializedId = {
-        set: "chordEarTraining",
-        midiNumberNoOctaves: pitches.map(p => p.midiNumberNoOctave)
+        set: flashCardSetId,
+        midiNumbers: pitches.map(p => p.midiNumber)
       };
       const id = JSON.stringify(deserializedId);
 

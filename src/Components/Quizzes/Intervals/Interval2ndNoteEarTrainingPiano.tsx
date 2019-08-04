@@ -200,11 +200,10 @@ export function renderAnswerSelect(
 export function createFlashCards(): Array<FlashCard> {
   const flashCards = new Array<FlashCard>();
   forEachInterval(rootNotes,
-    (interval, p1, p2, isHarmonicInterval, i) => {
+    (interval, p1, p2, _, i) => {
       const deserializedId = {
         set: "pianoNextNoteEarTraining",
-        curMidiNumber: p1.midiNumber,
-        nextMidiNumber: p2.midiNumber
+        pitches: [p1.toString(true), p2.toString(true)]
       };
       const id = JSON.stringify(deserializedId);
 

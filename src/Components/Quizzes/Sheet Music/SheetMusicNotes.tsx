@@ -89,7 +89,7 @@ export function createFlashCards(): FlashCard[] {
     }
 
     return FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, pitch: pitch.toString(true) }),
+      JSON.stringify({ set: flashCardSetId, clef: isTrebleNote ? "t" : "b", pitch: pitch.toString(true) }),
       () => (  
         <SheetMusicSingleNote
           width={150} height={200}

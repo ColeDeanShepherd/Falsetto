@@ -67,9 +67,6 @@ export function createFlashCards(): FlashCard[] {
     FlashCard.fromRenderFns(
       JSON.stringify({ set: flashCardSetId, scale: "Minor Blues" }),
       "Minor Blues", "{4, #4 (11, #11)}, {#9, sus4, b5}"),
-    FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scale: "Major Blues" }),
-      "Major Blues", "b3, no4 or 7"),
 
     FlashCard.fromRenderFns(
       JSON.stringify({ set: flashCardSetId, scale: "Lydian aug" }),

@@ -266,7 +266,7 @@ export function createFlashCards(): Array<FlashCard> {
           
           const deserializedId = {
             set: flashCardSetId,
-            midiNumbers: [rootNote.midiNumber, newPitch.midiNumber]
+            midiNumbers: [rootNote.toString(true), newPitch.toString(true)]
           };
           const id = JSON.stringify(deserializedId);
 

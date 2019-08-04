@@ -228,7 +228,7 @@ export function createFlashCards(): Array<FlashCard> {
   const flashCardSetId = "notesToIntervals";
 
   return Utils.flattenArrays<FlashCard>(rootNotes
-    .map(rootNote => intervals
+    .map(rootPitch => intervals
       .map(interval => signs
         .map(sign => {
           const intervalQuality = interval[0];
@@ -238,20 +238,20 @@ export function createFlashCards(): Array<FlashCard> {
           const genericIntervalNum = parseInt(genericInterval, 10);
 
           const newPitch = Pitch.addInterval(
-            rootNote,
+            rootPitch,
             (sign === "+") ? VerticalDirection.Up : VerticalDirection.Down,
             new Interval(genericIntervalNum, intervalQualityNum)
           );
           
           const deserializedId = {
             set: flashCardSetId,
-            midiNumbers: [rootNote.midiNumber, newPitch.midiNumber]
+            pitches: [rootPitch.toString(true), newPitch.toString(true)]
           };
           const id = JSON.stringify(deserializedId);
           
           return FlashCard.fromRenderFns(
             id,
-            rootNote.toString(true) + ", " + newPitch.toString(true),
+            rootPitch.toString(true) + ", " + newPitch.toString(true),
             interval
           );
         })

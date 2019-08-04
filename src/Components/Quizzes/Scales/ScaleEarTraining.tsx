@@ -13,7 +13,8 @@ import { ChordScaleFormula, ChordScaleFormulaPart } from '../../../ChordScaleFor
 
 const minPitch = new Pitch(PitchLetter.C, -1, 2);
 const maxPitch = new Pitch(PitchLetter.C, 1, 6);
-const rootPitches = pitchRange(minPitch, maxPitch, -1, 1);
+const rootPitches = Utils.range(minPitch.midiNumber, maxPitch.midiNumber)
+  .map(midiNumber => Pitch.createFromMidiNumber(midiNumber));
 
 // TODO: instead of generating all flash cards ahead of time, dynamically generate each one
 
