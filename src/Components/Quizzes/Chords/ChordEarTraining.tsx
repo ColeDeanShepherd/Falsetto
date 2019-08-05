@@ -5,7 +5,7 @@ import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
 import { FlashCardSet } from "../../../FlashCardSet";
-import { Pitch, pitchRange } from "../../../Pitch";
+import { Pitch } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 import { Chord, ChordType } from "../../../Chord";
 import { playPitches } from "../../../Piano";
@@ -19,10 +19,23 @@ const rootPitches = Utils.range(minPitch.midiNumber, maxPitch.midiNumber)
 const chordTypes = ChordType.Triads
   .concat(ChordType.SimpleSeventhChords);
 
-export interface IFlashCardFrontSideProps {
+  export interface IFlashCardFrontSideProps {
+    chordType: ChordType;
+  }
+export interface IFlashCardFrontSideState {
   pitches: Array<Pitch>;
 }
-export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps, {}> {
+export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps, IFlashCardFrontSideState> {
+  public constructor(props: IFlashCardFrontSideProps) {
+    super(props);
+    
+    const rootPitch = Utils.randomElement(rootPitches);
+
+    this.state = {
+      pitches: new Chord(this.props.chordType, rootPitch).getPitches()
+    };
+  }
+
   public render(): JSX.Element {
     return (
       <div>
@@ -37,7 +50,7 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
   }
 
   private playAudio(): void {
-    playPitches(this.props.pitches);
+    playPitches(this.state.pitches);
   }
 }
 
@@ -50,14 +63,12 @@ export function configDataToEnabledQuestionIds(configData: IConfigData): Array<n
 
   let i = 0;
 
-  for (const rootPitch of rootPitches) {
-    for (const chordType of chordTypes) {
-      if (Utils.arrayContains(configData.enabledChordTypes, chordType.name)) {
-        newEnabledFlashCardIndices.push(i);
-      }
-
-      i++;
+  for (const chordType of chordTypes) {
+    if (Utils.arrayContains(configData.enabledChordTypes, chordType.name)) {
+      newEnabledFlashCardIndices.push(i);
     }
+
+    i++;
   }
 
   return newEnabledFlashCardIndices;
@@ -138,25 +149,21 @@ export function createFlashCards(): Array<FlashCard> {
 
   const flashCards = new Array<FlashCard>();
 
-  for (const rootPitch of rootPitches) {
-    for (const chordType of chordTypes) {
-      const pitches = new Chord(chordType, rootPitch).getPitches();
-      
-      const iCopy = i;
-      i++;
+  for (const chordType of chordTypes) {
+    const iCopy = i;
+    i++;
 
-      const deserializedId = {
-        set: flashCardSetId,
-        chord: `${rootPitch.toString(true)} ${chordType.name}`
-      };
-      const id = JSON.stringify(deserializedId);
+    const deserializedId = {
+      set: flashCardSetId,
+      chord: `${chordType.name}`
+    };
+    const id = JSON.stringify(deserializedId);
 
-      flashCards.push(FlashCard.fromRenderFns(
-        id,
-        () => <FlashCardFrontSide key={iCopy} pitches={pitches} />,
-        chordType.name
-      ));
-    }
+    flashCards.push(FlashCard.fromRenderFns(
+      id,
+      () => <FlashCardFrontSide key={iCopy} chordType={chordType} />,
+      chordType.name
+    ));
   }
 
   return flashCards;

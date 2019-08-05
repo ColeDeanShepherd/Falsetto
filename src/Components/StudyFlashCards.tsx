@@ -69,6 +69,7 @@ export interface IStudyFlashCardsProps {
 }
 export interface IStudyFlashCardsState {
   currentFlashCardId: number;
+  sessionFlashCardNumber: number;
   haveGottenCurrentFlashCardWrong: boolean;
   lastCorrectAnswer: any;
   wasCorrect: boolean;
@@ -96,6 +97,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
 
     this.state = Object.assign(
       {
+        sessionFlashCardNumber: 0,
         showConfiguration: false,
         showDetailedStats: false,
         isShowingBackSide: false,
@@ -178,6 +180,8 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
       ? getPercentToNextLevel(activeFlashCardLevel, this.studyAlgorithm.quizStats)
       : undefined;
 
+    const currentFlashCardKey = `${this.state.sessionFlashCardNumber}.${this.state.currentFlashCardId}`;
+
     return (
       <Card style={cardStyle}>
         <CardContent style={{position: "relative"}}>
@@ -212,7 +216,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
             ? (
               <p style={{marginBottom: "0", marginTop: "0", lineHeight: "1.5"}}>
                 <span style={{paddingRight: "1em"}}>{this.studyAlgorithm.quizStats.numCorrectGuesses} / {this.studyAlgorithm.quizStats.numIncorrectGuesses} correct ({(100 * percentCorrect).toFixed(2)}%)</span>
-                <span key={this.state.currentFlashCardId}>
+                <span key={currentFlashCardKey}>
                   <i
                     className="material-icons fade-out"
                     style={{
@@ -269,6 +273,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
 
           <div
             ref={this.flashCardContainerRef}
+            key={currentFlashCardKey}
             style={flashCardContainerStyle}
           >
             {renderedFlashCardSide}
@@ -462,6 +467,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
   private moveToNextFlashCard(lastCorrectAnswer: any, wasCorrect: boolean) {
     this.setState({
       currentFlashCardId: this.studyAlgorithm.getNextQuestionId(),
+      sessionFlashCardNumber: this.state.sessionFlashCardNumber + 1,
       haveGottenCurrentFlashCardWrong: false,
       isShowingBackSide: false,
       lastCorrectAnswer: lastCorrectAnswer,

@@ -138,6 +138,7 @@ export class LeitnerStudyAlgorithm extends StudyAlgorithm {
     }
   }
   public getNextQuestionIdInternal(enabledQuestionIds: number[]): number {
+    console.log(enabledQuestionIds.length);
     if (enabledQuestionIds.length === 1) {
       const questionId = enabledQuestionIds[0];
 

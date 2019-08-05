@@ -38,6 +38,7 @@ export function createFlashCards(): FlashCard[] {
     FlashCard.fromRenderFns(
       JSON.stringify({ set: flashCardSetId, id: "M7" }),
       "Major Degree 7 Mode", "Locrian"),
+
     FlashCard.fromRenderFns(
       JSON.stringify({ set: flashCardSetId, id: "melMin1" }),
       "Melodic Minor Degree 1 Mode", "Melodic Minor"),
@@ -59,6 +60,7 @@ export function createFlashCards(): FlashCard[] {
     FlashCard.fromRenderFns(
       JSON.stringify({ set: flashCardSetId, id: "melMin7" }),
       "Melodic Minor Degree 7 Mode", "Altered dominant"),
+    
     FlashCard.fromRenderFns(
       JSON.stringify({ set: flashCardSetId, id: "harmMin1" }),
       "Harmonic Minor Degree 1 Mode", "Harmonic Minor"),
@@ -80,6 +82,29 @@ export function createFlashCards(): FlashCard[] {
     FlashCard.fromRenderFns(
       JSON.stringify({ set: flashCardSetId, id: "harmMin7" }),
       "Harmonic Minor Degree 7 Mode", "Altered Diminished"),
+    
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, id: "harmMaj1" }),
+      "Harmonic Major Degree 1 Mode", "Harmonic Major"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, id: "harmMaj2" }),
+      "Harmonic Major Degree 2 Mode", "Dorian b5"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, id: "harmMaj3" }),
+      "Harmonic Major Degree 3 Mode", "Phrygian b4"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, id: "harmMaj4" }),
+      "Harmonic Major Degree 4 Mode", "Lydian b3"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, id: "harmMaj5" }),
+      "Harmonic Major Degree 5 Mode", "Mixolydian b9"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, id: "harmMaj6" }),
+      "Harmonic Major Degree 6 Mode", "Lydian Augmented #2"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, id: "harmMaj7" }),
+      "Harmonic Major Degree 7 Mode", "Locrian bb7"),
+    
     FlashCard.fromRenderFns(
       JSON.stringify({ set: flashCardSetId, id: "dHarmMaj1" }),
       "Double Harmonic Major Degree 1 Mode", "Double Harmonic Major"),

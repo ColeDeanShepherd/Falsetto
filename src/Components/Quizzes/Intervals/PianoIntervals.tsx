@@ -175,7 +175,7 @@ export function createFlashCards(): Array<FlashCard> {
   forEachInterval((pitches, intervalString) => {
     const deserializedId = {
       set: flashCardSetId,
-      midiNumbers: pitches.map(p => p.midiNumber)
+      pitches: pitches.map(p => p.toString(true, false))
     };
     const id = JSON.stringify(deserializedId);
 

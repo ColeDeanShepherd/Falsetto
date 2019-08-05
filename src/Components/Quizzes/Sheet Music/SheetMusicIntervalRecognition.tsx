@@ -12,9 +12,32 @@ import { Interval } from "../../../Interval";
 
 const flashCardSetId = "sheetIntervals";
 
+const allowedPitches = [
+  new Pitch(PitchLetter.C, -1, 0),
+  new Pitch(PitchLetter.C, 0, 0),
+  new Pitch(PitchLetter.C, 1, 0),
+  new Pitch(PitchLetter.D, -1, 0),
+  new Pitch(PitchLetter.D, 0, 0),
+  new Pitch(PitchLetter.E, -1, 0),
+  new Pitch(PitchLetter.E, 0, 0),
+  new Pitch(PitchLetter.F, 0, 0),
+  new Pitch(PitchLetter.F, 1, 0),
+  new Pitch(PitchLetter.G, -1, 0),
+  new Pitch(PitchLetter.G, 0, 0),
+  new Pitch(PitchLetter.A, -1, 0),
+  new Pitch(PitchLetter.A, 0, 0),
+  new Pitch(PitchLetter.B, -1, 0),
+  new Pitch(PitchLetter.B, 0, 0)
+];
 const minPitch = new Pitch(PitchLetter.C, -1, 2);
 const maxPitch = new Pitch(PitchLetter.C, 1, 6);
-const notes = pitchRange(minPitch, maxPitch, -1, 1);
+const rootPitches = pitchRange(minPitch, maxPitch, -1, 1)
+  .filter(pitch =>
+    allowedPitches.some(allowedPitch =>
+      (pitch.letter === allowedPitch.letter) &&
+      (pitch.signedAccidental === allowedPitch.signedAccidental)
+    )
+  );
 const intervals = [
   "m2",
   "M2",
@@ -138,9 +161,9 @@ export class IntervalsFlashCardMultiSelect extends React.Component<IIntervalsFla
 }
 
 function forEachInterval(fn: (pitches: Array<Pitch>, interval: Interval) => void) {
-  for (let note1Index = 0; note1Index < notes.length; note1Index++) {
-    for (let note2Index = note1Index + 1; note2Index < notes.length; note2Index++) {
-      const pitches = [notes[note1Index], notes[note2Index]];
+  for (let note1Index = 0; note1Index < rootPitches.length; note1Index++) {
+    for (let note2Index = note1Index + 1; note2Index < rootPitches.length; note2Index++) {
+      const pitches = [rootPitches[note1Index], rootPitches[note2Index]];
       const interval = Interval.fromPitches(pitches[0], pitches[1]);
 
       if (Utils.arrayContains(intervals, interval.toString())) {

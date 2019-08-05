@@ -11,7 +11,6 @@ import { ScaleType } from "../../../Scale";
 import { PianoKeyboard } from "../../Utils/PianoKeyboard";
 import { FlashCard, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, RenderAnswerSelectArgs } from "../../../FlashCardSet";
-import { AnswerDifficulty } from "../../../StudyAlgorithm";
 import { PianoKeysAnswerSelect } from "../../Utils/PianoKeysAnswerSelect";
 import { ScaleAnswerSelect } from "../../Utils/ScaleAnswerSelect";
 import { ChordScaleFormula, ChordScaleFormulaPart } from '../../../ChordScaleFormula';

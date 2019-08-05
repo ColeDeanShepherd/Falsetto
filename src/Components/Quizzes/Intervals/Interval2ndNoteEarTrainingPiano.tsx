@@ -63,7 +63,7 @@ export function configDataToEnabledQuestionIds(
 ): Array<number> {
   const enabledQuestionIds = new Array<number>();
   forEachInterval(rootNotes,
-    (interval, p1, p2, isHarmonicInterval, i) => {
+    (interval, direction, p1, p2, isHarmonicInterval, i) => {
     if (Utils.arrayContains(configData.enabledIntervals, interval)) {
       enabledQuestionIds.push(i);
     }
@@ -201,7 +201,7 @@ export function renderAnswerSelect(
 export function createFlashCards(): Array<FlashCard> {
   const flashCards = new Array<FlashCard>();
   forEachInterval(rootNotes,
-    (interval, p1, p2, _, i) => {
+    (interval, direction, p1, p2, _, i) => {
       const deserializedId = {
         set: flashCardSetId,
         pitches: [p1.toString(true), p2.toString(true)]

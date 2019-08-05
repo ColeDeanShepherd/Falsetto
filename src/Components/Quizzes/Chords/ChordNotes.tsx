@@ -4,7 +4,7 @@ import { FlashCard } from "../../../FlashCard";
 import { FlashCardSet } from "../../../FlashCardSet";
 import { ChordType } from '../../../Chord';
 
-const flashCardSetId = "chordFormulasMajorScale";
+const flashCardSetId = "chordFormulasRelativeToMajorScale";
 
 export function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Chord Notes", createFlashCards);

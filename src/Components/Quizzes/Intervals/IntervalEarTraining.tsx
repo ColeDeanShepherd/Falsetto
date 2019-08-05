@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
 import { FlashCardSet } from "../../../FlashCardSet";
@@ -15,15 +16,34 @@ import {
   forEachInterval
 } from "../../Utils/IntervalEarTrainingFlashCardMultiSelect";
 import { Button } from "@material-ui/core";
+import { VerticalDirection } from '../../../VerticalDirection';
 
 const flashCardSetId = "intervalEarTraining";
 
 export interface IFlashCardFrontSideProps {
-  pitch1: Pitch;
-  pitch2: Pitch;
-  isHarmonicInterval: boolean;
+  interval: string;
+  direction: string;
 }
-export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps, {}> {
+export interface IFlashCardFrontSideState {
+  pitches: Array<Pitch>;
+}
+export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps, IFlashCardFrontSideState> {
+  public constructor(props: IFlashCardFrontSideProps) {
+    super(props);
+
+    const pitch1 = Utils.randomElement(rootNotes);
+
+    const intervalIndex = intervals.indexOf(this.props.interval);
+    const intervalHalfSteps = (this.props.direction === "↓")
+      ? intervalIndex + 1
+      : -(intervalIndex + 1);
+    const pitch2 = Pitch.createFromMidiNumber(pitch1.midiNumber + intervalHalfSteps);
+
+    this.state = {
+      pitches: [pitch1, pitch2]
+    };
+  }
+
   public componentDidMount() {
     //this.playAudio();
   }
@@ -49,8 +69,8 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
       this.stopSoundsFunc = null;
     }
 
-    if (this.props.isHarmonicInterval) {
-      const sounds = playPitches([this.props.pitch1, this.props.pitch2])
+    if (this.props.direction === "harmonic") {
+      const sounds = playPitches(this.state.pitches)
         .then(sounds => {
           this.stopSoundsFunc = () => {
             for (const sound of sounds) {
@@ -60,7 +80,7 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
         });
     } else {
       const cutOffSounds = true;
-      this.stopSoundsFunc = playPitchesSequentially([this.props.pitch1, this.props.pitch2], 500, cutOffSounds);
+      this.stopSoundsFunc = playPitchesSequentially(this.state.pitches, 500, cutOffSounds);
     }
   }
 }
@@ -69,18 +89,18 @@ export function createFlashCards(): Array<FlashCard> {
   let flashCards = new Array<FlashCard>();
 
   const includeHarmonicIntervals = true;
-  forEachInterval(rootNotes,
-    (interval, pitch1, pitch2, isHarmonicInterval, i) => {
+  forEachInterval([rootNotes[0]],
+    (interval, direction, pitch1, pitch2, isHarmonicInterval, i) => {
       const deserializedId = {
         set: flashCardSetId,
-        isHarmonic: isHarmonicInterval,
-        pitches: [pitch1.toString(true), pitch2.toString(true)]
+        interval: interval,
+        direction: direction
       };
       const id = JSON.stringify(deserializedId);
 
       flashCards.push(FlashCard.fromRenderFns(
         id,
-        () => <FlashCardFrontSide key={i} pitch1={pitch1} pitch2={pitch2} isHarmonicInterval={isHarmonicInterval} />,
+        () => <FlashCardFrontSide key={i} interval={interval} direction={direction} />,
         interval.toString()
       ));
     },
@@ -100,6 +120,7 @@ export function createFlashCardSet(): FlashCardSet {
       flashCards={flashCards}
       configData={configData}
       selectedFlashCardIndices={selectedFlashCardIndices}
+      hasFlashCardPerRootNote={false}
       onChange={onChange}
       enableHarmonicIntervals={true}
     />
@@ -116,7 +137,8 @@ export function createFlashCardSet(): FlashCardSet {
     "Interval Ear Training",
     createFlashCards
   );
-  flashCardSet.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(true, initialConfigData);
+  flashCardSet.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(
+    true, false, initialConfigData);
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.enableInvertFlashCards = false;

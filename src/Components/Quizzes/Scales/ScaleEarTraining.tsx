@@ -21,9 +21,26 @@ const rootPitches = Utils.range(minPitch.midiNumber, maxPitch.midiNumber)
 // TODO: instead of generating all flash cards ahead of time, dynamically generate each one
 
 export interface IFlashCardFrontSideProps {
+  scaleType: ScaleType;
+}
+export interface IFlashCardFrontSideState {
   pitches: Array<Pitch>;
 }
-export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps, {}> {
+export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps, IFlashCardFrontSideState> {
+  public constructor(props: IFlashCardFrontSideProps) {
+    super(props);
+
+    const rootPitch = Utils.randomElement(rootPitches);
+    const pitches = new ChordScaleFormula(
+      this.props.scaleType.formula.parts
+        .concat(new ChordScaleFormulaPart(8, 0, false))
+    ).getPitches(rootPitch);
+
+    this.state = {
+      pitches: pitches
+    };
+  }
+
   public componentWillUnmount() {
     if (this.playAudioCancelFn) {
       this.playAudioCancelFn();
@@ -52,7 +69,7 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
     }
 
     const cutOffSounds = true;
-    this.playAudioCancelFn = playPitchesSequentially(this.props.pitches, 500, cutOffSounds);
+    this.playAudioCancelFn = playPitchesSequentially(this.state.pitches, 500, cutOffSounds);
   }
 }
 
@@ -65,15 +82,13 @@ export function configDataToEnabledQuestionIds(configData: IConfigData): Array<n
 
   let i = 0;
 
-  for (const rootPitch of rootPitches) {
-    for (const scale of ScaleType.All) {
-      const scaleType = scale.name;
-      if (Utils.arrayContains(configData.enabledScaleTypes, scaleType)) {
-        newEnabledFlashCardIndices.push(i);
-      }
-
-      i++;
+  for (const scale of ScaleType.All) {
+    const scaleType = scale.name;
+    if (Utils.arrayContains(configData.enabledScaleTypes, scaleType)) {
+      newEnabledFlashCardIndices.push(i);
     }
+
+    i++;
   }
 
   return newEnabledFlashCardIndices;
@@ -154,31 +169,26 @@ export function createFlashCards(): Array<FlashCard> {
 
   const flashCards = new Array<FlashCard>();
 
-  for (const rootPitch of rootPitches) {
-    for (const scaleType of ScaleType.All) {
-      const pitches = new ChordScaleFormula(scaleType.formula.parts.concat(new ChordScaleFormulaPart(8, 0, false))).getPitches(rootPitch);
-      
-      const iCopy = i;
-      i++;
+  for (const scaleType of ScaleType.All) {
+    const iCopy = i;
+    i++;
 
-      const deserializedId = {
-        set: flashCardSetId,
-        scale: `${rootPitch.toString(true)} ${scaleType.name}`
-      };
-      const id = JSON.stringify(deserializedId);
+    const deserializedId = {
+      set: flashCardSetId,
+      scale: `${scaleType.name}`
+    };
+    const id = JSON.stringify(deserializedId);
 
-      flashCards.push(FlashCard.fromRenderFns(
-        id,
-        () => <FlashCardFrontSide key={iCopy} pitches={pitches} />,
-        scaleType.name
-      ));
-    }
+    flashCards.push(FlashCard.fromRenderFns(
+      id,
+      () => <FlashCardFrontSide key={iCopy} scaleType={scaleType} />,
+      scaleType.name
+    ));
   }
 
   return flashCards;
 }
 export function createFlashCardSet(): FlashCardSet {
-
   const renderFlashCardMultiSelect = (
     flashCards: Array<FlashCard>,
     selectedFlashCardIndices: number[],

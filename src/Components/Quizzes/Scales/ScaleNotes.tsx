@@ -2,12 +2,12 @@ import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
 import { FlashCardSet } from "../../../FlashCardSet";
-import { Scale, ScaleType } from '../../../Scale';
+import { ScaleType } from '../../../Scale';
 
 const flashCardSetId = "scaleFormulasMajor";
 
 export function createFlashCardSet(): FlashCardSet {
-  const flashCardSet = new FlashCardSet(flashCardSetId, "Scale Notes", createFlashCards);
+  const flashCardSet = new FlashCardSet(flashCardSetId, "Scale Formulas", createFlashCards);
   flashCardSet.initialSelectedFlashCardIndices = Utils.range(0, 8);
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/the-basics/modes";

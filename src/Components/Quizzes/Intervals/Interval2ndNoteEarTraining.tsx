@@ -59,7 +59,7 @@ export function createFlashCards(): Array<FlashCard> {
 
   const includeHarmonicIntervals = false;
   forEachInterval(rootNotes,
-    (interval, pitch1, pitch2, isHarmonicInterval, i) => {
+    (interval, direction, pitch1, pitch2, isHarmonicInterval, i) => {
       const deserializedId = {
         set: flashCardSetId,
         isHarmonic: isHarmonicInterval,
@@ -89,6 +89,7 @@ export function createFlashCardSet(): FlashCardSet {
       flashCards={flashCards}
       configData={configData}
       selectedFlashCardIndices={selectedFlashCardIndices}
+      hasFlashCardPerRootNote={true}
       onChange={onChange}
     />
     );
@@ -104,7 +105,8 @@ export function createFlashCardSet(): FlashCardSet {
     "Interval 2nd Note Ear Training",
     createFlashCards
   );
-  flashCardSet.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(false, initialConfigData);
+  flashCardSet.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(
+    false, true, initialConfigData);
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.enableInvertFlashCards = false;
