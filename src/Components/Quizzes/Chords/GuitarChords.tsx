@@ -1,94 +1,58 @@
 import * as React from "react";
 
 import * as Utils from "../../../Utils";
-import { Vector2D } from '../../../Vector2D';
 import { Size2D } from "../../../Size2D";
-import { Rect2D } from '../../../Rect2D';
-import { PianoKeyboard } from "../../Utils/PianoKeyboard";
 import { FlashCard, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, RenderAnswerSelectArgs } from "../../../FlashCardSet";
-import { AnswerDifficulty } from "../../../StudyAlgorithm";
 import { Pitch } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 import { TableRow, TableCell, Table, TableHead, TableBody, Grid, Checkbox, Button, Typography } from "@material-ui/core";
 import { ChordType } from "../../../Chord";
-import { GuitarChordViewer } from '../Scales/GuitarScales';
-import { AnswerButton } from '../Utils';
+import {  renderDistinctFlashCardSideAnswerSelect } from '../Utils';
+import { GuitarChordViewer } from '../../Utils/GuitarChordViewer';
+import { getStandardGuitarTuning } from '../../Utils/GuitarFretboard';
+import { GuitarNotesAnswerSelect } from '../../Utils/GuitarNotesAnswerSelect';
 
 const flashCardSetId = "guitarChordOrderedNotes";
-const rootPitchStrs = ["Ab", "A", "Bb", "B/Cb", "C", "C#/Db", "D", "Eb", "E", "F", "F#/Gb", "G"];
+
+const guitarTuning = getStandardGuitarTuning(6);
 
 interface IConfigData {
-  enabledRootPitches: string[];
-  enabledChordTypes: string[];
+  enabledChordTypes: ChordType[];
 }
 
 export function configDataToEnabledQuestionIds(configData: IConfigData): Array<number> {
   const newEnabledFlashCardIndices = new Array<number>();
 
-  let i = 0;
-
-  for (const rootPitchStr of rootPitchStrs) {
-    for (const chord of ChordType.All) {
-      const chordType = chord.name;
-      if (
-        Utils.arrayContains(configData.enabledRootPitches, rootPitchStr) &&
-        Utils.arrayContains(configData.enabledChordTypes, chordType)
-      ) {
-        newEnabledFlashCardIndices.push(i);
-      }
-
-      i++;
+  //for (const chord of ChordType.All) {
+  for (let i = 0; i < ChordType.All.length; i++) {
+    const chordType = ChordType.All[i];
+    if (Utils.arrayContains(configData.enabledChordTypes, chordType)) {
+      newEnabledFlashCardIndices.push(i);
     }
   }
 
   return newEnabledFlashCardIndices;
 }
+
 export interface IGuitarChordsFlashCardMultiSelectProps {
   flashCards: FlashCard[];
   configData: IConfigData;
   selectedFlashCardIndices: number[];
   onChange?: (newValue: number[], newConfigData: any) => void;
 }
-
 export interface IGuitarChordsFlashCardMultiSelectState {}
 export class GuitarChordsFlashCardMultiSelect extends React.Component<IGuitarChordsFlashCardMultiSelectProps, IGuitarChordsFlashCardMultiSelectState> {
   public render(): JSX.Element {
-    const rootPitchCheckboxTableRows = rootPitchStrs
-      .map((rootPitch, i) => {
-        const isChecked = this.props.configData.enabledRootPitches.indexOf(rootPitch) >= 0;
-        const isEnabled = !isChecked || (this.props.configData.enabledRootPitches.length > 1);
-
-        return (
-          <TableRow key={i}>
-            <TableCell><Checkbox checked={isChecked} onChange={event => this.toggleRootPitchEnabled(rootPitch)} disabled={!isEnabled} /></TableCell>
-            <TableCell>{rootPitch}</TableCell>
-          </TableRow>
-        );
-      }, this);
-    const rootPitchCheckboxes = (
-      <Table className="table">
-        <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell>Root Pitch</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rootPitchCheckboxTableRows}
-        </TableBody>
-      </Table>
-    );
-
     const chordTypeCheckboxTableRows = ChordType.All
-      .map((chord, i) => {
-        const isChecked = this.props.configData.enabledChordTypes.indexOf(chord.name) >= 0;
+      .map((chordType, i) => {
+        const isChecked = this.props.configData.enabledChordTypes.indexOf(chordType) >= 0;
         const isEnabled = !isChecked || (this.props.configData.enabledChordTypes.length > 1);
 
         return (
           <TableRow key={i}>
-            <TableCell><Checkbox checked={isChecked} onChange={event => this.toggleChordEnabled(chord.name)} disabled={!isEnabled} /></TableCell>
-            <TableCell>{chord.name}</TableCell>
+            <TableCell><Checkbox checked={isChecked} onChange={event => this.toggleChordEnabled(chordType)} disabled={!isEnabled} /></TableCell>
+            <TableCell>{chordType.name}</TableCell>
           </TableRow>
         );
       }, this);
@@ -108,35 +72,19 @@ export class GuitarChordsFlashCardMultiSelect extends React.Component<IGuitarCho
 
     return (
       <Grid container spacing={32}>
-        <Grid item xs={6}>{rootPitchCheckboxes}</Grid>
-        <Grid item xs={6}>{chordTypeCheckboxes}</Grid>
+        <Grid item xs={12}>{chordTypeCheckboxes}</Grid>
       </Grid>
     );
   }
   
-  private toggleRootPitchEnabled(rootPitch: string) {
-    const newEnabledRootPitches = Utils.toggleArrayElement(
-      this.props.configData.enabledRootPitches,
-      rootPitch
-    );
-    
-    if (newEnabledRootPitches.length > 0) {
-      const newConfigData: IConfigData = {
-        enabledRootPitches: newEnabledRootPitches,
-        enabledChordTypes: this.props.configData.enabledChordTypes
-      };
-      this.onChange(newConfigData);
-    }
-  }
-  private toggleChordEnabled(chord: string) {
+  private toggleChordEnabled(chordType: ChordType) {
     const newEnabledChordTypes = Utils.toggleArrayElement(
       this.props.configData.enabledChordTypes,
-      chord
+      chordType
     );
     
     if (newEnabledChordTypes.length > 0) {
       const newConfigData: IConfigData = {
-        enabledRootPitches: this.props.configData.enabledRootPitches,
         enabledChordTypes: newEnabledChordTypes
       };
       this.onChange(newConfigData);
@@ -147,217 +95,6 @@ export class GuitarChordsFlashCardMultiSelect extends React.Component<IGuitarCho
 
     const newEnabledFlashCardIndices = configDataToEnabledQuestionIds(newConfigData);
     this.props.onChange(newEnabledFlashCardIndices, newConfigData);
-  }
-}
-
-export interface IGuitarChordsAnswerSelectProps {
-  correctAnswer: string;
-  onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void;
-  lastCorrectAnswer: any;
-  incorrectAnswers: Array<any>;
-  enabledChordTypeNames: Array<string>;
-}
-export interface IGuitarChordsAnswerSelectState {
-  selectedRootPitch: string | undefined;
-  selectedChordType: string | undefined;
-}
-export class GuitarChordsAnswerSelect extends React.Component<IGuitarChordsAnswerSelectProps, IGuitarChordsAnswerSelectState> {
-  public constructor(props: IGuitarChordsAnswerSelectProps) {
-    super(props);
-    
-    this.state = this.getInitialState();
-  }
-  public render(): JSX.Element {
-    // TODO: use lastCorrectAnswer
-    const selectedAnswer = this.getSelectedAnswer();
-    
-    return (
-      <div>
-        <Typography gutterBottom={true} variant="h6" component="h4">
-          Root Pitch
-        </Typography>
-        <div style={{padding: "1em 0"}}>
-          <div>
-            {rootPitchStrs.slice(0, 6).map(rootPitchStr => {
-              const style: any = { textTransform: "none" };
-              
-              const isPressed = rootPitchStr === this.state.selectedRootPitch;
-              if (isPressed) {
-                style.backgroundColor = "#959595";
-              }
-
-              return (
-                <Button
-                  key={rootPitchStr}
-                  onClick={event => this.onRootPitchClick(rootPitchStr)}
-                  variant="contained"
-                  style={style}
-                >
-                  {rootPitchStr}
-                </Button>
-              );
-            })}
-          </div>
-          <div>
-            {rootPitchStrs.slice(6, 12).map(rootPitchStr => {
-              const style: any = { textTransform: "none" };
-              
-              const isPressed = rootPitchStr === this.state.selectedRootPitch;
-              if (isPressed) {
-                style.backgroundColor = "#959595";
-              }
-
-              return (
-                <Button
-                  key={rootPitchStr}
-                  onClick={event => this.onRootPitchClick(rootPitchStr)}
-                  variant="contained"
-                  style={style}
-                >
-                  {rootPitchStr}
-                </Button>
-              );
-            })}
-          </div>
-        </div>
-        
-        <Typography gutterBottom={true} variant="h6" component="h4">
-          Chord
-        </Typography>
-        <div style={{padding: "1em 0"}}>
-          {ChordType.All
-            .filter(ct => Utils.arrayContains(this.props.enabledChordTypeNames, ct.name))
-            .map(chord => {
-              const style: any = { textTransform: "none" };
-              
-              const isPressed = chord.name === this.state.selectedChordType;
-              if (isPressed) {
-                style.backgroundColor = "#959595";
-              }
-              
-              return (
-                <Button
-                  key={chord.name}
-                  onClick={event => this.onChordTypeClick(chord.name)}
-                  variant="contained"
-                  style={style}
-                >
-                  {chord.name}
-                </Button>
-              );
-            })
-          }
-        </div>
-
-        <div style={{padding: "1em 0"}}>
-          <AnswerButton
-            key={this.props.correctAnswer}
-            answer={selectedAnswer}
-            incorrectAnswers={this.props.incorrectAnswers}
-            lastCorrectAnswer={this.props.lastCorrectAnswer}
-            onClick={() => this.confirmAnswer()}
-            disabled={!this.state.selectedRootPitch || !this.state.selectedChordType} >
-            Confirm Answer
-          </AnswerButton>
-        </div>
-      </div>
-    );
-  }
-
-  private getInitialState(): IGuitarChordsAnswerSelectState {
-    return {
-      selectedRootPitch: undefined,
-      selectedChordType: undefined
-    };
-  }
-  private onRootPitchClick(rootPitch: string) {
-    this.setState({ selectedRootPitch: rootPitch });
-  }
-  private onChordTypeClick(chordType: string) {
-    this.setState({ selectedChordType: chordType });
-  }
-  private confirmAnswer() {
-    const selectedAnswer = this.getSelectedAnswer();
-    const isCorrect = selectedAnswer === this.props.correctAnswer;
-
-    if (isCorrect) {
-      this.setState(this.getInitialState());
-    }
-
-    this.props.onAnswer(isCorrect ? AnswerDifficulty.Easy : AnswerDifficulty.Incorrect, selectedAnswer);
-  }
-  private getSelectedAnswer(): string {
-    return this.state.selectedRootPitch + " " + this.state.selectedChordType;
-  }
-}
-
-export interface IGuitarNotesAnswerSelectProps {
-  correctAnswer: Array<Pitch>;
-  onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void;
-  lastCorrectAnswer: any;
-  incorrectAnswers: Array<any>;
-}
-export interface IGuitarNotesAnswerSelectState {
-  selectedPitches: Array<Pitch>;
-}
-export class GuitarNotesAnswerSelect extends React.Component<IGuitarNotesAnswerSelectProps, IGuitarNotesAnswerSelectState> {
-  public constructor(props: IGuitarNotesAnswerSelectProps) {
-    super(props);
-    
-    this.state = {
-      selectedPitches: []
-    };
-  }
-  public render(): JSX.Element {
-    // TODO: lastCorrectAnswer
-    return (
-      <div>
-        <PianoKeyboard
-          rect={new Rect2D(new Size2D(400, 100), new Vector2D(0, 0))}
-          lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-          highestPitch={new Pitch(PitchLetter.B, 0, 5)}
-          pressedPitches={this.state.selectedPitches}
-          onKeyPress={pitch => this.onPitchClick(pitch)}
-        />
-        
-        <div style={{padding: "1em 0"}}>
-          <Button
-            onClick={event => this.confirmAnswer()}
-            disabled={this.state.selectedPitches.length === 0}
-            variant="contained"
-          >
-            Confirm Answer
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
-  private onPitchClick(pitch: Pitch) {
-    const newSelectedPitches = Utils.toggleArrayElementCustomEquals(
-      this.state.selectedPitches,
-      pitch,
-      (p1, p2) => p1.equals(p2)
-    );
-    this.setState({ selectedPitches: newSelectedPitches });
-  }
-  private confirmAnswer() {
-    const selectedPitchMidiNumbersNoOctave = Utils.uniq(
-      this.state.selectedPitches
-        .map(pitch => pitch.midiNumberNoOctave)
-    );
-    const correctAnswerMidiNumbersNoOctave = Utils.uniq(
-      this.props.correctAnswer
-        .map(pitch => pitch.midiNumberNoOctave)
-    );
-
-    const isCorrect = (selectedPitchMidiNumbersNoOctave.length === correctAnswerMidiNumbersNoOctave.length) &&
-      (selectedPitchMidiNumbersNoOctave.every(guess =>
-        correctAnswerMidiNumbersNoOctave.some(answer =>
-          guess === answer
-        )
-      ));
-    this.props.onAnswer(isCorrect ? AnswerDifficulty.Easy : AnswerDifficulty.Incorrect, selectedPitchMidiNumbersNoOctave);
   }
 }
 
@@ -379,10 +116,8 @@ export function createFlashCardSet(): FlashCardSet {
   };
 
   const initialConfigData: IConfigData = {
-    enabledRootPitches: rootPitchStrs.slice(),
     enabledChordTypes: ChordType.All
       .filter((_, chordIndex) => chordIndex <= 8)
-      .map(chord => chord.name)
   };
 
   const flashCardSet = new FlashCardSet(flashCardSetId, "Guitar Chords", createFlashCards);
@@ -396,48 +131,39 @@ export function createFlashCardSet(): FlashCardSet {
   return flashCardSet;
 }
 export function createFlashCards(): FlashCard[] {
-  return Utils.flattenArrays<FlashCard>(
-    rootPitchStrs.map((rootPitchStr, i) => {
-      const halfStepsFromC = Utils.mod(i - 4, 12);
-      const rootPitch = Pitch.createFromMidiNumber((new Pitch(PitchLetter.C, 0, 4)).midiNumber + halfStepsFromC);
-      
-      return ChordType.All.map(chordType => {
-        const pitches = chordType.getPitches(rootPitch);
-        const deserializedId = {
-          set: flashCardSetId,
-          chord: `${rootPitch.toString(false)} ${chordType.name}`
-        };
-        const id = JSON.stringify(deserializedId);
-        return new FlashCard(
-          id,
-          new FlashCardSide(
-            (width, height) => {
-              const size = Utils.shrinkRectToFit(new Size2D(width, height), new Size2D(400, 140));
+  return ChordType.All.map(chordType => {
+    const rootPitch = new Pitch(PitchLetter.F, 0, 2);
+    const pitches = chordType.getPitches(rootPitch);
+    const deserializedId = {
+      set: flashCardSetId,
+      chord: chordType.name
+    };
+    const id = JSON.stringify(deserializedId);
+    return new FlashCard(
+      id,
+      new FlashCardSide(
+        (width, height) => {
+          const size = Utils.shrinkRectToFit(new Size2D(width, height), new Size2D(400, 140));
 
-              return (
-                <GuitarChordViewer
-                  chordType={chordType}
-                  rootPitch={rootPitch}
-                  size={size} />
-              )
-            },
-            pitches
-          ),
-          new FlashCardSide(rootPitchStr + " " + chordType.name)
-        );
-      });
-    })
-  );
+          return (
+            <GuitarChordViewer
+              chordType={chordType}
+              rootPitch={rootPitch}
+              tuning={guitarTuning}
+              size={size} />
+          )
+        },
+        pitches
+      ),
+      new FlashCardSide(chordType.name)
+    );
+  });
 }
 export function renderAnswerSelect(
   state: RenderAnswerSelectArgs
 ) {
   if (!state.areFlashCardsInverted) {
-    const correctAnswer = state.currentFlashCard.backSide.renderFn as string;
-    return <GuitarChordsAnswerSelect
-      correctAnswer={correctAnswer} onAnswer={state.onAnswer}
-      lastCorrectAnswer={state.lastCorrectAnswer} incorrectAnswers={state.incorrectAnswers}
-      enabledChordTypeNames={(state.configData as IConfigData).enabledChordTypes} />;
+    return renderDistinctFlashCardSideAnswerSelect(state);
   } else {
     const key = state.currentFlashCard.frontSide.renderFn as string;
     const correctAnswer = state.currentFlashCard.backSide.data[0] as Array<Pitch>;

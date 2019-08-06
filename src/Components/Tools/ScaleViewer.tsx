@@ -11,9 +11,9 @@ import { Pitch } from "../../Pitch";
 import { PianoKeyboard } from "../Utils/PianoKeyboard";
 import { playPitches } from '../../Piano';
 import * as PianoScaleDronePlayer from "../Utils/PianoScaleDronePlayer";
-import { GuitarScaleViewer } from '../Quizzes/Scales/GuitarScales';
 import { getStandardGuitarTuning, getPreferredGuitarScaleShape } from '../Utils/GuitarFretboard';
 import { ScaleAudioPlayer } from '../Utils/ScaleAudioPlayer';
+import { GuitarScaleViewer } from '../Utils/GuitarScaleViewer';
 
 const validSharpKeyPitches = [
   null,
@@ -103,18 +103,14 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
     const showGuitarFretboard = (this.props.showGuitarFretboard !== undefined)
       ? this.props.showGuitarFretboard
       : true;
-
-    const guitarRootPitch = new Pitch(
-      this.state.scale.rootPitch.letter,
-      this.state.scale.rootPitch.signedAccidental,
-      this.state.scale.rootPitch.octaveNumber - 2
-    );
     
     const baseButtonStyle: any = { textTransform: "none" };
 
+    const guitarTuning = getStandardGuitarTuning(6);
+
     const numPitchesToPlay = showPianoKeyboard
       ? pitches.length
-      : getPreferredGuitarScaleShape(this.state.scale, getStandardGuitarTuning(6)).length;
+      : getPreferredGuitarScaleShape(this.state.scale, guitarTuning).length;
 
     return (
       <Card>
@@ -208,6 +204,7 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
                   <GuitarScaleViewer
                     scale={this.state.scale}
                     size={guitarSize}
+                    tuning={guitarTuning}
                     renderAllScaleShapes={this.props.renderAllScaleShapes} />
                 ) : null}
               </div>

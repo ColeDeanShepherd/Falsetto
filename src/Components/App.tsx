@@ -287,7 +287,7 @@ class App extends React.Component<IAppProps, IAppState> {
         <div className={!this.isEmbedded ? "main" : "main embedded"}>
           <div style={{ maxWidth: MAX_MAIN_CARD_WIDTH, margin: "0 auto" }}>
             {this.renderRoutes()}
-            <textarea>{Utils.flattenArrays(this.flashCardSets.map(fcs => fcs.createFlashCards().map(fc => fc.id))).join("\n")}</textarea>
+            {false ? <textarea>{Utils.flattenArrays(this.flashCardSets.map(fcs => fcs.createFlashCards().map(fc => fc.id))).join("\n")}</textarea> : null}
           </div>
           <div className="footer">
             <BecomeAPatronButton />

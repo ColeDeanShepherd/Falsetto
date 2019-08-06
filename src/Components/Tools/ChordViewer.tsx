@@ -11,7 +11,10 @@ import { Chord, ChordType, ChordTypeGroup } from "../../Chord";
 import { PianoKeyboard } from "../Utils/PianoKeyboard";
 import { playPitches } from '../../Piano';
 import * as PianoScaleDronePlayer from "../Utils/PianoScaleDronePlayer";
-import { GuitarChordViewer } from '../Quizzes/Scales/GuitarScales';
+import { GuitarChordViewer } from '../Utils/GuitarChordViewer';
+import { getStandardGuitarTuning } from '../Utils/GuitarFretboard';
+
+const guitarTuning = getStandardGuitarTuning(6);
 
 const validSharpKeyPitches = [
   null,
@@ -202,6 +205,7 @@ export class ChordViewer extends React.Component<IChordViewerProps, IChordViewer
                   <GuitarChordViewer
                     chordType={this.state.chord.type}
                     rootPitch={guitarRootPitch}
+                    tuning={guitarTuning}
                     size={guitarSize} />
                 ) : null}
               </div>
