@@ -6,12 +6,13 @@ import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
 import { FlashCardSet, RenderAnswerSelectArgs } from "../../../FlashCardSet";
 import { Interval } from "../../../Interval";
-import { standard6StringGuitarTuning, GuitarFretboard, StringedInstrumentMetrics } from "../../Utils/GuitarFretboard";
+import { standard6StringGuitarTuning, GuitarFretboard, StringedInstrumentMetrics, getIntervalDeltaFretNumber, StringedInstrumentFingerboard } from "../../Utils/GuitarFretboard";
 import { VerticalDirection } from "../../../VerticalDirection";
 import { Size2D } from '../../../Size2D';
 import { StringedInstrumentNote } from '../../../GuitarNote';
 
 const flashCardSetId = "guitarIntervals";
+const fretCount = StringedInstrumentFingerboard.DEFAULT_FRET_COUNT;
 
 const intervals = [
   "m2",
@@ -31,21 +32,16 @@ const intervals = [
 
 interface IConfigData {
   enabledIntervals: string[];
+  // TODO: add enabledDirections?
 };
 
 export function configDataToEnabledQuestionIds(configData: IConfigData): Array<number> {
   const newEnabledFlashCardIndices = new Array<number>();
 
-  let i = 0;
-
-  forEachInterval((pitches, interval) => {
-    if (
-      Utils.arrayContains(configData.enabledIntervals, interval.toString())
-    ) {
+  forEachInterval((interval, _, i) => {
+    if (Utils.arrayContains(configData.enabledIntervals, interval.toString())) {
       newEnabledFlashCardIndices.push(i);
     }
-
-    i++;
   });
 
   return newEnabledFlashCardIndices;
@@ -114,34 +110,38 @@ export class IntervalsFlashCardMultiSelect extends React.Component<IIntervalsFla
   }
 }
 
-function forEachInterval(fn: (pitches: Array<StringedInstrumentNote>, interval: Interval) => void) {
-  for (let stringIndex1 = 0; stringIndex1 < 6; stringIndex1++) {
-    for (let fretNumber1 = 0; fretNumber1 < 12; fretNumber1++) {
-      for (let stringIndex2 = 0; stringIndex2 < 6; stringIndex2++) {
-        for (let fretNumber2 = 0; fretNumber2 < 12; fretNumber2++) {
-          const note1 = standard6StringGuitarTuning.getNote(stringIndex1, fretNumber1);
-          const note2 = standard6StringGuitarTuning.getNote(stringIndex2, fretNumber2);
+function forEachInterval(fn: (interval: Interval, direction: VerticalDirection, i: number) => void) {
+  const directions = [VerticalDirection.Up, VerticalDirection.Down];
+  const gBStringSpan = 0;
+  const stringSpans = Utils.range(gBStringSpan, 4);
 
-          const halfSteps = Math.abs(note2.pitch.midiNumber - note1.pitch.midiNumber);
-          if ((halfSteps === 0) || (halfSteps > 12)) { continue; }
+  let i = 0;
 
-          const interval = Interval.fromPitches(note1.pitch, note2.pitch);
-          
-          fn([note1, note2], interval);
+  for (let intervalIndex = 0; intervalIndex < intervals.length; (intervalIndex++)) {
+    const interval = Interval.fromHalfSteps(1 + intervalIndex);
+
+    for (const direction of directions) {
+      for (const stringSpan of stringSpans) {
+        const stringIndex0 = (stringSpan !== gBStringSpan) ? 0 : 3;
+        const deltaStringIndex = (stringSpan !== gBStringSpan) ? stringSpan : 1;
+        const deltaFretNumber = getIntervalDeltaFretNumber(interval, stringIndex0, deltaStringIndex);
+
+        if (Math.abs(deltaFretNumber) <= fretCount) {
+          fn(interval, direction, i);
+          i++;
         }
       }
     }
   }
 }
 
-
 export function renderAnswerSelect(
   state: RenderAnswerSelectArgs
 ): JSX.Element {
   const ascendingIntervals = intervals
-    .map(i => "↑ " + i);
+    .map(i => Interval.upDirectionSymbol + " " + i);
   const descendingIntervals = intervals
-    .map(i => "↓ " + i);
+    .map(i => Interval.downDirectionSymbol + " " + i);
   return (
     <div>
       {FlashCardUtils.renderStringAnswerSelectInternal(
@@ -154,79 +154,95 @@ export function renderAnswerSelect(
   );
 }
 
+interface IFlashCardFrontSideProps {
+  interval: Interval;
+  direction: VerticalDirection;
+  stringIndex0: number;
+  deltaStringIndex: number;
+  deltaFretNumber: number;
+}
+class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps, {}> {
+  public render(): JSX.Element {
+    // TODO
+    const renderExtras = (metrics: StringedInstrumentMetrics) => renderFretboardExtras(metrics, notes);
+    const style: any = { width: "100%", maxWidth: "400px" };
+
+    return (
+      <div>
+        <GuitarFretboard
+          width={400} height={140}
+          tuning={standard6StringGuitarTuning}
+          renderExtrasFn={renderExtras}
+          style={style}
+        />
+      </div>
+    );
+  }
+}
+
+export function renderFretboardExtras(metrics: StringedInstrumentMetrics, notes: Array<StringedInstrumentNote>): JSX.Element {
+  const fontSize = 16;
+  const textStyle = {
+    fontSize: `${fontSize}px`
+  };
+
+  const x1 = metrics.getNoteX(notes[0].getFretNumber(standard6StringGuitarTuning));
+  const y1 = metrics.getStringY(notes[0].stringIndex);
+  
+  const x2 = metrics.getNoteX(notes[1].getFretNumber(standard6StringGuitarTuning));
+  const y2 = metrics.getStringY(notes[1].stringIndex);
+
+  const textXOffset = -(0.3 * fontSize);
+  const textYOffset = 0.3 * fontSize;
+
+  return (
+    <g>
+      <circle
+        cx={x1}
+        cy={y1}
+        r={metrics.fretDotRadius}
+        fill="green"
+        strokeWidth="0"
+      />
+      <text x={x1 + textXOffset} y={y1 + textYOffset} style={textStyle}>1</text>
+
+      <circle
+        cx={x2}
+        cy={y2}
+        r={metrics.fretDotRadius}
+        fill="red"
+        strokeWidth="0"
+      />
+      <text x={x2 + textXOffset} y={y2 + textYOffset} style={textStyle}>2</text>
+    </g>
+  );
+}
+
 export function createFlashCards(): Array<FlashCard> {
   const flashCards = new Array<FlashCard>();
 
-  forEachInterval((notes, interval) => {
-    const intervalDirection = (notes[1].pitch.midiNumber > notes[0].pitch.midiNumber)
-      ? VerticalDirection.Up
-      : VerticalDirection.Down;
-    const directionChar = (intervalDirection === VerticalDirection.Up)
-      ? "↑"
-      : "↓";
+  forEachInterval((interval, direction, i) => {
+    const directionChar = (direction === VerticalDirection.Up)
+      ? Interval.upDirectionSymbol
+      : Interval.downDirectionSymbol;
     
-    const renderExtras = (metrics: StringedInstrumentMetrics) => {
-      const fontSize = 16;
-      const textStyle = {
-        fontSize: `${fontSize}px`
-      };
-
-      const x1 = metrics.getNoteX(notes[0].getFretNumber(standard6StringGuitarTuning));
-      const y1 = metrics.getStringY(notes[0].stringIndex);
-      
-      const x2 = metrics.getNoteX(notes[1].getFretNumber(standard6StringGuitarTuning));
-      const y2 = metrics.getStringY(notes[1].stringIndex);
-
-      const textXOffset = -(0.3 * fontSize);
-      const textYOffset = 0.3 * fontSize;
-
-      return (
-        <g>
-          <circle
-            cx={x1}
-            cy={y1}
-            r={metrics.fretDotRadius}
-            fill="green"
-            strokeWidth="0"
-          />
-          <text x={x1 + textXOffset} y={y1 + textYOffset} style={textStyle}>1</text>
-
-          <circle
-            cx={x2}
-            cy={y2}
-            r={metrics.fretDotRadius}
-            fill="red"
-            strokeWidth="0"
-          />
-          <text x={x2 + textXOffset} y={y2 + textYOffset} style={textStyle}>2</text>
-        </g>
-      );
-    };
-
     const deserializedId = {
       set: flashCardSetId,
-      notes: notes.map(n => [n.stringIndex, n.pitch.midiNumber])
+      TODO: TODO
     };
     const id = JSON.stringify(deserializedId);
 
     flashCards.push(FlashCard.fromRenderFns(
       id,
-      (width, height) => {
-        const size = Utils.shrinkRectToFit(
-          new Size2D(width, height),
-          new Size2D(400, 140)
-        );
-
-        return (
-          <div>
-            <GuitarFretboard
-              width={size.width} height={size.height}
-              tuning={standard6StringGuitarTuning}
-              renderExtrasFn={renderExtras}
-            />
-          </div>
-        );
-      },
+      (width, height) => (
+        <FlashCardFrontSide
+          interval={interval}
+          direction={direction}
+          stringIndex0={stringIndex0}
+          deltaStringIndex={deltaStringIndex}
+          deltaFretNumber={deltaFretNumber}
+        />
+      ),
       directionChar + " " + interval.toString()
     ));
   });

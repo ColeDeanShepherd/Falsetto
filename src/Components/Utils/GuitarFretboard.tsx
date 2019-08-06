@@ -9,6 +9,7 @@ import { Vector2D } from '../../Vector2D';
 import { ScaleType, Scale } from '../../Scale';
 import { Chord } from '../../Chord';
 import { StringedInstrumentNote } from '../../GuitarNote';
+import { Interval } from '../../Interval';
 
 export class StringedInstrumentTuning {
   public constructor(public openStringPitches: Array<Pitch>) {
@@ -145,6 +146,10 @@ export function getPreferredGuitarScaleShape(
     return -1;
   });
   return scaleShapes[0];
+}
+
+export function getIntervalDeltaFretNumber(interval: Interval, stringIndex: number, deltaStringIndex: number): number {
+  throw new Error("Not implemented");
 }
 
 export function get1stStringedInstrumentNoteOnString(pitch: Pitch, stringIndex: number, tuning: StringedInstrumentTuning): StringedInstrumentNote {
@@ -299,7 +304,7 @@ export class StringedInstrumentMetrics {
     public height: number,
     public hasFrets: boolean,
     public minFretNumber: number = 0,
-    public fretCount: number = 11,
+    public fretCount: number = StringedInstrumentFingerboard.DEFAULT_FRET_COUNT,
     public stringCount: number = 6
   ) {
     Utils.precondition((fretCount >= 1) && (fretCount <= 24))
@@ -650,6 +655,8 @@ export interface IStringedInstrumentFingerboardProps {
   style?: any;
 }
 export class StringedInstrumentFingerboard extends React.Component<IStringedInstrumentFingerboardProps, {}> {
+  public static readonly DEFAULT_FRET_COUNT = 11;
+
   public render(): JSX.Element {
     const margin = 20;
 
@@ -658,7 +665,7 @@ export class StringedInstrumentFingerboard extends React.Component<IStringedInst
       this.props.height - (2 * margin),
       this.props.hasFrets,
       (this.props.minFretNumber !== undefined) ? this.props.minFretNumber : 0,
-      (this.props.fretCount !== undefined) ? this.props.fretCount : 11,
+      (this.props.fretCount !== undefined) ? this.props.fretCount : StringedInstrumentFingerboard.DEFAULT_FRET_COUNT,
       this.props.tuning.stringCount
     );
     

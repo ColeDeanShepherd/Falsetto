@@ -2,6 +2,9 @@ import * as Utils from "./Utils";
 import { Pitch } from './Pitch';
 
 export class Interval {
+  public static readonly upDirectionSymbol = "↑";
+  public static readonly downDirectionSymbol = "↓";
+
   public static fromPitches(
     pitch1: Pitch,
     pitch2: Pitch
