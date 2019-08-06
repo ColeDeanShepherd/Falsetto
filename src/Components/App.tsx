@@ -37,6 +37,7 @@ import * as DiatonicTriads from "./Quizzes/Chords/DiatonicTriads";
 import * as DiatonicSeventhChords from "./Quizzes/Chords/DiatonicSeventhChords";
 import * as RandomChordGenerator from "./Tools/RandomChordGenerator";
 import * as GuitarNotes from "./Quizzes/Notes/GuitarNotes";
+import * as GuitarPerfectPitchTrainer from "./Quizzes/Notes/GuitarPerfectPitchTrainer";
 import * as PianoNotes from "./Quizzes/Notes/PianoNotes";
 import * as ViolinNotes from "./Quizzes/Notes/ViolinNotes";
 import * as PianoScales from "./Quizzes/Scales/PianoScales";
@@ -129,7 +130,8 @@ class App extends React.Component<IAppProps, IAppState> {
           GuitarNotes.createFlashCardGroup(),
           ViolinNotes.createFlashCardGroup(),
           NoteDurations.createFlashCardGroup(),
-          SheetMusicNotes.createFlashCardGroup()
+          SheetMusicNotes.createFlashCardGroup(),
+          GuitarPerfectPitchTrainer.createFlashCardGroup()
         ]
       },
       {
