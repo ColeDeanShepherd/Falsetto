@@ -2,8 +2,6 @@ import * as React from "react";
 import { TextField, Button } from "@material-ui/core";
 
 import * as Utils from "../../../Utils";
-import { Size2D } from "../../../Size2D";
-import * as FlashCardUtils from "../Utils";
 import {
   GuitarFretboard,
   standard6StringGuitarTuning,
@@ -13,7 +11,7 @@ import {
 import { FlashCard, FlashCardSide } from "../../../FlashCard";
 import { FlashCardGroup, RenderAnswerSelectArgs } from "../../../FlashCardGroup";
 import { StringedInstrumentNote } from '../../../GuitarNote';
-import { playPitches } from '../../../Piano';
+import { playPitches } from '../../../Guitar';
 import { Pitch } from '../../../Pitch';
 import { Vector2D } from '../../../Vector2D';
 import { AnswerDifficulty } from '../../../StudyAlgorithm';
