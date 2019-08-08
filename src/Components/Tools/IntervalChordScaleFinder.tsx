@@ -13,6 +13,8 @@ import { ChordType, Chord } from '../../Chord';
 import { ScaleType, getAllModePitchIntegers } from '../../Scale';
 import { generateChordNames } from '../../ChordName';
 import { ChordScaleFormula } from '../../ChordScaleFormula';
+import { playPitches } from '../../Piano';
+import { StringDictionary } from '../../StringDictionary';
 
 // TODO: refactor Chord, Scale
 // TODO: add support for multiple chord names
@@ -99,6 +101,38 @@ export function keyToPitch(keyString: string): Pitch | null {
       return new Pitch(PitchLetter.B, -1, 4);
     case "m":
       return new Pitch(PitchLetter.B, 0, 4);
+    case ",":
+      return new Pitch(PitchLetter.C, 0, 5);
+    case "l":
+      return new Pitch(PitchLetter.D, -1, 5);
+    case ".":
+      return new Pitch(PitchLetter.D, 0, 5);
+    case ";":
+      return new Pitch(PitchLetter.E, -1, 5);
+    case "q":
+      return new Pitch(PitchLetter.C, 0, 5);
+    case "2":
+      return new Pitch(PitchLetter.D, -1, 5);
+    case "w":
+      return new Pitch(PitchLetter.D, 0, 5);
+    case "3":
+      return new Pitch(PitchLetter.E, -1, 5);
+    case "e":
+      return new Pitch(PitchLetter.E, 0, 5);
+    case "r":
+      return new Pitch(PitchLetter.F, 0, 5);
+    case "5":
+      return new Pitch(PitchLetter.G, -1, 5);
+    case "t":
+      return new Pitch(PitchLetter.G, 0, 5);
+    case "6":
+      return new Pitch(PitchLetter.A, -1, 5);
+    case "y":
+      return new Pitch(PitchLetter.A, 0, 5);
+    case "7":
+      return new Pitch(PitchLetter.B, -1, 5);
+    case "u":
+      return new Pitch(PitchLetter.B, 0, 5);
     default:
       return null;
   }
@@ -212,6 +246,7 @@ export class IntervalChordScaleFinder extends React.Component<IIntervalChordScal
 
   private boundOnKeyDown: ((event: KeyboardEvent) => void) | undefined;
   private boundOnKeyUp: ((event: KeyboardEvent) => void) | undefined;
+  private pitchCancellationFns: StringDictionary<() => void> = {};
 
   private renderExtras(metrics: PianoKeyboardMetrics): { whiteKeyLayerExtras: JSX.Element, blackKeyLayerExtras: JSX.Element } {
     const whitePressedPitches = this.state.pressedPitches
@@ -261,11 +296,21 @@ export class IntervalChordScaleFinder extends React.Component<IIntervalChordScal
     this.setIsPianoKeyPressed(pitch, false);
   }
   private setIsPianoKeyPressed(pitch: Pitch, value: boolean) {
+    const cancellationFnKey = pitch.midiNumber.toString();
     if (value) {
+      const cancellationFn = playPitches([pitch])[1];
+      this.pitchCancellationFns[cancellationFnKey] = cancellationFn;
+
       this.setState({
         pressedPitches: Utils.immutableAddIfNotFoundInArray(this.state.pressedPitches, pitch, p => p.equals(pitch))
       });
     } else {
+      const cancellationFn = this.pitchCancellationFns[cancellationFnKey];
+      if (cancellationFn) {
+        cancellationFn();
+        delete this.pitchCancellationFns[cancellationFnKey];
+      }
+
       this.setState({
         pressedPitches: Utils.immutableRemoveIfFoundInArray(this.state.pressedPitches, p => p.equals(pitch))
       });

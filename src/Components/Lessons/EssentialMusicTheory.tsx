@@ -693,7 +693,7 @@ const IntervalsTable: React.FunctionComponent<{ showExamples?: boolean, showCate
     const pitches = (halfSteps === 0)
       ? [basePitch]
       : [basePitch, Pitch.createFromMidiNumber(basePitch.midiNumber + halfSteps)];
-    playPitches(pitches)
+    playPitches(pitches)[0]
       .then(sounds => { playingSounds = sounds; });
   };
 
