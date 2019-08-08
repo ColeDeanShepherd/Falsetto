@@ -317,10 +317,8 @@ export class IntervalChordScaleFinder extends React.Component<IIntervalChordScal
     }
   }
   private toggleIsPianoKeyPressed(pitch: Pitch) {
-    const newPressedPitches = Utils.toggleArrayElementCustomEquals(
-      this.state.pressedPitches, pitch, (a, b) => a.midiNumber === b.midiNumber
-    );
-    this.setState({ pressedPitches: newPressedPitches });
+    const isPressed = this.state.pressedPitches.find(p => p.midiNumber === pitch.midiNumber) !== undefined;
+    this.setIsPianoKeyPressed(pitch, !isPressed);
   }
   private reset() {
     this.setState({ pressedPitches: [] });
