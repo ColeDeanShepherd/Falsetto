@@ -1,5 +1,6 @@
 import { FlashCard } from "./FlashCard";
-import { AnswerDifficulty, StudyAlgorithm } from "./StudyAlgorithm";
+import { StudyAlgorithm } from "./StudyAlgorithm";
+import { AnswerDifficulty } from "./AnswerDifficulty";
 
 /*
 - Every flash card has a front and a back.
