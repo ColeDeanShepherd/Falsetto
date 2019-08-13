@@ -4,23 +4,43 @@ import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid, Butto
 import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
-import { FlashCardGroup } from "../../../FlashCardGroup";
+import { FlashCardSet } from "../../../FlashCardSet";
 import { Pitch, pitchRange } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 import { playPitchesSequentially } from "../../../Piano";
 import { ScaleType } from "../../../Scale";
 import { ChordScaleFormula, ChordScaleFormulaPart } from '../../../ChordScaleFormula';
 
+const flashCardSetId = "scaleEarTraining";
+
 const minPitch = new Pitch(PitchLetter.C, -1, 2);
 const maxPitch = new Pitch(PitchLetter.C, 1, 6);
-const rootPitches = pitchRange(minPitch, maxPitch, -1, 1);
+const rootPitches = Utils.range(minPitch.midiNumber, maxPitch.midiNumber)
+  .map(midiNumber => Pitch.createFromMidiNumber(midiNumber));
 
 // TODO: instead of generating all flash cards ahead of time, dynamically generate each one
 
 export interface IFlashCardFrontSideProps {
+  scaleType: ScaleType;
+}
+export interface IFlashCardFrontSideState {
   pitches: Array<Pitch>;
 }
-export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps, {}> {
+export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps, IFlashCardFrontSideState> {
+  public constructor(props: IFlashCardFrontSideProps) {
+    super(props);
+
+    const rootPitch = Utils.randomElement(rootPitches);
+    const pitches = new ChordScaleFormula(
+      this.props.scaleType.formula.parts
+        .concat(new ChordScaleFormulaPart(8, 0, false))
+    ).getPitches(rootPitch);
+
+    this.state = {
+      pitches: pitches
+    };
+  }
+
   public componentWillUnmount() {
     if (this.playAudioCancelFn) {
       this.playAudioCancelFn();
@@ -49,7 +69,7 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
     }
 
     const cutOffSounds = true;
-    this.playAudioCancelFn = playPitchesSequentially(this.props.pitches, 500, cutOffSounds);
+    this.playAudioCancelFn = playPitchesSequentially(this.state.pitches, 500, cutOffSounds);
   }
 }
 
@@ -62,15 +82,13 @@ export function configDataToEnabledQuestionIds(configData: IConfigData): Array<n
 
   let i = 0;
 
-  for (const rootPitch of rootPitches) {
-    for (const scale of ScaleType.All) {
-      const scaleType = scale.name;
-      if (Utils.arrayContains(configData.enabledScaleTypes, scaleType)) {
-        newEnabledFlashCardIndices.push(i);
-      }
-
-      i++;
+  for (const scale of ScaleType.All) {
+    const scaleType = scale.name;
+    if (Utils.arrayContains(configData.enabledScaleTypes, scaleType)) {
+      newEnabledFlashCardIndices.push(i);
     }
+
+    i++;
   }
 
   return newEnabledFlashCardIndices;
@@ -151,24 +169,26 @@ export function createFlashCards(): Array<FlashCard> {
 
   const flashCards = new Array<FlashCard>();
 
-  for (const rootPitch of rootPitches) {
-    for (const scaleType of ScaleType.All) {
-      const pitches = new ChordScaleFormula(scaleType.formula.parts.concat(new ChordScaleFormulaPart(8, 0, false))).getPitches(rootPitch);
-      
-      const iCopy = i;
-      i++;
+  for (const scaleType of ScaleType.All) {
+    const iCopy = i;
+    i++;
 
-      flashCards.push(FlashCard.fromRenderFns(
-        () => <FlashCardFrontSide key={iCopy} pitches={pitches} />,
-        scaleType.name
-      ));
-    }
+    const deserializedId = {
+      set: flashCardSetId,
+      scale: `${scaleType.name}`
+    };
+    const id = JSON.stringify(deserializedId);
+
+    flashCards.push(FlashCard.fromRenderFns(
+      id,
+      () => <FlashCardFrontSide key={iCopy} scaleType={scaleType} />,
+      scaleType.name
+    ));
   }
 
   return flashCards;
 }
-export function createFlashCardGroup(): FlashCardGroup {
-
+export function createFlashCardSet(): FlashCardSet {
   const renderFlashCardMultiSelect = (
     flashCards: Array<FlashCard>,
     selectedFlashCardIndices: number[],
@@ -191,16 +211,16 @@ export function createFlashCardGroup(): FlashCardGroup {
       .map(scale => scale.name)
   };
   
-  const group = new FlashCardGroup(
+  const flashCardSet = new FlashCardSet(flashCardSetId,
     "Scale Ear Training",
     createFlashCards
   );
-  group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
-  group.initialConfigData = initialConfigData;
-  group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
-  group.enableInvertFlashCards = false;
-  group.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
-  group.containerHeight = "110px";
+  flashCardSet.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
+  flashCardSet.initialConfigData = initialConfigData;
+  flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
+  flashCardSet.enableInvertFlashCards = false;
+  flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+  flashCardSet.containerHeight = "110px";
 
-  return group;
+  return flashCardSet;
 }

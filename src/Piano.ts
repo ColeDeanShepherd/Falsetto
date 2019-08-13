@@ -99,7 +99,7 @@ export function getPitchAudioFilePath(pitch: Pitch): string | null {
   return kvp[1];
 }
 
-export function playPitches(pitches: Array<Pitch>): Promise<Array<Howl>> {
+export function playPitches(pitches: Array<Pitch>): [Promise<Array<Howl>>, () => void] {
   const soundFilePaths = pitches
     .map(getPitchAudioFilePath)
     .filter(fp => fp !== null)

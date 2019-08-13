@@ -1,18 +1,26 @@
 import * as FlashCardUtils from "../Utils";
 
 import { FlashCard } from "../../../FlashCard";
-import { FlashCardGroup } from "../../../FlashCardGroup";
+import { FlashCardSet } from "../../../FlashCardSet";
 
-export function createFlashCardGroup(): FlashCardGroup {
-  const flashCardGroup = new FlashCardGroup("Chord Family Definitions", createFlashCards);
-  flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+const flashCardSetId = "diatonicChordFamilyDefinitions";
 
-  return flashCardGroup;
+export function createFlashCardSet(): FlashCardSet {
+  const flashCardSet = new FlashCardSet(flashCardSetId, "Chord Family Definitions", createFlashCards);
+  flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+
+  return flashCardSet;
 }
 export function createFlashCards(): FlashCard[] {
   return [
-    FlashCard.fromRenderFns("Tonic", "doesn't contain the 4th scale degree"),
-    FlashCard.fromRenderFns("Pre-Dominant", "contains only 4th scale degree"),
-    FlashCard.fromRenderFns("Dominant", "contains the 4th and 7th scale degrees"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, family: "Tonic" }),
+      "Tonic", "doesn't contain the 4th scale degree"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, family: "Pre-Dominant" }),
+      "Pre-Dominant", "contains only 4th scale degree"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, family: "Dominant" }),
+      "Dominant", "contains the 4th and 7th scale degrees"),
   ];
 }

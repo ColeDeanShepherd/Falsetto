@@ -3,8 +3,10 @@ import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid } from
 
 import * as Utils from "../../Utils";
 import { FlashCard } from "../../FlashCard";
-import { FlashCardGroup } from "../../FlashCardGroup";
+import { FlashCardSet } from "../../FlashCardSet";
 import { ChordType } from '../../Chord';
+
+const flashCardSetId = "randomChords";
 
 const chordRoots = [
   "Cb",
@@ -149,11 +151,15 @@ export class RandomChordGeneratorFlashCardMultiSelect extends React.Component<IR
 export function createFlashCards(): Array<FlashCard> {
   return Utils.flattenArrays<FlashCard>(chordRoots
     .map(chordRoot => ChordType.All
-      .map(chordType => FlashCard.fromRenderFns(chordRoot + chordType.name, chordType.formula.toString()))
+      .map(chordType => FlashCard.fromRenderFns(
+        JSON.stringify({ set: flashCardSetId, chord: chordRoot + " " + chordType.name }),
+        chordRoot + " " + chordType.name,
+        chordType.formula.toString())
+      )
     )
   );
 }
-export function createFlashCardGroup(): FlashCardGroup {
+export function createFlashCardSet(): FlashCardSet {
   const renderFlashCardMultiSelect = (
     flashCards: Array<FlashCard>,
     selectedFlashCardIndices: number[],
@@ -177,15 +183,15 @@ export function createFlashCardGroup(): FlashCardGroup {
       .filter((_, i) => (i >= 1) && (i <= 16))
   };
   
-  const group = new FlashCardGroup(
+  const flashCardSet = new FlashCardSet(flashCardSetId,
     "Random Chord Generator",
     createFlashCards
   );
-  group.enableInvertFlashCards = false;
-  group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
-  group.initialConfigData = initialConfigData;
-  group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
-  group.containerHeight = "80px";
+  flashCardSet.enableInvertFlashCards = false;
+  flashCardSet.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
+  flashCardSet.initialConfigData = initialConfigData;
+  flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
+  flashCardSet.containerHeight = "80px";
 
-  return group;
+  return flashCardSet;
 }

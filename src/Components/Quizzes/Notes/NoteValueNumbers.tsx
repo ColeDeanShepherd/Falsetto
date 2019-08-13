@@ -1,25 +1,43 @@
 import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
-import { FlashCardGroup } from "../../../FlashCardGroup";
+import { FlashCardSet } from "../../../FlashCardSet";
 
-export function createFlashCardGroup(): FlashCardGroup {
-  const flashCardGroup = new FlashCardGroup("Note Value Numbers", createFlashCards);
-  flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
-  flashCardGroup.containerHeight = "80px";
-  flashCardGroup.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/the-basics/overview/";
+const flashCardSetId = "noteVal#s";
 
-  return flashCardGroup;
+export function createFlashCardSet(): FlashCardSet {
+  const flashCardSet = new FlashCardSet(flashCardSetId, "Note Value Numbers", createFlashCards);
+  flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+  flashCardSet.containerHeight = "80px";
+  flashCardSet.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/the-basics/overview/";
+
+  return flashCardSet;
 }
 export function createFlashCards(): FlashCard[] {
   return [
-    FlashCard.fromRenderFns("1", "Whole Note/Rest"),
-    FlashCard.fromRenderFns("2", "Half Note/Rest"),
-    FlashCard.fromRenderFns("4", "Quarter Note/Rest"),
-    FlashCard.fromRenderFns("8", "Eighth Note/Rest"),
-    FlashCard.fromRenderFns("16", "Sixteenth Note/Rest"),
-    FlashCard.fromRenderFns("32", "32nd Note/Rest"),
-    FlashCard.fromRenderFns("64", "64th Note/Rest"),
-    FlashCard.fromRenderFns("128", "128th Note/Rest")
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, num: 1 }),
+      "1", "Whole Note/Rest"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, num: 2 }),
+      "2", "Half Note/Rest"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, num: 4 }),
+      "4", "Quarter Note/Rest"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, num: 8 }),
+      "8", "Eighth Note/Rest"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, num: 16 }),
+      "16", "Sixteenth Note/Rest"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, num: 32 }),
+      "32", "32nd Note/Rest"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, num: 64 }),
+      "64", "64th Note/Rest"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, num: 128 }),
+      "128", "128th Note/Rest")
   ];
 }

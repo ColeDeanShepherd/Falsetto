@@ -5,7 +5,7 @@ import * as Utils from "../../Utils";
 import { FlashCard, FlashCardSide, FlashCardSideRenderFn } from "../../FlashCard";
 import { callFlashCardSideRenderFn } from "../../Components/FlashCard";
 import { AnswerDifficulty } from "../../StudyAlgorithm";
-import { RenderAnswerSelectArgs } from '../../FlashCardGroup';
+import { RenderAnswerSelectArgs } from '../../FlashCardSet';
 
 export function renderNoteAnswerSelect(
   state: RenderAnswerSelectArgs

@@ -1,29 +1,35 @@
 import * as React from "react";
 import * as Utils from "./Utils";
 
-export type FlashCardSideRenderFn = string | ((width: number, height: number) => JSX.Element);
+export type FlashCardId = string;
 
-export class FlashCardSide {
-  public constructor(
-    public renderFn: FlashCardSideRenderFn,
-    public data: any = null
-  ) {}
-}
-
+// TODO: add non-unique friendly name
 export class FlashCard {
   public static fromRenderFns(
+    id: FlashCardId,
     frontSideRenderFn: FlashCardSideRenderFn,
     backSideRenderFn: FlashCardSideRenderFn
   ): FlashCard {
     return new FlashCard(
+      id,
       new FlashCardSide(frontSideRenderFn),
       new FlashCardSide(backSideRenderFn)
     );
   }
 
   public constructor(
+    public id: FlashCardId,
     public frontSide: FlashCardSide,
     public backSide: FlashCardSide
+  ) {}
+}
+
+export type FlashCardSideRenderFn = string | ((width: number, height: number) => JSX.Element);
+
+export class FlashCardSide {
+  public constructor(
+    public renderFn: FlashCardSideRenderFn,
+    public data: any = null
   ) {}
 }
 
@@ -48,6 +54,8 @@ export function invertFlashCards(
     const matchingOldFrontSideIndices = oldFrontSides
       .map((_, i) => (flashCards[i].backSide === oldBackSide) ? i : -1)
       .filter(i => i >= 0);
+    const matchingOldIds = flashCards
+      .filter((fc, i) => fc.id);
     const matchingOldFrontSides = matchingOldFrontSideIndices
       .map(i => oldFrontSides[i]);
     
@@ -79,7 +87,9 @@ export function invertFlashCards(
     );
 
     result.invertedFlashCards.push(
-      new FlashCard(newFrontSide, newBackSide)
+      new FlashCard(
+        JSON.stringify({ ids: matchingOldIds }),
+        newFrontSide, newBackSide)
     );
 
     // add new enabled flash card indices

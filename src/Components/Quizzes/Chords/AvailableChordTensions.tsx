@@ -1,25 +1,45 @@
 import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
-import { FlashCardGroup } from "../../../FlashCardGroup";
+import { FlashCardSet } from "../../../FlashCardSet";
 
-export function createFlashCardGroup(): FlashCardGroup {
-  const flashCardGroup = new FlashCardGroup("Available Chord Tensions", createFlashCards);
-  flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
-  flashCardGroup.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/jazz-chords/extensions-alterations/";
-  flashCardGroup.containerHeight = "80px";
+const flashCardSetId = "availableChordTensions";
 
-  return flashCardGroup;
+export function createFlashCardSet(): FlashCardSet {
+  const flashCardSet = new FlashCardSet(flashCardSetId, "Available Chord Tensions", createFlashCards);
+  flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+  flashCardSet.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/jazz-chords/extensions-alterations/";
+  flashCardSet.containerHeight = "80px";
+
+  return flashCardSet;
 }
 export function createFlashCards(): FlashCard[] {
   return [
-    FlashCard.fromRenderFns("Maj7", "9, #11, 13"),
-    FlashCard.fromRenderFns("m7", "9, 11, 13"),
-    FlashCard.fromRenderFns("ø7", "9, 11, b13"),
-    FlashCard.fromRenderFns("mMaj7", "9, 11, 13"),
-    FlashCard.fromRenderFns("Maj+7", "9, #11"),
-    FlashCard.fromRenderFns("o", "9, 11, b13, 7"),
-    FlashCard.fromRenderFns("7", "b9, 9, #9, #11, b13, 13"),
-    FlashCard.fromRenderFns("7sus", "b9, 9, #9, b11, b13, 13"),
-    FlashCard.fromRenderFns("+7", "b9, 9, #9, #11, 13"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ "set": flashCardSetId, chordType: "maj7" }),
+      "Maj7", "9, #11, 13"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ "set": flashCardSetId, chordType: "m7" }),
+      "m7", "9, 11, 13"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ "set": flashCardSetId, chordType: "halfDim7" }),
+      "ø7", "9, 11, b13"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ "set": flashCardSetId, chordType: "mMaj7" }),
+      "mMaj7", "9, 11, 13"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ "set": flashCardSetId, chordType: "augMaj7" }),
+      "Maj+7", "9, #11"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ "set": flashCardSetId, chordType: "dim7" }),
+      "o", "9, 11, b13, 7"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ "set": flashCardSetId, chordType: "7" }),
+      "7", "b9, 9, #9, #11, b13, 13"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ "set": flashCardSetId, chordType: "7sus" }),
+      "7sus", "b9, 9, #9, b11, b13, 13"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ "set": flashCardSetId, chordType: "aug7" }),
+      "+7", "b9, 9, #9, #11, 13"),
   ];
 }

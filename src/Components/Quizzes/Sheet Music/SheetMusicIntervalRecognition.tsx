@@ -4,16 +4,40 @@ import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody } from "@mat
 import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
-import { FlashCardGroup, RenderAnswerSelectArgs } from "../../../FlashCardGroup";
+import { FlashCardSet, RenderAnswerSelectArgs } from "../../../FlashCardSet";
 import { Pitch, pitchRange } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 import { SheetMusicChord } from "./SheetMusicChords";
 import { Interval } from "../../../Interval";
-import { AnswerDifficulty } from '../../../StudyAlgorithm';
 
+const flashCardSetId = "sheetIntervals";
+
+const allowedPitches = [
+  new Pitch(PitchLetter.C, -1, 0),
+  new Pitch(PitchLetter.C, 0, 0),
+  new Pitch(PitchLetter.C, 1, 0),
+  new Pitch(PitchLetter.D, -1, 0),
+  new Pitch(PitchLetter.D, 0, 0),
+  new Pitch(PitchLetter.E, -1, 0),
+  new Pitch(PitchLetter.E, 0, 0),
+  new Pitch(PitchLetter.F, 0, 0),
+  new Pitch(PitchLetter.F, 1, 0),
+  new Pitch(PitchLetter.G, -1, 0),
+  new Pitch(PitchLetter.G, 0, 0),
+  new Pitch(PitchLetter.A, -1, 0),
+  new Pitch(PitchLetter.A, 0, 0),
+  new Pitch(PitchLetter.B, -1, 0),
+  new Pitch(PitchLetter.B, 0, 0)
+];
 const minPitch = new Pitch(PitchLetter.C, -1, 2);
 const maxPitch = new Pitch(PitchLetter.C, 1, 6);
-const notes = pitchRange(minPitch, maxPitch, -1, 1);
+const rootPitches = pitchRange(minPitch, maxPitch, -1, 1)
+  .filter(pitch =>
+    allowedPitches.some(allowedPitch =>
+      (pitch.letter === allowedPitch.letter) &&
+      (pitch.signedAccidental === allowedPitch.signedAccidental)
+    )
+  );
 const intervals = [
   "m2",
   "M2",
@@ -137,9 +161,9 @@ export class IntervalsFlashCardMultiSelect extends React.Component<IIntervalsFla
 }
 
 function forEachInterval(fn: (pitches: Array<Pitch>, interval: Interval) => void) {
-  for (let note1Index = 0; note1Index < notes.length; note1Index++) {
-    for (let note2Index = note1Index + 1; note2Index < notes.length; note2Index++) {
-      const pitches = [notes[note1Index], notes[note2Index]];
+  for (let note1Index = 0; note1Index < rootPitches.length; note1Index++) {
+    for (let note2Index = note1Index + 1; note2Index < rootPitches.length; note2Index++) {
+      const pitches = [rootPitches[note1Index], rootPitches[note2Index]];
       const interval = Interval.fromPitches(pitches[0], pitches[1]);
 
       if (Utils.arrayContains(intervals, interval.toString())) {
@@ -164,6 +188,7 @@ export function createFlashCards(): Array<FlashCard> {
 
   forEachInterval((pitches, interval) => {
     flashCards.push(FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, pitches: pitches.map(p => p.toString(true)) }),
       (width, height) => (
         <div>
           <SheetMusicChord
@@ -178,7 +203,7 @@ export function createFlashCards(): Array<FlashCard> {
 
   return flashCards;
 }
-export function createFlashCardGroup(): FlashCardGroup {
+export function createFlashCardSet(): FlashCardSet {
   const renderFlashCardMultiSelect = (
     flashCards: Array<FlashCard>,
     selectedFlashCardIndices: number[],
@@ -200,15 +225,15 @@ export function createFlashCardGroup(): FlashCardGroup {
     allowAccidentals: true
   };
   
-  const group = new FlashCardGroup(
+  const flashCardSet = new FlashCardSet(flashCardSetId,
     "Sheet Music Intervals",
     createFlashCards
   );
-  group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
-  group.initialConfigData = initialConfigData;
-  group.enableInvertFlashCards = false;
-  group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
-  group.renderAnswerSelect = renderAnswerSelect;
+  flashCardSet.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
+  flashCardSet.initialConfigData = initialConfigData;
+  flashCardSet.enableInvertFlashCards = false;
+  flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
+  flashCardSet.renderAnswerSelect = renderAnswerSelect;
 
-  return group;
+  return flashCardSet;
 }

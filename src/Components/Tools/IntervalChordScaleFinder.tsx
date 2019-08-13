@@ -13,6 +13,8 @@ import { ChordType, Chord } from '../../Chord';
 import { ScaleType, getAllModePitchIntegers } from '../../Scale';
 import { generateChordNames } from '../../ChordName';
 import { ChordScaleFormula } from '../../ChordScaleFormula';
+import { playPitches } from '../../Piano';
+import { StringDictionary } from '../../StringDictionary';
 
 // TODO: refactor Chord, Scale
 // TODO: add support for multiple chord names
@@ -73,6 +75,69 @@ export function findScales(pitches: Array<Pitch>): Array<[ScaleType, Pitch]> {
     : new Array<[ScaleType, Pitch]>();
 }
 
+export function keyToPitch(keyString: string): Pitch | null {
+  switch (keyString) {
+    case "z":
+      return new Pitch(PitchLetter.C, 0, 4);
+    case "s":
+      return new Pitch(PitchLetter.D, -1, 4);
+    case "x":
+      return new Pitch(PitchLetter.D, 0, 4);
+    case "d":
+      return new Pitch(PitchLetter.E, -1, 4);
+    case "c":
+      return new Pitch(PitchLetter.E, 0, 4);
+    case "v":
+      return new Pitch(PitchLetter.F, 0, 4);
+    case "g":
+      return new Pitch(PitchLetter.G, -1, 4);
+    case "b":
+      return new Pitch(PitchLetter.G, 0, 4);
+    case "h":
+      return new Pitch(PitchLetter.A, -1, 4);
+    case "n":
+      return new Pitch(PitchLetter.A, 0, 4);
+    case "j":
+      return new Pitch(PitchLetter.B, -1, 4);
+    case "m":
+      return new Pitch(PitchLetter.B, 0, 4);
+    case ",":
+      return new Pitch(PitchLetter.C, 0, 5);
+    case "l":
+      return new Pitch(PitchLetter.D, -1, 5);
+    case ".":
+      return new Pitch(PitchLetter.D, 0, 5);
+    case ";":
+      return new Pitch(PitchLetter.E, -1, 5);
+    case "q":
+      return new Pitch(PitchLetter.C, 0, 5);
+    case "2":
+      return new Pitch(PitchLetter.D, -1, 5);
+    case "w":
+      return new Pitch(PitchLetter.D, 0, 5);
+    case "3":
+      return new Pitch(PitchLetter.E, -1, 5);
+    case "e":
+      return new Pitch(PitchLetter.E, 0, 5);
+    case "r":
+      return new Pitch(PitchLetter.F, 0, 5);
+    case "5":
+      return new Pitch(PitchLetter.G, -1, 5);
+    case "t":
+      return new Pitch(PitchLetter.G, 0, 5);
+    case "6":
+      return new Pitch(PitchLetter.A, -1, 5);
+    case "y":
+      return new Pitch(PitchLetter.A, 0, 5);
+    case "7":
+      return new Pitch(PitchLetter.B, -1, 5);
+    case "u":
+      return new Pitch(PitchLetter.B, 0, 5);
+    default:
+      return null;
+  }
+}
+
 interface IIntervalChordScaleFinderProps {}
 interface IIntervalChordScaleFinderState {
   pressedPitches: Array<Pitch>;
@@ -87,6 +152,25 @@ export class IntervalChordScaleFinder extends React.Component<IIntervalChordScal
     };
   }
 
+  public componentDidMount() {
+    this.boundOnKeyDown = this.onKeyDown.bind(this);
+    window.addEventListener("keydown", this.boundOnKeyDown);
+    
+    this.boundOnKeyUp = this.onKeyUp.bind(this);
+    window.addEventListener("keyup", this.boundOnKeyUp);
+  }
+  public componentWillUnmount() {
+    if (this.boundOnKeyDown) {
+      window.removeEventListener("keydown", this.boundOnKeyDown);
+      this.boundOnKeyDown = undefined;
+    }
+
+    if (this.boundOnKeyUp) {
+      window.removeEventListener("keyup", this.boundOnKeyUp);
+      this.boundOnKeyUp = undefined;
+    }
+  }
+
   public render(): JSX.Element {
     const pianoStyle = { width: "100%", maxWidth: "400px", height: "auto" };
     const pianoSize = new Size2D(400, 100);
@@ -99,7 +183,7 @@ export class IntervalChordScaleFinder extends React.Component<IIntervalChordScal
       .map(p => p.toOneAccidentalAmbiguousString(false))
       .join(', ');
     
-    const onPianoKeyPress = this.onPianoKeyPress.bind(this);
+    const onPianoKeyPress = this.toggleIsPianoKeyPressed.bind(this);
     
     return (
       <Card>
@@ -160,6 +244,10 @@ export class IntervalChordScaleFinder extends React.Component<IIntervalChordScal
     );
   }
 
+  private boundOnKeyDown: ((event: KeyboardEvent) => void) | undefined;
+  private boundOnKeyUp: ((event: KeyboardEvent) => void) | undefined;
+  private pitchCancellationFns: StringDictionary<() => void> = {};
+
   private renderExtras(metrics: PianoKeyboardMetrics): { whiteKeyLayerExtras: JSX.Element, blackKeyLayerExtras: JSX.Element } {
     const whitePressedPitches = this.state.pressedPitches
       .filter(p => p.isWhiteKey);
@@ -193,11 +281,44 @@ export class IntervalChordScaleFinder extends React.Component<IIntervalChordScal
     }
   }
 
-  private onPianoKeyPress(pitch: Pitch) {
-    const newPressedPitches = Utils.toggleArrayElementCustomEquals(
-      this.state.pressedPitches, pitch, (a, b) => a.midiNumber === b.midiNumber
-    );
-    this.setState({ pressedPitches: newPressedPitches });
+  private onKeyDown(event: KeyboardEvent) {
+    if (event.repeat) { return; }
+
+    const pitch = keyToPitch(event.key)
+    if (pitch === null) { return; }
+
+    this.setIsPianoKeyPressed(pitch, true);
+  }
+  private onKeyUp(event: KeyboardEvent) {
+    const pitch = keyToPitch(event.key)
+    if (pitch === null) { return; }
+
+    this.setIsPianoKeyPressed(pitch, false);
+  }
+  private setIsPianoKeyPressed(pitch: Pitch, value: boolean) {
+    const cancellationFnKey = pitch.midiNumber.toString();
+    if (value) {
+      const cancellationFn = playPitches([pitch])[1];
+      this.pitchCancellationFns[cancellationFnKey] = cancellationFn;
+
+      this.setState({
+        pressedPitches: Utils.immutableAddIfNotFoundInArray(this.state.pressedPitches, pitch, p => p.equals(pitch))
+      });
+    } else {
+      const cancellationFn = this.pitchCancellationFns[cancellationFnKey];
+      if (cancellationFn) {
+        cancellationFn();
+        delete this.pitchCancellationFns[cancellationFnKey];
+      }
+
+      this.setState({
+        pressedPitches: Utils.immutableRemoveIfFoundInArray(this.state.pressedPitches, p => p.equals(pitch))
+      });
+    }
+  }
+  private toggleIsPianoKeyPressed(pitch: Pitch) {
+    const isPressed = this.state.pressedPitches.find(p => p.midiNumber === pitch.midiNumber) !== undefined;
+    this.setIsPianoKeyPressed(pitch, !isPressed);
   }
   private reset() {
     this.setState({ pressedPitches: [] });

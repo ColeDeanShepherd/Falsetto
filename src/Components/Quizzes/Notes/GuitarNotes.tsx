@@ -9,8 +9,10 @@ import {
   standard6StringGuitarTuning
 } from "../../Utils/GuitarFretboard";
 import { FlashCard } from "../../../FlashCard";
-import { FlashCardGroup } from "../../../FlashCardGroup";
+import { FlashCardSet } from "../../../FlashCardSet";
 import { StringedInstrumentNote } from '../../../GuitarNote';
+
+const flashCardSetId = "guitarNotes";
 
 interface IConfigData {
   maxFret: number
@@ -68,7 +70,7 @@ export class GuitarNotesFlashCardMultiSelect extends React.Component<IGuitarNote
   }
 }
 
-export function createFlashCardGroup(guitarNotes?: Array<StringedInstrumentNote>): FlashCardGroup {
+export function createFlashCardSet(guitarNotes?: Array<StringedInstrumentNote>): FlashCardSet {
   const renderFlashCardMultiSelect = (
     flashCards: Array<FlashCard>,
     selectedFlashCardIndices: number[],
@@ -87,16 +89,16 @@ export function createFlashCardGroup(guitarNotes?: Array<StringedInstrumentNote>
     maxFret: 11
   };
 
-  const group = new FlashCardGroup("Guitar Notes", () => createFlashCards(guitarNotes));
-  group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
-  group.initialConfigData = initialConfigData;
-  group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
-  group.renderAnswerSelect = FlashCardUtils.renderNoteAnswerSelect;
-  group.enableInvertFlashCards = false;
-  group.moreInfoUri = "https://medium.com/@aslushnikov/memorizing-fretboard-a9f4f28dbf03";
-  group.containerHeight = "120px";
+  const flashCardSet = new FlashCardSet(flashCardSetId, "Guitar Notes", () => createFlashCards(guitarNotes));
+  flashCardSet.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
+  flashCardSet.initialConfigData = initialConfigData;
+  flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
+  flashCardSet.renderAnswerSelect = FlashCardUtils.renderNoteAnswerSelect;
+  flashCardSet.enableInvertFlashCards = false;
+  flashCardSet.moreInfoUri = "https://medium.com/@aslushnikov/memorizing-fretboard-a9f4f28dbf03";
+  flashCardSet.containerHeight = "120px";
 
-  return group;
+  return flashCardSet;
 }
 
 export function createFlashCards(guitarNotes?: Array<StringedInstrumentNote>): FlashCard[] {
@@ -113,21 +115,30 @@ export function createFlashCards(guitarNotes?: Array<StringedInstrumentNote>): F
     : guitarNotes;
 
   return guitarNotes
-    .map(guitarNote => FlashCard.fromRenderFns(
-      (width, height) => {
-        const size = Utils.shrinkRectToFit(
-          new Size2D(width, height),
-          new Size2D(400, 140)
-        );
+    .map(guitarNote => {
+      const deserializedId = {
+        set: flashCardSetId,
+        note: [guitarNote.stringIndex, guitarNote.pitch.midiNumber]
+      };
+      const id = JSON.stringify(deserializedId);
 
-        return (
-          <GuitarFretboard
-            width={size.width} height={size.height}
-            tuning={standard6StringGuitarTuning}
-            pressedNotes={[guitarNote]}
-          />
-        );
-      },
-      guitarNote.pitch.toOneAccidentalAmbiguousString(false, true)
-    ));
+      return FlashCard.fromRenderFns(
+        id,
+        (width, height) => {
+          const size = Utils.shrinkRectToFit(
+            new Size2D(width, height),
+            new Size2D(400, 140)
+          );
+  
+          return (
+            <GuitarFretboard
+              width={size.width} height={size.height}
+              tuning={standard6StringGuitarTuning}
+              pressedNotes={[guitarNote]}
+            />
+          );
+        },
+        guitarNote.pitch.toOneAccidentalAmbiguousString(false, true)
+      );
+    });
 }

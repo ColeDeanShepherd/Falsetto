@@ -5,7 +5,7 @@ import { Vector2D } from '../../../Vector2D';
 import { Size2D } from "../../../Size2D";
 import { Rect2D } from '../../../Rect2D';
 import { FlashCard, FlashCardSide } from "../../../FlashCard";
-import { FlashCardGroup, RenderAnswerSelectArgs } from "../../../FlashCardGroup";
+import { FlashCardSet, RenderAnswerSelectArgs } from "../../../FlashCardSet";
 import { Pitch } from "../../../Pitch";
 import { playPitchesSequentially } from "../../../Piano";
 import {
@@ -15,8 +15,9 @@ import {
 import { Button, TableRow, TableCell, Checkbox, Table, TableHead, TableBody, Grid } from "@material-ui/core";
 import { PianoKeyboard } from "../../Utils/PianoKeyboard";
 import { PitchLetter } from "../../../PitchLetter";
-import { AnswerDifficulty } from "../../../StudyAlgorithm";
 import { PianoKeysAnswerSelect } from "../../Utils/PianoKeysAnswerSelect";
+
+const flashCardSetId = "pianoNextNoteEarTraining";
 
 const minPitch = new Pitch(PitchLetter.C, 0, 4);
 const maxPitch = new Pitch(PitchLetter.B, 0, 5);
@@ -62,7 +63,7 @@ export function configDataToEnabledQuestionIds(
 ): Array<number> {
   const enabledQuestionIds = new Array<number>();
   forEachInterval(rootNotes,
-    (interval, p1, p2, isHarmonicInterval, i) => {
+    (interval, direction, p1, p2, isHarmonicInterval, i) => {
     if (Utils.arrayContains(configData.enabledIntervals, interval)) {
       enabledQuestionIds.push(i);
     }
@@ -200,17 +201,24 @@ export function renderAnswerSelect(
 export function createFlashCards(): Array<FlashCard> {
   const flashCards = new Array<FlashCard>();
   forEachInterval(rootNotes,
-    (interval, p1, p2, isHarmonicInterval, i) => {
-    flashCards.push(
-      new FlashCard(
-        new FlashCardSide((width, height) => <FlashCardFrontSide key={i} width={width} height={height} pitch1={p1} pitch2={p2} />, p1),
-        new FlashCardSide(p2.toOneAccidentalAmbiguousString(false), p2)
-      )
-    );
-  }, includeHarmonicIntervals, minPitch, maxPitch);
+    (interval, direction, p1, p2, _, i) => {
+      const deserializedId = {
+        set: flashCardSetId,
+        pitches: [p1.toString(true), p2.toString(true)]
+      };
+      const id = JSON.stringify(deserializedId);
+
+      flashCards.push(
+        new FlashCard(
+          id,
+          new FlashCardSide((width, height) => <FlashCardFrontSide key={i} width={width} height={height} pitch1={p1} pitch2={p2} />, p1),
+          new FlashCardSide(p2.toOneAccidentalAmbiguousString(false), p2)
+        )
+      );
+    }, includeHarmonicIntervals, minPitch, maxPitch);
   return flashCards;
 }
-export function createFlashCardGroup(): FlashCardGroup {
+export function createFlashCardSet(): FlashCardSet {
   const renderFlashCardMultiSelect = (
     flashCards: Array<FlashCard>,
     selectedFlashCardIndices: number[],
@@ -231,16 +239,16 @@ export function createFlashCardGroup(): FlashCardGroup {
     enabledIntervals: intervals.slice()
   };
   
-  const group = new FlashCardGroup(
+  const flashCardSet = new FlashCardSet(flashCardSetId,
     "Interval 2nd Note Ear Training Piano",
     createFlashCards
   );
-  group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
-  group.initialConfigData = initialConfigData;
-  group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
-  group.enableInvertFlashCards = false;
-  group.renderAnswerSelect = renderAnswerSelect;
-  group.customNextFlashCardIdFilter = (studyAlgorithm, flashCards, enabledFlashCardIds) => {
+  flashCardSet.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
+  flashCardSet.initialConfigData = initialConfigData;
+  flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
+  flashCardSet.enableInvertFlashCards = false;
+  flashCardSet.renderAnswerSelect = renderAnswerSelect;
+  flashCardSet.customNextFlashCardIdFilter = (studyAlgorithm, flashCards, enabledFlashCardIds) => {
     if (studyAlgorithm.currentQuestionId === undefined) {
       return enabledFlashCardIds;
     }
@@ -256,7 +264,7 @@ export function createFlashCardGroup(): FlashCardGroup {
         return firstPitch.midiNumber === secondPitch.midiNumber;
       });
   };
-  group.containerHeight = "180px";
+  flashCardSet.containerHeight = "180px";
   
-  return group;
+  return flashCardSet;
 }

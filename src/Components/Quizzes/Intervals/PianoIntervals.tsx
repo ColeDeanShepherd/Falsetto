@@ -7,7 +7,7 @@ import { Size2D } from "../../../Size2D";
 import { Rect2D } from '../../../Rect2D';
 import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
-import { FlashCardGroup, RenderAnswerSelectArgs } from "../../../FlashCardGroup";
+import { FlashCardSet, RenderAnswerSelectArgs } from "../../../FlashCardSet";
 import { Pitch } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 import { PianoKeyboard } from "../../Utils/PianoKeyboard";
@@ -30,6 +30,8 @@ const intervals = [
   "M7",
   "P8"
 ];
+
+const flashCardSetId = "pianoIntervals";
 
 interface IConfigData {
   enabledIntervals: string[];
@@ -171,7 +173,14 @@ export function createFlashCards(): Array<FlashCard> {
   const flashCards = new Array<FlashCard>();
 
   forEachInterval((pitches, intervalString) => {
+    const deserializedId = {
+      set: flashCardSetId,
+      pitches: pitches.map(p => p.toString(true, false))
+    };
+    const id = JSON.stringify(deserializedId);
+
     flashCards.push(FlashCard.fromRenderFns(
+      id,
       (width, height) => {
         const size = Utils.shrinkRectToFit(
           new Size2D(width, height),
@@ -195,7 +204,7 @@ export function createFlashCards(): Array<FlashCard> {
 
   return flashCards;
 }
-export function createFlashCardGroup(): FlashCardGroup {
+export function createFlashCardSet(): FlashCardSet {
 
   const renderFlashCardMultiSelect = (
     flashCards: Array<FlashCard>,
@@ -218,16 +227,16 @@ export function createFlashCardGroup(): FlashCardGroup {
     allowAccidentals: true
   };
   
-  const group = new FlashCardGroup(
+  const flashCardSet = new FlashCardSet(flashCardSetId,
     "Piano Intervals",
     createFlashCards
   );
-  group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
-  group.initialConfigData = initialConfigData;
-  group.enableInvertFlashCards = false;
-  group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
-  group.renderAnswerSelect = renderAnswerSelect;
-  group.containerHeight = "100px";
+  flashCardSet.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
+  flashCardSet.initialConfigData = initialConfigData;
+  flashCardSet.enableInvertFlashCards = false;
+  flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
+  flashCardSet.renderAnswerSelect = renderAnswerSelect;
+  flashCardSet.containerHeight = "100px";
 
-  return group;
+  return flashCardSet;
 }

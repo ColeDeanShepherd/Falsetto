@@ -3,7 +3,6 @@ import { Pitch } from "./Pitch";
 import { getIntervalsFromFormula, getSimpleScaleDegree } from './Scale';
 import { Interval } from './Interval';
 import { ChordScaleFormula } from './ChordScaleFormula';
-import { number } from 'prop-types';
 
 export function getSimpleChordNoteNumber(chordNoteNumber: number) {
   return getSimpleScaleDegree(chordNoteNumber);
@@ -143,7 +142,7 @@ export class ChordType {
 
   // Other Chords
   public static Power = new ChordType("Power", ChordScaleFormula.parse("1 5"), [" power"]);
-  public static QuartalTriad = new ChordType("Quartal", ChordScaleFormula.parse("1 4 b7"), ["quartal"]);
+  public static QuartalTriad = new ChordType("Quartal Triad", ChordScaleFormula.parse("1 4 b7"), ["quartal triad"]);
   public static Quartal4Notes = new ChordType("Quartal", ChordScaleFormula.parse("1 b3 4 b7"), ["quartal"]);
     
   public static OtherChords = [

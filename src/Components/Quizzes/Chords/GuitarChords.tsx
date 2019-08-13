@@ -6,7 +6,7 @@ import { Size2D } from "../../../Size2D";
 import { Rect2D } from '../../../Rect2D';
 import { PianoKeyboard } from "../../Utils/PianoKeyboard";
 import { FlashCard, FlashCardSide } from "../../../FlashCard";
-import { FlashCardGroup, RenderAnswerSelectArgs } from "../../../FlashCardGroup";
+import { FlashCardSet, RenderAnswerSelectArgs } from "../../../FlashCardSet";
 import { AnswerDifficulty } from "../../../StudyAlgorithm";
 import { Pitch } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
@@ -15,6 +15,7 @@ import { ChordType } from "../../../Chord";
 import { GuitarChordViewer } from '../Scales/GuitarScales';
 import { AnswerButton } from '../Utils';
 
+const flashCardSetId = "guitarChordOrderedNotes";
 const rootPitchStrs = ["Ab", "A", "Bb", "B/Cb", "C", "C#/Db", "D", "Eb", "E", "F", "F#/Gb", "G"];
 
 interface IConfigData {
@@ -360,7 +361,7 @@ export class GuitarNotesAnswerSelect extends React.Component<IGuitarNotesAnswerS
   }
 }
 
-export function createFlashCardGroup(): FlashCardGroup {
+export function createFlashCardSet(): FlashCardSet {
   const renderFlashCardMultiSelect = (
     flashCards: Array<FlashCard>,
     selectedFlashCardIndices: number[],
@@ -384,15 +385,15 @@ export function createFlashCardGroup(): FlashCardGroup {
       .map(chord => chord.name)
   };
 
-  const group = new FlashCardGroup("Guitar Chords", createFlashCards);
-  group.enableInvertFlashCards = false;
-  group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
-  group.initialConfigData = initialConfigData;
-  group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
-  group.renderAnswerSelect = renderAnswerSelect;
-  group.containerHeight = "120px";
+  const flashCardSet = new FlashCardSet(flashCardSetId, "Guitar Chords", createFlashCards);
+  flashCardSet.enableInvertFlashCards = false;
+  flashCardSet.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
+  flashCardSet.initialConfigData = initialConfigData;
+  flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
+  flashCardSet.renderAnswerSelect = renderAnswerSelect;
+  flashCardSet.containerHeight = "120px";
 
-  return group;
+  return flashCardSet;
 }
 export function createFlashCards(): FlashCard[] {
   return Utils.flattenArrays<FlashCard>(
@@ -402,7 +403,13 @@ export function createFlashCards(): FlashCard[] {
       
       return ChordType.All.map(chordType => {
         const pitches = chordType.getPitches(rootPitch);
+        const deserializedId = {
+          set: flashCardSetId,
+          chord: `${rootPitch.toString(false)} ${chordType.name}`
+        };
+        const id = JSON.stringify(deserializedId);
         return new FlashCard(
+          id,
           new FlashCardSide(
             (width, height) => {
               const size = Utils.shrinkRectToFit(new Size2D(width, height), new Size2D(400, 140));

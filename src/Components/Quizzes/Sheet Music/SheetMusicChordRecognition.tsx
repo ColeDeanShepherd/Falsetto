@@ -4,11 +4,13 @@ import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid } from
 import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
-import { FlashCardGroup } from "../../../FlashCardGroup";
+import { FlashCardSet } from "../../../FlashCardSet";
 import { Pitch, pitchRange } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 import { SheetMusicChord } from "./SheetMusicChords";
 import { Chord, ChordType } from "../../../Chord";
+
+const flashCardSetId = "sheetChords";
 
 const allowedPitches = [
   new Pitch(PitchLetter.C, -1, 0),
@@ -192,6 +194,7 @@ export function createFlashCards(): Array<FlashCard> {
       const pitches = new Chord(chordType, rootPitch).getPitches();
 
       flashCards.push(FlashCard.fromRenderFns(
+        JSON.stringify({ set: flashCardSetId, chord: `${rootPitch.toString(true)} ${chordType.name}` }),
         (width, height) => (
           <div>
             <SheetMusicChord
@@ -207,7 +210,7 @@ export function createFlashCards(): Array<FlashCard> {
 
   return flashCards;
 }
-export function createFlashCardGroup(): FlashCardGroup {
+export function createFlashCardSet(): FlashCardSet {
   const renderFlashCardMultiSelect = (
     flashCards: Array<FlashCard>,
     selectedFlashCardIndices: number[],
@@ -229,15 +232,15 @@ export function createFlashCardGroup(): FlashCardGroup {
     enabledChordTypes: chordTypes.map(chordType => chordType.name)
   };
   
-  const group = new FlashCardGroup(
+  const flashCardSet = new FlashCardSet(flashCardSetId,
     "Sheet Music Chords",
     createFlashCards
   );
-  group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
-  group.initialConfigData = initialConfigData;
-  group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
-  group.enableInvertFlashCards = false;
-  group.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+  flashCardSet.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
+  flashCardSet.initialConfigData = initialConfigData;
+  flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
+  flashCardSet.enableInvertFlashCards = false;
+  flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
 
-  return group;
+  return flashCardSet;
 }

@@ -4,12 +4,13 @@ import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid } from
 import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
-import { FlashCardGroup } from "../../../FlashCardGroup";
+import { FlashCardSet } from "../../../FlashCardSet";
 import { Pitch } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 import { VerticalDirection } from "../../../VerticalDirection";
 import { Interval } from "../../../Interval";
 
+const flashCardSetId = "notesToIntervals";
 const rootNotes = [
   new Pitch(PitchLetter.C, -1, 4),
   new Pitch(PitchLetter.C, 0, 4),
@@ -226,7 +227,7 @@ export class IntervalNotesFlashCardMultiSelect extends React.Component<IInterval
 
 export function createFlashCards(): Array<FlashCard> {
   return Utils.flattenArrays<FlashCard>(rootNotes
-    .map(rootNote => intervals
+    .map(rootPitch => intervals
       .map(interval => signs
         .map(sign => {
           const intervalQuality = interval[0];
@@ -236,13 +237,20 @@ export function createFlashCards(): Array<FlashCard> {
           const genericIntervalNum = parseInt(genericInterval, 10);
 
           const newPitch = Pitch.addInterval(
-            rootNote,
+            rootPitch,
             (sign === "+") ? VerticalDirection.Up : VerticalDirection.Down,
             new Interval(genericIntervalNum, intervalQualityNum)
           );
           
+          const deserializedId = {
+            set: flashCardSetId,
+            pitches: [rootPitch.toString(true), newPitch.toString(true)]
+          };
+          const id = JSON.stringify(deserializedId);
+          
           return FlashCard.fromRenderFns(
-            rootNote.toString(true) + ", " + newPitch.toString(true),
+            id,
+            rootPitch.toString(true) + ", " + newPitch.toString(true),
             interval
           );
         })
@@ -250,7 +258,7 @@ export function createFlashCards(): Array<FlashCard> {
     )
   );
 }
-export function createFlashCardGroup(): FlashCardGroup {
+export function createFlashCardSet(): FlashCardSet {
   const renderFlashCardMultiSelect = (
     flashCards: Array<FlashCard>,
     selectedFlashCardIndices: number[],
@@ -273,16 +281,16 @@ export function createFlashCardGroup(): FlashCardGroup {
     enabledSigns: signs.slice()
   };
   
-  const group = new FlashCardGroup(
+  const flashCardSet = new FlashCardSet(flashCardSetId,
     "Notes To Intervals",
     createFlashCards
   );
-  group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
-  group.initialConfigData = initialConfigData;
-  group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
-  group.enableInvertFlashCards = false;
-  group.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
-  group.containerHeight = "80px";
+  flashCardSet.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
+  flashCardSet.initialConfigData = initialConfigData;
+  flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
+  flashCardSet.enableInvertFlashCards = false;
+  flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+  flashCardSet.containerHeight = "80px";
 
-  return group;
+  return flashCardSet;
 }

@@ -1,5 +1,20 @@
 # To-Do
 ## High Priority
+* Persistent data
+  * Make these root pitch invariant?:
+    * guitarChordOrderedNotes
+    * guitarScaleOrderedNotes
+  * Carefully review flash card IDs
+  * Remove text area
+  * Add in-memory flash card stats DB
+    * Use it, make sure tracking works
+      * Include levels
+    * Show the data in some way
+      * knowledge map with percentages?
+    * Save in local storage if you aren't logged in?
+  * Allow log in/log out/account management
+  * Show data specific to current account
+
 * Figure out flash card inverting with levels, re-enable.
 * Each flash card has its own ID
 * Chord Progressions

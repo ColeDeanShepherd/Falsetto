@@ -1,23 +1,41 @@
 import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
-import { FlashCardGroup } from "../../../FlashCardGroup";
+import { FlashCardSet } from "../../../FlashCardSet";
 
-export function createFlashCardGroup(): FlashCardGroup {
-  const flashCardGroup = new FlashCardGroup("Generic Intervals To Interval Qualities", createFlashCards);
-  flashCardGroup.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+const flashCardSetId = "genericIntervalQualities";
 
-  return flashCardGroup;
+export function createFlashCardSet(): FlashCardSet {
+  const flashCardSet = new FlashCardSet(flashCardSetId, "Generic Intervals To Interval Qualities", createFlashCards);
+  flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+
+  return flashCardSet;
 }
 
 export function createFlashCards(): FlashCard[] {
   return [
-    FlashCard.fromRenderFns("1st", "perfect"),
-    FlashCard.fromRenderFns("2nd", "imperfect"),
-    FlashCard.fromRenderFns("3rd", "imperfect"),
-    FlashCard.fromRenderFns("4th", "perfect"),
-    FlashCard.fromRenderFns("5th", "perfect"),
-    FlashCard.fromRenderFns("6th", "imperfect"),
-    FlashCard.fromRenderFns("7th", "imperfect"),
-    FlashCard.fromRenderFns("8th", "perfect"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, interval: 1 }),
+      "1st", "perfect"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, interval: 2 }),
+      "2nd", "imperfect"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, interval: 3 }),
+      "3rd", "imperfect"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, interval: 4 }),
+      "4th", "perfect"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, interval: 5 }),
+      "5th", "perfect"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, interval: 6 }),
+      "6th", "imperfect"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, interval: 7 }),
+      "7th", "imperfect"),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, interval: 8 }),
+      "8th", "perfect"),
   ];
 }

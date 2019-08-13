@@ -2,7 +2,7 @@ import * as React from "react";
 
 import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
-import { FlashCardGroup } from "../../../FlashCardGroup";
+import { FlashCardSet } from "../../../FlashCardSet";
 import { Pitch } from "../../../Pitch";
 import { playPitchesSequentially } from "../../../Piano";
 import {
@@ -15,6 +15,8 @@ import {
   forEachInterval
 } from "../../Utils/IntervalEarTrainingFlashCardMultiSelect";
 import { Button } from "@material-ui/core";
+
+const flashCardSetId = "nextNoteEarTraining";
 
 export interface IFlashCardFrontSideProps {
   pitch1: Pitch;
@@ -57,8 +59,16 @@ export function createFlashCards(): Array<FlashCard> {
 
   const includeHarmonicIntervals = false;
   forEachInterval(rootNotes,
-    (interval, pitch1, pitch2, isHarmonicInterval, i) => {
+    (interval, direction, pitch1, pitch2, isHarmonicInterval, i) => {
+      const deserializedId = {
+        set: flashCardSetId,
+        isHarmonic: isHarmonicInterval,
+        pitches: [pitch1.toString(true), pitch2.toString(true)]
+      };
+      const id = JSON.stringify(deserializedId);
+
       flashCards.push(FlashCard.fromRenderFns(
+        id,
         () => <FlashCardFrontSide key={i} pitch1={pitch1} pitch2={pitch2} />,
         pitch2.toOneAccidentalAmbiguousString(false, true)
       ));
@@ -67,7 +77,7 @@ export function createFlashCards(): Array<FlashCard> {
 
   return flashCards;
 }
-export function createFlashCardGroup(): FlashCardGroup {
+export function createFlashCardSet(): FlashCardSet {
   const renderFlashCardMultiSelect = (
     flashCards: Array<FlashCard>,
     selectedFlashCardIndices: number[],
@@ -79,6 +89,7 @@ export function createFlashCardGroup(): FlashCardGroup {
       flashCards={flashCards}
       configData={configData}
       selectedFlashCardIndices={selectedFlashCardIndices}
+      hasFlashCardPerRootNote={true}
       onChange={onChange}
     />
     );
@@ -90,16 +101,17 @@ export function createFlashCardGroup(): FlashCardGroup {
     enabledDirections: directions.slice()
   };
   
-  const group = new FlashCardGroup(
+  const flashCardSet = new FlashCardSet(flashCardSetId,
     "Interval 2nd Note Ear Training",
     createFlashCards
   );
-  group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(false, initialConfigData);
-  group.initialConfigData = initialConfigData;
-  group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
-  group.enableInvertFlashCards = false;
-  group.renderAnswerSelect = FlashCardUtils.renderNoteAnswerSelect;
-  group.containerHeight = "120px";
+  flashCardSet.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(
+    false, true, initialConfigData);
+  flashCardSet.initialConfigData = initialConfigData;
+  flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
+  flashCardSet.enableInvertFlashCards = false;
+  flashCardSet.renderAnswerSelect = FlashCardUtils.renderNoteAnswerSelect;
+  flashCardSet.containerHeight = "120px";
   
-  return group;
+  return flashCardSet;
 }

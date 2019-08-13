@@ -43,7 +43,7 @@ export const directionsWithHarmonic = directions.concat(["harmonic"]);
 
 export function forEachInterval(
   rootNotes: Array<Pitch>,
-  callbackFn: (interval: string, pitch1: Pitch, pitch2: Pitch, isHarmonicInterval: boolean, index: number) => void,
+  callbackFn: (interval: string, direction: string, pitch1: Pitch, pitch2: Pitch, isHarmonicInterval: boolean, index: number) => void,
   includeHarmonicIntervals: boolean,
   minPitch?: Pitch,
   maxPitch?: Pitch
@@ -71,7 +71,7 @@ export function forEachInterval(
         
         const isHarmonicInterval = direction === "harmonic";
 
-        callbackFn(interval, rootPitch, newPitch, isHarmonicInterval, i);
+        callbackFn(interval, direction, rootPitch, newPitch, isHarmonicInterval, i);
         i++;
       }
     }
@@ -86,28 +86,44 @@ export interface IConfigData {
 
 export function configDataToEnabledQuestionIds(
   enableHarmonicIntervals: boolean,
+  hasFlashCardPerRootNote: boolean,
   configData: IConfigData
 ): Array<number> {
   const directionsToUse = enableHarmonicIntervals ? directionsWithHarmonic : directions;
-  return Utils.flattenArrays<boolean>(rootNotes
-    .map(rootNote => intervals
+
+  if (hasFlashCardPerRootNote) {
+    return Utils.flattenArrays<boolean>(rootNotes
+      .map(rootNote => intervals
+        .map(interval => directionsToUse
+          .map(direction =>
+            Utils.arrayContains(configData.enabledRootNotes, rootNote) &&
+            Utils.arrayContains(configData.enabledIntervals, interval) &&
+            Utils.arrayContains(configData.enabledDirections, direction)
+          )
+        )
+      )
+    )
+      .map((x, i) => x ? i : -1)
+      .filter(i => i >= 0);
+  } else {
+    return Utils.flattenArrays<boolean>(intervals
       .map(interval => directionsToUse
         .map(direction =>
-          Utils.arrayContains(configData.enabledRootNotes, rootNote) &&
           Utils.arrayContains(configData.enabledIntervals, interval) &&
           Utils.arrayContains(configData.enabledDirections, direction)
         )
       )
     )
-  )
-    .map((x, i) => x ? i : -1)
-    .filter(i => i >= 0);
+      .map((x, i) => x ? i : -1)
+      .filter(i => i >= 0);
+  }
 }
 
 export interface IIntervalEarTrainingFlashCardMultiSelectProps {
   flashCards: FlashCard[];
   configData: IConfigData;
   selectedFlashCardIndices: number[];
+  hasFlashCardPerRootNote: boolean;
   onChange?: (newValue: number[], newConfigData: any) => void;
   enableHarmonicIntervals?: boolean;
 }
@@ -186,6 +202,7 @@ export class IntervalEarTrainingFlashCardMultiSelect extends React.Component<IIn
   private get directionsSource(): Array<string> {
     return !this.props.enableHarmonicIntervals ? directions : directionsWithHarmonic;
   }
+
   private toggleIntervalEnabled(interval: string) {
     const newEnabledIntervals = Utils.toggleArrayElement(
       this.props.configData.enabledIntervals,
@@ -220,7 +237,8 @@ export class IntervalEarTrainingFlashCardMultiSelect extends React.Component<IIn
     if (!this.props.onChange) { return; }
 
     const enableHarmonicIntervals = this.props.enableHarmonicIntervals === true;
-    const newEnabledFlashCardIndices = configDataToEnabledQuestionIds(enableHarmonicIntervals, newConfigData);
+    const newEnabledFlashCardIndices = configDataToEnabledQuestionIds(
+      enableHarmonicIntervals, this.props.hasFlashCardPerRootNote, newConfigData);
     this.props.onChange(newEnabledFlashCardIndices, newConfigData);
   }
 }

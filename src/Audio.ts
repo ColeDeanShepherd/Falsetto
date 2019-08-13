@@ -45,15 +45,22 @@ export function loadAndPlaySound(soundFilePath: string, volume: number = 1): How
 
   return howl;
 }
-export function loadAndPlaySoundsSimultaneously(soundFilePaths: Array<string>): Promise<Array<Howl>> {
-  return new Promise((resolve, reject) => {
-    const loadedSounds = new Array<Howl>();
+export function loadAndPlaySoundsSimultaneously(
+  soundFilePaths: Array<string>
+): [Promise<Array<Howl>>, () => void] {
+  let isCancelled = false;
+  let isPlaying = false;
+  let loadedSounds = new Array<Howl>();
+
+  const promise = new Promise<Array<Howl>>((resolve, reject) => {
     let loadedSoundCount = 0;
 
     const playSounds = () => {
       for (const loadedSound of loadedSounds) {
         loadedSound.play();
       }
+      
+      isPlaying = true;
 
       resolve(sounds);
     };
@@ -65,7 +72,7 @@ export function loadAndPlaySoundsSimultaneously(soundFilePaths: Array<string>): 
           loadedSounds.push(this);
           loadedSoundCount++;
     
-          if (loadedSoundCount === sounds.length) {
+          if ((loadedSoundCount === sounds.length) && !isCancelled) {
             playSounds();
           }
         },
@@ -78,6 +85,19 @@ export function loadAndPlaySoundsSimultaneously(soundFilePaths: Array<string>): 
         }
       }));
   });
+
+  const cancellationFn = () => {
+    isCancelled = true;
+
+    if (isPlaying) {
+      for (const sound of loadedSounds) {
+        //sound.stop();
+        sound.fade(1, 0, 300);
+      }
+    }
+  };
+
+  return [promise, cancellationFn];
 }
 export function loadAndPlaySoundsSequentially(soundFilePaths: Array<string>, delayInMs: number, cutOffSounds: boolean = false): () => void {
   let isCancelled = false;

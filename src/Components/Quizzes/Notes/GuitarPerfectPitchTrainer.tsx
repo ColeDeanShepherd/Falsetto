@@ -9,7 +9,7 @@ import {
   StringedInstrumentTuning
 } from "../../Utils/GuitarFretboard";
 import { FlashCard, FlashCardSide } from "../../../FlashCard";
-import { FlashCardGroup, RenderAnswerSelectArgs } from "../../../FlashCardGroup";
+import { FlashCardSet, RenderAnswerSelectArgs } from "../../../FlashCardSet";
 import { StringedInstrumentNote } from '../../../GuitarNote';
 import { playPitches } from '../../../Guitar';
 import { Pitch } from '../../../Pitch';
@@ -19,6 +19,8 @@ import { AnswerDifficulty } from '../../../StudyAlgorithm';
 interface IConfigData {
   maxFret: number
 };
+
+const flashCardSetId = "guitarPerfectPitchTrainer";
 
 export function configDataToEnabledQuestionIds(configData: IConfigData): Array<number> {
   const notesPerString = 12;
@@ -101,14 +103,8 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
       this.stopSoundsFunc = null;
     }
 
-    playPitches([this.props.pitch])
-      .then(sounds => {
-        this.stopSoundsFunc = () => {
-          for (const sound of sounds) {
-            sound.stop();
-          }
-        };
-      });
+    const playPitchesResult = playPitches([this.props.pitch]);
+    this.stopSoundsFunc = playPitchesResult[1];
   }
 }
 
@@ -213,7 +209,7 @@ export class GuitarNoteAnswerSelect extends React.Component<IGuitarNoteAnswerSel
   }
 }
 
-export function createFlashCardGroup(guitarNotes?: Array<StringedInstrumentNote>): FlashCardGroup {
+export function createFlashCardSet(guitarNotes?: Array<StringedInstrumentNote>): FlashCardSet {
   const renderFlashCardMultiSelect = (
     flashCards: Array<FlashCard>,
     selectedFlashCardIndices: number[],
@@ -232,7 +228,7 @@ export function createFlashCardGroup(guitarNotes?: Array<StringedInstrumentNote>
     maxFret: 11
   };
 
-  const group = new FlashCardGroup("Guitar Perfect Pitch Trainer", () => createFlashCards(guitarNotes));
+  const group = new FlashCardSet(flashCardSetId, "Guitar Perfect Pitch Trainer", () => createFlashCards(guitarNotes));
   group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
   group.initialConfigData = initialConfigData;
   group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
@@ -276,29 +272,38 @@ export function createFlashCards(guitarNotes?: Array<StringedInstrumentNote>): F
     : guitarNotes;
 
   return guitarNotes
-    .map(guitarNote => new FlashCard(
-      new FlashCardSide(
-        (width, height) => {
-          return <FlashCardFrontSide key={`${guitarNote.stringIndex}.${guitarNote.pitch.toString()}`} pitch={guitarNote.pitch} />;
-        }
-      ),
-      new FlashCardSide(
-        (width, height) => {
-          const style= { width: "100%", maxWidth: "400px" };
+    .map(guitarNote => {
+      const deserializedId = {
+        set: flashCardSetId,
+        note: [guitarNote.stringIndex, guitarNote.pitch.midiNumber]
+      };
+      const id = JSON.stringify(deserializedId);
 
-          return (
-            <div style={{ margin: "1em" }}>
-              <div>{guitarNote.pitch.toString()}</div>
-              <GuitarFretboard
-                width={400} height={140}
-                tuning={tuning}
-                pressedNotes={getStringedInstrumentNotes(guitarNote.pitch, tuning, 0, MAX_FRET_NUMBER)}
-                style={style}
-              />
-            </div>
-          );
-        },
-        guitarNote
-      )
-    ));
+      return new FlashCard(
+        id,
+        new FlashCardSide(
+          (width, height) => {
+            return <FlashCardFrontSide key={`${guitarNote.stringIndex}.${guitarNote.pitch.toString()}`} pitch={guitarNote.pitch} />;
+          }
+        ),
+        new FlashCardSide(
+          (width, height) => {
+            const style= { width: "100%", maxWidth: "400px" };
+  
+            return (
+              <div style={{ margin: "1em" }}>
+                <div>{guitarNote.pitch.toString()}</div>
+                <GuitarFretboard
+                  width={400} height={140}
+                  tuning={tuning}
+                  pressedNotes={getStringedInstrumentNotes(guitarNote.pitch, tuning, 0, MAX_FRET_NUMBER)}
+                  style={style}
+                />
+              </div>
+            );
+          },
+          guitarNote
+        )
+      );
+    });
 }

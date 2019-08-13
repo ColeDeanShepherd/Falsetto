@@ -9,8 +9,10 @@ import {
   standardViolinTuning
 } from "../../Utils/GuitarFretboard";
 import { FlashCard } from "../../../FlashCard";
-import { FlashCardGroup } from "../../../FlashCardGroup";
+import { FlashCardSet } from "../../../FlashCardSet";
 import { StringedInstrumentNote } from '../../../GuitarNote';
+
+const flashCardSetId = "violinNotes";
 
 const DEFAULT_MAX_FRET_NUMBER = 13;
 
@@ -70,7 +72,7 @@ export class ViolinNotesFlashCardMultiSelect extends React.Component<IViolinNote
   }
 }
 
-export function createFlashCardGroup(notes?: Array<StringedInstrumentNote>): FlashCardGroup {
+export function createFlashCardSet(notes?: Array<StringedInstrumentNote>): FlashCardSet {
   const renderFlashCardMultiSelect = (
     flashCards: Array<FlashCard>,
     selectedFlashCardIndices: number[],
@@ -89,16 +91,16 @@ export function createFlashCardGroup(notes?: Array<StringedInstrumentNote>): Fla
     maxFret: DEFAULT_MAX_FRET_NUMBER
   };
 
-  const group = new FlashCardGroup("Violin Notes", () => createFlashCards(notes));
-  group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
-  group.initialConfigData = initialConfigData;
-  group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
-  group.renderAnswerSelect = FlashCardUtils.renderNoteAnswerSelect;
-  group.enableInvertFlashCards = false;
-  //group.moreInfoUri = "https://medium.com/@aslushnikov/memorizing-fretboard-a9f4f28dbf03";
-  group.containerHeight = "160px";
+  const flashCardSet = new FlashCardSet(flashCardSetId, "Violin Notes", () => createFlashCards(notes));
+  flashCardSet.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
+  flashCardSet.initialConfigData = initialConfigData;
+  flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
+  flashCardSet.renderAnswerSelect = FlashCardUtils.renderNoteAnswerSelect;
+  flashCardSet.enableInvertFlashCards = false;
+  //flashCardSet.moreInfoUri = "https://medium.com/@aslushnikov/memorizing-fretboard-a9f4f28dbf03";
+  flashCardSet.containerHeight = "160px";
 
-  return group;
+  return flashCardSet;
 }
 
 export function createFlashCards(notes?: Array<StringedInstrumentNote>): FlashCard[] {
@@ -114,21 +116,30 @@ export function createFlashCards(notes?: Array<StringedInstrumentNote>): FlashCa
     : notes;
 
   return notes
-    .map(note => FlashCard.fromRenderFns(
-      (width, height) => {
-        const size = new Size2D(500, 140);
-        const style: any = { width: "100%", maxWidth: `${size.width}px` };
+    .map(note => {
+      const deserializedId = {
+        set: flashCardSetId,
+        note: [note.stringIndex, note.pitch.midiNumber]
+      };
+      const id = JSON.stringify(deserializedId);
 
-        return (
-          <ViolinFingerboard
-            width={size.width} height={size.height}
-            tuning={standardViolinTuning}
-            fretCount={DEFAULT_MAX_FRET_NUMBER}
-            pressedNotes={[note]}
-            style={style}
-          />
-        );
-      },
-      note.pitch.toOneAccidentalAmbiguousString(false, true)
-    ));
+      return FlashCard.fromRenderFns(
+        id,
+        (width, height) => {
+          const size = new Size2D(500, 140);
+          const style: any = { width: "100%", maxWidth: `${size.width}px` };
+  
+          return (
+            <ViolinFingerboard
+              width={size.width} height={size.height}
+              tuning={standardViolinTuning}
+              fretCount={DEFAULT_MAX_FRET_NUMBER}
+              pressedNotes={[note]}
+              style={style}
+            />
+          );
+        },
+        note.pitch.toOneAccidentalAmbiguousString(false, true)
+      );
+    });
 }

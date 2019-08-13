@@ -10,33 +10,33 @@ import { FlashCard, invertFlashCards } from "../FlashCard";
 import { renderFlashCardSide } from "./FlashCard";
 import { DefaultFlashCardMultiSelect } from "./Utils/DefaultFlashCardMultiSelect";
 import { StudyAlgorithm, AnswerDifficulty, isAnswerDifficultyCorrect, LeitnerStudyAlgorithm } from "../StudyAlgorithm";
-import { RenderAnswerSelectFunc, RenderFlashCardMultiSelectFunc, CustomNextFlashCardIdFilter, FlashCardGroup, RenderAnswerSelectArgs, FlashCardLevel } from '../FlashCardGroup';
+import { RenderAnswerSelectFunc, RenderFlashCardMultiSelectFunc, CustomNextFlashCardIdFilter, FlashCardSet, RenderAnswerSelectArgs, FlashCardLevel } from '../FlashCardSet';
 import { MAX_MAIN_CARD_WIDTH } from './Style';
 import { QuizStats } from '../QuizStats';
 
-export function createStudyFlashCardGroupComponent(
-  flashCardGroup: FlashCardGroup, isEmbedded: boolean, hideMoreInfoUri: boolean,
+export function createStudyFlashCardSetComponent(
+  flashCardSet: FlashCardSet, isEmbedded: boolean, hideMoreInfoUri: boolean,
   title?: string, style?: any, enableSettings?: boolean
 ): JSX.Element {
-  const flashCards = flashCardGroup.createFlashCards();
-  const flashCardLevels = (flashCardGroup.createFlashCardLevels !== undefined)
-    ? flashCardGroup.createFlashCardLevels(flashCardGroup, flashCards)
+  const flashCards = flashCardSet.createFlashCards();
+  const flashCardLevels = (flashCardSet.createFlashCardLevels !== undefined)
+    ? flashCardSet.createFlashCardLevels(flashCardSet, flashCards)
     : [];
 
   return (
     <StudyFlashCards
-      key={flashCardGroup.route}
-      title={title ? title : flashCardGroup.name}
+      key={flashCardSet.route}
+      title={title ? title : flashCardSet.name}
       flashCards={flashCards}
-      containerHeight={flashCardGroup.containerHeight}
-      initialSelectedFlashCardIndices={flashCardGroup.initialSelectedFlashCardIndices}
-      initialConfigData={flashCardGroup.initialConfigData}
-      renderFlashCardMultiSelect={flashCardGroup.renderFlashCardMultiSelect}
-      renderAnswerSelect={flashCardGroup.renderAnswerSelect}
-      moreInfoUri={!hideMoreInfoUri ? flashCardGroup.moreInfoUri : ""}
+      containerHeight={flashCardSet.containerHeight}
+      initialSelectedFlashCardIndices={flashCardSet.initialSelectedFlashCardIndices}
+      initialConfigData={flashCardSet.initialConfigData}
+      renderFlashCardMultiSelect={flashCardSet.renderFlashCardMultiSelect}
+      renderAnswerSelect={flashCardSet.renderAnswerSelect}
+      moreInfoUri={!hideMoreInfoUri ? flashCardSet.moreInfoUri : ""}
       enableSettings={enableSettings}
-      enableInvertFlashCards={flashCardGroup.enableInvertFlashCards}
-      customNextFlashCardIdFilter={flashCardGroup.customNextFlashCardIdFilter}
+      enableInvertFlashCards={flashCardSet.enableInvertFlashCards}
+      customNextFlashCardIdFilter={flashCardSet.customNextFlashCardIdFilter}
       flashCardLevels={flashCardLevels}
       isEmbedded={isEmbedded}
       style={style}
@@ -69,6 +69,7 @@ export interface IStudyFlashCardsProps {
 }
 export interface IStudyFlashCardsState {
   currentFlashCardId: number;
+  sessionFlashCardNumber: number;
   haveGottenCurrentFlashCardWrong: boolean;
   lastCorrectAnswer: any;
   wasCorrect: boolean;
@@ -96,6 +97,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
 
     this.state = Object.assign(
       {
+        sessionFlashCardNumber: 0,
         showConfiguration: false,
         showDetailedStats: false,
         isShowingBackSide: false,
@@ -178,6 +180,8 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
       ? getPercentToNextLevel(activeFlashCardLevel, this.studyAlgorithm.quizStats)
       : undefined;
 
+    const currentFlashCardKey = `${this.state.sessionFlashCardNumber}.${this.state.currentFlashCardId}`;
+
     return (
       <Card style={cardStyle}>
         <CardContent style={{position: "relative"}}>
@@ -212,7 +216,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
             ? (
               <p style={{marginBottom: "0", marginTop: "0", lineHeight: "1.5"}}>
                 <span style={{paddingRight: "1em"}}>{this.studyAlgorithm.quizStats.numCorrectGuesses} / {this.studyAlgorithm.quizStats.numIncorrectGuesses} correct ({(100 * percentCorrect).toFixed(2)}%)</span>
-                <span key={this.state.currentFlashCardId}>
+                <span key={currentFlashCardKey}>
                   <i
                     className="material-icons fade-out"
                     style={{
@@ -269,6 +273,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
 
           <div
             ref={this.flashCardContainerRef}
+            key={currentFlashCardKey}
             style={flashCardContainerStyle}
           >
             {renderedFlashCardSide}
@@ -462,6 +467,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
   private moveToNextFlashCard(lastCorrectAnswer: any, wasCorrect: boolean) {
     this.setState({
       currentFlashCardId: this.studyAlgorithm.getNextQuestionId(),
+      sessionFlashCardNumber: this.state.sessionFlashCardNumber + 1,
       haveGottenCurrentFlashCardWrong: false,
       isShowingBackSide: false,
       lastCorrectAnswer: lastCorrectAnswer,

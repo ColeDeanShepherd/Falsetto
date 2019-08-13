@@ -7,6 +7,7 @@ import "./App.css";
 
 import * as Utils from "../Utils";
 import * as Analytics from "../Analytics";
+import { StringDictionary } from "../StringDictionary";
 
 import {
   SectionContainer,
@@ -46,8 +47,8 @@ import * as GuitarScales from "./Quizzes/Scales/GuitarScales";
 import * as GuitarChords from "./Quizzes/Chords/GuitarChords";
 import * as SheetMusicNotes from "./Quizzes/Sheet Music/SheetMusicNotes";
 import * as NoteDurations from "./Quizzes/Sheet Music/SheetMusicNoteDurations";
-import * as KeyAccidentalCounts from "./Quizzes/KeyAccidentalCounts";
-import * as KeyAccidentalNotes from "./Quizzes/KeyAccidentalNotes";
+import * as KeyAccidentalCounts from "./Quizzes/Sheet Music/KeyAccidentalCounts";
+import * as KeyAccidentalNotes from "./Quizzes/Sheet Music/KeyAccidentalNotes";
 import * as KeySignatureIdentification from "./Quizzes/Sheet Music/KeySignatureIdentification";
 import * as Interval2ndNotes from "./Quizzes/Intervals/Interval2ndNotes";
 import * as IntervalNotes from "./Quizzes/Intervals/IntervalNotes";
@@ -66,8 +67,8 @@ import { ScaleViewer } from "./Tools/ScaleViewer";
 import { ChordViewer } from "./Tools/ChordViewer";
 import { IntervalChordScaleFinder } from "./Tools/IntervalChordScaleFinder";
 import { RhythmTapper } from "./Tools/RhythmTapper";
-import { FlashCardGroup } from "../FlashCardGroup";
-import { createStudyFlashCardGroupComponent } from "./StudyFlashCards";
+import { FlashCardSet } from "../FlashCardSet";
+import { createStudyFlashCardSetComponent } from "./StudyFlashCards";
 import { AboutPage } from "./AboutPage";
 import { SupportUsPage } from "./SupportUs";
 import DocumentTitle from "react-document-title";
@@ -79,6 +80,7 @@ import { Paper } from '@material-ui/core';
 import { BecomeAPatronButton } from './Utils/BecomeAPatronButton';
 import { Metronome } from './Tools/Metronome';
 import { DiatonicChordPlayer } from './Tools/DiatonicChordPlayer';
+import { isDevelopment } from '../Config';
 
 async function getErrorDescription(msg: string | Event, file: string | undefined, line: number | undefined, col: number | undefined, error: Error | undefined): Promise<string> {
   return new Promise<string>((resolve, reject) => {
@@ -122,76 +124,81 @@ class App extends React.Component<IAppProps, IAppState> {
     this.history = createBrowserHistory();
     this.unregisterHistoryListener = this.history.listen(this.historyListener.bind(this));
 
-    this.groupedFlashCardGroups = [
+    this.groupedFlashCardSets = [
       {
         title: "Notes",
-        flashCardGroups: [
-          PianoNotes.createFlashCardGroup(),
-          GuitarNotes.createFlashCardGroup(),
-          ViolinNotes.createFlashCardGroup(),
-          NoteDurations.createFlashCardGroup(),
-          SheetMusicNotes.createFlashCardGroup(),
-          GuitarPerfectPitchTrainer.createFlashCardGroup()
+        flashCardSets: [
+          PianoNotes.createFlashCardSet(),
+          GuitarNotes.createFlashCardSet(),
+          ViolinNotes.createFlashCardSet(),
+          NoteDurations.createFlashCardSet(),
+          SheetMusicNotes.createFlashCardSet(),
+          GuitarPerfectPitchTrainer.createFlashCardSet()
         ]
       },
       {
         title: "Intervals",
-        flashCardGroups: [
-          IntervalQualitySymbolsToQualities.createFlashCardGroup(),
-          GenericIntervalsToIntervalQualities.createFlashCardGroup(),
-          IntervalNamesToHalfSteps.createFlashCardGroup(),
-          IntervalsToConsonanceDissonance.createFlashCardGroup(),
-          Interval2ndNotes.createFlashCardGroup(),
-          IntervalNotes.createFlashCardGroup(),
-          SheetMusicIntervalRecognition.createFlashCardGroup(),
-          PianoIntervals.createFlashCardGroup(),
-          GuitarIntervals.createFlashCardGroup(),
-          IntervalEarTraining.createFlashCardGroup(),
-          Interval2ndNoteEarTraining.createFlashCardGroup(),
-          Interval2ndNoteEarTrainingPiano.createFlashCardGroup()
+        flashCardSets: [
+          IntervalQualitySymbolsToQualities.createFlashCardSet(),
+          GenericIntervalsToIntervalQualities.createFlashCardSet(),
+          IntervalNamesToHalfSteps.createFlashCardSet(),
+          IntervalsToConsonanceDissonance.createFlashCardSet(),
+          Interval2ndNotes.createFlashCardSet(),
+          IntervalNotes.createFlashCardSet(),
+          SheetMusicIntervalRecognition.createFlashCardSet(),
+          PianoIntervals.createFlashCardSet(),
+          GuitarIntervals.createFlashCardSet(),
+          IntervalEarTraining.createFlashCardSet(),
+          Interval2ndNoteEarTraining.createFlashCardSet(),
+          Interval2ndNoteEarTrainingPiano.createFlashCardSet()
         ]
       },
       {
         title: "Scales",
-        flashCardGroups: [
-          ScaleDegreeNames.createFlashCardGroup(),
-          ScaleNotes.createFlashCardGroup(),
-          PianoScales.createFlashCardGroup(),
-          GuitarScales.createFlashCardGroup(),
-          ScaleDegreeModes.createFlashCardGroup(),
-          ScaleChords.createFlashCardGroup(),
-          ScaleFamilies.createFlashCardGroup(),
-          ScaleCharacteristics.createFlashCardGroup(),
-          ScaleEarTraining.createFlashCardGroup()
+        flashCardSets: [
+          ScaleDegreeNames.createFlashCardSet(),
+          ScaleNotes.createFlashCardSet(),
+          PianoScales.createFlashCardSet(),
+          GuitarScales.createFlashCardSet(),
+          ScaleDegreeModes.createFlashCardSet(),
+          ScaleChords.createFlashCardSet(),
+          ScaleFamilies.createFlashCardSet(),
+          ScaleCharacteristics.createFlashCardSet(),
+          ScaleEarTraining.createFlashCardSet()
         ]
       },
       {
         title: "Keys",
-        flashCardGroups: [
-          KeyAccidentalCounts.createFlashCardGroup(),
-          KeyAccidentalNotes.createFlashCardGroup(),
-          KeySignatureIdentification.createFlashCardGroup()
+        flashCardSets: [
+          KeyAccidentalCounts.createFlashCardSet(),
+          KeyAccidentalNotes.createFlashCardSet(),
+          KeySignatureIdentification.createFlashCardSet()
         ]
       },
       {
         title: "Chords",
-        flashCardGroups: [
-          ChordFamilyDefinitions.createFlashCardGroup(),
-          ChordFamilies.createFlashCardGroup(),
-          ChordNotes.createFlashCardGroup(),
-          AvailableChordTensions.createFlashCardGroup(),
-          DiatonicTriads.createFlashCardGroup(),
-          DiatonicSeventhChords.createFlashCardGroup(),
-          SheetMusicChordRecognition.createFlashCardGroup(),
-          PianoChords.createFlashCardGroup(),
-          GuitarChords.createFlashCardGroup(),
-          ChordEarTraining.createFlashCardGroup(),
-          RandomChordGenerator.createFlashCardGroup()
+        flashCardSets: [
+          ChordFamilyDefinitions.createFlashCardSet(),
+          ChordFamilies.createFlashCardSet(),
+          ChordNotes.createFlashCardSet(),
+          AvailableChordTensions.createFlashCardSet(),
+          DiatonicTriads.createFlashCardSet(),
+          DiatonicSeventhChords.createFlashCardSet(),
+          SheetMusicChordRecognition.createFlashCardSet(),
+          PianoChords.createFlashCardSet(),
+          GuitarChords.createFlashCardSet(),
+          ChordEarTraining.createFlashCardSet(),
+          RandomChordGenerator.createFlashCardSet()
         ]
       }
     ];
 
-    this.flashCardGroups = Utils.flattenArrays<FlashCardGroup>(this.groupedFlashCardGroups.map(g => g.flashCardGroups));
+    this.flashCardSets = Utils.flattenArrays<FlashCardSet>(this.groupedFlashCardSets.map(g => g.flashCardSets));
+    
+    if (isDevelopment()) {
+      this.checkFlashCardSetIds();
+      this.checkFlashCardIds();
+    }
 
     this.mainContainerRef = React.createRef();
 
@@ -234,11 +241,11 @@ class App extends React.Component<IAppProps, IAppState> {
       <Route exact path="/learn-guitar-notes-in-10-steps" component={() => <DocumentTitle title={"Learn the Guitar Notes in 10 Easy Steps - Falsetto"}><GuitarNotesLesson /></DocumentTitle>} />,
       <Route exact path="/learn-guitar-scales" component={() => <DocumentTitle title={"Learn the Guitar Scales - Falsetto"}><GuitarScalesLesson /></DocumentTitle>} />
     ].concat(
-      this.flashCardGroups.map(fcg => <Route key={fcg.route} exact path={fcg.route} component={this.createStudyFlashCardGroupComponent(fcg)} />)
+      this.flashCardSets.map(fcg => <Route key={fcg.route} exact path={fcg.route} component={this.createStudyFlashCardSetComponent(fcg)} />)
     );
   }
   public render(): JSX.Element {
-    const renderFlashCardGroupLink = this.renderFlashCardGroupLink.bind(this);
+    const renderFlashCardSetLink = this.renderFlashCardSetLink.bind(this);
 
     /*
     <div>
@@ -309,8 +316,8 @@ class App extends React.Component<IAppProps, IAppState> {
   public renderNavLink(route: string, text: string): JSX.Element {
     return <NavLink exact to={route} onClick={event => this.onNavLinkClick()} className="menu-link">{text}</NavLink>;
   }
-  public renderFlashCardGroupLink(flashCardGroup: FlashCardGroup): JSX.Element {
-    return <NavLink exact to={flashCardGroup.route} onClick={event => this.onNavLinkClick()} className="menu-link">{flashCardGroup.name}</NavLink>;
+  public renderFlashCardSetLink(flashCardSet: FlashCardSet): JSX.Element {
+    return <NavLink exact to={flashCardSet.route} onClick={event => this.onNavLinkClick()} className="menu-link">{flashCardSet.name}</NavLink>;
   }
   public toggleMenu() {
     this.setState({ isMenuVisible: !this.state.isMenuVisible });
@@ -328,8 +335,8 @@ class App extends React.Component<IAppProps, IAppState> {
 
   private history: History<any>;
   private unregisterHistoryListener: UnregisterCallback;
-  private groupedFlashCardGroups: { title: string; flashCardGroups: FlashCardGroup[]; }[];
-  private flashCardGroups: FlashCardGroup[];
+  private groupedFlashCardSets: { title: string; flashCardSets: FlashCardSet[]; }[];
+  private flashCardSets: FlashCardSet[];
   private mainContainerRef: React.Ref<HTMLDivElement>;
 
   private get isEmbedded(): boolean {
@@ -341,12 +348,39 @@ class App extends React.Component<IAppProps, IAppState> {
       Analytics.trackPageView();
     }
   }
-  private createStudyFlashCardGroupComponent(currentFlashCardGroup: FlashCardGroup): () => JSX.Element {
+  private createStudyFlashCardSetComponent(currentFlashCardSet: FlashCardSet): () => JSX.Element {
     return () => (
-      <DocumentTitle title={currentFlashCardGroup.name + " - Falsetto"}>
-        {createStudyFlashCardGroupComponent(currentFlashCardGroup, this.isEmbedded, false)}
+      <DocumentTitle title={currentFlashCardSet.name + " - Falsetto"}>
+        {createStudyFlashCardSetComponent(currentFlashCardSet, this.isEmbedded, false)}
       </DocumentTitle>
     );
+  }
+
+  private checkFlashCardSetIds() {
+    var flashCardSetIds: StringDictionary<boolean> = {};
+
+    for (const set of this.flashCardSets) {
+      if (flashCardSetIds[set.id] === undefined) {
+        flashCardSetIds[set.id] = true;
+      } else {
+        throw new Error(`Duplicate flash card set ID: ${set.id}`);
+      }
+    }
+  }
+  private checkFlashCardIds() {
+    var flashCardIds: StringDictionary<boolean> = {};
+
+    for (const set of this.flashCardSets) {
+      const flashCards = set.createFlashCards();
+
+      for (const flashCard of flashCards) {
+        if (flashCardIds[flashCard.id] === undefined) {
+          flashCardIds[flashCard.id] = true;
+        } else {
+          throw new Error(`Duplicate flash card ID: ${flashCard.id}`);
+        }
+      }
+    }
   }
 }
 

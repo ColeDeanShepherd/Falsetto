@@ -25,8 +25,8 @@ import { AnswerDifficulty, StudyAlgorithm } from "./StudyAlgorithm";
     - some kind of answer form
       - which can be dependent on user config
   
-- Now for flash card groups!
-- Every flash card group has:
+- Now for flash card sets!
+- Every flash card set has:
   - A name
   - A set of flash cards
     - And some way to configure them! (custom component probably)
@@ -73,7 +73,7 @@ export class FlashCardLevel {
   ) {}
 }
 
-export class FlashCardGroup {
+export class FlashCardSet {
   public containerHeight: string = "240px";
   public initialSelectedFlashCardIndices: number[] | undefined;
   public initialConfigData: any;
@@ -82,13 +82,14 @@ export class FlashCardGroup {
   public enableInvertFlashCards: boolean = true;
   public moreInfoUri: string = "";
   public customNextFlashCardIdFilter?: CustomNextFlashCardIdFilter;
-  public createFlashCardLevels?: (flashCardGroup: FlashCardGroup, flashCards: Array<FlashCard>) => Array<FlashCardLevel>;
+  public createFlashCardLevels?: (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => Array<FlashCardLevel>;
 
   public get route(): string {
     return "/" + this.name.toLowerCase().replace(/( )|(\/)|(\\)/g, "-");
   }
   
   public constructor(
+    public id: string,
     public name: string,
     public createFlashCards: () => FlashCard[]
   ) {}
