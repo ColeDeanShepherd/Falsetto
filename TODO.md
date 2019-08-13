@@ -10,7 +10,6 @@
     * Save in local storage if you aren't logged in?
   * Allow log in/log out/account management
   * Show data specific to current account
-* Condense guitarIntervals answer count
 
 * Figure out flash card inverting with levels, re-enable.
 * Each flash card has its own ID

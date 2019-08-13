@@ -10,6 +10,7 @@ import { ScaleType, Scale } from '../../Scale';
 import { Chord } from '../../Chord';
 import { StringedInstrumentNote } from '../../GuitarNote';
 import { Interval } from '../../Interval';
+import { VerticalDirection } from '../../VerticalDirection';
 
 export class StringedInstrumentTuning {
   public constructor(public openStringPitches: Array<Pitch>) {
@@ -148,8 +149,28 @@ export function getPreferredGuitarScaleShape(
   return scaleShapes[0];
 }
 
-export function getIntervalDeltaFretNumber(interval: Interval, stringIndex: number, deltaStringIndex: number): number {
-  throw new Error("Not implemented");
+export function getIntervalDeltaFretNumber(
+  interval: Interval, direction: VerticalDirection, stringIndex: number,
+  deltaStringIndex: number, tuning: StringedInstrumentTuning
+): number {
+  Utils.precondition(stringIndex >= 0);
+  Utils.precondition(stringIndex < tuning.stringCount);
+  Utils.precondition((stringIndex + deltaStringIndex) >= 0);
+  Utils.precondition((stringIndex + deltaStringIndex) < tuning.stringCount);
+
+  const signedHalfSteps = (direction === VerticalDirection.Up)
+    ? interval.halfSteps
+    : -interval.halfSteps;
+
+  if (deltaStringIndex === 0) {
+    return signedHalfSteps;
+  }
+
+  const halfStepsBetweenStrings =
+    tuning.openStringPitches[stringIndex + deltaStringIndex].midiNumber -
+    tuning.openStringPitches[stringIndex].midiNumber;
+  const deltaFretNumber = signedHalfSteps - halfStepsBetweenStrings;
+  return deltaFretNumber;
 }
 
 export function get1stStringedInstrumentNoteOnString(pitch: Pitch, stringIndex: number, tuning: StringedInstrumentTuning): StringedInstrumentNote {

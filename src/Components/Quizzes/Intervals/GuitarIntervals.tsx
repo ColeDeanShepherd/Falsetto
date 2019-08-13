@@ -8,7 +8,6 @@ import { FlashCardSet, RenderAnswerSelectArgs } from "../../../FlashCardSet";
 import { Interval } from "../../../Interval";
 import { standard6StringGuitarTuning, GuitarFretboard, StringedInstrumentMetrics, getIntervalDeltaFretNumber, StringedInstrumentFingerboard } from "../../Utils/GuitarFretboard";
 import { VerticalDirection } from "../../../VerticalDirection";
-import { Size2D } from '../../../Size2D';
 import { StringedInstrumentNote } from '../../../GuitarNote';
 
 const flashCardSetId = "guitarIntervals";
@@ -20,8 +19,7 @@ const intervals = [
   "m3",
   "M3",
   "P4",
-  "A4",
-  "d5",
+  "A4/d5",
   "P5",
   "m6",
   "M6",
@@ -29,6 +27,8 @@ const intervals = [
   "M7",
   "P8"
 ];
+
+const guitarTuning = standard6StringGuitarTuning;
 
 interface IConfigData {
   enabledIntervals: string[];
@@ -110,25 +110,43 @@ export class IntervalsFlashCardMultiSelect extends React.Component<IIntervalsFla
   }
 }
 
-function forEachInterval(fn: (interval: Interval, direction: VerticalDirection, i: number) => void) {
+function forEachInterval(
+  fn: (
+    interval: Interval,
+    direction: VerticalDirection,
+    stringIndex0: number,
+    deltaStringIndex: number,
+    deltaFretNumber: number,
+    i: number
+  ) => void
+) {
   const directions = [VerticalDirection.Up, VerticalDirection.Down];
-  const gBStringSpan = 0;
-  const stringSpans = Utils.range(gBStringSpan, 4);
+  const firstStringIndices = [0, 3];
+  const stringSpansPerFirstStringIndex = [
+    Utils.range(1, 4), // E string
+    Utils.range(2, 3) // G string
+  ];
 
   let i = 0;
 
-  for (let intervalIndex = 0; intervalIndex < intervals.length; (intervalIndex++)) {
+  for (let intervalIndex = 0; intervalIndex < intervals.length; intervalIndex++) {
     const interval = Interval.fromHalfSteps(1 + intervalIndex);
 
     for (const direction of directions) {
-      for (const stringSpan of stringSpans) {
-        const stringIndex0 = (stringSpan !== gBStringSpan) ? 0 : 3;
-        const deltaStringIndex = (stringSpan !== gBStringSpan) ? stringSpan : 1;
-        const deltaFretNumber = getIntervalDeltaFretNumber(interval, stringIndex0, deltaStringIndex);
+      for (let firstStringIndexIndex = 0; firstStringIndexIndex < firstStringIndices.length; firstStringIndexIndex++) {
+        const stringIndex0 = firstStringIndices[firstStringIndexIndex];
+        const stringSpans = stringSpansPerFirstStringIndex[firstStringIndexIndex];
 
-        if (Math.abs(deltaFretNumber) <= fretCount) {
-          fn(interval, direction, i);
-          i++;
+        for (const stringSpan of stringSpans) {
+          const deltaStringIndex = stringSpan - 1;
+          const deltaFretNumber = getIntervalDeltaFretNumber(
+            interval, direction, stringIndex0, deltaStringIndex, guitarTuning
+          );
+
+          if (Math.abs(deltaFretNumber) <= fretCount) {
+            fn(interval, direction, stringIndex0, deltaStringIndex, deltaFretNumber, i);
+            i++;
+          }
         }
       }
     }
@@ -155,15 +173,31 @@ export function renderAnswerSelect(
 }
 
 interface IFlashCardFrontSideProps {
-  interval: Interval;
-  direction: VerticalDirection;
   stringIndex0: number;
   deltaStringIndex: number;
   deltaFretNumber: number;
 }
-class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps, {}> {
+interface IFlashCardFrontSideState {
+  fretNumber: number;
+}
+class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps, IFlashCardFrontSideState> {
+  public constructor(props: IFlashCardFrontSideProps) {
+    super(props);
+
+    const minFretNumber = Math.max(-this.props.deltaFretNumber, 0);
+    const maxFretNumber = Math.min(fretCount - this.props.deltaFretNumber, fretCount);
+    this.state = {
+      fretNumber: Utils.randomInt(minFretNumber, maxFretNumber)
+    };
+  }
   public render(): JSX.Element {
-    // TODO
+    const note1 = guitarTuning.getNote(this.props.stringIndex0, this.state.fretNumber);
+    const note2 = guitarTuning.getNote(
+      this.props.stringIndex0 + this.props.deltaStringIndex,
+      this.state.fretNumber + this.props.deltaFretNumber
+    );
+    const notes = [note1, note2];
+
     const renderExtras = (metrics: StringedInstrumentMetrics) => renderFretboardExtras(metrics, notes);
     const style: any = { width: "100%", maxWidth: "400px" };
 
@@ -171,7 +205,8 @@ class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps, {}> {
       <div>
         <GuitarFretboard
           width={400} height={140}
-          tuning={standard6StringGuitarTuning}
+          tuning={guitarTuning}
+          fretCount={fretCount}
           renderExtrasFn={renderExtras}
           style={style}
         />
@@ -186,10 +221,10 @@ export function renderFretboardExtras(metrics: StringedInstrumentMetrics, notes:
     fontSize: `${fontSize}px`
   };
 
-  const x1 = metrics.getNoteX(notes[0].getFretNumber(standard6StringGuitarTuning));
+  const x1 = metrics.getNoteX(notes[0].getFretNumber(guitarTuning));
   const y1 = metrics.getStringY(notes[0].stringIndex);
   
-  const x2 = metrics.getNoteX(notes[1].getFretNumber(standard6StringGuitarTuning));
+  const x2 = metrics.getNoteX(notes[1].getFretNumber(guitarTuning));
   const y2 = metrics.getStringY(notes[1].stringIndex);
 
   const textXOffset = -(0.3 * fontSize);
@@ -221,14 +256,16 @@ export function renderFretboardExtras(metrics: StringedInstrumentMetrics, notes:
 export function createFlashCards(): Array<FlashCard> {
   const flashCards = new Array<FlashCard>();
 
-  forEachInterval((interval, direction, i) => {
+  forEachInterval((interval, direction, stringIndex0, deltaStringIndex, deltaFretNumber, i) => {
     const directionChar = (direction === VerticalDirection.Up)
       ? Interval.upDirectionSymbol
       : Interval.downDirectionSymbol;
     
     const deserializedId = {
       set: flashCardSetId,
-      TODO: TODO
+      stringIndex0: stringIndex0,
+      deltaStringIndex: deltaStringIndex,
+      deltaFretNumber: deltaFretNumber
     };
     const id = JSON.stringify(deserializedId);
 
@@ -236,8 +273,6 @@ export function createFlashCards(): Array<FlashCard> {
       id,
       (width, height) => (
         <FlashCardFrontSide
-          interval={interval}
-          direction={direction}
           stringIndex0={stringIndex0}
           deltaStringIndex={deltaStringIndex}
           deltaFretNumber={deltaFretNumber}
@@ -246,6 +281,10 @@ export function createFlashCards(): Array<FlashCard> {
       directionChar + " " + interval.toString()
     ));
   });
+
+  for (const fc of flashCards) {
+    console.log(fc.id);
+  }
 
   return flashCards;
 }
