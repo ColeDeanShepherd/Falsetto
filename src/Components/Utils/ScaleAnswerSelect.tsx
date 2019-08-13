@@ -2,7 +2,7 @@ import * as React from "react";
 import { Button, Typography } from "@material-ui/core";
 
 import { ScaleType } from "../../Scale";
-import { AnswerDifficulty } from "../../StudyAlgorithm";
+import { AnswerDifficulty } from "../../AnswerDifficulty";
 
 const rootPitchStrs = ["Ab", "A", "Bb", "B/Cb", "C", "C#/Db", "D", "Eb", "E", "F", "F#/Gb", "G"];
 

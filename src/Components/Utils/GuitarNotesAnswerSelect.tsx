@@ -6,7 +6,7 @@ import { Vector2D } from "../../Vector2D";
 import { Size2D } from "../../Size2D";
 import { Rect2D } from "../../Rect2D";
 import { PianoKeyboard } from "../Utils/PianoKeyboard";
-import { AnswerDifficulty } from "../../StudyAlgorithm";
+import { AnswerDifficulty } from "../../AnswerDifficulty";
 import { Pitch } from "../../Pitch";
 import { PitchLetter } from "../../PitchLetter";
 

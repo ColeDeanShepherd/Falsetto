@@ -14,7 +14,7 @@ import { StringedInstrumentNote } from '../../../GuitarNote';
 import { playPitches } from '../../../Guitar';
 import { Pitch } from '../../../Pitch';
 import { Vector2D } from '../../../Vector2D';
-import { AnswerDifficulty } from '../../../StudyAlgorithm';
+import { AnswerDifficulty } from '../../../AnswerDifficulty';
 
 interface IConfigData {
   maxFret: number

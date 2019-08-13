@@ -3,13 +3,7 @@ import { QuizStats } from "./QuizStats";
 import { QuestionStats } from "./QuestionStats";
 import { CustomNextFlashCardIdFilter as CustomNextFlashCardIdFilterFn } from './FlashCardSet';
 import { FlashCard } from './FlashCard';
-
-export enum AnswerDifficulty {
-  Incorrect,
-  Hard,
-  Medium,
-  Easy
-}
+import { AnswerDifficulty } from './AnswerDifficulty';
 
 export function isAnswerDifficultyCorrect(answerDifficulty: AnswerDifficulty): boolean {
   switch (answerDifficulty) {

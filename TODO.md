@@ -11,8 +11,7 @@
   * Allow log in/log out/account management
   * Show data specific to current account
 
-* Figure out flash card inverting with levels, re-enable.
-* Each flash card has its own ID
+* Figure out flash card inverting with levels, re-enable.x
 * Chord Progressions
   * Ensure it works on mobile.
 * Implement button colors for

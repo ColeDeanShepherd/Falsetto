@@ -7,7 +7,7 @@ import { Rect2D } from '../../../Rect2D';
 import { PianoKeyboard } from "../../Utils/PianoKeyboard";
 import { FlashCard, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, RenderAnswerSelectArgs } from "../../../FlashCardSet";
-import { AnswerDifficulty } from "../../../StudyAlgorithm";
+import { AnswerDifficulty } from "../../../AnswerDifficulty";
 import { Pitch } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 import { TableRow, TableCell, Table, TableHead, TableBody, Grid, Checkbox, Button, Typography } from "@material-ui/core";

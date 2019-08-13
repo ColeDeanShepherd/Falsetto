@@ -4,7 +4,7 @@ import { Button } from "@material-ui/core";
 import * as Utils from "../../Utils";
 import { FlashCard, FlashCardSide, FlashCardSideRenderFn } from "../../FlashCard";
 import { callFlashCardSideRenderFn } from "../../Components/FlashCard";
-import { AnswerDifficulty } from "../../StudyAlgorithm";
+import { AnswerDifficulty } from "../../AnswerDifficulty";
 import { RenderAnswerSelectArgs } from '../../FlashCardSet';
 
 export function renderNoteAnswerSelect(

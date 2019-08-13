@@ -9,7 +9,7 @@ import { PitchLetter } from "../../../PitchLetter";
 import { FlashCard } from "../../../FlashCard";
 import { Pitch } from "../../../Pitch";
 import { FlashCardSet, RenderAnswerSelectArgs } from "../../../FlashCardSet";
-import { AnswerDifficulty } from "../../../StudyAlgorithm";
+import { AnswerDifficulty } from "../../../AnswerDifficulty";
 
 const flashCardSetId = "sheetMusicNotes";
 

@@ -3,7 +3,7 @@ import { Button } from "@material-ui/core";
 
 import * as Utils from "../../Utils";
 import { Pitch } from "../../Pitch";
-import { AnswerDifficulty } from "../../StudyAlgorithm";
+import { AnswerDifficulty } from "../../AnswerDifficulty";
 import { PianoKeyboard } from "./PianoKeyboard";
 import { PitchLetter } from "../../PitchLetter";
 import { Rect2D } from '../../Rect2D';
