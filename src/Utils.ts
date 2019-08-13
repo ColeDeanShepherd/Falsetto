@@ -374,6 +374,46 @@ export function newArraySplice<T>(array: T[], start: number, deleteCount: number
   return newArray;
 }
 
+export function immutableAddIfNotInArray<T>(array: T[], element: T): T[] {
+  const elementIndex = array.indexOf(element);
+  return (elementIndex < 0)
+    ? array.concat([element])
+    : array.slice();
+}
+
+export function immutableRemoveIfInArray<T>(array: T[], element: T): T[] {
+  const newArray = array.slice();
+  const elementIndex = newArray.indexOf(element);
+
+  if (elementIndex >= 0) {
+    newArray.splice(elementIndex, 1);
+  } 
+  
+  return newArray;
+}
+
+export function immutableAddIfNotFoundInArray<T>(
+  array: T[], element: T, predicate: (value: T, index: number) => boolean
+): T[] {
+  const elementIndex = array.findIndex(predicate);
+  return (elementIndex < 0)
+    ? array.concat([element])
+    : array.slice();
+}
+
+export function immutableRemoveIfFoundInArray<T>(
+  array: T[], predicate: (value: T, index: number) => boolean
+): T[] {
+  const newArray = array.slice();
+  const elementIndex = newArray.findIndex(predicate);
+
+  if (elementIndex >= 0) {
+    newArray.splice(elementIndex, 1);
+  } 
+  
+  return newArray;
+}
+
 // TODO: add tests
 export function getRomanNumerals(x: number): string {
   switch (x) {

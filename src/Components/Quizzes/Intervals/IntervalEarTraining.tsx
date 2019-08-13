@@ -70,7 +70,7 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
     }
 
     if (this.props.direction === "harmonic") {
-      const sounds = playPitches(this.state.pitches)
+      const sounds = playPitches(this.state.pitches)[0]
         .then(sounds => {
           this.stopSoundsFunc = () => {
             for (const sound of sounds) {

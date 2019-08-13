@@ -32,6 +32,10 @@ export class StringedInstrumentNote {
     Utils.invariant(stringIndex >= 0);
   }
 
+  public equals(other: StringedInstrumentNote) {
+    return this.pitch.equals(other.pitch) && (this.stringIndex == other.stringIndex);
+  }
+
   // TODO: add tests
   public getFretNumber(tuning: StringedInstrumentTuning): number {
     const openStringPitch = tuning.openStringPitches[this.stringIndex];
