@@ -258,15 +258,18 @@ export function createFlashCards(): Array<FlashCard> {
           const genericInterval = interval[1];
           const genericIntervalNum = parseInt(genericInterval, 10);
 
+          const verticalDirection = (direction === "↑") ? VerticalDirection.Up : VerticalDirection.Down;
           const newPitch = Pitch.addInterval(
             rootPitch,
-            (direction === "↑") ? VerticalDirection.Up : VerticalDirection.Down,
+            verticalDirection,
             new Interval(genericIntervalNum, intervalQualityNum)
           );
           
           const deserializedId = {
             set: flashCardSetId,
-            pitches: [rootPitch.toString(true), newPitch.toString(true)]
+            rootPitch: rootPitch.toString(true, false),
+            interval: interval.toString(),
+            direction: VerticalDirection[verticalDirection]
           };
           const id = JSON.stringify(deserializedId);
 

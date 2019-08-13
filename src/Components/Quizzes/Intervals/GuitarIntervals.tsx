@@ -282,10 +282,6 @@ export function createFlashCards(): Array<FlashCard> {
     ));
   });
 
-  for (const fc of flashCards) {
-    console.log(fc.id);
-  }
-
   return flashCards;
 }
 export function createFlashCardSet(): FlashCardSet {

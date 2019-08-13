@@ -14,6 +14,8 @@ import { StringedInstrumentNote } from '../../../GuitarNote';
 
 const flashCardSetId = "violinNotes";
 
+const violinTuning = standardViolinTuning;
+
 const DEFAULT_MAX_FRET_NUMBER = 13;
 
 interface IConfigData {
@@ -24,7 +26,7 @@ export function configDataToEnabledQuestionIds(configData: IConfigData): Array<n
   const notesPerString = DEFAULT_MAX_FRET_NUMBER + 1;
 
   const enabledFlashCardIds = new Array<number>();
-  for (let stringIndex = 0; stringIndex < standardViolinTuning.stringCount; stringIndex++) {
+  for (let stringIndex = 0; stringIndex < violinTuning.stringCount; stringIndex++) {
     for (let fretNumber = 0; fretNumber <= configData.maxFret; fretNumber++) {
       enabledFlashCardIds.push((notesPerString * stringIndex) + fretNumber);
     }
@@ -105,10 +107,10 @@ export function createFlashCardSet(notes?: Array<StringedInstrumentNote>): Flash
 
 export function createFlashCards(notes?: Array<StringedInstrumentNote>): FlashCard[] {
   notes = !notes
-    ? Utils.flattenArrays(Utils.range(0, standardViolinTuning.stringCount - 1)
+    ? Utils.flattenArrays(Utils.range(0, violinTuning.stringCount - 1)
     .map(stringIndex => Utils.range(0, DEFAULT_MAX_FRET_NUMBER)
       .map(fretNumber => {
-        return standardViolinTuning.getNote(
+        return violinTuning.getNote(
           stringIndex, fretNumber
         );
       })
@@ -119,7 +121,9 @@ export function createFlashCards(notes?: Array<StringedInstrumentNote>): FlashCa
     .map(note => {
       const deserializedId = {
         set: flashCardSetId,
-        note: [note.stringIndex, note.pitch.midiNumber]
+        tuning: violinTuning.openStringPitches.map(p => p.toString(true, false)),
+        stringIndex: note.stringIndex,
+        fretNumber: note.getFretNumber(violinTuning)
       };
       const id = JSON.stringify(deserializedId);
 
@@ -132,7 +136,7 @@ export function createFlashCards(notes?: Array<StringedInstrumentNote>): FlashCa
           return (
             <ViolinFingerboard
               width={size.width} height={size.height}
-              tuning={standardViolinTuning}
+              tuning={violinTuning}
               fretCount={DEFAULT_MAX_FRET_NUMBER}
               pressedNotes={[note]}
               style={style}

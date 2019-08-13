@@ -14,6 +14,8 @@ import { StringedInstrumentNote } from '../../../GuitarNote';
 
 const flashCardSetId = "guitarNotes";
 
+const guitarTuning = standard6StringGuitarTuning;
+
 interface IConfigData {
   maxFret: number
 };
@@ -22,7 +24,7 @@ export function configDataToEnabledQuestionIds(configData: IConfigData): Array<n
   const notesPerString = 12;
 
   const enabledFlashCardIds = new Array<number>();
-  for (let stringIndex = 0; stringIndex < standard6StringGuitarTuning.stringCount; stringIndex++) {
+  for (let stringIndex = 0; stringIndex < guitarTuning.stringCount; stringIndex++) {
     for (let fretNumber = 0; fretNumber <= configData.maxFret; fretNumber++) {
       enabledFlashCardIds.push((notesPerString * stringIndex) + fretNumber);
     }
@@ -104,10 +106,10 @@ export function createFlashCardSet(guitarNotes?: Array<StringedInstrumentNote>):
 export function createFlashCards(guitarNotes?: Array<StringedInstrumentNote>): FlashCard[] {
   const MAX_FRET_NUMBER = 11;
   guitarNotes = !guitarNotes
-    ? Utils.flattenArrays(Utils.range(0, standard6StringGuitarTuning.stringCount - 1)
+    ? Utils.flattenArrays(Utils.range(0, guitarTuning.stringCount - 1)
     .map(stringIndex => Utils.range(0, MAX_FRET_NUMBER)
       .map(fretNumber => {
-        return standard6StringGuitarTuning.getNote(
+        return guitarTuning.getNote(
           stringIndex, fretNumber
         );
       })
@@ -118,7 +120,9 @@ export function createFlashCards(guitarNotes?: Array<StringedInstrumentNote>): F
     .map(guitarNote => {
       const deserializedId = {
         set: flashCardSetId,
-        note: [guitarNote.stringIndex, guitarNote.pitch.midiNumber]
+        tuning: guitarTuning.openStringPitches.map(p => p.toString(true, false)),
+        stringIndex: guitarNote.stringIndex,
+        fretNumber: guitarNote.getFretNumber(guitarTuning)
       };
       const id = JSON.stringify(deserializedId);
 
@@ -133,7 +137,7 @@ export function createFlashCards(guitarNotes?: Array<StringedInstrumentNote>): F
           return (
             <GuitarFretboard
               width={size.width} height={size.height}
-              tuning={standard6StringGuitarTuning}
+              tuning={guitarTuning}
               pressedNotes={[guitarNote]}
             />
           );
