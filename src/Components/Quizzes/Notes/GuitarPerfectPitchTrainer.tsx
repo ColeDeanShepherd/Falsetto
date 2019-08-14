@@ -9,7 +9,7 @@ import {
   StringedInstrumentTuning
 } from "../../Utils/GuitarFretboard";
 import { FlashCard, FlashCardSide } from "../../../FlashCard";
-import { FlashCardSet, RenderAnswerSelectArgs } from "../../../FlashCardSet";
+import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { StringedInstrumentNote } from '../../../GuitarNote';
 import { playPitches } from '../../../Guitar';
 import { Pitch } from '../../../Pitch';
@@ -109,7 +109,7 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
 }
 
 export interface IGuitarNoteAnswerSelectProps {
-  args: RenderAnswerSelectArgs;
+  args: FlashCardStudySessionInfo;
   tuning: StringedInstrumentTuning;
 }
 export interface IGuitarNoteAnswerSelectState {
@@ -229,10 +229,10 @@ export function createFlashCardSet(guitarNotes?: Array<StringedInstrumentNote>):
   };
 
   const flashCardSet = new FlashCardSet(flashCardSetId, "Guitar Perfect Pitch Trainer", () => createFlashCards(guitarNotes));
-  flashCardSet.initialSelectedFlashCardIds = configDataToEnabledFlashCardIds(flashCardSet, initialConfigData);
+  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds configDataToEnabledFlashCardIds(flashCardSet, initialConfigData);
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
-  flashCardSet.renderAnswerSelect = (state: RenderAnswerSelectArgs) => <GuitarNoteAnswerSelect key={state.currentFlashCardId} args={state} tuning={standard6StringGuitarTuning} />;
+  flashCardSet.renderAnswerSelect = (info: FlashCardStudySessionInfo) => <GuitarNoteAnswerSelect key={state.currentFlashCardId} args={state} tuning={standard6StringGuitarTuning} />;
   flashCardSet.enableInvertFlashCards = false;
   flashCardSet.containerHeight = "200px";
 

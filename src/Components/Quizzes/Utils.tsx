@@ -5,10 +5,10 @@ import * as Utils from "../../Utils";
 import { FlashCard, FlashCardSide, FlashCardSideRenderFn } from "../../FlashCard";
 import { callFlashCardSideRenderFn } from "../../Components/FlashCard";
 import { AnswerDifficulty } from "../../AnswerDifficulty";
-import { RenderAnswerSelectArgs } from '../../FlashCardSet';
+import { FlashCardStudySessionInfo } from '../../FlashCardSet';
 
 export function renderNoteAnswerSelect(
-  state: RenderAnswerSelectArgs
+  info: FlashCardStudySessionInfo
 ): JSX.Element {
   const naturalNotes = ["A", "B", "C", "D", "E", "F", "G"];
   const accidentalNotes = ["A#/B♭", "C#/D♭", "D#/E♭", "F#/G♭", "G#/A♭"];
@@ -25,7 +25,7 @@ export function renderNoteAnswerSelect(
 }
 export function renderStringAnswerSelect(
   answers: string[],
-  state: RenderAnswerSelectArgs
+  info: FlashCardStudySessionInfo
 ): JSX.Element {
   return renderStringAnswerSelectInternal(
     state.currentFlashCardId.toString(), answers, state
@@ -35,7 +35,7 @@ export function renderStringAnswerSelect(
 export function renderStringAnswerSelectInternal(
   key: string,
   answers: string[],
-  state: RenderAnswerSelectArgs
+  info: FlashCardStudySessionInfo
 ): JSX.Element {
   return <StringAnswerSelect
     key={key} answers={answers} flashCard={state.currentFlashCard} onAnswer={state.onAnswer}
@@ -167,7 +167,7 @@ export class FlashCardSideAnswerSelect extends React.Component<FlashCardSideAnsw
 }
 
 export function renderMultiRowDistinctFlashCardSideAnswerSelect(
-  state: RenderAnswerSelectArgs,
+  info: FlashCardStudySessionInfo,
   rowLengths: Array<number>
 ): JSX.Element {
   const answers = Utils.uniq(
@@ -203,7 +203,7 @@ export function renderMultiRowDistinctFlashCardSideAnswerSelect(
 }
 
 export function renderDistinctFlashCardSideAnswerSelect(
-  state: RenderAnswerSelectArgs
+  info: FlashCardStudySessionInfo
 ): JSX.Element {
   const distinctFlashCardSideRenderFns = Utils.uniq(
     state.flashCards
@@ -220,7 +220,7 @@ export function renderDistinctFlashCardSideAnswerSelect(
 export function renderDistinctFlashCardSideAnswerSelectInternal(
   key: string,
   answers: Array<FlashCardSideRenderFn>,
-  state: RenderAnswerSelectArgs
+  info: FlashCardStudySessionInfo
 ): JSX.Element {
   return <FlashCardSideAnswerSelect
     key={key}

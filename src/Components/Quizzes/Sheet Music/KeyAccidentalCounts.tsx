@@ -2,13 +2,13 @@ import * as React from "react";
 
 import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
-import { FlashCardSet, RenderAnswerSelectArgs } from "../../../FlashCardSet";
+import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { AnswerDifficulty } from "../../../AnswerDifficulty";
 
 const flashCardSetId = "keyAccidentalCounts";
 
 export function renderAnswerSelect(
-  state: RenderAnswerSelectArgs
+  info: FlashCardStudySessionInfo
 ): JSX.Element {
   const row0 = ["0 sharps/flats"];
   const row1 = ["1 sharp", "2 sharps", "3 sharps", "4 sharps", "5 sharps", "6 sharps", "7 sharps"];

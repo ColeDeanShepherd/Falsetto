@@ -7,7 +7,7 @@ const flashCardSetId = "scaleCharacteristics";
 
 export function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Scale Characteristics", createFlashCards);
-  flashCardSet.initialSelectedFlashCardIds = Utils.range(0, 8);
+  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds Utils.range(0, 8);
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
 
   return flashCardSet;

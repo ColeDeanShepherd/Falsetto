@@ -137,7 +137,7 @@ export function createFlashCardSet(): FlashCardSet {
     "Interval Ear Training",
     createFlashCards
   );
-  flashCardSet.initialSelectedFlashCardIds = configDataToEnabledFlashCardIds(
+  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds configDataToEnabledFlashCardIds(
     true, false, initialConfigData);
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;

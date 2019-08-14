@@ -5,7 +5,7 @@ import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
 import { VexFlowComponent } from "../../Utils/VexFlowComponent";
-import { FlashCardSet, RenderAnswerSelectArgs } from "../../../FlashCardSet";
+import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 
 const flashCardSetId = "noteDurationSymbols";
 
@@ -13,14 +13,14 @@ const width = 100;
 const height = 65;
 
 export function renderAnswerSelect(
-  state: RenderAnswerSelectArgs
+  info: FlashCardStudySessionInfo
 ): JSX.Element {
   return FlashCardUtils.renderMultiRowDistinctFlashCardSideAnswerSelect(state, [5, 5]);
 }
 
 export function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Sheet Music Note Durations", createFlashCards);
-  flashCardSet.initialSelectedFlashCardIds = Utils.range(0, 4).concat(Utils.range(8, 12));
+  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds Utils.range(0, 4).concat(Utils.range(8, 12));
   flashCardSet.renderAnswerSelect = renderAnswerSelect;
   flashCardSet.containerHeight = "80px";
   flashCardSet.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/the-basics/overview/";

@@ -4,7 +4,7 @@ import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid } from
 import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
-import { FlashCardSet, RenderAnswerSelectArgs } from "../../../FlashCardSet";
+import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { Pitch } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 import { VerticalDirection } from "../../../VerticalDirection";
@@ -218,7 +218,7 @@ export class IntervalNotesFlashCardMultiSelect extends React.Component<IInterval
 }
 
 export function renderNoteAnswerSelect(
-  state: RenderAnswerSelectArgs
+  info: FlashCardStudySessionInfo
 ): JSX.Element {
   const doubleSharpNotes = ["A##", "B##", "C##", "D##", "E##", "F##", "G##"];
   const sharpNotes = ["A#", "B#", "C#", "D#", "E#", "F#", "G#"];
@@ -310,7 +310,7 @@ export function createFlashCardSet(): FlashCardSet {
     "Interval 2nd Notes",
     createFlashCards
   );
-  flashCardSet.initialSelectedFlashCardIds = configDataToEnabledFlashCardIds(flashCardSet, initialConfigData);
+  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds configDataToEnabledFlashCardIds(flashCardSet, initialConfigData);
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.enableInvertFlashCards = false;

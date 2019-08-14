@@ -6,7 +6,7 @@ import { Size2D } from "../../../Size2D";
 import { Rect2D } from '../../../Rect2D';
 import { PianoKeyboard } from "../../Utils/PianoKeyboard";
 import { FlashCard, FlashCardSide } from "../../../FlashCard";
-import { FlashCardSet, RenderAnswerSelectArgs } from "../../../FlashCardSet";
+import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { AnswerDifficulty } from "../../../AnswerDifficulty";
 import { Pitch } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
@@ -301,7 +301,7 @@ export function createFlashCardSet(): FlashCardSet {
 
   const flashCardSet = new FlashCardSet(flashCardSetId, "Piano Chords", createFlashCards);
   flashCardSet.enableInvertFlashCards = true;
-  flashCardSet.initialSelectedFlashCardIds = configDataToEnabledFlashCardIds(flashCardSet, initialConfigData);
+  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds configDataToEnabledFlashCardIds(flashCardSet, initialConfigData);
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = renderAnswerSelect;
@@ -346,7 +346,7 @@ export function createFlashCards(): FlashCard[] {
   );
 }
 export function renderAnswerSelect(
-  state: RenderAnswerSelectArgs
+  info: FlashCardStudySessionInfo
 ) {
   if (!state.areFlashCardsInverted) {
     const correctAnswer = state.currentFlashCard.backSide.renderFn as string;

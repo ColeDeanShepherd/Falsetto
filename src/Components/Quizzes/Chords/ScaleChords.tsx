@@ -7,7 +7,7 @@ const flashCardSetId = "scalesAsChords";
 
 export function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Scale Chords", createFlashCards);
-  flashCardSet.initialSelectedFlashCardIds = Utils.range(0, 8);
+  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds Utils.range(0, 8);
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/jazz-scales/chord-scale-system/";
   flashCardSet.containerHeight = "80px";

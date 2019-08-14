@@ -8,7 +8,7 @@ const flashCardSetId = "scaleFormulasMajor";
 
 export function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Scale Formulas", createFlashCards);
-  flashCardSet.initialSelectedFlashCardIds = Utils.range(0, 8);
+  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds Utils.range(0, 8);
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/the-basics/modes";
   flashCardSet.containerHeight = "80px";

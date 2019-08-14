@@ -5,7 +5,7 @@ import { Vector2D } from '../../../Vector2D';
 import { Size2D } from "../../../Size2D";
 import { Rect2D } from '../../../Rect2D';
 import { FlashCard, FlashCardSide } from "../../../FlashCard";
-import { FlashCardSet, RenderAnswerSelectArgs } from "../../../FlashCardSet";
+import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { Pitch } from "../../../Pitch";
 import { playPitchesSequentially } from "../../../Piano";
 import {
@@ -61,15 +61,15 @@ export interface IConfigData {
 export function configDataToEnabledFlashCardIds(
   configData: IConfigData
 ): Array<number> {
-  const enabledQuestionIds = new Array<number>();
+  const enabledFlashCardIds = new Array<string>();
   forEachInterval(rootNotes,
     (interval, direction, p1, p2, isHarmonicInterval, i) => {
     if (Utils.arrayContains(configData.enabledIntervals, interval)) {
-      enabledQuestionIds.push(i);
+      enabledFlashCardIds.push(i);
     }
   }, includeHarmonicIntervals, minPitch, maxPitch);
 
-  return enabledQuestionIds;
+  return enabledFlashCardIds;
 }
 
 export interface IFlashCardFrontSideProps {
@@ -186,7 +186,7 @@ export class FlashCardMultiSelect extends React.Component<IFlashCardMultiSelectP
 }
 
 export function renderAnswerSelect(
-  state: RenderAnswerSelectArgs
+  info: FlashCardStudySessionInfo
 ) {
   const key = state.flashCards.indexOf(state.currentFlashCard);
   const correctAnswer = [state.currentFlashCard.backSide.data as Pitch];
@@ -243,17 +243,17 @@ export function createFlashCardSet(): FlashCardSet {
     "Interval 2nd Note Ear Training Piano",
     createFlashCards
   );
-  flashCardSet.initialSelectedFlashCardIds = configDataToEnabledFlashCardIds(flashCardSet, initialConfigData);
+  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds configDataToEnabledFlashCardIds(flashCardSet, initialConfigData);
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.enableInvertFlashCards = false;
   flashCardSet.renderAnswerSelect = renderAnswerSelect;
   flashCardSet.customNextFlashCardIdFilter = (studyAlgorithm, flashCards, enabledFlashCardIds) => {
-    if (studyAlgorithm.currentQuestionId === undefined) {
+    if (studyAlgorithm.currentFlashCardId === undefined) {
       return enabledFlashCardIds;
     }
 
-    const flashCard = flashCards[studyAlgorithm.currentQuestionId];
+    const flashCard = flashCards[studyAlgorithm.currentFlashCardId];
     const secondPitch = flashCard.backSide.data as Pitch;
     
     return enabledFlashCardIds

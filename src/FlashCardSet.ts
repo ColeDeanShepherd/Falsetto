@@ -2,10 +2,11 @@ import { FlashCard, FlashCardId } from "./FlashCard";
 import { StudyAlgorithm } from "./StudyAlgorithm";
 import { AnswerDifficulty } from "./AnswerDifficulty";
 
-export class RenderAnswerSelectArgs {
+export class FlashCardStudySessionInfo {
   public constructor(
     public width: number,
     public height: number,
+    public flashCardSet: FlashCardSet,
     public flashCards: FlashCard[],
     public enabledFlashCardIds: Array<FlashCardId>,
     public configData: any,
@@ -14,24 +15,21 @@ export class RenderAnswerSelectArgs {
     public currentFlashCard: FlashCard,
     public onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void,
     public lastCorrectAnswer: any,
-    public incorrectAnswers: Array<any>
+    public incorrectAnswers: Array<any>,
+    public studyAlgorithm: StudyAlgorithm
   ) {}
 }
 
-export type RenderAnswerSelectFunc = (state: RenderAnswerSelectArgs) => JSX.Element;
+export type ConfigDataToEnabledFlashCardIdsFunc = (info: FlashCardStudySessionInfo, configData: any) => Array<FlashCardId>;
+
+export type RenderAnswerSelectFunc = (info: FlashCardStudySessionInfo) => JSX.Element;
 
 export type RenderFlashCardMultiSelectFunc = (
-  flashCards: Array<FlashCard>,
-  selectedFlashCardIds: Array<FlashCardId>,
-  configData: any,
+  info: FlashCardStudySessionInfo,
   onChange: (newValue: Array<FlashCardId>, newConfigData: any) => void
 ) => JSX.Element;
 
-export type CustomNextFlashCardIdFilter = (
-  studyAlgorithm: StudyAlgorithm,
-  flashCards: Array<FlashCard>,
-  enabledFlashCardIds: Array<FlashCardId>
-) => Array<FlashCardId>;
+export type CustomNextFlashCardIdFilter = (info: FlashCardStudySessionInfo) => Array<FlashCardId>;
 
 export class FlashCardLevel {
   public constructor(
@@ -42,8 +40,8 @@ export class FlashCardLevel {
 
 export class FlashCardSet {
   public containerHeight: string = "240px";
-  public initialSelectedFlashCardIds: Array<FlashCardId> | undefined;
   public initialConfigData: any;
+  public configDataToEnabledFlashCardIds: ConfigDataToEnabledFlashCardIdsFunc | undefined;
   public renderFlashCardMultiSelect?: RenderFlashCardMultiSelectFunc;
   public renderAnswerSelect?: RenderAnswerSelectFunc;
   public enableInvertFlashCards: boolean = true;

@@ -7,7 +7,7 @@ const flashCardSetId = "scaleDegreeModes";
 
 export function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Scale Degree Modes", createFlashCards);
-  flashCardSet.initialSelectedFlashCardIds = Utils.range(0, 6);
+  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds Utils.range(0, 6);
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/the-basics/modes";
   flashCardSet.containerHeight = "80px";

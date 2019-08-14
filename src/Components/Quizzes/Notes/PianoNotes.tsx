@@ -6,7 +6,7 @@ import { Rect2D } from '../../../Rect2D';
 import * as FlashCardUtils from "../Utils";
 import { PianoKeyboard } from "../../Utils/PianoKeyboard";
 import { FlashCard, FlashCardSide } from "../../../FlashCard";
-import { FlashCardSet, RenderAnswerSelectArgs, FlashCardLevel } from "../../../FlashCardSet";
+import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
 import { Pitch } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 
@@ -64,7 +64,7 @@ export function createFlashCards(): FlashCard[] {
   );
 }
 export function renderAnswerSelect(
-  state: RenderAnswerSelectArgs
+  info: FlashCardStudySessionInfo
 ) {
   return (
     <div>

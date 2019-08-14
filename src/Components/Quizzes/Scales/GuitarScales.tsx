@@ -5,7 +5,7 @@ import * as Utils from "../../../Utils";
 import { Size2D } from "../../../Size2D";
 import { ScaleType, Scale } from "../../../Scale";
 import { FlashCard, FlashCardSide } from "../../../FlashCard";
-import { FlashCardSet, RenderAnswerSelectArgs } from "../../../FlashCardSet";
+import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { Pitch } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 import { getStandardGuitarTuning } from "../../Utils/GuitarFretboard";
@@ -132,7 +132,7 @@ export function createFlashCardSet(title?: string, initialScaleTypes?: Array<Sca
 
   const flashCardSet = new FlashCardSet(flashCardSetId, title, createFlashCards);
   flashCardSet.enableInvertFlashCards = false;
-  flashCardSet.initialSelectedFlashCardIds = configDataToEnabledFlashCardIds(flashCardSet, initialConfigData);
+  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds configDataToEnabledFlashCardIds(flashCardSet, initialConfigData);
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = renderAnswerSelect;
@@ -173,7 +173,7 @@ export function createFlashCards(): Array<FlashCard> {
   return flashCards;
 }
 export function renderAnswerSelect(
-  state: RenderAnswerSelectArgs
+  info: FlashCardStudySessionInfo
 ) {
   if (!state.areFlashCardsInverted) {
     return renderDistinctFlashCardSideAnswerSelect(state);

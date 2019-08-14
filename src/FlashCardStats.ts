@@ -1,6 +1,6 @@
-export class QuestionStats {
+export class FlashCardStats {
   public constructor(
-    public questionId: any,
+    public flashCardId: string,
     public numCorrectGuesses: number,
     public numIncorrectGuesses: number
   ) {}

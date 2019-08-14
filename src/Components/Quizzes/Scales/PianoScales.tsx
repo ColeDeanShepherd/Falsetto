@@ -10,7 +10,7 @@ import { PitchLetter } from "../../../PitchLetter";
 import { ScaleType } from "../../../Scale";
 import { PianoKeyboard } from "../../Utils/PianoKeyboard";
 import { FlashCard, FlashCardSide } from "../../../FlashCard";
-import { FlashCardSet, RenderAnswerSelectArgs } from "../../../FlashCardSet";
+import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { PianoKeysAnswerSelect } from "../../Utils/PianoKeysAnswerSelect";
 import { ScaleAnswerSelect } from "../../Utils/ScaleAnswerSelect";
 import { ChordScaleFormula, ChordScaleFormulaPart } from '../../../ChordScaleFormula';
@@ -177,7 +177,7 @@ export function createFlashCardSet(): FlashCardSet {
 
   const flashCardSet = new FlashCardSet(flashCardSetId, "Piano Scales", createFlashCards);
   flashCardSet.enableInvertFlashCards = true;
-  flashCardSet.initialSelectedFlashCardIds = configDataToEnabledFlashCardIds(flashCardSet, initialConfigData);
+  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds configDataToEnabledFlashCardIds(flashCardSet, initialConfigData);
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = renderAnswerSelect;
@@ -223,7 +223,7 @@ export function createFlashCards(): FlashCard[] {
   );
 }
 export function renderAnswerSelect(
-  state: RenderAnswerSelectArgs
+  info: FlashCardStudySessionInfo
 ) {
   if (!state.areFlashCardsInverted) {
     const correctAnswer = state.currentFlashCard.backSide.renderFn as string;

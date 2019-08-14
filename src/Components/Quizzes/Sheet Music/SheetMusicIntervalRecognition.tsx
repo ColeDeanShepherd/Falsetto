@@ -4,7 +4,7 @@ import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody } from "@mat
 import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
-import { FlashCardSet, RenderAnswerSelectArgs } from "../../../FlashCardSet";
+import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { Pitch, pitchRange } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 import { SheetMusicChord } from "./SheetMusicChords";
@@ -174,7 +174,7 @@ function forEachInterval(fn: (pitches: Array<Pitch>, interval: Interval) => void
 }
 
 export function renderAnswerSelect(
-  state: RenderAnswerSelectArgs
+  info: FlashCardStudySessionInfo
 ): JSX.Element {
   return (
     <div>
@@ -229,7 +229,7 @@ export function createFlashCardSet(): FlashCardSet {
     "Sheet Music Intervals",
     createFlashCards
   );
-  flashCardSet.initialSelectedFlashCardIds = configDataToEnabledFlashCardIds(flashCardSet, initialConfigData);
+  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds configDataToEnabledFlashCardIds(flashCardSet, initialConfigData);
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.enableInvertFlashCards = false;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;

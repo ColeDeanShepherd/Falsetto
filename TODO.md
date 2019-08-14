@@ -72,7 +72,7 @@
   * Flat, sharp, natural
 * Chord intervals.
 * Chord Symbols
-* Support enabled question indices when double-inverting.
+* Support enabled flash card indices when double-inverting.
 * Add support for dynamically generated flash card decks.
 * Share more code between interval recognition exercises.
 * Interval Type Changes When Lowering/Raising

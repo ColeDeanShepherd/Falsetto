@@ -4,7 +4,7 @@ import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody } from "@mat
 import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
-import { FlashCardSet, RenderAnswerSelectArgs } from "../../../FlashCardSet";
+import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { Interval } from "../../../Interval";
 import { standard6StringGuitarTuning, GuitarFretboard, StringedInstrumentMetrics, getIntervalDeltaFretNumber, StringedInstrumentFingerboard } from "../../Utils/GuitarFretboard";
 import { VerticalDirection } from "../../../VerticalDirection";
@@ -154,7 +154,7 @@ function forEachInterval(
 }
 
 export function renderAnswerSelect(
-  state: RenderAnswerSelectArgs
+  info: FlashCardStudySessionInfo
 ): JSX.Element {
   const ascendingIntervals = intervals
     .map(i => Interval.upDirectionSymbol + " " + i);
@@ -309,7 +309,7 @@ export function createFlashCardSet(): FlashCardSet {
     "Guitar Intervals",
     createFlashCards
   );createFlashCards
-  flashCardSet.initialSelectedFlashCardIds = configDataToEnabledFlashCardIds(flashCardSet, initialConfigData);
+  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds configDataToEnabledFlashCardIds(flashCardSet, initialConfigData);
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.enableInvertFlashCards = false;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;

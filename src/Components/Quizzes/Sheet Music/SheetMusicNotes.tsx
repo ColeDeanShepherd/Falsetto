@@ -8,7 +8,7 @@ import { VexFlowComponent } from "../../Utils/VexFlowComponent";
 import { PitchLetter } from "../../../PitchLetter";
 import { FlashCard } from "../../../FlashCard";
 import { Pitch } from "../../../Pitch";
-import { FlashCardSet, RenderAnswerSelectArgs } from "../../../FlashCardSet";
+import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { AnswerDifficulty } from "../../../AnswerDifficulty";
 
 const flashCardSetId = "sheetMusicNotes";
@@ -46,7 +46,7 @@ export function createFlashCardSet(): FlashCardSet {
 
   const flashCardSet = new FlashCardSet(flashCardSetId, "Sheet Music Notes", createFlashCards);
   flashCardSet.enableInvertFlashCards = false;
-  flashCardSet.initialSelectedFlashCardIds = configDataToEnabledFlashCardIds(flashCardSet, initialConfigData);
+  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds configDataToEnabledFlashCardIds(flashCardSet, initialConfigData);
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = renderNoteAnswerSelect;
@@ -138,7 +138,7 @@ function configDataToEnabledFlashCardIds(flashCardSet: FlashCardSet, flashCards:
     .filter(i => i >= 0);
 }
 export function renderNoteAnswerSelect(
-  state: RenderAnswerSelectArgs
+  info: FlashCardStudySessionInfo
 ): JSX.Element {
   const sharpNotes = ["A#", "B#", "C#", "D#", "E#", "F#", "G#"];
   const naturalNotes = ["A", "B", "C", "D", "E", "F", "G"];

@@ -4,7 +4,7 @@ import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid, Butto
 import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
 import { FlashCard, FlashCardId } from "../../../FlashCard";
-import { FlashCardSet } from "../../../FlashCardSet";
+import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { Pitch } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 import { Chord, ChordType } from "../../../Chord";
@@ -59,7 +59,7 @@ interface IConfigData {
 }
 
 export function configDataToEnabledFlashCardIds(
-  flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: IConfigData
+  info: FlashCardStudySessionInfo, configData: IConfigData
 ): Array<FlashCardId> {
   const newEnabledFlashCardIds = new Array<FlashCardId>();
 
@@ -67,7 +67,7 @@ export function configDataToEnabledFlashCardIds(
     const chordType = chordTypes[i];
     
     if (Utils.arrayContains(configData.enabledChordTypes, chordType.name)) {
-      const flashCard = flashCards[i];
+      const flashCard = info.flashCards[i];
       newEnabledFlashCardIds.push(flashCard.id);
     }
   }
@@ -76,10 +76,7 @@ export function configDataToEnabledFlashCardIds(
 }
 
 export interface IChordNotesFlashCardMultiSelectProps {
-  flashCardSet: FlashCardSet;
-  flashCards: FlashCard[];
-  configData: IConfigData;
-  selectedFlashCardIds: Array<FlashCardId>;
+  studySessionInfo: FlashCardStudySessionInfo,
   onChange?: (newValue: Array<FlashCardId>, newConfigData: any) => void;
 }
 export interface IChordNotesFlashCardMultiSelectState {}
@@ -94,8 +91,8 @@ export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesF
   public render(): JSX.Element {
     const chordTypeCheckboxTableRows = chordTypes
       .map((chordType, i) => {
-        const isChecked = this.props.configData.enabledChordTypes.indexOf(chordType.name) >= 0;
-        const isEnabled = !isChecked || (this.props.configData.enabledChordTypes.length > 1);
+        const isChecked = this.props.studySessionInfo.configData.enabledChordTypes.indexOf(chordType.name) >= 0;
+        const isEnabled = !isChecked || (this.props.studySessionInfo.configData.enabledChordTypes.length > 1);
 
         return (
           <TableRow key={i}>
@@ -127,7 +124,7 @@ export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesF
   
   private toggleChordEnabled(chordType: string) {
     const newEnabledChordTypes = Utils.toggleArrayElement(
-      this.props.configData.enabledChordTypes,
+      (this.props.studySessionInfo.configData as IConfigData).enabledChordTypes,
       chordType
     );
     
@@ -142,7 +139,7 @@ export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesF
     if (!this.props.onChange) { return; }
 
     const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(
-      this.props.flashCardSet, this.props.flashCards, newConfigData
+      this.props.studySessionInfo, newConfigData
     );
     this.props.onChange(newEnabledFlashCardIds, newConfigData);
   }
@@ -174,16 +171,12 @@ export function createFlashCards(): Array<FlashCard> {
 }
 export function createFlashCardSet(): FlashCardSet {
   const renderFlashCardMultiSelect = (
-    flashCards: Array<FlashCard>,
-    selectedFlashCardIds: Array<FlashCardId>,
-    configData: any,
+    info: FlashCardStudySessionInfo,
     onChange: (newValue: Array<FlashCardId>, newConfigData: any) => void
   ): JSX.Element => {
     return (
     <ChordNotesFlashCardMultiSelect
-      flashCards={flashCards}
-      configData={configData}
-      selectedFlashCardIds={selectedFlashCardIds}
+      studySessionInfo={info}
       onChange={onChange}
     />
     );
@@ -197,7 +190,7 @@ export function createFlashCardSet(): FlashCardSet {
     "Chord Ear Training",
     createFlashCards
   );
-  flashCardSet.initialSelectedFlashCardIds = configDataToEnabledFlashCardIds(flashCardSet, initialConfigData);
+  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.enableInvertFlashCards = false;

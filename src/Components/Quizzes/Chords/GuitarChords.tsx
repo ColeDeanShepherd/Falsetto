@@ -3,7 +3,7 @@ import * as React from "react";
 import * as Utils from "../../../Utils";
 import { Size2D } from "../../../Size2D";
 import { FlashCard, FlashCardSide } from "../../../FlashCard";
-import { FlashCardSet, RenderAnswerSelectArgs } from "../../../FlashCardSet";
+import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { Pitch } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 import { TableRow, TableCell, Table, TableHead, TableBody, Grid, Checkbox, Button, Typography } from "@material-ui/core";
@@ -122,7 +122,7 @@ export function createFlashCardSet(): FlashCardSet {
 
   const flashCardSet = new FlashCardSet(flashCardSetId, "Guitar Chords", createFlashCards);
   flashCardSet.enableInvertFlashCards = false;
-  flashCardSet.initialSelectedFlashCardIds = configDataToEnabledFlashCardIds(flashCardSet, initialConfigData);
+  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds configDataToEnabledFlashCardIds(flashCardSet, initialConfigData);
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = renderAnswerSelect;
@@ -160,7 +160,7 @@ export function createFlashCards(): FlashCard[] {
   });
 }
 export function renderAnswerSelect(
-  state: RenderAnswerSelectArgs
+  info: FlashCardStudySessionInfo
 ) {
   if (!state.areFlashCardsInverted) {
     return renderDistinctFlashCardSideAnswerSelect(state);

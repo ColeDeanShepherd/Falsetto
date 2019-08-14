@@ -7,7 +7,7 @@ import { Size2D } from "../../../Size2D";
 import { Rect2D } from '../../../Rect2D';
 import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
-import { FlashCardSet, RenderAnswerSelectArgs } from "../../../FlashCardSet";
+import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { Pitch } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 import { PianoKeyboard } from "../../Utils/PianoKeyboard";
@@ -159,7 +159,7 @@ function forEachInterval(fn: (pitches: Array<Pitch>, intervalString: string) => 
 }
 
 export function renderAnswerSelect(
-  state: RenderAnswerSelectArgs
+  info: FlashCardStudySessionInfo
 ): JSX.Element {
   return (
     <div>
@@ -230,7 +230,7 @@ export function createFlashCardSet(): FlashCardSet {
     "Piano Intervals",
     createFlashCards
   );
-  flashCardSet.initialSelectedFlashCardIds = configDataToEnabledFlashCardIds(flashCardSet, initialConfigData);
+  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds configDataToEnabledFlashCardIds(flashCardSet, initialConfigData);
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.enableInvertFlashCards = false;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
