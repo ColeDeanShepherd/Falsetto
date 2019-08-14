@@ -37,8 +37,8 @@ interface IConfigData {
   allowAccidentals: boolean;
 };
 
-export function configDataToEnabledQuestionIds(configData: IConfigData): Array<number> {
-  const newEnabledFlashCardIndices = new Array<number>();
+export function configDataToEnabledFlashCardIds(flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: IConfigData): Array<FlashCardId> {
+  const newEnabledFlashCardIds = new Array<FlashCardId>();
 
   let i = 0;
 
@@ -47,20 +47,20 @@ export function configDataToEnabledQuestionIds(configData: IConfigData): Array<n
       Utils.arrayContains(configData.enabledIntervals, intervalString) &&
       (configData.allowAccidentals || pitches.every(p => p.isNatural))
     ) {
-      newEnabledFlashCardIndices.push(i);
+      newEnabledFlashCardIds.push(i);
     }
 
     i++;
   });
 
-  return newEnabledFlashCardIndices;
+  return newEnabledFlashCardIds;
 }
 
 export interface IIntervalsFlashCardMultiSelectProps {
   flashCards: FlashCard[];
   configData: IConfigData;
-  selectedFlashCardIndices: number[];
-  onChange?: (newValue: number[], newConfigData: any) => void;
+  selectedFlashCardIds: Array<FlashCardId>;
+  onChange?: (newValue: Array<FlashCardId>, newConfigData: any) => void;
 }
 export interface IIntervalsFlashCardMultiSelectState {}
 export class IntervalsFlashCardMultiSelect extends React.Component<IIntervalsFlashCardMultiSelectProps, IIntervalsFlashCardMultiSelectState> {
@@ -133,8 +133,8 @@ export class IntervalsFlashCardMultiSelect extends React.Component<IIntervalsFla
   private onChange(newConfigData: IConfigData) {
     if (!this.props.onChange) { return; }
 
-    const newEnabledFlashCardIndices = configDataToEnabledQuestionIds(newConfigData);
-    this.props.onChange(newEnabledFlashCardIndices, newConfigData);
+    const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(newConfigData);
+    this.props.onChange(newEnabledFlashCardIds, newConfigData);
   }
 }
 
@@ -207,15 +207,15 @@ export function createFlashCardSet(): FlashCardSet {
 
   const renderFlashCardMultiSelect = (
     flashCards: Array<FlashCard>,
-    selectedFlashCardIndices: number[],
+    selectedFlashCardIds: Array<FlashCardId>,
     configData: any,
-    onChange: (newValue: number[], newConfigData: any) => void
+    onChange: (newValue: Array<FlashCardId>, newConfigData: any) => void
   ): JSX.Element => {
     return (
     <IntervalsFlashCardMultiSelect
       flashCards={flashCards}
       configData={configData}
-      selectedFlashCardIndices={selectedFlashCardIndices}
+      selectedFlashCardIds={selectedFlashCardIds}
       onChange={onChange}
     />
     );
@@ -230,7 +230,7 @@ export function createFlashCardSet(): FlashCardSet {
     "Piano Intervals",
     createFlashCards
   );
-  flashCardSet.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
+  flashCardSet.initialSelectedFlashCardIds = configDataToEnabledFlashCardIds(flashCardSet, initialConfigData);
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.enableInvertFlashCards = false;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;

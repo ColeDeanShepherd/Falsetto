@@ -6,14 +6,16 @@ import ResizeObserver from "resize-observer-polyfill";
 
 import * as Utils from "../Utils";
 import * as Analytics from "../Analytics";
-import { FlashCard, invertFlashCards } from "../FlashCard";
+import { FlashCard, invertFlashCards, FlashCardId } from "../FlashCard";
 import { renderFlashCardSide } from "./FlashCard";
 import { DefaultFlashCardMultiSelect } from "./Utils/DefaultFlashCardMultiSelect";
 import { StudyAlgorithm, isAnswerDifficultyCorrect, LeitnerStudyAlgorithm } from "../StudyAlgorithm";
-import { AnswerDifficulty } from "../AnswerDifficulty";
+import { AnswerDifficulty, answerDifficultyToPercentCorrect } from "../AnswerDifficulty";
 import { RenderAnswerSelectFunc, RenderFlashCardMultiSelectFunc, CustomNextFlashCardIdFilter, FlashCardSet, RenderAnswerSelectArgs, FlashCardLevel } from '../FlashCardSet';
 import { MAX_MAIN_CARD_WIDTH } from './Style';
 import { QuizStats } from '../QuizStats';
+import { IDatabase, FlashCardAnswer } from '../Database';
+import { IUserManager } from '../UserManager';
 
 export function createStudyFlashCardSetComponent(
   flashCardSet: FlashCardSet, isEmbedded: boolean, hideMoreInfoUri: boolean,
@@ -30,7 +32,7 @@ export function createStudyFlashCardSetComponent(
       title={title ? title : flashCardSet.name}
       flashCards={flashCards}
       containerHeight={flashCardSet.containerHeight}
-      initialSelectedFlashCardIndices={flashCardSet.initialSelectedFlashCardIndices}
+      initialSelectedFlashCardIds={flashCardSet.initialSelectedFlashCardIds}
       initialConfigData={flashCardSet.initialConfigData}
       renderFlashCardMultiSelect={flashCardSet.renderFlashCardMultiSelect}
       renderAnswerSelect={flashCardSet.renderAnswerSelect}
@@ -56,7 +58,7 @@ export interface IStudyFlashCardsProps {
   title: string;
   flashCards: FlashCard[];
   containerHeight: string;
-  initialSelectedFlashCardIndices?: number[];
+  initialSelectedFlashCardIds?: number[];
   initialConfigData: any;
   renderFlashCardMultiSelect?: RenderFlashCardMultiSelectFunc;
   renderAnswerSelect?: RenderAnswerSelectFunc;
@@ -69,7 +71,7 @@ export interface IStudyFlashCardsProps {
   style?: any;
 }
 export interface IStudyFlashCardsState {
-  currentFlashCardId: number;
+  currentFlashCardId: FlashCardId;
   sessionFlashCardNumber: number;
   haveGottenCurrentFlashCardWrong: boolean;
   lastCorrectAnswer: any;
@@ -90,7 +92,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
     this.flashCardContainerRef = React.createRef();
     this.flashCardContainerResizeObserver = null;
 
-    if (this.props.initialConfigData && !this.props.initialSelectedFlashCardIndices) {
+    if (this.props.initialConfigData && !this.props.initialSelectedFlashCardIds) {
       Utils.assert(false);
     }
 
@@ -108,7 +110,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
       },
       this.getInitialStateForFlashCards(
         this.props.flashCards,
-        this.props.initialSelectedFlashCardIndices
+        this.props.initialSelectedFlashCardIds
       )
     );
   }
@@ -124,7 +126,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
         return <p key={i}>{renderedFlashCard} {qs.numCorrectGuesses} / {qs.numIncorrectGuesses}</p>;
       }, this);
     
-    const currentFlashCard = flashCards[this.state.currentFlashCardId];
+    const currentFlashCard = flashCards.find(fc => fc.id === this.state.currentFlashCardId);
 
     let renderedFlashCardSide: JSX.Element | null;
     let containerWidth = 0;
@@ -410,6 +412,14 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
       const eventLabel = this.state.currentFlashCardId.toString();
       const eventValue = undefined;
       const eventCategory = this.props.title;
+
+      const userId = this.props.userManager.getCurrentUserId();
+      const answeredAt = new Date();
+
+      this.props.database.addAnswer(new FlashCardAnswer(
+        this.state.currentFlashCardId, userId,
+        answerDifficultyToPercentCorrect(answerDifficulty), answeredAt
+      ));
       Analytics.trackCustomEvent(
         eventId, eventLabel, eventValue, eventCategory
       );
@@ -445,7 +455,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
 
     if (!newInvertFlashCards) {
       newFlashCards = this.props.flashCards;
-      newEnabledQuestionIds = this.props.initialSelectedFlashCardIndices;
+      newEnabledQuestionIds = this.props.initialSelectedFlashCardIds;
     } else {
       const inversion = invertFlashCards(this.props.flashCards, this.state.enabledFlashCardIds);
       newFlashCards = inversion.invertedFlashCards;

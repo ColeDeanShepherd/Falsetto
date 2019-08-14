@@ -22,7 +22,7 @@ interface IConfigData {
 
 const flashCardSetId = "guitarPerfectPitchTrainer";
 
-export function configDataToEnabledQuestionIds(configData: IConfigData): Array<number> {
+export function configDataToEnabledFlashCardIds(flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: IConfigData): Array<FlashCardId> {
   const notesPerString = 12;
 
   const enabledFlashCardIds = new Array<number>();
@@ -38,8 +38,8 @@ export function configDataToEnabledQuestionIds(configData: IConfigData): Array<n
 export interface IFlashCardMultiSelectProps {
   flashCards: FlashCard[];
   configData: IConfigData;
-  selectedFlashCardIndices: number[];
-  onChange?: (newValue: number[], newConfigData: any) => void;
+  selectedFlashCardIds: Array<FlashCardId>;
+  onChange?: (newValue: Array<FlashCardId>, newConfigData: any) => void;
 }
 export interface IFlashCardMultiSelectState {}
 export class FlashCardMultiSelect extends React.Component<IFlashCardMultiSelectProps, IFlashCardMultiSelectState> {
@@ -69,8 +69,8 @@ export class FlashCardMultiSelect extends React.Component<IFlashCardMultiSelectP
     const newConfigData: IConfigData = {
       maxFret: clampedMaxFret
     }
-    const newEnabledFlashCardIndices = configDataToEnabledQuestionIds(newConfigData);
-    this.props.onChange(newEnabledFlashCardIndices, newConfigData);
+    const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(newConfigData);
+    this.props.onChange(newEnabledFlashCardIds, newConfigData);
   }
 }
 
@@ -212,14 +212,14 @@ export class GuitarNoteAnswerSelect extends React.Component<IGuitarNoteAnswerSel
 export function createFlashCardSet(guitarNotes?: Array<StringedInstrumentNote>): FlashCardSet {
   const renderFlashCardMultiSelect = (
     flashCards: Array<FlashCard>,
-    selectedFlashCardIndices: number[],
+    selectedFlashCardIds: Array<FlashCardId>,
     configData: any,
-    onChange: (newValue: number[], newConfigData: any) => void
+    onChange: (newValue: Array<FlashCardId>, newConfigData: any) => void
   ): JSX.Element => {
     return <FlashCardMultiSelect
       flashCards={flashCards}
       configData={configData}
-      selectedFlashCardIndices={selectedFlashCardIndices}
+      selectedFlashCardIds={selectedFlashCardIds}
       onChange={onChange}
     />;
   };
@@ -228,15 +228,15 @@ export function createFlashCardSet(guitarNotes?: Array<StringedInstrumentNote>):
     maxFret: 11
   };
 
-  const group = new FlashCardSet(flashCardSetId, "Guitar Perfect Pitch Trainer", () => createFlashCards(guitarNotes));
-  group.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
-  group.initialConfigData = initialConfigData;
-  group.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
-  group.renderAnswerSelect = (state: RenderAnswerSelectArgs) => <GuitarNoteAnswerSelect key={state.currentFlashCardId} args={state} tuning={standard6StringGuitarTuning} />;
-  group.enableInvertFlashCards = false;
-  group.containerHeight = "200px";
+  const flashCardSet = new FlashCardSet(flashCardSetId, "Guitar Perfect Pitch Trainer", () => createFlashCards(guitarNotes));
+  flashCardSet.initialSelectedFlashCardIds = configDataToEnabledFlashCardIds(flashCardSet, initialConfigData);
+  flashCardSet.initialConfigData = initialConfigData;
+  flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
+  flashCardSet.renderAnswerSelect = (state: RenderAnswerSelectArgs) => <GuitarNoteAnswerSelect key={state.currentFlashCardId} args={state} tuning={standard6StringGuitarTuning} />;
+  flashCardSet.enableInvertFlashCards = false;
+  flashCardSet.containerHeight = "200px";
 
-  return group;
+  return flashCardSet;
 }
 
 export function getStringedInstrumentNotes(pitch: Pitch, tuning: StringedInstrumentTuning, minFretNumber: number, maxFretNumber: number): Array<StringedInstrumentNote> {

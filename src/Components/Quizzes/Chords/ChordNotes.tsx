@@ -8,7 +8,7 @@ const flashCardSetId = "chordFormulasRelativeToMajorScale";
 
 export function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Chord Notes", createFlashCards);
-  flashCardSet.initialSelectedFlashCardIndices = Utils.range(1, 16);
+  flashCardSet.initialSelectedFlashCardIds = Utils.range(1, 16);
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/jazz-chords/extensions-alterations/";
   flashCardSet.containerHeight = "80px";

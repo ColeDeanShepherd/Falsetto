@@ -22,7 +22,7 @@ interface IConfigData {
   maxFret: number
 };
 
-export function configDataToEnabledQuestionIds(configData: IConfigData): Array<number> {
+export function configDataToEnabledFlashCardIds(flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: IConfigData): Array<FlashCardId> {
   const notesPerString = DEFAULT_MAX_FRET_NUMBER + 1;
 
   const enabledFlashCardIds = new Array<number>();
@@ -38,8 +38,8 @@ export function configDataToEnabledQuestionIds(configData: IConfigData): Array<n
 export interface IViolinNotesFlashCardMultiSelectProps {
   flashCards: FlashCard[];
   configData: IConfigData;
-  selectedFlashCardIndices: number[];
-  onChange?: (newValue: number[], newConfigData: any) => void;
+  selectedFlashCardIds: Array<FlashCardId>;
+  onChange?: (newValue: Array<FlashCardId>, newConfigData: any) => void;
 }
 export interface IViolinNotesFlashCardMultiSelectState {}
 export class ViolinNotesFlashCardMultiSelect extends React.Component<IViolinNotesFlashCardMultiSelectProps, IViolinNotesFlashCardMultiSelectState> {
@@ -69,22 +69,22 @@ export class ViolinNotesFlashCardMultiSelect extends React.Component<IViolinNote
     const newConfigData: IConfigData = {
       maxFret: clampedMaxFret
     }
-    const newEnabledFlashCardIndices = configDataToEnabledQuestionIds(newConfigData);
-    this.props.onChange(newEnabledFlashCardIndices, newConfigData);
+    const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(newConfigData);
+    this.props.onChange(newEnabledFlashCardIds, newConfigData);
   }
 }
 
 export function createFlashCardSet(notes?: Array<StringedInstrumentNote>): FlashCardSet {
   const renderFlashCardMultiSelect = (
     flashCards: Array<FlashCard>,
-    selectedFlashCardIndices: number[],
+    selectedFlashCardIds: Array<FlashCardId>,
     configData: any,
-    onChange: (newValue: number[], newConfigData: any) => void
+    onChange: (newValue: Array<FlashCardId>, newConfigData: any) => void
   ): JSX.Element => {
     return <ViolinNotesFlashCardMultiSelect
       flashCards={flashCards}
       configData={configData}
-      selectedFlashCardIndices={selectedFlashCardIndices}
+      selectedFlashCardIds={selectedFlashCardIds}
       onChange={onChange}
     />;
   };
@@ -94,7 +94,7 @@ export function createFlashCardSet(notes?: Array<StringedInstrumentNote>): Flash
   };
 
   const flashCardSet = new FlashCardSet(flashCardSetId, "Violin Notes", () => createFlashCards(notes));
-  flashCardSet.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
+  flashCardSet.initialSelectedFlashCardIds = configDataToEnabledFlashCardIds(flashCardSet, initialConfigData);
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderNoteAnswerSelect;

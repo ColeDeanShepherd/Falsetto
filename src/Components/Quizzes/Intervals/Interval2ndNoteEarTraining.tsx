@@ -11,7 +11,7 @@ import {
   intervals,
   directions,
   IntervalEarTrainingFlashCardMultiSelect,
-  configDataToEnabledQuestionIds,
+  configDataToEnabledFlashCardIds,
   forEachInterval
 } from "../../Utils/IntervalEarTrainingFlashCardMultiSelect";
 import { Button } from "@material-ui/core";
@@ -80,15 +80,15 @@ export function createFlashCards(): Array<FlashCard> {
 export function createFlashCardSet(): FlashCardSet {
   const renderFlashCardMultiSelect = (
     flashCards: Array<FlashCard>,
-    selectedFlashCardIndices: number[],
+    selectedFlashCardIds: Array<FlashCardId>,
     configData: any,
-    onChange: (newValue: number[], newConfigData: any) => void
+    onChange: (newValue: Array<FlashCardId>, newConfigData: any) => void
   ): JSX.Element => {
     return (
     <IntervalEarTrainingFlashCardMultiSelect
       flashCards={flashCards}
       configData={configData}
-      selectedFlashCardIndices={selectedFlashCardIndices}
+      selectedFlashCardIds={selectedFlashCardIds}
       hasFlashCardPerRootNote={true}
       onChange={onChange}
     />
@@ -105,7 +105,7 @@ export function createFlashCardSet(): FlashCardSet {
     "Interval 2nd Note Ear Training",
     createFlashCards
   );
-  flashCardSet.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(
+  flashCardSet.initialSelectedFlashCardIds = configDataToEnabledFlashCardIds(
     false, true, initialConfigData);
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;

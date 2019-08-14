@@ -3,7 +3,7 @@ import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid, Butto
 
 import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
-import { FlashCard } from "../../../FlashCard";
+import { FlashCard, FlashCardId } from "../../../FlashCard";
 import { FlashCardSet } from "../../../FlashCardSet";
 import { Pitch } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
@@ -58,27 +58,29 @@ interface IConfigData {
   enabledChordTypes: string[];
 }
 
-export function configDataToEnabledQuestionIds(configData: IConfigData): Array<number> {
-  const newEnabledFlashCardIndices = new Array<number>();
+export function configDataToEnabledFlashCardIds(
+  flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: IConfigData
+): Array<FlashCardId> {
+  const newEnabledFlashCardIds = new Array<FlashCardId>();
 
-  let i = 0;
-
-  for (const chordType of chordTypes) {
+  for (let i = 0; i < chordTypes.length; i++) {
+    const chordType = chordTypes[i];
+    
     if (Utils.arrayContains(configData.enabledChordTypes, chordType.name)) {
-      newEnabledFlashCardIndices.push(i);
+      const flashCard = flashCards[i];
+      newEnabledFlashCardIds.push(flashCard.id);
     }
-
-    i++;
   }
 
-  return newEnabledFlashCardIndices;
+  return newEnabledFlashCardIds;
 }
 
 export interface IChordNotesFlashCardMultiSelectProps {
+  flashCardSet: FlashCardSet;
   flashCards: FlashCard[];
   configData: IConfigData;
-  selectedFlashCardIndices: number[];
-  onChange?: (newValue: number[], newConfigData: any) => void;
+  selectedFlashCardIds: Array<FlashCardId>;
+  onChange?: (newValue: Array<FlashCardId>, newConfigData: any) => void;
 }
 export interface IChordNotesFlashCardMultiSelectState {}
 export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesFlashCardMultiSelectProps, IChordNotesFlashCardMultiSelectState> {
@@ -139,8 +141,10 @@ export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesF
   private onChange(newConfigData: IConfigData) {
     if (!this.props.onChange) { return; }
 
-    const newEnabledFlashCardIndices = configDataToEnabledQuestionIds(newConfigData);
-    this.props.onChange(newEnabledFlashCardIndices, newConfigData);
+    const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(
+      this.props.flashCardSet, this.props.flashCards, newConfigData
+    );
+    this.props.onChange(newEnabledFlashCardIds, newConfigData);
   }
 }
 
@@ -171,15 +175,15 @@ export function createFlashCards(): Array<FlashCard> {
 export function createFlashCardSet(): FlashCardSet {
   const renderFlashCardMultiSelect = (
     flashCards: Array<FlashCard>,
-    selectedFlashCardIndices: number[],
+    selectedFlashCardIds: Array<FlashCardId>,
     configData: any,
-    onChange: (newValue: number[], newConfigData: any) => void
+    onChange: (newValue: Array<FlashCardId>, newConfigData: any) => void
   ): JSX.Element => {
     return (
     <ChordNotesFlashCardMultiSelect
       flashCards={flashCards}
       configData={configData}
-      selectedFlashCardIndices={selectedFlashCardIndices}
+      selectedFlashCardIds={selectedFlashCardIds}
       onChange={onChange}
     />
     );
@@ -193,7 +197,7 @@ export function createFlashCardSet(): FlashCardSet {
     "Chord Ear Training",
     createFlashCards
   );
-  flashCardSet.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
+  flashCardSet.initialSelectedFlashCardIds = configDataToEnabledFlashCardIds(flashCardSet, initialConfigData);
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.enableInvertFlashCards = false;

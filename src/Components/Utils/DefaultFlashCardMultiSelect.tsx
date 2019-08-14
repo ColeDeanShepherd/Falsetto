@@ -12,8 +12,8 @@ export interface IDefaultFlashCardMultiSelectProps {
   flashCards: FlashCard[];
   configData: any;
   flashCardLevels: Array<FlashCardLevel>;
-  selectedFlashCardIndices: number[];
-  onChange?: (newValue: number[], newConfigData: any) => void;
+  selectedFlashCardIds: Array<FlashCardId>;
+  onChange?: (newValue: Array<FlashCardId>, newConfigData: any) => void;
 }
 export class DefaultFlashCardMultiSelect extends React.Component<IDefaultFlashCardMultiSelectProps, {}> {
   public static readonly FINAL_FLASH_CARD_LEVEL_NAME = "All";
@@ -85,21 +85,21 @@ export class DefaultFlashCardMultiSelect extends React.Component<IDefaultFlashCa
   private toggleFlashCardEnabled(flashCardIndex: number) {
     if (!this.props.onChange) { return; }
 
-    const newEnabledFlashCardIndices = Utils.toggleArrayElement(
+    const newEnabledFlashCardIds = Utils.toggleArrayElement(
       this.props.selectedFlashCardIndices,
       flashCardIndex
     );
 
-    if (newEnabledFlashCardIndices.length > 0) {
-      this.props.onChange(newEnabledFlashCardIndices, this.props.configData);
+    if (newEnabledFlashCardIds.length > 0) {
+      this.props.onChange(newEnabledFlashCardIds, this.props.configData);
     }
   }
   private activateLevel(levelIndex: number) {
     if (!this.props.onChange) { return; }
 
-    const newEnabledFlashCardIndices = (levelIndex < this.props.flashCardLevels.length)
+    const newEnabledFlashCardIds = (levelIndex < this.props.flashCardLevels.length)
       ? this.props.flashCardLevels[levelIndex].flashCardIds.slice()
       : this.props.flashCards.map((_, i) => i);
-    this.props.onChange(newEnabledFlashCardIndices, this.props.configData);
+    this.props.onChange(newEnabledFlashCardIds, this.props.configData);
   }
 }

@@ -81,6 +81,8 @@ import { BecomeAPatronButton } from './Utils/BecomeAPatronButton';
 import { Metronome } from './Tools/Metronome';
 import { DiatonicChordPlayer } from './Tools/DiatonicChordPlayer';
 import { isDevelopment } from '../Config';
+import { IDatabase, InMemoryDatabase } from '../Database';
+import { IUserManager, UserManager } from '../UserManager';
 
 async function getErrorDescription(msg: string | Event, file: string | undefined, line: number | undefined, col: number | undefined, error: Error | undefined): Promise<string> {
   return new Promise<string>((resolve, reject) => {
@@ -201,6 +203,9 @@ class App extends React.Component<IAppProps, IAppState> {
     }
 
     this.mainContainerRef = React.createRef();
+
+    this.database = new InMemoryDatabase();
+    this.userManager = new UserManager();
 
     this.state = {
       isMenuVisible: false
@@ -339,6 +344,8 @@ class App extends React.Component<IAppProps, IAppState> {
   private groupedFlashCardSets: { title: string; flashCardSets: FlashCardSet[]; }[];
   private flashCardSets: FlashCardSet[];
   private mainContainerRef: React.Ref<HTMLDivElement>;
+  private database: IDatabase;
+  private userManager: IUserManager;
 
   private get isEmbedded(): boolean {
     return this.props.isEmbedded || this.history.location.search.includes("isEmbedded=true");

@@ -32,21 +32,21 @@ export function createFlashCardSet(): FlashCardSet {
   };
   const renderFlashCardMultiSelect = (
     flashCards: Array<FlashCard>,
-    selectedFlashCardIndices: number[],
+    selectedFlashCardIds: Array<FlashCardId>,
     configData: any,
-    onChange: (newValue: number[], newConfigData: any) => void
+    onChange: (newValue: Array<FlashCardId>, newConfigData: any) => void
   ): JSX.Element => {
     return <SheetMusicNotesFlashCardMultiSelect
       flashCards={flashCards}
       configData={configData}
-      selectedFlashCardIndices={selectedFlashCardIndices}
+      selectedFlashCardIds={selectedFlashCardIds}
       onChange={onChange}
     />;
   }
 
   const flashCardSet = new FlashCardSet(flashCardSetId, "Sheet Music Notes", createFlashCards);
   flashCardSet.enableInvertFlashCards = false;
-  flashCardSet.initialSelectedFlashCardIndices = configDataToEnabledQuestionIds(initialConfigData);
+  flashCardSet.initialSelectedFlashCardIds = configDataToEnabledFlashCardIds(flashCardSet, initialConfigData);
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = renderNoteAnswerSelect;
@@ -119,7 +119,7 @@ export function allPitchesMap<TResult>(mapFn: (clef: string, pitch: Pitch, index
 
   return result;
 }
-function configDataToEnabledQuestionIds(configData: IConfigData): Array<number> {
+function configDataToEnabledFlashCardIds(flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: IConfigData): Array<FlashCardId> {
   return allPitchesMap((clef, pitch, i) => {
     if (!configData.isTrebleClefEnabled && (clef === "treble")) {
       return -1;
@@ -228,8 +228,8 @@ interface IConfigData {
 export interface ISheetMusicNotesFlashCardMultiSelectProps {
   flashCards: FlashCard[];
   configData: IConfigData;
-  selectedFlashCardIndices: number[];
-  onChange?: (newValue: number[], newConfigData: any) => void;
+  selectedFlashCardIds: Array<FlashCardId>;
+  onChange?: (newValue: Array<FlashCardId>, newConfigData: any) => void;
 }
 export interface ISheetMusicNotesFlashCardMultiSelectState {}
 export class SheetMusicNotesFlashCardMultiSelect extends React.Component<ISheetMusicNotesFlashCardMultiSelectProps, ISheetMusicNotesFlashCardMultiSelectState> {
@@ -275,8 +275,8 @@ export class SheetMusicNotesFlashCardMultiSelect extends React.Component<ISheetM
       isBassClefEnabled: this.props.configData.isBassClefEnabled,
       areAccidentalsEnabled: this.props.configData.areAccidentalsEnabled
     };
-    const newEnabledFlashCardIndices = configDataToEnabledQuestionIds(newConfigData);
-    this.props.onChange(newEnabledFlashCardIndices, newConfigData);
+    const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(newConfigData);
+    this.props.onChange(newEnabledFlashCardIds, newConfigData);
   }
   private onIsBassClefEnabledChange(event: React.ChangeEvent, checked: boolean) {
     if (!this.props.onChange) { return; }
@@ -286,8 +286,8 @@ export class SheetMusicNotesFlashCardMultiSelect extends React.Component<ISheetM
       isBassClefEnabled: checked,
       areAccidentalsEnabled: this.props.configData.areAccidentalsEnabled
     };
-    const newEnabledFlashCardIndices = configDataToEnabledQuestionIds(newConfigData);
-    this.props.onChange(newEnabledFlashCardIndices, newConfigData);
+    const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(newConfigData);
+    this.props.onChange(newEnabledFlashCardIds, newConfigData);
   }
   private onAreAccidentalsEnabledChange(event: React.ChangeEvent, checked: boolean) {
     if (!this.props.onChange) { return; }
@@ -297,7 +297,7 @@ export class SheetMusicNotesFlashCardMultiSelect extends React.Component<ISheetM
       isBassClefEnabled: this.props.configData.isBassClefEnabled,
       areAccidentalsEnabled: checked
     };
-    const newEnabledFlashCardIndices = configDataToEnabledQuestionIds(newConfigData);
-    this.props.onChange(newEnabledFlashCardIndices, newConfigData);
+    const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(newConfigData);
+    this.props.onChange(newEnabledFlashCardIds, newConfigData);
   }
 }

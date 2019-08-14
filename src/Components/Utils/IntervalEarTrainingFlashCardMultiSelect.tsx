@@ -84,7 +84,7 @@ export interface IConfigData {
   enabledDirections: string[];
 }
 
-export function configDataToEnabledQuestionIds(
+export function configDataToEnabledFlashCardIds(
   enableHarmonicIntervals: boolean,
   hasFlashCardPerRootNote: boolean,
   configData: IConfigData
@@ -122,9 +122,9 @@ export function configDataToEnabledQuestionIds(
 export interface IIntervalEarTrainingFlashCardMultiSelectProps {
   flashCards: FlashCard[];
   configData: IConfigData;
-  selectedFlashCardIndices: number[];
+  selectedFlashCardIds: Array<FlashCardId>;
   hasFlashCardPerRootNote: boolean;
-  onChange?: (newValue: number[], newConfigData: any) => void;
+  onChange?: (newValue: Array<FlashCardId>, newConfigData: any) => void;
   enableHarmonicIntervals?: boolean;
 }
 export interface IIntervalEarTrainingFlashCardMultiSelectState {}
@@ -237,8 +237,8 @@ export class IntervalEarTrainingFlashCardMultiSelect extends React.Component<IIn
     if (!this.props.onChange) { return; }
 
     const enableHarmonicIntervals = this.props.enableHarmonicIntervals === true;
-    const newEnabledFlashCardIndices = configDataToEnabledQuestionIds(
+    const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(
       enableHarmonicIntervals, this.props.hasFlashCardPerRootNote, newConfigData);
-    this.props.onChange(newEnabledFlashCardIndices, newConfigData);
+    this.props.onChange(newEnabledFlashCardIds, newConfigData);
   }
 }
