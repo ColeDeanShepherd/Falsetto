@@ -20,7 +20,7 @@ interface IConfigData {
   maxFret: number
 };
 
-export function configDataToEnabledFlashCardIds(flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: IConfigData): Array<FlashCardId> {
+export function configDataToEnabledFlashCardIds(info: FlashCardStudySessionInfo, configData: IConfigData): Array<FlashCardId> {
   const notesPerString = 12;
 
   const enabledFlashCardIds = new Array<number>();

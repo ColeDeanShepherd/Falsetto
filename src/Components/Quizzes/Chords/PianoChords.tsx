@@ -5,7 +5,7 @@ import { Vector2D } from '../../../Vector2D';
 import { Size2D } from "../../../Size2D";
 import { Rect2D } from '../../../Rect2D';
 import { PianoKeyboard } from "../../Utils/PianoKeyboard";
-import { FlashCard, FlashCardSide } from "../../../FlashCard";
+import { FlashCard, FlashCardSide, FlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { AnswerDifficulty } from "../../../AnswerDifficulty";
 import { Pitch } from "../../../Pitch";
@@ -23,7 +23,7 @@ interface IConfigData {
   enabledChordTypes: string[];
 }
 
-export function configDataToEnabledFlashCardIds(flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: IConfigData): Array<FlashCardId> {
+export function configDataToEnabledFlashCardIds(info: FlashCardStudySessionInfo, configData: IConfigData): Array<FlashCardId> {
   const newEnabledFlashCardIds = new Array<FlashCardId>();
 
   let i = 0;
@@ -45,19 +45,19 @@ export function configDataToEnabledFlashCardIds(flashCardSet: FlashCardSet, flas
   return newEnabledFlashCardIds;
 }
 export interface IPianoChordsFlashCardMultiSelectProps {
-  flashCards: FlashCard[];
-  configData: IConfigData;
-  selectedFlashCardIds: Array<FlashCardId>;
+  studySessionInfo: FlashCardStudySessionInfo,
   onChange?: (newValue: Array<FlashCardId>, newConfigData: any) => void;
 }
 
 export interface IPianoChordsFlashCardMultiSelectState {}
 export class PianoChordsFlashCardMultiSelect extends React.Component<IPianoChordsFlashCardMultiSelectProps, IPianoChordsFlashCardMultiSelectState> {
   public render(): JSX.Element {
+    const configData = this.props.studySessionInfo.configData as IConfigData;
+    
     const rootPitchCheckboxTableRows = rootPitchStrs
       .map((rootPitch, i) => {
-        const isChecked = this.props.configData.enabledRootPitches.indexOf(rootPitch) >= 0;
-        const isEnabled = !isChecked || (this.props.configData.enabledRootPitches.length > 1);
+        const isChecked = configData.enabledRootPitches.indexOf(rootPitch) >= 0;
+        const isEnabled = !isChecked || (configData.enabledRootPitches.length > 1);
 
         return (
           <TableRow key={i}>
@@ -82,8 +82,8 @@ export class PianoChordsFlashCardMultiSelect extends React.Component<IPianoChord
 
     const chordTypeCheckboxTableRows = ChordType.All
       .map((chord, i) => {
-        const isChecked = this.props.configData.enabledChordTypes.indexOf(chord.name) >= 0;
-        const isEnabled = !isChecked || (this.props.configData.enabledChordTypes.length > 1);
+        const isChecked = configData.enabledChordTypes.indexOf(chord.name) >= 0;
+        const isEnabled = !isChecked || (configData.enabledChordTypes.length > 1);
 
         return (
           <TableRow key={i}>
@@ -115,28 +115,32 @@ export class PianoChordsFlashCardMultiSelect extends React.Component<IPianoChord
   }
   
   private toggleRootPitchEnabled(rootPitch: string) {
+    const configData = this.props.studySessionInfo.configData as IConfigData;
+
     const newEnabledRootPitches = Utils.toggleArrayElement(
-      this.props.configData.enabledRootPitches,
+      configData.enabledRootPitches,
       rootPitch
     );
     
     if (newEnabledRootPitches.length > 0) {
       const newConfigData: IConfigData = {
         enabledRootPitches: newEnabledRootPitches,
-        enabledChordTypes: this.props.configData.enabledChordTypes
+        enabledChordTypes: configData.enabledChordTypes
       };
       this.onChange(newConfigData);
     }
   }
   private toggleChordEnabled(chord: string) {
+    const configData = this.props.studySessionInfo.configData as IConfigData;
+
     const newEnabledChordTypes = Utils.toggleArrayElement(
-      this.props.configData.enabledChordTypes,
+      configData.enabledChordTypes,
       chord
     );
     
     if (newEnabledChordTypes.length > 0) {
       const newConfigData: IConfigData = {
-        enabledRootPitches: this.props.configData.enabledRootPitches,
+        enabledRootPitches: configData.enabledRootPitches,
         enabledChordTypes: newEnabledChordTypes
       };
       this.onChange(newConfigData);
@@ -145,7 +149,7 @@ export class PianoChordsFlashCardMultiSelect extends React.Component<IPianoChord
   private onChange(newConfigData: IConfigData) {
     if (!this.props.onChange) { return; }
 
-    const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(newConfigData);
+    const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(this.props.studySessionInfo, newConfigData);
     this.props.onChange(newEnabledFlashCardIds, newConfigData);
   }
 }
@@ -277,16 +281,12 @@ export class PianoChordsAnswerSelect extends React.Component<IPianoChordsAnswerS
 
 export function createFlashCardSet(): FlashCardSet {
   const renderFlashCardMultiSelect = (
-    flashCards: Array<FlashCard>,
-    selectedFlashCardIds: Array<FlashCardId>,
-    configData: any,
+    info: FlashCardStudySessionInfo,
     onChange: (newValue: Array<FlashCardId>, newConfigData: any) => void
   ): JSX.Element => {
     return (
     <PianoChordsFlashCardMultiSelect
-      flashCards={flashCards}
-      configData={configData}
-      selectedFlashCardIds={selectedFlashCardIds}
+      studySessionInfo={info}
       onChange={onChange}
     />
     );
@@ -301,7 +301,7 @@ export function createFlashCardSet(): FlashCardSet {
 
   const flashCardSet = new FlashCardSet(flashCardSetId, "Piano Chords", createFlashCards);
   flashCardSet.enableInvertFlashCards = true;
-  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds configDataToEnabledFlashCardIds(flashCardSet, initialConfigData);
+  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = renderAnswerSelect;
@@ -348,18 +348,18 @@ export function createFlashCards(): FlashCard[] {
 export function renderAnswerSelect(
   info: FlashCardStudySessionInfo
 ) {
-  if (!state.areFlashCardsInverted) {
-    const correctAnswer = state.currentFlashCard.backSide.renderFn as string;
+  if (!info.areFlashCardsInverted) {
+    const correctAnswer = info.currentFlashCard.backSide.renderFn as string;
     return <PianoChordsAnswerSelect
-      key={correctAnswer} correctAnswer={correctAnswer} onAnswer={state.onAnswer}
-      lastCorrectAnswer={state.lastCorrectAnswer} incorrectAnswers={state.incorrectAnswers}
-      enabledChordTypeNames={(state.configData as IConfigData).enabledChordTypes} />;
+      key={correctAnswer} correctAnswer={correctAnswer} onAnswer={info.onAnswer}
+      lastCorrectAnswer={info.lastCorrectAnswer} incorrectAnswers={info.incorrectAnswers}
+      enabledChordTypeNames={(info.configData as IConfigData).enabledChordTypes} />;
   } else {
-    const key = state.currentFlashCard.frontSide.renderFn as string;
-    const correctAnswer = state.currentFlashCard.backSide.data[0] as Array<Pitch>;
+    const key = info.currentFlashCard.frontSide.renderFn as string;
+    const correctAnswer = info.currentFlashCard.backSide.data[0] as Array<Pitch>;
     return <PianoKeysAnswerSelect
       key={key} width={400} height={100} correctAnswer={correctAnswer}
-      onAnswer={state.onAnswer} lastCorrectAnswer={state.lastCorrectAnswer}
-      incorrectAnswers={state.incorrectAnswers} />;
+      onAnswer={info.onAnswer} lastCorrectAnswer={info.lastCorrectAnswer}
+      incorrectAnswers={info.incorrectAnswers} />;
   }
 }

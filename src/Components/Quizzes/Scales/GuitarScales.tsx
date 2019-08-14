@@ -28,7 +28,7 @@ export function forEachScaleType(callbackFn: (scaleType: ScaleType, i: number) =
     callbackFn(scaleType, i);
   }
 }
-export function configDataToEnabledFlashCardIds(flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: IConfigData): Array<FlashCardId> {
+export function configDataToEnabledFlashCardIds(info: FlashCardStudySessionInfo, configData: IConfigData): Array<FlashCardId> {
   const newEnabledFlashCardIds = new Array<FlashCardId>();
 
   forEachScaleType((scaleType, i) => {

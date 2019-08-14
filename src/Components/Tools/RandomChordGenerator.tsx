@@ -31,7 +31,7 @@ interface IConfigData {
   enabledChordTypes: string[];
 }
 
-export function configDataToEnabledFlashCardIds(flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: IConfigData): Array<FlashCardId> {
+export function configDataToEnabledFlashCardIds(info: FlashCardStudySessionInfo, configData: IConfigData): Array<FlashCardId> {
   return Utils.flattenArrays<boolean>(chordRoots
     .map(chordRoot => ChordType.All
       .map(chordType =>

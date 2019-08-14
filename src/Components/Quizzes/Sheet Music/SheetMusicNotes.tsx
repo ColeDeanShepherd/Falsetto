@@ -119,7 +119,7 @@ export function allPitchesMap<TResult>(mapFn: (clef: string, pitch: Pitch, index
 
   return result;
 }
-function configDataToEnabledFlashCardIds(flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: IConfigData): Array<FlashCardId> {
+function configDataToEnabledFlashCardIds(info: FlashCardStudySessionInfo, configData: IConfigData): Array<FlashCardId> {
   return allPitchesMap((clef, pitch, i) => {
     if (!configData.isTrebleClefEnabled && (clef === "treble")) {
       return -1;

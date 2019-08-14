@@ -1,14 +1,19 @@
 import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
-import { FlashCard } from "../../../FlashCard";
-import { FlashCardSet } from "../../../FlashCardSet";
+import { FlashCard, FlashCardId } from "../../../FlashCard";
+import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { ChordType } from '../../../Chord';
 
 const flashCardSetId = "chordFormulasRelativeToMajorScale";
 
+function configDataToEnabledFlashCardIds(info: FlashCardStudySessionInfo, configData: any): Array<FlashCardId> {
+  return info.flashCards
+    .filter((fc, i) => i <= 16)
+    .map(fc => fc.id);
+}
 export function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Chord Notes", createFlashCards);
-  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds Utils.range(1, 16);
+  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/jazz-chords/extensions-alterations/";
   flashCardSet.containerHeight = "80px";
