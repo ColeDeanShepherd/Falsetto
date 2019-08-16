@@ -2,9 +2,10 @@ import * as React from "react";
 import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid } from "@material-ui/core";
 
 import * as Utils from "../../Utils";
-import { FlashCard } from "../../FlashCard";
-import { FlashCardSet } from "../../FlashCardSet";
+import { FlashCard, FlashCardId } from "../../FlashCard";
+import { FlashCardSet, FlashCardStudySessionInfo } from "../../FlashCardSet";
 import { ChordType } from '../../Chord';
+import { Pitch } from '../../Pitch';
 
 const flashCardSetId = "randomChords";
 
@@ -31,31 +32,45 @@ interface IConfigData {
   enabledChordTypes: string[];
 }
 
-export function configDataToEnabledFlashCardIds(info: FlashCardStudySessionInfo, configData: IConfigData): Array<FlashCardId> {
-  return Utils.flattenArrays<boolean>(chordRoots
-    .map(chordRoot => ChordType.All
-      .map(chordType =>
-        Utils.arrayContains(configData.enabledChordRoots, chordRoot) &&
-        Utils.arrayContains(configData.enabledChordTypes, chordType.name))
-    )
-  )
-    .map((x, i) => x ? i : -1)
-    .filter(i => i >= 0);
+export function forEachChord(callbackFn: (chordRoot: string, chordType: ChordType, i: number) => void) {
+  let i = 0;
+
+  for (const chordRoot of chordRoots) {
+    for (const chordType of ChordType.All) {
+      callbackFn(chordRoot, chordType, i);
+      i++
+    }
+  }
+}
+export function configDataToEnabledFlashCardIds(
+  info: FlashCardStudySessionInfo, configData: IConfigData
+): Array<FlashCardId> {
+  const flashCardIds = new Array<FlashCardId>();
+
+  forEachChord((chordRoot, chordType, i) => {
+    if (
+      Utils.arrayContains(configData.enabledChordRoots, chordRoot) &&
+      Utils.arrayContains(configData.enabledChordTypes, chordType.name)
+    ) {
+      flashCardIds.push(info.flashCards[i].id);
+    }
+  });
+
+  return flashCardIds;
 }
 
 export interface IRandomChordGeneratorFlashCardMultiSelectProps {
-  flashCards: FlashCard[];
-  configData: IConfigData;
-  selectedFlashCardIds: Array<FlashCardId>;
+  studySessionInfo: FlashCardStudySessionInfo;
   onChange?: (newValue: Array<FlashCardId>, newConfigData: any) => void;
 }
 export interface IRandomChordGeneratorFlashCardMultiSelectState {}
 export class RandomChordGeneratorFlashCardMultiSelect extends React.Component<IRandomChordGeneratorFlashCardMultiSelectProps, IRandomChordGeneratorFlashCardMultiSelectState> {
   public render(): JSX.Element {
+    const configData = this.props.studySessionInfo.configData as IConfigData;
     const chordRootCheckboxTableRows = chordRoots
       .map((chordRoot, i) => {
-        const isChecked = this.props.configData.enabledChordRoots.indexOf(chordRoot) >= 0;
-        const isEnabled = !isChecked || (this.props.configData.enabledChordRoots.length > 1);
+        const isChecked = configData.enabledChordRoots.indexOf(chordRoot) >= 0;
+        const isEnabled = !isChecked || (configData.enabledChordRoots.length > 1);
 
         return (
           <TableRow key={i}>
@@ -80,8 +95,8 @@ export class RandomChordGeneratorFlashCardMultiSelect extends React.Component<IR
     
     const chordTypeCheckboxTableRows = ChordType.All
       .map((chordType, i) => {
-        const isChecked = this.props.configData.enabledChordTypes.indexOf(chordType.name) >= 0;
-        const isEnabled = !isChecked || (this.props.configData.enabledChordTypes.length > 1);
+        const isChecked = configData.enabledChordTypes.indexOf(chordType.name) >= 0;
+        const isEnabled = !isChecked || (configData.enabledChordTypes.length > 1);
 
         return (
           <TableRow key={i}>
@@ -113,28 +128,30 @@ export class RandomChordGeneratorFlashCardMultiSelect extends React.Component<IR
   }
 
   private toggleChordRootEnabled(chordRoot: string) {
+    const configData = this.props.studySessionInfo.configData as IConfigData;
     const newEnabledChordRoots = Utils.toggleArrayElement(
-      this.props.configData.enabledChordRoots,
+      configData.enabledChordRoots,
       chordRoot
     );
     
     if (newEnabledChordRoots.length > 0) {
       const newConfigData: IConfigData = {
         enabledChordRoots: newEnabledChordRoots,
-        enabledChordTypes: this.props.configData.enabledChordTypes
+        enabledChordTypes: configData.enabledChordTypes
       };
       this.onChange(newConfigData);
     }
   }
   private toggleChordTypeEnabled(chordType: string) {
+    const configData = this.props.studySessionInfo.configData as IConfigData;
     const newEnabledChordTypes = Utils.toggleArrayElement(
-      this.props.configData.enabledChordTypes,
+      configData.enabledChordTypes,
       chordType
     );
     
     if (newEnabledChordTypes.length > 0) {
       const newConfigData: IConfigData = {
-        enabledChordRoots: this.props.configData.enabledChordRoots,
+        enabledChordRoots: configData.enabledChordRoots,
         enabledChordTypes: newEnabledChordTypes
       };
       this.onChange(newConfigData);
@@ -143,34 +160,35 @@ export class RandomChordGeneratorFlashCardMultiSelect extends React.Component<IR
   private onChange(newConfigData: IConfigData) {
     if (!this.props.onChange) { return; }
 
-    const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(newConfigData);
+    const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(
+      this.props.studySessionInfo, newConfigData
+    );
     this.props.onChange(newEnabledFlashCardIds, newConfigData);
   }
 }
 
 export function createFlashCards(): Array<FlashCard> {
-  return Utils.flattenArrays<FlashCard>(chordRoots
-    .map(chordRoot => ChordType.All
-      .map(chordType => FlashCard.fromRenderFns(
-        JSON.stringify({ set: flashCardSetId, chord: chordRoot + " " + chordType.name }),
-        chordRoot + " " + chordType.name,
-        chordType.formula.toString())
-      )
-    )
-  );
+  const flashCards = new Array<FlashCard>();
+
+  forEachChord((chordRoot, chordType, i) => {
+    const flashCard = FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, chord: chordRoot + " " + chordType.name }),
+      chordRoot + " " + chordType.name,
+      chordType.formula.toString()
+    );
+    flashCards.push(flashCard);
+  });
+  
+  return flashCards;
 }
 export function createFlashCardSet(): FlashCardSet {
   const renderFlashCardMultiSelect = (
-    flashCards: Array<FlashCard>,
-    selectedFlashCardIds: Array<FlashCardId>,
-    configData: any,
+    studySessionInfo: FlashCardStudySessionInfo,
     onChange: (newValue: Array<FlashCardId>, newConfigData: any) => void
   ): JSX.Element => {
     return (
     <RandomChordGeneratorFlashCardMultiSelect
-      flashCards={flashCards}
-      configData={configData}
-      selectedFlashCardIds={selectedFlashCardIds}
+      studySessionInfo={studySessionInfo}
       onChange={onChange}
     />
     );
@@ -188,7 +206,7 @@ export function createFlashCardSet(): FlashCardSet {
     createFlashCards
   );
   flashCardSet.enableInvertFlashCards = false;
-  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds configDataToEnabledFlashCardIds(flashCardSet, initialConfigData);
+  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.containerHeight = "80px";

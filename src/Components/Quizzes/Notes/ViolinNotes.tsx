@@ -8,8 +8,8 @@ import {
   ViolinFingerboard,
   standardViolinTuning
 } from "../../Utils/GuitarFretboard";
-import { FlashCard } from "../../../FlashCard";
-import { FlashCardSet } from "../../../FlashCardSet";
+import { FlashCard, FlashCardId } from "../../../FlashCard";
+import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { StringedInstrumentNote } from '../../../GuitarNote';
 
 const flashCardSetId = "violinNotes";
@@ -22,32 +22,43 @@ interface IConfigData {
   maxFret: number
 };
 
-export function configDataToEnabledFlashCardIds(info: FlashCardStudySessionInfo, configData: IConfigData): Array<FlashCardId> {
-  const notesPerString = DEFAULT_MAX_FRET_NUMBER + 1;
+function forEachNote(callbackFn: (stringIndex: number, fretNumber: number, i: number) => void) {
+  let i = 0;
 
-  const enabledFlashCardIds = new Array<number>();
   for (let stringIndex = 0; stringIndex < violinTuning.stringCount; stringIndex++) {
-    for (let fretNumber = 0; fretNumber <= configData.maxFret; fretNumber++) {
-      enabledFlashCardIds.push((notesPerString * stringIndex) + fretNumber);
+    for (let fretNumber = 0; fretNumber <= DEFAULT_MAX_FRET_NUMBER; fretNumber++) {
+      callbackFn(stringIndex, fretNumber, i);
+      i++;
     }
   }
+}
+export function configDataToEnabledFlashCardIds(
+  info: FlashCardStudySessionInfo, configData: IConfigData
+): Array<FlashCardId> {
+  const flashCardIds = new Array<FlashCardId>();
 
-  return enabledFlashCardIds;
+  forEachNote((_, fretNumber, i) => {
+    if (fretNumber <= configData.maxFret) {
+      flashCardIds.push(info.flashCards[i].id);
+    }
+  });
+
+  return flashCardIds;
 }
 
 export interface IViolinNotesFlashCardMultiSelectProps {
-  flashCards: FlashCard[];
-  configData: IConfigData;
-  selectedFlashCardIds: Array<FlashCardId>;
+  studySessionInfo: FlashCardStudySessionInfo;
   onChange?: (newValue: Array<FlashCardId>, newConfigData: any) => void;
 }
 export interface IViolinNotesFlashCardMultiSelectState {}
 export class ViolinNotesFlashCardMultiSelect extends React.Component<IViolinNotesFlashCardMultiSelectProps, IViolinNotesFlashCardMultiSelectState> {
   public render(): JSX.Element {
+    const configData = this.props.studySessionInfo.configData as IConfigData;
+
     return (
       <TextField
         label={"Max. \"Fret\""}
-        value={this.props.configData.maxFret}
+        value={configData.maxFret}
         onChange={event => this.onMaxFretStringChange(event.target.value)}
         type="number"
         InputLabelProps={{
@@ -69,22 +80,20 @@ export class ViolinNotesFlashCardMultiSelect extends React.Component<IViolinNote
     const newConfigData: IConfigData = {
       maxFret: clampedMaxFret
     }
-    const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(newConfigData);
+    const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(
+      this.props.studySessionInfo, newConfigData
+    );
     this.props.onChange(newEnabledFlashCardIds, newConfigData);
   }
 }
 
 export function createFlashCardSet(notes?: Array<StringedInstrumentNote>): FlashCardSet {
   const renderFlashCardMultiSelect = (
-    flashCards: Array<FlashCard>,
-    selectedFlashCardIds: Array<FlashCardId>,
-    configData: any,
+    studySessionInfo: FlashCardStudySessionInfo,
     onChange: (newValue: Array<FlashCardId>, newConfigData: any) => void
   ): JSX.Element => {
     return <ViolinNotesFlashCardMultiSelect
-      flashCards={flashCards}
-      configData={configData}
-      selectedFlashCardIds={selectedFlashCardIds}
+      studySessionInfo={studySessionInfo}
       onChange={onChange}
     />;
   };
@@ -94,7 +103,7 @@ export function createFlashCardSet(notes?: Array<StringedInstrumentNote>): Flash
   };
 
   const flashCardSet = new FlashCardSet(flashCardSetId, "Violin Notes", () => createFlashCards(notes));
-  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds configDataToEnabledFlashCardIds(flashCardSet, initialConfigData);
+  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderNoteAnswerSelect;

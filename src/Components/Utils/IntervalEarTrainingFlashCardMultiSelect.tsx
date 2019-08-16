@@ -2,9 +2,10 @@ import * as React from "react";
 import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid } from "@material-ui/core";
 
 import * as Utils from "../../Utils";
-import { FlashCard } from "../../FlashCard";
+import { FlashCard, FlashCardId } from "../../FlashCard";
 import { Pitch } from "../../Pitch";
 import { PitchLetter } from "../../PitchLetter";
+import { FlashCardStudySessionInfo } from '../../FlashCardSet';
 
 // TODO: move this somewhere else
 export const rootNotes = [
@@ -87,8 +88,9 @@ export interface IConfigData {
 export function configDataToEnabledFlashCardIds(
   enableHarmonicIntervals: boolean,
   hasFlashCardPerRootNote: boolean,
+  studySessionInfo: FlashCardStudySessionInfo,
   configData: IConfigData
-): Array<number> {
+): Array<FlashCardId> {
   const directionsToUse = enableHarmonicIntervals ? directionsWithHarmonic : directions;
 
   if (hasFlashCardPerRootNote) {
@@ -104,7 +106,8 @@ export function configDataToEnabledFlashCardIds(
       )
     )
       .map((x, i) => x ? i : -1)
-      .filter(i => i >= 0);
+      .filter(i => i >= 0)
+      .map(i => studySessionInfo.flashCards[i].id);
   } else {
     return Utils.flattenArrays<boolean>(intervals
       .map(interval => directionsToUse
@@ -115,14 +118,13 @@ export function configDataToEnabledFlashCardIds(
       )
     )
       .map((x, i) => x ? i : -1)
-      .filter(i => i >= 0);
+      .filter(i => i >= 0)
+      .map(i => studySessionInfo.flashCards[i].id);
   }
 }
 
 export interface IIntervalEarTrainingFlashCardMultiSelectProps {
-  flashCards: FlashCard[];
-  configData: IConfigData;
-  selectedFlashCardIds: Array<FlashCardId>;
+  studySessionInfo: FlashCardStudySessionInfo;
   hasFlashCardPerRootNote: boolean;
   onChange?: (newValue: Array<FlashCardId>, newConfigData: any) => void;
   enableHarmonicIntervals?: boolean;
@@ -139,10 +141,12 @@ export class IntervalEarTrainingFlashCardMultiSelect extends React.Component<IIn
     };
   }
   public render(): JSX.Element {
+    const configData = this.props.studySessionInfo.configData as IConfigData;
+
     const intervalCheckboxTableRows = intervals
       .map((interval, i) => {
-        const isChecked = this.props.configData.enabledIntervals.indexOf(interval) >= 0;
-        const isEnabled = !isChecked || (this.props.configData.enabledIntervals.length > 1);
+        const isChecked = configData.enabledIntervals.indexOf(interval) >= 0;
+        const isEnabled = !isChecked || (configData.enabledIntervals.length > 1);
 
         return (
           <TableRow key={i}>
@@ -167,8 +171,8 @@ export class IntervalEarTrainingFlashCardMultiSelect extends React.Component<IIn
     
     const directionCheckboxTableRows = this.directionsSource
       .map((direction, i) => {
-        const isChecked = this.props.configData.enabledDirections.indexOf(direction) >= 0;
-        const isEnabled = !isChecked || (this.props.configData.enabledDirections.length > 1);
+        const isChecked = configData.enabledDirections.indexOf(direction) >= 0;
+        const isEnabled = !isChecked || (configData.enabledDirections.length > 1);
 
         return (
           <TableRow key={i}>
@@ -204,30 +208,32 @@ export class IntervalEarTrainingFlashCardMultiSelect extends React.Component<IIn
   }
 
   private toggleIntervalEnabled(interval: string) {
+    const configData = this.props.studySessionInfo.configData as IConfigData;
     const newEnabledIntervals = Utils.toggleArrayElement(
-      this.props.configData.enabledIntervals,
+      configData.enabledIntervals,
       interval
     );
     
     if (newEnabledIntervals.length > 0) {
       const newConfigData: IConfigData = {
-        enabledRootNotes: this.props.configData.enabledRootNotes,
+        enabledRootNotes: configData.enabledRootNotes,
         enabledIntervals: newEnabledIntervals,
-        enabledDirections: this.props.configData.enabledDirections
+        enabledDirections: configData.enabledDirections
       };
       this.onChange(newConfigData);
     }
   }
   private toggleDirectionEnabled(direction: string) {
+    const configData = this.props.studySessionInfo.configData as IConfigData;
     const newEnabledDirections = Utils.toggleArrayElement(
-      this.props.configData.enabledDirections,
+      configData.enabledDirections,
       direction
     );
     
     if (newEnabledDirections.length > 0) {
       const newConfigData: IConfigData = {
-        enabledRootNotes: this.props.configData.enabledRootNotes,
-        enabledIntervals: this.props.configData.enabledIntervals,
+        enabledRootNotes: configData.enabledRootNotes,
+        enabledIntervals: configData.enabledIntervals,
         enabledDirections: newEnabledDirections
       };
       this.onChange(newConfigData);
@@ -238,7 +244,8 @@ export class IntervalEarTrainingFlashCardMultiSelect extends React.Component<IIn
 
     const enableHarmonicIntervals = this.props.enableHarmonicIntervals === true;
     const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(
-      enableHarmonicIntervals, this.props.hasFlashCardPerRootNote, newConfigData);
+      enableHarmonicIntervals, this.props.hasFlashCardPerRootNote,
+      this.props.studySessionInfo, newConfigData);
     this.props.onChange(newEnabledFlashCardIds, newConfigData);
   }
 }

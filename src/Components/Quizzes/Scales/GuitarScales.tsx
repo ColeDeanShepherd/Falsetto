@@ -4,7 +4,7 @@ import { TableRow, TableCell, Table, TableHead, TableBody, Grid, Checkbox, Butto
 import * as Utils from "../../../Utils";
 import { Size2D } from "../../../Size2D";
 import { ScaleType, Scale } from "../../../Scale";
-import { FlashCard, FlashCardSide } from "../../../FlashCard";
+import { FlashCard, FlashCardSide, FlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { Pitch } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
@@ -28,12 +28,14 @@ export function forEachScaleType(callbackFn: (scaleType: ScaleType, i: number) =
     callbackFn(scaleType, i);
   }
 }
-export function configDataToEnabledFlashCardIds(info: FlashCardStudySessionInfo, configData: IConfigData): Array<FlashCardId> {
+export function configDataToEnabledFlashCardIds(
+  info: FlashCardStudySessionInfo, configData: IConfigData
+): Array<FlashCardId> {
   const newEnabledFlashCardIds = new Array<FlashCardId>();
 
   forEachScaleType((scaleType, i) => {
     if (Utils.arrayContains(configData.enabledScaleTypes, scaleType)) {
-      newEnabledFlashCardIds.push(i);
+      newEnabledFlashCardIds.push(info.flashCards[i].id);
     }
   });
 
@@ -41,18 +43,18 @@ export function configDataToEnabledFlashCardIds(info: FlashCardStudySessionInfo,
 }
 
 export interface IGuitarScalesFlashCardMultiSelectProps {
-  flashCards: FlashCard[];
-  configData: IConfigData;
-  selectedFlashCardIds: Array<FlashCardId>;
+  studySessionInfo: FlashCardStudySessionInfo;
   onChange?: (newValue: Array<FlashCardId>, newConfigData: any) => void;
 }
 export interface IGuitarScalesFlashCardMultiSelectState {}
 export class GuitarScalesFlashCardMultiSelect extends React.Component<IGuitarScalesFlashCardMultiSelectProps, IGuitarScalesFlashCardMultiSelectState> {
   public render(): JSX.Element {
+    const configData = this.props.studySessionInfo.configData as IConfigData;
+    
     const scaleTypeCheckboxTableRows = ScaleType.All
       .map((scaleType, i) => {
-        const isChecked = this.props.configData.enabledScaleTypes.indexOf(scaleType) >= 0;
-        const isEnabled = !isChecked || (this.props.configData.enabledScaleTypes.length > 1);
+        const isChecked = configData.enabledScaleTypes.indexOf(scaleType) >= 0;
+        const isEnabled = !isChecked || (configData.enabledScaleTypes.length > 1);
 
         return (
           <TableRow key={i}>
@@ -83,8 +85,9 @@ export class GuitarScalesFlashCardMultiSelect extends React.Component<IGuitarSca
   }
   
   private toggleScaleEnabled(scaleType: ScaleType) {
+    const configData = this.props.studySessionInfo.configData as IConfigData;
     const newEnabledScaleTypes = Utils.toggleArrayElement(
-      this.props.configData.enabledScaleTypes,
+      configData.enabledScaleTypes,
       scaleType
     );
     
@@ -98,7 +101,9 @@ export class GuitarScalesFlashCardMultiSelect extends React.Component<IGuitarSca
   private onChange(newConfigData: IConfigData) {
     if (!this.props.onChange) { return; }
 
-    const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(newConfigData);
+    const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(
+      this.props.studySessionInfo, newConfigData
+    );
     this.props.onChange(newEnabledFlashCardIds, newConfigData);
   }
 }
@@ -107,16 +112,12 @@ export function createFlashCardSet(title?: string, initialScaleTypes?: Array<Sca
   title = (title !== undefined) ? title : "Guitar Scales";
 
   const renderFlashCardMultiSelect = (
-    flashCards: Array<FlashCard>,
-    selectedFlashCardIds: Array<FlashCardId>,
-    configData: any,
+    studySessionInfo: FlashCardStudySessionInfo,
     onChange: (newValue: Array<FlashCardId>, newConfigData: any) => void
   ): JSX.Element => {
     return (
     <GuitarScalesFlashCardMultiSelect
-      flashCards={flashCards}
-      configData={configData}
-      selectedFlashCardIds={selectedFlashCardIds}
+      studySessionInfo={studySessionInfo}
       onChange={onChange}
     />
     );
@@ -132,7 +133,7 @@ export function createFlashCardSet(title?: string, initialScaleTypes?: Array<Sca
 
   const flashCardSet = new FlashCardSet(flashCardSetId, title, createFlashCards);
   flashCardSet.enableInvertFlashCards = false;
-  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds configDataToEnabledFlashCardIds(flashCardSet, initialConfigData);
+  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = renderAnswerSelect;
@@ -175,13 +176,13 @@ export function createFlashCards(): Array<FlashCard> {
 export function renderAnswerSelect(
   info: FlashCardStudySessionInfo
 ) {
-  if (!state.areFlashCardsInverted) {
-    return renderDistinctFlashCardSideAnswerSelect(state);
+  if (!info.areFlashCardsInverted) {
+    return renderDistinctFlashCardSideAnswerSelect(info);
   } else {
-    const key = state.currentFlashCard.frontSide.renderFn as string;
-    const correctAnswer = state.currentFlashCard.backSide.data[0] as Array<Pitch>;
+    const key = info.currentFlashCard.frontSide.renderFn as string;
+    const correctAnswer = info.currentFlashCard.backSide.data[0] as Array<Pitch>;
     return <GuitarNotesAnswerSelect
-      key={key} correctAnswer={correctAnswer} onAnswer={state.onAnswer}
-      lastCorrectAnswer={state.lastCorrectAnswer} incorrectAnswers={state.incorrectAnswers} />;
+      key={key} correctAnswer={correctAnswer} onAnswer={info.onAnswer}
+      lastCorrectAnswer={info.lastCorrectAnswer} incorrectAnswers={info.incorrectAnswers} />;
   }
 }

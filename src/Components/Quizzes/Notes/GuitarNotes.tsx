@@ -8,44 +8,56 @@ import {
   GuitarFretboard,
   standard6StringGuitarTuning
 } from "../../Utils/GuitarFretboard";
-import { FlashCard } from "../../../FlashCard";
-import { FlashCardSet } from "../../../FlashCardSet";
+import { FlashCard, FlashCardId } from "../../../FlashCard";
+import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { StringedInstrumentNote } from '../../../GuitarNote';
 
 const flashCardSetId = "guitarNotes";
 
 const guitarTuning = standard6StringGuitarTuning;
 
+const MAX_MAX_FRET_NUMBER = 11;
+
 interface IConfigData {
   maxFret: number
 };
 
-export function configDataToEnabledFlashCardIds(info: FlashCardStudySessionInfo, configData: IConfigData): Array<FlashCardId> {
-  const notesPerString = 12;
+function forEachNote(callbackFn: (stringIndex: number, fretNumber: number, i: number) => void) {
+  let i = 0;
 
-  const enabledFlashCardIds = new Array<number>();
   for (let stringIndex = 0; stringIndex < guitarTuning.stringCount; stringIndex++) {
-    for (let fretNumber = 0; fretNumber <= configData.maxFret; fretNumber++) {
-      enabledFlashCardIds.push((notesPerString * stringIndex) + fretNumber);
+    for (let fretNumber = 0; fretNumber <= MAX_MAX_FRET_NUMBER; fretNumber++) {
+      callbackFn(stringIndex, fretNumber, i);
+      i++;
     }
   }
+}
+export function configDataToEnabledFlashCardIds(
+  info: FlashCardStudySessionInfo, configData: IConfigData
+): Array<FlashCardId> {
+  const flashCardIds = new Array<FlashCardId>();
 
-  return enabledFlashCardIds;
+  forEachNote((_, fretNumber, i) => {
+    if (fretNumber <= configData.maxFret) {
+      flashCardIds.push(info.flashCards[i].id);
+    }
+  });
+
+  return flashCardIds;
 }
 
 export interface IGuitarNotesFlashCardMultiSelectProps {
-  flashCards: FlashCard[];
-  configData: IConfigData;
-  selectedFlashCardIds: Array<FlashCardId>;
+  studySessionInfo: FlashCardStudySessionInfo;
   onChange?: (newValue: Array<FlashCardId>, newConfigData: any) => void;
 }
 export interface IGuitarNotesFlashCardMultiSelectState {}
 export class GuitarNotesFlashCardMultiSelect extends React.Component<IGuitarNotesFlashCardMultiSelectProps, IGuitarNotesFlashCardMultiSelectState> {
   public render(): JSX.Element {
+    const configData = this.props.studySessionInfo.configData as IConfigData;
     return (
       <TextField
         label="Max. Fret"
-        value={this.props.configData.maxFret}
+        value={configData.maxFret}
         onChange={event => this.onMaxFretStringChange(event.target.value)}
         type="number"
         InputLabelProps={{
@@ -62,27 +74,25 @@ export class GuitarNotesFlashCardMultiSelect extends React.Component<IGuitarNote
     const maxFret = parseInt(newValue, 10);
     if (isNaN(maxFret)) { return; }
 
-    const clampedMaxFret = Utils.clamp(maxFret, 0, 11);
+    const clampedMaxFret = Utils.clamp(maxFret, 0, MAX_MAX_FRET_NUMBER);
 
     const newConfigData: IConfigData = {
       maxFret: clampedMaxFret
     }
-    const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(newConfigData);
+    const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(
+      this.props.studySessionInfo, newConfigData
+    );
     this.props.onChange(newEnabledFlashCardIds, newConfigData);
   }
 }
 
 export function createFlashCardSet(guitarNotes?: Array<StringedInstrumentNote>): FlashCardSet {
   const renderFlashCardMultiSelect = (
-    flashCards: Array<FlashCard>,
-    selectedFlashCardIds: Array<FlashCardId>,
-    configData: any,
+    studySessionInfo: FlashCardStudySessionInfo,
     onChange: (newValue: Array<FlashCardId>, newConfigData: any) => void
   ): JSX.Element => {
     return <GuitarNotesFlashCardMultiSelect
-      flashCards={flashCards}
-      configData={configData}
-      selectedFlashCardIds={selectedFlashCardIds}
+      studySessionInfo={studySessionInfo}
       onChange={onChange}
     />;
   };
@@ -92,7 +102,7 @@ export function createFlashCardSet(guitarNotes?: Array<StringedInstrumentNote>):
   };
 
   const flashCardSet = new FlashCardSet(flashCardSetId, "Guitar Notes", () => createFlashCards(guitarNotes));
-  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds configDataToEnabledFlashCardIds(flashCardSet, initialConfigData);
+  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderNoteAnswerSelect;

@@ -3,8 +3,8 @@ import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid } from
 
 import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
-import { FlashCard } from "../../../FlashCard";
-import { FlashCardSet } from "../../../FlashCardSet";
+import { FlashCard, FlashCardId } from "../../../FlashCard";
+import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { Pitch, pitchRange } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 import { SheetMusicChord } from "./SheetMusicChords";
@@ -47,36 +47,42 @@ interface IConfigData {
   enabledRootPitches: Pitch[];
 }
 
-export function configDataToEnabledFlashCardIds(info: FlashCardStudySessionInfo, configData: IConfigData): Array<FlashCardId> {
-  const newEnabledFlashCardIds = new Array<FlashCardId>();
-
+export function forEachChord(
+  callbackFn: (rootPitch: Pitch, chordType: ChordType, i: number) => void
+) {
   let i = 0;
 
   for (const rootPitch of rootPitches) {
     for (const chordType of chordTypes) {
-      if (
-        Utils.arrayContains(configData.enabledRootPitches, rootPitch) &&
-        Utils.arrayContains(configData.enabledChordTypes, chordType.name)
-      ) {
-        const pitches = new Chord(chordType, rootPitch).getPitches();
-        
-        // VexFlow doesn't allow triple sharps/flats
-        if (pitches.every(pitch => Math.abs(pitch.signedAccidental) < 3)) {
-          newEnabledFlashCardIds.push(i);
-        }
-      }
-
+      callbackFn(rootPitch, chordType, i);
       i++;
     }
   }
+}
+export function configDataToEnabledFlashCardIds(
+  info: FlashCardStudySessionInfo, configData: IConfigData
+): Array<FlashCardId> {
+  const newEnabledFlashCardIds = new Array<FlashCardId>();
+
+  forEachChord((rootPitch, chordType, i) => {
+    if (
+      Utils.arrayContains(configData.enabledRootPitches, rootPitch) &&
+      Utils.arrayContains(configData.enabledChordTypes, chordType.name)
+    ) {
+      const pitches = new Chord(chordType, rootPitch).getPitches();
+      
+      // VexFlow doesn't allow triple sharps/flats
+      if (pitches.every(pitch => Math.abs(pitch.signedAccidental) < 3)) {
+        newEnabledFlashCardIds.push(info.flashCards[i].id);
+      }
+    }
+  });
 
   return newEnabledFlashCardIds;
 }
 
 export interface IChordNotesFlashCardMultiSelectProps {
-  flashCards: FlashCard[];
-  configData: IConfigData;
-  selectedFlashCardIds: Array<FlashCardId>;
+  studySessionInfo: FlashCardStudySessionInfo;
   onChange?: (newValue: Array<FlashCardId>, newConfigData: any) => void;
 }
 export interface IChordNotesFlashCardMultiSelectState {}
@@ -90,10 +96,11 @@ export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesF
     };
   }
   public render(): JSX.Element {
+    const configData = this.props.studySessionInfo.configData as IConfigData;
     const rootPitchCheckboxTableRows = rootPitches
       .map((rootPitch, i) => {
-        const isChecked = this.props.configData.enabledRootPitches.indexOf(rootPitch) >= 0;
-        const isEnabled = !isChecked || (this.props.configData.enabledRootPitches.length > 1);
+        const isChecked = configData.enabledRootPitches.indexOf(rootPitch) >= 0;
+        const isEnabled = !isChecked || (configData.enabledRootPitches.length > 1);
 
         return (
           <TableRow key={i}>
@@ -118,8 +125,8 @@ export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesF
 
     const chordTypeCheckboxTableRows = chordTypes
       .map((chordType, i) => {
-        const isChecked = this.props.configData.enabledChordTypes.indexOf(chordType.name) >= 0;
-        const isEnabled = !isChecked || (this.props.configData.enabledChordTypes.length > 1);
+        const isChecked = configData.enabledChordTypes.indexOf(chordType.name) >= 0;
+        const isEnabled = !isChecked || (configData.enabledChordTypes.length > 1);
 
         return (
           <TableRow key={i}>
@@ -151,28 +158,30 @@ export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesF
   }
   
   private toggleRootPitchEnabled(rootPitch: Pitch) {
+    const configData = this.props.studySessionInfo.configData as IConfigData;
     const newEnabledRootPitches = Utils.toggleArrayElement(
-      this.props.configData.enabledRootPitches,
+      configData.enabledRootPitches,
       rootPitch
     );
     
     if (newEnabledRootPitches.length > 0) {
       const newConfigData: IConfigData = {
         enabledRootPitches: newEnabledRootPitches,
-        enabledChordTypes: this.props.configData.enabledChordTypes
+        enabledChordTypes: configData.enabledChordTypes
       };
       this.onChange(newConfigData);
     }
   }
   private toggleChordEnabled(chordType: string) {
+    const configData = this.props.studySessionInfo.configData as IConfigData;
     const newEnabledChords = Utils.toggleArrayElement(
-      this.props.configData.enabledChordTypes,
+      configData.enabledChordTypes,
       chordType
     );
     
     if (newEnabledChords.length > 0) {
       const newConfigData: IConfigData = {
-        enabledRootPitches: this.props.configData.enabledRootPitches,
+        enabledRootPitches: configData.enabledRootPitches,
         enabledChordTypes: newEnabledChords
       };
       this.onChange(newConfigData);
@@ -181,7 +190,8 @@ export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesF
   private onChange(newConfigData: IConfigData) {
     if (!this.props.onChange) { return; }
 
-    const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(newConfigData);
+    const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(
+      this.props.studySessionInfo, newConfigData);
     this.props.onChange(newEnabledFlashCardIds, newConfigData);
   }
 }
@@ -212,16 +222,12 @@ export function createFlashCards(): Array<FlashCard> {
 }
 export function createFlashCardSet(): FlashCardSet {
   const renderFlashCardMultiSelect = (
-    flashCards: Array<FlashCard>,
-    selectedFlashCardIds: Array<FlashCardId>,
-    configData: any,
+    studySessionInfo: FlashCardStudySessionInfo,
     onChange: (newValue: Array<FlashCardId>, newConfigData: any) => void
   ): JSX.Element => {
     return (
     <ChordNotesFlashCardMultiSelect
-      flashCards={flashCards}
-      configData={configData}
-      selectedFlashCardIds={selectedFlashCardIds}
+      studySessionInfo={studySessionInfo}
       onChange={onChange}
     />
     );
@@ -236,7 +242,7 @@ export function createFlashCardSet(): FlashCardSet {
     "Sheet Music Chords",
     createFlashCards
   );
-  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds configDataToEnabledFlashCardIds(flashCardSet, initialConfigData);
+  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.enableInvertFlashCards = false;

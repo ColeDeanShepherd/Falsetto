@@ -35,17 +35,17 @@ export class FlashCardSide {
 
 export function invertFlashCards(
   flashCards: Array<FlashCard>,
-  enabledFlashCardIds: Array<number> | undefined
+  enabledFlashCardIds: Array<FlashCardId> | undefined
 ): ({
   invertedFlashCards: Array<FlashCard>,
-  invertedEnabledFlashCardIndices: Array<number> | undefined
+  invertedEnabledFlashCardIds: Array<FlashCardId> | undefined
 }) {
   const oldFrontSides = flashCards.map(flashCard => flashCard.frontSide);
   const distinctOldBackSides = Utils.uniq(flashCards.map(flashCard => flashCard.backSide));
 
   const result = {
     invertedFlashCards: new Array<FlashCard>(),
-    invertedEnabledFlashCardIndices: enabledFlashCardIds ? new Array<number>() : undefined
+    invertedEnabledFlashCardIds: enabledFlashCardIds ? new Array<FlashCardId>() : undefined
   };
 
   for (const oldBackSide of distinctOldBackSides) {
@@ -55,7 +55,7 @@ export function invertFlashCards(
       .map((_, i) => (flashCards[i].backSide === oldBackSide) ? i : -1)
       .filter(i => i >= 0);
     const matchingOldIds = flashCards
-      .filter((fc, i) => fc.id);
+      .filter(fc => fc.id);
     const matchingOldFrontSides = matchingOldFrontSideIndices
       .map(i => oldFrontSides[i]);
     
@@ -93,10 +93,10 @@ export function invertFlashCards(
     );
 
     // add new enabled flash card indices
-    if (enabledFlashCardIds && result.invertedEnabledFlashCardIndices) {
-      if (matchingOldFrontSideIndices.some(i => Utils.arrayContains(enabledFlashCardIds, i))) {
+    if (enabledFlashCardIds && result.invertedEnabledFlashCardIds) {
+      if (matchingOldFrontSideIndices.some(i => Utils.arrayContains(enabledFlashCardIds, flashCards[i].id))) {
         const newInvertedFlashCardIndex = result.invertedFlashCards.length - 1;
-        result.invertedEnabledFlashCardIndices.push(newInvertedFlashCardIndex);
+        result.invertedEnabledFlashCardIds.push(flashCards[newInvertedFlashCardIndex].id);
       }
     }
   }

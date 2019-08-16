@@ -3,7 +3,7 @@ import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid } from
 
 import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
-import { FlashCard } from "../../../FlashCard";
+import { FlashCard, FlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { Pitch } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
@@ -52,35 +52,48 @@ interface IConfigData {
   enabledDirections: string[];
 }
 
-export function configDataToEnabledFlashCardIds(info: FlashCardStudySessionInfo, configData: IConfigData): Array<FlashCardId> {
-  return Utils.flattenArrays<boolean>(rootNotes
-    .map(rootNote => intervals
-      .map(interval => directions
-        .map(direction =>
-          Utils.arrayContains(configData.enabledRootNotes, rootNote) &&
-          Utils.arrayContains(configData.enabledIntervals, interval) &&
-          Utils.arrayContains(configData.enabledDirections, direction)
-        )
-      )
-    )
-  )
-    .map((x, i) => x ? i : -1)
-    .filter(i => i >= 0);
+export function forEachInterval(callbackFn: (rootNote: Pitch, interval: string, direction: string, i: number) => void) {
+  let i = 0;
+
+  for (const rootNote of rootNotes) {
+    for (const interval of intervals) {
+      for (const direction of directions) {
+        callbackFn(rootNote, interval, direction, i);
+        i++;
+      }
+    }
+  }
+}
+export function configDataToEnabledFlashCardIds(
+  info: FlashCardStudySessionInfo, configData: IConfigData
+): Array<FlashCardId> {
+  const flashCardIds = new Array<FlashCardId>();
+
+  forEachInterval((rootNote, interval, direction, i) => {
+    if (
+      Utils.arrayContains(configData.enabledRootNotes, rootNote) &&
+      Utils.arrayContains(configData.enabledIntervals, interval) &&
+      Utils.arrayContains(configData.enabledDirections, direction)
+    ) {
+      flashCardIds.push(info.flashCards[i].id);
+    }
+  });
+
+  return flashCardIds;
 }
 
 export interface IIntervalNotesFlashCardMultiSelectProps {
-  flashCards: FlashCard[];
-  configData: IConfigData;
-  selectedFlashCardIds: Array<FlashCardId>;
+  studySessionInfo: FlashCardStudySessionInfo;
   onChange?: (newValue: Array<FlashCardId>, newConfigData: any) => void;
 }
 export interface IIntervalNotesFlashCardMultiSelectState {}
 export class IntervalNotesFlashCardMultiSelect extends React.Component<IIntervalNotesFlashCardMultiSelectProps, IIntervalNotesFlashCardMultiSelectState> {
   public render(): JSX.Element {
+    const configData = this.props.studySessionInfo.configData as IConfigData;
     const rootNoteCheckboxTableRows = rootNotes
       .map((rootNote, i) => {
-        const isChecked = this.props.configData.enabledRootNotes.indexOf(rootNote) >= 0;
-        const isEnabled = !isChecked || (this.props.configData.enabledRootNotes.length > 1);
+        const isChecked = configData.enabledRootNotes.indexOf(rootNote) >= 0;
+        const isEnabled = !isChecked || (configData.enabledRootNotes.length > 1);
 
         return (
           <TableRow key={i}>
@@ -105,8 +118,8 @@ export class IntervalNotesFlashCardMultiSelect extends React.Component<IInterval
     
     const intervalCheckboxTableRows = intervals
       .map((interval, i) => {
-        const isChecked = this.props.configData.enabledIntervals.indexOf(interval) >= 0;
-        const isEnabled = !isChecked || (this.props.configData.enabledIntervals.length > 1);
+        const isChecked = configData.enabledIntervals.indexOf(interval) >= 0;
+        const isEnabled = !isChecked || (configData.enabledIntervals.length > 1);
 
         return (
           <TableRow key={i}>
@@ -131,8 +144,8 @@ export class IntervalNotesFlashCardMultiSelect extends React.Component<IInterval
     
     const directionCheckboxTableRows = directions
       .map((direction, i) => {
-        const isChecked = this.props.configData.enabledDirections.indexOf(direction) >= 0;
-        const isEnabled = !isChecked || (this.props.configData.enabledDirections.length > 1);
+        const isChecked = configData.enabledDirections.indexOf(direction) >= 0;
+        const isEnabled = !isChecked || (configData.enabledDirections.length > 1);
 
         return (
           <TableRow key={i}>
@@ -165,45 +178,48 @@ export class IntervalNotesFlashCardMultiSelect extends React.Component<IInterval
   }
 
   private toggleRootNoteEnabled(rootNote: Pitch) {
+    const configData = this.props.studySessionInfo.configData as IConfigData;
     const newEnabledRootNotes = Utils.toggleArrayElement(
-      this.props.configData.enabledRootNotes,
+      configData.enabledRootNotes,
       rootNote
     );
     
     if (newEnabledRootNotes.length > 0) {
       const newConfigData: IConfigData = {
         enabledRootNotes: newEnabledRootNotes,
-        enabledIntervals: this.props.configData.enabledIntervals,
-        enabledDirections: this.props.configData.enabledDirections
+        enabledIntervals: configData.enabledIntervals,
+        enabledDirections: configData.enabledDirections
       };
       this.onChange(newConfigData);
     }
   }
   private toggleIntervalEnabled(interval: string) {
+    const configData = this.props.studySessionInfo.configData as IConfigData;
     const newEnabledIntervals = Utils.toggleArrayElement(
-      this.props.configData.enabledIntervals,
+      configData.enabledIntervals,
       interval
     );
     
     if (newEnabledIntervals.length > 0) {
       const newConfigData: IConfigData = {
-        enabledRootNotes: this.props.configData.enabledRootNotes,
+        enabledRootNotes: configData.enabledRootNotes,
         enabledIntervals: newEnabledIntervals,
-        enabledDirections: this.props.configData.enabledDirections
+        enabledDirections: configData.enabledDirections
       };
       this.onChange(newConfigData);
     }
   }
   private toggleSignsEnabled(direction: string) {
+    const configData = this.props.studySessionInfo.configData as IConfigData;
     const newEnabledDirections = Utils.toggleArrayElement(
-      this.props.configData.enabledDirections,
+      configData.enabledDirections,
       direction
     );
     
     if (newEnabledDirections.length > 0) {
       const newConfigData: IConfigData = {
-        enabledRootNotes: this.props.configData.enabledRootNotes,
-        enabledIntervals: this.props.configData.enabledIntervals,
+        enabledRootNotes: configData.enabledRootNotes,
+        enabledIntervals: configData.enabledIntervals,
         enabledDirections: newEnabledDirections
       };
       this.onChange(newConfigData);
@@ -212,7 +228,8 @@ export class IntervalNotesFlashCardMultiSelect extends React.Component<IInterval
   private onChange(newConfigData: IConfigData) {
     if (!this.props.onChange) { return; }
 
-    const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(newConfigData);
+    const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(
+      this.props.studySessionInfo, newConfigData);
     this.props.onChange(newEnabledFlashCardIds, newConfigData);
   }
 }
@@ -229,72 +246,68 @@ export function renderNoteAnswerSelect(
   return (
     <div>
       {FlashCardUtils.renderStringAnswerSelectInternal(
-        `${state.currentFlashCardId}.0`, doubleSharpNotes, state
+        `${info.currentFlashCardId}.0`, doubleSharpNotes, info
       )}
       {FlashCardUtils.renderStringAnswerSelectInternal(
-        `${state.currentFlashCardId}.1`, sharpNotes, state
+        `${info.currentFlashCardId}.1`, sharpNotes, info
       )}
       {FlashCardUtils.renderStringAnswerSelectInternal(
-        `${state.currentFlashCardId}.2`, naturalNotes, state
+        `${info.currentFlashCardId}.2`, naturalNotes, info
       )}
       {FlashCardUtils.renderStringAnswerSelectInternal(
-        `${state.currentFlashCardId}.3`, flatNotes, state
+        `${info.currentFlashCardId}.3`, flatNotes, info
       )}
       {FlashCardUtils.renderStringAnswerSelectInternal(
-        `${state.currentFlashCardId}.4`, doubleFlatNotes, state
+        `${info.currentFlashCardId}.4`, doubleFlatNotes, info
       )}
     </div>
   );
 }
 
 export function createFlashCards(): Array<FlashCard> {
-  return Utils.flattenArrays<FlashCard>(rootNotes
-    .map(rootPitch => intervals
-      .map(interval => directions
-        .map(direction => {
-          const intervalQuality = interval[0];
-          const intervalQualityNum = Utils.intervalQualityToNumber(intervalQuality);
+  const flashCards = new Array<FlashCard>();
 
-          const genericInterval = interval[1];
-          const genericIntervalNum = parseInt(genericInterval, 10);
+  forEachInterval((rootPitch, interval, direction, i) => {
+    const intervalQuality = interval[0];
+    const intervalQualityNum = Utils.intervalQualityToNumber(intervalQuality);
 
-          const verticalDirection = (direction === "↑") ? VerticalDirection.Up : VerticalDirection.Down;
-          const newPitch = Pitch.addInterval(
-            rootPitch,
-            verticalDirection,
-            new Interval(genericIntervalNum, intervalQualityNum)
-          );
-          
-          const deserializedId = {
-            set: flashCardSetId,
-            rootPitch: rootPitch.toString(true, false),
-            interval: interval.toString(),
-            direction: VerticalDirection[verticalDirection]
-          };
-          const id = JSON.stringify(deserializedId);
+    const genericInterval = interval[1];
+    const genericIntervalNum = parseInt(genericInterval, 10);
 
-          return FlashCard.fromRenderFns(
-            id,
-            rootPitch.toString(false) + " " + direction + " " + interval,
-            newPitch.toString(false)
-          );
-        })
-      )
-    )
-  );
+    const verticalDirection = (direction === "↑") ? VerticalDirection.Up : VerticalDirection.Down;
+    const newPitch = Pitch.addInterval(
+      rootPitch,
+      verticalDirection,
+      new Interval(genericIntervalNum, intervalQualityNum)
+    );
+    
+    const deserializedId = {
+      set: flashCardSetId,
+      rootPitch: rootPitch.toString(true, false),
+      interval: interval.toString(),
+      direction: VerticalDirection[verticalDirection]
+    };
+    const id = JSON.stringify(deserializedId);
+
+    const flashCard = FlashCard.fromRenderFns(
+      id,
+      rootPitch.toString(false) + " " + direction + " " + interval,
+      newPitch.toString(false)
+    );
+
+    flashCards.push(flashCard);
+  });
+
+  return flashCards;
 }
 export function createFlashCardSet(): FlashCardSet {
   const renderFlashCardMultiSelect = (
-    flashCards: Array<FlashCard>,
-    selectedFlashCardIds: Array<FlashCardId>,
-    configData: any,
+    studySessionInfo: FlashCardStudySessionInfo,
     onChange: (newValue: Array<FlashCardId>, newConfigData: any) => void
   ): JSX.Element => {
     return (
     <IntervalNotesFlashCardMultiSelect
-      flashCards={flashCards}
-      configData={configData}
-      selectedFlashCardIds={selectedFlashCardIds}
+      studySessionInfo={studySessionInfo}
       onChange={onChange}
     />
     );
@@ -310,7 +323,7 @@ export function createFlashCardSet(): FlashCardSet {
     "Interval 2nd Notes",
     createFlashCards
   );
-  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds configDataToEnabledFlashCardIds(flashCardSet, initialConfigData);
+  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.enableInvertFlashCards = false;

@@ -24,9 +24,8 @@ export function createFlashCardSet(): FlashCardSet {
       new FlashCardLevel(
         "Natural Notes",
         flashCards
-          .map<[FlashCard, number]>((fc, i) => [fc, i])
-          .filter(t => (t[0].backSide.data as string).length === 1)
-          .map(t => t[1])
+          .filter(fc => (fc.backSide.data as string).length === 1)
+          .map(fc => fc.id)
       )
     ]
   );
@@ -68,8 +67,8 @@ export function renderAnswerSelect(
 ) {
   return (
     <div>
-      {!state.areFlashCardsInverted ? FlashCardUtils.renderNoteAnswerSelect(state) : null}
-      {state.areFlashCardsInverted ? FlashCardUtils.renderDistinctFlashCardSideAnswerSelect(state) : null}
+      {!info.areFlashCardsInverted ? FlashCardUtils.renderNoteAnswerSelect(info) : null}
+      {info.areFlashCardsInverted ? FlashCardUtils.renderDistinctFlashCardSideAnswerSelect(info) : null}
     </div>
   );
 }

@@ -4,7 +4,7 @@ import * as Utils from "../../../Utils";
 import { Vector2D } from '../../../Vector2D';
 import { Size2D } from "../../../Size2D";
 import { Rect2D } from '../../../Rect2D';
-import { FlashCard, FlashCardSide } from "../../../FlashCard";
+import { FlashCard, FlashCardSide, FlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { Pitch } from "../../../Pitch";
 import { playPitchesSequentially } from "../../../Piano";
@@ -59,13 +59,14 @@ export interface IConfigData {
 }
 
 export function configDataToEnabledFlashCardIds(
+  studySessionInfo: FlashCardStudySessionInfo,
   configData: IConfigData
-): Array<number> {
+): Array<FlashCardId> {
   const enabledFlashCardIds = new Array<string>();
   forEachInterval(rootNotes,
     (interval, direction, p1, p2, isHarmonicInterval, i) => {
     if (Utils.arrayContains(configData.enabledIntervals, interval)) {
-      enabledFlashCardIds.push(i);
+      enabledFlashCardIds.push(studySessionInfo.flashCards[i].id);
     }
   }, includeHarmonicIntervals, minPitch, maxPitch);
 
@@ -123,18 +124,17 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
 }
 
 export interface IFlashCardMultiSelectProps {
-  flashCards: FlashCard[];
-  configData: IConfigData;
-  selectedFlashCardIds: Array<FlashCardId>;
+  studySessionInfo: FlashCardStudySessionInfo;
   onChange?: (newValue: Array<FlashCardId>, newConfigData: any) => void;
 }
 export interface IFlashCardMultiSelectState {}
 export class FlashCardMultiSelect extends React.Component<IFlashCardMultiSelectProps, IFlashCardMultiSelectState> {
   public render(): JSX.Element {
+    const configData = this.props.studySessionInfo.configData as IConfigData;
     const intervalCheckboxTableRows = intervals
       .map((interval, i) => {
-        const isChecked = this.props.configData.enabledIntervals.indexOf(interval) >= 0;
-        const isEnabled = !isChecked || (this.props.configData.enabledIntervals.length > 1);
+        const isChecked = configData.enabledIntervals.indexOf(interval) >= 0;
+        const isEnabled = !isChecked || (configData.enabledIntervals.length > 1);
 
         return (
           <TableRow key={i}>
@@ -165,8 +165,9 @@ export class FlashCardMultiSelect extends React.Component<IFlashCardMultiSelectP
   }
 
   private toggleIntervalEnabled(interval: string) {
+    const configData = this.props.studySessionInfo.configData as IConfigData;
     const newEnabledIntervals = Utils.toggleArrayElement(
-      this.props.configData.enabledIntervals,
+      configData.enabledIntervals,
       interval
     );
     
@@ -180,7 +181,9 @@ export class FlashCardMultiSelect extends React.Component<IFlashCardMultiSelectP
   private onChange(newConfigData: IConfigData) {
     if (!this.props.onChange) { return; }
 
-    const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(newConfigData);
+    const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(
+      this.props.studySessionInfo, newConfigData
+    );
     this.props.onChange(newEnabledFlashCardIds, newConfigData);
   }
 }
@@ -188,14 +191,14 @@ export class FlashCardMultiSelect extends React.Component<IFlashCardMultiSelectP
 export function renderAnswerSelect(
   info: FlashCardStudySessionInfo
 ) {
-  const key = state.flashCards.indexOf(state.currentFlashCard);
-  const correctAnswer = [state.currentFlashCard.backSide.data as Pitch];
-  const size = Utils.shrinkRectToFit(new Size2D(state.width, state.height), new Size2D(400, 100));
+  const key = info.flashCards.indexOf(info.currentFlashCard);
+  const correctAnswer = [info.currentFlashCard.backSide.data as Pitch];
+  const size = Utils.shrinkRectToFit(new Size2D(info.width, info.height), new Size2D(400, 100));
   
   return <PianoKeysAnswerSelect
     key={key} width={size.width} height={size.height} correctAnswer={correctAnswer}
-    onAnswer={state.onAnswer} maxNumPitches={1} lastCorrectAnswer={state.lastCorrectAnswer}
-    incorrectAnswers={state.incorrectAnswers} />;
+    onAnswer={info.onAnswer} maxNumPitches={1} lastCorrectAnswer={info.lastCorrectAnswer}
+    incorrectAnswers={info.incorrectAnswers} />;
 }
 
 export function createFlashCards(): Array<FlashCard> {
@@ -220,16 +223,12 @@ export function createFlashCards(): Array<FlashCard> {
 }
 export function createFlashCardSet(): FlashCardSet {
   const renderFlashCardMultiSelect = (
-    flashCards: Array<FlashCard>,
-    selectedFlashCardIds: Array<FlashCardId>,
-    configData: any,
+    studySessionInfo: FlashCardStudySessionInfo,
     onChange: (newValue: Array<FlashCardId>, newConfigData: any) => void
   ): JSX.Element => {
     return (
     <FlashCardMultiSelect
-      flashCards={flashCards}
-      configData={configData}
-      selectedFlashCardIds={selectedFlashCardIds}
+      studySessionInfo={studySessionInfo}
       onChange={onChange}
     />
     );
@@ -243,22 +242,22 @@ export function createFlashCardSet(): FlashCardSet {
     "Interval 2nd Note Ear Training Piano",
     createFlashCards
   );
-  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds configDataToEnabledFlashCardIds(flashCardSet, initialConfigData);
+  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.enableInvertFlashCards = false;
   flashCardSet.renderAnswerSelect = renderAnswerSelect;
-  flashCardSet.customNextFlashCardIdFilter = (studyAlgorithm, flashCards, enabledFlashCardIds) => {
-    if (studyAlgorithm.currentFlashCardId === undefined) {
-      return enabledFlashCardIds;
+  flashCardSet.customNextFlashCardIdFilter = studySessionInfo => {
+    if (studySessionInfo.studyAlgorithm.currentFlashCardId === undefined) {
+      return studySessionInfo.enabledFlashCardIds;
     }
 
-    const flashCard = flashCards[studyAlgorithm.currentFlashCardId];
+    const flashCard = studySessionInfo.flashCards[studySessionInfo.studyAlgorithm.currentFlashCardId];
     const secondPitch = flashCard.backSide.data as Pitch;
     
-    return enabledFlashCardIds
+    return studySessionInfo.enabledFlashCardIds
       .filter(flashCardIndex => {
-        const otherFlashCard = flashCards[flashCardIndex];
+        const otherFlashCard = studySessionInfo.flashCards[flashCardIndex];
         const firstPitch = otherFlashCard.frontSide.data as Pitch;
 
         return firstPitch.midiNumber === secondPitch.midiNumber;

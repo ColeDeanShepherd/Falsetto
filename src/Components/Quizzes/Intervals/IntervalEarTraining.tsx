@@ -2,8 +2,8 @@ import * as React from "react";
 
 import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
-import { FlashCard } from "../../../FlashCard";
-import { FlashCardSet } from "../../../FlashCardSet";
+import { FlashCard, FlashCardId } from "../../../FlashCard";
+import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { Pitch } from "../../../Pitch";
 import { playPitches, playPitchesSequentially } from "../../../Piano";
 import {
@@ -16,7 +16,6 @@ import {
   forEachInterval
 } from "../../Utils/IntervalEarTrainingFlashCardMultiSelect";
 import { Button } from "@material-ui/core";
-import { VerticalDirection } from '../../../VerticalDirection';
 
 const flashCardSetId = "intervalEarTraining";
 
@@ -110,16 +109,12 @@ export function createFlashCards(): Array<FlashCard> {
 }
 export function createFlashCardSet(): FlashCardSet {
   const renderFlashCardMultiSelect = (
-    flashCards: Array<FlashCard>,
-    selectedFlashCardIds: Array<FlashCardId>,
-    configData: any,
+    studySessionInfo: FlashCardStudySessionInfo,
     onChange: (newValue: Array<FlashCardId>, newConfigData: any) => void
   ): JSX.Element => {
     return (
     <IntervalEarTrainingFlashCardMultiSelect
-      flashCards={flashCards}
-      configData={configData}
-      selectedFlashCardIds={selectedFlashCardIds}
+      studySessionInfo={studySessionInfo}
       hasFlashCardPerRootNote={false}
       onChange={onChange}
       enableHarmonicIntervals={true}
@@ -137,8 +132,9 @@ export function createFlashCardSet(): FlashCardSet {
     "Interval Ear Training",
     createFlashCards
   );
-  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds configDataToEnabledFlashCardIds(
-    true, false, initialConfigData);
+  flashCardSet.configDataToEnabledFlashCardIds = (
+    studySessionInfo: FlashCardStudySessionInfo, configData: any
+  ) => configDataToEnabledFlashCardIds(true, false, studySessionInfo, configData);
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.enableInvertFlashCards = false;

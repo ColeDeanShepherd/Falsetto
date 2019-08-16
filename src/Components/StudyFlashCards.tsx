@@ -16,6 +16,7 @@ import { MAX_MAIN_CARD_WIDTH } from './Style';
 import { FlashCardSetStats } from '../FlashCardSetStats';
 import { IDatabase, FlashCardAnswer } from '../Database';
 import { IUserManager } from '../UserManager';
+import App from './App';
 
 export function createStudyFlashCardSetComponent(
   flashCardSet: FlashCardSet, isEmbedded: boolean, hideMoreInfoUri: boolean,
@@ -29,17 +30,13 @@ export function createStudyFlashCardSetComponent(
   return (
     <StudyFlashCards
       key={flashCardSet.route}
+      database={App.instance.database}
+      userManager={App.instance.userManager}
+      flashCardSet={flashCardSet}
       title={title ? title : flashCardSet.name}
       flashCards={flashCards}
-      containerHeight={flashCardSet.containerHeight}
-      initialSelectedFlashCardIds={flashCardSet.initialSelectedFlashCardIds}
-      initialConfigData={flashCardSet.initialConfigData}
-      renderFlashCardMultiSelect={flashCardSet.renderFlashCardMultiSelect}
-      renderAnswerSelect={flashCardSet.renderAnswerSelect}
-      moreInfoUri={!hideMoreInfoUri ? flashCardSet.moreInfoUri : ""}
+      hideMoreInfoUri={hideMoreInfoUri}
       enableSettings={enableSettings}
-      enableInvertFlashCards={flashCardSet.enableInvertFlashCards}
-      customNextFlashCardIdFilter={flashCardSet.customNextFlashCardIdFilter}
       flashCardLevels={flashCardLevels}
       isEmbedded={isEmbedded}
       style={style}
@@ -55,17 +52,13 @@ export function getPercentToNextLevel(currentFlashCardLevel: FlashCardLevel, fla
 }
 
 export interface IStudyFlashCardsProps {
+  database: IDatabase;
+  userManager: IUserManager;
   title: string;
+  flashCardSet: FlashCardSet;
   flashCards: FlashCard[];
-  containerHeight: string;
-  initialSelectedFlashCardIds?: FlashCardId[];
-  initialConfigData: any;
-  renderFlashCardMultiSelect?: RenderFlashCardMultiSelectFunc;
-  renderAnswerSelect?: RenderAnswerSelectFunc;
+  hideMoreInfoUri: boolean;
   enableSettings?: boolean;
-  enableInvertFlashCards?: boolean;
-  moreInfoUri?: string;
-  customNextFlashCardIdFilter?: CustomNextFlashCardIdFilter;
   flashCardLevels: Array<FlashCardLevel>;
   isEmbedded?: boolean;
   style?: any;
@@ -92,11 +85,11 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
     this.flashCardContainerRef = React.createRef();
     this.flashCardContainerResizeObserver = null;
 
-    if (this.props.initialConfigData && !this.props.initialSelectedFlashCardIds) {
+    if (this.props.flashCardSet.initialConfigData && !this.props.flashCardSet.configDataToEnabledFlashCardIds) {
       Utils.assert(false);
     }
 
-    this.studyAlgorithm.customNextFlashCardIdFilter = this.props.customNextFlashCardIdFilter;
+    this.studyAlgorithm.customNextFlashCardIdFilter = this.props.flashCardSet.customNextFlashCardIdFilter;
 
     this.state = Object.assign(
       {
@@ -106,11 +99,11 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
         isShowingBackSide: false,
         invertFlashCards: false,
         invertedFlashCards: [],
-        configData: props.initialConfigData
+        configData: props.flashCardSet.initialConfigData
       },
       this.getInitialStateForFlashCards(
         this.props.flashCards,
-        this.props.initialSelectedFlashCardIds
+        this.getInitialEnabledFlashCardIds()
       )
     );
   }
@@ -126,7 +119,9 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
         return <p key={i}>{renderedFlashCard} {qs.numCorrectGuesses} / {qs.numIncorrectGuesses}</p>;
       }, this);
     
-    const currentFlashCard = flashCards.find(fc => fc.id === this.state.currentFlashCardId);
+    const currentFlashCard = Utils.unwrapValueOrUndefined(
+      flashCards.find(fc => fc.id === this.state.currentFlashCardId)
+    );
 
     let renderedFlashCardSide: JSX.Element | null;
     let containerWidth = 0;
@@ -148,13 +143,11 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
       ? (this.studyAlgorithm.flashCardSetStats.numCorrectGuesses / numGuesses)
       : 1;
     
-    const boundOnAnswer = this.onAnswer.bind(this);
-    
     const flashCardContainerStyle: any = {
       fontSize: "1.5em",
       textAlign: "center",
       padding: "0.5em 0",
-      height: this.props.containerHeight,
+      height: this.props.flashCardSet.containerHeight,
       display: "flex",
       justifyContent: "center",
       alignItems: "center"
@@ -184,6 +177,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
       : undefined;
 
     const currentFlashCardKey = `${this.state.sessionFlashCardNumber}.${this.state.currentFlashCardId}`;
+    const moreInfoUri = !this.props.hideMoreInfoUri ? this.props.flashCardSet.moreInfoUri : "";
 
     return (
       <Card style={cardStyle}>
@@ -207,15 +201,15 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
 
           {this.state.showConfiguration ? (
             <Paper style={{padding: "1em", margin: "1em 0"}}>
-              {(this.props.enableInvertFlashCards && false) ? <div><Checkbox checked={this.state.invertFlashCards} onChange={event => this.toggleInvertFlashCards()} /> Invert Flash Cards</div> : null}
+              {(this.props.flashCardSet.enableInvertFlashCards && false) ? <div><Checkbox checked={this.state.invertFlashCards} onChange={event => this.toggleInvertFlashCards()} /> Invert Flash Cards</div> : null}
               {false ? <p>{flashCards.length} Flash Cards</p> : null}
-              {this.renderFlashCardMultiSelect(flashCards)}
+              {this.renderFlashCardMultiSelect(containerWidth, containerHeight, flashCards)}
             </Paper>
           ) : null}
 
-          {(!this.props.isEmbedded && this.props.moreInfoUri) ? <p style={{ margin: "0.5em 0" }}><a href={this.props.moreInfoUri} className="moreInfoLink" target="_blank">To learn more, click here.</a></p> : null}
+          {(!this.props.isEmbedded && moreInfoUri) ? <p style={{ margin: "0.5em 0" }}><a href={moreInfoUri} className="moreInfoLink" target="_blank">To learn more, click here.</a></p> : null}
 
-          {this.props.renderAnswerSelect
+          {this.props.flashCardSet.renderAnswerSelect
             ? (
               <p style={{marginBottom: "0", marginTop: "0", lineHeight: "1.5"}}>
                 <span style={{paddingRight: "1em"}}>{this.studyAlgorithm.flashCardSetStats.numCorrectGuesses} / {this.studyAlgorithm.flashCardSetStats.numIncorrectGuesses} correct ({(100 * percentCorrect).toFixed(2)}%)</span>
@@ -283,15 +277,9 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
           </div>
 
           <div style={{textAlign: "center"}}>
-            {this.props.renderAnswerSelect ? (
-              this.props.renderAnswerSelect(
-                new FlashCardStudySessionInfo(
-                  containerWidth, containerHeight, flashCards,
-                  this.state.enabledFlashCardIds, this.state.configData,
-                  this.state.invertFlashCards, this.state.currentFlashCardId,
-                  currentFlashCard, boundOnAnswer, this.state.lastCorrectAnswer,
-                  this.state.incorrectAnswers
-                )
+            {this.props.flashCardSet.renderAnswerSelect ? (
+              this.props.flashCardSet.renderAnswerSelect(
+                this.getStudySessionInfo(containerWidth, containerHeight)
               )
              ) : null}
 
@@ -306,7 +294,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
                 onClick={event => this.moveToNextFlashCard(null, false)}
                 variant="contained"
               >
-                {!this.props.renderAnswerSelect ? "Next" : "Skip"}
+                {!this.props.flashCardSet.renderAnswerSelect ? "Next" : "Skip"}
               </Button>
             </div>
           </div>
@@ -368,18 +356,20 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
     return this.props.flashCardLevels[currentLevelIndex + 1];
   }
 
-  private renderFlashCardMultiSelect(flashCards: FlashCard[]): JSX.Element {
+  private renderFlashCardMultiSelect(
+    containerWidth: number, containerHeight: number, flashCards: FlashCard[]
+  ): JSX.Element {
     const onEnabledFlashCardIndicesChange = this.onEnabledFlashCardIdsChange.bind(this);
 
-    return this.props.renderFlashCardMultiSelect
-      ? this.props.renderFlashCardMultiSelect(
-        flashCards, this.state.enabledFlashCardIds, this.state.configData, onEnabledFlashCardIndicesChange
+    return this.props.flashCardSet.renderFlashCardMultiSelect
+      ? this.props.flashCardSet.renderFlashCardMultiSelect(
+        this.getStudySessionInfo(containerWidth, containerHeight), onEnabledFlashCardIndicesChange
       )
       : <DefaultFlashCardMultiSelect
           flashCards={flashCards}
           configData={this.state.configData}
           flashCardLevels={this.props.flashCardLevels}
-          selectedFlashCardIndices={this.state.enabledFlashCardIds}
+          selectedFlashCardIds={this.state.enabledFlashCardIds}
           onChange={onEnabledFlashCardIndicesChange}
         />;
   }
@@ -388,7 +378,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
     flashCards: FlashCard[],
     enabledFlashCardIds: Array<FlashCardId> | undefined
   ) {
-    this.studyAlgorithm.reset(flashCards.map((_, i) => i), flashCards);
+    this.studyAlgorithm.reset(flashCards.map(fc => fc.id), flashCards);
 
     if (enabledFlashCardIds) {
       this.studyAlgorithm.enabledFlashCardIds = enabledFlashCardIds;
@@ -402,6 +392,30 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
       incorrectAnswers: [],
       enabledFlashCardIds: this.studyAlgorithm.enabledFlashCardIds
     };
+  }
+
+  private getInitialEnabledFlashCardIds(): Array<FlashCardId> {
+    return this.props.flashCardSet.configDataToEnabledFlashCardIds
+      ? this.props.flashCardSet.configDataToEnabledFlashCardIds(
+        this.getStudySessionInfo(0, 0), this.state.configData
+      )
+      : this.props.flashCards.map(fc => fc.id)
+  }
+  private getStudySessionInfo(
+    containerWidth: number, containerHeight: number
+  ): FlashCardStudySessionInfo {
+    const currentFlashCard = Utils.unwrapValueOrUndefined(
+      this.props.flashCards.find(fc => fc.id === this.state.currentFlashCardId)
+    );
+    const boundOnAnswer = this.onAnswer.bind(this);
+
+    return new FlashCardStudySessionInfo(
+      containerWidth, containerHeight, this.props.flashCardSet, this.props.flashCards,
+      this.state.enabledFlashCardIds, this.state.configData,
+      this.state.invertFlashCards, this.state.currentFlashCardId,
+      currentFlashCard, boundOnAnswer, this.state.lastCorrectAnswer,
+      this.state.incorrectAnswers, this.studyAlgorithm
+    );
   }
 
   private onAnswer(answerDifficulty: AnswerDifficulty, answer: any) {
@@ -455,11 +469,11 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
 
     if (!newInvertFlashCards) {
       newFlashCards = this.props.flashCards;
-      newEnabledFlashCardIds = this.props.initialSelectedFlashCardIds;
+      newEnabledFlashCardIds = this.getInitialEnabledFlashCardIds();
     } else {
       const inversion = invertFlashCards(this.props.flashCards, this.state.enabledFlashCardIds);
       newFlashCards = inversion.invertedFlashCards;
-      newEnabledFlashCardIds = inversion.invertedEnabledFlashCardIndices;
+      newEnabledFlashCardIds = inversion.invertedEnabledFlashCardIds;
     }
 
     this.setState(Object.assign(
@@ -477,7 +491,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
   }
   private moveToNextFlashCard(lastCorrectAnswer: any, wasCorrect: boolean) {
     this.setState({
-      currentFlashCardId: this.studyAlgorithm.getNextFlashCardId(),
+      currentFlashCardId: this.studyAlgorithm.getNextFlashCardId(this.getStudySessionInfo(0, 0)),
       sessionFlashCardNumber: this.state.sessionFlashCardNumber + 1,
       haveGottenCurrentFlashCardWrong: false,
       isShowingBackSide: false,

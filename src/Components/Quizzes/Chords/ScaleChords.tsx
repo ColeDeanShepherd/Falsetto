@@ -1,13 +1,20 @@
-import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
-import { FlashCard } from "../../../FlashCard";
-import { FlashCardSet } from "../../../FlashCardSet";
+import { FlashCard, FlashCardId } from "../../../FlashCard";
+import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 
 const flashCardSetId = "scalesAsChords";
 
+function configDataToEnabledFlashCardIds(
+  info: FlashCardStudySessionInfo, configData: any
+): Array<FlashCardId> {
+  return info.flashCards
+    .filter((_, i) => i <= 8)
+    .map(fc => fc.id);
+}
+
 export function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Scale Chords", createFlashCards);
-  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds Utils.range(0, 8);
+  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/jazz-scales/chord-scale-system/";
   flashCardSet.containerHeight = "80px";

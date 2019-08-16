@@ -1,7 +1,7 @@
 import * as Utils from "./Utils";
 import { FlashCardSetStats } from "./FlashCardSetStats";
 import { FlashCardStats } from "./FlashCardStats";
-import { CustomNextFlashCardIdFilter as CustomNextFlashCardIdFilterFn } from './FlashCardSet';
+import { CustomNextFlashCardIdFilter as CustomNextFlashCardIdFilterFn, FlashCardStudySessionInfo } from './FlashCardSet';
 import { FlashCard, FlashCardId } from './FlashCard';
 import { AnswerDifficulty } from './AnswerDifficulty';
 
@@ -53,9 +53,10 @@ export abstract class StudyAlgorithm {
       flashCardStats.numIncorrectGuesses++;
     }
   }
-  public getNextFlashCardId(): FlashCardId {
-    const enabledFlashCardIds = this.customNextFlashCardIdFilter
-      ? this.customNextFlashCardIdFilter(this, this._flashCards, this.enabledFlashCardIds)
+  public getNextFlashCardId(studySessionInfo?: FlashCardStudySessionInfo): FlashCardId {
+    // TODO: fix this shit
+    const enabledFlashCardIds = (this.customNextFlashCardIdFilter && studySessionInfo)
+      ? this.customNextFlashCardIdFilter(studySessionInfo)
       : this.enabledFlashCardIds;
       
     Utils.assert(enabledFlashCardIds.length > 0);

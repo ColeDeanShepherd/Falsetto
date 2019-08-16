@@ -8,7 +8,7 @@ const flashCardSetId = "chordFormulasRelativeToMajorScale";
 
 function configDataToEnabledFlashCardIds(info: FlashCardStudySessionInfo, configData: any): Array<FlashCardId> {
   return info.flashCards
-    .filter((fc, i) => i <= 16)
+    .filter((_, i) => i <= 16)
     .map(fc => fc.id);
 }
 export function createFlashCardSet(): FlashCardSet {

@@ -1,9 +1,8 @@
 import * as React from "react";
 import * as Vex from "vexflow";
 
-import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
-import { FlashCard } from "../../../FlashCard";
+import { FlashCard, FlashCardId } from "../../../FlashCard";
 import { VexFlowComponent } from "../../Utils/VexFlowComponent";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 
@@ -15,12 +14,20 @@ const height = 65;
 export function renderAnswerSelect(
   info: FlashCardStudySessionInfo
 ): JSX.Element {
-  return FlashCardUtils.renderMultiRowDistinctFlashCardSideAnswerSelect(state, [5, 5]);
+  return FlashCardUtils.renderMultiRowDistinctFlashCardSideAnswerSelect(info, [5, 5]);
+}
+
+function configDataToEnabledFlashCardIds(
+  info: FlashCardStudySessionInfo, configData: any
+): Array<FlashCardId> {
+  return info.flashCards
+    .filter((_, i) => (i <= 4) || ((i >= 8) && (i <= 12)))
+    .map(fc => fc.id);
 }
 
 export function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Sheet Music Note Durations", createFlashCards);
-  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds Utils.range(0, 4).concat(Utils.range(8, 12));
+  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.renderAnswerSelect = renderAnswerSelect;
   flashCardSet.containerHeight = "80px";
   flashCardSet.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/the-basics/overview/";

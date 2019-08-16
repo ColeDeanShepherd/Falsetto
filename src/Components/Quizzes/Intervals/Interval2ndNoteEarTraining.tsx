@@ -1,8 +1,8 @@
 import * as React from "react";
 
 import * as FlashCardUtils from "../Utils";
-import { FlashCard } from "../../../FlashCard";
-import { FlashCardSet } from "../../../FlashCardSet";
+import { FlashCard, FlashCardId } from "../../../FlashCard";
+import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { Pitch } from "../../../Pitch";
 import { playPitchesSequentially } from "../../../Piano";
 import {
@@ -79,16 +79,12 @@ export function createFlashCards(): Array<FlashCard> {
 }
 export function createFlashCardSet(): FlashCardSet {
   const renderFlashCardMultiSelect = (
-    flashCards: Array<FlashCard>,
-    selectedFlashCardIds: Array<FlashCardId>,
-    configData: any,
+    studySessionInfo: FlashCardStudySessionInfo,
     onChange: (newValue: Array<FlashCardId>, newConfigData: any) => void
   ): JSX.Element => {
     return (
     <IntervalEarTrainingFlashCardMultiSelect
-      flashCards={flashCards}
-      configData={configData}
-      selectedFlashCardIds={selectedFlashCardIds}
+      studySessionInfo={studySessionInfo}
       hasFlashCardPerRootNote={true}
       onChange={onChange}
     />
@@ -105,8 +101,9 @@ export function createFlashCardSet(): FlashCardSet {
     "Interval 2nd Note Ear Training",
     createFlashCards
   );
-  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds configDataToEnabledFlashCardIds(
-    false, true, initialConfigData);
+  flashCardSet.configDataToEnabledFlashCardIds = (
+    studySessionInfo: FlashCardStudySessionInfo, configData: any
+  ) => configDataToEnabledFlashCardIds(false, true, studySessionInfo, configData);
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.enableInvertFlashCards = false;

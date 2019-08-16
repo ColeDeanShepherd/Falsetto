@@ -3,7 +3,7 @@ import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody } from "@mat
 
 import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
-import { FlashCard } from "../../../FlashCard";
+import { FlashCard, FlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { Interval } from "../../../Interval";
 import { standard6StringGuitarTuning, GuitarFretboard, StringedInstrumentMetrics, getIntervalDeltaFretNumber, StringedInstrumentFingerboard } from "../../Utils/GuitarFretboard";
@@ -35,12 +35,14 @@ interface IConfigData {
   // TODO: add enabledDirections?
 };
 
-export function configDataToEnabledFlashCardIds(info: FlashCardStudySessionInfo, configData: IConfigData): Array<FlashCardId> {
+export function configDataToEnabledFlashCardIds(
+  info: FlashCardStudySessionInfo, configData: IConfigData
+): Array<FlashCardId> {
   const newEnabledFlashCardIds = new Array<FlashCardId>();
 
   forEachInterval((interval, _, i) => {
     if (Utils.arrayContains(configData.enabledIntervals, interval.toString())) {
-      newEnabledFlashCardIds.push(i);
+      newEnabledFlashCardIds.push(info.flashCards[i].id);
     }
   });
 
@@ -48,18 +50,18 @@ export function configDataToEnabledFlashCardIds(info: FlashCardStudySessionInfo,
 }
 
 export interface IIntervalsFlashCardMultiSelectProps {
-  flashCards: FlashCard[];
-  configData: IConfigData;
-  selectedFlashCardIds: Array<FlashCardId>;
+  studySessionInfo: FlashCardStudySessionInfo;
   onChange?: (newValue: Array<FlashCardId>, newConfigData: any) => void;
 }
 export interface IIntervalsFlashCardMultiSelectState {}
 export class IntervalsFlashCardMultiSelect extends React.Component<IIntervalsFlashCardMultiSelectProps, IIntervalsFlashCardMultiSelectState> {
   public render(): JSX.Element {
+    const configData = this.props.studySessionInfo.configData as IConfigData;
+
     const intervalCheckboxTableRows = intervals
       .map((interval, i) => {
-        const isChecked = this.props.configData.enabledIntervals.indexOf(interval) >= 0;
-        const isEnabled = !isChecked || (this.props.configData.enabledIntervals.length > 1);
+        const isChecked = configData.enabledIntervals.indexOf(interval) >= 0;
+        const isEnabled = !isChecked || (configData.enabledIntervals.length > 1);
 
         return (
           <TableRow key={i}>
@@ -90,9 +92,9 @@ export class IntervalsFlashCardMultiSelect extends React.Component<IIntervalsFla
   }
 
   private toggleIntervalEnabled(interval: string) {
+    const configData = this.props.studySessionInfo.configData as IConfigData;
     const newEnabledIntervals = Utils.toggleArrayElement(
-      this.props.configData.enabledIntervals,
-      interval
+      configData.enabledIntervals, interval
     );
     
     if (newEnabledIntervals.length > 0) {
@@ -105,7 +107,9 @@ export class IntervalsFlashCardMultiSelect extends React.Component<IIntervalsFla
   private onChange(newConfigData: IConfigData) {
     if (!this.props.onChange) { return; }
 
-    const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(newConfigData);
+    const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(
+      this.props.studySessionInfo, newConfigData
+    );
     this.props.onChange(newEnabledFlashCardIds, newConfigData);
   }
 }
@@ -163,10 +167,10 @@ export function renderAnswerSelect(
   return (
     <div>
       {FlashCardUtils.renderStringAnswerSelectInternal(
-        `${state.currentFlashCardId}.0`, ascendingIntervals, state
+        `${info.currentFlashCardId}.0`, ascendingIntervals, info
       )}
       {FlashCardUtils.renderStringAnswerSelectInternal(
-        `${state.currentFlashCardId}.1`, descendingIntervals, state
+        `${info.currentFlashCardId}.1`, descendingIntervals, info
       )}
     </div>
   );
@@ -286,16 +290,12 @@ export function createFlashCards(): Array<FlashCard> {
 }
 export function createFlashCardSet(): FlashCardSet {
   const renderFlashCardMultiSelect = (
-    flashCards: Array<FlashCard>,
-    selectedFlashCardIds: Array<FlashCardId>,
-    configData: any,
+    studySessionInfo: FlashCardStudySessionInfo,
     onChange: (newValue: Array<FlashCardId>, newConfigData: any) => void
   ): JSX.Element => {
     return (
     <IntervalsFlashCardMultiSelect
-      flashCards={flashCards}
-      configData={configData}
-      selectedFlashCardIds={selectedFlashCardIds}
+      studySessionInfo={studySessionInfo}
       onChange={onChange}
     />
     );
@@ -309,7 +309,7 @@ export function createFlashCardSet(): FlashCardSet {
     "Guitar Intervals",
     createFlashCards
   );createFlashCards
-  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds configDataToEnabledFlashCardIds(flashCardSet, initialConfigData);
+  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.enableInvertFlashCards = false;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;

@@ -3,7 +3,7 @@ import {
   Checkbox, Table, TableHead, TableBody, TableRow, TableCell, Button
 } from "@material-ui/core";
 
-import { FlashCard } from "../../FlashCard";
+import { FlashCard, FlashCardId } from "../../FlashCard";
 import { renderFlashCardSide } from "../FlashCard";
 import * as Utils from "../../Utils";
 import { FlashCardLevel } from '../../FlashCardSet';
@@ -19,14 +19,14 @@ export class DefaultFlashCardMultiSelect extends React.Component<IDefaultFlashCa
   public static readonly FINAL_FLASH_CARD_LEVEL_NAME = "All";
 
   public render(): JSX.Element {
-    const allFlashCardIds = this.props.flashCards.map((fc, i) => i);
+    const allFlashCardIds = this.props.flashCards.map(fc => fc.id);
     const levelButtons = (this.props.flashCardLevels.length > 0)
       ? (this.props.flashCardLevels
           .concat([new FlashCardLevel(DefaultFlashCardMultiSelect.FINAL_FLASH_CARD_LEVEL_NAME, allFlashCardIds)])
           .map((level, levelIndex) => {
             const style: any = { textTransform: "none" };
                     
-            const isPressed = Utils.areArraysEqual(this.props.selectedFlashCardIndices, level.flashCardIds);
+            const isPressed = Utils.areArraysEqual(this.props.selectedFlashCardIds, level.flashCardIds);
             if (isPressed) {
               style.backgroundColor = "#959595";
             }
@@ -44,13 +44,13 @@ export class DefaultFlashCardMultiSelect extends React.Component<IDefaultFlashCa
     const flashCardSideHeight = 300;
 
     const flashCardCheckboxTableRows = this.props.flashCards
-      .map((fc, i) => {
-        const isChecked = this.props.selectedFlashCardIndices.indexOf(i) >= 0;
-        const isEnabled = !isChecked || (this.props.selectedFlashCardIndices.length > 1);
+      .map(fc => {
+        const isChecked = this.props.selectedFlashCardIds.indexOf(fc.id) >= 0;
+        const isEnabled = !isChecked || (this.props.selectedFlashCardIds.length > 1);
 
         return (
-          <TableRow key={i}>
-            <TableCell><Checkbox checked={isChecked} onChange={event => this.toggleFlashCardEnabled(i)} disabled={!isEnabled} /></TableCell>
+          <TableRow key={fc.id}>
+            <TableCell><Checkbox checked={isChecked} onChange={event => this.toggleFlashCardEnabled(fc.id)} disabled={!isEnabled} /></TableCell>
             <TableCell>{renderFlashCardSide(flashCardSideWidth, flashCardSideHeight, fc.frontSide)}</TableCell>
             <TableCell>{renderFlashCardSide(flashCardSideWidth, flashCardSideHeight, fc.backSide)}</TableCell>
           </TableRow >
@@ -82,12 +82,12 @@ export class DefaultFlashCardMultiSelect extends React.Component<IDefaultFlashCa
     );
   }
 
-  private toggleFlashCardEnabled(flashCardIndex: number) {
+  private toggleFlashCardEnabled(flashCardId: string) {
     if (!this.props.onChange) { return; }
 
     const newEnabledFlashCardIds = Utils.toggleArrayElement(
-      this.props.selectedFlashCardIndices,
-      flashCardIndex
+      this.props.selectedFlashCardIds,
+      flashCardId
     );
 
     if (newEnabledFlashCardIds.length > 0) {
@@ -99,7 +99,7 @@ export class DefaultFlashCardMultiSelect extends React.Component<IDefaultFlashCa
 
     const newEnabledFlashCardIds = (levelIndex < this.props.flashCardLevels.length)
       ? this.props.flashCardLevels[levelIndex].flashCardIds.slice()
-      : this.props.flashCards.map((_, i) => i);
+      : this.props.flashCards.map(fc => fc.id);
     this.props.onChange(newEnabledFlashCardIds, this.props.configData);
   }
 }

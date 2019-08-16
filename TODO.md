@@ -1,5 +1,6 @@
 # To-Do
 ## High Priority
+* Double-check piano scales
 * Persistent data
   * Carefully review flash card IDs
   * Add in-memory flash card stats DB

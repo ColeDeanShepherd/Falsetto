@@ -344,8 +344,8 @@ class App extends React.Component<IAppProps, IAppState> {
   private groupedFlashCardSets: { title: string; flashCardSets: FlashCardSet[]; }[];
   private flashCardSets: FlashCardSet[];
   private mainContainerRef: React.Ref<HTMLDivElement>;
-  private database: IDatabase;
-  private userManager: IUserManager;
+  public database: IDatabase;
+  public userManager: IUserManager;
 
   private get isEmbedded(): boolean {
     return this.props.isEmbedded || this.history.location.search.includes("isEmbedded=true");

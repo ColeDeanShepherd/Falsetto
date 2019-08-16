@@ -2,7 +2,7 @@ import * as React from "react";
 import { Button } from "@material-ui/core";
 
 import * as Utils from "../../Utils";
-import { FlashCard, FlashCardSide, FlashCardSideRenderFn } from "../../FlashCard";
+import { FlashCard, FlashCardSide, FlashCardSideRenderFn, FlashCardId } from "../../FlashCard";
 import { callFlashCardSideRenderFn } from "../../Components/FlashCard";
 import { AnswerDifficulty } from "../../AnswerDifficulty";
 import { FlashCardStudySessionInfo } from '../../FlashCardSet';
@@ -15,10 +15,10 @@ export function renderNoteAnswerSelect(
   return (
     <div>
       {renderStringAnswerSelectInternal(
-        `${state.currentFlashCardId}.0`, accidentalNotes, state
+        `${info.currentFlashCardId}.0`, accidentalNotes, info
       )}
       {renderStringAnswerSelectInternal(
-        `${state.currentFlashCardId}.1`, naturalNotes, state
+        `${info.currentFlashCardId}.1`, naturalNotes, info
         )}
     </div>
   );
@@ -28,7 +28,7 @@ export function renderStringAnswerSelect(
   info: FlashCardStudySessionInfo
 ): JSX.Element {
   return renderStringAnswerSelectInternal(
-    state.currentFlashCardId.toString(), answers, state
+    info.currentFlashCardId.toString(), answers, info
   );
 }
 
@@ -38,8 +38,8 @@ export function renderStringAnswerSelectInternal(
   info: FlashCardStudySessionInfo
 ): JSX.Element {
   return <StringAnswerSelect
-    key={key} answers={answers} flashCard={state.currentFlashCard} onAnswer={state.onAnswer}
-    lastCorrectAnswer={state.lastCorrectAnswer} incorrectAnswers={state.incorrectAnswers} />;
+    key={key} answers={answers} flashCard={info.currentFlashCard} onAnswer={info.onAnswer}
+    lastCorrectAnswer={info.lastCorrectAnswer} incorrectAnswers={info.incorrectAnswers} />;
 }
 
 export interface StringAnswerSelectProps {
@@ -120,7 +120,7 @@ export const AnswerButton: React.FunctionComponent<{
 
 export interface FlashCardSideAnswerSelectProps {
   answers: Array<FlashCardSideRenderFn>;
-  enabledFlashCardIds: number[];
+  enabledFlashCardIds: Array<FlashCardId>;
   flashCard: FlashCard;
   onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void;
   lastCorrectAnswer: any;
@@ -171,8 +171,8 @@ export function renderMultiRowDistinctFlashCardSideAnswerSelect(
   rowLengths: Array<number>
 ): JSX.Element {
   const answers = Utils.uniq(
-    state.flashCards
-      .filter((_, i) => Utils.arrayContains(state.enabledFlashCardIds, i))
+    info.flashCards
+      .filter(fc => Utils.arrayContains(info.enabledFlashCardIds, fc.id))
       .map(fc => fc.backSide.renderFn)
   );
 
@@ -186,9 +186,9 @@ export function renderMultiRowDistinctFlashCardSideAnswerSelect(
       : answers.slice(answers.length - startIndex);
 
     answerRows.push(renderDistinctFlashCardSideAnswerSelectInternal(
-      `${state.currentFlashCardId}.${rowIndex}`,
+      `${info.currentFlashCardId}.${rowIndex}`,
       rowAnswers,
-      state
+      info
     ));
 
     rowIndex++;
@@ -206,15 +206,15 @@ export function renderDistinctFlashCardSideAnswerSelect(
   info: FlashCardStudySessionInfo
 ): JSX.Element {
   const distinctFlashCardSideRenderFns = Utils.uniq(
-    state.flashCards
-      .filter((_, i) => Utils.arrayContains(state.enabledFlashCardIds, i))
+    info.flashCards
+      .filter(fc => Utils.arrayContains(info.enabledFlashCardIds, fc.id))
       .map(fc => fc.backSide.renderFn)
   );
 
   return renderDistinctFlashCardSideAnswerSelectInternal(
-    state.currentFlashCardId.toString(),
+    info.currentFlashCardId.toString(),
     distinctFlashCardSideRenderFns,
-    state
+    info
   );
 }
 export function renderDistinctFlashCardSideAnswerSelectInternal(
@@ -225,10 +225,10 @@ export function renderDistinctFlashCardSideAnswerSelectInternal(
   return <FlashCardSideAnswerSelect
     key={key}
     answers={answers}
-    enabledFlashCardIds={state.enabledFlashCardIds}
-    flashCard={state.currentFlashCard}
-    onAnswer={state.onAnswer}
-    lastCorrectAnswer={state.lastCorrectAnswer}
-    incorrectAnswers={state.incorrectAnswers}
+    enabledFlashCardIds={info.enabledFlashCardIds}
+    flashCard={info.currentFlashCard}
+    onAnswer={info.onAnswer}
+    lastCorrectAnswer={info.lastCorrectAnswer}
+    incorrectAnswers={info.incorrectAnswers}
   />;
 }

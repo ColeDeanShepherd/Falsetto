@@ -6,7 +6,7 @@ import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
 import { VexFlowComponent } from "../../Utils/VexFlowComponent";
 import { PitchLetter } from "../../../PitchLetter";
-import { FlashCard } from "../../../FlashCard";
+import { FlashCard, FlashCardId } from "../../../FlashCard";
 import { Pitch } from "../../../Pitch";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { AnswerDifficulty } from "../../../AnswerDifficulty";
@@ -31,22 +31,18 @@ export function createFlashCardSet(): FlashCardSet {
     areAccidentalsEnabled: false
   };
   const renderFlashCardMultiSelect = (
-    flashCards: Array<FlashCard>,
-    selectedFlashCardIds: Array<FlashCardId>,
-    configData: any,
+    studySessionInfo: FlashCardStudySessionInfo,
     onChange: (newValue: Array<FlashCardId>, newConfigData: any) => void
   ): JSX.Element => {
     return <SheetMusicNotesFlashCardMultiSelect
-      flashCards={flashCards}
-      configData={configData}
-      selectedFlashCardIds={selectedFlashCardIds}
+      studySessionInfo={studySessionInfo}
       onChange={onChange}
     />;
   }
 
   const flashCardSet = new FlashCardSet(flashCardSetId, "Sheet Music Notes", createFlashCards);
   flashCardSet.enableInvertFlashCards = false;
-  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds configDataToEnabledFlashCardIds(flashCardSet, initialConfigData);
+  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = renderNoteAnswerSelect;
@@ -119,23 +115,28 @@ export function allPitchesMap<TResult>(mapFn: (clef: string, pitch: Pitch, index
 
   return result;
 }
-function configDataToEnabledFlashCardIds(info: FlashCardStudySessionInfo, configData: IConfigData): Array<FlashCardId> {
-  return allPitchesMap((clef, pitch, i) => {
+function configDataToEnabledFlashCardIds(
+  info: FlashCardStudySessionInfo, configData: IConfigData
+): Array<FlashCardId> {
+  const enabledFlashCardIds = new Array<FlashCardId>();
+
+  allPitchesMap((clef, pitch, i) => {
     if (!configData.isTrebleClefEnabled && (clef === "treble")) {
-      return -1;
+      return;
     }
     
     if (!configData.isBassClefEnabled && (clef === "bass")) {
-      return -1;
+      return;
     }
 
     if (!configData.areAccidentalsEnabled && (pitch.signedAccidental !== 0)) {
-      return -1;
+      return;
     }
 
-    return i;
-  })
-    .filter(i => i >= 0);
+    enabledFlashCardIds.push(info.flashCards[i].id);
+  });
+
+  return enabledFlashCardIds;
 }
 export function renderNoteAnswerSelect(
   info: FlashCardStudySessionInfo
@@ -146,13 +147,13 @@ export function renderNoteAnswerSelect(
   return (
     <div>
       {FlashCardUtils.renderStringAnswerSelectInternal(
-        `${state.currentFlashCardId}.0`, sharpNotes, state
+        `${info.currentFlashCardId}.0`, sharpNotes, info
       )}
       {FlashCardUtils.renderStringAnswerSelectInternal(
-        `${state.currentFlashCardId}.1`, naturalNotes, state
+        `${info.currentFlashCardId}.1`, naturalNotes, info
       )}
       {FlashCardUtils.renderStringAnswerSelectInternal(
-        `${state.currentFlashCardId}.2`, flatNotes, state
+        `${info.currentFlashCardId}.2`, flatNotes, info
       )}
     </div>
   );
@@ -226,14 +227,14 @@ interface IConfigData {
 };
 
 export interface ISheetMusicNotesFlashCardMultiSelectProps {
-  flashCards: FlashCard[];
-  configData: IConfigData;
-  selectedFlashCardIds: Array<FlashCardId>;
+  studySessionInfo: FlashCardStudySessionInfo;
   onChange?: (newValue: Array<FlashCardId>, newConfigData: any) => void;
 }
 export interface ISheetMusicNotesFlashCardMultiSelectState {}
 export class SheetMusicNotesFlashCardMultiSelect extends React.Component<ISheetMusicNotesFlashCardMultiSelectProps, ISheetMusicNotesFlashCardMultiSelectState> {
   public render(): JSX.Element {
+    const configData = this.props.studySessionInfo.configData as IConfigData;
+
     const onIsTrebleClefEnabledChange = this.onIsTrebleClefEnabledChange.bind(this);
     const onIsBassClefEnabledChange = this.onIsBassClefEnabledChange.bind(this);
     const onAreAccidentalsEnabledChange = this.onAreAccidentalsEnabledChange.bind(this);
@@ -243,23 +244,23 @@ export class SheetMusicNotesFlashCardMultiSelect extends React.Component<ISheetM
         <div>
           <Typography>Treble Clef</Typography>
           <Checkbox
-            checked={this.props.configData.isTrebleClefEnabled}
+            checked={configData.isTrebleClefEnabled}
             onChange={onIsTrebleClefEnabledChange}
-            disabled={!this.props.configData.isBassClefEnabled}
+            disabled={!configData.isBassClefEnabled}
           />
         </div>
         <div>
           <Typography>Bass Clef</Typography>
           <Checkbox
-            checked={this.props.configData.isBassClefEnabled}
+            checked={configData.isBassClefEnabled}
             onChange={onIsBassClefEnabledChange}
-            disabled={!this.props.configData.isTrebleClefEnabled}
+            disabled={!configData.isTrebleClefEnabled}
           />
         </div>
         <div>
           <Typography>Accidentals</Typography>
           <Checkbox
-            checked={this.props.configData.areAccidentalsEnabled}
+            checked={configData.areAccidentalsEnabled}
             onChange={onAreAccidentalsEnabledChange}
           />
         </div>
@@ -269,35 +270,46 @@ export class SheetMusicNotesFlashCardMultiSelect extends React.Component<ISheetM
 
   private onIsTrebleClefEnabledChange(event: React.ChangeEvent, checked: boolean) {
     if (!this.props.onChange) { return; }
+    
+    const configData = this.props.studySessionInfo.configData as IConfigData;
 
     const newConfigData: IConfigData = {
       isTrebleClefEnabled: checked,
-      isBassClefEnabled: this.props.configData.isBassClefEnabled,
-      areAccidentalsEnabled: this.props.configData.areAccidentalsEnabled
+      isBassClefEnabled: configData.isBassClefEnabled,
+      areAccidentalsEnabled: configData.areAccidentalsEnabled
     };
-    const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(newConfigData);
+    const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(
+      this.props.studySessionInfo, newConfigData);
     this.props.onChange(newEnabledFlashCardIds, newConfigData);
   }
   private onIsBassClefEnabledChange(event: React.ChangeEvent, checked: boolean) {
     if (!this.props.onChange) { return; }
+    
+    const configData = this.props.studySessionInfo.configData as IConfigData;
 
     const newConfigData: IConfigData = {
-      isTrebleClefEnabled: this.props.configData.isTrebleClefEnabled,
+      isTrebleClefEnabled: configData.isTrebleClefEnabled,
       isBassClefEnabled: checked,
-      areAccidentalsEnabled: this.props.configData.areAccidentalsEnabled
+      areAccidentalsEnabled: configData.areAccidentalsEnabled
     };
-    const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(newConfigData);
+    const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(
+      this.props.studySessionInfo, newConfigData
+    );
     this.props.onChange(newEnabledFlashCardIds, newConfigData);
   }
   private onAreAccidentalsEnabledChange(event: React.ChangeEvent, checked: boolean) {
     if (!this.props.onChange) { return; }
 
+    const configData = this.props.studySessionInfo.configData as IConfigData;
+
     const newConfigData: IConfigData = {
-      isTrebleClefEnabled: this.props.configData.isTrebleClefEnabled,
-      isBassClefEnabled: this.props.configData.isBassClefEnabled,
+      isTrebleClefEnabled: configData.isTrebleClefEnabled,
+      isBassClefEnabled: configData.isBassClefEnabled,
       areAccidentalsEnabled: checked
     };
-    const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(newConfigData);
+    const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(
+      this.props.studySessionInfo, newConfigData
+    );
     this.props.onChange(newEnabledFlashCardIds, newConfigData);
   }
 }

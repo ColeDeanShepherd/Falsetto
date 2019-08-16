@@ -16,13 +16,13 @@ export function renderAnswerSelect(
   return (
     <div>
       {FlashCardUtils.renderStringAnswerSelectInternal(
-        `${state.currentFlashCardId}.0`, row0, state
+        `${info.currentFlashCardId}.0`, row0, info
       )}
       {FlashCardUtils.renderStringAnswerSelectInternal(
-        `${state.currentFlashCardId}.1`, row1, state
+        `${info.currentFlashCardId}.1`, row1, info
       )}
       {FlashCardUtils.renderStringAnswerSelectInternal(
-        `${state.currentFlashCardId}.2`, row2, state
+        `${info.currentFlashCardId}.2`, row2, info
       )}
     </div>
   );

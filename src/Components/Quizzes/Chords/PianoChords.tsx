@@ -23,24 +23,29 @@ interface IConfigData {
   enabledChordTypes: string[];
 }
 
-export function configDataToEnabledFlashCardIds(info: FlashCardStudySessionInfo, configData: IConfigData): Array<FlashCardId> {
-  const newEnabledFlashCardIds = new Array<FlashCardId>();
-
+export function forEachChord(callbackFn: (rootPitchString: string, chordType: ChordType, i: number) => void) {
   let i = 0;
 
   for (const rootPitchStr of rootPitchStrs) {
-    for (const chord of ChordType.All) {
-      const chordType = chord.name;
-      if (
-        Utils.arrayContains(configData.enabledRootPitches, rootPitchStr) &&
-        Utils.arrayContains(configData.enabledChordTypes, chordType)
-      ) {
-        newEnabledFlashCardIds.push(i);
-      }
-
+    for (const chordType of ChordType.All) {
+      callbackFn(rootPitchStr, chordType, i);
       i++;
     }
   }
+}
+export function configDataToEnabledFlashCardIds(
+  info: FlashCardStudySessionInfo, configData: IConfigData
+): Array<FlashCardId> {
+  const newEnabledFlashCardIds = new Array<FlashCardId>();
+
+  forEachChord((rootPitchStr, chordType, i) => {
+    if (
+      Utils.arrayContains(configData.enabledRootPitches, rootPitchStr) &&
+      Utils.arrayContains(configData.enabledChordTypes, chordType.name)
+    ) {
+      newEnabledFlashCardIds.push(info.flashCards[i].id);
+    }
+  });
 
   return newEnabledFlashCardIds;
 }
