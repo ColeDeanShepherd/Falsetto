@@ -12,7 +12,7 @@ import { Pitch } from '../../Pitch';
 import { PitchLetter } from '../../PitchLetter';
 import { MAX_MAIN_CARD_WIDTH } from '../Style';
 import { ScaleType, Scale } from '../../Scale';
-import { NoteText } from './EssentialMusicTheory';
+import { NoteText } from './EssentialMusicTheory/EssentialMusicTheory';
 import { ScaleAudioPlayer } from '../Utils/ScaleAudioPlayer';
 import { createStudyFlashCardSetComponent } from '../StudyFlashCards';
 import * as GuitarScales from "../Quizzes/Scales/GuitarScales";

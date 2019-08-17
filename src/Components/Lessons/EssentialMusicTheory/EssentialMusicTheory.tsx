@@ -1,102 +1,100 @@
 import * as React from "react";
 import { CardContent, Card, Table, TableHead, TableBody, TableRow, TableCell } from "@material-ui/core";
 
-import App from '../App';
+import App from '../../App';
 
-import * as Utils from "../../Utils";
+import * as Utils from "../../../Utils";
 
-import { playPitches, playPitchesSequentially } from "../../Piano";
+import { playPitches, playPitchesSequentially } from "../../../Piano";
 
-import { YouTubeVideo } from "../Utils/YouTubeVideo";
-import { TimeSignature } from "../../TimeSignature";
+import { YouTubeVideo } from "../../Utils/YouTubeVideo";
+import { TimeSignature } from "../../../TimeSignature";
 
-import { PianoKeyboard, renderPianoKeyboardNoteNames, PianoKeyboardMetrics, renderPianoKeyboardKeyLabels } from "../Utils/PianoKeyboard";
-import { Pitch } from '../../Pitch';
-import { PitchLetter } from '../../PitchLetter';
+import { PianoKeyboard, renderPianoKeyboardNoteNames, PianoKeyboardMetrics, renderPianoKeyboardKeyLabels } from "../../Utils/PianoKeyboard";
+import { Pitch } from '../../../Pitch';
+import { PitchLetter } from '../../../PitchLetter';
 
-import * as PianoNotes from "../Quizzes/Notes/PianoNotes";
-import * as GuitarNotes from "../Quizzes/Notes/GuitarNotes";
-import * as SheetMusicNotes from "../Quizzes/Sheet Music/SheetMusicNotes";
+import * as PianoNotes from "../../Quizzes/Notes/PianoNotes";
+import * as GuitarNotes from "../../Quizzes/Notes/GuitarNotes";
+import * as SheetMusicNotes from "../../Quizzes/Sheet Music/SheetMusicNotes";
 
-import { createStudyFlashCardSetComponent } from '../StudyFlashCards';
+import { createStudyFlashCardSetComponent } from '../../StudyFlashCards';
 
-import { Metronome } from "../Tools/Metronome";
+import { Metronome } from "../../Tools/Metronome";
 
-import * as RhythmQuiz from "../Quizzes/RhythmQuiz";
-import * as NoteDurations from "../Quizzes/Sheet Music/SheetMusicNoteDurations";
-import * as NoteValueNumbers from "../Quizzes/Notes/NoteValueNumbers";
+import * as RhythmQuiz from "../../Quizzes/RhythmQuiz";
+import * as NoteDurations from "../../Quizzes/Sheet Music/SheetMusicNoteDurations";
+import * as NoteValueNumbers from "../../Quizzes/Notes/NoteValueNumbers";
 
-import intervalQualityChart from "../../img/interval-qualities.svg";
+import intervalQualityChart from "../../../img/interval-qualities.svg";
 
-import * as IntervalNamesToHalfSteps from "../Quizzes/Intervals/IntervalNamesToHalfSteps";
-import * as IntervalEarTraining from "../Quizzes/Intervals/IntervalEarTraining";
-import * as IntervalQualitySymbols from "../Quizzes/Intervals/IntervalQualitySymbolsToQualities";
-import * as IntervalsToConsonanceDissonance from "../Quizzes/Intervals/IntervalsToConsonanceDissonance";
-import * as IntervalNotes from "../Quizzes/Intervals/IntervalNotes";
-import * as SheetMusicIntervalRecognition from "../Quizzes/Sheet Music/SheetMusicIntervalRecognition";
-import * as GuitarIntervals from "../Quizzes/Intervals/GuitarIntervals";
-import * as Interval2ndNotes from "../Quizzes/Intervals/Interval2ndNotes";
-import * as Interval2ndNoteEarTraining from "../Quizzes/Intervals/Interval2ndNoteEarTraining";
-import * as Interval2ndNoteEarTrainingPiano from "../Quizzes/Intervals/Interval2ndNoteEarTrainingPiano";
+import * as IntervalNamesToHalfSteps from "../../Quizzes/Intervals/IntervalNamesToHalfSteps";
+import * as IntervalEarTraining from "../../Quizzes/Intervals/IntervalEarTraining";
+import * as IntervalQualitySymbols from "../../Quizzes/Intervals/IntervalQualitySymbolsToQualities";
+import * as IntervalsToConsonanceDissonance from "../../Quizzes/Intervals/IntervalsToConsonanceDissonance";
+import * as IntervalNotes from "../../Quizzes/Intervals/IntervalNotes";
+import * as SheetMusicIntervalRecognition from "../../Quizzes/Sheet Music/SheetMusicIntervalRecognition";
+import * as GuitarIntervals from "../../Quizzes/Intervals/GuitarIntervals";
+import * as Interval2ndNotes from "../../Quizzes/Intervals/Interval2ndNotes";
+import * as Interval2ndNoteEarTraining from "../../Quizzes/Intervals/Interval2ndNoteEarTraining";
+import * as Interval2ndNoteEarTrainingPiano from "../../Quizzes/Intervals/Interval2ndNoteEarTrainingPiano";
 
-import * as ScaleNotes from "../Quizzes/Scales/ScaleNotes";
-import * as PianoScales from "../Quizzes/Scales/PianoScales";
-import * as PianoChords from "../Quizzes/Chords/PianoChords";
-import * as ScaleEarTraining from "../Quizzes/Scales/ScaleEarTraining";
-import { ScaleViewer } from "../Tools/ScaleViewer";
+import * as ScaleNotes from "../../Quizzes/Scales/ScaleNotes";
+import * as PianoScales from "../../Quizzes/Scales/PianoScales";
+import * as PianoChords from "../../Quizzes/Chords/PianoChords";
+import * as ScaleEarTraining from "../../Quizzes/Scales/ScaleEarTraining";
+import { ScaleViewer } from "../../Tools/ScaleViewer";
 
-import * as ChordNotes from "../Quizzes/Chords/ChordNotes";
-import * as GuitarScales from "../Quizzes/Scales/GuitarScales";
-import * as GuitarChords from "../Quizzes/Chords/GuitarChords";
-import * as ChordEarTraining from "../Quizzes/Chords/ChordEarTraining";
-import { ChordViewer } from "../Tools/ChordViewer";
+import * as ChordNotes from "../../Quizzes/Chords/ChordNotes";
+import * as GuitarScales from "../../Quizzes/Scales/GuitarScales";
+import * as GuitarChords from "../../Quizzes/Chords/GuitarChords";
+import * as ChordEarTraining from "../../Quizzes/Chords/ChordEarTraining";
+import { ChordViewer } from "../../Tools/ChordViewer";
 
-import measures from "../../img/sheet-music/measures.svg";
-import timeSignatureDiagram from "../../img/sheet-music/time-signature.svg";
-import notesRestsDiagram from "../../img/sheet-music/notes-and-rests.svg";
+import measures from "../../../img/sheet-music/measures.svg";
+import timeSignatureDiagram from "../../../img/sheet-music/time-signature.svg";
+import notesRestsDiagram from "../../../img/sheet-music/notes-and-rests.svg";
 
-import wholeNote from "../../img/sheet-music/whole-note.svg";
-import wholeRest from "../../img/sheet-music/whole-rest.svg";
-import halfNote from "../../img/sheet-music/half-note.svg";
-import halfRest from "../../img/sheet-music/half-rest.svg";
-import quarterNote from "../../img/sheet-music/quarter-note.svg";
-import quarterRest from "../../img/sheet-music/quarter-rest.svg";
-import eighthNote from "../../img/sheet-music/eighth-note.svg";
-import eighthRest from "../../img/sheet-music/eighth-rest.svg";
-import sixteenthNote from "../../img/sheet-music/sixteenth-note.svg";
-import sixteenthRest from "../../img/sheet-music/sixteenth-rest.svg";
-import _32ndNote from "../../img/sheet-music/32nd-note.svg";
-import _32ndRest from "../../img/sheet-music/32nd-rest.svg";
+import wholeNote from "../../../img/sheet-music/whole-note.svg";
+import wholeRest from "../../../img/sheet-music/whole-rest.svg";
+import halfNote from "../../../img/sheet-music/half-note.svg";
+import halfRest from "../../../img/sheet-music/half-rest.svg";
+import quarterNote from "../../../img/sheet-music/quarter-note.svg";
+import quarterRest from "../../../img/sheet-music/quarter-rest.svg";
+import eighthNote from "../../../img/sheet-music/eighth-note.svg";
+import eighthRest from "../../../img/sheet-music/eighth-rest.svg";
+import sixteenthNote from "../../../img/sheet-music/sixteenth-note.svg";
+import sixteenthRest from "../../../img/sheet-music/sixteenth-rest.svg";
+import _32ndNote from "../../../img/sheet-music/32nd-note.svg";
+import _32ndRest from "../../../img/sheet-music/32nd-rest.svg";
 
-import timeSignature44 from "../../img/sheet-music/time-signature-4-4.svg";
-import timeSignature34 from "../../img/sheet-music/time-signature-3-4.svg";
+import timeSignature44 from "../../../img/sheet-music/time-signature-4-4.svg";
+import timeSignature34 from "../../../img/sheet-music/time-signature-3-4.svg";
 
-import becomeAPatronButton from "../../img/become_a_patron_button.png";
+import { TimeSignaturePlayer } from '../../Tools/TimeSignaturePlayer';
+import { NoteValuePlayer } from '../../Tools/NoteValuePlayer';
 
-import { TimeSignaturePlayer } from '../Tools/TimeSignaturePlayer';
-import { NoteValuePlayer } from '../Tools/NoteValuePlayer';
+import * as NotesQuiz from "../../Quizzes/Notes/NotesQuiz";
 
-import * as NotesQuiz from "../Quizzes/Notes/NotesQuiz";
-
-import { MAX_MAIN_CARD_WIDTH } from '../Style';
-import { Rect2D } from '../../Rect2D';
-import { Vector2D } from '../../Vector2D';
-import { Size2D } from '../../Size2D';
-import { Margin } from '../../Margin';
+import { MAX_MAIN_CARD_WIDTH } from '../../Style';
+import { Rect2D } from '../../../Rect2D';
+import { Vector2D } from '../../../Vector2D';
+import { Size2D } from '../../../Size2D';
+import { Margin } from '../../../Margin';
 import { NavLink } from 'react-router-dom';
-import { ScaleType, Scale } from '../../Scale';
-import { doesKeyUseSharps } from '../../Key';
-import { PianoScaleDronePlayer } from '../Utils/PianoScaleDronePlayer';
-import { Chord, ChordType, ChordTypeGroup } from "../../Chord";
-import { DiatonicChordPlayer } from '../Tools/DiatonicChordPlayer';
-import { ChordAudioPlayer } from "../Utils/ChordAudioPlayer";
-import { ScaleAudioPlayer } from '../Utils/ScaleAudioPlayer';
-import { PitchesAudioPlayer } from '../Utils/PitchesAudioPlayer';
+import { ScaleType, Scale } from '../../../Scale';
+import { doesKeyUseSharps } from '../../../Key';
+import { PianoScaleDronePlayer } from '../../Utils/PianoScaleDronePlayer';
+import { Chord, ChordType, ChordTypeGroup } from "../../../Chord";
+import { DiatonicChordPlayer } from '../../Tools/DiatonicChordPlayer';
+import { ChordAudioPlayer } from "../../Utils/ChordAudioPlayer";
+import { ScaleAudioPlayer } from '../../Utils/ScaleAudioPlayer';
+import { PitchesAudioPlayer } from '../../Utils/PitchesAudioPlayer';
 
 // #region Chord Progressions
 
-import * as ChordProgressionsQuiz from "../Quizzes/Chords/ChordProgressionsQuiz";
-import * as ChordHarmonicFunctions from "../Quizzes/Chords/ChordFamilies";
+import * as ChordProgressionsQuiz from "../../Quizzes/Chords/ChordProgressionsQuiz";
+import * as ChordHarmonicFunctions from "../../Quizzes/Chords/ChordFamilies";
 
 const FiveChordDiagram: React.FunctionComponent<{}> = props => {
   const width = 600;
@@ -446,9 +444,9 @@ export const NextStepsSection: React.FunctionComponent<SectionProps> = props => 
 const pianoKeyboardStyle = { width: "100%", maxWidth: "400px", height: "auto" };
 const defaultRootPitch = new Pitch(PitchLetter.C, 0, 4);
 
-const MainTitle: React.FunctionComponent<{}> = props => <h1>{props.children}</h1>;
-const SectionTitle: React.FunctionComponent<{}> = props => <h2>{props.children}</h2>;
-const SubSectionTitle: React.FunctionComponent<{}> = props => <h3>{props.children}</h3>;
+export const MainTitle: React.FunctionComponent<{}> = props => <h1>{props.children}</h1>;
+export const SectionTitle: React.FunctionComponent<{}> = props => <h2>{props.children}</h2>;
+export const SubSectionTitle: React.FunctionComponent<{}> = props => <h3>{props.children}</h3>;
 
 export const NoteText: React.FunctionComponent<{}> = props => <p style={{ color: "#004085", backgroundColor: "#cce5ff", padding: "1em", border: "1px solid #b8daff", borderRadius: "4px" }}>NOTE: {props.children}</p>;
 
@@ -838,14 +836,6 @@ export interface SectionProps {
   isEmbedded: boolean;
   hideMoreInfoUri: boolean;
 }
-export const IntroSection: React.FunctionComponent<SectionProps> = props => (
-  <div>
-    <MainTitle>Essential Music Theory</MainTitle>
-    <p>This course is designed to teach students the essentials of Western music theory interactively. As you work your way through this course, keep in mind that music theory is descriptive, not prescriptive. This means that there are no hard-rules, only guidelines based on music that already exists. The goal of learning music theory is not to restrict ourselves to doing only what is "correct", but to understand the music we hear on a deeper level, to apply this understanding to our music, and to know how to skillfully break the "rules" to fully express ourselves in our music.</p>
-    <p>Without further ado, let's get started!</p>
-    <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory/rhythm", "Next: Rhythm >>")}</p>
-  </div>
-);
 export const RhythmSection: React.FunctionComponent<SectionProps> = props => (
   <div>
     <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory", "<< Previous: Introduction")} | {App.instance.renderNavLink("/essential-music-theory/notes", "Next: Notes >>")}</p>

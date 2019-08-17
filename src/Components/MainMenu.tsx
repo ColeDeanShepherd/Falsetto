@@ -2,17 +2,6 @@ import * as React from "react";
 import { Router, Route, NavLink } from "react-router-dom";
 import App from './App';
 
-import {
-  SectionContainer,
-  IntroSection,
-  RhythmSection,
-  NotesSection,
-  IntervalsSection,
-  ScalesAndModesSection,
-  ChordsSection,
-  ChordProgressionsSection,
-  NextStepsSection
-} from "./Lessons/EssentialMusicTheory";
 import * as IntervalNamesToHalfSteps from "./Quizzes/Intervals/IntervalNamesToHalfSteps";
 import * as IntervalQualitySymbolsToQualities from "./Quizzes/Intervals/IntervalQualitySymbolsToQualities";
 import * as GenericIntervalsToIntervalQualities from "./Quizzes/Intervals/GenericIntervalsToIntervalQualities";
