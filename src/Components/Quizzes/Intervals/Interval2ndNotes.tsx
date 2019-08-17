@@ -326,7 +326,6 @@ export function createFlashCardSet(): FlashCardSet {
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
-  flashCardSet.enableInvertFlashCards = false;
   flashCardSet.renderAnswerSelect = renderNoteAnswerSelect;
   flashCardSet.containerHeight = "80px";
 

@@ -305,7 +305,6 @@ export function createFlashCardSet(): FlashCardSet {
   };
 
   const flashCardSet = new FlashCardSet(flashCardSetId, "Piano Chords", createFlashCards);
-  flashCardSet.enableInvertFlashCards = true;
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
@@ -353,18 +352,9 @@ export function createFlashCards(): FlashCard[] {
 export function renderAnswerSelect(
   info: FlashCardStudySessionInfo
 ) {
-  if (!info.areFlashCardsInverted) {
-    const correctAnswer = info.currentFlashCard.backSide.renderFn as string;
-    return <PianoChordsAnswerSelect
-      key={correctAnswer} correctAnswer={correctAnswer} onAnswer={info.onAnswer}
-      lastCorrectAnswer={info.lastCorrectAnswer} incorrectAnswers={info.incorrectAnswers}
-      enabledChordTypeNames={(info.configData as IConfigData).enabledChordTypes} />;
-  } else {
-    const key = info.currentFlashCard.frontSide.renderFn as string;
-    const correctAnswer = info.currentFlashCard.backSide.data[0] as Array<Pitch>;
-    return <PianoKeysAnswerSelect
-      key={key} width={400} height={100} correctAnswer={correctAnswer}
-      onAnswer={info.onAnswer} lastCorrectAnswer={info.lastCorrectAnswer}
-      incorrectAnswers={info.incorrectAnswers} />;
-  }
+  const correctAnswer = info.currentFlashCard.backSide.renderFn as string;
+  return <PianoChordsAnswerSelect
+    key={correctAnswer} correctAnswer={correctAnswer} onAnswer={info.onAnswer}
+    lastCorrectAnswer={info.lastCorrectAnswer} incorrectAnswers={info.incorrectAnswers}
+    enabledChordTypeNames={(info.configData as IConfigData).enabledChordTypes} />;
 }

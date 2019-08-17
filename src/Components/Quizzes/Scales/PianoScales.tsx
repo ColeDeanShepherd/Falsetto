@@ -180,7 +180,6 @@ export function createFlashCardSet(): FlashCardSet {
   };
 
   const flashCardSet = new FlashCardSet(flashCardSetId, "Piano Scales", createFlashCards);
-  flashCardSet.enableInvertFlashCards = true;
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
@@ -231,21 +230,13 @@ export function createFlashCards(): FlashCard[] {
 export function renderAnswerSelect(
   info: FlashCardStudySessionInfo
 ) {
-  if (!info.areFlashCardsInverted) {
-    const configData = info.configData as IConfigData
-    const correctAnswer = info.currentFlashCard.backSide.renderFn as string;
-    const activeScales = ScaleType.All
-      .filter(scaleType => Utils.arrayContains(configData.enabledScaleTypes, scaleType.name));
-    return <ScaleAnswerSelect
-      key={correctAnswer} scales={activeScales} correctAnswer={correctAnswer}
-      onAnswer={info.onAnswer} lastCorrectAnswer={info.lastCorrectAnswer}
-      incorrectAnswers={info.incorrectAnswers} />;
-  } else {
-    const key = info.currentFlashCard.frontSide.renderFn as string;
-    const correctAnswer = info.currentFlashCard.backSide.data[0] as Array<Pitch>;
-    return <PianoKeysAnswerSelect
-      key={key} width={info.width} height={info.height} correctAnswer={correctAnswer}
-      onAnswer={info.onAnswer} lastCorrectAnswer={info.lastCorrectAnswer}
-      incorrectAnswers={info.incorrectAnswers} />;
-  }
+  const configData = info.configData as IConfigData
+  const correctAnswer = info.currentFlashCard.backSide.renderFn as string;
+  const activeScales = ScaleType.All
+    .filter(scaleType => Utils.arrayContains(configData.enabledScaleTypes, scaleType.name));
+  
+  return <ScaleAnswerSelect
+    key={correctAnswer} scales={activeScales} correctAnswer={correctAnswer}
+    onAnswer={info.onAnswer} lastCorrectAnswer={info.lastCorrectAnswer}
+    incorrectAnswers={info.incorrectAnswers} />;
 }

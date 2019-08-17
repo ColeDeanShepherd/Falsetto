@@ -10,7 +10,6 @@ export class FlashCardStudySessionInfo {
     public flashCards: FlashCard[],
     public enabledFlashCardIds: Array<FlashCardId>,
     public configData: any,
-    public areFlashCardsInverted: boolean,
     public currentFlashCardId: FlashCardId,
     public currentFlashCard: FlashCard,
     public onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void,
@@ -44,7 +43,6 @@ export class FlashCardSet {
   public configDataToEnabledFlashCardIds: ConfigDataToEnabledFlashCardIdsFunc | undefined;
   public renderFlashCardMultiSelect?: RenderFlashCardMultiSelectFunc;
   public renderAnswerSelect?: RenderAnswerSelectFunc;
-  public enableInvertFlashCards: boolean = true;
   public moreInfoUri: string = "";
   public customNextFlashCardIdFilter?: CustomNextFlashCardIdFilter;
   public createFlashCardLevels?: (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => Array<FlashCardLevel>;

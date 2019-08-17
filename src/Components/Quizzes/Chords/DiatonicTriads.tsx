@@ -13,7 +13,6 @@ function configDataToEnabledFlashCardIds(info: FlashCardStudySessionInfo, config
 
 export function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Diatonic Triads", createFlashCards);
-  flashCardSet.enableInvertFlashCards = false;
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/the-basics/keys/";

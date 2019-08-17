@@ -41,7 +41,6 @@ export function createFlashCardSet(): FlashCardSet {
   }
 
   const flashCardSet = new FlashCardSet(flashCardSetId, "Sheet Music Notes", createFlashCards);
-  flashCardSet.enableInvertFlashCards = false;
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;

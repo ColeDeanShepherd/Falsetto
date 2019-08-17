@@ -231,7 +231,6 @@ export function createFlashCardSet(guitarNotes?: Array<StringedInstrumentNote>):
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = (info: FlashCardStudySessionInfo) => <GuitarNoteAnswerSelect key={info.currentFlashCardId} args={info} tuning={standard6StringGuitarTuning} />;
-  flashCardSet.enableInvertFlashCards = false;
   flashCardSet.containerHeight = "200px";
 
   return flashCardSet;

@@ -118,11 +118,10 @@ export function createFlashCardSet(): FlashCardSet {
   };
 
   const flashCardSet = new FlashCardSet(flashCardSetId, "Guitar Chords", createFlashCards);
-  flashCardSet.enableInvertFlashCards = false;
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
-  flashCardSet.renderAnswerSelect = renderAnswerSelect;
+  flashCardSet.renderAnswerSelect = renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.containerHeight = "120px";
 
   return flashCardSet;
@@ -155,17 +154,4 @@ export function createFlashCards(): FlashCard[] {
       new FlashCardSide(chordType.name)
     );
   });
-}
-export function renderAnswerSelect(
-  info: FlashCardStudySessionInfo
-) {
-  if (!info.areFlashCardsInverted) {
-    return renderDistinctFlashCardSideAnswerSelect(info);
-  } else {
-    const key = info.currentFlashCard.frontSide.renderFn as string;
-    const correctAnswer = info.currentFlashCard.backSide.data[0] as Array<Pitch>;
-    return <GuitarNotesAnswerSelect
-      key={key} correctAnswer={correctAnswer} onAnswer={info.onAnswer}
-      lastCorrectAnswer={info.lastCorrectAnswer} incorrectAnswers={info.incorrectAnswers} />;
-  }
 }

@@ -245,7 +245,6 @@ export function createFlashCardSet(): FlashCardSet {
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
-  flashCardSet.enableInvertFlashCards = false;
   flashCardSet.renderAnswerSelect = renderAnswerSelect;
   flashCardSet.customNextFlashCardIdFilter = studySessionInfo => {
     if (studySessionInfo.studyAlgorithm.currentFlashCardId === undefined) {

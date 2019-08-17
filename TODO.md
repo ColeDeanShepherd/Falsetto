@@ -12,7 +12,6 @@
   * Allow log in/log out/account management
   * Show data specific to current account
 
-* Figure out flash card inverting with levels, re-enable.x
 * Chord Progressions
   * Ensure it works on mobile.
 * Implement button colors for
@@ -73,7 +72,6 @@
   * Flat, sharp, natural
 * Chord intervals.
 * Chord Symbols
-* Support enabled flash card indices when double-inverting.
 * Add support for dynamically generated flash card decks.
 * Share more code between interval recognition exercises.
 * Interval Type Changes When Lowering/Raising

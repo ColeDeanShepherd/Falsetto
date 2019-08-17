@@ -106,7 +106,6 @@ export function createFlashCardSet(): FlashCardSet {
   ) => configDataToEnabledFlashCardIds(false, true, studySessionInfo, configData);
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
-  flashCardSet.enableInvertFlashCards = false;
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderNoteAnswerSelect;
   flashCardSet.containerHeight = "120px";
   

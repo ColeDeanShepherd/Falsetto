@@ -132,11 +132,10 @@ export function createFlashCardSet(title?: string, initialScaleTypes?: Array<Sca
   };
 
   const flashCardSet = new FlashCardSet(flashCardSetId, title, createFlashCards);
-  flashCardSet.enableInvertFlashCards = false;
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
-  flashCardSet.renderAnswerSelect = renderAnswerSelect;
+  flashCardSet.renderAnswerSelect = renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.containerHeight = "180px";
 
   return flashCardSet;
@@ -172,17 +171,4 @@ export function createFlashCards(): Array<FlashCard> {
   });
 
   return flashCards;
-}
-export function renderAnswerSelect(
-  info: FlashCardStudySessionInfo
-) {
-  if (!info.areFlashCardsInverted) {
-    return renderDistinctFlashCardSideAnswerSelect(info);
-  } else {
-    const key = info.currentFlashCard.frontSide.renderFn as string;
-    const correctAnswer = info.currentFlashCard.backSide.data[0] as Array<Pitch>;
-    return <GuitarNotesAnswerSelect
-      key={key} correctAnswer={correctAnswer} onAnswer={info.onAnswer}
-      lastCorrectAnswer={info.lastCorrectAnswer} incorrectAnswers={info.incorrectAnswers} />;
-  }
 }

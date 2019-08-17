@@ -107,7 +107,6 @@ export function createFlashCardSet(notes?: Array<StringedInstrumentNote>): Flash
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderNoteAnswerSelect;
-  flashCardSet.enableInvertFlashCards = false;
   //flashCardSet.moreInfoUri = "https://medium.com/@aslushnikov/memorizing-fretboard-a9f4f28dbf03";
   flashCardSet.containerHeight = "160px";
 

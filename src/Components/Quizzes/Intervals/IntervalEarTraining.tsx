@@ -137,7 +137,6 @@ export function createFlashCardSet(): FlashCardSet {
   ) => configDataToEnabledFlashCardIds(true, false, studySessionInfo, configData);
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
-  flashCardSet.enableInvertFlashCards = false;
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.moreInfoUri = "https://www.youtube.com/watch?v=_aDCO3h_xik";
   flashCardSet.containerHeight = "120px";

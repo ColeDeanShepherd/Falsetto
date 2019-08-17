@@ -6,7 +6,7 @@ import { Rect2D } from '../../../Rect2D';
 import * as FlashCardUtils from "../Utils";
 import { PianoKeyboard } from "../../Utils/PianoKeyboard";
 import { FlashCard, FlashCardSide } from "../../../FlashCard";
-import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
+import { FlashCardSet, FlashCardLevel } from "../../../FlashCardSet";
 import { Pitch } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 
@@ -18,7 +18,7 @@ export function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Piano Notes", createFlashCards);
   flashCardSet.containerHeight = "120px";
   flashCardSet.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/the-basics/overview/";
-  flashCardSet.renderAnswerSelect = renderAnswerSelect;
+  flashCardSet.renderAnswerSelect = FlashCardUtils.renderNoteAnswerSelect;
   flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (
     [
       new FlashCardLevel(
@@ -60,15 +60,5 @@ export function createFlashCards(): FlashCard[] {
         )
       );
     }
-  );
-}
-export function renderAnswerSelect(
-  info: FlashCardStudySessionInfo
-) {
-  return (
-    <div>
-      {!info.areFlashCardsInverted ? FlashCardUtils.renderNoteAnswerSelect(info) : null}
-      {info.areFlashCardsInverted ? FlashCardUtils.renderDistinctFlashCardSideAnswerSelect(info) : null}
-    </div>
   );
 }

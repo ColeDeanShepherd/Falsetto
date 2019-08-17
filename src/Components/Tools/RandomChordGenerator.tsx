@@ -205,7 +205,6 @@ export function createFlashCardSet(): FlashCardSet {
     "Random Chord Generator",
     createFlashCards
   );
-  flashCardSet.enableInvertFlashCards = false;
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
