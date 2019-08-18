@@ -1,5 +1,6 @@
 # To-Do
 ## High Priority
+* Actually fix levels implementation.
 * Refactor & check everything.
 * Singing interval ear trainer (note plays, sing above & below)
   * FFT library, pick out main tone

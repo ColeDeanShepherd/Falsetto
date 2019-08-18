@@ -17,7 +17,7 @@ const notes = ["C", "C♯/D♭", "D", "D♯/E♭", "E", "F", "F♯/G♭", "G", "
 export function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Piano Notes", createFlashCards);
   flashCardSet.containerHeight = "120px";
-  flashCardSet.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/the-basics/overview/";
+  flashCardSet.moreInfoUri = "/essential-music-theory/notes";
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderNoteAnswerSelect;
   flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (
     [

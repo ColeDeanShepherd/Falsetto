@@ -191,6 +191,14 @@ export function renderPianoKeyboardNoteNames(metrics: PianoKeyboardMetrics, useS
   });
 }
 
+export function getRectRoundedBottomPathDefString(
+  topLeftPos: Vector2D,
+  size: Size2D,
+  radius: number
+): string {
+  return `M ${topLeftPos.x} ${topLeftPos.y} h ${size.width} v ${size.height - radius} a ${radius} ${radius} 0 0 1 ${-radius} ${radius} h ${-(size.width - (2 * radius))} a ${radius} ${radius} 0 0 1 ${-radius} ${-radius} Z`;
+}
+
 export interface IPianoKeyboardProps {
   rect: Rect2D;
   lowestPitch: Pitch;
@@ -210,37 +218,46 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
 
     const whiteKeys = new Array<JSX.Element>();
     const blackKeys = new Array<JSX.Element>();
+
+    const whiteKeyRadius = 4;
+    const blackKeyRadius = 2;
     
     for (let i = 0; i < metrics.keyCount; i++) {
       const midiNumber = metrics.lowestPitch.midiNumber + i;
       const pitch = Pitch.createFromMidiNumber(midiNumber);
 
       if (pitch.isWhiteKey) {
-        whiteKeys.push(<rect
-          key={i}
-          x={metrics.keyLeftXs[i]} y={0}
-          width={metrics.whiteKeyWidth} height={metrics.whiteKeyHeight}
-          fill="white" stroke="black" strokeWidth="2" className="cursor-pointer"
-          onMouseDown={event => {
-            if (this.props.onKeyPress) {
-              this.props.onKeyPress(pitch);
-              event.preventDefault();
-            }
-          }}
-        />);
+        const position = new Vector2D(metrics.keyLeftXs[i], 0);
+        const size = new Size2D(metrics.whiteKeyWidth, metrics.whiteKeyHeight);
+        whiteKeys.push(
+          <path
+            key={i}
+            d={getRectRoundedBottomPathDefString(position, size, whiteKeyRadius)}
+            fill="white" stroke="black" strokeWidth="2" className="cursor-pointer"
+            onMouseDown={event => {
+              if (this.props.onKeyPress) {
+                this.props.onKeyPress(pitch);
+                event.preventDefault();
+              }
+            }}
+          />
+        );
       } else {
-        blackKeys.push(<rect
-          key={i}
-          x={metrics.keyLeftXs[i]} y={0}
-          width={metrics.blackKeyWidth} height={metrics.blackKeyHeight}
-          fill="black" strokeWidth="0" className="cursor-pointer"
-          onMouseDown={event => {
-            if (this.props.onKeyPress) {
-              this.props.onKeyPress(pitch);
-              event.preventDefault();
-            }
-          }}
-        />);
+        const position = new Vector2D(metrics.keyLeftXs[i], 0);
+        const size = new Size2D(metrics.blackKeyWidth, metrics.blackKeyHeight);
+        blackKeys.push(
+          <path
+            key={i}
+            d={getRectRoundedBottomPathDefString(position, size, blackKeyRadius)}
+            fill="black" strokeWidth="0" className="cursor-pointer"
+            onMouseDown={event => {
+              if (this.props.onKeyPress) {
+                this.props.onKeyPress(pitch);
+                event.preventDefault();
+              }
+            }}
+          />
+        );
       }
     }
     
