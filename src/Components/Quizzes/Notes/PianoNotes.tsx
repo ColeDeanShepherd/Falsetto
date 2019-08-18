@@ -12,7 +12,10 @@ import { PitchLetter } from "../../../PitchLetter";
 
 const flashCardSetId = "pianoNotes1Octave";
 
-const notes = ["C", "C♯/D♭", "D", "D♯/E♭", "E", "F", "F♯/G♭", "G", "G♯/A♭", "A", "A♯/B♭", "B"];
+const noteStrings = ["C", "C♯/D♭", "D", "D♯/E♭", "E", "F", "F♯/G♭", "G", "G♯/A♭", "A", "A♯/B♭", "B"];
+function isNoteStringNatural(noteString: string): boolean {
+  return noteString.length === 1;
+}
 
 export function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Piano Notes", createFlashCards);
@@ -24,7 +27,7 @@ export function createFlashCardSet(): FlashCardSet {
       new FlashCardLevel(
         "Natural Notes",
         flashCards
-          .filter(fc => (fc.backSide.data as string).length === 1)
+          .filter(fc => isNoteStringNatural(fc.backSide.data as string))
           .map(fc => fc.id)
       )
     ]
@@ -33,8 +36,13 @@ export function createFlashCardSet(): FlashCardSet {
   return flashCardSet;
 }
 export function createFlashCards(): FlashCard[] {
-  return notes
-    .map((_, i) => {
+  const pianoKeyboardRect = new Rect2D(new Size2D(200, 100), new Vector2D(0, 0));
+  const lowestPitch = new Pitch(PitchLetter.C, 0, 4);
+  const highestPitch = new Pitch(PitchLetter.B, 0, 4);
+  const pianoStyle = { width: "100%", maxWidth: "200px" };
+
+  return noteStrings
+    .map((noteString, i) => {
       const pitch = Pitch.createFromMidiNumber((new Pitch(PitchLetter.C, 0, 4)).midiNumber + i);
       const deserializedId = {
         set: flashCardSetId,
@@ -47,16 +55,17 @@ export function createFlashCards(): FlashCard[] {
         new FlashCardSide(
           () => (
             <PianoKeyboard
-              rect={new Rect2D(new Size2D(200, 100), new Vector2D(0, 0))}
-              lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-              highestPitch={new Pitch(PitchLetter.B, 0, 4)}
+              rect={pianoKeyboardRect}
+              lowestPitch={lowestPitch}
+              highestPitch={highestPitch}
               pressedPitches={[pitch]}
+              style={pianoStyle}
             />
           )
         ),
         new FlashCardSide(
-          notes[i],
-          notes[i]
+          noteString,
+          noteString
         )
       );
     }
