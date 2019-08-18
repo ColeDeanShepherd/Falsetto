@@ -102,7 +102,7 @@ export function createFlashCardSet(): FlashCardSet {
     createFlashCards
   );
   flashCardSet.configDataToEnabledFlashCardIds = (
-    flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: any
+    flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: IConfigData
   ) => configDataToEnabledFlashCardIds(false, true, flashCardSet, flashCards, configData);
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;

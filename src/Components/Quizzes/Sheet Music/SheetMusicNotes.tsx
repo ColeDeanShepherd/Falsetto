@@ -115,7 +115,7 @@ export function allPitchesMap<TResult>(mapFn: (clef: string, pitch: Pitch, index
   return result;
 }
 function configDataToEnabledFlashCardIds(
-  flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: any
+  flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: IConfigData
 ): Array<FlashCardId> {
   const enabledFlashCardIds = new Array<FlashCardId>();
 

@@ -33,7 +33,7 @@ function forEachNote(callbackFn: (stringIndex: number, fretNumber: number, i: nu
   }
 }
 export function configDataToEnabledFlashCardIds(
-  flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: any
+  flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: IConfigData
 ): Array<FlashCardId> {
   const flashCardIds = new Array<FlashCardId>();
 

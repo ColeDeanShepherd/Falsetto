@@ -65,7 +65,7 @@ export function forEachInterval(callbackFn: (rootNote: Pitch, interval: string, 
   }
 }
 export function configDataToEnabledFlashCardIds(
-  flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: any
+  flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: IConfigData
 ): Array<FlashCardId> {
   const flashCardIds = new Array<FlashCardId>();
 

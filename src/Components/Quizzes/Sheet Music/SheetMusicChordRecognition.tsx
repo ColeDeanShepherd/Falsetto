@@ -60,7 +60,7 @@ export function forEachChord(
   }
 }
 export function configDataToEnabledFlashCardIds(
-  flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: any
+  flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: IConfigData
 ): Array<FlashCardId> {
   const newEnabledFlashCardIds = new Array<FlashCardId>();
 

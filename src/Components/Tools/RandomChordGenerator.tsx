@@ -43,7 +43,7 @@ export function forEachChord(callbackFn: (chordRoot: string, chordType: ChordTyp
   }
 }
 export function configDataToEnabledFlashCardIds(
-  flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: any
+  flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: IConfigData
 ): Array<FlashCardId> {
   const flashCardIds = new Array<FlashCardId>();
 
