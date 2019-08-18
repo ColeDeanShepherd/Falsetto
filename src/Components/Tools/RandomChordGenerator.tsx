@@ -43,7 +43,7 @@ export function forEachChord(callbackFn: (chordRoot: string, chordType: ChordTyp
   }
 }
 export function configDataToEnabledFlashCardIds(
-  info: FlashCardStudySessionInfo, configData: IConfigData
+  flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: any
 ): Array<FlashCardId> {
   const flashCardIds = new Array<FlashCardId>();
 
@@ -52,7 +52,7 @@ export function configDataToEnabledFlashCardIds(
       Utils.arrayContains(configData.enabledChordRoots, chordRoot) &&
       Utils.arrayContains(configData.enabledChordTypes, chordType.name)
     ) {
-      flashCardIds.push(info.flashCards[i].id);
+      flashCardIds.push(flashCards[i].id);
     }
   });
 
@@ -161,7 +161,7 @@ export class RandomChordGeneratorFlashCardMultiSelect extends React.Component<IR
     if (!this.props.onChange) { return; }
 
     const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(
-      this.props.studySessionInfo, newConfigData
+      this.props.studySessionInfo.flashCardSet, this.props.studySessionInfo.flashCards, newConfigData
     );
     this.props.onChange(newEnabledFlashCardIds, newConfigData);
   }

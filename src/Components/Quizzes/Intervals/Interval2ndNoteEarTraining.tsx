@@ -102,8 +102,8 @@ export function createFlashCardSet(): FlashCardSet {
     createFlashCards
   );
   flashCardSet.configDataToEnabledFlashCardIds = (
-    studySessionInfo: FlashCardStudySessionInfo, configData: any
-  ) => configDataToEnabledFlashCardIds(false, true, studySessionInfo, configData);
+    flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: any
+  ) => configDataToEnabledFlashCardIds(false, true, flashCardSet, flashCards, configData);
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderNoteAnswerSelect;

@@ -65,7 +65,7 @@ export function forEachInterval(callbackFn: (rootNote: Pitch, interval: string, 
   }
 }
 export function configDataToEnabledFlashCardIds(
-  info: FlashCardStudySessionInfo, configData: IConfigData
+  flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: any
 ): Array<FlashCardId> {
   const flashCardIds = new Array<FlashCardId>();
 
@@ -75,7 +75,7 @@ export function configDataToEnabledFlashCardIds(
       Utils.arrayContains(configData.enabledIntervals, interval) &&
       Utils.arrayContains(configData.enabledDirections, direction)
     ) {
-      flashCardIds.push(info.flashCards[i].id);
+      flashCardIds.push(flashCards[i].id);
     }
   });
 
@@ -229,7 +229,8 @@ export class IntervalNotesFlashCardMultiSelect extends React.Component<IInterval
     if (!this.props.onChange) { return; }
 
     const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(
-      this.props.studySessionInfo, newConfigData);
+      this.props.studySessionInfo.flashCardSet, this.props.studySessionInfo.flashCards, newConfigData
+    );
     this.props.onChange(newEnabledFlashCardIds, newConfigData);
   }
 }

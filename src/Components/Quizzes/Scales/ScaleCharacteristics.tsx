@@ -4,8 +4,10 @@ import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 
 const flashCardSetId = "scaleCharacteristics";
 
-function configDataToEnabledFlashCardIds(info: FlashCardStudySessionInfo, configData: any): Array<FlashCardId> {
-  return info.flashCards
+function configDataToEnabledFlashCardIds(
+  flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: any
+): Array<FlashCardId> {
+  return flashCards
     .filter((_, i) => i <= 8)
     .map(fc => fc.id);
 }

@@ -18,9 +18,9 @@ export function renderAnswerSelect(
 }
 
 function configDataToEnabledFlashCardIds(
-  info: FlashCardStudySessionInfo, configData: any
+  flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: any
 ): Array<FlashCardId> {
-  return info.flashCards
+  return flashCards
     .filter((_, i) => (i <= 4) || ((i >= 8) && (i <= 12)))
     .map(fc => fc.id);
 }

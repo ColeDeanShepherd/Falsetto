@@ -29,13 +29,13 @@ export function forEachScaleType(callbackFn: (scaleType: ScaleType, i: number) =
   }
 }
 export function configDataToEnabledFlashCardIds(
-  info: FlashCardStudySessionInfo, configData: IConfigData
+  flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: any
 ): Array<FlashCardId> {
   const newEnabledFlashCardIds = new Array<FlashCardId>();
 
   forEachScaleType((scaleType, i) => {
     if (Utils.arrayContains(configData.enabledScaleTypes, scaleType)) {
-      newEnabledFlashCardIds.push(info.flashCards[i].id);
+      newEnabledFlashCardIds.push(flashCards[i].id);
     }
   });
 
@@ -102,7 +102,7 @@ export class GuitarScalesFlashCardMultiSelect extends React.Component<IGuitarSca
     if (!this.props.onChange) { return; }
 
     const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(
-      this.props.studySessionInfo, newConfigData
+      this.props.studySessionInfo.flashCardSet, this.props.studySessionInfo.flashCards, newConfigData
     );
     this.props.onChange(newEnabledFlashCardIds, newConfigData);
   }

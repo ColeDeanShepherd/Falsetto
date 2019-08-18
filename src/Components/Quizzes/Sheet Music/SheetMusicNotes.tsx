@@ -115,7 +115,7 @@ export function allPitchesMap<TResult>(mapFn: (clef: string, pitch: Pitch, index
   return result;
 }
 function configDataToEnabledFlashCardIds(
-  info: FlashCardStudySessionInfo, configData: IConfigData
+  flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: any
 ): Array<FlashCardId> {
   const enabledFlashCardIds = new Array<FlashCardId>();
 
@@ -132,7 +132,7 @@ function configDataToEnabledFlashCardIds(
       return;
     }
 
-    enabledFlashCardIds.push(info.flashCards[i].id);
+    enabledFlashCardIds.push(flashCards[i].id);
   });
 
   return enabledFlashCardIds;
@@ -278,7 +278,8 @@ export class SheetMusicNotesFlashCardMultiSelect extends React.Component<ISheetM
       areAccidentalsEnabled: configData.areAccidentalsEnabled
     };
     const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(
-      this.props.studySessionInfo, newConfigData);
+      this.props.studySessionInfo.flashCardSet, this.props.studySessionInfo.flashCards, newConfigData
+    );
     this.props.onChange(newEnabledFlashCardIds, newConfigData);
   }
   private onIsBassClefEnabledChange(event: React.ChangeEvent, checked: boolean) {
@@ -292,7 +293,7 @@ export class SheetMusicNotesFlashCardMultiSelect extends React.Component<ISheetM
       areAccidentalsEnabled: configData.areAccidentalsEnabled
     };
     const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(
-      this.props.studySessionInfo, newConfigData
+      this.props.studySessionInfo.flashCardSet, this.props.studySessionInfo.flashCards, newConfigData
     );
     this.props.onChange(newEnabledFlashCardIds, newConfigData);
   }
@@ -307,7 +308,7 @@ export class SheetMusicNotesFlashCardMultiSelect extends React.Component<ISheetM
       areAccidentalsEnabled: checked
     };
     const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(
-      this.props.studySessionInfo, newConfigData
+      this.props.studySessionInfo.flashCardSet, this.props.studySessionInfo.flashCards, newConfigData
     );
     this.props.onChange(newEnabledFlashCardIds, newConfigData);
   }

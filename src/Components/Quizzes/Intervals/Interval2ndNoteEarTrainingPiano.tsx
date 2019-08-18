@@ -59,14 +59,13 @@ export interface IConfigData {
 }
 
 export function configDataToEnabledFlashCardIds(
-  studySessionInfo: FlashCardStudySessionInfo,
-  configData: IConfigData
+  flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: IConfigData
 ): Array<FlashCardId> {
   const enabledFlashCardIds = new Array<string>();
   forEachInterval(rootNotes,
     (interval, direction, p1, p2, isHarmonicInterval, i) => {
     if (Utils.arrayContains(configData.enabledIntervals, interval)) {
-      enabledFlashCardIds.push(studySessionInfo.flashCards[i].id);
+      enabledFlashCardIds.push(flashCards[i].id);
     }
   }, includeHarmonicIntervals, minPitch, maxPitch);
 
@@ -182,7 +181,7 @@ export class FlashCardMultiSelect extends React.Component<IFlashCardMultiSelectP
     if (!this.props.onChange) { return; }
 
     const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(
-      this.props.studySessionInfo, newConfigData
+      this.props.studySessionInfo.flashCardSet, this.props.studySessionInfo.flashCards, newConfigData
     );
     this.props.onChange(newEnabledFlashCardIds, newConfigData);
   }

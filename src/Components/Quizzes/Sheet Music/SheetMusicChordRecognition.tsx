@@ -60,7 +60,7 @@ export function forEachChord(
   }
 }
 export function configDataToEnabledFlashCardIds(
-  info: FlashCardStudySessionInfo, configData: IConfigData
+  flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: any
 ): Array<FlashCardId> {
   const newEnabledFlashCardIds = new Array<FlashCardId>();
 
@@ -73,7 +73,7 @@ export function configDataToEnabledFlashCardIds(
       
       // VexFlow doesn't allow triple sharps/flats
       if (pitches.every(pitch => Math.abs(pitch.signedAccidental) < 3)) {
-        newEnabledFlashCardIds.push(info.flashCards[i].id);
+        newEnabledFlashCardIds.push(flashCards[i].id);
       }
     }
   });
@@ -191,7 +191,8 @@ export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesF
     if (!this.props.onChange) { return; }
 
     const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(
-      this.props.studySessionInfo, newConfigData);
+      this.props.studySessionInfo.flashCardSet, this.props.studySessionInfo.flashCards, newConfigData
+    );
     this.props.onChange(newEnabledFlashCardIds, newConfigData);
   }
 }

@@ -22,14 +22,14 @@ interface IConfigData {
 }
 
 export function configDataToEnabledFlashCardIds(
-  info: FlashCardStudySessionInfo, configData: IConfigData
+  flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: any
 ): Array<FlashCardId> {
   const newEnabledFlashCardIds = new Array<FlashCardId>();
 
   for (let i = 0; i < chordTypes.length; i++) {
     const chordType = chordTypes[i];
     if (Utils.arrayContains(configData.enabledChordTypes, chordType)) {
-      newEnabledFlashCardIds.push(info.flashCards[i].id);
+      newEnabledFlashCardIds.push(flashCards[i].id);
     }
   }
 
@@ -94,7 +94,9 @@ export class GuitarChordsFlashCardMultiSelect extends React.Component<IGuitarCho
   private onChange(newConfigData: IConfigData) {
     if (!this.props.onChange) { return; }
 
-    const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(this.props.studySessionInfo, newConfigData);
+    const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(
+      this.props.studySessionInfo.flashCardSet, this.props.studySessionInfo.flashCards, newConfigData
+    );
     this.props.onChange(newEnabledFlashCardIds, newConfigData);
   }
 }

@@ -6,8 +6,10 @@ import { ChordType } from '../../../Chord';
 
 const flashCardSetId = "chordFormulasRelativeToMajorScale";
 
-function configDataToEnabledFlashCardIds(info: FlashCardStudySessionInfo, configData: any): Array<FlashCardId> {
-  return info.flashCards
+function configDataToEnabledFlashCardIds(
+  flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: any
+): Array<FlashCardId> {
+  return flashCards
     .filter((_, i) => i <= 16)
     .map(fc => fc.id);
 }

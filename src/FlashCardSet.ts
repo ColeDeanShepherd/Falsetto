@@ -7,7 +7,7 @@ export class FlashCardStudySessionInfo {
     public width: number,
     public height: number,
     public flashCardSet: FlashCardSet,
-    public flashCards: FlashCard[],
+    public flashCards: Array<FlashCard>,
     public enabledFlashCardIds: Array<FlashCardId>,
     public configData: any,
     public currentFlashCardId: FlashCardId,
@@ -19,7 +19,9 @@ export class FlashCardStudySessionInfo {
   ) {}
 }
 
-export type ConfigDataToEnabledFlashCardIdsFunc = (info: FlashCardStudySessionInfo, configData: any) => Array<FlashCardId>;
+export type ConfigDataToEnabledFlashCardIdsFunc = (
+  flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: any
+) => Array<FlashCardId>;
 
 export type RenderAnswerSelectFunc = (info: FlashCardStudySessionInfo) => JSX.Element;
 
@@ -54,6 +56,6 @@ export class FlashCardSet {
   public constructor(
     public id: string,
     public name: string,
-    public createFlashCards: () => FlashCard[]
+    public createFlashCards: () => Array<FlashCard>
   ) {}
 }

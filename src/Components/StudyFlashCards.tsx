@@ -392,7 +392,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
   private getInitialEnabledFlashCardIds(): Array<FlashCardId> {
     return this.props.flashCardSet.configDataToEnabledFlashCardIds
       ? this.props.flashCardSet.configDataToEnabledFlashCardIds(
-        this.getStudySessionInfo(0, 0), this.state.configData
+        this.props.flashCardSet, this.props.flashCards, this.state.configData
       )
       : this.props.flashCards.map(fc => fc.id)
   }

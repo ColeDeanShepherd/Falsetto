@@ -5,7 +5,7 @@ import * as Utils from "../../Utils";
 import { FlashCard, FlashCardId } from "../../FlashCard";
 import { Pitch } from "../../Pitch";
 import { PitchLetter } from "../../PitchLetter";
-import { FlashCardStudySessionInfo } from '../../FlashCardSet';
+import { FlashCardStudySessionInfo, FlashCardSet } from '../../FlashCardSet';
 
 // TODO: move this somewhere else
 export const rootNotes = [
@@ -88,8 +88,7 @@ export interface IConfigData {
 export function configDataToEnabledFlashCardIds(
   enableHarmonicIntervals: boolean,
   hasFlashCardPerRootNote: boolean,
-  studySessionInfo: FlashCardStudySessionInfo,
-  configData: IConfigData
+  flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: IConfigData
 ): Array<FlashCardId> {
   const directionsToUse = enableHarmonicIntervals ? directionsWithHarmonic : directions;
 
@@ -107,7 +106,7 @@ export function configDataToEnabledFlashCardIds(
     )
       .map((x, i) => x ? i : -1)
       .filter(i => i >= 0)
-      .map(i => studySessionInfo.flashCards[i].id);
+      .map(i => flashCards[i].id);
   } else {
     return Utils.flattenArrays<boolean>(intervals
       .map(interval => directionsToUse
@@ -119,7 +118,7 @@ export function configDataToEnabledFlashCardIds(
     )
       .map((x, i) => x ? i : -1)
       .filter(i => i >= 0)
-      .map(i => studySessionInfo.flashCards[i].id);
+      .map(i => flashCards[i].id);
   }
 }
 
@@ -245,7 +244,8 @@ export class IntervalEarTrainingFlashCardMultiSelect extends React.Component<IIn
     const enableHarmonicIntervals = this.props.enableHarmonicIntervals === true;
     const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(
       enableHarmonicIntervals, this.props.hasFlashCardPerRootNote,
-      this.props.studySessionInfo, newConfigData);
+      this.props.studySessionInfo.flashCardSet, this.props.studySessionInfo.flashCards, newConfigData
+    );
     this.props.onChange(newEnabledFlashCardIds, newConfigData);
   }
 }

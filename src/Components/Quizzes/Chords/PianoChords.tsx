@@ -34,7 +34,7 @@ export function forEachChord(callbackFn: (rootPitchString: string, chordType: Ch
   }
 }
 export function configDataToEnabledFlashCardIds(
-  info: FlashCardStudySessionInfo, configData: IConfigData
+  flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: any
 ): Array<FlashCardId> {
   const newEnabledFlashCardIds = new Array<FlashCardId>();
 
@@ -43,7 +43,7 @@ export function configDataToEnabledFlashCardIds(
       Utils.arrayContains(configData.enabledRootPitches, rootPitchStr) &&
       Utils.arrayContains(configData.enabledChordTypes, chordType.name)
     ) {
-      newEnabledFlashCardIds.push(info.flashCards[i].id);
+      newEnabledFlashCardIds.push(flashCards[i].id);
     }
   });
 
@@ -154,7 +154,9 @@ export class PianoChordsFlashCardMultiSelect extends React.Component<IPianoChord
   private onChange(newConfigData: IConfigData) {
     if (!this.props.onChange) { return; }
 
-    const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(this.props.studySessionInfo, newConfigData);
+    const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(
+      this.props.studySessionInfo.flashCardSet, this.props.studySessionInfo.flashCards, newConfigData
+    );
     this.props.onChange(newEnabledFlashCardIds, newConfigData);
   }
 }

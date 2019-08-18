@@ -133,8 +133,8 @@ export function createFlashCardSet(): FlashCardSet {
     createFlashCards
   );
   flashCardSet.configDataToEnabledFlashCardIds = (
-    studySessionInfo: FlashCardStudySessionInfo, configData: any
-  ) => configDataToEnabledFlashCardIds(true, false, studySessionInfo, configData);
+    flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: any
+  ) => configDataToEnabledFlashCardIds(true, false, flashCardSet, flashCards, configData);
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;

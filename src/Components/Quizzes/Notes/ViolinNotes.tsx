@@ -33,13 +33,13 @@ function forEachNote(callbackFn: (stringIndex: number, fretNumber: number, i: nu
   }
 }
 export function configDataToEnabledFlashCardIds(
-  info: FlashCardStudySessionInfo, configData: IConfigData
+  flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: any
 ): Array<FlashCardId> {
   const flashCardIds = new Array<FlashCardId>();
 
   forEachNote((_, fretNumber, i) => {
     if (fretNumber <= configData.maxFret) {
-      flashCardIds.push(info.flashCards[i].id);
+      flashCardIds.push(flashCards[i].id);
     }
   });
 
@@ -81,7 +81,7 @@ export class ViolinNotesFlashCardMultiSelect extends React.Component<IViolinNote
       maxFret: clampedMaxFret
     }
     const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(
-      this.props.studySessionInfo, newConfigData
+      this.props.studySessionInfo.flashCardSet, this.props.studySessionInfo.flashCards, newConfigData
     );
     this.props.onChange(newEnabledFlashCardIds, newConfigData);
   }

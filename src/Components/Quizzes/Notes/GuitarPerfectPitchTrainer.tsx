@@ -23,7 +23,7 @@ interface IConfigData {
 const flashCardSetId = "guitarPerfectPitchTrainer";
 
 export function configDataToEnabledFlashCardIds(
-  info: FlashCardStudySessionInfo, configData: IConfigData
+  flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: any
 ): Array<FlashCardId> {
   const notesPerString = 12;
 
@@ -31,7 +31,7 @@ export function configDataToEnabledFlashCardIds(
   for (let stringIndex = 0; stringIndex < standard6StringGuitarTuning.stringCount; stringIndex++) {
     for (let fretNumber = 0; fretNumber <= configData.maxFret; fretNumber++) {
       const flashCardIndex = (notesPerString * stringIndex) + fretNumber;
-      enabledFlashCardIds.push(info.flashCards[flashCardIndex].id);
+      enabledFlashCardIds.push(flashCards[flashCardIndex].id);
     }
   }
 
@@ -71,7 +71,9 @@ export class FlashCardMultiSelect extends React.Component<IFlashCardMultiSelectP
     const newConfigData: IConfigData = {
       maxFret: clampedMaxFret
     }
-    const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(this.props.studySessionInfo, newConfigData);
+    const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(
+      this.props.studySessionInfo.flashCardSet, this.props.studySessionInfo.flashCards, newConfigData
+    );
     this.props.onChange(newEnabledFlashCardIds, newConfigData);
   }
 }
