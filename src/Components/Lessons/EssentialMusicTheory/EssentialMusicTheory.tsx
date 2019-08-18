@@ -7,24 +7,11 @@ import * as Utils from "../../../Utils";
 
 import { playPitches, playPitchesSequentially } from "../../../Piano";
 
-import { YouTubeVideo } from "../../Utils/YouTubeVideo";
-import { TimeSignature } from "../../../TimeSignature";
-
 import { PianoKeyboard, renderPianoKeyboardNoteNames, PianoKeyboardMetrics, renderPianoKeyboardKeyLabels } from "../../Utils/PianoKeyboard";
 import { Pitch } from '../../../Pitch';
 import { PitchLetter } from '../../../PitchLetter';
 
-import * as PianoNotes from "../../Quizzes/Notes/PianoNotes";
-import * as GuitarNotes from "../../Quizzes/Notes/GuitarNotes";
-import * as SheetMusicNotes from "../../Quizzes/Sheet Music/SheetMusicNotes";
-
 import { createStudyFlashCardSetComponent } from '../../StudyFlashCards';
-
-import { Metronome } from "../../Tools/Metronome";
-
-import * as RhythmQuiz from "./RhythmQuiz";
-import * as NoteDurations from "../../Quizzes/Sheet Music/SheetMusicNoteDurations";
-import * as NoteValueNumbers from "../../Quizzes/Notes/NoteValueNumbers";
 
 import intervalQualityChart from "../../../img/interval-qualities.svg";
 
@@ -51,37 +38,14 @@ import * as GuitarChords from "../../Quizzes/Chords/GuitarChords";
 import * as ChordEarTraining from "../../Quizzes/Chords/ChordEarTraining";
 import { ChordViewer } from "../../Tools/ChordViewer";
 
-import measures from "../../../img/sheet-music/measures.svg";
-import timeSignatureDiagram from "../../../img/sheet-music/time-signature.svg";
-import notesRestsDiagram from "../../../img/sheet-music/notes-and-rests.svg";
-
-import wholeNote from "../../../img/sheet-music/whole-note.svg";
-import wholeRest from "../../../img/sheet-music/whole-rest.svg";
-import halfNote from "../../../img/sheet-music/half-note.svg";
-import halfRest from "../../../img/sheet-music/half-rest.svg";
-import quarterNote from "../../../img/sheet-music/quarter-note.svg";
-import quarterRest from "../../../img/sheet-music/quarter-rest.svg";
-import eighthNote from "../../../img/sheet-music/eighth-note.svg";
-import eighthRest from "../../../img/sheet-music/eighth-rest.svg";
-import sixteenthNote from "../../../img/sheet-music/sixteenth-note.svg";
-import sixteenthRest from "../../../img/sheet-music/sixteenth-rest.svg";
 import _32ndNote from "../../../img/sheet-music/32nd-note.svg";
 import _32ndRest from "../../../img/sheet-music/32nd-rest.svg";
-
-import timeSignature44 from "../../../img/sheet-music/time-signature-4-4.svg";
-import timeSignature34 from "../../../img/sheet-music/time-signature-3-4.svg";
-
-import { TimeSignaturePlayer } from '../../Tools/TimeSignaturePlayer';
-import { NoteValuePlayer } from '../../Tools/NoteValuePlayer';
-
-import * as NotesQuiz from "../../Quizzes/Notes/NotesQuiz";
 
 import { MAX_MAIN_CARD_WIDTH } from '../../Style';
 import { Rect2D } from '../../../Rect2D';
 import { Vector2D } from '../../../Vector2D';
 import { Size2D } from '../../../Size2D';
 import { Margin } from '../../../Margin';
-import { NavLink } from 'react-router-dom';
 import { ScaleType, Scale } from '../../../Scale';
 import { doesKeyUseSharps } from '../../../Key';
 import { PianoScaleDronePlayer } from '../../Utils/PianoScaleDronePlayer';
@@ -450,7 +414,7 @@ export const SubSectionTitle: React.FunctionComponent<{}> = props => <h3>{props.
 
 export const NoteText: React.FunctionComponent<{}> = props => <p style={{ color: "#004085", backgroundColor: "#cce5ff", padding: "1em", border: "1px solid #b8daff", borderRadius: "4px" }}>NOTE: {props.children}</p>;
 
-const OctavesPlayer: React.FunctionComponent<{}> = props => {
+export const OctavesPlayer: React.FunctionComponent<{}> = props => {
   return (
     <PianoKeyboard
       rect={new Rect2D(new Size2D(300, 150), new Vector2D(0, 0))}
@@ -836,40 +800,6 @@ export interface SectionProps {
   isEmbedded: boolean;
   hideMoreInfoUri: boolean;
 }
-export const NotesSection: React.FunctionComponent<SectionProps> = props => (
-  <div>
-    <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory/rhythm", "<< Previous: Rhythm")} | {App.instance.renderNavLink("/essential-music-theory/intervals", "Next: Intervals >>")}</p>
-
-    <SectionTitle>Notes</SectionTitle>
-    <p>In music, a <Term>note</Term> is a sound with a distinct pitch and a duration, and a <Term>pitch</Term> is the "highness" or "lowness" of a sound.</p>
-    <NoteText><Term>Note</Term> and <Term>pitch</Term> have slightly different meanings, but in practice these words are often used interchangably.</NoteText>
-    <p>Technically, there are an infinite number of pitches, but the vast majority of music is composed of a standardized set of pitches with distinct names. These names, arranged on a small section of a piano, are:</p>
-
-    <div style={{ textAlign: "center" }}><OctavesPlayer /></div>
-
-    <p>A few things to notice:</p>
-    <ul>
-      <li>There are only 12 pitch names here! This is because humans hear all pitches with the same name as very similar, regardless of how high or low they are played on an instrument. So, the pitch names repeat as you go higher or lower. <strong>Try clicking the piano above to hear pitches of different highness/lowness with the same name!</strong></li>
-      <li>The base of all pitch names is one of the seven letters: A, B, C, D, E, F, G. We do not use more than seven letters to name pitches because most Western music is based on 7-note <Term>scales</Term> which use each letter exactly once. We will cover <Term>scales</Term> in a future lesson.</li>
-      <li>The 7 notes on white keys each have a one-letter name with no symbol. These are called <Term>natural</Term> notes.</li>
-      <li>The black keys each have two names: one with a "#", read as "sharp" and meaning slightly raised, and one with a "b", read as "flat" and meaning slightly lowered. This is because Western music has 12 names for pitches but only uses 7 letters. To name the 5 pitches on the black piano keys we add sharps or flats &mdash; called <Term>accidentals</Term> &mdash; to the letters to indicate where the note is compared to an adjacent note.</li>
-      <li>There are no black keys between B &amp; C and E &amp; F. This is because we are only left with 5 notes after naming all the natural notes &mdash; there has to be gaps somewhere! These "missing" black notes also create groups of 2 &amp; 3 black notes, which are useful for finding where you are on a piano by sight or by touch.</li>
-    </ul>
-    
-    <NoteText>Though there are no black keys in-between B &amp; C and E &amp; F, you can &mdash; and sometimes must, as we will discover in a future lesson &mdash; use accidentals to name those notes relative to another. So, Cb is the same as B, B# is the same as C, Fb is the same as E, and E# is the same as F.</NoteText>
-    
-    <p>It is <strong>vitally</strong> important to learn where all the notes are on your instrument of choice. Please take some time to do so before moving on to the next lesson!</p>
-    <p>If your instrument of choice is piano, there is an interactive exercise below. If your instrument of choise is guitar, there is an interactive exercise below, and a comprehensive lesson: <NavLink to="/learn-guitar-notes-in-10-steps" className="menu-link">Learn the Notes on Guitar in 10 Easy Steps</NavLink></p>
-
-    <SubSectionTitle>Interactive Exercises</SubSectionTitle>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(NotesQuiz.createFlashCardSet(), props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(PianoNotes.createFlashCardSet(), props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(GuitarNotes.createFlashCardSet(), props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(SheetMusicNotes.createFlashCardSet(), props.isEmbedded, props.hideMoreInfoUri)}</div>
-    
-    <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory/rhythm", "<< Previous: Rhythm")} | {App.instance.renderNavLink("/essential-music-theory/intervals", "Next: Intervals >>")}</p>
-  </div>
-);
 export const IntervalsSection: React.FunctionComponent<SectionProps> = props => (
   <div>
     <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory/notes", "<< Previous: Notes")} | {App.instance.renderNavLink("/essential-music-theory/scales-and-modes", "Next: Scales & Modes >>")}</p>
