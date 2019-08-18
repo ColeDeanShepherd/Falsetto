@@ -7,12 +7,11 @@ import * as FlashCardUtils from "../Utils";
 import { PianoKeyboard } from "../../Utils/PianoKeyboard";
 import { FlashCard, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardLevel } from "../../../FlashCardSet";
-import { Pitch } from "../../../Pitch";
+import { Pitch, ambiguousPitchStringsSymbols } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 
 const flashCardSetId = "pianoNotes1Octave";
 
-const noteStrings = ["C", "C♯/D♭", "D", "D♯/E♭", "E", "F", "F♯/G♭", "G", "G♯/A♭", "A", "A♯/B♭", "B"];
 function isNoteStringNatural(noteString: string): boolean {
   return noteString.length === 1;
 }
@@ -41,7 +40,7 @@ export function createFlashCards(): FlashCard[] {
   const highestPitch = new Pitch(PitchLetter.B, 0, 4);
   const pianoStyle = { width: "100%", maxWidth: "200px" };
 
-  return noteStrings
+  return ambiguousPitchStringsSymbols
     .map((noteString, i) => {
       const pitch = Pitch.createFromMidiNumber((new Pitch(PitchLetter.C, 0, 4)).midiNumber + i);
       const deserializedId = {

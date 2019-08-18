@@ -1,6 +1,6 @@
 import * as Utils from "./Utils";
 import { Pitch } from "./Pitch";
-import { StringedInstrumentTuning as StringedInstrumentTuning } from './Components/Utils/GuitarFretboard';
+import { StringedInstrumentTuning } from './Components/Utils/StringedInstrumentTuning';
 
 export class StringedInstrumentNote {
   public static allNotesOfPitches(

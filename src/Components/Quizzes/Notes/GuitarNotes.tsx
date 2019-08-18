@@ -4,10 +4,8 @@ import { TextField } from "@material-ui/core";
 import * as Utils from "../../../Utils";
 import { Size2D } from "../../../Size2D";
 import * as FlashCardUtils from "../Utils";
-import {
-  GuitarFretboard,
-  standard6StringGuitarTuning
-} from "../../Utils/GuitarFretboard";
+import { GuitarFretboard} from "../../Utils/GuitarFretboard";
+import { standard6StringGuitarTuning } from "../../Utils/StringedInstrumentTuning";
 import { FlashCard, FlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { StringedInstrumentNote } from '../../../GuitarNote';
@@ -106,7 +104,7 @@ export function createFlashCardSet(guitarNotes?: Array<StringedInstrumentNote>):
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderNoteAnswerSelect;
-  flashCardSet.moreInfoUri = "https://medium.com/@aslushnikov/memorizing-fretboard-a9f4f28dbf03";
+  flashCardSet.moreInfoUri = "/learn-guitar-notes-in-10-steps";
   flashCardSet.containerHeight = "120px";
 
   return flashCardSet;

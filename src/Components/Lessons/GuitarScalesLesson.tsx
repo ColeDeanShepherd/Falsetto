@@ -5,9 +5,10 @@ import * as Utils from "../../Utils";
 import App from '../App';
 import {
   GuitarFretboard, StringedInstrumentMetrics,
-  renderGuitarNoteHighlightsAndLabels, renderFretNumbers, getStandardGuitarTuning,
+  renderGuitarNoteHighlightsAndLabels, renderFretNumbers,
   getPreferredGuitarScaleShape, 
 } from '../Utils/GuitarFretboard';
+import { getStandardGuitarTuning } from "../Utils/StringedInstrumentTuning";
 import { Pitch } from '../../Pitch';
 import { PitchLetter } from '../../PitchLetter';
 import { MAX_MAIN_CARD_WIDTH } from '../Style';

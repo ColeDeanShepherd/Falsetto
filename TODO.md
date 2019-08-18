@@ -1,5 +1,6 @@
 # To-Do
 ## High Priority
+* Add "Move to next level" button, remove always-there "next level" text
 * Actually fix levels implementation.
 * Refactor & check everything.
 * Singing interval ear trainer (note plays, sing above & below)

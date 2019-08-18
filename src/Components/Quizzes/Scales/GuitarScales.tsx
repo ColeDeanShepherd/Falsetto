@@ -1,5 +1,5 @@
 import * as React from "react";
-import { TableRow, TableCell, Table, TableHead, TableBody, Grid, Checkbox, Button } from "@material-ui/core";
+import { TableRow, TableCell, Table, TableHead, TableBody, Grid, Checkbox } from "@material-ui/core";
 
 import * as Utils from "../../../Utils";
 import { Size2D } from "../../../Size2D";
@@ -8,10 +8,9 @@ import { FlashCard, FlashCardSide, FlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { Pitch } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
-import { getStandardGuitarTuning } from "../../Utils/GuitarFretboard";
+import { getStandardGuitarTuning } from "../../Utils/StringedInstrumentTuning";
 import { ChordScaleFormula, ChordScaleFormulaPart } from '../../../ChordScaleFormula';
 import { GuitarScaleViewer } from '../../Utils/GuitarScaleViewer';
-import { GuitarNotesAnswerSelect } from '../../Utils/GuitarNotesAnswerSelect';
 import { renderDistinctFlashCardSideAnswerSelect } from '../Utils';
 
 const flashCardSetId = "guitarScalesOrderedNotes";

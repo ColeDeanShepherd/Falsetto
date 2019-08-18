@@ -12,7 +12,7 @@ import { PianoKeyboard } from "../Utils/PianoKeyboard";
 import { playPitches } from '../../Piano';
 import * as PianoScaleDronePlayer from "../Utils/PianoScaleDronePlayer";
 import { GuitarChordViewer } from '../Utils/GuitarChordViewer';
-import { getStandardGuitarTuning } from '../Utils/GuitarFretboard';
+import { getStandardGuitarTuning } from '../Utils/StringedInstrumentTuning';
 
 const guitarTuning = getStandardGuitarTuning(6);
 

@@ -10,8 +10,7 @@ import { PitchLetter } from "../../../PitchLetter";
 import { ChordType } from "../../../Chord";
 import {  renderDistinctFlashCardSideAnswerSelect } from '../Utils';
 import { GuitarChordViewer } from '../../Utils/GuitarChordViewer';
-import { getStandardGuitarTuning } from '../../Utils/GuitarFretboard';
-import { GuitarNotesAnswerSelect } from '../../Utils/GuitarNotesAnswerSelect';
+import { getStandardGuitarTuning } from '../../Utils/StringedInstrumentTuning';
 
 const flashCardSetId = "guitarChordOrderedNotes";
 const guitarTuning = getStandardGuitarTuning(6);

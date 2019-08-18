@@ -6,7 +6,13 @@ import * as FlashCardUtils from "../Utils";
 import { FlashCard, FlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { Interval } from "../../../Interval";
-import { standard6StringGuitarTuning, GuitarFretboard, StringedInstrumentMetrics, getIntervalDeltaFretNumber, StringedInstrumentFingerboard } from "../../Utils/GuitarFretboard";
+import {
+  GuitarFretboard,
+  StringedInstrumentMetrics,
+  getIntervalDeltaFretNumber,
+  StringedInstrumentFingerboard
+} from "../../Utils/GuitarFretboard";
+import { standard6StringGuitarTuning } from "../../Utils/StringedInstrumentTuning";
 import { VerticalDirection } from "../../../VerticalDirection";
 import { StringedInstrumentNote } from '../../../GuitarNote';
 

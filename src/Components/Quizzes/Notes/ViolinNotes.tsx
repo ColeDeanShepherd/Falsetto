@@ -4,10 +4,8 @@ import { TextField } from "@material-ui/core";
 import * as Utils from "../../../Utils";
 import { Size2D } from "../../../Size2D";
 import * as FlashCardUtils from "../Utils";
-import {
-  ViolinFingerboard,
-  standardViolinTuning
-} from "../../Utils/GuitarFretboard";
+import { ViolinFingerboard } from "../../Utils/GuitarFretboard";
+import { standardViolinTuning } from "../../Utils/StringedInstrumentTuning";
 import { FlashCard, FlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { StringedInstrumentNote } from '../../../GuitarNote';
