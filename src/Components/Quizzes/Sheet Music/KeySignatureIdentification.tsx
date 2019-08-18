@@ -28,21 +28,21 @@ const allowedPitches = [
   new Pitch(PitchLetter.B, 0, 0)
 ];
 export const answers = [
-  "Cb Major, Ab Minor",
+  "C♭ Major, A♭ Minor",
   "C Major, A Minor",
-  "C# Major, A# Minor",
-  "Db Major, Bb Minor",
+  "C♯ Major, A♯ Minor",
+  "D♭ Major, B♭ Minor",
   "D Major, B Minor",
-  "Eb Major, C Minor",
-  "E Major, C# Minor",
+  "E♭ Major, C Minor",
+  "E Major, C♯ Minor",
   "F Major, D Minor",
-  "F# Major, D# Minor",
-  "Gb Major, Eb Minor",
+  "F♯ Major, D♯ Minor",
+  "G♭ Major, E♭ Minor",
   "G Major, E Minor",
-  "Ab Major, F Minor",
-  "A Major, F# Minor",
-  "Bb Major, G Minor",
-  "B Major, G# Minor"
+  "A♭ Major, F Minor",
+  "A Major, F♯ Minor",
+  "B♭ Major, G Minor",
+  "B Major, G♯ Minor"
 ];
 
 export interface ISheetMusicKeySignatureProps {

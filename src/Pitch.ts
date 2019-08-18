@@ -39,7 +39,7 @@ export function getAccidentalString(signedAccidental: number, useSymbols: boolea
   }
 
   const accidentalCharacter = (signedAccidental > 0)
-    ? useSymbols ? "#" : "#"
+    ? useSymbols ? "♯" : "#"
     : useSymbols ? "♭" : "b";
   return accidentalCharacter.repeat(Math.abs(signedAccidental));
 }
@@ -62,7 +62,11 @@ export const ambiguousPitchStrings = [
   "C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb", "G", "G#/Ab", "A", "A#/Bb", "B"
 ];
 export const ambiguousPitchStringsSymbols = [
-  "C", "C#/D♭", "D", "D#/E♭", "E", "F", "F#/G♭", "G", "G#/A♭", "A", "A#/B♭", "B"
+  "C", "C♯/D♭", "D", "D♯/E♭", "E", "F", "F♯/G♭", "G", "G♯/A♭", "A", "A♯/B♭", "B"
+];
+
+export const ambiguousKeyPitchStringsSymbols = [
+  "A", "A♯/B♭", "B", "C", "C♯/D♭", "D", "D♯/E♭", "E", "F", "F♯/G♭", "G", "G♯/A♭"
 ];
 
 export class Pitch {

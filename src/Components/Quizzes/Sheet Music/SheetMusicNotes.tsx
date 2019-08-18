@@ -9,7 +9,6 @@ import { PitchLetter } from "../../../PitchLetter";
 import { FlashCard, FlashCardId } from "../../../FlashCard";
 import { Pitch } from "../../../Pitch";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
-import { AnswerDifficulty } from "../../../AnswerDifficulty";
 
 const flashCardSetId = "sheetMusicNotes";
 
@@ -140,9 +139,9 @@ function configDataToEnabledFlashCardIds(
 export function renderNoteAnswerSelect(
   info: FlashCardStudySessionInfo
 ): JSX.Element {
-  const sharpNotes = ["A#", "B#", "C#", "D#", "E#", "F#", "G#"];
+  const sharpNotes = ["A♯", "B♯", "C♯", "D♯", "E♯", "F♯", "G♯"];
   const naturalNotes = ["A", "B", "C", "D", "E", "F", "G"];
-  const flatNotes = ["Ab", "Bb", "Cb", "Db", "Eb", "Fb", "Gb"];
+  const flatNotes = ["A♭", "B♭", "C♭", "D♭", "E♭", "F♭", "G♭"];
   return (
     <div>
       {FlashCardUtils.renderStringAnswerSelectInternal(

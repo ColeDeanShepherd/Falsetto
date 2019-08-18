@@ -238,11 +238,11 @@ export class IntervalNotesFlashCardMultiSelect extends React.Component<IInterval
 export function renderNoteAnswerSelect(
   info: FlashCardStudySessionInfo
 ): JSX.Element {
-  const doubleSharpNotes = ["A##", "B##", "C##", "D##", "E##", "F##", "G##"];
-  const sharpNotes = ["A#", "B#", "C#", "D#", "E#", "F#", "G#"];
+  const doubleSharpNotes = ["A♯♯", "B♯♯", "C♯♯", "D♯♯", "E♯♯", "F♯♯", "G♯♯"];
+  const sharpNotes = ["A♯", "B♯", "C♯", "D♯", "E♯", "F♯", "G♯"];
   const naturalNotes = ["A", "B", "C", "D", "E", "F", "G"];
-  const flatNotes = ["Ab", "Bb", "Cb", "Db", "Eb", "Fb", "Gb"];
-  const doubleFlatNotes = ["Abb", "Bbb", "Cbb", "Dbb", "Ebb", "Fbb", "Gbb"];
+  const flatNotes = ["A♭", "B♭", "C♭", "D♭", "E♭", "F♭", "G♭"];
+  const doubleFlatNotes = ["A♭♭", "B♭♭", "C♭♭", "D♭♭", "E♭♭", "F♭♭", "G♭♭"];
 
   return (
     <div>

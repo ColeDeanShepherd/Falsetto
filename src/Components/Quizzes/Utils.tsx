@@ -2,7 +2,7 @@ import * as React from "react";
 import { Button } from "@material-ui/core";
 
 import * as Utils from "../../Utils";
-import { FlashCard, FlashCardSide, FlashCardSideRenderFn, FlashCardId } from "../../FlashCard";
+import { FlashCard, FlashCardSideRenderFn, FlashCardId } from "../../FlashCard";
 import { callFlashCardSideRenderFn } from "../../Components/FlashCard";
 import { AnswerDifficulty } from "../../AnswerDifficulty";
 import { FlashCardStudySessionInfo } from '../../FlashCardSet';
@@ -11,7 +11,7 @@ export function renderNoteAnswerSelect(
   info: FlashCardStudySessionInfo
 ): JSX.Element {
   const naturalNotes = ["A", "B", "C", "D", "E", "F", "G"];
-  const accidentalNotes = ["A#/B♭", "C#/D♭", "D#/E♭", "F#/G♭", "G#/A♭"];
+  const accidentalNotes = ["A♯/B♭", "C♯/D♭", "D♯/E♭", "F♯/G♭", "G♯/A♭"];
   return (
     <div>
       {renderStringAnswerSelectInternal(

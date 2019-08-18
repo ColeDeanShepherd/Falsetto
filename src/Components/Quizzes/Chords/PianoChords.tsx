@@ -8,15 +8,12 @@ import { PianoKeyboard } from "../../Utils/PianoKeyboard";
 import { FlashCard, FlashCardSide, FlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { AnswerDifficulty } from "../../../AnswerDifficulty";
-import { Pitch } from "../../../Pitch";
+import { Pitch, ambiguousKeyPitchStringsSymbols } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 import { TableRow, TableCell, Table, TableHead, TableBody, Grid, Checkbox, Button, Typography } from "@material-ui/core";
 import { Chord, ChordType } from "../../../Chord";
-import { PianoKeysAnswerSelect } from "../../Utils/PianoKeysAnswerSelect";
 
 const flashCardSetId = "pianoChords";
-
-const rootPitchStrs = ["Ab", "A", "Bb", "B/Cb", "C", "C#/Db", "D", "Eb", "E", "F", "F#/Gb", "G"];
 
 interface IConfigData {
   enabledRootPitches: string[];
@@ -26,7 +23,7 @@ interface IConfigData {
 export function forEachChord(callbackFn: (rootPitchString: string, chordType: ChordType, i: number) => void) {
   let i = 0;
 
-  for (const rootPitchStr of rootPitchStrs) {
+  for (const rootPitchStr of ambiguousKeyPitchStringsSymbols) {
     for (const chordType of ChordType.All) {
       callbackFn(rootPitchStr, chordType, i);
       i++;
@@ -59,7 +56,7 @@ export class PianoChordsFlashCardMultiSelect extends React.Component<IPianoChord
   public render(): JSX.Element {
     const configData = this.props.studySessionInfo.configData as IConfigData;
     
-    const rootPitchCheckboxTableRows = rootPitchStrs
+    const rootPitchCheckboxTableRows = ambiguousKeyPitchStringsSymbols
       .map((rootPitch, i) => {
         const isChecked = configData.enabledRootPitches.indexOf(rootPitch) >= 0;
         const isEnabled = !isChecked || (configData.enabledRootPitches.length > 1);
@@ -190,7 +187,7 @@ export class PianoChordsAnswerSelect extends React.Component<IPianoChordsAnswerS
         </Typography>
         <div style={{padding: "1em 0"}}>
           <div>
-            {rootPitchStrs.slice(0, 6).map(rootPitchStr => {
+            {ambiguousKeyPitchStringsSymbols.slice(0, 6).map(rootPitchStr => {
               const style: any = { textTransform: "none" };
               
               const isPressed = rootPitchStr === this.state.selectedRootPitch;
@@ -211,7 +208,7 @@ export class PianoChordsAnswerSelect extends React.Component<IPianoChordsAnswerS
             })}
           </div>
           <div>
-            {rootPitchStrs.slice(6, 12).map(rootPitchStr => {
+            {ambiguousKeyPitchStringsSymbols.slice(6, 12).map(rootPitchStr => {
               const style: any = { textTransform: "none" };
               
               const isPressed = rootPitchStr === this.state.selectedRootPitch;
@@ -300,7 +297,7 @@ export function createFlashCardSet(): FlashCardSet {
   };
 
   const initialConfigData: IConfigData = {
-    enabledRootPitches: rootPitchStrs.slice(),
+    enabledRootPitches: ambiguousKeyPitchStringsSymbols.slice(),
     enabledChordTypes: ChordType.All
       .filter((_, chordIndex) => chordIndex <= 8)
       .map(chord => chord.name)
@@ -317,7 +314,7 @@ export function createFlashCardSet(): FlashCardSet {
 }
 export function createFlashCards(): FlashCard[] {
   return Utils.flattenArrays<FlashCard>(
-    rootPitchStrs.map((rootPitchStr, i) =>
+    ambiguousKeyPitchStringsSymbols.map((rootPitchStr, i) =>
       ChordType.All.map(chordType => {
         const halfStepsFromC = Utils.mod(i - 4, 12);
         const rootPitch = Pitch.createFromMidiNumber((new Pitch(PitchLetter.C, 0, 4)).midiNumber + halfStepsFromC);

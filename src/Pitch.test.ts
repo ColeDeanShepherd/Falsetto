@@ -47,7 +47,7 @@ test("createFromLineOrSpaceOnStaffNumber(-7, -2) is Cbb-1", () => {
     Pitch.createFromLineOrSpaceOnStaffNumber(-7, -2).equals(new Pitch(PitchLetter.C, -2, -1))
   ).toBeTruthy();
 });
-test("createFromLineOrSpaceOnStaffNumber(5, 2) is A##0", () => {
+test("createFromLineOrSpaceOnStaffNumber(5, 2) is A♯♯0", () => {
   expect(
     Pitch.createFromLineOrSpaceOnStaffNumber(5, 2).equals(new Pitch(PitchLetter.A, 2, 0))
   ).toBeTruthy();

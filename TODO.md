@@ -1,5 +1,8 @@
 # To-Do
 ## High Priority
+* Refactor & check everything.
+* Singing interval ear trainer (note plays, sing above & below)
+  * FFT library, pick out main tone
 * Double-check piano scales
 * Persistent data
   * Carefully review flash card IDs

@@ -5,19 +5,16 @@ import * as Utils from "../../../Utils";
 import { Vector2D } from '../../../Vector2D';
 import { Size2D } from "../../../Size2D";
 import { Rect2D } from '../../../Rect2D';
-import { Pitch } from "../../../Pitch";
+import { Pitch, ambiguousKeyPitchStringsSymbols } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 import { ScaleType } from "../../../Scale";
 import { PianoKeyboard } from "../../Utils/PianoKeyboard";
 import { FlashCard, FlashCardSide, FlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
-import { PianoKeysAnswerSelect } from "../../Utils/PianoKeysAnswerSelect";
 import { ScaleAnswerSelect } from "../../Utils/ScaleAnswerSelect";
 import { ChordScaleFormula, ChordScaleFormulaPart } from '../../../ChordScaleFormula';
 
 const flashCardSetId = "pianoScalesOrderedNotes";
-
-const rootPitchStrs = ["Ab", "A", "Bb", "B/Cb", "C", "C#/Db", "D", "Eb", "E", "F", "F#/Gb", "G"];
 
 interface IConfigData {
   enabledRootPitches: string[];
@@ -28,7 +25,7 @@ export function forEachScale(callbackFn: (scaleType: ScaleType, rootPitchStr: st
   let i = 0;
 
   for (const scaleType of ScaleType.All) {
-    for (const rootPitchStr of rootPitchStrs) {
+    for (const rootPitchStr of ambiguousKeyPitchStringsSymbols) {
       callbackFn(scaleType, rootPitchStr, i);
       i++;
     }
@@ -59,7 +56,7 @@ export interface IPianoScalesFlashCardMultiSelectState {}
 export class PianoScalesFlashCardMultiSelect extends React.Component<IPianoScalesFlashCardMultiSelectProps, IPianoScalesFlashCardMultiSelectState> {
   public render(): JSX.Element {
     const configData = this.props.studySessionInfo.configData as IConfigData;
-    const rootPitchCheckboxTableRows = rootPitchStrs
+    const rootPitchCheckboxTableRows = ambiguousKeyPitchStringsSymbols
       .map((rootPitch, i) => {
         const isChecked = configData.enabledRootPitches.indexOf(rootPitch) >= 0;
         const isEnabled = !isChecked || (configData.enabledRootPitches.length > 1);
@@ -173,7 +170,7 @@ export function createFlashCardSet(): FlashCardSet {
   };
 
   const initialConfigData: IConfigData = {
-    enabledRootPitches: rootPitchStrs.slice(),
+    enabledRootPitches: ambiguousKeyPitchStringsSymbols.slice(),
     enabledScaleTypes: ScaleType.All
       .filter((_, scaleIndex) => scaleIndex <= 8)
       .map(scale => scale.name)

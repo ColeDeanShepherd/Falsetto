@@ -162,7 +162,7 @@ export class GuitarScalesLesson extends React.Component<IGuitarScalesLessonProps
           />
 
           <h3>Lydian</h3>
-          <p>The Bb lydian mode is the 4th mode of the F major scale, and starts on the 3rd part of the repeating pattern. Here is the Bb lydian mode:</p>
+          <p>The B♭ lydian mode is the 4th mode of the F major scale, and starts on the 3rd part of the repeating pattern. Here is the B♭ lydian mode:</p>
           <GuitarScalePatternDiagram
             scale={new Scale(ScaleType.Lydian, ionianPitches[3])}
           />
@@ -210,7 +210,7 @@ export class GuitarScalesLesson extends React.Component<IGuitarScalesLessonProps
           />
           
           <h3>Major Pentatonic Mode 3</h3>
-          <p>The 3rd mode of the A major pentatonic scale starts with the 1st 4-fret interval, on the note C#, and has the following shape:</p>
+          <p>The 3rd mode of the A major pentatonic scale starts with the 1st 4-fret interval, on the note C♯, and has the following shape:</p>
           <GuitarScalePatternDiagram
             scale={new Scale(ScaleType.MajorPentatonicMode3, majorPentatonicPitches[2])}
           />
@@ -222,7 +222,7 @@ export class GuitarScalesLesson extends React.Component<IGuitarScalesLessonProps
           />
 
           <h3>Minor Pentatonic Scale</h3>
-          <p>The 5th mode of the A major pentatonic scale is the F# minor pentatonic scale, which starts on the 2nd 4-fret interval and has the following shape:</p>
+          <p>The 5th mode of the A major pentatonic scale is the F♯ minor pentatonic scale, which starts on the 2nd 4-fret interval and has the following shape:</p>
           <GuitarScalePatternDiagram
             scale={new Scale(ScaleType.MinorPentatonic, majorPentatonicPitches[4])}
           />
@@ -263,13 +263,13 @@ export class GuitarScalesLesson extends React.Component<IGuitarScalesLessonProps
           />
           
           <h3>Lydian Augmented</h3>
-          <p>The Ab lydian augmented mode is the 3rd mode of the F melodic minor scale, and starts on the 7th part of the repeating pattern. Here is the Ab lydian augmented mode:</p>
+          <p>The A♭ lydian augmented mode is the 3rd mode of the F melodic minor scale, and starts on the 7th part of the repeating pattern. Here is the A♭ lydian augmented mode:</p>
           <GuitarScalePatternDiagram
             scale={new Scale(ScaleType.LydianAug, melodicMinorPitches[2])}
           />
 
-          <h3>Mixolydian #11</h3>
-          <p>The Bb mixolydian #11 mode is the 4th mode of the F melodic minor scale, and starts on the 5th part of the repeating pattern. Here is the Bb mixolydian #11:</p>
+          <h3>Mixolydian ♯11</h3>
+          <p>The B♭ mixolydian ♯11 mode is the 4th mode of the F melodic minor scale, and starts on the 5th part of the repeating pattern. Here is the B♭ mixolydian ♯11:</p>
           <GuitarScalePatternDiagram
             scale={new Scale(ScaleType.MixolydianSharp11, melodicMinorPitches[3])}
           />

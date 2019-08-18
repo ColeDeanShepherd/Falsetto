@@ -5,25 +5,24 @@ import * as Utils from "../../Utils";
 import { FlashCard, FlashCardId } from "../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../FlashCardSet";
 import { ChordType } from '../../Chord';
-import { Pitch } from '../../Pitch';
 
 const flashCardSetId = "randomChords";
 
 const chordRoots = [
-  "Cb",
+  "C♭",
   "C",
-  "C#",
-  "Db",
+  "C♯",
+  "D♭",
   "D",
-  "Eb",
+  "E♭",
   "E",
   "F",
-  "F#",
-  "Gb",
+  "F♯",
+  "G♭",
   "G",
-  "Ab",
+  "A♭",
   "A",
-  "Bb",
+  "B♭",
   "B"
 ];
 

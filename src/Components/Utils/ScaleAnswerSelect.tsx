@@ -3,8 +3,7 @@ import { Button, Typography } from "@material-ui/core";
 
 import { ScaleType } from "../../Scale";
 import { AnswerDifficulty } from "../../AnswerDifficulty";
-
-const rootPitchStrs = ["Ab", "A", "Bb", "B/Cb", "C", "C#/Db", "D", "Eb", "E", "F", "F#/Gb", "G"];
+import { ambiguousKeyPitchStringsSymbols } from '../../Pitch';
 
 export interface IScaleAnswerSelectProps {
   scales: Array<ScaleType>;
@@ -34,7 +33,7 @@ export class ScaleAnswerSelect extends React.Component<IScaleAnswerSelectProps, 
         </Typography>
         <div style={{padding: "1em 0"}}>
           <div>
-            {rootPitchStrs.slice(0, 6).map(rootPitchStr => {
+            {ambiguousKeyPitchStringsSymbols.slice(0, 6).map(rootPitchStr => {
               const style: any = { textTransform: "none" };
               
               const isPressed = rootPitchStr === this.state.selectedRootPitch;
@@ -55,7 +54,7 @@ export class ScaleAnswerSelect extends React.Component<IScaleAnswerSelectProps, 
             })}
           </div>
           <div>
-            {rootPitchStrs.slice(6, 12).map(rootPitchStr => {
+            {ambiguousKeyPitchStringsSymbols.slice(6, 12).map(rootPitchStr => {
               const style: any = { textTransform: "none" };
               
               const isPressed = rootPitchStr === this.state.selectedRootPitch;
