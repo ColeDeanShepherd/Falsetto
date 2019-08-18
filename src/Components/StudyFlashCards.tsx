@@ -107,12 +107,12 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
   public render(): JSX.Element {
     const flashCards = this.props.flashCards;
     const flashCardStats = this.studyAlgorithm.flashCardSetStats.flashCardStats
-      .map((qs, i) => {
+      .map((fcs, i) => {
         // TODO: calculate width & height
         const width = 300;
         const height = 300;
         const renderedFlashCard = renderFlashCardSide(width, height, flashCards[i].frontSide);
-        return <p key={i}>{renderedFlashCard} {qs.numCorrectGuesses} / {qs.numIncorrectGuesses}</p>;
+        return <p key={i}>{renderedFlashCard} {fcs.numCorrectGuesses} / {fcs.numIncorrectGuesses}</p>;
       }, this);
     
     const currentFlashCard = Utils.unwrapValueOrUndefined(
@@ -392,7 +392,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
   private getInitialEnabledFlashCardIds(): Array<FlashCardId> {
     return this.props.flashCardSet.configDataToEnabledFlashCardIds
       ? this.props.flashCardSet.configDataToEnabledFlashCardIds(
-        this.props.flashCardSet, this.props.flashCards, this.state.configData
+        this.props.flashCardSet, this.props.flashCards, this.props.flashCardSet.initialConfigData
       )
       : this.props.flashCards.map(fc => fc.id)
   }
