@@ -266,7 +266,7 @@ export class StringedInstrumentMetrics {
     
     this.nutWidth = (minFretNumber === 0) ? 8 :  4;
 
-    this.stringSpacing = (this.height - this.lowestStringWidth) / (this.stringCount - 1);
+    this.stringSpacing = (this.height - (2 * this.topBottomStringMargin)) / (this.stringCount - 1);
     this.fretSpacing = (this.width - this.nutWidth) / this.fretCount;
     
     this.nutX = this.nutWidth / 2;
@@ -280,6 +280,7 @@ export class StringedInstrumentMetrics {
   public nutWidth: number;
   public fretWidth: number = 4;
 
+  public topBottomStringMargin = 5;
   public stringSpacing: number;
   public fretSpacing: number;
 
@@ -289,9 +290,11 @@ export class StringedInstrumentMetrics {
 
   public fretDotRadius: number;
   public fretDotY: number;
+  
+  public lowestStringWidth: number = 3;
 
   public getStringY(stringIndex: number): number {
-    return this.height - (this.lowestStringWidth / 2) - (stringIndex * this.stringSpacing);
+    return this.height - this.topBottomStringMargin - (stringIndex * this.stringSpacing);
   }
   public getStringWidth(stringIndex: number): number {
     return this.lowestStringWidth / (1 + (stringIndex / 4));
@@ -315,8 +318,6 @@ export class StringedInstrumentMetrics {
   public getTextYOffset(fontSize: number): number {
     return 0.3 * fontSize;
   }
-  
-  public lowestStringWidth: number = 4;
 }
 
 export function renderGuitarNoteHighlightsAndLabels(
@@ -626,18 +627,46 @@ export class StringedInstrumentFingerboard extends React.Component<IStringedInst
     
     const tuning = this.props.tuning;
 
-    const nut = <line x1={metrics.nutX} x2={metrics.nutX} y1={0} y2={metrics.height} stroke="black" strokeWidth={metrics.nutWidth} />;
+    const neckRect = (
+      <rect
+        x={0} y={0}
+        width={metrics.width} height={metrics.height}
+        strokeWidth="0"
+        fill="#855E42"
+        opacity="1"
+      />
+    );
+
+    const nutColor = "#DEDEDE";
+    const nut = <line
+      x1={metrics.nutX} y1={0}
+      x2={metrics.nutX} y2={metrics.height}
+      stroke={nutColor} strokeWidth={metrics.nutWidth}
+    />;
+
+    const stringColor = "#CCC";
     const strings = Utils.range(0, metrics.stringCount - 1)
       .map(i => {
         const y = metrics.getStringY(i);
-        return <line key={i} x1={metrics.stringsLeft} x2={metrics.width} y1={y} y2={y} stroke="black" strokeWidth={metrics.getStringWidth(i)} />;
+        return <line
+          key={i}
+          x1={metrics.stringsLeft} y1={y}
+          x2={metrics.width} y2={y}
+          stroke={stringColor} strokeWidth={metrics.getStringWidth(i)}
+        />;
       });
 
+    const fretColor = "#AAA";
     const frets = this.props.hasFrets ? (
       Utils.range(1, metrics.fretCount)
         .map(i => {
           const x = metrics.stringsLeft + (i * metrics.fretSpacing);
-          return <line key={i} x1={x} x2={x} y1={0} y2={metrics.height} stroke="black" strokeWidth={metrics.fretWidth} />;
+          return <line
+            key={i}
+            x1={x} y1={0}
+            x2={x} y2={metrics.height}
+            stroke={fretColor} strokeWidth={metrics.fretWidth}
+          />;
         })
       ) : null;
     
@@ -664,6 +693,7 @@ export class StringedInstrumentFingerboard extends React.Component<IStringedInst
     );
 
     const dottedFretNumbers = (this.props.dottedFretNumbers !== undefined) ? this.props.dottedFretNumbers : [];
+    const fretDotColor = "#CCC";
     const fretDots = this.props.hasFrets ? (
       dottedFretNumbers
         .filter(fretNumber => (fretNumber > metrics.minFretNumber) && ((fretNumber - metrics.minFretNumber) <= metrics.fretCount))
@@ -671,13 +701,21 @@ export class StringedInstrumentFingerboard extends React.Component<IStringedInst
           const x = metrics.getFretSpaceCenterX(fretNumber);
 
           if ((fretNumber % 12) != 0) {
-            return <circle key={fretNumber} cx={x} cy={metrics.fretDotY} r={metrics.fretDotRadius} fill="black" strokeWidth="0" />;
+            return <circle key={fretNumber} cx={x} cy={metrics.fretDotY} r={metrics.fretDotRadius} fill={fretDotColor} strokeWidth="0" />;
           } else {
             const fretDotYOffset = metrics.stringSpacing;
             return (
               <g>
-                <circle key={fretNumber} cx={x} cy={metrics.fretDotY - fretDotYOffset} r={metrics.fretDotRadius} fill="black" strokeWidth="0" />
-                <circle key={`${fretNumber}_2`} cx={x} cy={metrics.fretDotY + fretDotYOffset} r={metrics.fretDotRadius} fill="black" strokeWidth="0" />
+                <circle
+                  key={fretNumber}
+                  cx={x} cy={metrics.fretDotY - fretDotYOffset} r={metrics.fretDotRadius}
+                  fill={fretDotColor} strokeWidth="0"
+                />
+                <circle
+                  key={`${fretNumber}_2`}
+                  cx={x} cy={metrics.fretDotY + fretDotYOffset} r={metrics.fretDotRadius}
+                  fill={fretDotColor} strokeWidth="0"
+                />
               </g>
             );
           }
@@ -693,16 +731,26 @@ export class StringedInstrumentFingerboard extends React.Component<IStringedInst
               metrics.getStringY(stringIndex)
             );
 
-            return <circle key={fretNumber} cx={position.x} cy={position.y} r={metrics.fretDotRadius} fill="none" stroke="black" strokeWidth="2" />;
+            return <circle
+              key={fretNumber}
+              cx={position.x} cy={position.y} r={metrics.fretDotRadius}
+              fill="none" stroke="black"
+              strokeWidth="2"
+            />;
           }))
     ) : null;
 
+    const noteHighlightColor = "lightblue";
     const noteHighlights = this.props.pressedNotes ? (
         this.props.pressedNotes
         .map((note, i) => {
           const x = metrics.getNoteX(note.getFretNumber(tuning));
           const y = metrics.getStringY(note.stringIndex);
-          return <circle key={i} cx={x} cy={y} r={metrics.fretDotRadius} fill="red" strokeWidth="0" />;
+          return <circle
+            key={i}
+            cx={x} cy={y} r={metrics.fretDotRadius}
+            fill={noteHighlightColor} strokeWidth="0"
+          />;
         })
       ) : null;
     const extraElements = this.props.renderExtrasFn
@@ -716,10 +764,11 @@ export class StringedInstrumentFingerboard extends React.Component<IStringedInst
         version="1.1" xmlns="http://www.w3.org/2000/svg"
         style={this.props.style}>
         <g transform={`translate(${margin},${margin})`}>
+          {neckRect}
           {nut}
-          {strings}
           {frets}
           {fretDots}
+          {strings}
           {positionLines}
           {noteCircles}
           {noteHighlights}
