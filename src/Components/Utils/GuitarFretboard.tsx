@@ -10,6 +10,7 @@ import { Chord } from '../../Chord';
 import { StringedInstrumentNote } from '../../GuitarNote';
 import { Interval } from '../../Interval';
 import { VerticalDirection } from '../../VerticalDirection';
+import { getStandardGuitarTuning, StringedInstrumentTuning } from './StringedInstrumentTuning';
 
 export function generateGuitarScaleTextDiagram(scale: Scale, stringCount: number): string {
   const minFretNumber = 1;

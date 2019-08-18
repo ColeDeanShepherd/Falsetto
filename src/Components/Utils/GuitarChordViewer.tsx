@@ -5,7 +5,8 @@ import { Pitch } from "../../Pitch";
 import { PitchLetter } from "../../PitchLetter";
 import { StringedInstrumentNote } from '../../GuitarNote';
 import { ChordType } from "../../Chord";
-import { GuitarFretboard, renderGuitarNoteHighlightsAndLabels, StringedInstrumentTuning } from "./GuitarFretboard";
+import { GuitarFretboard, renderGuitarNoteHighlightsAndLabels } from "./GuitarFretboard";
+import { StringedInstrumentTuning } from "./StringedInstrumentTuning";
 
 export const GuitarChordViewer: React.FunctionComponent<{
   chordType: ChordType,
