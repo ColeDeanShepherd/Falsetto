@@ -10,16 +10,16 @@ import * as Analytics from "../Analytics";
 import { StringDictionary } from "../StringDictionary";
 
 import {
-  SectionContainer,
-  IntervalsSection,
-  ScalesAndModesSection,
-  ChordsSection,
-  ChordProgressionsSection,
-  NextStepsSection
+  SectionContainer
 } from "./Lessons/EssentialMusicTheory/EssentialMusicTheory";
 import { IntroSection } from "./Lessons/EssentialMusicTheory/Introduction";
 import { RhythmSection } from "./Lessons/EssentialMusicTheory/Rhythm";
 import { NotesSection } from "./Lessons/EssentialMusicTheory/Notes";
+import { IntervalsSection } from "./Lessons/EssentialMusicTheory/Intervals";
+import { ScalesAndModesSection } from "./Lessons/EssentialMusicTheory/ScalesAndModes";
+import { ChordsSection } from "./Lessons/EssentialMusicTheory/Chords";
+import { ChordProgressionsSection } from "./Lessons/EssentialMusicTheory/ChordProgressions";
+import { NextStepsSection } from "./Lessons/EssentialMusicTheory/NextSteps";
 import * as IntervalNamesToHalfSteps from "./Quizzes/Intervals/IntervalNamesToHalfSteps";
 import * as IntervalQualitySymbolsToQualities from "./Quizzes/Intervals/IntervalQualitySymbolsToQualities";
 import * as GenericIntervalsToIntervalQualities from "./Quizzes/Intervals/GenericIntervalsToIntervalQualities";
