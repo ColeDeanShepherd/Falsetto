@@ -1,6 +1,6 @@
-import * as FlashCardUtils from "./Utils";
-import { FlashCard } from "../../FlashCard";
-import { FlashCardSet } from "../../FlashCardSet";
+import * as FlashCardUtils from "../../Quizzes/Utils";
+import { FlashCard } from "../../../FlashCard";
+import { FlashCardSet } from "../../../FlashCardSet";
 
 const flashCardSetId = "esmRhythmQuiz";
 

@@ -11,7 +11,6 @@ import { StringDictionary } from "../StringDictionary";
 
 import {
   SectionContainer,
-  RhythmSection,
   NotesSection,
   IntervalsSection,
   ScalesAndModesSection,
@@ -20,6 +19,7 @@ import {
   NextStepsSection
 } from "./Lessons/EssentialMusicTheory/EssentialMusicTheory";
 import { IntroSection } from "./Lessons/EssentialMusicTheory/Introduction";
+import { RhythmSection } from "./Lessons/EssentialMusicTheory/Rhythm";
 import * as IntervalNamesToHalfSteps from "./Quizzes/Intervals/IntervalNamesToHalfSteps";
 import * as IntervalQualitySymbolsToQualities from "./Quizzes/Intervals/IntervalQualitySymbolsToQualities";
 import * as GenericIntervalsToIntervalQualities from "./Quizzes/Intervals/GenericIntervalsToIntervalQualities";
