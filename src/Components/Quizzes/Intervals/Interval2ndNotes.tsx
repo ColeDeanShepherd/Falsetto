@@ -142,8 +142,6 @@ export class IntervalNotesFlashCardMultiSelect extends React.Component<IInterval
       enabledDirections: newSelectedCellDatas[2] as Array<string>
     };
 
-    console.log(newConfigData);
-
     const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(
       this.props.studySessionInfo.flashCardSet, this.props.studySessionInfo.flashCards,
       newConfigData
