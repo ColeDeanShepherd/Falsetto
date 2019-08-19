@@ -1,5 +1,6 @@
 # To-Do
 ## High Priority
+* Violin Notes "more info" URI
 * Add "Move to next level" button, remove always-there "next level" text
 * Actually fix levels implementation.
 * Refactor & check everything.
@@ -61,7 +62,6 @@
 * Add "Next Steps"
 * SVG rendering improvements
   * Improve SVG rendering to be scalable.
-    * look for Utils.shrinkRectToFit
   * Improve SVG text align
     * Horizontal align
     * dy

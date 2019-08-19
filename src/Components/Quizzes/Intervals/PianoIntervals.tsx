@@ -174,6 +174,9 @@ export function renderAnswerSelect(
 }
 
 export function createFlashCards(): Array<FlashCard> {
+  const pianoStyle = {
+    width: "100%", maxWidth: "400px"
+  };
   const flashCards = new Array<FlashCard>();
 
   forEachInterval((pitches, intervalString) => {
@@ -186,18 +189,15 @@ export function createFlashCards(): Array<FlashCard> {
     flashCards.push(FlashCard.fromRenderFns(
       id,
       (width, height) => {
-        const size = Utils.shrinkRectToFit(
-          new Size2D(width, height),
-          new Size2D(400, 100)
-        );
         
         return (
           <div>
             <PianoKeyboard
-              rect={new Rect2D(size, new Vector2D(0, 0))}
+              rect={new Rect2D(new Size2D(400, 100), new Vector2D(0, 0))}
               lowestPitch={minPitch}
               highestPitch={maxPitch}
               pressedPitches={pitches}
+              style={pianoStyle}
             />
           </div>
         );

@@ -5,11 +5,11 @@ import * as Utils from "../../Utils";
 import { FlashCardId, FlashCard } from "../../FlashCard";
 import { FlashCardStudySessionInfo, FlashCardSet } from "../../FlashCardSet";
 import { StringedInstrumentTuning } from './StringedInstrumentTuning';
+import { StringedInstrumentNote } from '../../GuitarNote';
 
 export interface IConfigData {
   maxFret: number
 };
-
 
 function forEachNote(
   tuning: StringedInstrumentTuning, maxMaxFretNumber: number,
@@ -110,4 +110,44 @@ export class StringedInstrumentNotesFlashCardMultiSelect extends React.Component
       : maxFret.toString();
     this.setState({ maxFretNumberString: newMaxFretNumberString });
   }
+}
+
+export function createFlashCards(
+  flashCardSetId: string,
+  tuning: StringedInstrumentTuning,
+  maxMaxFretNumber: number,
+  flashCardFrontSideRenderFn: (
+    tuning: StringedInstrumentTuning,
+    maxMaxFretNumber: number,
+    note: StringedInstrumentNote
+  ) => JSX.Element,
+  notes?: Array<StringedInstrumentNote>
+): FlashCard[] {
+  notes = !notes
+    ? Utils.flattenArrays(Utils.range(0, tuning.stringCount - 1)
+    .map(stringIndex => Utils.range(0, maxMaxFretNumber)
+      .map(fretNumber => {
+        return tuning.getNote(
+          stringIndex, fretNumber
+        );
+      })
+    ))
+    : notes;
+
+  return notes
+    .map(note => {
+      const deserializedId = {
+        set: flashCardSetId,
+        tuning: tuning.openStringPitches.map(p => p.toString(true, false)),
+        stringIndex: note.stringIndex,
+        fretNumber: note.getFretNumber(tuning)
+      };
+      const id = JSON.stringify(deserializedId);
+
+      return FlashCard.fromRenderFns(
+        id,
+        (width, height) => flashCardFrontSideRenderFn(tuning, maxMaxFretNumber, note),
+        note.pitch.toOneAccidentalAmbiguousString(false, true)
+      );
+    });
 }

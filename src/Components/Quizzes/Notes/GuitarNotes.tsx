@@ -10,7 +10,8 @@ import { StringedInstrumentNote } from '../../../GuitarNote';
 import {
   IConfigData,
   StringedInstrumentNotesFlashCardMultiSelect,
-  configDataToEnabledFlashCardIds
+  configDataToEnabledFlashCardIds,
+  createFlashCards as baseCreateFlashCards
 } from '../../Utils/StringedInstrumentNotes';
 
 const flashCardSetId = "guitarNotes";
@@ -50,42 +51,18 @@ export function createFlashCardSet(guitarNotes?: Array<StringedInstrumentNote>):
 }
 
 export function createFlashCards(guitarNotes?: Array<StringedInstrumentNote>): FlashCard[] {
-  guitarNotes = !guitarNotes
-    ? Utils.flattenArrays(Utils.range(0, guitarTuning.stringCount - 1)
-    .map(stringIndex => Utils.range(0, MAX_MAX_FRET_NUMBER)
-      .map(fretNumber => {
-        return guitarTuning.getNote(
-          stringIndex, fretNumber
-        );
-      })
-    ))
-    : guitarNotes;
-  
   const guitarStyle: any = { width: "400px", maxWidth: "100%" };
 
-  return guitarNotes
-    .map(guitarNote => {
-      const deserializedId = {
-        set: flashCardSetId,
-        tuning: guitarTuning.openStringPitches.map(p => p.toString(true, false)),
-        stringIndex: guitarNote.stringIndex,
-        fretNumber: guitarNote.getFretNumber(guitarTuning)
-      };
-      const id = JSON.stringify(deserializedId);
-
-      return FlashCard.fromRenderFns(
-        id,
-        (width, height) => {
-          return (
-            <GuitarFretboard
-              width={400} height={140}
-              tuning={guitarTuning}
-              pressedNotes={[guitarNote]}
-              style={guitarStyle}
-            />
-          );
-        },
-        guitarNote.pitch.toOneAccidentalAmbiguousString(false, true)
-      );
-    });
+  return baseCreateFlashCards(
+    flashCardSetId, guitarTuning, MAX_MAX_FRET_NUMBER,
+    (tuning, maxMaxFretNumber, note) => (
+      <GuitarFretboard
+        width={400} height={140}
+        tuning={tuning}
+        fretCount={maxMaxFretNumber}
+        pressedNotes={[note]}
+        style={guitarStyle}
+      />
+    )
+  );
 }

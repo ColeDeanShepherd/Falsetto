@@ -4,10 +4,11 @@ import { Card, CardContent } from '@material-ui/core';
 import * as Utils from "../../Utils";
 import App from '../App';
 import {
-  GuitarFretboard, StringedInstrumentMetrics,
+  GuitarFretboard,
   renderGuitarNoteHighlightsAndLabels, renderFretNumbers,
   getPreferredGuitarScaleShape, 
 } from '../Utils/GuitarFretboard';
+import { StringedInstrumentMetrics } from "../Utils/StringedInstrumentFingerboard";
 import { getStandardGuitarTuning } from "../Utils/StringedInstrumentTuning";
 import { Pitch } from '../../Pitch';
 import { PitchLetter } from '../../PitchLetter';

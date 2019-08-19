@@ -128,6 +128,8 @@ export function createFlashCardSet(): FlashCardSet {
   return flashCardSet;
 }
 export function createFlashCards(): FlashCard[] {
+  const guitarStyle = { width: "100%", maxWidth: "400px" };
+
   return chordTypes.map(chordType => {
     const rootPitch = new Pitch(PitchLetter.F, 0, 2);
     const pitches = chordType.getPitches(rootPitch);
@@ -140,14 +142,14 @@ export function createFlashCards(): FlashCard[] {
       id,
       new FlashCardSide(
         (width, height) => {
-          const size = Utils.shrinkRectToFit(new Size2D(width, height), new Size2D(400, 140));
-
           return (
             <GuitarChordViewer
               chordType={chordType}
               rootPitch={rootPitch}
               tuning={guitarTuning}
-              size={size} />
+              size={new Size2D(400, 140)}
+              style={guitarStyle}
+            />
           )
         },
         pitches

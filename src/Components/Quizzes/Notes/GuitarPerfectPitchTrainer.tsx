@@ -3,9 +3,9 @@ import { TextField, Button } from "@material-ui/core";
 
 import * as Utils from "../../../Utils";
 import {
-  GuitarFretboard,
-  StringedInstrumentMetrics
+  GuitarFretboard
 } from "../../Utils/GuitarFretboard";
+import { StringedInstrumentMetrics } from "../../Utils/StringedInstrumentFingerboard";
 import { standard6StringGuitarTuning, StringedInstrumentTuning } from "../../Utils/StringedInstrumentTuning";
 import { FlashCard, FlashCardSide, FlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";

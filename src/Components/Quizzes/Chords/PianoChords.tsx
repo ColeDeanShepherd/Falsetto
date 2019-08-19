@@ -313,6 +313,7 @@ export function createFlashCardSet(): FlashCardSet {
   return flashCardSet;
 }
 export function createFlashCards(): FlashCard[] {
+  const pianoStyle = { width: "400px", maxWidth: "100%" };
   return Utils.flattenArrays<FlashCard>(
     ambiguousKeyPitchStringsSymbols.map((rootPitchStr, i) =>
       ChordType.All.map(chordType => {
@@ -329,14 +330,13 @@ export function createFlashCards(): FlashCard[] {
           id,
           new FlashCardSide(
             (width, height) => {
-              const size = Utils.shrinkRectToFit(new Size2D(width, height), new Size2D(400, 100));
-
               return (
                 <PianoKeyboard
-                  rect={new Rect2D(size, new Vector2D(0, 0))}
+                  rect={new Rect2D(new Size2D(400, 100), new Vector2D(0, 0))}
                   lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
                   highestPitch={new Pitch(PitchLetter.B, 0, 5)}
                   pressedPitches={pitches}
+                  style={pianoStyle}
                 />
               );
             },

@@ -12,7 +12,8 @@ export const GuitarChordViewer: React.FunctionComponent<{
   chordType: ChordType,
   rootPitch: Pitch,
   tuning: StringedInstrumentTuning,
-  size: Size2D
+  size: Size2D,
+  style?: any
 }> = props => {
   let rootPitch = Pitch.createFromMidiNumber(
     (new Pitch(PitchLetter.C, 0, 2)).midiNumber + props.rootPitch.midiNumberNoOctave
@@ -41,6 +42,7 @@ export const GuitarChordViewer: React.FunctionComponent<{
         metrics, guitarNotes, "lightblue",
         (n, i) => (1 + pitches.findIndex(p => p.midiNumberNoOctave == n.pitch.midiNumberNoOctave)).toString()
       )}
+      style={props.style}
     />
   );
 }

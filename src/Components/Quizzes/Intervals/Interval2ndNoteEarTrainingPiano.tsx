@@ -84,19 +84,17 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
   }
 
   public render(): JSX.Element {
-    const size = Utils.shrinkRectToFit(
-      new Size2D(this.props.width, this.props.height),
-      new Size2D(400, 100)
-    );
+    const pianoStyle = { width: "100%", maxWidth: "400px" };
 
     return (
       <div>
         <div>
           <PianoKeyboard
-            rect={new Rect2D(size, new Vector2D(0, 0))}
+            rect={new Rect2D(new Size2D(400, 100), new Vector2D(0, 0))}
             lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
             highestPitch={new Pitch(PitchLetter.B, 0, 5)}
             pressedPitches={[this.props.pitch1]}
+            style={pianoStyle}
           />
         </div>
         <Button
@@ -192,7 +190,7 @@ export function renderAnswerSelect(
 ) {
   const key = info.flashCards.indexOf(info.currentFlashCard);
   const correctAnswer = [info.currentFlashCard.backSide.data as Pitch];
-  const size = Utils.shrinkRectToFit(new Size2D(info.width, info.height), new Size2D(400, 100));
+  const size = new Size2D(400, 100);
   
   return <PianoKeysAnswerSelect
     key={key} width={size.width} height={size.height} correctAnswer={correctAnswer}
