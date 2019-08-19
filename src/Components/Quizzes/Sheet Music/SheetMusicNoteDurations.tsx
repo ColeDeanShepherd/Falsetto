@@ -14,7 +14,7 @@ const canvasSize = new Size2D(100, 65);
 export function renderAnswerSelect(
   info: FlashCardStudySessionInfo
 ): JSX.Element {
-  return FlashCardUtils.renderMultiRowDistinctFlashCardSideAnswerSelect(info, [5, 5]);
+  return FlashCardUtils.renderMultiRowDistinctFlashCardSideAnswerSelect(info, [5, 5, 5, 5]);
 }
 
 function configDataToEnabledFlashCardIds(
