@@ -8,9 +8,9 @@ import { VexFlowComponent } from "../Utils/VexFlowComponent";
 import { Rational } from "../../Rational";
 import { noteDurationToVexFlowStr } from '../../VexFlowUtils';
 import { TimeSignature } from '../../TimeSignature';
+import { Size2D } from '../../Size2D';
 
-const width = 800;
-const height = 100;
+const canvasSize = new Size2D(800, 100);
 
 // Add an actual generation algorithm.
 /// params: (measures, allowed notes, frequencies???)
@@ -23,7 +23,7 @@ const height = 100;
 First, need to be able to generate random rhythms.
 Maybe using random subdivisions?
 Each second (bar, note) can be subdivided in half or in thirds
-THirds should be less common
+Thirds should be less common
 Need a way of detecting the closeness of hits to rhythms
 Need a way of thresholding or categorizing distance to notes.
 Might depend on the value of the note too.
@@ -78,7 +78,7 @@ export class RhythmTapper extends React.Component<IRhythmTapperProps, IRhythmTap
           </div>
 
           <VexFlowComponent
-            width={width} height={height}
+            size={canvasSize}
             vexFlowRender={vexFlowRender}
           />
 
@@ -138,7 +138,7 @@ export class RhythmTapper extends React.Component<IRhythmTapperProps, IRhythmTap
       .setFont("Arial", 10)
       .setBackgroundFillStyle("#eed");
   
-    const stave = new Vex.Flow.Stave(0, 0, width);
+    const stave = new Vex.Flow.Stave(0, 0, canvasSize.width);
     stave.addClef("treble").addTimeSignature("4/4");
     stave.setContext(context).draw();
     
@@ -148,7 +148,7 @@ export class RhythmTapper extends React.Component<IRhythmTapperProps, IRhythmTap
     voice.addTickables(vexFlowNotes);
     
     const formatter = new Vex.Flow.Formatter();
-    formatter.joinVoices([voice]).format([voice], width);
+    formatter.joinVoices([voice]).format([voice], canvasSize.width);
     
     voice.draw(context, stave);
 
@@ -158,7 +158,7 @@ export class RhythmTapper extends React.Component<IRhythmTapperProps, IRhythmTap
 
       if (timeBarNoteIndex < this.state.rhythmNotes.length) {
         const timeBarWidth = 3;
-        const timeBarHeight = height;
+        const timeBarHeight = canvasSize.height;
         const timeBarX = vexFlowNotes[timeBarNoteIndex].getAbsoluteX();
         const timeBarY = 0;
         

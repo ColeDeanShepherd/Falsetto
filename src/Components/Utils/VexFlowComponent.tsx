@@ -3,8 +3,7 @@ import * as Vex from "vexflow";
 import { Size2D } from '../../Size2D';
 
 export interface IVexFlowComponentProps {
-  width: number;
-  height: number;
+  size: Size2D;
   vexFlowRender: (context: Vex.IRenderContext, size: Size2D) => void
 }
 export class VexFlowComponent extends React.Component<IVexFlowComponentProps, {}> {
@@ -19,20 +18,22 @@ export class VexFlowComponent extends React.Component<IVexFlowComponentProps, {}
     }
 
     this.vexFlowRenderer = new Vex.Flow.Renderer(div, (Vex.Flow.Renderer as any).Backends.SVG);
-    this.vexFlowRenderer.resize(this.props.width, this.props.height);
+    this.vexFlowRenderer.resize(this.props.size.width, this.props.size.height);
 
     this.vexFlowContext = this.vexFlowRenderer.getContext();
 
     if (this.props.vexFlowRender) {
-      this.props.vexFlowRender(this.vexFlowContext, new Size2D(this.props.width, this.props.height));
+      this.props.vexFlowRender(this.vexFlowContext, new Size2D(this.props.size.width, this.props.size.height));
     }
   }
   public componentDidUpdate(prevProps: IVexFlowComponentProps, prevState: {}, snapshot: any) {
     if (this.vexFlowRenderer && this.vexFlowContext && this.props.vexFlowRender) {
       this.vexFlowContext.clear();
-      this.vexFlowRenderer.resize(this.props.width, this.props.height);
+      this.vexFlowRenderer.resize(this.props.size.width, this.props.size.height);
       this.vexFlowContext.scale(1, 1); // Fix the viewbox after clear sets it and resize doesn't update it.
-      this.props.vexFlowRender(this.vexFlowContext, new Size2D(this.props.width, this.props.height));
+      this.props.vexFlowRender(
+        this.vexFlowContext, new Size2D(this.props.size.width, this.props.size.height)
+      );
     }
   }
   

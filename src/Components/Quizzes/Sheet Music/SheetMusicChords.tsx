@@ -5,16 +5,16 @@ import * as Utils from "../../../Utils";
 import { Pitch } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 import { VexFlowComponent } from "../../Utils/VexFlowComponent";
+import { Size2D } from '../../../Size2D';
 
 export interface ISheetMusicChordProps {
-  width: number;
-  height: number;
+  size: Size2D;
   pitches: Array<Pitch>;
 }
 export class SheetMusicChord extends React.Component<ISheetMusicChordProps, {}> {
   public render(): JSX.Element {
     const vexFlowRender = this.vexFlowRender.bind(this);
-    return <VexFlowComponent width={this.props.width} height={this.props.height} vexFlowRender={vexFlowRender} />;
+    return <VexFlowComponent size={this.props.size} vexFlowRender={vexFlowRender} />;
   }
 
   private vexFlowRender(context: Vex.IRenderContext) {
@@ -23,7 +23,7 @@ export class SheetMusicChord extends React.Component<ISheetMusicChordProps, {}> 
     context.setFont("Arial", 10).setBackgroundFillStyle("#eed");
 
     // Create the staves
-    const staveLength = this.props.width;
+    const staveLength = this.props.size.width;
     const staveX = 20;
 
     const topStaff = new Vex.Flow.Stave(staveX, 0, staveLength);

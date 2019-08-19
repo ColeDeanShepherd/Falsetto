@@ -158,7 +158,7 @@ export class TimeSignaturePlayer extends React.Component<ITimeSignaturePlayerPro
 
           <SizeAwareContainer height={100} onResize={s => this.onCanvasResize(s)}>
             <VexFlowComponent
-              width={this.state.canvasSize.width} height={this.state.canvasSize.height}
+              size={this.state.canvasSize}
               vexFlowRender={vexFlowRender}
             />
           </SizeAwareContainer>

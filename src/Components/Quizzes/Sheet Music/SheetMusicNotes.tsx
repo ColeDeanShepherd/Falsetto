@@ -9,6 +9,7 @@ import { PitchLetter } from "../../../PitchLetter";
 import { FlashCard, FlashCardId } from "../../../FlashCard";
 import { Pitch } from "../../../Pitch";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
+import { Size2D } from '../../../Size2D';
 
 const flashCardSetId = "sheetMusicNotes";
 
@@ -86,7 +87,7 @@ export function createFlashCards(): FlashCard[] {
       JSON.stringify({ set: flashCardSetId, clef: clef, pitch: pitch.toString(true) }),
       () => (  
         <SheetMusicSingleNote
-          width={150} height={200}
+          size={new Size2D(150, 200)}
           trebleNotes={trebleNotes}
           bassNotes={bassNotes}
         />
@@ -158,22 +159,23 @@ export function renderNoteAnswerSelect(
 }
 
 export interface ISheetMusicSingleNoteProps {
-  width: number;
-  height: number;
+  size: Size2D;
   trebleNotes: Array<Vex.Flow.StaveNote>;
   bassNotes: Array<Vex.Flow.StaveNote>;
 }
 export class SheetMusicSingleNote extends React.Component<ISheetMusicSingleNoteProps, {}> {
   public render(): JSX.Element {
     const vexFlowRender = this.vexFlowRender.bind(this);
-    return <VexFlowComponent width={this.props.width} height={this.props.height} vexFlowRender={vexFlowRender} />;
+    return <VexFlowComponent
+      size={this.props.size}
+      vexFlowRender={vexFlowRender} />;
   }
 
   private vexFlowRender(context: Vex.IRenderContext) {
     context.setFont("Arial", 10).setBackgroundFillStyle("#eed");
 
     // Create the staves
-    const staveLength = this.props.width;
+    const staveLength = this.props.size.width;
     const staveX = 20;
 
     const topStaff = new Vex.Flow.Stave(staveX, 0, staveLength);

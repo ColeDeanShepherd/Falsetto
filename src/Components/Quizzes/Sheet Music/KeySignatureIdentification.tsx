@@ -7,6 +7,7 @@ import { FlashCardSet } from "../../../FlashCardSet";
 import { VexFlowComponent } from "../../Utils/VexFlowComponent";
 import { Pitch } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
+import { Size2D } from '../../../Size2D';
 
 const flashCardSetId = "keySignatureIdentification";
 
@@ -46,21 +47,20 @@ export const answers = [
 ];
 
 export interface ISheetMusicKeySignatureProps {
-  width: number;
-  height: number;
+  size: Size2D;
   keySignature: string;
 }
 export class SheetMusicKeySignature extends React.Component<ISheetMusicKeySignatureProps, {}> {
   public render(): JSX.Element {
     const vexFlowRender = this.vexFlowRender.bind(this);
-    return <VexFlowComponent width={this.props.width} height={this.props.height} vexFlowRender={vexFlowRender} />;
+    return <VexFlowComponent size={this.props.size} vexFlowRender={vexFlowRender} />;
   }
 
   private vexFlowRender(context: Vex.IRenderContext) {
     context.setFont("Arial", 10).setBackgroundFillStyle("#eed");
 
     // Create the staves
-    const staveLength = this.props.width;
+    const staveLength = this.props.size.width;
     const staveX = 20;
 
     const topStaff = new Vex.Flow.Stave(staveX, 0, staveLength);
@@ -89,7 +89,7 @@ export function createFlashCards(): Array<FlashCard> {
     .map((pitch, i) => FlashCard.fromRenderFns(
       JSON.stringify({ set: flashCardSetId, keys: answers[i] }),
       (width, height) => <SheetMusicKeySignature
-        width={300} height={200}
+        size={new Size2D(300, 200)}
         keySignature={pitch.toVexFlowKeySignatureString()}
       />,
       answers[i]

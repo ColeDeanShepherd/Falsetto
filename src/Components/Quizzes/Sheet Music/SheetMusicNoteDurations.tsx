@@ -5,11 +5,11 @@ import * as FlashCardUtils from "../Utils";
 import { FlashCard, FlashCardId } from "../../../FlashCard";
 import { VexFlowComponent } from "../../Utils/VexFlowComponent";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
+import { Size2D } from '../../../Size2D';
 
 const flashCardSetId = "noteDurationSymbols";
 
-const width = 100;
-const height = 65;
+const canvasSize = new Size2D(100, 65);
 
 export function renderAnswerSelect(
   info: FlashCardStudySessionInfo
@@ -40,7 +40,7 @@ export function createFlashCards(): FlashCard[] {
       JSON.stringify({ set: flashCardSetId, id: "w" }),
       () => (
         <VexFlowComponent
-          width={width} height={height}
+          size={canvasSize}
           vexFlowRender={vexFlowRender.bind(null, "w", [])}
         />
       ),
@@ -50,7 +50,7 @@ export function createFlashCards(): FlashCard[] {
       JSON.stringify({ set: flashCardSetId, id: "h" }),
       () => (
         <VexFlowComponent
-          width={width} height={height}
+          size={canvasSize}
           vexFlowRender={vexFlowRender.bind(null, "h", ["hr"])}
         />
       ),
@@ -60,7 +60,7 @@ export function createFlashCards(): FlashCard[] {
       JSON.stringify({ set: flashCardSetId, id: "q" }),
       () => (
         <VexFlowComponent
-          width={width} height={height}
+          size={canvasSize}
           vexFlowRender={vexFlowRender.bind(null, "q", ["qr", "hr"])}
         />
       ),
@@ -70,7 +70,7 @@ export function createFlashCards(): FlashCard[] {
       JSON.stringify({ set: flashCardSetId, id: "8" }),
       () => (
         <VexFlowComponent
-          width={width} height={height}
+          size={canvasSize}
           vexFlowRender={vexFlowRender.bind(null, "8", ["8r", "qr", "hr"])}
         />
       ),
@@ -80,7 +80,7 @@ export function createFlashCards(): FlashCard[] {
       JSON.stringify({ set: flashCardSetId, id: "16" }),
       () => (
         <VexFlowComponent
-          width={width} height={height}
+          size={canvasSize}
           vexFlowRender={vexFlowRender.bind(null, "16", ["16r", "8r", "qr", "hr"])}
         />
       ),
@@ -90,7 +90,7 @@ export function createFlashCards(): FlashCard[] {
       JSON.stringify({ set: flashCardSetId, id: "32" }),
       () => (
         <VexFlowComponent
-          width={width} height={height}
+          size={canvasSize}
           vexFlowRender={vexFlowRender.bind(null, "32", ["32r", "16r", "8r", "qr", "hr"])}
         />
       ),
@@ -100,7 +100,7 @@ export function createFlashCards(): FlashCard[] {
       JSON.stringify({ set: flashCardSetId, id: "64" }),
       () => (
         <VexFlowComponent
-          width={width} height={height}
+          size={canvasSize}
           vexFlowRender={vexFlowRender.bind(null, "64", ["64r", "32r", "16r", "8r", "qr", "hr"])}
         />
       ),
@@ -110,7 +110,7 @@ export function createFlashCards(): FlashCard[] {
       JSON.stringify({ set: flashCardSetId, id: "128" }),
       () => (
         <VexFlowComponent
-          width={width} height={height}
+          size={canvasSize}
           vexFlowRender={vexFlowRender.bind(null, "128", ["128r", "64r", "32r", "16r", "8r", "qr", "hr"])}
         />
       ),
@@ -120,7 +120,7 @@ export function createFlashCards(): FlashCard[] {
       JSON.stringify({ set: flashCardSetId, id: "wr" }),
       () => (
         <VexFlowComponent
-          width={width} height={height}
+          size={canvasSize}
           vexFlowRender={vexFlowRender.bind(null, "wr", [])}
         />
       ),
@@ -130,7 +130,7 @@ export function createFlashCards(): FlashCard[] {
       JSON.stringify({ set: flashCardSetId, id: "h4" }),
       () => (
         <VexFlowComponent
-          width={width} height={height}
+          size={canvasSize}
           vexFlowRender={vexFlowRender.bind(null, "hr", ["hr"])}
         />
       ),
@@ -140,7 +140,7 @@ export function createFlashCards(): FlashCard[] {
       JSON.stringify({ set: flashCardSetId, id: "qr" }),
       () => (
         <VexFlowComponent
-          width={width} height={height}
+          size={canvasSize}
           vexFlowRender={vexFlowRender.bind(null, "qr", ["qr", "hr"])}
         />
       ),
@@ -150,7 +150,7 @@ export function createFlashCards(): FlashCard[] {
       JSON.stringify({ set: flashCardSetId, id: "8r" }),
       () => (
         <VexFlowComponent
-          width={width} height={height}
+          size={canvasSize}
           vexFlowRender={vexFlowRender.bind(null, "8r", ["8r", "qr", "hr"])}
         />
       ),
@@ -160,7 +160,7 @@ export function createFlashCards(): FlashCard[] {
       JSON.stringify({ set: flashCardSetId, id: "16r" }),
       () => (
         <VexFlowComponent
-          width={width} height={height}
+          size={canvasSize}
           vexFlowRender={vexFlowRender.bind(null, "16r", ["16r", "8r", "qr", "hr"])}
         />
       ),
@@ -170,7 +170,7 @@ export function createFlashCards(): FlashCard[] {
       JSON.stringify({ set: flashCardSetId, id: "32r" }),
       () => (
         <VexFlowComponent
-          width={width} height={height}
+          size={canvasSize}
           vexFlowRender={vexFlowRender.bind(null, "32r", ["32r", "16r", "8r", "qr", "hr"])}
         />
       ),
@@ -180,7 +180,7 @@ export function createFlashCards(): FlashCard[] {
       JSON.stringify({ set: flashCardSetId, id: "64r" }),
       () => (
         <VexFlowComponent
-          width={width} height={height}
+          size={canvasSize}
           vexFlowRender={vexFlowRender.bind(null, "64r", ["64r", "32r", "16r", "8r", "qr", "hr"])}
         />
       ),
@@ -190,7 +190,7 @@ export function createFlashCards(): FlashCard[] {
       JSON.stringify({ set: flashCardSetId, id: "128r" }),
       () => (
         <VexFlowComponent
-          width={width} height={height}
+          size={canvasSize}
           vexFlowRender={vexFlowRender.bind(null, "128r", ["128r", "64r", "32r", "16r", "8r", "qr", "hr"])}
         />
       ),
@@ -203,7 +203,7 @@ function vexFlowRender(noteDurationString: string, restDurationStrings: string[]
     .setFont("Arial", 10)
     .setBackgroundFillStyle("#eed");
 
-  const stave = new Vex.Flow.Stave(0, -20, width);
+  const stave = new Vex.Flow.Stave(0, -20, canvasSize.width);
   stave.setContext(context).draw();
   
   const notes = [
@@ -233,7 +233,7 @@ function vexFlowRender(noteDurationString: string, restDurationStrings: string[]
   voice.addTickables(notes);
   
   const formatter = new Vex.Flow.Formatter();
-  formatter.joinVoices([voice]).format([voice], width);
+  formatter.joinVoices([voice]).format([voice], canvasSize.width);
   
   voice.draw(context, stave);
 }

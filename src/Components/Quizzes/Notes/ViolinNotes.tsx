@@ -1,6 +1,5 @@
 import * as React from "react";
 
-import * as Utils from "../../../Utils";
 import { Size2D } from "../../../Size2D";
 import * as FlashCardUtils from "../Utils";
 import { ViolinFingerboard } from "../../Utils/ViolinFingerboard";

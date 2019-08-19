@@ -87,7 +87,7 @@ export class NoteValuePlayer extends React.Component<INoteValuePlayerProps, INot
 
           <SizeAwareContainer height={140} onResize={s => this.onCanvasResize(s)}>
             <VexFlowComponent
-              width={this.state.canvasSize.width} height={this.state.canvasSize.height}
+              size={this.state.canvasSize}
               vexFlowRender={vexFlowRender}
             />
           </SizeAwareContainer>

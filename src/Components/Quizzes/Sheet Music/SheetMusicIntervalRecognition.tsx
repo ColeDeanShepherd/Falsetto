@@ -9,6 +9,7 @@ import { Pitch, pitchRange } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 import { SheetMusicChord } from "./SheetMusicChords";
 import { Interval } from "../../../Interval";
+import { Size2D } from '../../../Size2D';
 
 const flashCardSetId = "sheetIntervals";
 
@@ -196,7 +197,7 @@ export function createFlashCards(): Array<FlashCard> {
       (width, height) => (
         <div>
           <SheetMusicChord
-            width={300} height={200}
+            size={new Size2D(300, 200)}
             pitches={pitches}
           />
         </div>
