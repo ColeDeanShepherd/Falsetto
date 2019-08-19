@@ -1,7 +1,7 @@
 import * as Utils from "../../Utils";
 import { Pitch } from "../../Pitch";
 import { PitchLetter } from "../../PitchLetter";
-import { StringedInstrumentNote } from '../../GuitarNote';
+import { StringedInstrumentNote } from '../../StringedInstrumentNote';
 
 export class StringedInstrumentTuning {
   public constructor(public openStringPitches: Array<Pitch>) {

@@ -42,3 +42,21 @@ export class StringedInstrumentNote {
     return this.pitch.midiNumber - openStringPitch.midiNumber;
   }
 }
+
+export function getStringedInstrumentNotes(pitch: Pitch, tuning: StringedInstrumentTuning, minFretNumber: number, maxFretNumber: number): Array<StringedInstrumentNote> {
+  Utils.precondition(minFretNumber <= maxFretNumber);
+  
+  const notes = new Array<StringedInstrumentNote>();
+
+  for (let stringIndex = 0; stringIndex < tuning.stringCount; stringIndex++) {
+    for (let fretNumber = minFretNumber; fretNumber <= maxFretNumber; fretNumber++) {
+      const note = tuning.getNote(stringIndex, fretNumber);
+
+      if (note.pitch.midiNumber === pitch.midiNumber) {
+        notes.push(note);
+      }
+    }
+  }
+
+  return notes;
+}

@@ -6,7 +6,7 @@ import { GuitarFretboard} from "../../Utils/GuitarFretboard";
 import { standard6StringGuitarTuning } from "../../Utils/StringedInstrumentTuning";
 import { FlashCard, FlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
-import { StringedInstrumentNote } from '../../../GuitarNote';
+import { StringedInstrumentNote } from '../../../StringedInstrumentNote';
 import {
   IConfigData,
   StringedInstrumentNotesFlashCardMultiSelect,
@@ -15,9 +15,7 @@ import {
 } from '../../Utils/StringedInstrumentNotes';
 
 const flashCardSetId = "guitarNotes";
-
 const guitarTuning = standard6StringGuitarTuning;
-
 const MAX_MAX_FRET_NUMBER = 11;
 
 export function createFlashCardSet(guitarNotes?: Array<StringedInstrumentNote>): FlashCardSet {

@@ -19,7 +19,7 @@ import { ScaleAudioPlayer } from '../Utils/ScaleAudioPlayer';
 import { createStudyFlashCardSetComponent } from '../StudyFlashCards';
 import * as GuitarScales from "../Quizzes/Scales/GuitarScales";
 import { ScaleViewer } from '../Tools/ScaleViewer';
-import { StringedInstrumentNote } from '../../GuitarNote';
+import { StringedInstrumentNote } from '../../StringedInstrumentNote';
 
 const fretCount = 11;
 const ionianRootPitch = new Pitch(PitchLetter.F, 0, 2);

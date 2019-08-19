@@ -135,7 +135,6 @@ export class LeitnerStudyAlgorithm extends StudyAlgorithm {
     }
   }
   public getNextFlashCardIdInternal(enabledFlashCardIds: Array<FlashCardId>): FlashCardId {
-    console.log(enabledFlashCardIds.length);
     if (enabledFlashCardIds.length === 1) {
       const flashCardId = enabledFlashCardIds[0];
 

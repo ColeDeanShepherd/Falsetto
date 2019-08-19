@@ -53,6 +53,7 @@ export function createFlashCardSet(): FlashCardSet {
 export function createFlashCards(): FlashCard[] {
   return allPitchesMap((clef, pitch) => {
     const pitchAccidentalString = pitch.getAccidentalString();
+    const pitchAccidentalSymbolString = pitch.getAccidentalString(true);
     const vexFlowPitchString = pitch.toVexFlowString();
     
     const isTrebleNote = (clef === "treble");
@@ -92,7 +93,7 @@ export function createFlashCards(): FlashCard[] {
           bassNotes={bassNotes}
         />
       ),
-      `${PitchLetter[pitch.letter]}${pitchAccidentalString}`
+      `${PitchLetter[pitch.letter]}${pitchAccidentalSymbolString}`
     );
   });
 }

@@ -5,13 +5,13 @@ import * as Utils from "../../Utils";
 import { FlashCardId, FlashCard } from "../../FlashCard";
 import { FlashCardStudySessionInfo, FlashCardSet } from "../../FlashCardSet";
 import { StringedInstrumentTuning } from './StringedInstrumentTuning';
-import { StringedInstrumentNote } from '../../GuitarNote';
+import { StringedInstrumentNote } from '../../StringedInstrumentNote';
 
 export interface IConfigData {
   maxFret: number
 };
 
-function forEachNote(
+export function forEachNote(
   tuning: StringedInstrumentTuning, maxMaxFretNumber: number,
   callbackFn: (stringIndex: number, fretNumber: number, i: number) => void
 ) {

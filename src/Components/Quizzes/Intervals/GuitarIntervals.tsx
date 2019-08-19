@@ -16,7 +16,7 @@ import {
 } from "../../Utils/StringedInstrumentFingerboard";
 import { standard6StringGuitarTuning } from "../../Utils/StringedInstrumentTuning";
 import { VerticalDirection } from "../../../VerticalDirection";
-import { StringedInstrumentNote } from '../../../GuitarNote';
+import { StringedInstrumentNote } from '../../../StringedInstrumentNote';
 
 const flashCardSetId = "guitarIntervals";
 const fretCount = StringedInstrumentFingerboard.DEFAULT_FRET_COUNT;

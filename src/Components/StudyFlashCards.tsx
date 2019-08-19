@@ -197,7 +197,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
 
           {this.state.showConfiguration ? (
             <Paper style={{padding: "1em", margin: "1em 0"}}>
-              {false ? <p>{flashCards.length} Flash Cards</p> : null}
+              <Typography component="h6" variant="h6" gutterBottom={true}>Settings</Typography>
               {this.renderFlashCardMultiSelect(containerWidth, containerHeight, flashCards)}
             </Paper>
           ) : null}

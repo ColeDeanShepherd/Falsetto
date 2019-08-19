@@ -6,7 +6,7 @@ import { ViolinFingerboard } from "../../Utils/ViolinFingerboard";
 import { standardViolinTuning } from "../../Utils/StringedInstrumentTuning";
 import { FlashCard, FlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
-import { StringedInstrumentNote } from '../../../GuitarNote';
+import { StringedInstrumentNote } from '../../../StringedInstrumentNote';
 import {
   IConfigData,
   StringedInstrumentNotesFlashCardMultiSelect,

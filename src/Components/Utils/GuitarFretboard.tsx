@@ -7,7 +7,7 @@ import { Rect2D } from '../../Rect2D';
 import { Vector2D } from '../../Vector2D';
 import { ScaleType, Scale } from '../../Scale';
 import { Chord } from '../../Chord';
-import { StringedInstrumentNote } from '../../GuitarNote';
+import { StringedInstrumentNote } from '../../StringedInstrumentNote';
 import { getStandardGuitarTuning, StringedInstrumentTuning } from './StringedInstrumentTuning';
 import { StringedInstrumentMetrics, StringedInstrumentFingerboard } from './StringedInstrumentFingerboard';
 

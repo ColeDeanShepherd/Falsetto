@@ -15,7 +15,7 @@ import { Pitch } from '../../Pitch';
 import { PitchLetter } from '../../PitchLetter';
 import { createStudyFlashCardSetComponent } from '../StudyFlashCards';
 import { MAX_MAIN_CARD_WIDTH } from '../Style';
-import { StringedInstrumentNote } from '../../GuitarNote';
+import { StringedInstrumentNote } from '../../StringedInstrumentNote';
 
 const noteGroups = [
   {

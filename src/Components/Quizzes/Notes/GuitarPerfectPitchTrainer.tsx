@@ -1,5 +1,5 @@
 import * as React from "react";
-import { TextField, Button } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 
 import * as Utils from "../../../Utils";
 import {
@@ -9,72 +9,29 @@ import { StringedInstrumentMetrics } from "../../Utils/StringedInstrumentFingerb
 import { standard6StringGuitarTuning, StringedInstrumentTuning } from "../../Utils/StringedInstrumentTuning";
 import { FlashCard, FlashCardSide, FlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
-import { StringedInstrumentNote } from '../../../GuitarNote';
+import { StringedInstrumentNote, getStringedInstrumentNotes } from '../../../StringedInstrumentNote';
 import { playPitches } from '../../../Guitar';
 import { Pitch } from '../../../Pitch';
 import { Vector2D } from '../../../Vector2D';
 import { AnswerDifficulty } from '../../../AnswerDifficulty';
-
-interface IConfigData {
-  maxFret: number
-};
+import { IConfigData, forEachNote, StringedInstrumentNotesFlashCardMultiSelect } from "../../Utils/StringedInstrumentNotes";
 
 const flashCardSetId = "guitarPerfectPitchTrainer";
+const guitarTuning = standard6StringGuitarTuning;
+const MAX_MAX_FRET_NUMBER = 11;
 
 export function configDataToEnabledFlashCardIds(
   flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: IConfigData
 ): Array<FlashCardId> {
-  const notesPerString = 12;
-
   const enabledFlashCardIds = new Array<FlashCardId>();
-  for (let stringIndex = 0; stringIndex < standard6StringGuitarTuning.stringCount; stringIndex++) {
-    for (let fretNumber = 0; fretNumber <= configData.maxFret; fretNumber++) {
-      const flashCardIndex = (notesPerString * stringIndex) + fretNumber;
-      enabledFlashCardIds.push(flashCards[flashCardIndex].id);
+
+  forEachNote(guitarTuning, MAX_MAX_FRET_NUMBER, (stringIndex, fretNumber, i) => {
+    if (fretNumber <= configData.maxFret) {
+      enabledFlashCardIds.push(flashCards[i].id);
     }
-  }
+  });
 
   return enabledFlashCardIds;
-}
-
-export interface IFlashCardMultiSelectProps {
-  studySessionInfo: FlashCardStudySessionInfo;
-  onChange?: (newValue: Array<FlashCardId>, newConfigData: any) => void;
-}
-export interface IFlashCardMultiSelectState {}
-export class FlashCardMultiSelect extends React.Component<IFlashCardMultiSelectProps, IFlashCardMultiSelectState> {
-  public render(): JSX.Element {
-    const configData = this.props.studySessionInfo.configData as IConfigData;
-    return (
-      <TextField
-        label="Max. Fret"
-        value={configData.maxFret}
-        onChange={event => this.onMaxFretStringChange(event.target.value)}
-        type="number"
-        InputLabelProps={{
-          shrink: true,
-        }}
-        margin="normal"
-      />
-    );
-  }
-  
-  private onMaxFretStringChange(newValue: string) {
-    if (!this.props.onChange) { return; }
-    
-    const maxFret = parseInt(newValue, 10);
-    if (isNaN(maxFret)) { return; }
-
-    const clampedMaxFret = Utils.clamp(maxFret, 0, 11);
-
-    const newConfigData: IConfigData = {
-      maxFret: clampedMaxFret
-    }
-    const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(
-      this.props.studySessionInfo.flashCardSet, this.props.studySessionInfo.flashCards, newConfigData
-    );
-    this.props.onChange(newEnabledFlashCardIds, newConfigData);
-  }
 }
 
 export interface IFlashCardFrontSideProps {
@@ -155,6 +112,8 @@ export class GuitarNoteAnswerSelect extends React.Component<IGuitarNoteAnswerSel
   private renderExtras(metrics: StringedInstrumentMetrics): JSX.Element {
     const stringIndices = Utils.range(0, metrics.stringCount - 1);
     const fretNumbers = Utils.range(metrics.minFretNumber, metrics.minFretNumber + metrics.fretCount);
+    
+    const buttonRadius = 0.9 * metrics.fretDotRadius;
     const buttonStyle: any = { cursor: "pointer" };
 
     const buttons = Utils.flattenArrays(
@@ -175,11 +134,11 @@ export class GuitarNoteAnswerSelect extends React.Component<IGuitarNoteAnswerSel
             <circle
               cx={position.x}
               cy={position.y}
-              r={metrics.fretDotRadius}
-              fill={!isClickedNote ? "white" : "blue"}
-              fillOpacity={!isClickedNote ? 0.2 : 1}
+              r={buttonRadius}
+              fill={!isClickedNote ? "white" : "lightblue"}
+              fillOpacity={!isClickedNote ? 0.1 : 1}
               stroke="gray"
-              strokeWidth="1.25"
+              strokeWidth="1"
               onClick={e => this.onNoteClick(note)}
               style={buttonStyle}
             />          
@@ -217,63 +176,48 @@ export function createFlashCardSet(guitarNotes?: Array<StringedInstrumentNote>):
     studySessionInfo: FlashCardStudySessionInfo,
     onChange: (newValue: Array<FlashCardId>, newConfigData: any) => void
   ): JSX.Element => {
-    return <FlashCardMultiSelect
+    return <StringedInstrumentNotesFlashCardMultiSelect
+      tuning={guitarTuning}
+      maxMaxFretNumber={MAX_MAX_FRET_NUMBER}
       studySessionInfo={studySessionInfo}
       onChange={onChange}
     />;
   };
 
   const initialConfigData: IConfigData = {
-    maxFret: 11
+    maxFret: MAX_MAX_FRET_NUMBER
   };
 
   const flashCardSet = new FlashCardSet(flashCardSetId, "Guitar Perfect Pitch Trainer", () => createFlashCards(guitarNotes));
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
-  flashCardSet.renderAnswerSelect = (info: FlashCardStudySessionInfo) => <GuitarNoteAnswerSelect key={info.currentFlashCardId} args={info} tuning={standard6StringGuitarTuning} />;
+  flashCardSet.renderAnswerSelect = (info: FlashCardStudySessionInfo) => <GuitarNoteAnswerSelect key={info.currentFlashCardId} args={info} tuning={guitarTuning} />;
   flashCardSet.containerHeight = "200px";
 
   return flashCardSet;
 }
 
-export function getStringedInstrumentNotes(pitch: Pitch, tuning: StringedInstrumentTuning, minFretNumber: number, maxFretNumber: number): Array<StringedInstrumentNote> {
-  Utils.precondition(minFretNumber <= maxFretNumber);
-  
-  const notes = new Array<StringedInstrumentNote>();
-
-  for (let stringIndex = 0; stringIndex < tuning.stringCount; stringIndex++) {
-    for (let fretNumber = minFretNumber; fretNumber <= maxFretNumber; fretNumber++) {
-      const note = tuning.getNote(stringIndex, fretNumber);
-
-      if (note.pitch.midiNumber === pitch.midiNumber) {
-        notes.push(note);
-      }
-    }
-  }
-
-  return notes;
-}
-
-export function createFlashCards(guitarNotes?: Array<StringedInstrumentNote>): FlashCard[] {
-  const MAX_FRET_NUMBER = 11;
-  const tuning = standard6StringGuitarTuning;
-  guitarNotes = !guitarNotes
-    ? Utils.flattenArrays(Utils.range(0, tuning.stringCount - 1)
-    .map(stringIndex => Utils.range(0, MAX_FRET_NUMBER)
+export function createFlashCards(notes?: Array<StringedInstrumentNote>): FlashCard[] {
+  const guitarStyle = { width: "100%", maxWidth: "400px" };
+  notes = !notes
+    ? Utils.flattenArrays(Utils.range(0, guitarTuning.stringCount - 1)
+    .map(stringIndex => Utils.range(0, MAX_MAX_FRET_NUMBER)
       .map(fretNumber => {
-        return tuning.getNote(
+        return guitarTuning.getNote(
           stringIndex, fretNumber
         );
       })
     ))
-    : guitarNotes;
+    : notes;
 
-  return guitarNotes
-    .map(guitarNote => {
+  return notes
+    .map(note => {
       const deserializedId = {
         set: flashCardSetId,
-        note: [guitarNote.stringIndex, guitarNote.pitch.midiNumber]
+        tuning: guitarTuning.openStringPitches.map(p => p.toString(true, false)),
+        stringIndex: note.stringIndex,
+        fretNumber: note.getFretNumber(guitarTuning)
       };
       const id = JSON.stringify(deserializedId);
 
@@ -281,26 +225,27 @@ export function createFlashCards(guitarNotes?: Array<StringedInstrumentNote>): F
         id,
         new FlashCardSide(
           (width, height) => {
-            return <FlashCardFrontSide key={`${guitarNote.stringIndex}.${guitarNote.pitch.toString()}`} pitch={guitarNote.pitch} />;
+            return <FlashCardFrontSide
+              key={`${note.stringIndex}.${note.pitch.toString()}`}
+              pitch={note.pitch}
+            />;
           }
         ),
         new FlashCardSide(
           (width, height) => {
-            const style= { width: "100%", maxWidth: "400px" };
-  
             return (
               <div style={{ margin: "1em" }}>
-                <div>{guitarNote.pitch.toString()}</div>
+                <div>{note.pitch.toString()}</div>
                 <GuitarFretboard
                   width={400} height={140}
-                  tuning={tuning}
-                  pressedNotes={getStringedInstrumentNotes(guitarNote.pitch, tuning, 0, MAX_FRET_NUMBER)}
-                  style={style}
+                  tuning={guitarTuning}
+                  pressedNotes={getStringedInstrumentNotes(note.pitch, guitarTuning, 0, MAX_MAX_FRET_NUMBER)}
+                  style={guitarStyle}
                 />
               </div>
             );
           },
-          guitarNote
+          note
         )
       );
     });

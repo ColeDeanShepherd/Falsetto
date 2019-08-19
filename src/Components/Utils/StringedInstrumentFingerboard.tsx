@@ -2,7 +2,7 @@ import * as React from "react";
 
 import * as Utils from "../../Utils";
 import { Vector2D } from '../../Vector2D';
-import { StringedInstrumentNote } from '../../GuitarNote';
+import { StringedInstrumentNote } from '../../StringedInstrumentNote';
 import { StringedInstrumentTuning } from './StringedInstrumentTuning';
 import { Interval } from '../../Interval';
 import { VerticalDirection } from '../../VerticalDirection';
@@ -148,19 +148,19 @@ export class StringedInstrumentFingerboard extends React.Component<IStringedInst
         x={0} y={0}
         width={metrics.width} height={metrics.height}
         strokeWidth="0"
-        fill="#37363c"
+        fill="#844e30"
         opacity="1"
       />
     );
 
-    const nutColor = "#f4f3f6";
+    const nutColor = "#a29f98";
     const nut = <line
       x1={metrics.nutX} y1={0}
       x2={metrics.nutX} y2={metrics.height}
       stroke={nutColor} strokeWidth={metrics.nutWidth}
     />;
 
-    const stringColor = "#CCC";
+    const stringColor = "#dad2cb";
     const strings = Utils.range(0, metrics.stringCount - 1)
       .map(i => {
         const y = metrics.getStringY(i);
@@ -172,7 +172,7 @@ export class StringedInstrumentFingerboard extends React.Component<IStringedInst
         />;
       });
 
-    const fretColor = "#bfbfc0";
+    const fretColor = "#bebeba";
     const frets = this.props.hasFrets ? (
       Utils.range(1, metrics.fretCount)
         .map(i => {
@@ -215,7 +215,7 @@ export class StringedInstrumentFingerboard extends React.Component<IStringedInst
     );
 
     const dottedFretNumbers = (this.props.dottedFretNumbers !== undefined) ? this.props.dottedFretNumbers : [];
-    const fretDotColor = "#e7e9ea";
+    const fretDotColor = "#fdfcf8";
     const fretDots = this.props.hasFrets ? (
       dottedFretNumbers
         .filter(fretNumber => (fretNumber > metrics.minFretNumber) && ((fretNumber - metrics.minFretNumber) <= metrics.fretCount))

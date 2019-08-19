@@ -3,7 +3,7 @@ import * as React from "react";
 import { Size2D } from "../../Size2D";
 import { Pitch } from "../../Pitch";
 import { PitchLetter } from "../../PitchLetter";
-import { StringedInstrumentNote } from '../../GuitarNote';
+import { StringedInstrumentNote } from '../../StringedInstrumentNote';
 import { ChordType } from "../../Chord";
 import { GuitarFretboard, renderGuitarNoteHighlightsAndLabels } from "./GuitarFretboard";
 import { StringedInstrumentTuning } from "./StringedInstrumentTuning";
