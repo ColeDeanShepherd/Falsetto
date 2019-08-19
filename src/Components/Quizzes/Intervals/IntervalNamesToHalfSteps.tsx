@@ -7,7 +7,7 @@ const flashCardSetId = "intervalHalfSteps";
 export function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Interval Semitones", createFlashCards);
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
-  flashCardSet.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/the-basics/chords-intervals/";
+  flashCardSet.moreInfoUri = "/essential-music-theory/intervals";
   flashCardSet.containerHeight = "80px";
 
   return flashCardSet;

@@ -73,10 +73,12 @@ export class DefaultFlashCardMultiSelect extends React.Component<IDefaultFlashCa
 
     return (
       <div>
-        <div>
-          <span style={{ paddingRight: "1em" }}>Levels:</span>
-          {levelButtons}
-        </div>
+        {(this.props.flashCardLevels.length > 0) ? (
+          <div>
+            <span style={{ paddingRight: "1em" }}>Levels:</span>
+            {levelButtons}
+          </div>
+        ) : null}
         {flashCardCheckboxes}
       </div>
     );

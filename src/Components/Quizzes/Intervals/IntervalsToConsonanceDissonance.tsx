@@ -3,11 +3,18 @@ import { FlashCard } from "../../../FlashCard";
 import { FlashCardSet } from "../../../FlashCardSet";
 
 const flashCardSetId = "intervalConsonances";
+const orderedAnswers = [
+  "open consonance",
+  "soft consonance",
+  "context-dependent",
+  "mild dissonance",
+  "sharp dissonance"
+];
 
 export function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Intervals Consonance/Dissonance", createFlashCards);
-  flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
-  flashCardSet.moreInfoUri = "https://sites.google.com/site/nebironamsmusictheory/chords/1-01intervals";
+  flashCardSet.renderAnswerSelect = info => FlashCardUtils.renderStringAnswerSelect(orderedAnswers, info);
+  flashCardSet.moreInfoUri = "/essential-music-theory/intervals";
   flashCardSet.containerHeight = "80px";
 
   return flashCardSet;
@@ -29,10 +36,10 @@ export function createFlashCards(): FlashCard[] {
       "M3", "soft consonance"),
     FlashCard.fromRenderFns(
       JSON.stringify({ set: flashCardSetId, int: "P4" }),
-      "P4", "consonance or dissonance"),
+      "P4", "context-dependent"),
     FlashCard.fromRenderFns(
       JSON.stringify({ set: flashCardSetId, int: "A4/d5" }),
-      "A4/d5", "neutral or restless"),
+      "A4/d5", "sharp dissonance"),
     FlashCard.fromRenderFns(
       JSON.stringify({ set: flashCardSetId, int: "P5" }),
       "P5", "open consonance"),
