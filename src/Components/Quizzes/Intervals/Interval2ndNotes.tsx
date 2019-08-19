@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid } from "@material-ui/core";
 
 import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
@@ -9,6 +8,7 @@ import { Pitch } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 import { VerticalDirection } from "../../../VerticalDirection";
 import { Interval } from "../../../Interval";
+import { CheckboxColumnsFlashCardMultiSelect, CheckboxColumn, CheckboxColumnCell } from '../../Utils/CheckboxColumnsFlashCardMultiSelect';
 
 const flashCardSetId = "interval2ndNotes";
 
@@ -90,146 +90,63 @@ export interface IIntervalNotesFlashCardMultiSelectState {}
 export class IntervalNotesFlashCardMultiSelect extends React.Component<IIntervalNotesFlashCardMultiSelectProps, IIntervalNotesFlashCardMultiSelectState> {
   public render(): JSX.Element {
     const configData = this.props.studySessionInfo.configData as IConfigData;
-    const rootNoteCheckboxTableRows = rootNotes
-      .map((rootNote, i) => {
-        const isChecked = configData.enabledRootNotes.indexOf(rootNote) >= 0;
-        const isEnabled = !isChecked || (configData.enabledRootNotes.length > 1);
-
-        return (
-          <TableRow key={i}>
-            <TableCell><Checkbox checked={isChecked} onChange={event => this.toggleRootNoteEnabled(rootNote)} disabled={!isEnabled} /></TableCell>
-            <TableCell>{rootNote.toString(false)}</TableCell>
-          </TableRow>
-        );
-      }, this);
-    const rootNoteCheckboxes = (
-      <Table className="table">
-        <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell>Root Note</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rootNoteCheckboxTableRows}
-        </TableBody>
-      </Table>
-    );
-    
-    const intervalCheckboxTableRows = intervals
-      .map((interval, i) => {
-        const isChecked = configData.enabledIntervals.indexOf(interval) >= 0;
-        const isEnabled = !isChecked || (configData.enabledIntervals.length > 1);
-
-        return (
-          <TableRow key={i}>
-            <TableCell><Checkbox checked={isChecked} onChange={event => this.toggleIntervalEnabled(interval)} disabled={!isEnabled} /></TableCell>
-            <TableCell>{interval}</TableCell>
-          </TableRow>
-        );
-      }, this);
-    const intervalCheckboxes = (
-      <Table className="table">
-        <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell>Interval</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {intervalCheckboxTableRows}
-        </TableBody>
-      </Table>
-    );
-    
-    const directionCheckboxTableRows = directions
-      .map((direction, i) => {
-        const isChecked = configData.enabledDirections.indexOf(direction) >= 0;
-        const isEnabled = !isChecked || (configData.enabledDirections.length > 1);
-
-        return (
-          <TableRow key={i}>
-            <TableCell><Checkbox checked={isChecked} onChange={event => this.toggleSignsEnabled(direction)} disabled={!isEnabled} /></TableCell>
-            <TableCell>{direction}</TableCell>
-          </TableRow>
-        );
-      }, this);
-    const directionCheckboxes = (
-      <Table className="table">
-        <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell>Direction</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {directionCheckboxTableRows}
-        </TableBody>
-      </Table>
-    );
+    const selectedCellDatas = [
+      configData.enabledRootNotes,
+      configData.enabledIntervals,
+      configData.enabledDirections
+    ];
+    const boundOnChange = this.onChange.bind(this);
 
     return (
-      <Grid container spacing={32}>
-        <Grid item xs={4}>{rootNoteCheckboxes}</Grid>
-        <Grid item xs={4}>{intervalCheckboxes}</Grid>
-        <Grid item xs={4}>{directionCheckboxes}</Grid>
-      </Grid>
+      <CheckboxColumnsFlashCardMultiSelect
+        columns={this.columns}
+        selectedCellDatas={selectedCellDatas}
+        onChange={boundOnChange}
+      />
     );
   }
 
-  private toggleRootNoteEnabled(rootNote: Pitch) {
-    const configData = this.props.studySessionInfo.configData as IConfigData;
-    const newEnabledRootNotes = Utils.toggleArrayElement(
-      configData.enabledRootNotes,
-      rootNote
-    );
-    
-    if (newEnabledRootNotes.length > 0) {
-      const newConfigData: IConfigData = {
-        enabledRootNotes: newEnabledRootNotes,
-        enabledIntervals: configData.enabledIntervals,
-        enabledDirections: configData.enabledDirections
-      };
-      this.onChange(newConfigData);
-    }
-  }
-  private toggleIntervalEnabled(interval: string) {
-    const configData = this.props.studySessionInfo.configData as IConfigData;
-    const newEnabledIntervals = Utils.toggleArrayElement(
-      configData.enabledIntervals,
-      interval
-    );
-    
-    if (newEnabledIntervals.length > 0) {
-      const newConfigData: IConfigData = {
-        enabledRootNotes: configData.enabledRootNotes,
-        enabledIntervals: newEnabledIntervals,
-        enabledDirections: configData.enabledDirections
-      };
-      this.onChange(newConfigData);
-    }
-  }
-  private toggleSignsEnabled(direction: string) {
-    const configData = this.props.studySessionInfo.configData as IConfigData;
-    const newEnabledDirections = Utils.toggleArrayElement(
-      configData.enabledDirections,
-      direction
-    );
-    
-    if (newEnabledDirections.length > 0) {
-      const newConfigData: IConfigData = {
-        enabledRootNotes: configData.enabledRootNotes,
-        enabledIntervals: configData.enabledIntervals,
-        enabledDirections: newEnabledDirections
-      };
-      this.onChange(newConfigData);
-    }
-  }
-  private onChange(newConfigData: IConfigData) {
+  private columns: Array<CheckboxColumn> = [
+    new CheckboxColumn(
+      "Root Note",
+      rootNotes
+        .map(rn => new CheckboxColumnCell(
+          () => <span>{rn.toString(false)}</span>, rn
+        )),
+      (a: Pitch, b: Pitch) => a === b
+    ),
+    new CheckboxColumn(
+      "Interval",
+      intervals
+        .map(i => new CheckboxColumnCell(
+          () => <span>{i}</span>, i
+        )),
+      (a: string, b: string) => a === b
+    ),
+    new CheckboxColumn(
+      "Direction",
+      directions
+        .map(d => new CheckboxColumnCell(
+          () => <span>{d}</span>, d
+        )),
+      (a: string, b: string) => a === b
+    )
+  ];
+
+  private onChange(newSelectedCellDatas: Array<Array<any>>) {
     if (!this.props.onChange) { return; }
 
+    const newConfigData: IConfigData = {
+      enabledRootNotes: newSelectedCellDatas[0] as Array<Pitch>,
+      enabledIntervals: newSelectedCellDatas[1] as Array<string>,
+      enabledDirections: newSelectedCellDatas[2] as Array<string>
+    };
+
+    console.log(newConfigData);
+
     const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(
-      this.props.studySessionInfo.flashCardSet, this.props.studySessionInfo.flashCards, newConfigData
+      this.props.studySessionInfo.flashCardSet, this.props.studySessionInfo.flashCards,
+      newConfigData
     );
     this.props.onChange(newEnabledFlashCardIds, newConfigData);
   }
