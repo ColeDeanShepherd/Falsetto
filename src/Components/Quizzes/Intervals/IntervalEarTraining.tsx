@@ -8,7 +8,7 @@ import { Pitch } from "../../../Pitch";
 import { playPitches, playPitchesSequentially } from "../../../Piano";
 import {
   IConfigData,
-  rootNotes,
+  firstPitches,
   intervals,
   directionsWithHarmonic as directions,
   IntervalEarTrainingFlashCardMultiSelect,
@@ -30,7 +30,7 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
   public constructor(props: IFlashCardFrontSideProps) {
     super(props);
 
-    const pitch1 = Utils.randomElement(rootNotes);
+    const pitch1 = Utils.randomElement(firstPitches);
 
     const intervalIndex = intervals.indexOf(this.props.interval);
     const intervalHalfSteps = (this.props.direction === "↓")
@@ -88,7 +88,7 @@ export function createFlashCards(): Array<FlashCard> {
   let flashCards = new Array<FlashCard>();
 
   const includeHarmonicIntervals = true;
-  forEachInterval([rootNotes[0]],
+  forEachInterval([firstPitches[0]],
     (interval, direction, pitch1, pitch2, isHarmonicInterval, i) => {
       const deserializedId = {
         set: flashCardSetId,
@@ -115,7 +115,7 @@ export function createFlashCardSet(): FlashCardSet {
     return (
     <IntervalEarTrainingFlashCardMultiSelect
       studySessionInfo={studySessionInfo}
-      hasFlashCardPerRootNote={false}
+      hasFlashCardPerFirstPitch={false}
       onChange={onChange}
       enableHarmonicIntervals={true}
     />
@@ -123,7 +123,7 @@ export function createFlashCardSet(): FlashCardSet {
   };
 
   const initialConfigData: IConfigData = {
-    enabledRootNotes: rootNotes.slice(),
+    enabledFirstPitches: firstPitches.slice(),
     enabledIntervals: intervals.slice(),
     enabledDirections: directions.slice()
   };

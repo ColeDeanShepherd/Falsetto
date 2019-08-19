@@ -7,6 +7,15 @@ export enum PitchLetter {
   F,
   G
 }
+export const pitchLetters = [
+  PitchLetter.A,
+  PitchLetter.B,
+  PitchLetter.C,
+  PitchLetter.D,
+  PitchLetter.E,
+  PitchLetter.F,
+  PitchLetter.G,
+];
 
 export function getPitchLetterMidiNoteNumberOffset(pitchLetter: PitchLetter): number {
   switch (pitchLetter) {

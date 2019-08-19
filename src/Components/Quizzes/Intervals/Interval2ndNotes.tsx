@@ -5,30 +5,14 @@ import * as FlashCardUtils from "../Utils";
 import { FlashCard, FlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { Pitch } from "../../../Pitch";
-import { PitchLetter } from "../../../PitchLetter";
 import { VerticalDirection } from "../../../VerticalDirection";
 import { Interval } from "../../../Interval";
 import { CheckboxColumnsFlashCardMultiSelect, CheckboxColumn, CheckboxColumnCell } from '../../Utils/CheckboxColumnsFlashCardMultiSelect';
+import { getValidKeyPitches } from '../../../Key';
 
 const flashCardSetId = "interval2ndNotes";
 
-const rootNotes = [
-  new Pitch(PitchLetter.C, -1, 4),
-  new Pitch(PitchLetter.C, 0, 4),
-  new Pitch(PitchLetter.C, 1, 4),
-  new Pitch(PitchLetter.D, -1, 4),
-  new Pitch(PitchLetter.D, 0, 4),
-  new Pitch(PitchLetter.E, -1, 4),
-  new Pitch(PitchLetter.E, 0, 4),
-  new Pitch(PitchLetter.F, 0, 4),
-  new Pitch(PitchLetter.F, 1, 4),
-  new Pitch(PitchLetter.G, -1, 4),
-  new Pitch(PitchLetter.G, 0, 4),
-  new Pitch(PitchLetter.A, -1, 4),
-  new Pitch(PitchLetter.A, 0, 4),
-  new Pitch(PitchLetter.B, -1, 4),
-  new Pitch(PitchLetter.B, 0, 4)
-];
+const firstPitches = getValidKeyPitches(4);
 const intervals = [
   "m2",
   "M2",
@@ -47,18 +31,18 @@ const intervals = [
 const directions = ["↑", "↓"];
 
 interface IConfigData {
-  enabledRootNotes: Pitch[];
+  enabledFirstPitches: Pitch[];
   enabledIntervals: string[];
   enabledDirections: string[];
 }
 
-export function forEachInterval(callbackFn: (rootNote: Pitch, interval: string, direction: string, i: number) => void) {
+export function forEachInterval(callbackFn: (firstPitch: Pitch, interval: string, direction: string, i: number) => void) {
   let i = 0;
 
-  for (const rootNote of rootNotes) {
+  for (const firstPitch of firstPitches) {
     for (const interval of intervals) {
       for (const direction of directions) {
-        callbackFn(rootNote, interval, direction, i);
+        callbackFn(firstPitch, interval, direction, i);
         i++;
       }
     }
@@ -69,9 +53,9 @@ export function configDataToEnabledFlashCardIds(
 ): Array<FlashCardId> {
   const flashCardIds = new Array<FlashCardId>();
 
-  forEachInterval((rootNote, interval, direction, i) => {
+  forEachInterval((firstPitch, interval, direction, i) => {
     if (
-      Utils.arrayContains(configData.enabledRootNotes, rootNote) &&
+      Utils.arrayContains(configData.enabledFirstPitches, firstPitch) &&
       Utils.arrayContains(configData.enabledIntervals, interval) &&
       Utils.arrayContains(configData.enabledDirections, direction)
     ) {
@@ -91,7 +75,7 @@ export class IntervalNotesFlashCardMultiSelect extends React.Component<IInterval
   public render(): JSX.Element {
     const configData = this.props.studySessionInfo.configData as IConfigData;
     const selectedCellDatas = [
-      configData.enabledRootNotes,
+      configData.enabledFirstPitches,
       configData.enabledIntervals,
       configData.enabledDirections
     ];
@@ -108,10 +92,10 @@ export class IntervalNotesFlashCardMultiSelect extends React.Component<IInterval
 
   private columns: Array<CheckboxColumn> = [
     new CheckboxColumn(
-      "Root Note",
-      rootNotes
+      "First Pitch",
+      firstPitches
         .map(rn => new CheckboxColumnCell(
-          () => <span>{rn.toString(false)}</span>, rn
+          () => <span>{rn.toString(false, true)}</span>, rn
         )),
       (a: Pitch, b: Pitch) => a === b
     ),
@@ -137,7 +121,7 @@ export class IntervalNotesFlashCardMultiSelect extends React.Component<IInterval
     if (!this.props.onChange) { return; }
 
     const newConfigData: IConfigData = {
-      enabledRootNotes: newSelectedCellDatas[0] as Array<Pitch>,
+      enabledFirstPitches: newSelectedCellDatas[0] as Array<Pitch>,
       enabledIntervals: newSelectedCellDatas[1] as Array<string>,
       enabledDirections: newSelectedCellDatas[2] as Array<string>
     };
@@ -150,7 +134,7 @@ export class IntervalNotesFlashCardMultiSelect extends React.Component<IInterval
   }
 }
 
-export function renderNoteAnswerSelect(
+export function renderPitchAnswerSelect(
   info: FlashCardStudySessionInfo
 ): JSX.Element {
   const doubleSharpNotes = ["A♯♯", "B♯♯", "C♯♯", "D♯♯", "E♯♯", "F♯♯", "G♯♯"];
@@ -183,7 +167,7 @@ export function renderNoteAnswerSelect(
 export function createFlashCards(): Array<FlashCard> {
   const flashCards = new Array<FlashCard>();
 
-  forEachInterval((rootPitch, interval, direction, i) => {
+  forEachInterval((firstPitch, interval, direction, i) => {
     const intervalQuality = interval[0];
     const intervalQualityNum = Utils.intervalQualityToNumber(intervalQuality);
 
@@ -192,14 +176,14 @@ export function createFlashCards(): Array<FlashCard> {
 
     const verticalDirection = (direction === "↑") ? VerticalDirection.Up : VerticalDirection.Down;
     const newPitch = Pitch.addInterval(
-      rootPitch,
+      firstPitch,
       verticalDirection,
       new Interval(genericIntervalNum, intervalQualityNum)
     );
     
     const deserializedId = {
       set: flashCardSetId,
-      rootPitch: rootPitch.toString(true, false),
+      firstPitch: firstPitch.toString(true, false),
       interval: interval.toString(),
       direction: VerticalDirection[verticalDirection]
     };
@@ -207,8 +191,8 @@ export function createFlashCards(): Array<FlashCard> {
 
     const flashCard = FlashCard.fromRenderFns(
       id,
-      rootPitch.toString(false) + " " + direction + " " + interval,
-      newPitch.toString(false)
+      firstPitch.toString(false, true) + " " + direction + " " + interval,
+      newPitch.toString(false, true)
     );
 
     flashCards.push(flashCard);
@@ -230,7 +214,7 @@ export function createFlashCardSet(): FlashCardSet {
   };
 
   const initialConfigData: IConfigData = {
-    enabledRootNotes: rootNotes.slice(),
+    enabledFirstPitches: firstPitches.slice(),
     enabledIntervals: intervals.slice(),
     enabledDirections: directions.slice()
   };
@@ -242,7 +226,7 @@ export function createFlashCardSet(): FlashCardSet {
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
-  flashCardSet.renderAnswerSelect = renderNoteAnswerSelect;
+  flashCardSet.renderAnswerSelect = renderPitchAnswerSelect;
   flashCardSet.containerHeight = "80px";
 
   return flashCardSet;

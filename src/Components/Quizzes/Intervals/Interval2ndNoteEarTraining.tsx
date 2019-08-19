@@ -7,7 +7,7 @@ import { Pitch } from "../../../Pitch";
 import { playPitchesSequentially } from "../../../Piano";
 import {
   IConfigData,
-  rootNotes,
+  firstPitches,
   intervals,
   directions,
   IntervalEarTrainingFlashCardMultiSelect,
@@ -58,7 +58,7 @@ export function createFlashCards(): Array<FlashCard> {
   let flashCards = new Array<FlashCard>();
 
   const includeHarmonicIntervals = false;
-  forEachInterval(rootNotes,
+  forEachInterval(firstPitches,
     (interval, direction, pitch1, pitch2, isHarmonicInterval, i) => {
       const deserializedId = {
         set: flashCardSetId,
@@ -85,14 +85,14 @@ export function createFlashCardSet(): FlashCardSet {
     return (
     <IntervalEarTrainingFlashCardMultiSelect
       studySessionInfo={studySessionInfo}
-      hasFlashCardPerRootNote={true}
+      hasFlashCardPerFirstPitch={true}
       onChange={onChange}
     />
     );
   };
 
   const initialConfigData: IConfigData = {
-    enabledRootNotes: rootNotes.slice(),
+    enabledFirstPitches: firstPitches.slice(),
     enabledIntervals: intervals.slice(),
     enabledDirections: directions.slice()
   };

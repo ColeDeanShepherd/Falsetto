@@ -4,27 +4,10 @@ import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid } from
 import * as Utils from "../../Utils";
 import { FlashCard, FlashCardId } from "../../FlashCard";
 import { Pitch } from "../../Pitch";
-import { PitchLetter } from "../../PitchLetter";
 import { FlashCardStudySessionInfo, FlashCardSet } from '../../FlashCardSet';
+import { getValidKeyPitches } from '../../Key';
 
-// TODO: move this somewhere else
-export const rootNotes = [
-  new Pitch(PitchLetter.C, -1, 4),
-  new Pitch(PitchLetter.C, 0, 4),
-  new Pitch(PitchLetter.C, 1, 4),
-  new Pitch(PitchLetter.D, -1, 4),
-  new Pitch(PitchLetter.D, 0, 4),
-  new Pitch(PitchLetter.E, -1, 4),
-  new Pitch(PitchLetter.E, 0, 4),
-  new Pitch(PitchLetter.F, 0, 4),
-  new Pitch(PitchLetter.F, 1, 4),
-  new Pitch(PitchLetter.G, -1, 4),
-  new Pitch(PitchLetter.G, 0, 4),
-  new Pitch(PitchLetter.A, -1, 4),
-  new Pitch(PitchLetter.A, 0, 4),
-  new Pitch(PitchLetter.B, -1, 4),
-  new Pitch(PitchLetter.B, 0, 4)
-];
+export const firstPitches = getValidKeyPitches(4);
 export const intervals = [
   "m2",
   "M2",
@@ -43,7 +26,7 @@ export const directions = ["↑", "↓"];
 export const directionsWithHarmonic = directions.concat(["harmonic"]);
 
 export function forEachInterval(
-  rootNotes: Array<Pitch>,
+  firstPitches: Array<Pitch>,
   callbackFn: (interval: string, direction: string, pitch1: Pitch, pitch2: Pitch, isHarmonicInterval: boolean, index: number) => void,
   includeHarmonicIntervals: boolean,
   minPitch?: Pitch,
@@ -52,7 +35,7 @@ export function forEachInterval(
   let i = 0;
   const theDirections = includeHarmonicIntervals ? directionsWithHarmonic : directions;
 
-  for (const rootPitch of rootNotes) {
+  for (const firstPitch of firstPitches) {
     for (let intervalIndex = 0; intervalIndex < intervals.length; intervalIndex++) {
       const interval = intervals[intervalIndex];
 
@@ -60,7 +43,7 @@ export function forEachInterval(
         const intervalHalfSteps = (direction === "↑")
           ? intervalIndex + 1
           : -(intervalIndex + 1);
-        const newPitch = Pitch.createFromMidiNumber(rootPitch.midiNumber + intervalHalfSteps);
+        const newPitch = Pitch.createFromMidiNumber(firstPitch.midiNumber + intervalHalfSteps);
 
         if (minPitch && (newPitch.midiNumber < minPitch.midiNumber)) {
           continue;
@@ -72,7 +55,7 @@ export function forEachInterval(
         
         const isHarmonicInterval = direction === "harmonic";
 
-        callbackFn(interval, direction, rootPitch, newPitch, isHarmonicInterval, i);
+        callbackFn(interval, direction, firstPitch, newPitch, isHarmonicInterval, i);
         i++;
       }
     }
@@ -80,24 +63,24 @@ export function forEachInterval(
 }
 
 export interface IConfigData {
-  enabledRootNotes: Pitch[];
+  enabledFirstPitches: Pitch[];
   enabledIntervals: string[];
   enabledDirections: string[];
 }
 
 export function configDataToEnabledFlashCardIds(
   enableHarmonicIntervals: boolean,
-  hasFlashCardPerRootNote: boolean,
+  hasFlashCardPerFirstPitch: boolean,
   flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: IConfigData
 ): Array<FlashCardId> {
   const directionsToUse = enableHarmonicIntervals ? directionsWithHarmonic : directions;
 
-  if (hasFlashCardPerRootNote) {
-    return Utils.flattenArrays<boolean>(rootNotes
-      .map(rootNote => intervals
+  if (hasFlashCardPerFirstPitch) {
+    return Utils.flattenArrays<boolean>(firstPitches
+      .map(firstPitch => intervals
         .map(interval => directionsToUse
           .map(direction =>
-            Utils.arrayContains(configData.enabledRootNotes, rootNote) &&
+            Utils.arrayContains(configData.enabledFirstPitches, firstPitch) &&
             Utils.arrayContains(configData.enabledIntervals, interval) &&
             Utils.arrayContains(configData.enabledDirections, direction)
           )
@@ -124,7 +107,7 @@ export function configDataToEnabledFlashCardIds(
 
 export interface IIntervalEarTrainingFlashCardMultiSelectProps {
   studySessionInfo: FlashCardStudySessionInfo;
-  hasFlashCardPerRootNote: boolean;
+  hasFlashCardPerFirstPitch: boolean;
   onChange?: (newValue: Array<FlashCardId>, newConfigData: any) => void;
   enableHarmonicIntervals?: boolean;
 }
@@ -134,7 +117,7 @@ export class IntervalEarTrainingFlashCardMultiSelect extends React.Component<IIn
     super(props);
 
     this.state = {
-      enabledRootNotes: rootNotes.slice(),
+      enabledFirstPitches: firstPitches.slice(),
       enabledIntervals: intervals.slice(),
       enabledDirections: this.directionsSource.slice()
     };
@@ -215,7 +198,7 @@ export class IntervalEarTrainingFlashCardMultiSelect extends React.Component<IIn
     
     if (newEnabledIntervals.length > 0) {
       const newConfigData: IConfigData = {
-        enabledRootNotes: configData.enabledRootNotes,
+        enabledFirstPitches: configData.enabledFirstPitches,
         enabledIntervals: newEnabledIntervals,
         enabledDirections: configData.enabledDirections
       };
@@ -231,7 +214,7 @@ export class IntervalEarTrainingFlashCardMultiSelect extends React.Component<IIn
     
     if (newEnabledDirections.length > 0) {
       const newConfigData: IConfigData = {
-        enabledRootNotes: configData.enabledRootNotes,
+        enabledFirstPitches: configData.enabledFirstPitches,
         enabledIntervals: configData.enabledIntervals,
         enabledDirections: newEnabledDirections
       };
@@ -243,7 +226,7 @@ export class IntervalEarTrainingFlashCardMultiSelect extends React.Component<IIn
 
     const enableHarmonicIntervals = this.props.enableHarmonicIntervals === true;
     const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(
-      enableHarmonicIntervals, this.props.hasFlashCardPerRootNote,
+      enableHarmonicIntervals, this.props.hasFlashCardPerFirstPitch,
       this.props.studySessionInfo.flashCardSet, this.props.studySessionInfo.flashCards, newConfigData
     );
     this.props.onChange(newEnabledFlashCardIds, newConfigData);

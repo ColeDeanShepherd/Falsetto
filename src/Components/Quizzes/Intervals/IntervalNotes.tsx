@@ -6,28 +6,12 @@ import * as FlashCardUtils from "../Utils";
 import { FlashCard, FlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { Pitch } from "../../../Pitch";
-import { PitchLetter } from "../../../PitchLetter";
 import { VerticalDirection } from "../../../VerticalDirection";
 import { Interval } from "../../../Interval";
+import { getValidKeyPitches } from '../../../Key';
 
 const flashCardSetId = "notesToIntervals";
-const rootNotes = [
-  new Pitch(PitchLetter.C, -1, 4),
-  new Pitch(PitchLetter.C, 0, 4),
-  new Pitch(PitchLetter.C, 1, 4),
-  new Pitch(PitchLetter.D, -1, 4),
-  new Pitch(PitchLetter.D, 0, 4),
-  new Pitch(PitchLetter.E, -1, 4),
-  new Pitch(PitchLetter.E, 0, 4),
-  new Pitch(PitchLetter.F, 0, 4),
-  new Pitch(PitchLetter.F, 1, 4),
-  new Pitch(PitchLetter.G, -1, 4),
-  new Pitch(PitchLetter.G, 0, 4),
-  new Pitch(PitchLetter.A, -1, 4),
-  new Pitch(PitchLetter.A, 0, 4),
-  new Pitch(PitchLetter.B, -1, 4),
-  new Pitch(PitchLetter.B, 0, 4)
-];
+const firstPitches = getValidKeyPitches(4);
 const intervals = [
   "m2",
   "M2",
@@ -54,7 +38,7 @@ interface IConfigData {
 function forEachInterval(callbackFn: (rootNote: Pitch, interval: string, sign: string, i: number) => void) {
   let i = 0;
   
-  for (const rootNote of rootNotes) {
+  for (const rootNote of firstPitches) {
     for (const interval of intervals) {
       for (const sign of signs) {
         callbackFn(rootNote, interval, sign, i);
@@ -91,14 +75,14 @@ export class IntervalNotesFlashCardMultiSelect extends React.Component<IInterval
     super(props);
 
     this.state = {
-      enabledRootNotes: rootNotes.slice(),
+      enabledRootNotes: firstPitches.slice(),
       enabledIntervals: intervals.slice(),
       enabledSigns: signs.slice()
     };
   }
   public render(): JSX.Element {
     const configData = this.props.studySessionInfo.configData as IConfigData;
-    const rootNoteCheckboxTableRows = rootNotes
+    const rootNoteCheckboxTableRows = firstPitches
       .map((rootNote, i) => {
         const isChecked = configData.enabledRootNotes.indexOf(rootNote) >= 0;
         const isEnabled = !isChecked || (configData.enabledRootNotes.length > 1);
@@ -106,7 +90,7 @@ export class IntervalNotesFlashCardMultiSelect extends React.Component<IInterval
         return (
           <TableRow key={i}>
             <TableCell><Checkbox checked={isChecked} onChange={event => this.toggleRootNoteEnabled(rootNote)} disabled={!isEnabled} /></TableCell>
-            <TableCell>{rootNote.toString(false)}</TableCell>
+            <TableCell>{rootNote.toString(false, true)}</TableCell>
           </TableRow>
         );
       }, this);
@@ -290,7 +274,7 @@ export function createFlashCardSet(): FlashCardSet {
   };
 
   const initialConfigData: IConfigData = {
-    enabledRootNotes: rootNotes.slice(),
+    enabledRootNotes: firstPitches.slice(),
     enabledIntervals: intervals.slice(),
     enabledSigns: signs.slice()
   };

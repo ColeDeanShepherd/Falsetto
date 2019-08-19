@@ -15,34 +15,9 @@ import { getPreferredGuitarScaleShape } from '../Utils/GuitarFretboard';
 import { getStandardGuitarTuning } from "../Utils/StringedInstrumentTuning";
 import { ScaleAudioPlayer } from '../Utils/ScaleAudioPlayer';
 import { GuitarScaleViewer } from '../Utils/GuitarScaleViewer';
+import { ValidKeyPitchSelect } from '../Utils/ValidKeyPitchSelect';
 
-const validSharpKeyPitches = [
-  null,
-  null,
-  new Pitch(PitchLetter.C, 1, 3),
-  null,
-  null,
-  new Pitch(PitchLetter.F, 1, 3),
-  null
-];
-const validNaturalKeyPitches = [
-  new Pitch(PitchLetter.A, 0, 3),
-  new Pitch(PitchLetter.B, 0, 3),
-  new Pitch(PitchLetter.C, 0, 3),
-  new Pitch(PitchLetter.D, 0, 3),
-  new Pitch(PitchLetter.E, 0, 3),
-  new Pitch(PitchLetter.F, 0, 3),
-  new Pitch(PitchLetter.G, 0, 3)
-];
-const validFlatKeyPitches = [
-  new Pitch(PitchLetter.A, -1, 3),
-  new Pitch(PitchLetter.B, -1, 3),
-  new Pitch(PitchLetter.C, -1, 4),
-  new Pitch(PitchLetter.D, -1, 3),
-  new Pitch(PitchLetter.E, -1, 3),
-  null,
-  new Pitch(PitchLetter.G, -1, 3)
-];
+// subtract one octave for valid key pitches
 
 interface IScaleViewerProps {
   title?: string;
@@ -127,9 +102,11 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
               Root Pitch
             </Typography>
             <div style={{padding: "1em 0"}}>
-              {this.renderRootPitchRow(validSharpKeyPitches)}
-              {this.renderRootPitchRow(validNaturalKeyPitches)}
-              {this.renderRootPitchRow(validFlatKeyPitches)}
+              <ValidKeyPitchSelect
+                preferredOctaveNumber={4}
+                value={[this.state.scale.rootPitch]}
+                onChange={rootPitches => this.onRootPitchClick(rootPitches[0])}
+              />
             </div>
             
             <Typography gutterBottom={true} variant="h6" component="h4">
@@ -220,41 +197,6 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
     return this.props.scaleTypeGroups
       ? this.props.scaleTypeGroups
       : ScaleType.Groups;
-  }
-  private renderRootPitchRow(rootPitches: Array<Pitch | null>): JSX.Element {
-    const useGuitarRootPitches = this.props.showPianoKeyboard === false;
-
-    return (
-      <div>
-        {rootPitches.map(pitch => {
-          const style: any = { textTransform: "none" };
-          
-          const isPressed = pitch && (pitch.equalsNoOctave(this.state.scale.rootPitch));
-          if (isPressed) {
-            style.backgroundColor = "#959595";
-          }
-
-          return (
-            pitch
-              ? (
-                <Button
-                  onClick={event => this.onRootPitchClick(pitch)}
-                  variant="contained"
-                  style={style}
-                >
-                  {pitch.toString(false)}
-                </Button>
-              )
-              : (
-                <Button
-                  variant="contained"
-                  style={{ visibility: "hidden" }}
-                />
-              )
-          );
-        })}
-      </div>
-    );
   }
 
   private onRootPitchClick(rootPitch: Pitch) {

@@ -7,7 +7,7 @@ import { PitchesAudioPlayer } from '../Utils/PitchesAudioPlayer';
 import { Pitch } from '../../Pitch';
 import { PitchLetter } from '../../PitchLetter';
 import { ScaleType } from '../../Scale';
-import { validSharpKeyPitches, validNaturalKeyPitches, validFlatKeyPitches } from '../../Key';
+import { ValidKeyPitchSelect } from '../Utils/ValidKeyPitchSelect';
 
 export const defaultScales = [
   ScaleType.Ionian,
@@ -78,9 +78,11 @@ export class DiatonicChordPlayer extends React.Component<IDiatonicChordPlayerPro
               Root Pitch
             </Typography>
             <div style={{padding: "1em 0"}}>
-              {this.renderRootPitchRow(validSharpKeyPitches)}
-              {this.renderRootPitchRow(validNaturalKeyPitches)}
-              {this.renderRootPitchRow(validFlatKeyPitches)}
+              <ValidKeyPitchSelect
+                preferredOctaveNumber={4}
+                value={[this.state.rootPitch]}
+                onChange={rootPitches => this.onRootPitchClick(rootPitches[0])}
+              />
             </div>
           </div>
           
@@ -135,39 +137,6 @@ export class DiatonicChordPlayer extends React.Component<IDiatonicChordPlayerPro
           {romanNumeral}<sup>{chord.type.symbols[0]}</sup>
         </PitchesAudioPlayer>
       </TableCell>
-    );
-  }
-  private renderRootPitchRow(rootPitches: Array<Pitch | null>): JSX.Element {
-    return (
-      <div>
-        {rootPitches.map(pitch => {
-          const style: any = { textTransform: "none" };
-          
-          const isPressed = pitch && (pitch.equals(this.state.rootPitch));
-          if (isPressed) {
-            style.backgroundColor = "#959595";
-          }
-
-          return (
-            pitch
-              ? (
-                <Button
-                  onClick={event => this.onRootPitchClick(pitch)}
-                  variant="contained"
-                  style={style}
-                >
-                  {pitch.toString(false)}
-                </Button>
-              )
-              : (
-                <Button
-                  variant="contained"
-                  style={{ visibility: "hidden" }}
-                />
-              )
-          );
-        })}
-      </div>
     );
   }
 

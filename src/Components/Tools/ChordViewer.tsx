@@ -13,36 +13,9 @@ import { playPitches } from '../../Piano';
 import * as PianoScaleDronePlayer from "../Utils/PianoScaleDronePlayer";
 import { GuitarChordViewer } from '../Utils/GuitarChordViewer';
 import { getStandardGuitarTuning } from '../Utils/StringedInstrumentTuning';
+import { ValidKeyPitchSelect } from '../Utils/ValidKeyPitchSelect';
 
 const guitarTuning = getStandardGuitarTuning(6);
-
-const validSharpKeyPitches = [
-  null,
-  null,
-  new Pitch(PitchLetter.C, 1, 4),
-  null,
-  null,
-  new Pitch(PitchLetter.F, 1, 4),
-  null
-];
-const validNaturalKeyPitches = [
-  new Pitch(PitchLetter.A, 0, 4),
-  new Pitch(PitchLetter.B, 0, 4),
-  new Pitch(PitchLetter.C, 0, 4),
-  new Pitch(PitchLetter.D, 0, 4),
-  new Pitch(PitchLetter.E, 0, 4),
-  new Pitch(PitchLetter.F, 0, 4),
-  new Pitch(PitchLetter.G, 0, 4)
-];
-const validFlatKeyPitches = [
-  new Pitch(PitchLetter.A, -1, 4),
-  new Pitch(PitchLetter.B, -1, 4),
-  new Pitch(PitchLetter.C, -1, 5),
-  new Pitch(PitchLetter.D, -1, 4),
-  new Pitch(PitchLetter.E, -1, 4),
-  null,
-  new Pitch(PitchLetter.G, -1, 4)
-];
 
 interface IChordViewerProps {
   title?: string;
@@ -119,9 +92,11 @@ export class ChordViewer extends React.Component<IChordViewerProps, IChordViewer
               Root Pitch
             </Typography>
             <div style={{padding: "1em 0"}}>
-              {this.renderRootPitchRow(validSharpKeyPitches)}
-              {this.renderRootPitchRow(validNaturalKeyPitches)}
-              {this.renderRootPitchRow(validFlatKeyPitches)}
+              <ValidKeyPitchSelect
+                preferredOctaveNumber={4}
+                value={[this.state.chord.rootPitch]}
+                onChange={rootPitches => this.onRootPitchClick(rootPitches[0])}
+              />
             </div>
             
             {(this.chordTypeGroups.length > 1) ? (
@@ -220,39 +195,6 @@ export class ChordViewer extends React.Component<IChordViewerProps, IChordViewer
     return this.props.chordTypeGroups
       ? this.props.chordTypeGroups
       : ChordType.Groups;
-  }
-  private renderRootPitchRow(rootPitches: Array<Pitch | null>): JSX.Element {
-    return (
-      <div>
-        {rootPitches.map(pitch => {
-          const style: any = { textTransform: "none" };
-          
-          const isPressed = pitch && (pitch.equals(this.state.chord.rootPitch));
-          if (isPressed) {
-            style.backgroundColor = "#959595";
-          }
-
-          return (
-            pitch
-              ? (
-                <Button
-                  onClick={event => this.onRootPitchClick(pitch)}
-                  variant="contained"
-                  style={style}
-                >
-                  {pitch.toString(false)}
-                </Button>
-              )
-              : (
-                <Button
-                  variant="contained"
-                  style={{ visibility: "hidden" }}
-                />
-              )
-          );
-        })}
-      </div>
-    );
   }
 
   private onRootPitchClick(rootPitch: Pitch) {
