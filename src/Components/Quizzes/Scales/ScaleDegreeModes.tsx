@@ -1,6 +1,6 @@
 import * as FlashCardUtils from "../Utils";
 import { FlashCard, FlashCardId } from "../../../FlashCard";
-import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
+import { FlashCardSet } from "../../../FlashCardSet";
 
 const flashCardSetId = "scaleDegreeModes";
 
@@ -16,7 +16,7 @@ export function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Scale Degree Modes", createFlashCards);
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
-  flashCardSet.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/the-basics/modes";
+  flashCardSet.moreInfoUri = "/essential-music-theory/scales-and-modes";
   flashCardSet.containerHeight = "80px";
 
   return flashCardSet;

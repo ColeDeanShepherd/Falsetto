@@ -13,7 +13,7 @@ import { PitchLetter } from '../../../PitchLetter';
 
 import { createStudyFlashCardSetComponent } from '../../StudyFlashCards';
 
-import * as ScaleNotes from "../../Quizzes/Scales/ScaleNotes";
+import * as ScaleNotes from "../../Quizzes/Scales/ScaleFormulas";
 import * as PianoScales from "../../Quizzes/Scales/PianoScales";
 import * as ScaleEarTraining from "../../Quizzes/Scales/ScaleEarTraining";
 import { ScaleViewer } from "../../Tools/ScaleViewer";

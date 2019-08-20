@@ -8,6 +8,9 @@ import { ChordType } from "../../Chord";
 import { GuitarFretboard, renderGuitarNoteHighlightsAndLabels } from "./GuitarFretboard";
 import { StringedInstrumentTuning } from "./StringedInstrumentTuning";
 
+const MIN_FRET_NUMBER = 0;
+const MAX_FRET_NUMBER = 11;
+
 export const GuitarChordViewer: React.FunctionComponent<{
   chordType: ChordType,
   rootPitch: Pitch,
@@ -26,21 +29,19 @@ export const GuitarChordViewer: React.FunctionComponent<{
   }
 
   const pitches = props.chordType.getPitches(rootPitch);
-  const minFretNumber = 0;
-  const fretCount = 11;
-  const maxFretNumber = minFretNumber + fretCount;
+  const maxFretNumber = MIN_FRET_NUMBER + MAX_FRET_NUMBER;
   const guitarNotes = StringedInstrumentNote.allNotesOfPitches(
-    props.tuning, pitches, minFretNumber, maxFretNumber
+    props.tuning, pitches, MIN_FRET_NUMBER, maxFretNumber
   );
 
   return (
     <GuitarFretboard
       width={props.size.width} height={props.size.height}
       tuning={props.tuning}
-      minFretNumber={minFretNumber} fretCount={fretCount}
+      minFretNumber={MIN_FRET_NUMBER} fretCount={MAX_FRET_NUMBER}
       renderExtrasFn={metrics => renderGuitarNoteHighlightsAndLabels(
         metrics, guitarNotes, "lightblue",
-        (n, i) => (1 + pitches.findIndex(p => p.midiNumberNoOctave == n.pitch.midiNumberNoOctave)).toString()
+        (n, i) => ""
       )}
       style={props.style}
     />

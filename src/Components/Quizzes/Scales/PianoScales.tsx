@@ -172,7 +172,7 @@ export function createFlashCardSet(): FlashCardSet {
   const initialConfigData: IConfigData = {
     enabledRootPitches: ambiguousKeyPitchStringsSymbols.slice(),
     enabledScaleTypes: ScaleType.All
-      .filter((_, scaleIndex) => scaleIndex <= 8)
+      .filter((_, scaleIndex) => scaleIndex <= 7)
       .map(scale => scale.name)
   };
 

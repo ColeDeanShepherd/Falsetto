@@ -317,7 +317,7 @@ export function createFlashCards(): FlashCard[] {
   return Utils.flattenArrays<FlashCard>(
     ambiguousKeyPitchStringsSymbols.map((rootPitchStr, i) =>
       ChordType.All.map(chordType => {
-        const halfStepsFromC = Utils.mod(i - 4, 12);
+        const halfStepsFromC = Utils.mod(i - 3, 12);
         const rootPitch = Pitch.createFromMidiNumber((new Pitch(PitchLetter.C, 0, 4)).midiNumber + halfStepsFromC);
         const pitches = new Chord(chordType, rootPitch).getPitches();
         const deserializedId = {

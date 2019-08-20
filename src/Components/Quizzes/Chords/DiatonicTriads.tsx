@@ -1,7 +1,6 @@
-import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
 import { FlashCard, FlashCardId } from "../../../FlashCard";
-import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
+import { FlashCardSet } from "../../../FlashCardSet";
 
 const flashCardSetId = "diatonicTriads";
 

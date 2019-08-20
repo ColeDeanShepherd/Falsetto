@@ -8,7 +8,7 @@ import * as GenericIntervalsToIntervalQualities from "./Quizzes/Intervals/Generi
 import * as IntervalsToConsonanceDissonance from "./Quizzes/Intervals/IntervalsToConsonanceDissonance";
 import * as ScaleDegreeModes from "./Quizzes/Scales/ScaleDegreeModes";
 import * as ChordNotes from "./Quizzes/Chords/ChordNotes";
-import * as ScaleNotes from "./Quizzes/Scales/ScaleNotes";
+import * as ScaleNotes from "./Quizzes/Scales/ScaleFormulas";
 import * as ScaleChords from "./Quizzes/Chords/ScaleChords";
 import * as ScaleCharacteristics from "./Quizzes/Scales/ScaleCharacteristics";
 import * as ScaleFamilies from "./Quizzes/Scales/ScaleFamilies";
