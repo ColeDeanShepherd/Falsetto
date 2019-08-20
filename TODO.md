@@ -1,5 +1,6 @@
 # To-Do
 ## High Priority
+* Fix bug on dynamic flash cards where if you look at the answer, then the question, it's different.
 * Violin Notes "more info" URI
 * Add "Move to next level" button, remove always-there "next level" text
 * Actually fix levels implementation.

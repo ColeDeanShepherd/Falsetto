@@ -8,7 +8,6 @@ import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { Pitch, pitchRange } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 import { SheetMusicChord } from "./SheetMusicChords";
-import { Interval } from "../../../Interval";
 import { Size2D } from '../../../Size2D';
 
 const flashCardSetId = "sheetIntervals";
@@ -32,7 +31,7 @@ const allowedPitches = [
 ];
 const minPitch = new Pitch(PitchLetter.C, -1, 2);
 const maxPitch = new Pitch(PitchLetter.C, 1, 6);
-const rootPitches = pitchRange(minPitch, maxPitch, -1, 1)
+const firstPitches = pitchRange(minPitch, maxPitch, -1, 1)
   .filter(pitch =>
     allowedPitches.some(allowedPitch =>
       (pitch.letter === allowedPitch.letter) &&
@@ -75,6 +74,22 @@ export function configDataToEnabledFlashCardIds(
   });
 
   return newEnabledFlashCardIds;
+}
+
+function forEachInterval(callbackFn: (pitches: Array<Pitch>, interval: Interval, i: number) => void) {
+  let i = 0;
+
+  for (let note1Index = 0; note1Index < firstPitches.length; note1Index++) {
+    for (let note2Index = note1Index + 1; note2Index < firstPitches.length; note2Index++) {
+      const pitches = [firstPitches[note1Index], firstPitches[note2Index]];
+      const interval = Interval.fromPitches(pitches[0], pitches[1]);
+
+      if (Utils.arrayContains(intervals, interval.toString())) {
+        callbackFn(pitches, interval, i);
+        i++;
+      }
+    }
+  }
 }
 
 export interface IIntervalsFlashCardMultiSelectProps {
@@ -159,22 +174,6 @@ export class IntervalsFlashCardMultiSelect extends React.Component<IIntervalsFla
       this.props.studySessionInfo.flashCardSet, this.props.studySessionInfo.flashCards, newConfigData
     );
     this.props.onChange(newEnabledFlashCardIds, newConfigData);
-  }
-}
-
-function forEachInterval(callbackFn: (pitches: Array<Pitch>, interval: Interval, i: number) => void) {
-  let i = 0;
-
-  for (let note1Index = 0; note1Index < rootPitches.length; note1Index++) {
-    for (let note2Index = note1Index + 1; note2Index < rootPitches.length; note2Index++) {
-      const pitches = [rootPitches[note1Index], rootPitches[note2Index]];
-      const interval = Interval.fromPitches(pitches[0], pitches[1]);
-
-      if (Utils.arrayContains(intervals, interval.toString())) {
-        callbackFn(pitches, interval, i);
-        i++;
-      }
-    }
   }
 }
 
