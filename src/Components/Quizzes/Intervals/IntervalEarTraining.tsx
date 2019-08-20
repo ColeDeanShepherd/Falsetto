@@ -33,7 +33,7 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
     const pitch1 = Utils.randomElement(firstPitches);
 
     const intervalIndex = intervals.indexOf(this.props.interval);
-    const intervalHalfSteps = (this.props.direction === "↓")
+    const intervalHalfSteps = (this.props.direction === "↑")
       ? intervalIndex + 1
       : -(intervalIndex + 1);
     const pitch2 = Pitch.createFromMidiNumber(pitch1.midiNumber + intervalHalfSteps);

@@ -248,12 +248,12 @@ export function createFlashCardSet(): FlashCardSet {
       return studySessionInfo.enabledFlashCardIds;
     }
 
-    const flashCard = studySessionInfo.flashCards[studySessionInfo.studyAlgorithm.currentFlashCardId];
+    const flashCard = studySessionInfo.currentFlashCard;
     const secondPitch = flashCard.backSide.data as Pitch;
     
     return studySessionInfo.enabledFlashCardIds
-      .filter(flashCardIndex => {
-        const otherFlashCard = studySessionInfo.flashCards[flashCardIndex];
+      .filter(flashCardId => {
+        const otherFlashCard = Utils.unwrapValueOrUndefined(studySessionInfo.flashCards.find(fc => fc.id === flashCardId));
         const firstPitch = otherFlashCard.frontSide.data as Pitch;
 
         return firstPitch.midiNumber === secondPitch.midiNumber;

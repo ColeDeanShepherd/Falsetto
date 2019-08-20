@@ -18,8 +18,6 @@ import { standard6StringGuitarTuning } from "../../Utils/StringedInstrumentTunin
 import { VerticalDirection } from "../../../VerticalDirection";
 import { StringedInstrumentNote } from '../../../StringedInstrumentNote';
 
-// TODO: hide disabled interval buttons
-
 const flashCardSetId = "guitarIntervals";
 const FRET_COUNT = StringedInstrumentFingerboard.DEFAULT_FRET_COUNT;
 
@@ -169,9 +167,11 @@ export class IntervalsFlashCardMultiSelect extends React.Component<IIntervalsFla
 export function renderAnswerSelect(
   info: FlashCardStudySessionInfo
 ): JSX.Element {
-  const ascendingIntervals = intervals
+  const configData = info.configData as IConfigData;
+  
+  const ascendingIntervals = configData.enabledIntervals
     .map(i => Interval.upDirectionSymbol + " " + i);
-  const descendingIntervals = intervals
+  const descendingIntervals = configData.enabledIntervals
     .map(i => Interval.downDirectionSymbol + " " + i);
   return (
     <div>
