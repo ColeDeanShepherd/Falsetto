@@ -419,9 +419,9 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
       this.studyAlgorithm.onAnswer(answerDifficulty);
 
       const eventId = isAnswerDifficultyCorrect(answerDifficulty) ? "answer_correct" : "answer_incorrect";
-      const eventLabel = this.state.currentFlashCardId.toString();
+      const eventLabel = this.state.currentFlashCardId;
       const eventValue = undefined;
-      const eventCategory = this.props.title;
+      const eventCategory = this.props.flashCardSet.id;
 
       const userId = this.props.userManager.getCurrentUserId();
       const answeredAt = new Date();
