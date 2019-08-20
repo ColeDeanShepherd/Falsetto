@@ -119,19 +119,20 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
       flashCards.find(fc => fc.id === this.state.currentFlashCardId)
     );
 
-    let renderedFlashCardSide: JSX.Element | null;
+    let renderedFlashCardFrontSide: JSX.Element | null;
+    let renderedFlashCardBackSide: JSX.Element | null;
     let containerWidth = 0;
     let containerHeight = 0;
     if (!this.flashCardContainerRef || !((this.flashCardContainerRef as any).current)) {
-      renderedFlashCardSide = null;
+      renderedFlashCardFrontSide = null;
+      renderedFlashCardBackSide = null;
     } else {
       const containerElement = (this.flashCardContainerRef as any).current;
       containerWidth = containerElement.offsetWidth;
       containerHeight = containerElement.offsetHeight;
 
-      renderedFlashCardSide = !this.state.isShowingBackSide
-        ? renderFlashCardSide(containerWidth, containerHeight, currentFlashCard.frontSide)
-        : renderFlashCardSide(containerWidth, containerHeight, currentFlashCard.backSide);
+      renderedFlashCardFrontSide = renderFlashCardSide(containerWidth, containerHeight, currentFlashCard.frontSide);
+      renderedFlashCardBackSide = renderFlashCardSide(containerWidth, containerHeight, currentFlashCard.backSide);
     }
 
     const numGuesses = this.studyAlgorithm.flashCardSetStats.numCorrectGuesses + this.studyAlgorithm.flashCardSetStats.numIncorrectGuesses;
@@ -268,7 +269,8 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
             key={currentFlashCardKey}
             style={flashCardContainerStyle}
           >
-            {renderedFlashCardSide}
+            <div style={this.state.isShowingBackSide ? { display: "none" } : {}}>{renderedFlashCardFrontSide}</div>
+            <div style={!this.state.isShowingBackSide ? { display: "none" } : {}}>{renderedFlashCardBackSide}</div>
           </div>
 
           <div style={{textAlign: "center"}}>

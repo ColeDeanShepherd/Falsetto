@@ -133,7 +133,7 @@ export function randomInt(minValue: number, maxValue: number): number {
   precondition(maxValue >= minValue);
 
   const numValues = 1 + (maxValue - minValue);
-  return Math.floor(numValues * Math.random());
+  return minValue + Math.floor(numValues * Math.random());
 }
 
 // TODO: add tests

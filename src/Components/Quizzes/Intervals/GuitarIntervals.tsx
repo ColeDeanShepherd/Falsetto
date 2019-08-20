@@ -18,8 +18,10 @@ import { standard6StringGuitarTuning } from "../../Utils/StringedInstrumentTunin
 import { VerticalDirection } from "../../../VerticalDirection";
 import { StringedInstrumentNote } from '../../../StringedInstrumentNote';
 
+// TODO: hide disabled interval buttons
+
 const flashCardSetId = "guitarIntervals";
-const fretCount = StringedInstrumentFingerboard.DEFAULT_FRET_COUNT;
+const FRET_COUNT = StringedInstrumentFingerboard.DEFAULT_FRET_COUNT;
 
 const intervals = [
   "m2",
@@ -38,6 +40,49 @@ const intervals = [
 
 const guitarTuning = standard6StringGuitarTuning;
 
+function forEachInterval(
+  fn: (
+    interval: Interval,
+    direction: VerticalDirection,
+    stringIndex0: number,
+    deltaStringIndex: number,
+    deltaFretNumber: number,
+    i: number
+  ) => void
+) {
+  const directions = [VerticalDirection.Up, VerticalDirection.Down];
+  const firstStringIndices = [0, 3];
+  const stringSpansPerFirstStringIndex = [
+    Utils.range(1, 4), // E string
+    Utils.range(2, 3) // G string
+  ];
+
+  let i = 0;
+
+  for (let intervalIndex = 0; intervalIndex < intervals.length; intervalIndex++) {
+    const interval = Interval.fromHalfSteps(1 + intervalIndex);
+
+    for (const direction of directions) {
+      for (let firstStringIndexIndex = 0; firstStringIndexIndex < firstStringIndices.length; firstStringIndexIndex++) {
+        const stringIndex0 = firstStringIndices[firstStringIndexIndex];
+        const stringSpans = stringSpansPerFirstStringIndex[firstStringIndexIndex];
+
+        for (const stringSpan of stringSpans) {
+          const deltaStringIndex = stringSpan - 1;
+          const deltaFretNumber = getIntervalDeltaFretNumber(
+            interval, direction, stringIndex0, deltaStringIndex, guitarTuning
+          );
+
+          if (Math.abs(deltaFretNumber) <= FRET_COUNT) {
+            fn(interval, direction, stringIndex0, deltaStringIndex, deltaFretNumber, i);
+            i++;
+          }
+        }
+      }
+    }
+  }
+}
+
 interface IConfigData {
   enabledIntervals: string[];
   // TODO: add enabledDirections?
@@ -48,7 +93,7 @@ export function configDataToEnabledFlashCardIds(
 ): Array<FlashCardId> {
   const newEnabledFlashCardIds = new Array<FlashCardId>();
 
-  forEachInterval((interval, _, i) => {
+  forEachInterval((interval, direction, stringIndex0, deltaStringIndex, deltaFretNumber, i) => {
     if (Utils.arrayContains(configData.enabledIntervals, interval.toString())) {
       newEnabledFlashCardIds.push(flashCards[i].id);
     }
@@ -61,8 +106,7 @@ export interface IIntervalsFlashCardMultiSelectProps {
   studySessionInfo: FlashCardStudySessionInfo;
   onChange?: (newValue: Array<FlashCardId>, newConfigData: any) => void;
 }
-export interface IIntervalsFlashCardMultiSelectState {}
-export class IntervalsFlashCardMultiSelect extends React.Component<IIntervalsFlashCardMultiSelectProps, IIntervalsFlashCardMultiSelectState> {
+export class IntervalsFlashCardMultiSelect extends React.Component<IIntervalsFlashCardMultiSelectProps, {}> {
   public render(): JSX.Element {
     const configData = this.props.studySessionInfo.configData as IConfigData;
 
@@ -122,49 +166,6 @@ export class IntervalsFlashCardMultiSelect extends React.Component<IIntervalsFla
   }
 }
 
-function forEachInterval(
-  fn: (
-    interval: Interval,
-    direction: VerticalDirection,
-    stringIndex0: number,
-    deltaStringIndex: number,
-    deltaFretNumber: number,
-    i: number
-  ) => void
-) {
-  const directions = [VerticalDirection.Up, VerticalDirection.Down];
-  const firstStringIndices = [0, 3];
-  const stringSpansPerFirstStringIndex = [
-    Utils.range(1, 4), // E string
-    Utils.range(2, 3) // G string
-  ];
-
-  let i = 0;
-
-  for (let intervalIndex = 0; intervalIndex < intervals.length; intervalIndex++) {
-    const interval = Interval.fromHalfSteps(1 + intervalIndex);
-
-    for (const direction of directions) {
-      for (let firstStringIndexIndex = 0; firstStringIndexIndex < firstStringIndices.length; firstStringIndexIndex++) {
-        const stringIndex0 = firstStringIndices[firstStringIndexIndex];
-        const stringSpans = stringSpansPerFirstStringIndex[firstStringIndexIndex];
-
-        for (const stringSpan of stringSpans) {
-          const deltaStringIndex = stringSpan - 1;
-          const deltaFretNumber = getIntervalDeltaFretNumber(
-            interval, direction, stringIndex0, deltaStringIndex, guitarTuning
-          );
-
-          if (Math.abs(deltaFretNumber) <= fretCount) {
-            fn(interval, direction, stringIndex0, deltaStringIndex, deltaFretNumber, i);
-            i++;
-          }
-        }
-      }
-    }
-  }
-}
-
 export function renderAnswerSelect(
   info: FlashCardStudySessionInfo
 ): JSX.Element {
@@ -197,7 +198,7 @@ class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps, IFlas
     super(props);
 
     const minFretNumber = Math.max(-this.props.deltaFretNumber, 0);
-    const maxFretNumber = Math.min(fretCount - this.props.deltaFretNumber, fretCount);
+    const maxFretNumber = Math.min(FRET_COUNT - this.props.deltaFretNumber, FRET_COUNT);
     this.state = {
       fretNumber: Utils.randomInt(minFretNumber, maxFretNumber)
     };
@@ -218,7 +219,7 @@ class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps, IFlas
         <GuitarFretboard
           width={400} height={140}
           tuning={guitarTuning}
-          fretCount={fretCount}
+          fretCount={FRET_COUNT}
           renderExtrasFn={renderExtras}
           style={style}
         />
@@ -242,13 +243,15 @@ export function renderFretboardExtras(metrics: StringedInstrumentMetrics, notes:
   const textXOffset = -(0.3 * fontSize);
   const textYOffset = 0.3 * fontSize;
 
+  const fillColor = "lightblue";
+
   return (
     <g>
       <circle
         cx={x1}
         cy={y1}
         r={metrics.fretDotRadius}
-        fill="green"
+        fill={fillColor}
         strokeWidth="0"
       />
       <text x={x1 + textXOffset} y={y1 + textYOffset} style={textStyle}>1</text>
@@ -257,7 +260,7 @@ export function renderFretboardExtras(metrics: StringedInstrumentMetrics, notes:
         cx={x2}
         cy={y2}
         r={metrics.fretDotRadius}
-        fill="red"
+        fill={fillColor}
         strokeWidth="0"
       />
       <text x={x2 + textXOffset} y={y2 + textYOffset} style={textStyle}>2</text>
@@ -281,7 +284,7 @@ export function createFlashCards(): Array<FlashCard> {
     };
     const id = JSON.stringify(deserializedId);
 
-    flashCards.push(FlashCard.fromRenderFns(
+    const flashCard = FlashCard.fromRenderFns(
       id,
       (width, height) => (
         <FlashCardFrontSide
@@ -291,7 +294,8 @@ export function createFlashCards(): Array<FlashCard> {
         />
       ),
       directionChar + " " + interval.toString()
-    ));
+    );
+    flashCards.push(flashCard);
   });
 
   return flashCards;
@@ -313,10 +317,7 @@ export function createFlashCardSet(): FlashCardSet {
     enabledIntervals: intervals.slice()
   };
   
-  const flashCardSet = new FlashCardSet(flashCardSetId,
-    "Guitar Intervals",
-    createFlashCards
-  );createFlashCards
+  const flashCardSet = new FlashCardSet(flashCardSetId, "Guitar Intervals", createFlashCards);
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;

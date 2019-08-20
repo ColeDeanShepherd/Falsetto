@@ -9,6 +9,7 @@ import { Pitch, pitchRange } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 import { SheetMusicChord } from "./SheetMusicChords";
 import { Size2D } from '../../../Size2D';
+import { Interval } from '../../../Interval';
 
 const flashCardSetId = "sheetIntervals";
 
