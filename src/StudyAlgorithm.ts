@@ -1,22 +1,8 @@
 import * as Utils from "./Utils";
 import { FlashCardSetStats } from "./FlashCardSetStats";
-import { FlashCardStats } from "./FlashCardStats";
 import { CustomNextFlashCardIdFilter as CustomNextFlashCardIdFilterFn, FlashCardStudySessionInfo } from './FlashCardSet';
 import { FlashCard, FlashCardId } from './FlashCard';
-import { AnswerDifficulty } from './AnswerDifficulty';
-
-export function isAnswerDifficultyCorrect(answerDifficulty: AnswerDifficulty): boolean {
-  switch (answerDifficulty) {
-    case AnswerDifficulty.Incorrect:
-      return false;
-    case AnswerDifficulty.Hard:
-    case AnswerDifficulty.Medium:
-    case AnswerDifficulty.Easy:
-      return true;
-    default:
-      throw new Error(`Unknown answer difficulty ${answerDifficulty}`);
-  }
-}
+import { AnswerDifficulty, isAnswerDifficultyCorrect } from './AnswerDifficulty';
 
 export abstract class StudyAlgorithm {
   public enabledFlashCardIds: Array<FlashCardId> = [];
@@ -29,14 +15,16 @@ export abstract class StudyAlgorithm {
     return this._flashCardSetStats;
   }
 
-  public reset(flashCardIds: Array<FlashCardId>, flashCards: Array<FlashCard>) {
+  public reset(
+    flashCardIds: Array<FlashCardId>,
+    flashCards: Array<FlashCard>,
+    stats: FlashCardSetStats
+  ) {
     this._flashCardIds = flashCardIds;
     this._flashCards = flashCards;
     this.enabledFlashCardIds = flashCardIds.slice();
     this._currentFlashCardId = undefined;
-    this._flashCardSetStats = new FlashCardSetStats(
-      this._flashCardIds.map(id => new FlashCardStats(id, 0, 0))
-    );
+    this._flashCardSetStats = stats;
   }
   public onAnswer(answerDifficulty: AnswerDifficulty): void {
     Utils.precondition(this._currentFlashCardId !== undefined);
@@ -69,7 +57,7 @@ export abstract class StudyAlgorithm {
   protected _flashCards: Array<FlashCard> = [];
   protected _flashCardIds: Array<FlashCardId> = [];
   protected _currentFlashCardId: FlashCardId | undefined;
-  protected _flashCardSetStats: FlashCardSetStats = new FlashCardSetStats([]);
+  protected _flashCardSetStats: FlashCardSetStats = new FlashCardSetStats("", []);
 }
 
 export class RandomStudyAlgorithm extends StudyAlgorithm {
@@ -104,8 +92,12 @@ export class LeitnerStudyAlgorithm extends StudyAlgorithm {
       this.tieredFlashCardIds[i] = new Array<FlashCardId>();
     }
   }
-  public reset(flashCardIds: Array<FlashCardId>, flashCards: Array<FlashCard>) {
-    super.reset(flashCardIds, flashCards);
+  public reset(
+    flashCardIds: Array<FlashCardId>,
+    flashCards: Array<FlashCard>,
+    stats: FlashCardSetStats
+  ) {
+    super.reset(flashCardIds, flashCards, stats);
     
     this.tieredFlashCardIds[0] = this.enabledFlashCardIds.slice();
     for (let i = 1; i < this.tieredFlashCardIds.length; i++) {

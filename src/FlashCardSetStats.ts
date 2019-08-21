@@ -3,6 +3,7 @@ import { FlashCardStats } from "./FlashCardStats";
 
 export class FlashCardSetStats {
   public constructor(
+    public flashCardSetId: string,
     public flashCardStats: Array<FlashCardStats>
   ) {}
   
