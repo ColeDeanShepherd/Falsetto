@@ -182,9 +182,10 @@ export function renderAnswerSelect(
   const correctAnswer = info.currentFlashCard.backSide.renderFn as string;
   const activeScales = ScaleType.All
     .filter(scaleType => Utils.arrayContains(configData.enabledScaleTypes, scaleType.name));
+  const rootPitchStrings = configData.enabledRootPitches;
   
   return <ScaleAnswerSelect
-    key={correctAnswer} scales={activeScales} correctAnswer={correctAnswer}
+    key={correctAnswer} scales={activeScales} ambiguousPitchStringsSymbols={rootPitchStrings} correctAnswer={correctAnswer}
     onAnswer={info.onAnswer} lastCorrectAnswer={info.lastCorrectAnswer}
     incorrectAnswers={info.incorrectAnswers} />;
 }

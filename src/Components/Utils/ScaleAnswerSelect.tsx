@@ -3,9 +3,9 @@ import { Button, Typography } from "@material-ui/core";
 
 import { ScaleType } from "../../Scale";
 import { AnswerDifficulty } from "../../AnswerDifficulty";
-import { ambiguousKeyPitchStringsSymbols } from '../../Pitch';
 
 export interface IScaleAnswerSelectProps {
+  ambiguousPitchStringsSymbols: Array<string>;
   scales: Array<ScaleType>;
   correctAnswer: string;
   onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void;
@@ -33,46 +33,48 @@ export class ScaleAnswerSelect extends React.Component<IScaleAnswerSelectProps, 
         </Typography>
         <div style={{padding: "1em 0"}}>
           <div>
-            {ambiguousKeyPitchStringsSymbols.slice(0, 6).map(rootPitchStr => {
-              const style: any = { textTransform: "none" };
-              
-              const isPressed = rootPitchStr === this.state.selectedRootPitch;
-              if (isPressed) {
-                style.backgroundColor = "#959595";
-              }
+            {this.props.ambiguousPitchStringsSymbols.slice(0, 6)
+              .map(rootPitchStr => {
+                const style: any = { textTransform: "none" };
+                
+                const isPressed = rootPitchStr === this.state.selectedRootPitch;
+                if (isPressed) {
+                  style.backgroundColor = "#959595";
+                }
 
-              return (
-                <Button
-                  key={rootPitchStr}
-                  onClick={event => this.onRootPitchClick(rootPitchStr)}
-                  variant="contained"
-                  style={style}
-                >
-                  {rootPitchStr}
-                </Button>
-              );
-            })}
+                return (
+                  <Button
+                    key={rootPitchStr}
+                    onClick={event => this.onRootPitchClick(rootPitchStr)}
+                    variant="contained"
+                    style={style}
+                  >
+                    {rootPitchStr}
+                  </Button>
+                );
+              })}
           </div>
           <div>
-            {ambiguousKeyPitchStringsSymbols.slice(6, 12).map(rootPitchStr => {
-              const style: any = { textTransform: "none" };
-              
-              const isPressed = rootPitchStr === this.state.selectedRootPitch;
-              if (isPressed) {
-                style.backgroundColor = "#959595";
-              }
+            {this.props.ambiguousPitchStringsSymbols.slice(6, 12)
+              .map(rootPitchStr => {
+                const style: any = { textTransform: "none" };
+                
+                const isPressed = rootPitchStr === this.state.selectedRootPitch;
+                if (isPressed) {
+                  style.backgroundColor = "#959595";
+                }
 
-              return (
-                <Button
-                  key={rootPitchStr}
-                  onClick={event => this.onRootPitchClick(rootPitchStr)}
-                  variant="contained"
-                  style={style}
-                >
-                  {rootPitchStr}
-                </Button>
-              );
-            })}
+                return (
+                  <Button
+                    key={rootPitchStr}
+                    onClick={event => this.onRootPitchClick(rootPitchStr)}
+                    variant="contained"
+                    style={style}
+                  >
+                    {rootPitchStr}
+                  </Button>
+                );
+              })}
           </div>
         </div>
         

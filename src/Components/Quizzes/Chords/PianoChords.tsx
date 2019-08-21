@@ -111,6 +111,7 @@ export interface IPianoChordsAnswerSelectProps {
   onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void;
   lastCorrectAnswer: any;
   incorrectAnswers: Array<any>;
+  enabledRootPitches: Array<string>;
   enabledChordTypeNames: Array<string>;
 }
 export interface IPianoChordsAnswerSelectState {
@@ -135,46 +136,50 @@ export class PianoChordsAnswerSelect extends React.Component<IPianoChordsAnswerS
         </Typography>
         <div style={{padding: "1em 0"}}>
           <div>
-            {ambiguousKeyPitchStringsSymbols.slice(0, 6).map(rootPitchStr => {
-              const style: any = { textTransform: "none" };
-              
-              const isPressed = rootPitchStr === this.state.selectedRootPitch;
-              if (isPressed) {
-                style.backgroundColor = "#959595";
-              }
+            {ambiguousKeyPitchStringsSymbols.slice(0, 6)
+              .filter(rp => Utils.arrayContains(this.props.enabledRootPitches, rp))
+                .map(rootPitchStr => {
+                const style: any = { textTransform: "none" };
+                
+                const isPressed = rootPitchStr === this.state.selectedRootPitch;
+                if (isPressed) {
+                  style.backgroundColor = "#959595";
+                }
 
-              return (
-                <Button
-                  key={rootPitchStr}
-                  onClick={event => this.onRootPitchClick(rootPitchStr)}
-                  variant="contained"
-                  style={style}
-                >
-                  {rootPitchStr}
-                </Button>
-              );
-            })}
+                return (
+                  <Button
+                    key={rootPitchStr}
+                    onClick={event => this.onRootPitchClick(rootPitchStr)}
+                    variant="contained"
+                    style={style}
+                  >
+                    {rootPitchStr}
+                  </Button>
+                );
+              })}
           </div>
           <div>
-            {ambiguousKeyPitchStringsSymbols.slice(6, 12).map(rootPitchStr => {
-              const style: any = { textTransform: "none" };
-              
-              const isPressed = rootPitchStr === this.state.selectedRootPitch;
-              if (isPressed) {
-                style.backgroundColor = "#959595";
-              }
+            {ambiguousKeyPitchStringsSymbols.slice(6, 12)
+              .filter(rp => Utils.arrayContains(this.props.enabledRootPitches, rp))
+              .map(rootPitchStr => {
+                const style: any = { textTransform: "none" };
+                
+                const isPressed = rootPitchStr === this.state.selectedRootPitch;
+                if (isPressed) {
+                  style.backgroundColor = "#959595";
+                }
 
-              return (
-                <Button
-                  key={rootPitchStr}
-                  onClick={event => this.onRootPitchClick(rootPitchStr)}
-                  variant="contained"
-                  style={style}
-                >
-                  {rootPitchStr}
-                </Button>
-              );
-            })}
+                return (
+                  <Button
+                    key={rootPitchStr}
+                    onClick={event => this.onRootPitchClick(rootPitchStr)}
+                    variant="contained"
+                    style={style}
+                  >
+                    {rootPitchStr}
+                  </Button>
+                );
+              })}
           </div>
         </div>
         
@@ -303,5 +308,6 @@ export function renderAnswerSelect(
   return <PianoChordsAnswerSelect
     key={correctAnswer} correctAnswer={correctAnswer} onAnswer={info.onAnswer}
     lastCorrectAnswer={info.lastCorrectAnswer} incorrectAnswers={info.incorrectAnswers}
+    enabledRootPitches={(info.configData as IConfigData).enabledRootPitches}
     enabledChordTypeNames={(info.configData as IConfigData).enabledChordTypes} />;
 }

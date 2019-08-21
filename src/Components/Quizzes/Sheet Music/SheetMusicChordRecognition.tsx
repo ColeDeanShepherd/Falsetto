@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid } from "@material-ui/core";
 
 import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
@@ -14,7 +13,7 @@ import { CheckboxColumnsFlashCardMultiSelect, CheckboxColumn, CheckboxColumnCell
 
 const flashCardSetId = "sheetChords";
 
-const allowedPitches = [
+const allowedRootPitches = [
   new Pitch(PitchLetter.C, -1, 0),
   new Pitch(PitchLetter.C, 0, 0),
   new Pitch(PitchLetter.C, 1, 0),
@@ -35,7 +34,7 @@ const minPitch = new Pitch(PitchLetter.C, -1, 2);
 const maxPitch = new Pitch(PitchLetter.C, 1, 6);
 const rootPitches = pitchRange(minPitch, maxPitch, -1, 1)
   .filter(pitch =>
-    allowedPitches.some(allowedPitch =>
+    allowedRootPitches.some(allowedPitch =>
       (pitch.letter === allowedPitch.letter) &&
       (pitch.signedAccidental === allowedPitch.signedAccidental)
     )
@@ -68,7 +67,7 @@ export function configDataToEnabledFlashCardIds(
 
   forEachChord((rootPitch, chordType, i) => {
     if (
-      Utils.arrayContains(configData.enabledRootPitches, rootPitch) &&
+      configData.enabledRootPitches.some(erp => erp.equalsNoOctave(rootPitch)) &&
       Utils.arrayContains(configData.enabledChordTypes, chordType.name)
     ) {
       const pitches = new Chord(chordType, rootPitch).getPitches();
@@ -108,7 +107,7 @@ export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesF
   private columns: Array<CheckboxColumn> = [
     new CheckboxColumn(
       "Root Pitch",
-      rootPitches
+      allowedRootPitches
         .map(rp => new CheckboxColumnCell(
           () => <span>{rp.toString(false, true)}</span>, rp
         )),
@@ -178,7 +177,7 @@ export function createFlashCardSet(): FlashCardSet {
   };
 
   const initialConfigData: IConfigData = {
-    enabledRootPitches: rootPitches.slice(),
+    enabledRootPitches: allowedRootPitches.slice(),
     enabledChordTypes: chordTypes.map(chordType => chordType.name)
   };
   
