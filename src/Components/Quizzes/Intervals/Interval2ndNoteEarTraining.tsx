@@ -84,6 +84,7 @@ export function createFlashCardSet(): FlashCardSet {
   ): JSX.Element => {
     return (
     <IntervalEarTrainingFlashCardMultiSelect
+      enableHarmonicIntervals={false}
       studySessionInfo={studySessionInfo}
       hasFlashCardPerFirstPitch={true}
       onChange={onChange}

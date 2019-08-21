@@ -13,6 +13,7 @@ import { FlashCard, FlashCardSide, FlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { ScaleAnswerSelect } from "../../Utils/ScaleAnswerSelect";
 import { ChordScaleFormula, ChordScaleFormulaPart } from '../../../ChordScaleFormula';
+import { CheckboxColumnsFlashCardMultiSelect, CheckboxColumn, CheckboxColumnCell } from '../../Utils/CheckboxColumnsFlashCardMultiSelect';
 
 const flashCardSetId = "pianoScalesOrderedNotes";
 
@@ -56,101 +57,51 @@ export interface IPianoScalesFlashCardMultiSelectState {}
 export class PianoScalesFlashCardMultiSelect extends React.Component<IPianoScalesFlashCardMultiSelectProps, IPianoScalesFlashCardMultiSelectState> {
   public render(): JSX.Element {
     const configData = this.props.studySessionInfo.configData as IConfigData;
-    const rootPitchCheckboxTableRows = ambiguousKeyPitchStringsSymbols
-      .map((rootPitch, i) => {
-        const isChecked = configData.enabledRootPitches.indexOf(rootPitch) >= 0;
-        const isEnabled = !isChecked || (configData.enabledRootPitches.length > 1);
-
-        return (
-          <TableRow key={i}>
-            <TableCell><Checkbox checked={isChecked} onChange={event => this.toggleRootPitchEnabled(rootPitch)} disabled={!isEnabled} /></TableCell>
-            <TableCell>{rootPitch}</TableCell>
-          </TableRow>
-        );
-      }, this);
-    const rootPitchCheckboxes = (
-      <Table className="table">
-        <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell>Root Pitch</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rootPitchCheckboxTableRows}
-        </TableBody>
-      </Table>
-    );
-
-    const scaleTypeCheckboxTableRows = ScaleType.All
-      .map((scale, i) => {
-        const isChecked = configData.enabledScaleTypes.indexOf(scale.name) >= 0;
-        const isEnabled = !isChecked || (configData.enabledScaleTypes.length > 1);
-
-        return (
-          <TableRow key={i}>
-            <TableCell><Checkbox checked={isChecked} onChange={event => this.toggleScaleEnabled(scale.name)} disabled={!isEnabled} /></TableCell>
-            <TableCell>{scale.name}</TableCell>
-          </TableRow>
-        );
-      }, this);
-    const scaleTypeCheckboxes = (
-      <Table className="table">
-        <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell>Scale</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {scaleTypeCheckboxTableRows}
-        </TableBody>
-      </Table>
-    );
+    const selectedCellDatas = [
+      configData.enabledRootPitches,
+      configData.enabledScaleTypes
+    ];
+    const boundOnChange = this.onChange.bind(this);
 
     return (
-      <Grid container spacing={32}>
-        <Grid item xs={6}>{rootPitchCheckboxes}</Grid>
-        <Grid item xs={6}>{scaleTypeCheckboxes}</Grid>
-      </Grid>
+      <CheckboxColumnsFlashCardMultiSelect
+        columns={this.columns}
+        selectedCellDatas={selectedCellDatas}
+        onChange={boundOnChange}
+      />
     );
   }
+
+  private columns: Array<CheckboxColumn> = [
+    new CheckboxColumn(
+      "Root Pitch",
+      ambiguousKeyPitchStringsSymbols
+        .map(rp => new CheckboxColumnCell(
+          () => <span>{rp}</span>, rp
+        )),
+      (a: string, b: string) => a === b
+    ),
+    new CheckboxColumn(
+      "Scale Type",
+      ScaleType.All
+        .map(s => new CheckboxColumnCell(
+          () => <span>{s.name}</span>, s.name
+        )),
+      (a: string, b: string) => a === b
+    )
+  ];
   
-  private toggleRootPitchEnabled(rootPitch: string) {
-    const configData = this.props.studySessionInfo.configData as IConfigData;
-    const newEnabledRootPitches = Utils.toggleArrayElement(
-      configData.enabledRootPitches,
-      rootPitch
-    );
-    
-    if (newEnabledRootPitches.length > 0) {
-      const newConfigData: IConfigData = {
-        enabledRootPitches: newEnabledRootPitches,
-        enabledScaleTypes: configData.enabledScaleTypes
-      };
-      this.onChange(newConfigData);
-    }
-  }
-  private toggleScaleEnabled(scale: string) {
-    const configData = this.props.studySessionInfo.configData as IConfigData;
-    const newEnabledScaleTypes = Utils.toggleArrayElement(
-      configData.enabledScaleTypes,
-      scale
-    );
-    
-    if (newEnabledScaleTypes.length > 0) {
-      const newConfigData: IConfigData = {
-        enabledRootPitches: configData.enabledRootPitches,
-        enabledScaleTypes: newEnabledScaleTypes
-      };
-      this.onChange(newConfigData);
-    }
-  }
-  private onChange(newConfigData: IConfigData) {
+  private onChange(newSelectedCellDatas: Array<Array<any>>) {
     if (!this.props.onChange) { return; }
 
+    const newConfigData: IConfigData = {
+      enabledRootPitches: newSelectedCellDatas[0] as Array<string>,
+      enabledScaleTypes: newSelectedCellDatas[1] as Array<string>
+    };
+
     const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(
-      this.props.studySessionInfo.flashCardSet, this.props.studySessionInfo.flashCards, newConfigData
+      this.props.studySessionInfo.flashCardSet, this.props.studySessionInfo.flashCards,
+      newConfigData
     );
     this.props.onChange(newEnabledFlashCardIds, newConfigData);
   }
@@ -190,7 +141,7 @@ export function createFlashCards(): FlashCard[] {
   const flashCards = new Array<FlashCard>();
 
   forEachScale((scaleType, rootPitchStr, i) => {
-    const halfStepsFromC = Utils.mod(i - 4, 12);
+    const halfStepsFromC = Utils.mod(i - 3, 12);
     const rootPitch = Pitch.createFromMidiNumber((new Pitch(PitchLetter.C, 0, 4)).midiNumber + halfStepsFromC);
     const pitches = new ChordScaleFormula(scaleType.formula.parts.concat(new ChordScaleFormulaPart(8, 0, false))).getPitches(rootPitch);
     

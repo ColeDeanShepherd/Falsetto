@@ -1,42 +1,28 @@
 import * as React from "react";
-import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid } from "@material-ui/core";
 
 import * as Utils from "../../Utils";
 import { FlashCard, FlashCardId } from "../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../FlashCardSet";
 import { ChordType } from '../../Chord';
+import { CheckboxColumnsFlashCardMultiSelect, CheckboxColumnCell, CheckboxColumn } from '../Utils/CheckboxColumnsFlashCardMultiSelect';
+import { getValidKeyPitches } from '../../Key';
+import { Pitch } from '../../Pitch';
 
 const flashCardSetId = "randomChords";
 
-const chordRoots = [
-  "C♭",
-  "C",
-  "C♯",
-  "D♭",
-  "D",
-  "E♭",
-  "E",
-  "F",
-  "F♯",
-  "G♭",
-  "G",
-  "A♭",
-  "A",
-  "B♭",
-  "B"
-];
+const chordRootPitches = getValidKeyPitches(4);
 
 interface IConfigData {
-  enabledChordRoots: string[];
-  enabledChordTypes: string[];
+  enabledChordRootPitches: Pitch[];
+  enabledChordTypes: ChordType[];
 }
 
-export function forEachChord(callbackFn: (chordRoot: string, chordType: ChordType, i: number) => void) {
+export function forEachChord(callbackFn: (chordRootPitch: Pitch, chordType: ChordType, i: number) => void) {
   let i = 0;
 
-  for (const chordRoot of chordRoots) {
+  for (const chordRootPitch of chordRootPitches) {
     for (const chordType of ChordType.All) {
-      callbackFn(chordRoot, chordType, i);
+      callbackFn(chordRootPitch, chordType, i);
       i++
     }
   }
@@ -46,10 +32,10 @@ export function configDataToEnabledFlashCardIds(
 ): Array<FlashCardId> {
   const flashCardIds = new Array<FlashCardId>();
 
-  forEachChord((chordRoot, chordType, i) => {
+  forEachChord((chordRootPitch, chordType, i) => {
     if (
-      Utils.arrayContains(configData.enabledChordRoots, chordRoot) &&
-      Utils.arrayContains(configData.enabledChordTypes, chordType.name)
+      Utils.arrayContains(configData.enabledChordRootPitches, chordRootPitch) &&
+      Utils.arrayContains(configData.enabledChordTypes, chordType)
     ) {
       flashCardIds.push(flashCards[i].id);
     }
@@ -66,101 +52,51 @@ export interface IRandomChordGeneratorFlashCardMultiSelectState {}
 export class RandomChordGeneratorFlashCardMultiSelect extends React.Component<IRandomChordGeneratorFlashCardMultiSelectProps, IRandomChordGeneratorFlashCardMultiSelectState> {
   public render(): JSX.Element {
     const configData = this.props.studySessionInfo.configData as IConfigData;
-    const chordRootCheckboxTableRows = chordRoots
-      .map((chordRoot, i) => {
-        const isChecked = configData.enabledChordRoots.indexOf(chordRoot) >= 0;
-        const isEnabled = !isChecked || (configData.enabledChordRoots.length > 1);
-
-        return (
-          <TableRow key={i}>
-            <TableCell><Checkbox checked={isChecked} onChange={event => this.toggleChordRootEnabled(chordRoot)} disabled={!isEnabled} /></TableCell>
-            <TableCell>{chordRoot}</TableCell>
-          </TableRow>
-        );
-      }, this);
-    const chordRootCheckboxes = (
-      <Table className="table">
-        <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell>Chord Root</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {chordRootCheckboxTableRows}
-        </TableBody>
-      </Table>
-    );
-    
-    const chordTypeCheckboxTableRows = ChordType.All
-      .map((chordType, i) => {
-        const isChecked = configData.enabledChordTypes.indexOf(chordType.name) >= 0;
-        const isEnabled = !isChecked || (configData.enabledChordTypes.length > 1);
-
-        return (
-          <TableRow key={i}>
-            <TableCell><Checkbox checked={isChecked} onChange={event => this.toggleChordTypeEnabled(chordType.name)} disabled={!isEnabled} /></TableCell>
-            <TableCell>{chordType.name}</TableCell>
-          </TableRow>
-        );
-      }, this);
-    const chordTypeCheckboxes = (
-      <Table className="table">
-        <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell>Chord Type</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {chordTypeCheckboxTableRows}
-        </TableBody>
-      </Table>
-    );
+    const selectedCellDatas = [
+      configData.enabledChordRootPitches,
+      configData.enabledChordTypes
+    ];
+    const boundOnChange = this.onChange.bind(this);
 
     return (
-      <Grid container spacing={32}>
-        <Grid item xs={6}>{chordRootCheckboxes}</Grid>
-        <Grid item xs={6}>{chordTypeCheckboxes}</Grid>
-      </Grid>
+      <CheckboxColumnsFlashCardMultiSelect
+        columns={this.columns}
+        selectedCellDatas={selectedCellDatas}
+        onChange={boundOnChange}
+      />
     );
   }
 
-  private toggleChordRootEnabled(chordRoot: string) {
-    const configData = this.props.studySessionInfo.configData as IConfigData;
-    const newEnabledChordRoots = Utils.toggleArrayElement(
-      configData.enabledChordRoots,
-      chordRoot
-    );
-    
-    if (newEnabledChordRoots.length > 0) {
-      const newConfigData: IConfigData = {
-        enabledChordRoots: newEnabledChordRoots,
-        enabledChordTypes: configData.enabledChordTypes
-      };
-      this.onChange(newConfigData);
-    }
-  }
-  private toggleChordTypeEnabled(chordType: string) {
-    const configData = this.props.studySessionInfo.configData as IConfigData;
-    const newEnabledChordTypes = Utils.toggleArrayElement(
-      configData.enabledChordTypes,
-      chordType
-    );
-    
-    if (newEnabledChordTypes.length > 0) {
-      const newConfigData: IConfigData = {
-        enabledChordRoots: configData.enabledChordRoots,
-        enabledChordTypes: newEnabledChordTypes
-      };
-      this.onChange(newConfigData);
-    }
-  }
-  private onChange(newConfigData: IConfigData) {
+  private columns: Array<CheckboxColumn> = [
+    new CheckboxColumn(
+      "Root Pitch",
+      chordRootPitches
+        .map(crp => new CheckboxColumnCell(
+          () => <span>{crp.toString(false, true)}</span>, crp
+        )),
+      (a: Pitch, b: Pitch) => a === b
+    ),
+    new CheckboxColumn(
+      "Chord Type",
+      ChordType.All
+        .map(ct => new CheckboxColumnCell(
+          () => <span>{ct.name}</span>, ct
+        )),
+      (a: ChordType, b: ChordType) => a === b
+    )
+  ];
+  
+  private onChange(newSelectedCellDatas: Array<Array<any>>) {
     if (!this.props.onChange) { return; }
 
+    const newConfigData: IConfigData = {
+      enabledChordRootPitches: newSelectedCellDatas[0] as Array<Pitch>,
+      enabledChordTypes: newSelectedCellDatas[1] as Array<ChordType>
+    };
+
     const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(
-      this.props.studySessionInfo.flashCardSet, this.props.studySessionInfo.flashCards, newConfigData
+      this.props.studySessionInfo.flashCardSet, this.props.studySessionInfo.flashCards,
+      newConfigData
     );
     this.props.onChange(newEnabledFlashCardIds, newConfigData);
   }
@@ -169,11 +105,11 @@ export class RandomChordGeneratorFlashCardMultiSelect extends React.Component<IR
 export function createFlashCards(): Array<FlashCard> {
   const flashCards = new Array<FlashCard>();
 
-  forEachChord((chordRoot, chordType, i) => {
+  forEachChord((chordRootPitch, chordType, i) => {
     const flashCard = FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, chord: chordRoot + " " + chordType.name }),
-      chordRoot + " " + chordType.name,
-      chordType.formula.toString()
+      JSON.stringify({ set: flashCardSetId, chord: chordRootPitch.toString(false, true) + " " + chordType.name }),
+      chordRootPitch.toString(false, true) + " " + chordType.name,
+      chordType.getPitches(chordRootPitch).map(p => p.toString(false, true)).join(" ")
     );
     flashCards.push(flashCard);
   });
@@ -194,10 +130,9 @@ export function createFlashCardSet(): FlashCardSet {
   };
 
   const initialConfigData: IConfigData = {
-    enabledChordRoots: chordRoots.slice(),
+    enabledChordRootPitches: chordRootPitches.slice(),
     enabledChordTypes: ChordType.All
-      .map(ct => ct.name)
-      .filter((_, i) => (i >= 1) && (i <= 16))
+      .filter((_, i) => i <= 16)
   };
   
   const flashCardSet = new FlashCardSet(flashCardSetId,

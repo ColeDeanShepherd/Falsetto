@@ -10,6 +10,7 @@ import { PitchLetter } from "../../../PitchLetter";
 import { SheetMusicChord } from "./SheetMusicChords";
 import { Chord, ChordType } from "../../../Chord";
 import { Size2D } from '../../../Size2D';
+import { CheckboxColumnsFlashCardMultiSelect, CheckboxColumn, CheckboxColumnCell } from '../../Utils/CheckboxColumnsFlashCardMultiSelect';
 
 const flashCardSetId = "sheetChords";
 
@@ -44,8 +45,8 @@ const chordTypes = [ChordType.Power]
   .concat(ChordType.SimpleSeventhChords);
 
 interface IConfigData {
-  enabledChordTypes: string[];
   enabledRootPitches: Pitch[];
+  enabledChordTypes: string[];
 }
 
 export function forEachChord(
@@ -92,107 +93,57 @@ export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesF
     super(props);
 
     this.state = {
-      enabledChordTypes: chordTypes.map(c => c.name),
-      enabledRootPitches: rootPitches.slice()
+      enabledRootPitches: rootPitches.slice(),
+      enabledChordTypes: chordTypes.map(c => c.name)
     };
   }
   public render(): JSX.Element {
     const configData = this.props.studySessionInfo.configData as IConfigData;
-    const rootPitchCheckboxTableRows = rootPitches
-      .map((rootPitch, i) => {
-        const isChecked = configData.enabledRootPitches.indexOf(rootPitch) >= 0;
-        const isEnabled = !isChecked || (configData.enabledRootPitches.length > 1);
-
-        return (
-          <TableRow key={i}>
-            <TableCell><Checkbox checked={isChecked} onChange={event => this.toggleRootPitchEnabled(rootPitch)} disabled={!isEnabled} /></TableCell>
-            <TableCell>{rootPitch.toString(false)}</TableCell>
-          </TableRow>
-        );
-      }, this);
-    const rootPitchCheckboxes = (
-      <Table className="table">
-        <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell>Root Pitch</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rootPitchCheckboxTableRows}
-        </TableBody>
-      </Table>
-    );
-
-    const chordTypeCheckboxTableRows = chordTypes
-      .map((chordType, i) => {
-        const isChecked = configData.enabledChordTypes.indexOf(chordType.name) >= 0;
-        const isEnabled = !isChecked || (configData.enabledChordTypes.length > 1);
-
-        return (
-          <TableRow key={i}>
-            <TableCell><Checkbox checked={isChecked} onChange={event => this.toggleChordEnabled(chordType.name)} disabled={!isEnabled} /></TableCell>
-            <TableCell>{chordType.name}</TableCell>
-          </TableRow>
-        );
-      }, this);
-    const chordTypeCheckboxes = (
-      <Table className="table">
-        <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell>Chord</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {chordTypeCheckboxTableRows}
-        </TableBody>
-      </Table>
-    );
+    const selectedCellDatas = [
+      configData.enabledRootPitches,
+      configData.enabledChordTypes
+    ];
+    const boundOnChange = this.onChange.bind(this);
 
     return (
-      <Grid container spacing={32}>
-        <Grid item xs={6}>{rootPitchCheckboxes}</Grid>
-        <Grid item xs={6}>{chordTypeCheckboxes}</Grid>
-      </Grid>
+      <CheckboxColumnsFlashCardMultiSelect
+        columns={this.columns}
+        selectedCellDatas={selectedCellDatas}
+        onChange={boundOnChange}
+      />
     );
   }
   
-  private toggleRootPitchEnabled(rootPitch: Pitch) {
-    const configData = this.props.studySessionInfo.configData as IConfigData;
-    const newEnabledRootPitches = Utils.toggleArrayElement(
-      configData.enabledRootPitches,
-      rootPitch
-    );
-    
-    if (newEnabledRootPitches.length > 0) {
-      const newConfigData: IConfigData = {
-        enabledRootPitches: newEnabledRootPitches,
-        enabledChordTypes: configData.enabledChordTypes
-      };
-      this.onChange(newConfigData);
-    }
-  }
-  private toggleChordEnabled(chordType: string) {
-    const configData = this.props.studySessionInfo.configData as IConfigData;
-    const newEnabledChords = Utils.toggleArrayElement(
-      configData.enabledChordTypes,
-      chordType
-    );
-    
-    if (newEnabledChords.length > 0) {
-      const newConfigData: IConfigData = {
-        enabledRootPitches: configData.enabledRootPitches,
-        enabledChordTypes: newEnabledChords
-      };
-      this.onChange(newConfigData);
-    }
-  }
-  private onChange(newConfigData: IConfigData) {
+  private columns: Array<CheckboxColumn> = [
+    new CheckboxColumn(
+      "Root Pitch",
+      rootPitches
+        .map(rp => new CheckboxColumnCell(
+          () => <span>{rp.toString(false, true)}</span>, rp
+        )),
+      (a: Pitch, b: Pitch) => a === b
+    ),
+    new CheckboxColumn(
+      "Chord Type",
+      chordTypes
+        .map(ct => new CheckboxColumnCell(
+          () => <span>{ct.name}</span>, ct.name
+        )),
+      (a: string, b: string) => a === b
+    )
+  ];
+  
+  private onChange(newSelectedCellDatas: Array<Array<any>>) {
     if (!this.props.onChange) { return; }
 
+    const newConfigData: IConfigData = {
+      enabledRootPitches: newSelectedCellDatas[0] as Array<Pitch>,
+      enabledChordTypes: newSelectedCellDatas[1] as Array<string>
+    };
+
     const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(
-      this.props.studySessionInfo.flashCardSet, this.props.studySessionInfo.flashCards, newConfigData
+      this.props.studySessionInfo.flashCardSet, this.props.studySessionInfo.flashCards,
+      newConfigData
     );
     this.props.onChange(newEnabledFlashCardIds, newConfigData);
   }

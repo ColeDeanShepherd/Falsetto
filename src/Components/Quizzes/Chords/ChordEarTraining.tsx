@@ -67,8 +67,7 @@ export function configDataToEnabledFlashCardIds(
     const chordType = chordTypes[i];
     
     if (Utils.arrayContains(configData.enabledChordTypes, chordType.name)) {
-      const flashCard = flashCards[i];
-      newEnabledFlashCardIds.push(flashCard.id);
+      newEnabledFlashCardIds.push(flashCards[i].id);
     }
   }
 

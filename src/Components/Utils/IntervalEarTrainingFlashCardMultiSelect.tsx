@@ -6,6 +6,7 @@ import { FlashCard, FlashCardId } from "../../FlashCard";
 import { Pitch } from "../../Pitch";
 import { FlashCardStudySessionInfo, FlashCardSet } from '../../FlashCardSet';
 import { getValidKeyPitches } from '../../Key';
+import { CheckboxColumnsFlashCardMultiSelect, CheckboxColumnCell, CheckboxColumn } from './CheckboxColumnsFlashCardMultiSelect';
 
 export const firstPitches = getValidKeyPitches(4);
 export const intervals = [
@@ -108,80 +109,25 @@ export function configDataToEnabledFlashCardIds(
 export interface IIntervalEarTrainingFlashCardMultiSelectProps {
   studySessionInfo: FlashCardStudySessionInfo;
   hasFlashCardPerFirstPitch: boolean;
+  enableHarmonicIntervals: boolean;
   onChange?: (newValue: Array<FlashCardId>, newConfigData: any) => void;
-  enableHarmonicIntervals?: boolean;
 }
-export interface IIntervalEarTrainingFlashCardMultiSelectState {}
-export class IntervalEarTrainingFlashCardMultiSelect extends React.Component<IIntervalEarTrainingFlashCardMultiSelectProps, IIntervalEarTrainingFlashCardMultiSelectState> {
-  public constructor(props: IIntervalEarTrainingFlashCardMultiSelectProps) {
-    super(props);
-
-    this.state = {
-      enabledFirstPitches: firstPitches.slice(),
-      enabledIntervals: intervals.slice(),
-      enabledDirections: this.directionsSource.slice()
-    };
-  }
+export class IntervalEarTrainingFlashCardMultiSelect extends React.Component<IIntervalEarTrainingFlashCardMultiSelectProps, {}> {
   public render(): JSX.Element {
     const configData = this.props.studySessionInfo.configData as IConfigData;
-
-    const intervalCheckboxTableRows = intervals
-      .map((interval, i) => {
-        const isChecked = configData.enabledIntervals.indexOf(interval) >= 0;
-        const isEnabled = !isChecked || (configData.enabledIntervals.length > 1);
-
-        return (
-          <TableRow key={i}>
-            <TableCell><Checkbox checked={isChecked} onChange={event => this.toggleIntervalEnabled(interval)} disabled={!isEnabled} /></TableCell>
-            <TableCell>{interval}</TableCell>
-          </TableRow>
-        );
-      }, this);
-    const intervalCheckboxes = (
-      <Table className="table">
-        <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell>Interval</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {intervalCheckboxTableRows}
-        </TableBody>
-      </Table>
-    );
-    
-    const directionCheckboxTableRows = this.directionsSource
-      .map((direction, i) => {
-        const isChecked = configData.enabledDirections.indexOf(direction) >= 0;
-        const isEnabled = !isChecked || (configData.enabledDirections.length > 1);
-
-        return (
-          <TableRow key={i}>
-            <TableCell><Checkbox checked={isChecked} onChange={event => this.toggleDirectionEnabled(direction)} disabled={!isEnabled} /></TableCell>
-            <TableCell>{direction}</TableCell>
-          </TableRow>
-        );
-      }, this);
-    const directionCheckboxes = (
-      <Table className="table">
-        <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell>Direction</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {directionCheckboxTableRows}
-        </TableBody>
-      </Table>
-    );
+    const selectedCellDatas = [
+      //configData.enabledFirstPitches,
+      configData.enabledIntervals,
+      configData.enabledDirections
+    ];
+    const boundOnChange = this.onChange.bind(this);
 
     return (
-      <Grid container spacing={32}>
-        <Grid item xs={6}>{intervalCheckboxes}</Grid>
-        <Grid item xs={6}>{directionCheckboxes}</Grid>
-      </Grid>
+      <CheckboxColumnsFlashCardMultiSelect
+        columns={this.columns}
+        selectedCellDatas={selectedCellDatas}
+        onChange={boundOnChange}
+      />
     );
   }
 
@@ -189,45 +135,47 @@ export class IntervalEarTrainingFlashCardMultiSelect extends React.Component<IIn
     return !this.props.enableHarmonicIntervals ? directions : directionsWithHarmonic;
   }
 
-  private toggleIntervalEnabled(interval: string) {
-    const configData = this.props.studySessionInfo.configData as IConfigData;
-    const newEnabledIntervals = Utils.toggleArrayElement(
-      configData.enabledIntervals,
-      interval
-    );
-    
-    if (newEnabledIntervals.length > 0) {
-      const newConfigData: IConfigData = {
-        enabledFirstPitches: configData.enabledFirstPitches,
-        enabledIntervals: newEnabledIntervals,
-        enabledDirections: configData.enabledDirections
-      };
-      this.onChange(newConfigData);
-    }
-  }
-  private toggleDirectionEnabled(direction: string) {
-    const configData = this.props.studySessionInfo.configData as IConfigData;
-    const newEnabledDirections = Utils.toggleArrayElement(
-      configData.enabledDirections,
-      direction
-    );
-    
-    if (newEnabledDirections.length > 0) {
-      const newConfigData: IConfigData = {
-        enabledFirstPitches: configData.enabledFirstPitches,
-        enabledIntervals: configData.enabledIntervals,
-        enabledDirections: newEnabledDirections
-      };
-      this.onChange(newConfigData);
-    }
-  }
-  private onChange(newConfigData: IConfigData) {
+  private columns: Array<CheckboxColumn> = [
+    /*new CheckboxColumn(
+      "First Pitch",
+      firstPitches
+        .map(fp => new CheckboxColumnCell(
+          () => <span>{fp.toString(false, true)}</span>, fp
+        )),
+      (a: Pitch, b: Pitch) => a === b
+    ),*/
+    new CheckboxColumn(
+      "Interval",
+      intervals
+        .map(i => new CheckboxColumnCell(
+          () => <span>{i}</span>, i
+        )),
+      (a: string, b: string) => a === b
+    ),
+    new CheckboxColumn(
+      "Direction",
+      this.directionsSource
+        .map(d => new CheckboxColumnCell(
+          () => <span>{d}</span>, d
+        )),
+      (a: string, b: string) => a === b
+    )
+  ];
+
+  private onChange(newSelectedCellDatas: Array<Array<any>>) {
     if (!this.props.onChange) { return; }
 
-    const enableHarmonicIntervals = this.props.enableHarmonicIntervals === true;
+    const oldConfigData = this.props.studySessionInfo.configData as IConfigData;
+    const newConfigData: IConfigData = {
+      enabledFirstPitches: oldConfigData.enabledFirstPitches,
+      enabledIntervals: newSelectedCellDatas[0] as Array<string>,
+      enabledDirections: newSelectedCellDatas[1] as Array<string>
+    };
+
     const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(
-      enableHarmonicIntervals, this.props.hasFlashCardPerFirstPitch,
-      this.props.studySessionInfo.flashCardSet, this.props.studySessionInfo.flashCards, newConfigData
+      this.props.enableHarmonicIntervals, this.props.hasFlashCardPerFirstPitch,
+      this.props.studySessionInfo.flashCardSet, this.props.studySessionInfo.flashCards,
+      newConfigData
     );
     this.props.onChange(newEnabledFlashCardIds, newConfigData);
   }

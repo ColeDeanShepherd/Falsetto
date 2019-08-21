@@ -63,9 +63,10 @@ export class CheckboxColumnsFlashCardMultiSelect extends React.Component<ICheckb
         return table;
       });
 
+    const columnSize: any = Math.floor(12 / columns.length);
     return (
       <Grid container spacing={32}>
-        {columns.map(c => <Grid item xs={4}>{c}</Grid>)}
+        {columns.map(c => <Grid item xs={columnSize}>{c}</Grid>)}
       </Grid>
     );
   }
