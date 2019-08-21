@@ -86,7 +86,7 @@ export class PianoChordsFlashCardMultiSelect extends React.Component<IPianoChord
         .map(ct => new CheckboxColumnCell(
           () => <span>{ct.name}</span>, ct.name
         )),
-      (a: ChordType, b: ChordType) => a === b
+      (a: string, b: string) => a === b
     )
   ];
   

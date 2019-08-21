@@ -1,5 +1,4 @@
 import * as React from "react";
-import { TableRow, TableCell, Table, TableHead, TableBody, Grid, Checkbox } from "@material-ui/core";
 
 import * as Utils from "../../../Utils";
 import { Vector2D } from '../../../Vector2D';

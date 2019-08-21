@@ -87,16 +87,7 @@ export interface IChordNotesFlashCardMultiSelectProps {
   studySessionInfo: FlashCardStudySessionInfo;
   onChange?: (newValue: Array<FlashCardId>, newConfigData: any) => void;
 }
-export interface IChordNotesFlashCardMultiSelectState {}
-export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesFlashCardMultiSelectProps, IChordNotesFlashCardMultiSelectState> {
-  public constructor(props: IChordNotesFlashCardMultiSelectProps) {
-    super(props);
-
-    this.state = {
-      enabledRootPitches: rootPitches.slice(),
-      enabledChordTypes: chordTypes.map(c => c.name)
-    };
-  }
+export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesFlashCardMultiSelectProps, {}> {
   public render(): JSX.Element {
     const configData = this.props.studySessionInfo.configData as IConfigData;
     const selectedCellDatas = [
