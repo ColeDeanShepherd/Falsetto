@@ -101,8 +101,6 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
   public constructor(props: IStudyFlashCardsProps) {
     super(props);
 
-    this.flashCardContainerRef = React.createRef();
-
     if (this.props.flashCardSet.initialConfigData && !this.props.flashCardSet.configDataToEnabledFlashCardIds) {
       Utils.assert(false);
     }
@@ -115,7 +113,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
       this.getInitialEnabledFlashCardIds()
     )
       .then(partialState => {
-        this.state = Object.assign(
+        const newState = Object.assign(
           {
             sessionFlashCardNumber: 0,
             showConfiguration: false,
@@ -125,6 +123,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
           },
           partialState
         );
+        this.setState(newState);
       })
       .catch(e => {
         // TODO: handle error
@@ -173,20 +172,11 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
         flashCards.find(fc => fc.id === this.state.currentFlashCardId)
       );
 
-      let renderedFlashCardFrontSide: JSX.Element | null;
-      let renderedFlashCardBackSide: JSX.Element | null;
-      let containerSize: Size2D;
-      if (!this.flashCardContainerRef || !((this.flashCardContainerRef as any).current)) {
-        containerSize = new Size2D(0, 0);
-        renderedFlashCardFrontSide = null;
-        renderedFlashCardBackSide = null;
-      } else {
-        const containerElement = (this.flashCardContainerRef as any).current;
-        containerSize = new Size2D(containerElement.offsetWidth, containerElement.offsetHeight);
-
-        renderedFlashCardFrontSide = renderFlashCardSide(containerSize, currentFlashCard.frontSide);
-        renderedFlashCardBackSide = renderFlashCardSide(containerSize, currentFlashCard.backSide);
-      }
+      let containerSize = new Size2D(0, 0); // TODO: use size-aware container
+      let renderedFlashCardFrontSide =
+        renderFlashCardSide(containerSize, currentFlashCard.frontSide);
+      let renderedFlashCardBackSide =
+        renderFlashCardSide(containerSize, currentFlashCard.backSide);
 
       const numGuesses = this.studyAlgorithm.flashCardSetStats.numCorrectGuesses + this.studyAlgorithm.flashCardSetStats.numIncorrectGuesses;
       const percentCorrect = (this.studyAlgorithm.flashCardSetStats.numIncorrectGuesses !== 0)
@@ -293,7 +283,6 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
           {this.state.showDetailedStats ? flashCardStats : null}
   
           <div
-            ref={this.flashCardContainerRef}
             key={currentFlashCardKey}
             style={flashCardContainerStyle}
           >
@@ -340,7 +329,6 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
     );
   }
 
-  private flashCardContainerRef: React.Ref<HTMLDivElement>;
   private studyAlgorithm: StudyAlgorithm = new LeitnerStudyAlgorithm(5);
 
   private getCurrentLevel(): FlashCardLevel | undefined {

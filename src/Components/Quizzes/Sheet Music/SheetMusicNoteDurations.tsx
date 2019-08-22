@@ -198,7 +198,9 @@ export function createFlashCards(): FlashCard[] {
     )
   ];
 }
-function vexFlowRender(noteDurationString: string, restDurationStrings: string[], context: Vex.IRenderContext) {
+function vexFlowRender(
+  noteDurationString: string, restDurationStrings: string[], context: Vex.IRenderContext
+) {
   context
     .setFont("Arial", 10)
     .setBackgroundFillStyle("#eed");
