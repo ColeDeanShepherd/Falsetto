@@ -148,7 +148,7 @@ export function createFlashCards(): Array<FlashCard> {
 
       flashCards.push(FlashCard.fromRenderFns(
         JSON.stringify({ set: flashCardSetId, chord: `${rootPitch.toString(true)} ${chordType.name}` }),
-        (width, height) => (
+        size => (
           <div>
             <SheetMusicChord
               size={new Size2D(300, 200)}

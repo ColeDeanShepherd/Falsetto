@@ -88,7 +88,7 @@ export function createFlashCards(): Array<FlashCard> {
   return allowedPitches
     .map((pitch, i) => FlashCard.fromRenderFns(
       JSON.stringify({ set: flashCardSetId, keys: answers[i] }),
-      (width, height) => <SheetMusicKeySignature
+      size => <SheetMusicKeySignature
         size={new Size2D(300, 200)}
         keySignature={pitch.toVexFlowKeySignatureString()}
       />,

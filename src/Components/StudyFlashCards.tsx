@@ -2,7 +2,6 @@ import * as React from "react";
 import {
   Button, Card, CardContent, Typography, Paper
 } from "@material-ui/core";
-import ResizeObserver from "resize-observer-polyfill";
 
 import * as Utils from "../Utils";
 import * as Analytics from "../Analytics";
@@ -165,9 +164,8 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
       const flashCardStats = this.studyAlgorithm.flashCardSetStats.flashCardStats
         .map((fcs, i) => {
           // TODO: calculate width & height
-          const width = 300;
-          const height = 300;
-          const renderedFlashCard = renderFlashCardSide(width, height, flashCards[i].frontSide);
+          const size = new Size2D(300, 300);
+          const renderedFlashCard = renderFlashCardSide(size, flashCards[i].frontSide);
           return <p key={i}>{renderedFlashCard} {fcs.numCorrectGuesses} / {fcs.numIncorrectGuesses}</p>;
         }, this);
       
@@ -179,6 +177,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
       let renderedFlashCardBackSide: JSX.Element | null;
       let containerSize: Size2D;
       if (!this.flashCardContainerRef || !((this.flashCardContainerRef as any).current)) {
+        containerSize = new Size2D(0, 0);
         renderedFlashCardFrontSide = null;
         renderedFlashCardBackSide = null;
       } else {
@@ -378,13 +377,13 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
   }
 
   private renderFlashCardMultiSelect(
-    containerWidth: number, containerHeight: number, flashCards: FlashCard[]
+    containerSize: Size2D, flashCards: FlashCard[]
   ): JSX.Element {
     const onEnabledFlashCardIndicesChange = this.onEnabledFlashCardIdsChange.bind(this);
 
     return this.props.flashCardSet.renderFlashCardMultiSelect
       ? this.props.flashCardSet.renderFlashCardMultiSelect(
-        this.getStudySessionInfo(containerWidth, containerHeight), onEnabledFlashCardIndicesChange
+        this.getStudySessionInfo(containerSize), onEnabledFlashCardIndicesChange
       )
       : <DefaultFlashCardMultiSelect
           flashCards={flashCards}
@@ -429,7 +428,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
       : this.props.flashCards.map(fc => fc.id)
   }
   private getStudySessionInfo(
-    containerWidth: number, containerHeight: number
+    containerSize: Size2D,
   ): FlashCardStudySessionInfo {
     const currentFlashCard = Utils.unwrapValueOrUndefined(
       this.props.flashCards.find(fc => fc.id === this.state.currentFlashCardId)
@@ -437,7 +436,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
     const boundOnAnswer = this.onAnswer.bind(this);
 
     return new FlashCardStudySessionInfo(
-      containerWidth, containerHeight, this.props.flashCardSet, this.props.flashCards,
+      containerSize, this.props.flashCardSet, this.props.flashCards,
       this.state.enabledFlashCardIds, this.state.configData, this.state.currentFlashCardId,
       currentFlashCard, boundOnAnswer, this.state.lastCorrectAnswer,
       this.state.incorrectAnswers, this.studyAlgorithm
@@ -497,7 +496,9 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
   }
   private moveToNextFlashCard(lastCorrectAnswer: any, wasCorrect: boolean) {
     this.setState({
-      currentFlashCardId: this.studyAlgorithm.getNextFlashCardId(this.getStudySessionInfo(0, 0)),
+      currentFlashCardId: this.studyAlgorithm.getNextFlashCardId(
+        this.getStudySessionInfo(new Size2D(0, 0))
+      ),
       sessionFlashCardNumber: this.state.sessionFlashCardNumber + 1,
       haveGottenCurrentFlashCardWrong: false,
       isShowingBackSide: false,

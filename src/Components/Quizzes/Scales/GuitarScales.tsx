@@ -156,7 +156,7 @@ export function createFlashCards(): Array<FlashCard> {
     flashCards.push(new FlashCard(
       id,
       new FlashCardSide(
-        (width, height) => {
+        size => {
           return (
             <div>
               <GuitarScaleViewer scale={scale} renderAllScaleShapes={false} tuning={guitarTuning} size={new Size2D(400, 140)} />

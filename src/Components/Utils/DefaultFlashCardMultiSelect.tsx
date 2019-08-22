@@ -7,6 +7,7 @@ import { FlashCard, FlashCardId } from "../../FlashCard";
 import { renderFlashCardSide } from "../FlashCard";
 import * as Utils from "../../Utils";
 import { FlashCardLevel } from '../../FlashCardSet';
+import { Size2D } from '../../Size2D';
 
 export interface IDefaultFlashCardMultiSelectProps {
   flashCards: FlashCard[];
@@ -40,8 +41,7 @@ export class DefaultFlashCardMultiSelect extends React.Component<IDefaultFlashCa
       ) : null;
 
     // TODO: calculate
-    const flashCardSideWidth = 300;
-    const flashCardSideHeight = 300;
+    const flashCardSideSize = new Size2D(300, 300);
 
     const flashCardCheckboxTableRows = this.props.flashCards
       .map(fc => {
@@ -51,8 +51,8 @@ export class DefaultFlashCardMultiSelect extends React.Component<IDefaultFlashCa
         return (
           <TableRow key={fc.id}>
             <TableCell><Checkbox checked={isChecked} onChange={event => this.toggleFlashCardEnabled(fc.id)} disabled={!isEnabled} /></TableCell>
-            <TableCell>{renderFlashCardSide(flashCardSideWidth, flashCardSideHeight, fc.frontSide)}</TableCell>
-            <TableCell>{renderFlashCardSide(flashCardSideWidth, flashCardSideHeight, fc.backSide)}</TableCell>
+            <TableCell>{renderFlashCardSide(flashCardSideSize, fc.frontSide)}</TableCell>
+            <TableCell>{renderFlashCardSide(flashCardSideSize, fc.backSide)}</TableCell>
           </TableRow >
         );
       }, this);

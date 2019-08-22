@@ -188,7 +188,7 @@ export function createFlashCards(): Array<FlashCard> {
 
     flashCards.push(FlashCard.fromRenderFns(
       id,
-      (width, height) => {
+      size => {
         
         return (
           <div>
