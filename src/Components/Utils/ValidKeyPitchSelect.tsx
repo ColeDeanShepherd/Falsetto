@@ -76,15 +76,20 @@ export class ValidKeyPitchSelect extends React.Component<IValidKeyPitchSelectPro
   private onPitchClick(pitch: Pitch) {
     if (!this.props.onChange) { return; }
 
-    const newValue = Utils.toggleArrayElementCustomEquals(
-      this.props.value,
-      new Pitch(
-        pitch.letter, pitch.signedAccidental,
-        pitch.octaveNumber + this.props.preferredOctaveNumber
-      ),
-      (a, b) => a.equalsNoOctave(b)
-    );
-    if ((newValue.length !== 1) && !this.props.isMultiSelect) { return; }
+    let newValue: Array<Pitch>;
+
+    if (!this.props.isMultiSelect) {
+      newValue = [pitch];
+    } else {
+      newValue = Utils.toggleArrayElementCustomEquals(
+        this.props.value,
+        new Pitch(
+          pitch.letter, pitch.signedAccidental,
+          pitch.octaveNumber + this.props.preferredOctaveNumber
+        ),
+        (a, b) => a.equalsNoOctave(b)
+      );
+    }
 
     this.props.onChange(newValue);
   }
