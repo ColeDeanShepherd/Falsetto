@@ -270,6 +270,30 @@ export function arrayMax<T>(array: T[]): T {
   for (let i = 1; i < array.length; i++) {
     max = (array[i] > max) ? array[i] : max;
   }
+  
+  return max;
+}
+
+export function uint8ArrayMap<TResult>(
+  array: Uint8Array,
+  callbackFn: (value: number, index: number, array: Uint8Array) => TResult
+) {
+  const result = new Array<TResult>(array.length);
+
+  for (let i = 0; i < result.length; i++) {
+    result[i] = callbackFn(array[i], i, array);
+  }
+
+  return result;
+}
+export function uint8ArrayMax(array: Uint8Array): number {
+  precondition(array.length > 0);
+
+  let max = array[0];
+
+  for (let i = 1; i < array.length; i++) {
+    max = (array[i] > max) ? array[i] : max;
+  }
 
   return max;
 }
