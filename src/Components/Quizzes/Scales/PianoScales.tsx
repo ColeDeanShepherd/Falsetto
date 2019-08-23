@@ -153,7 +153,7 @@ export function createFlashCards(): FlashCard[] {
     const flashCard = new FlashCard(
       id,
       new FlashCardSide(
-        (width, height) => {
+        size => {
 
           return (
             <PianoKeyboard

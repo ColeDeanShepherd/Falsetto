@@ -224,7 +224,7 @@ export function createFlashCards(notes?: Array<StringedInstrumentNote>): FlashCa
       return new FlashCard(
         id,
         new FlashCardSide(
-          (width, height) => {
+          size => {
             return <FlashCardFrontSide
               key={`${note.stringIndex}.${note.pitch.toString()}`}
               pitch={note.pitch}
@@ -232,7 +232,7 @@ export function createFlashCards(notes?: Array<StringedInstrumentNote>): FlashCa
           }
         ),
         new FlashCardSide(
-          (width, height) => {
+          size => {
             return (
               <div style={{ margin: "1em" }}>
                 <div>{note.pitch.toString()}</div>

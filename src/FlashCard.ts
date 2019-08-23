@@ -1,5 +1,4 @@
-import * as React from "react";
-import * as Utils from "./Utils";
+import { Size2D } from './Size2D';
 
 export type FlashCardId = string;
 
@@ -24,7 +23,7 @@ export class FlashCard {
   ) {}
 }
 
-export type FlashCardSideRenderFn = string | ((width: number, height: number) => JSX.Element);
+export type FlashCardSideRenderFn = string | ((size: Size2D) => JSX.Element);
 
 export class FlashCardSide {
   public constructor(

@@ -1,11 +1,11 @@
 import { FlashCard, FlashCardId } from "./FlashCard";
 import { StudyAlgorithm } from "./StudyAlgorithm";
 import { AnswerDifficulty } from "./AnswerDifficulty";
+import { Size2D } from './Size2D';
 
 export class FlashCardStudySessionInfo {
   public constructor(
-    public width: number,
-    public height: number,
+    public size: Size2D,
     public flashCardSet: FlashCardSet,
     public flashCards: Array<FlashCard>,
     public enabledFlashCardIds: Array<FlashCardId>,

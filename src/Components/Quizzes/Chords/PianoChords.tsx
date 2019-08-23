@@ -282,7 +282,7 @@ export function createFlashCards(): FlashCard[] {
         return new FlashCard(
           id,
           new FlashCardSide(
-            (width, height) => {
+            size => {
               return (
                 <PianoKeyboard
                   rect={new Rect2D(new Size2D(400, 100), new Vector2D(0, 0))}

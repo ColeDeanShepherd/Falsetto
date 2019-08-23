@@ -5,6 +5,18 @@ export enum AnswerDifficulty {
   Easy
 }
 
+export function isAnswerDifficultyCorrect(answerDifficulty: AnswerDifficulty): boolean {
+  switch (answerDifficulty) {
+    case AnswerDifficulty.Incorrect:
+      return false;
+    case AnswerDifficulty.Hard:
+    case AnswerDifficulty.Medium:
+    case AnswerDifficulty.Easy:
+      return true;
+    default:
+      throw new Error(`Unknown answer difficulty ${answerDifficulty}`);
+  }
+}
 export function answerDifficultyToPercentCorrect(answerDifficulty: AnswerDifficulty): number {
   switch (answerDifficulty) {
     case AnswerDifficulty.Easy:

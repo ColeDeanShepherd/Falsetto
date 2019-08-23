@@ -141,7 +141,7 @@ export function createFlashCards(): FlashCard[] {
     return new FlashCard(
       id,
       new FlashCardSide(
-        (width, height) => {
+        size => {
           return (
             <GuitarChordViewer
               chordType={chordType}

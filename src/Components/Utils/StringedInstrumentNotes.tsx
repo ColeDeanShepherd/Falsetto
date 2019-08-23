@@ -146,7 +146,7 @@ export function createFlashCards(
 
       return FlashCard.fromRenderFns(
         id,
-        (width, height) => flashCardFrontSideRenderFn(tuning, maxMaxFretNumber, note),
+        size => flashCardFrontSideRenderFn(tuning, maxMaxFretNumber, note),
         note.pitch.toOneAccidentalAmbiguousString(false, true)
       );
     });

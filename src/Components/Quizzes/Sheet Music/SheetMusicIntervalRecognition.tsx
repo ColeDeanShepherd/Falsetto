@@ -194,7 +194,7 @@ export function createFlashCards(): Array<FlashCard> {
   forEachInterval((pitches, interval) => {
     flashCards.push(FlashCard.fromRenderFns(
       JSON.stringify({ set: flashCardSetId, pitches: pitches.map(p => p.toString(true)) }),
-      (width, height) => (
+      size => (
         <div>
           <SheetMusicChord
             size={new Size2D(300, 200)}

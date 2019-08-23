@@ -73,8 +73,6 @@ export function configDataToEnabledFlashCardIds(
 }
 
 export interface IFlashCardFrontSideProps {
-  width: number;
-  height: number;
   pitch1: Pitch;
   pitch2: Pitch;
 }
@@ -211,7 +209,7 @@ export function createFlashCards(): Array<FlashCard> {
       flashCards.push(
         new FlashCard(
           id,
-          new FlashCardSide((width, height) => <FlashCardFrontSide key={i} width={width} height={height} pitch1={p1} pitch2={p2} />, p1),
+          new FlashCardSide(size => <FlashCardFrontSide key={i} pitch1={p1} pitch2={p2} />, p1),
           new FlashCardSide(p2.toOneAccidentalAmbiguousString(false), p2)
         )
       );

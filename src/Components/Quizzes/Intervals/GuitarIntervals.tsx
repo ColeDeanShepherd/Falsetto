@@ -286,7 +286,7 @@ export function createFlashCards(): Array<FlashCard> {
 
     const flashCard = FlashCard.fromRenderFns(
       id,
-      (width, height) => (
+      size => (
         <FlashCardFrontSide
           stringIndex0={stringIndex0}
           deltaStringIndex={deltaStringIndex}

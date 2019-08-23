@@ -6,6 +6,7 @@ import { FlashCard, FlashCardSideRenderFn, FlashCardId } from "../../FlashCard";
 import { callFlashCardSideRenderFn } from "../../Components/FlashCard";
 import { AnswerDifficulty } from "../../AnswerDifficulty";
 import { FlashCardStudySessionInfo } from '../../FlashCardSet';
+import { Size2D } from '../../Size2D';
 
 export function renderNoteAnswerSelect(
   info: FlashCardStudySessionInfo
@@ -129,8 +130,7 @@ export interface FlashCardSideAnswerSelectProps {
 export class FlashCardSideAnswerSelect extends React.Component<FlashCardSideAnswerSelectProps, {}> {
   public render(): JSX.Element {
     // TODO: calculate
-    const maxButtonWidth = 300;
-    const maxButtonHeight = 300;
+    const maxButtonSize = new Size2D(300, 300);
   
     return (
       <div>
@@ -146,7 +146,7 @@ export class FlashCardSideAnswerSelect extends React.Component<FlashCardSideAnsw
               className={((fcs === this.props.lastCorrectAnswer) && !isIncorrectAnswer) ? "background-green-to-initial" : ""}
               style={{ textTransform: "none" }}
             >
-              {callFlashCardSideRenderFn(maxButtonWidth, maxButtonHeight, fcs)}
+              {callFlashCardSideRenderFn(maxButtonSize, fcs)}
             </Button>
           );
         })}
