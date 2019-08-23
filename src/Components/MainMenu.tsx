@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Router, Route, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import App from './App';
 
 import * as IntervalNamesToHalfSteps from "./Quizzes/Intervals/IntervalNamesToHalfSteps";
@@ -43,20 +43,7 @@ import * as GuitarIntervals from "./Quizzes/Intervals/GuitarIntervals";
 import * as SheetMusicChordRecognition from "./Quizzes/Sheet Music/SheetMusicChordRecognition";
 import * as ChordEarTraining from "./Quizzes/Chords/ChordEarTraining";
 import * as ScaleEarTraining from "./Quizzes/Scales/ScaleEarTraining";
-import { GuitarNotesLesson } from "./Lessons/GuitarNotesLesson";
-import { GuitarScalesLesson } from "./Lessons/GuitarScalesLesson";
-import { ScaleViewer } from "./Tools/ScaleViewer";
-import { ChordViewer } from "./Tools/ChordViewer";
-import { IntervalChordScaleFinder } from "./Tools/IntervalChordScaleFinder";
 import { RhythmTapper } from "./Tools/RhythmTapper";
-import { FlashCardSet } from "../FlashCardSet";
-import { createStudyFlashCardSetComponent } from "./StudyFlashCards";
-import { AboutPage } from "./AboutPage";
-import { SupportUsPage } from "./SupportUs";
-import DocumentTitle from "react-document-title";
-import { HomePage } from "./HomePage";
-import ScrollToTop from './Utils/ScrollToTop';
-import { MAX_MAIN_CARD_WIDTH } from './Style';
 
 const NavSectionTitle: React.FunctionComponent<{ style?: any }> = props => <p style={Object.assign({ fontSize: "1.2em", fontWeight: "bold", textDecoration: "underline" }, props.style)}>{props.children}</p>;
 const NavSectionSubTitle: React.FunctionComponent<{ style?: any }> = props => <p style={Object.assign({ textDecoration: "underline" }, props.style)}>{props.children}</p>;
@@ -94,6 +81,7 @@ export const MainMenu : React.FunctionComponent<{}> = props => (
           <NavLink to="/chord-viewer" onClick={event => App.instance.onNavLinkClick()} className="menu-link">Chord Viewer</NavLink>
           <NavLink to="/diatonic-chord-player" onClick={event => App.instance.onNavLinkClick()} className="menu-link">Diatonic Chord Player</NavLink>
           <NavLink to="/metronome" onClick={event => App.instance.onNavLinkClick()} className="menu-link">Metronome</NavLink>
+          <NavLink to="/tuner" onClick={event => App.instance.onNavLinkClick()} className="menu-link">Tuner</NavLink>
           {App.instance.renderFlashCardSetLink(RandomChordGenerator.createFlashCardSet())}
         </MenuCategory>
         <MenuCategory title="Note Exercises">

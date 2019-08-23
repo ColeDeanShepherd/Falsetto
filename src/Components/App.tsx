@@ -66,6 +66,7 @@ import { GuitarScalesLesson } from "./Lessons/GuitarScalesLesson";
 import { ScaleViewer } from "./Tools/ScaleViewer";
 import { ChordViewer } from "./Tools/ChordViewer";
 import { IntervalChordScaleFinder } from "./Tools/IntervalChordScaleFinder";
+import { Tuner } from "./Tools/Tuner";
 import { RhythmTapper } from "./Tools/RhythmTapper";
 import { FlashCardSet } from "../FlashCardSet";
 import { createStudyFlashCardSetComponent } from "./StudyFlashCards";
@@ -242,6 +243,7 @@ class App extends React.Component<IAppProps, IAppState> {
       <Route key="/metronome" exact path="/metronome" component={() => <DocumentTitle title={"Metronome - Falsetto"}><Metronome /></DocumentTitle>} />,
       <Route key="/diatonic-chord-player" exact path="/diatonic-chord-player" component={() => <DocumentTitle title={"Diatonic Chord Player - Falsetto"}><DiatonicChordPlayer /></DocumentTitle>} />,
       <Route key="/interval-chord-scale-finder" exact path="/interval-chord-scale-finder" component={() => <DocumentTitle title={"Interval/Chord/Scale Finder - Falsetto"}><IntervalChordScaleFinder /></DocumentTitle>} />,
+      <Route key="/tuner" exact path="/tuner" component={() => <DocumentTitle title={"Tuner - Falsetto"}><Tuner /></DocumentTitle>} />,
       <Route key="/rhythm-tapper" exact path="/rhythm-tapper" component={() => <DocumentTitle title={"Rhythm Tapper - Falsetto"}><RhythmTapper /></DocumentTitle>} />,
       <Route key="/learn-guitar-notes-in-10-steps" exact path="/learn-guitar-notes-in-10-steps" component={() => <DocumentTitle title={"Learn the Guitar Notes in 10 Easy Steps - Falsetto"}><GuitarNotesLesson /></DocumentTitle>} />,
       <Route key="/learn-guitar-scales" exact path="/learn-guitar-scales" component={() => <DocumentTitle title={"Learn the Guitar Scales - Falsetto"}><GuitarScalesLesson /></DocumentTitle>} />
