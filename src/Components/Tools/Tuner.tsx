@@ -2,43 +2,27 @@ import * as React from "react";
 import { Card, CardContent, Typography } from "@material-ui/core";
 
 import * as Utils from "../../Utils";
-import { Size2D } from "../../Size2D";
-import { Vector2D } from "../../Vector2D";
-import { Rect2D } from "../../Rect2D";
-
-export function getRMS(spectrum: Uint8Array) {
-  let rms = 0;
-  for (let i = 0; i < spectrum.length; i++) {
-    rms += spectrum[i] * spectrum[i];
-  }
-  rms = Math.sqrt(rms / spectrum.length);
-  return rms;
-}
+import { Pitch } from '../../Pitch';
+import { detectPitch } from '../PitchDetection';
 
 export class Microphone {
+  public mediaStream: MediaStream | null = null;
   public audioContext: AudioContext;
-  public fftSize = 1024;
-  public spectrum: Uint8Array | null = null;
-  public volume = 0;
-  public peakVolume = 0;
+  public analyzer: AnalyserNode | null = null;
 
-  public constructor() {
-    // polyfill
-    const windowAny = window as any;
-    windowAny.AudioContext = windowAny.AudioContext || windowAny.webkitAudioContext;
-
-    const navigatorAny = navigator as any;
-    navigatorAny.getUserMedia = navigatorAny.getUserMedia || navigatorAny.webkitGetUserMedia;
-
+  public constructor(public fftSize: number) {
     this.audioContext = new AudioContext();
   }
 
-  public startRecording(onAudioProcess?: (microphone: Microphone) => void) {
+  public startRecording(onAudioProcess?: () => void) {
     this.onAudioProcess = onAudioProcess;
 
     try {
-      navigator.mediaDevices.getUserMedia({ audio: true })
-        .then(this.connectAnalyzer.bind(this))
+      navigator.mediaDevices.getUserMedia({ audio: { noiseSuppression: true } })
+        .then(mediaStream => {
+          this.mediaStream = mediaStream;
+          this.connectAnalyzer();
+        })
         .catch(error => {
           console.error(error);
           alert(`Failed initializing microphone! Error: ${error}`);
@@ -48,10 +32,20 @@ export class Microphone {
       alert("Microphone input is not supported in this browser!");
     }
   }
+  public stopRecording() {
+    if (!this.mediaStream) { return; }
 
-  private onAudioProcess: ((microphone: Microphone) => void) | undefined = undefined;
+    const audioTracks = this.mediaStream.getAudioTracks();
+    for (const audioTrack of audioTracks) {
+      audioTrack.stop();
+    }
+  }
 
-  private connectAnalyzer(mediaStream: MediaStream) {
+  private onAudioProcess: (() => void) | undefined = undefined;
+
+  private connectAnalyzer() {
+    Utils.precondition(this.mediaStream !== null);
+
     const analyzer = this.audioContext.createAnalyser();
     analyzer.smoothingTimeConstant = 0.2;
     analyzer.fftSize = this.fftSize;
@@ -60,97 +54,70 @@ export class Microphone {
       2 * this.fftSize, 1, 1
     );
     processor.onaudioprocess = () => {
-      this.spectrum = new Uint8Array(analyzer.frequencyBinCount);
-      analyzer.getByteFrequencyData(this.spectrum);
-      
-      this.volume = getRMS(this.spectrum);
-      this.peakVolume = Math.max(this.volume, this.peakVolume);
-
       if (this.onAudioProcess) {
-        this.onAudioProcess(this);
+        this.onAudioProcess();
       }
     };
 
-    const streamSource = this.audioContext.createMediaStreamSource(mediaStream);
+    const streamSource = this.audioContext.createMediaStreamSource(
+      Utils.unwrapMaybe(this.mediaStream)
+    );
     streamSource.connect(analyzer);
     analyzer.connect(processor);
     processor.connect(this.audioContext.destination);
+
+    this.analyzer = analyzer;
   }
 }
 
-export interface IAudioSpectrumProps {
-  spectrum: Uint8Array;
-  rect: Rect2D;
-  style?: any;
-}
-export class AudioSpectrum extends React.Component<IAudioSpectrumProps, {}> {
-  public render(): JSX.Element {
-    const { spectrum, style } = this.props;
-    const svgRect = this.props.rect;
 
-    const numBars = spectrum.length;
-    const barMarginX = 1;
-    const totalMarginX = barMarginX * (numBars - 1);
-    const barWidth = (svgRect.size.width - totalMarginX) / numBars
-    const maxValue = Utils.uint8ArrayMax(spectrum);
-
-    const bars = Utils.uint8ArrayMap(
-      spectrum,
-      (v, i) => {
-        const barHeight = svgRect.size.height * (v / maxValue);
-        const rect = new Rect2D(
-          new Size2D(barWidth, barHeight),
-          new Vector2D(i * (barWidth + barMarginX), svgRect.size.height - barHeight)
-        );
-        
-        return (
-          <rect
-            key={i}
-            x={rect.position.x} y={rect.position.y}
-            width={rect.size.width} height={rect.size.height}
-            fill="black"
-          />
-        );
-      });
-
-    return (
-      <svg
-        width={svgRect.size.width} height={svgRect.size.height}
-        x={svgRect.position.x} y={svgRect.position.y}
-        viewBox={`0 0 ${svgRect.size.width} ${svgRect.size.height}`}
-        version="1.1" xmlns="http://www.w3.org/2000/svg"
-        style={style}
-      >
-        {bars}
-      </svg>
-    );
-  }
-}
+const fftSize = 2048;
 
 export interface ITunerProps {}
-export interface ITunerState {}
+export interface ITunerState {
+  detectedPitch: Pitch | null;
+  detectedPitchDetuneCents: number | null;
+}
 export class Tuner extends React.Component<ITunerProps, ITunerState> {
   public constructor(props: ITunerProps) {
     super(props);
 
     this.state = {
-      pressedPitches: []
+      detectedPitch: null,
+      detectedPitchDetuneCents: null
     };
   }
 
   public componentDidMount() {
-    this.microphone = new Microphone();
-    this.microphone.startRecording(mic => this.forceUpdate());
+    this.microphone = new Microphone(fftSize);
+    this.microphone.startRecording(() => {
+      if (!this.microphone || !this.microphone.analyzer) { return; }
+
+      const detectedPitch = detectPitch(
+        this.microphone.audioContext,
+        this.microphone.analyzer,
+        this.sampleBuffer
+      );
+      if (detectedPitch) {
+        this.setState({
+          detectedPitch: Pitch.createFromMidiNumber(detectedPitch.midiNumber),
+          detectedPitchDetuneCents: detectedPitch.detuneCents
+        });
+      } else {
+        this.setState({
+          detectedPitch: null,
+          detectedPitchDetuneCents: null
+        });
+      }
+    });
   }
   public componentWillUnmount() {
+    if (this.microphone) {
+      this.microphone.stopRecording();
+    }
   }
 
   public render(): JSX.Element {
-    const audioSpectrumRect = new Rect2D(
-      new Size2D(1024, 100),
-      new Vector2D(0, 0)
-    );
-
     return (
       <Card>
         <CardContent>
@@ -159,13 +126,16 @@ export class Tuner extends React.Component<ITunerProps, ITunerState> {
               Tuner
             </Typography>
           </div>
-        
+
           <div>
-            {(this.microphone && this.microphone.spectrum) ? (
-              <AudioSpectrum
-                spectrum={this.microphone.spectrum}
-                rect={audioSpectrumRect}
-              />
+            {this.state.detectedPitch ? (
+              <div>{this.state.detectedPitch.toOneAccidentalAmbiguousString(true, true)}</div>
+            ) : null}
+            {this.state.detectedPitchDetuneCents ? (
+              <div>
+                {(this.state.detectedPitchDetuneCents > 0) ? "+" : ""}
+                {this.state.detectedPitchDetuneCents} cents
+              </div>
             ) : null}
           </div>
         </CardContent>
@@ -174,4 +144,5 @@ export class Tuner extends React.Component<ITunerProps, ITunerState> {
   }
 
   private microphone: Microphone | null = null;
+  private sampleBuffer = new Float32Array(fftSize);
 }

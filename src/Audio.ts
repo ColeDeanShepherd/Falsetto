@@ -1,5 +1,12 @@
 import { Howl } from "howler";
 
+// polyfill
+const windowAny = window as any;
+windowAny.AudioContext = windowAny.AudioContext || windowAny.webkitAudioContext;
+
+const navigatorAny = navigator as any;
+navigatorAny.getUserMedia = navigatorAny.getUserMedia || navigatorAny.webkitGetUserMedia;
+
 export function loadSoundAsync(soundFilePath: string): Promise<Howl> {
   return new Promise<Howl>((resolve, reject) => {
     new Howl({
@@ -158,4 +165,13 @@ export function playSoundsSequentially(sounds: Array<Howl>, delayInMs: number, c
   
   const cancelFn = () => isCancelled = true;
   return cancelFn;
+}
+
+export function getRMS(spectrum: Uint8Array) {
+  let rms = 0;
+  for (let i = 0; i < spectrum.length; i++) {
+    rms += spectrum[i] * spectrum[i];
+  }
+  rms = Math.sqrt(rms / spectrum.length);
+  return rms;
 }

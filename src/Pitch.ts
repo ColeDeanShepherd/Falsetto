@@ -100,7 +100,7 @@ export class Pitch {
       case 11:
         return new Pitch(PitchLetter.B, 0, octaveNumber);
       default:
-        throw new Error("Invalid positivePitchOffsetFromC.");
+        throw new Error(`Invalid positivePitchOffsetFromC: ${positivePitchOffsetFromC}`);
     }
   }
   public static createFromLineOrSpaceOnStaffNumber(lineOrSpaceOnStaffNumber: number, signedAccidental: number): Pitch {
