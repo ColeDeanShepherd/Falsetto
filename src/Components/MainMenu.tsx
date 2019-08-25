@@ -37,6 +37,7 @@ import * as IntervalNotes from "./Quizzes/Intervals/IntervalNotes";
 import * as IntervalEarTraining from "./Quizzes/Intervals/IntervalEarTraining";
 import * as Interval2ndNoteEarTraining from "./Quizzes/Intervals/Interval2ndNoteEarTraining";
 import * as Interval2ndNoteEarTrainingPiano from "./Quizzes/Intervals/Interval2ndNoteEarTrainingPiano";
+import * as IntervalSinging from "./Quizzes/Intervals/IntervalSinging";
 import * as SheetMusicIntervalRecognition from "./Quizzes/Sheet Music/SheetMusicIntervalRecognition";
 import * as PianoIntervals from "./Quizzes/Intervals/PianoIntervals";
 import * as GuitarIntervals from "./Quizzes/Intervals/GuitarIntervals";
@@ -106,6 +107,7 @@ export const MainMenu : React.FunctionComponent<{}> = props => (
           {App.instance.renderFlashCardSetLink(IntervalEarTraining.createFlashCardSet())}
           {App.instance.renderFlashCardSetLink(Interval2ndNoteEarTraining.createFlashCardSet())}
           {App.instance.renderFlashCardSetLink(Interval2ndNoteEarTrainingPiano.createFlashCardSet())}
+          {App.instance.renderFlashCardSetLink(IntervalSinging.createFlashCardSet())}
         </MenuCategory>
       </div>
       <div className="column">

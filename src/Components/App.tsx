@@ -55,6 +55,7 @@ import * as IntervalNotes from "./Quizzes/Intervals/IntervalNotes";
 import * as IntervalEarTraining from "./Quizzes/Intervals/IntervalEarTraining";
 import * as Interval2ndNoteEarTraining from "./Quizzes/Intervals/Interval2ndNoteEarTraining";
 import * as Interval2ndNoteEarTrainingPiano from "./Quizzes/Intervals/Interval2ndNoteEarTrainingPiano";
+import * as IntervalSinging from "./Quizzes/Intervals/IntervalSinging";
 import * as SheetMusicIntervalRecognition from "./Quizzes/Sheet Music/SheetMusicIntervalRecognition";
 import * as PianoIntervals from "./Quizzes/Intervals/PianoIntervals";
 import * as GuitarIntervals from "./Quizzes/Intervals/GuitarIntervals";
@@ -153,7 +154,8 @@ class App extends React.Component<IAppProps, IAppState> {
           GuitarIntervals.createFlashCardSet(),
           IntervalEarTraining.createFlashCardSet(),
           Interval2ndNoteEarTraining.createFlashCardSet(),
-          Interval2ndNoteEarTrainingPiano.createFlashCardSet()
+          Interval2ndNoteEarTrainingPiano.createFlashCardSet(),
+          IntervalSinging.createFlashCardSet()
         ]
       },
       {
