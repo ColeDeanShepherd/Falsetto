@@ -82,11 +82,10 @@ export class Tuner extends React.Component<ITunerProps, ITunerState> {
           analyzer.smoothingTimeConstant = 0.2;
         },
         analyzer => {
-          const microphone = Utils.unwrapMaybe(this.microphone);
-          const audioContext = Utils.unwrapMaybe(microphone.audioContext);
+          if (!this.microphone || !this.microphone.audioContext) { return; }
 
           const detectedPitch = detectPitch(
-            audioContext,
+            this.microphone.audioContext,
             analyzer,
             this.sampleBuffer
           );
@@ -124,7 +123,7 @@ export class Tuner extends React.Component<ITunerProps, ITunerState> {
           <div>
             {this.state.detectedPitch ? (
               <div style={{ fontSize: "2em" }}>{this.state.detectedPitch.toOneAccidentalAmbiguousString(true, true)}</div>
-            ) : null}
+            ) : <div style={{ fontSize: "2em" }}>No pitch detected</div>}
             {this.state.detectedPitchDetuneCents ? (
               <div>
                 <div>
