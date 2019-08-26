@@ -227,32 +227,40 @@ class App extends React.Component<IAppProps, IAppState> {
       this.unregisterHistoryListener();
     }
   }
+
+  private cachedRenderedRoutes: Array<JSX.Element> | null = null;
+  
   public renderRoutes(): Array<JSX.Element> {
-    return [
-      <Route key="/" exact path="/" component={() => <DocumentTitle title="Falsetto"><HomePage /></DocumentTitle>} />,
-      <Route key="/about" exact path="/about" component={() => <DocumentTitle title="About - Falsetto"><AboutPage /></DocumentTitle>} />,
-      <Route key="/support-us" exact path="/support-us" component={() => <DocumentTitle title="Support Us - Falsetto"><SupportUsPage /></DocumentTitle>} />,
-      <Route key="/essential-music-theory" exact path="/essential-music-theory" component={() => <DocumentTitle title="Essential Music Theory - Falsetto"><SectionContainer section={IntroSection}></SectionContainer></DocumentTitle>} />,
-      <Route key="/essential-music-theory/rhythm" exact path="/essential-music-theory/rhythm" component={() => <DocumentTitle title="Rhythm - Essential Music Theory - Falsetto"><SectionContainer section={RhythmSection}></SectionContainer></DocumentTitle>} />,
-      <Route key="/essential-music-theory/notes" exact path="/essential-music-theory/notes" component={() => <DocumentTitle title="Notes - Essential Music Theory - Falsetto"><SectionContainer section={NotesSection}></SectionContainer></DocumentTitle>} />,
-      <Route key="/essential-music-theory/intervals" exact path="/essential-music-theory/intervals" component={() => <DocumentTitle title="Intervals - Essential Music Theory - Falsetto"><SectionContainer section={IntervalsSection}></SectionContainer></DocumentTitle>} />,
-      <Route key="/essential-music-theory/scales-and-modes" exact path="/essential-music-theory/scales-and-modes" component={() => <DocumentTitle title="Scales And Modes - Essential Music Theory - Falsetto"><SectionContainer section={ScalesAndModesSection}></SectionContainer></DocumentTitle>} />,
-      <Route key="/essential-music-theory/chords" exact path="/essential-music-theory/chords" component={() => <DocumentTitle title="Chords - Essential Music Theory - Falsetto"><SectionContainer section={ChordsSection}></SectionContainer></DocumentTitle>} />,
-      <Route key="/essential-music-theory/chord-progressions" exact path="/essential-music-theory/chord-progressions" component={() => <DocumentTitle title="Chord Progressions - Essential Music Theory - Falsetto"><SectionContainer section={ChordProgressionsSection}></SectionContainer></DocumentTitle>} />,
-      <Route key="/essential-music-theory/next-steps" exact path="/essential-music-theory/next-steps" component={() => <DocumentTitle title="Next Steps - Essential Music Theory - Falsetto"><SectionContainer section={NextStepsSection}></SectionContainer></DocumentTitle>} />,
-      <Route key="/scale-viewer" exact path="/scale-viewer" component={() => <DocumentTitle title={"Scale Viewer - Falsetto"}><ScaleViewer renderAllScaleShapes={false} /></DocumentTitle>} />,
-      <Route key="/chord-viewer" exact path="/chord-viewer" component={() => <DocumentTitle title={"Chord Viewer - Falsetto"}><ChordViewer /></DocumentTitle>} />,
-      <Route key="/metronome" exact path="/metronome" component={() => <DocumentTitle title={"Metronome - Falsetto"}><Metronome /></DocumentTitle>} />,
-      <Route key="/diatonic-chord-player" exact path="/diatonic-chord-player" component={() => <DocumentTitle title={"Diatonic Chord Player - Falsetto"}><DiatonicChordPlayer /></DocumentTitle>} />,
-      <Route key="/interval-chord-scale-finder" exact path="/interval-chord-scale-finder" component={() => <DocumentTitle title={"Interval/Chord/Scale Finder - Falsetto"}><IntervalChordScaleFinder /></DocumentTitle>} />,
-      <Route key="/tuner" exact path="/tuner" component={() => <DocumentTitle title={"Tuner - Falsetto"}><Tuner /></DocumentTitle>} />,
-      <Route key="/rhythm-tapper" exact path="/rhythm-tapper" component={() => <DocumentTitle title={"Rhythm Tapper - Falsetto"}><RhythmTapper /></DocumentTitle>} />,
-      <Route key="/learn-guitar-notes-in-10-steps" exact path="/learn-guitar-notes-in-10-steps" component={() => <DocumentTitle title={"Learn the Guitar Notes in 10 Easy Steps - Falsetto"}><GuitarNotesLesson /></DocumentTitle>} />,
-      <Route key="/learn-guitar-scales" exact path="/learn-guitar-scales" component={() => <DocumentTitle title={"Learn the Guitar Scales - Falsetto"}><GuitarScalesLesson /></DocumentTitle>} />
-    ].concat(
-      this.flashCardSets.map(fcg => <Route key={fcg.route} exact path={fcg.route} component={this.createStudyFlashCardSetComponent(fcg)} />)
-    );
+    if (!this.cachedRenderedRoutes) {
+      this.cachedRenderedRoutes = [
+        <Route key="/" exact path="/" component={() => <DocumentTitle title="Falsetto"><HomePage /></DocumentTitle>} />,
+        <Route key="/about" exact path="/about" component={() => <DocumentTitle title="About - Falsetto"><AboutPage /></DocumentTitle>} />,
+        <Route key="/support-us" exact path="/support-us" component={() => <DocumentTitle title="Support Us - Falsetto"><SupportUsPage /></DocumentTitle>} />,
+        <Route key="/essential-music-theory" exact path="/essential-music-theory" component={() => <DocumentTitle title="Essential Music Theory - Falsetto"><SectionContainer section={IntroSection}></SectionContainer></DocumentTitle>} />,
+        <Route key="/essential-music-theory/rhythm" exact path="/essential-music-theory/rhythm" component={() => <DocumentTitle title="Rhythm - Essential Music Theory - Falsetto"><SectionContainer section={RhythmSection}></SectionContainer></DocumentTitle>} />,
+        <Route key="/essential-music-theory/notes" exact path="/essential-music-theory/notes" component={() => <DocumentTitle title="Notes - Essential Music Theory - Falsetto"><SectionContainer section={NotesSection}></SectionContainer></DocumentTitle>} />,
+        <Route key="/essential-music-theory/intervals" exact path="/essential-music-theory/intervals" component={() => <DocumentTitle title="Intervals - Essential Music Theory - Falsetto"><SectionContainer section={IntervalsSection}></SectionContainer></DocumentTitle>} />,
+        <Route key="/essential-music-theory/scales-and-modes" exact path="/essential-music-theory/scales-and-modes" component={() => <DocumentTitle title="Scales And Modes - Essential Music Theory - Falsetto"><SectionContainer section={ScalesAndModesSection}></SectionContainer></DocumentTitle>} />,
+        <Route key="/essential-music-theory/chords" exact path="/essential-music-theory/chords" component={() => <DocumentTitle title="Chords - Essential Music Theory - Falsetto"><SectionContainer section={ChordsSection}></SectionContainer></DocumentTitle>} />,
+        <Route key="/essential-music-theory/chord-progressions" exact path="/essential-music-theory/chord-progressions" component={() => <DocumentTitle title="Chord Progressions - Essential Music Theory - Falsetto"><SectionContainer section={ChordProgressionsSection}></SectionContainer></DocumentTitle>} />,
+        <Route key="/essential-music-theory/next-steps" exact path="/essential-music-theory/next-steps" component={() => <DocumentTitle title="Next Steps - Essential Music Theory - Falsetto"><SectionContainer section={NextStepsSection}></SectionContainer></DocumentTitle>} />,
+        <Route key="/scale-viewer" exact path="/scale-viewer" component={() => <DocumentTitle title={"Scale Viewer - Falsetto"}><ScaleViewer renderAllScaleShapes={false} /></DocumentTitle>} />,
+        <Route key="/chord-viewer" exact path="/chord-viewer" component={() => <DocumentTitle title={"Chord Viewer - Falsetto"}><ChordViewer /></DocumentTitle>} />,
+        <Route key="/metronome" exact path="/metronome" component={() => <DocumentTitle title={"Metronome - Falsetto"}><Metronome /></DocumentTitle>} />,
+        <Route key="/diatonic-chord-player" exact path="/diatonic-chord-player" component={() => <DocumentTitle title={"Diatonic Chord Player - Falsetto"}><DiatonicChordPlayer /></DocumentTitle>} />,
+        <Route key="/interval-chord-scale-finder" exact path="/interval-chord-scale-finder" component={() => <DocumentTitle title={"Interval/Chord/Scale Finder - Falsetto"}><IntervalChordScaleFinder /></DocumentTitle>} />,
+        <Route key="/tuner" exact path="/tuner" component={() => <DocumentTitle title={"Tuner - Falsetto"}><Tuner /></DocumentTitle>} />,
+        <Route key="/rhythm-tapper" exact path="/rhythm-tapper" component={() => <DocumentTitle title={"Rhythm Tapper - Falsetto"}><RhythmTapper /></DocumentTitle>} />,
+        <Route key="/learn-guitar-notes-in-10-steps" exact path="/learn-guitar-notes-in-10-steps" component={() => <DocumentTitle title={"Learn the Guitar Notes in 10 Easy Steps - Falsetto"}><GuitarNotesLesson /></DocumentTitle>} />,
+        <Route key="/learn-guitar-scales" exact path="/learn-guitar-scales" component={() => <DocumentTitle title={"Learn the Guitar Scales - Falsetto"}><GuitarScalesLesson /></DocumentTitle>} />
+      ].concat(
+        this.flashCardSets.map(fcg => <Route key={fcg.route} exact path={fcg.route} component={this.createStudyFlashCardSetComponent(fcg)} />)
+      );
+    }
+
+    return this.cachedRenderedRoutes;
   }
+
   public render(): JSX.Element {
     //const renderFlashCardSetLink = this.renderFlashCardSetLink.bind(this);
 

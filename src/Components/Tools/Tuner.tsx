@@ -1,9 +1,7 @@
 import * as React from "react";
 import { Card, CardContent, Typography } from "@material-ui/core";
 
-import * as Utils from "../../Utils";
-import { Pitch } from '../../Pitch';
-import { detectPitch } from '../PitchDetection';
+import { detectPitch, DetectedPitch } from '../PitchDetection';
 import { Size2D } from '../../Size2D';
 import { Microphone } from '../../Microphone';
 
@@ -56,18 +54,21 @@ export class TunerCentsIndicator
 
 const fftSize = 2048;
 
-export interface ITunerProps {}
+export interface ITunerProps {
+  isStandalone?: boolean;
+  showOctaveNumbers?: boolean;
+  alwaysShowLastPitch?: boolean;
+  onPitchChange?: (detectedPitch: DetectedPitch | null) => void;
+}
 export interface ITunerState {
-  detectedPitch: Pitch | null;
-  detectedPitchDetuneCents: number | null;
+  detectedPitch: DetectedPitch | null;
 }
 export class Tuner extends React.Component<ITunerProps, ITunerState> {
   public constructor(props: ITunerProps) {
     super(props);
 
     this.state = {
-      detectedPitch: null,
-      detectedPitchDetuneCents: null
+      detectedPitch: null
     };
   }
 
@@ -89,16 +90,14 @@ export class Tuner extends React.Component<ITunerProps, ITunerState> {
             analyzer,
             this.sampleBuffer
           );
-          if (detectedPitch) {
+          if (detectedPitch || !this.props.alwaysShowLastPitch) {
             this.setState({
-              detectedPitch: Pitch.createFromMidiNumber(detectedPitch.midiNumber),
-              detectedPitchDetuneCents: detectedPitch.detuneCents
+              detectedPitch: detectedPitch
             });
-          } else {
-            this.setState({
-              detectedPitch: null,
-              detectedPitchDetuneCents: null
-            });
+            
+            if (this.props.onPitchChange) {
+              this.props.onPitchChange(detectedPitch);
+            }
           }
         }
       );
@@ -111,34 +110,43 @@ export class Tuner extends React.Component<ITunerProps, ITunerState> {
   }
 
   public render(): JSX.Element {
-    return (
+    const isStandalone = (this.props.isStandalone !== undefined) ? this.props.isStandalone : true;
+    const showOctaveNumbers = (this.props.showOctaveNumbers !== undefined) ? this.props.showOctaveNumbers : true;
+
+    const contents = (
+      <div>
+        {this.state.detectedPitch ? (
+          <div>
+            <div style={{ fontSize: "2em" }}>{this.state.detectedPitch.pitch.toOneAccidentalAmbiguousString(showOctaveNumbers, true)}</div>
+            <div>
+              <TunerCentsIndicator detuneCents={this.state.detectedPitch.detuneCents} />
+            </div>
+            <div>
+              {(this.state.detectedPitch.detuneCents > 0) ? "+" : ""}
+              {this.state.detectedPitch.detuneCents} cents
+            </div>
+          </div>
+        ) : (
+          <div style={{ fontSize: "2em" }}>No pitch detected</div>
+        )}
+      </div>
+    );
+
+    return isStandalone ? (
       <Card style={{ maxWidth: "420px", margin: "0 auto", textAlign: "center" }}>
         <CardContent>
-          <div style={{display: "flex"}}>
-            <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
-              Tuner
-            </Typography>
-          </div>
+          {isStandalone ? (
+            <div style={{display: "flex"}}>
+              <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
+                Tuner
+              </Typography>
+            </div>
+          ) : null}
 
-          <div>
-            {this.state.detectedPitch ? (
-              <div style={{ fontSize: "2em" }}>{this.state.detectedPitch.toOneAccidentalAmbiguousString(true, true)}</div>
-            ) : <div style={{ fontSize: "2em" }}>No pitch detected</div>}
-            {this.state.detectedPitchDetuneCents ? (
-              <div>
-                <div>
-                  <TunerCentsIndicator detuneCents={this.state.detectedPitchDetuneCents} />
-                </div>
-                <div>
-                  {(this.state.detectedPitchDetuneCents > 0) ? "+" : ""}
-                  {this.state.detectedPitchDetuneCents} cents
-                </div>
-              </div>
-            ) : null}
-          </div>
+          {contents}
         </CardContent>
       </Card>
-    );
+    ) : contents;
   }
 
   private microphone: Microphone | null = null;

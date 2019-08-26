@@ -1,6 +1,7 @@
 // Based on https://github.com/dalatant/PitchDetect
 
 import * as Utils from "../Utils";
+import { Pitch } from '../Pitch';
 
 export const concertAHz = 440;
 export const concertAMidiNumber = 69;
@@ -68,7 +69,7 @@ function autoCorrelate(buf: Float32Array, sampleRate: number): number {
 
 export class DetectedPitch {
   public constructor(
-    public midiNumber: number,
+    public pitch: Pitch,
     public detuneCents: number
   ) {}
 }
@@ -84,11 +85,10 @@ export function detectPitch(
 
   if (isConfident) {
     const pitch = ac;
-    const note =  noteFromPitch(pitch);
-    const detune = centsOffFromPitch(pitch, note);
+    const midiNumber = noteFromPitch(pitch);
+    const detuneCents = centsOffFromPitch(pitch, midiNumber);
 
-    return new DetectedPitch(note, detune);
-    // const noteString = noteStrings[note%12];
+    return new DetectedPitch(Pitch.createFromMidiNumber(midiNumber), detuneCents);
   } else {
     return null;
   }
