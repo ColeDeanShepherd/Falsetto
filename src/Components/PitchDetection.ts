@@ -1,10 +1,31 @@
-// Based on https://github.com/dalatant/PitchDetect
-
 import * as Utils from "../Utils";
 import { Pitch } from '../Pitch';
 
 export const concertAHz = 440;
 export const concertAMidiNumber = 69;
+
+export interface IPitchDetector {
+	detectPitch(sampleBuffer: Float32Array, sampleRate: number): DetectedPitch | null;
+}
+
+// Based on https://github.com/dalatant/PitchDetect
+export class DatalantPitchDetector implements IPitchDetector {
+	public detectPitch(sampleBuffer: Float32Array, sampleRate: number): DetectedPitch | null {
+		const ac = autoCorrelate(sampleBuffer, sampleRate);
+		
+		const isConfident = !isNaN(ac) && (ac !== -1);
+	
+		if (isConfident) {
+			const pitch = ac;
+			const midiNumber = noteFromPitch(pitch);
+			const detuneCents = centsOffFromPitch(pitch, midiNumber);
+	
+			return new DetectedPitch(Pitch.createFromMidiNumber(midiNumber), detuneCents);
+		} else {
+			return null;
+		}
+	}
+}
 
 const noteStrings = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
@@ -72,24 +93,4 @@ export class DetectedPitch {
     public pitch: Pitch,
     public detuneCents: number
   ) {}
-}
-export function detectPitch(
-  audioContext: AudioContext, analyser: AnalyserNode, sampleBuffer: Float32Array
-): DetectedPitch | null {
-  Utils.precondition(sampleBuffer.length === analyser.fftSize);
-
-	analyser.getFloatTimeDomainData(sampleBuffer);
-  const ac = autoCorrelate(sampleBuffer, audioContext.sampleRate);
-  
-  const isConfident = !isNaN(ac) && (ac !== -1);
-
-  if (isConfident) {
-    const pitch = ac;
-    const midiNumber = noteFromPitch(pitch);
-    const detuneCents = centsOffFromPitch(pitch, midiNumber);
-
-    return new DetectedPitch(Pitch.createFromMidiNumber(midiNumber), detuneCents);
-  } else {
-    return null;
-  }
 }

@@ -1,17 +1,14 @@
 import * as React from "react";
 import { Card, CardContent, Typography } from "@material-ui/core";
 
-import { detectPitch, DetectedPitch } from '../PitchDetection';
+import { DetectedPitch, IPitchDetector, DatalantPitchDetector } from '../PitchDetection';
 import { Size2D } from '../../Size2D';
 import { Microphone } from '../../Microphone';
 
 export interface ITunerCentsIndicatorProps {
   detuneCents: number;
 }
-export interface ITunerCentsIndicatorState {}
-
-export class TunerCentsIndicator
-  extends React.Component<ITunerCentsIndicatorProps, ITunerCentsIndicatorState>
+export class TunerCentsIndicator extends React.Component<ITunerCentsIndicatorProps, {}>
 {
   public render(): JSX.Element {
     // svg horizontal scale
@@ -52,9 +49,41 @@ export class TunerCentsIndicator
   }
 }
 
+export interface IDetectedPitchIndicatorProps {
+  detectedPitch: DetectedPitch | null;
+  showOctaveNumbers: boolean;
+}
+export class DetectedPitchIndicator extends React.Component<IDetectedPitchIndicatorProps, {}> {
+  public render(): JSX.Element {
+    const { detectedPitch, showOctaveNumbers } = this.props;
+
+    return (
+      <div>
+        {detectedPitch ? (
+          <div>
+            <div style={{ fontSize: "2em" }}>
+              {detectedPitch.pitch.toOneAccidentalAmbiguousString(showOctaveNumbers, true)}
+            </div>
+            <div>
+              <TunerCentsIndicator detuneCents={detectedPitch.detuneCents} />
+            </div>
+            <div>
+              {(detectedPitch.detuneCents > 0) ? "+" : ""}
+              {detectedPitch.detuneCents} cents
+            </div>
+          </div>
+        ) : (
+          <div style={{ fontSize: "2em" }}>No pitch detected</div>
+        )}
+      </div>
+    );
+  }
+}
+
 const fftSize = 2048;
 
 export interface ITunerProps {
+  pitchDetector?: IPitchDetector;
   isStandalone?: boolean;
   showOctaveNumbers?: boolean;
   alwaysShowLastPitch?: boolean;
@@ -73,6 +102,10 @@ export class Tuner extends React.Component<ITunerProps, ITunerState> {
   }
 
   public componentDidMount() {
+    const pitchDetector = (this.props.pitchDetector !== undefined)
+      ? this.props.pitchDetector
+      : new DatalantPitchDetector();
+
     this.microphone = new Microphone();
     this.microphone.startRecording(() => {
       if (!this.microphone) { return; }
@@ -85,10 +118,11 @@ export class Tuner extends React.Component<ITunerProps, ITunerState> {
         analyzer => {
           if (!this.microphone || !this.microphone.audioContext) { return; }
 
-          const detectedPitch = detectPitch(
-            this.microphone.audioContext,
-            analyzer,
-            this.sampleBuffer
+          analyzer.getFloatTimeDomainData(this.sampleBuffer);
+
+          const detectedPitch = pitchDetector.detectPitch(
+            this.sampleBuffer,
+            this.microphone.audioContext.sampleRate
           );
           if (detectedPitch || !this.props.alwaysShowLastPitch) {
             this.setState({
@@ -114,22 +148,10 @@ export class Tuner extends React.Component<ITunerProps, ITunerState> {
     const showOctaveNumbers = (this.props.showOctaveNumbers !== undefined) ? this.props.showOctaveNumbers : true;
 
     const contents = (
-      <div>
-        {this.state.detectedPitch ? (
-          <div>
-            <div style={{ fontSize: "2em" }}>{this.state.detectedPitch.pitch.toOneAccidentalAmbiguousString(showOctaveNumbers, true)}</div>
-            <div>
-              <TunerCentsIndicator detuneCents={this.state.detectedPitch.detuneCents} />
-            </div>
-            <div>
-              {(this.state.detectedPitch.detuneCents > 0) ? "+" : ""}
-              {this.state.detectedPitch.detuneCents} cents
-            </div>
-          </div>
-        ) : (
-          <div style={{ fontSize: "2em" }}>No pitch detected</div>
-        )}
-      </div>
+      <DetectedPitchIndicator
+        detectedPitch={this.state.detectedPitch}
+        showOctaveNumbers={showOctaveNumbers}
+      />
     );
 
     return isStandalone ? (
