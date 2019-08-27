@@ -127,10 +127,7 @@ class App extends React.Component<IAppProps, IAppState> {
     window.onerror = (msg, file, line, col, error) => {
       const fatal = true;
       getErrorDescription(msg, file, line, col, error)
-        .then(errorDescription => {
-          alert(msg + " " + errorDescription);
-          Analytics.trackException(errorDescription, fatal)
-        });
+        .then(errorDescription => Analytics.trackException(errorDescription, fatal));
     };
 
     this.history = createBrowserHistory();
