@@ -1,11 +1,21 @@
 import { Howl } from "howler";
 
-// polyfill
-const windowAny = window as any;
-windowAny.AudioContext = windowAny.AudioContext || windowAny.webkitAudioContext;
-
-const navigatorAny = navigator as any;
-navigatorAny.getUserMedia = navigatorAny.getUserMedia || navigatorAny.webkitGetUserMedia;
+export function polyfillWebAudio() {
+  // polyfill
+  const windowAny = window as any;
+  windowAny.AudioContext = windowAny.AudioContext || windowAny.webkitAudioContext;
+  
+  if (windowAny.AudioContext) {
+    const prototype = windowAny.AudioContext.prototype;
+  
+    if (!prototype.createScriptProcessor && prototype.createJavaScriptNode) {
+      prototype.createScriptProcessor = prototype.createJavaScriptNode;
+    }
+  }
+  
+  const navigatorAny = navigator as any;
+  navigatorAny.getUserMedia = navigatorAny.getUserMedia || navigatorAny.webkitGetUserMedia;
+}
 
 export function loadSoundAsync(soundFilePath: string): Promise<Howl> {
   return new Promise<Howl>((resolve, reject) => {

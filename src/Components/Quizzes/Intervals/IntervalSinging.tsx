@@ -90,7 +90,6 @@ export class FlashCardBackSide extends React.Component<IFlashCardBackSideProps, 
   }
 }
 
-
 export interface IFlashCardAnswerSelectProps {
   info: FlashCardStudySessionInfo
 }

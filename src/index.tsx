@@ -5,6 +5,7 @@ import * as ReactDOM from "react-dom";
 import App from "./Components/App";
 import "./index.css";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
+import { polyfillWebAudio } from "./Audio";
 import registerServiceWorker from "./registerServiceWorker";
 
 const theme = createMuiTheme({
@@ -31,6 +32,8 @@ const rootElement = (
     <App isEmbedded={false} />
   </MuiThemeProvider>
 );
+
+polyfillWebAudio();
 
 ReactDOM.render(
   rootElement,
