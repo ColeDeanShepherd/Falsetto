@@ -93,10 +93,15 @@ async function getErrorDescription(msg: string | Event, file: string | undefined
     if (error !== undefined) {
       StackTrace.fromError(error)
         .then(stackFrames => {
-          var stringifiedStack = stackFrames.map(sf => {
-            return sf.toString();
-          }).join('\n');
-          resolve(stringifiedStack);
+          const stringifiedStack = stackFrames
+            .map(sf => sf.toString())
+            .join('\n');
+          const errorDescription = (
+            error.name
+              ? (error.name) + ": " + stringifiedStack
+              : stringifiedStack
+          );
+          resolve(errorDescription);
         })
         .catch(err => {
           resolve(fallbackErrorDescription + "\n\n" + err);
@@ -122,7 +127,10 @@ class App extends React.Component<IAppProps, IAppState> {
     window.onerror = (msg, file, line, col, error) => {
       const fatal = true;
       getErrorDescription(msg, file, line, col, error)
-        .then(errorDescription => Analytics.trackException(errorDescription, fatal));
+        .then(errorDescription => {
+          alert(msg + " " + errorDescription);
+          Analytics.trackException(errorDescription, fatal)
+        });
     };
 
     this.history = createBrowserHistory();
