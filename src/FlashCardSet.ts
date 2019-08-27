@@ -13,6 +13,7 @@ export class FlashCardStudySessionInfo {
     public currentFlashCardId: FlashCardId,
     public currentFlashCard: FlashCard,
     public onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void,
+    public skipFlashCard: () => void,
     public lastCorrectAnswer: any,
     public incorrectAnswers: Array<any>,
     public studyAlgorithm: StudyAlgorithm

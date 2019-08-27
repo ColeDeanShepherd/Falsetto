@@ -1,16 +1,41 @@
 import { Howl } from "howler";
 
+import { NumberDictionary } from "./NumberDictionary";
+
 export function polyfillWebAudio() {
   // polyfill
   const windowAny = window as any;
   windowAny.AudioContext = windowAny.AudioContext || windowAny.webkitAudioContext;
   
-  if (windowAny.AudioContext) {
-    const prototype = windowAny.AudioContext.prototype;
+  const AudioContext = windowAny.AudioContext;
+  if (AudioContext) {
+    const prototype = AudioContext.prototype;
   
     if (!prototype.createScriptProcessor && prototype.createJavaScriptNode) {
       prototype.createScriptProcessor = prototype.createJavaScriptNode;
     }
+  }
+
+  const AnalyserNode = windowAny.AnalyserNode;
+  if (AnalyserNode) {
+    if (AnalyserNode.prototype.hasOwnProperty("getFloatTimeDomainData")) {
+      return;
+    }
+  
+    const uint8SampleBuffersBySize: NumberDictionary<Uint8Array> = {};
+  
+    AnalyserNode.prototype.getFloatTimeDomainData = function (this: AnalyserNode, sampleBuffer: Float32Array) {
+      if (!uint8SampleBuffersBySize[sampleBuffer.length]) {
+        uint8SampleBuffersBySize[sampleBuffer.length] = new Uint8Array(sampleBuffer.length);
+      }
+
+      const uint8SampleBuffer = uint8SampleBuffersBySize[sampleBuffer.length];
+      this.getByteTimeDomainData(uint8SampleBuffer);
+
+      for (let i = 0; i < sampleBuffer.length; i++) {
+        sampleBuffer[i] = (uint8SampleBuffer[i] - 128) * 0.0078125;
+      }
+    };
   }
   
   const navigatorAny = navigator as any;

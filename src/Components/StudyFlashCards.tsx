@@ -422,11 +422,12 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
       this.props.flashCards.find(fc => fc.id === this.state.currentFlashCardId)
     );
     const boundOnAnswer = this.onAnswer.bind(this);
+    const boundMoveToNextFlashCard = () => this.moveToNextFlashCard(null, false);
 
     return new FlashCardStudySessionInfo(
       containerSize, this.props.flashCardSet, this.props.flashCards,
       this.state.enabledFlashCardIds, this.state.configData, this.state.currentFlashCardId,
-      currentFlashCard, boundOnAnswer, this.state.lastCorrectAnswer,
+      currentFlashCard, boundOnAnswer, boundMoveToNextFlashCard, this.state.lastCorrectAnswer,
       this.state.incorrectAnswers, this.studyAlgorithm
     );
   }
