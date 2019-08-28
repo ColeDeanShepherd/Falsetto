@@ -86,7 +86,11 @@ import { isDevelopment } from '../Config';
 import { IDatabase, InMemoryDatabase } from '../Database';
 import { IUserManager, UserManager } from '../UserManager';
 
-async function getErrorDescription(msg: string | Event, file: string | undefined, line: number | undefined, col: number | undefined, error: Error | undefined): Promise<string> {
+export async function getErrorDescription(
+  msg: string | Event,
+  file: string | undefined, line: number | undefined, col: number | undefined,
+  error: Error | undefined
+): Promise<string> {
   return new Promise<string>((resolve, reject) => {
     const fallbackErrorDescription = `${file}: ${msg} (${line}:${col})`;
 

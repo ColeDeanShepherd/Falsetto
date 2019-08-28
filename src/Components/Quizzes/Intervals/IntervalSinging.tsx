@@ -17,6 +17,7 @@ import { Button } from "@material-ui/core";
 import { Tuner } from '../../Tools/Tuner';
 import { DetectedPitch } from '../../PitchDetection';
 import { AnswerDifficulty } from '../../../AnswerDifficulty';
+import { PitchesAudioPlayer } from '../../Utils/PitchesAudioPlayer';
 
 const flashCardSetId = "intervalSinging";
 
@@ -31,12 +32,15 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
   }
 
   public render(): JSX.Element {
+    const buttonStyle: any = { textTransform: "none" };
+
     return (
       <div>
         <div>{this.props.pitch1.toOneAccidentalAmbiguousString(false, true) + " " + this.props.direction + " " + this.props.interval}</div>
         <Button
           onClick={event => this.playAudio()}
           variant="contained"
+          style={buttonStyle}
         >
           Play First Pitch
         </Button>
@@ -95,6 +99,7 @@ export interface IFlashCardAnswerSelectProps {
 }
 export interface IFlashCardAnswerSelectState {
   detectedPitch: DetectedPitch | null;
+  useMicrophone: boolean;
 }
 export class FlashCardAnswerSelect
   extends React.Component<IFlashCardAnswerSelectProps, IFlashCardAnswerSelectState> {
@@ -102,18 +107,24 @@ export class FlashCardAnswerSelect
     super(props);
 
     this.state = {
-      detectedPitch: null
+      detectedPitch: null,
+      useMicrophone: true
     };
   }
 
   public render() {
-    return (
+    const { useMicrophone } = this.state;
+    
+    const buttonStyle: any = { textTransform: "none" };
+
+    return useMicrophone ? (
       <div>
         <Tuner
           isStandalone={false}
           showOctaveNumbers={false}
           alwaysShowLastPitch={true}
           onPitchChange={detectedPitch => this.setState({ detectedPitch: detectedPitch })}
+          onMicrophoneError={error => this.onMicrophoneError(error)}
         />
         <div style={{padding: "1em 0"}}>
           <Button
@@ -125,20 +136,60 @@ export class FlashCardAnswerSelect
           </Button>
         </div>
       </div>
+    ) : (
+      <div style={{ fontSize: "1.5em", margin: "0 0 2em 0" }}>
+        <div style={{ marginBottom: "0.5em" }}>
+          <PitchesAudioPlayer pitches={[this.getCorrectPitch()]} playSequentially={false}>
+            Play Answer
+          </PitchesAudioPlayer>
+        </div>
+        <div>
+          <Button
+            onClick={event => this.onUserProvidedCorrectness(AnswerDifficulty.Easy)}
+            variant="contained"
+            style={buttonStyle}
+          >
+            I Was Correct
+          </Button>
+          <Button
+            onClick={event => this.onUserProvidedCorrectness(AnswerDifficulty.Incorrect)}
+            variant="contained"
+            style={buttonStyle}
+          >
+            I Was Incorrect
+          </Button>
+        </div>
+      </div>
     );
+  }
+
+  private getCorrectPitch(): Pitch {
+    return this.props.info.currentFlashCard.backSide.data as Pitch;
   }
 
   private confirmAnswer() {
     if (!this.state.detectedPitch) { return; }
 
     const { info } = this.props;
-    const correctPitchString = info.currentFlashCard.backSide.data as string;
-    const answer = this.state.detectedPitch.pitch.toOneAccidentalAmbiguousString(false, true);
+    const correctPitch = this.getCorrectPitch();
+    const answer = this.state.detectedPitch.pitch;
 
-    const answerDifficulty = (answer === correctPitchString)
+    const answerDifficulty = (answer.midiNumberNoOctave === correctPitch.midiNumberNoOctave)
       ? AnswerDifficulty.Easy
       : AnswerDifficulty.Incorrect;
     info.onAnswer(answerDifficulty, answer);
+  }
+  private onUserProvidedCorrectness(answerDifficulty: AnswerDifficulty) {
+    const { info } = this.props;
+    info.onAnswer(answerDifficulty, AnswerDifficulty[answerDifficulty]);
+
+    if (answerDifficulty === AnswerDifficulty.Incorrect) {
+      info.skipFlashCard();
+    }
+  }
+  private onMicrophoneError(error: any) {
+    alert("Failed initializing microphone. You must check your answers yourself. Error: " + error);
+    this.setState({ useMicrophone: false });
   }
 }
 
@@ -169,7 +220,7 @@ export function createFlashCards(): Array<FlashCard> {
             key={i.toString() + "b"}
             pitch={pitch2}
           />,
-          pitch2.toOneAccidentalAmbiguousString(false, true)
+          pitch2
         ),
       ));
     },

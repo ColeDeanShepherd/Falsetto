@@ -4,28 +4,16 @@ export class Microphone {
   public audioContext: AudioContext | null = null;
   public mediaStream: MediaStream | null = null;
 
-  public startRecording(setupMediaStream?: () => void) {
-    try {
-      this.audioContext = new AudioContext();
-
-      navigator.mediaDevices.getUserMedia({ audio: { noiseSuppression: true } })
-        .then(mediaStream => {
-          this.mediaStream = mediaStream;
-
-          if (setupMediaStream) {
-            setupMediaStream();
-          }
-        })
-        .catch(error => {
-          console.error(error);
-          alert(`Failed initializing microphone! Error: ${error}`);
-        });
-    } catch (e) {
-      console.error(e);
-      alert("Microphone input is not supported in this browser!");
-    }
+  // returns an error
+  public async startRecording(): Promise<void> {
+    this.audioContext = new AudioContext();
+    this.mediaStream = await navigator.mediaDevices.getUserMedia({
+      audio: { noiseSuppression: true }
+    });
   }
+
   public stopRecording() {
+    if (!this.audioContext) { return; }
     if (!this.mediaStream) { return; }
 
     const audioTracks = this.mediaStream.getAudioTracks();

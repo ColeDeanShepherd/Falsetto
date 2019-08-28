@@ -3,7 +3,6 @@ import { Howl } from "howler";
 import { NumberDictionary } from "./NumberDictionary";
 
 export function polyfillWebAudio() {
-  // polyfill
   const windowAny = window as any;
   windowAny.AudioContext = windowAny.AudioContext || windowAny.webkitAudioContext;
   
@@ -22,6 +21,7 @@ export function polyfillWebAudio() {
       return;
     }
   
+    const scaleFactor = 0.0078125; // 1 / 128
     const uint8SampleBuffersBySize: NumberDictionary<Uint8Array> = {};
   
     AnalyserNode.prototype.getFloatTimeDomainData = function (this: AnalyserNode, sampleBuffer: Float32Array) {
@@ -33,7 +33,7 @@ export function polyfillWebAudio() {
       this.getByteTimeDomainData(uint8SampleBuffer);
 
       for (let i = 0; i < sampleBuffer.length; i++) {
-        sampleBuffer[i] = (uint8SampleBuffer[i] - 128) * 0.0078125;
+        sampleBuffer[i] = (uint8SampleBuffer[i] - 128) * scaleFactor;
       }
     };
   }

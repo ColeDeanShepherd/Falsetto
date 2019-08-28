@@ -1,9 +1,12 @@
 import * as React from "react";
 import { Card, CardContent, Typography } from "@material-ui/core";
 
+import * as Utils from "../../Utils";
+import * as Analytics from "../../Analytics";
 import { DetectedPitch, IPitchDetector, DatalantPitchDetector } from '../PitchDetection';
 import { Size2D } from '../../Size2D';
 import { Microphone } from '../../Microphone';
+import { getErrorDescription } from '../App';
 
 export interface ITunerCentsIndicatorProps {
   detuneCents: number;
@@ -88,54 +91,43 @@ export interface ITunerProps {
   showOctaveNumbers?: boolean;
   alwaysShowLastPitch?: boolean;
   onPitchChange?: (detectedPitch: DetectedPitch | null) => void;
+  onMicrophoneError?: (error: any) => void;
 }
 export interface ITunerState {
+  didFailInitialization: boolean;
   detectedPitch: DetectedPitch | null;
 }
 export class Tuner extends React.Component<ITunerProps, ITunerState> {
   public constructor(props: ITunerProps) {
     super(props);
+    
+    this.pitchDetector = (this.props.pitchDetector !== undefined)
+      ? this.props.pitchDetector
+      : new DatalantPitchDetector();
 
     this.state = {
+      didFailInitialization: false,
       detectedPitch: null
     };
   }
 
   public componentDidMount() {
-    const pitchDetector = (this.props.pitchDetector !== undefined)
-      ? this.props.pitchDetector
-      : new DatalantPitchDetector();
-
     this.microphone = new Microphone();
-    this.microphone.startRecording(() => {
-      if (!this.microphone) { return; }
-
-      this.microphone.connectAnalyzer(
-        analyzer => {
-          analyzer.fftSize = fftSize;
-          analyzer.smoothingTimeConstant = 0.2;
-        },
-        analyzer => {
-          if (!this.microphone || !this.microphone.audioContext) { return; }
-
-          analyzer.getFloatTimeDomainData(this.sampleBuffer);
-
-          const detectedPitch = pitchDetector.detectPitch(
-            this.sampleBuffer,
-            this.microphone.audioContext.sampleRate
+    this.microphone.startRecording()
+      .then(() => {
+        try {
+          Utils.unwrapMaybe(this.microphone).connectAnalyzer(
+            analyzer => {
+              analyzer.fftSize = fftSize;
+              analyzer.smoothingTimeConstant = 0.2;
+            },
+            analyzer => this.onAudioProcess(analyzer)
           );
-          if (detectedPitch || !this.props.alwaysShowLastPitch) {
-            this.setState({
-              detectedPitch: detectedPitch
-            });
-            
-            if (this.props.onPitchChange) {
-              this.props.onPitchChange(detectedPitch);
-            }
-          }
+        } catch (error) {
+          this.handleMicrophoneError(error);
         }
-      );
-    });
+      })
+      .catch(error => this.handleMicrophoneError(error));
   }
   public componentWillUnmount() {
     if (this.microphone) {
@@ -144,14 +136,17 @@ export class Tuner extends React.Component<ITunerProps, ITunerState> {
   }
 
   public render(): JSX.Element {
+    const { detectedPitch, didFailInitialization } = this.state;
     const isStandalone = (this.props.isStandalone !== undefined) ? this.props.isStandalone : true;
     const showOctaveNumbers = (this.props.showOctaveNumbers !== undefined) ? this.props.showOctaveNumbers : true;
 
-    const contents = (
+    const contents = !didFailInitialization ? (
       <DetectedPitchIndicator
-        detectedPitch={this.state.detectedPitch}
+        detectedPitch={detectedPitch}
         showOctaveNumbers={showOctaveNumbers}
       />
+    ) : (
+      <p style={{ fontSize: "2em" }}>Failed initializing microphone.</p>
     );
 
     return isStandalone ? (
@@ -173,4 +168,39 @@ export class Tuner extends React.Component<ITunerProps, ITunerState> {
 
   private microphone: Microphone | null = null;
   private sampleBuffer = new Float32Array(fftSize);
+  private pitchDetector: IPitchDetector;
+
+  private onAudioProcess(analyzer: AnalyserNode) {
+    if (!this.microphone || !this.microphone.audioContext) { return; }
+  
+    try {
+      analyzer.getFloatTimeDomainData(this.sampleBuffer);
+  
+      const detectedPitch = this.pitchDetector.detectPitch(
+        this.sampleBuffer,
+        this.microphone.audioContext.sampleRate
+      );
+      if (detectedPitch || !this.props.alwaysShowLastPitch) {
+        this.setState({
+          detectedPitch: detectedPitch
+        });
+        
+        if (this.props.onPitchChange) {
+          this.props.onPitchChange(detectedPitch);
+        }
+      }
+    } catch (error) {
+      this.handleMicrophoneError(error);
+    }
+  }
+  private handleMicrophoneError(error: any) {
+    this.setState({ didFailInitialization: true });
+
+    getErrorDescription("", undefined, undefined, undefined, error)
+      .then(errorDescription => Analytics.trackException(errorDescription, false));
+
+    if (this.props.onMicrophoneError) {
+      this.props.onMicrophoneError(error);
+    }
+  }
 }
