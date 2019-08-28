@@ -211,6 +211,8 @@ export class Tuner extends React.Component<ITunerProps, ITunerState> {
   private handleMicrophoneError(error: any) {
     this.setState({ didFailInitialization: true });
 
+    alert(error);
+
     getErrorDescription("", undefined, undefined, undefined, error)
       .then(errorDescription => Analytics.trackException(errorDescription, false));
 
