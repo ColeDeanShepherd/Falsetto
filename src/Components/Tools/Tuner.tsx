@@ -176,7 +176,11 @@ export class Tuner extends React.Component<ITunerProps, ITunerState> {
     }
 
     if (this.microphone.audioContext.state !== "running") {
-      this.handleMicrophoneError(new Error(`Unexpected audio context state: ${this.microphone.audioContext.state}`));
+      try {
+        throw new Error(`Unexpected audio context state: ${this.microphone.audioContext.state}`);
+      } catch (error) {
+        this.handleMicrophoneError(error);
+      }
       return;
     }
 
@@ -184,7 +188,11 @@ export class Tuner extends React.Component<ITunerProps, ITunerState> {
       ((this.microphone.mediaStream.active !== undefined) && !this.microphone.mediaStream.active) ||
       (this.microphone.mediaStream.getTracks()[0].readyState !== "live")
     ) {
-      this.handleMicrophoneError(new Error("Microphone mediaStream was made inactive."));
+      try {
+        throw new Error("Microphone mediaStream was made inactive.");
+      } catch (error) {
+        this.handleMicrophoneError(error);
+      }
       return;
     }
   
@@ -211,10 +219,11 @@ export class Tuner extends React.Component<ITunerProps, ITunerState> {
   private handleMicrophoneError(error: any) {
     this.setState({ didFailInitialization: true });
 
-    alert(error);
-
     getErrorDescription("", undefined, undefined, undefined, error)
-      .then(errorDescription => Analytics.trackException(errorDescription, false));
+      .then(errorDescription => {
+        alert(errorDescription);
+        Analytics.trackException(errorDescription, false);
+      });
 
     if (this.props.onMicrophoneError) {
       this.props.onMicrophoneError(error);
