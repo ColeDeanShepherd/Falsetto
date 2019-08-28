@@ -171,7 +171,17 @@ export class Tuner extends React.Component<ITunerProps, ITunerState> {
   private pitchDetector: IPitchDetector;
 
   private onAudioProcess(analyzer: AnalyserNode) {
-    if (!this.microphone || !this.microphone.audioContext) { return; }
+    if (!this.microphone || !this.microphone.audioContext || !this.microphone.mediaStream) {
+      return;
+    }
+
+    if (
+      ((this.microphone.mediaStream.active !== undefined) && !this.microphone.mediaStream.active) ||
+      (this.microphone.mediaStream.getTracks()[0].readyState !== "live")
+    ) {
+      this.handleMicrophoneError(new Error("Microphone mediaStream was made inactive."));
+      return;
+    }
   
     try {
       analyzer.getFloatTimeDomainData(this.sampleBuffer);
