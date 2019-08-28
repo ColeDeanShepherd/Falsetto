@@ -175,6 +175,11 @@ export class Tuner extends React.Component<ITunerProps, ITunerState> {
       return;
     }
 
+    if (this.microphone.audioContext.state !== "running") {
+      this.handleMicrophoneError(new Error(`Unexpected audio context state: ${this.microphone.audioContext.state}`));
+      return;
+    }
+
     if (
       ((this.microphone.mediaStream.active !== undefined) && !this.microphone.mediaStream.active) ||
       (this.microphone.mediaStream.getTracks()[0].readyState !== "live")
