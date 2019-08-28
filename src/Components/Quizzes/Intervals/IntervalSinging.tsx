@@ -5,7 +5,7 @@ import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { Pitch } from "../../../Pitch";
 import { playPitches } from "../../../Piano";
 import {
-  IConfigData,
+  IConfigData as IBaseConfigData,
   firstPitches,
   intervals,
   directions,
@@ -13,13 +13,17 @@ import {
   configDataToEnabledFlashCardIds,
   forEachInterval
 } from "../../Utils/IntervalEarTrainingFlashCardMultiSelect";
-import { Button } from "@material-ui/core";
+import { Button, Typography, Checkbox } from "@material-ui/core";
 import { Tuner } from '../../Tools/Tuner';
 import { DetectedPitch } from '../../PitchDetection';
 import { AnswerDifficulty } from '../../../AnswerDifficulty';
 import { PitchesAudioPlayer } from '../../Utils/PitchesAudioPlayer';
 
 const flashCardSetId = "intervalSinging";
+
+export interface IConfigData extends IBaseConfigData {
+  preferUseMic: boolean;
+}
 
 export interface IFlashCardFrontSideProps {
   pitch1: Pitch;
@@ -113,7 +117,8 @@ export class FlashCardAnswerSelect
   }
 
   public render() {
-    const { useMicrophone } = this.state;
+    const configData = this.props.info.configData as IConfigData;
+    const useMicrophone = this.state.useMicrophone && configData.preferUseMic;
     
     const buttonStyle: any = { textTransform: "none" };
 
@@ -233,20 +238,41 @@ export function createFlashCardSet(): FlashCardSet {
     studySessionInfo: FlashCardStudySessionInfo,
     onChange: (newValue: Array<FlashCardId>, newConfigData: any) => void
   ): JSX.Element => {
+    const configData = studySessionInfo.configData as IConfigData;
+    const preferUseMic = configData.preferUseMic;
+
     return (
-    <IntervalEarTrainingFlashCardMultiSelect
-      enableHarmonicIntervals={false}
-      studySessionInfo={studySessionInfo}
-      hasFlashCardPerFirstPitch={true}
-      onChange={onChange}
-    />
+      <div>
+        <div>
+          <Typography>Use Microphone If Available</Typography>
+          <Checkbox
+            checked={preferUseMic}
+            onChange={(event, checked) => {
+              const newConfigData: IConfigData = {
+                enabledFirstPitches: configData.enabledFirstPitches,
+                enabledIntervals: configData.enabledIntervals,
+                enabledDirections: configData.enabledDirections,
+                preferUseMic: checked
+              };
+              onChange(studySessionInfo.enabledFlashCardIds, newConfigData);
+            }}
+          />
+        </div>
+        <IntervalEarTrainingFlashCardMultiSelect
+          enableHarmonicIntervals={false}
+          studySessionInfo={studySessionInfo}
+          hasFlashCardPerFirstPitch={true}
+          onChange={onChange}
+        />
+      </div>
     );
   };
 
   const initialConfigData: IConfigData = {
     enabledFirstPitches: firstPitches.slice(),
     enabledIntervals: intervals.slice(),
-    enabledDirections: directions.slice()
+    enabledDirections: directions.slice(),
+    preferUseMic: true
   };
   
   const flashCardSet = new FlashCardSet(flashCardSetId,
