@@ -27,7 +27,13 @@ export function createFlashCardSet(): FlashCardSet {
         "Natural Notes",
         flashCards
           .filter(fc => isNoteStringNatural(fc.backSide.data as string))
-          .map(fc => fc.id)
+          .map(fc => fc.id),
+        () => null
+      ),
+      new FlashCardLevel(
+        "All Notes",
+        flashCards.map(fc => fc.id),
+        () => null
       )
     ]
   );
