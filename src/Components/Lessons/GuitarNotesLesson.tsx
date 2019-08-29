@@ -239,12 +239,25 @@ const step10Diagram1NoteGroups = step9Diagram1NoteGroups.concat([
     notes: noteGroups[5].notes.slice(0, 25)
   }
 ]);;
-const step10Diagram1Notes = Utils.flattenArrays<StringedInstrumentNote>(step10Diagram1NoteGroups
-  .map(ng => ng.notes));
   
 const step10Diagram2NoteGroups = noteGroups;
-const step10Diagram2Notes = Utils.flattenArrays<StringedInstrumentNote>(step10Diagram2NoteGroups
-  .map(ng => ng.notes));
+
+export const level1Notes = step3Diagram1Notes;
+export const level2Notes = step4Diagram1Notes;
+export const level3Notes = step5Diagram1Notes;
+export const level4Notes = step6Diagram1Notes;
+export const level5Notes = step7Diagram1Notes;
+export const level6Notes = step8Diagram1Notes;
+export const level7Notes = step9Diagram1Notes;
+export const levelsNotes = [
+  level1Notes,
+  level2Notes,
+  level3Notes,
+  level4Notes,
+  level5Notes,
+  level6Notes,
+  level7Notes
+];
 
 export interface IGuitarNotesLessonProps {
 }
@@ -329,7 +342,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           </p>
           <p>
             {createStudyFlashCardSetComponent(
-              GuitarNotes.createFlashCardSet(step3Diagram1Notes), false, true, "Step 3 Quiz", { margin: "0 auto" }, false)}
+              GuitarNotes.createFlashCardSet(level1Notes), false, true, "Step 3 Quiz", { margin: "0 auto" }, false)}
           </p>
           
           <h3>Step 4</h3>
@@ -344,7 +357,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           </p>
           <p>
             {createStudyFlashCardSetComponent(
-              GuitarNotes.createFlashCardSet(step4Diagram1Notes), false, true, "Step 4 Quiz", { margin: "0 auto" }, false)}
+              GuitarNotes.createFlashCardSet(level2Notes), false, true, "Step 4 Quiz", { margin: "0 auto" }, false)}
           </p>
 
           <h3>Step 5</h3>
@@ -362,7 +375,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
 
           <p>
             {createStudyFlashCardSetComponent(
-              GuitarNotes.createFlashCardSet(step5Diagram1Notes), false, true, "Step 5 Quiz", { margin: "0 auto" }, false)}
+              GuitarNotes.createFlashCardSet(level3Notes), false, true, "Step 5 Quiz", { margin: "0 auto" }, false)}
           </p>
 
           <h3>Step 6</h3>
@@ -378,7 +391,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           </p>
           <p>
             {createStudyFlashCardSetComponent(
-              GuitarNotes.createFlashCardSet(step6Diagram1Notes), false, true, "Step 6 Quiz", { margin: "0 auto" }, false)}
+              GuitarNotes.createFlashCardSet(level4Notes), false, true, "Step 6 Quiz", { margin: "0 auto" }, false)}
           </p>
           
           <h3>Step 7</h3>
@@ -393,7 +406,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           </p>
           <p>
             {createStudyFlashCardSetComponent(
-              GuitarNotes.createFlashCardSet(step7Diagram1Notes), false, true, "Step 7 Quiz", { margin: "0 auto" }, false)}
+              GuitarNotes.createFlashCardSet(level5Notes), false, true, "Step 7 Quiz", { margin: "0 auto" }, false)}
           </p>
 
           <h3>Step 8</h3>
@@ -408,7 +421,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           </p>
           <p>
             {createStudyFlashCardSetComponent(
-              GuitarNotes.createFlashCardSet(step8Diagram1Notes), false, true, "Step 8 Quiz", { margin: "0 auto" }, false)}
+              GuitarNotes.createFlashCardSet(level6Notes), false, true, "Step 8 Quiz", { margin: "0 auto" }, false)}
           </p>
 
           <h3>Step 9</h3>
@@ -427,7 +440,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           
           <p>
             {createStudyFlashCardSetComponent(
-              GuitarNotes.createFlashCardSet(step9Diagram1Notes), false, true, "Step 9 Quiz", { margin: "0 auto" }, false)}
+              GuitarNotes.createFlashCardSet(level7Notes), false, true, "Step 9 Quiz", { margin: "0 auto" }, false)}
           </p>
           
           <h3>Step 10</h3>
@@ -454,7 +467,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           <p>Now, you can practice your knowledge on your guitar, or using the exercise below.</p>
           <p>
             {createStudyFlashCardSetComponent(
-              GuitarNotes.createFlashCardSet(step10Diagram2Notes), false, true, "Final Quiz", { margin: "0 auto" })}
+              GuitarNotes.createFlashCardSet(), false, true, "Final Quiz", { margin: "0 auto" })}
           </p>
         </CardContent>
       </Card>

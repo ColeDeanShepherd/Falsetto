@@ -36,7 +36,8 @@ export type CustomNextFlashCardIdFilter = (info: FlashCardStudySessionInfo) => A
 export class FlashCardLevel {
   public constructor(
     public name: string,
-    public flashCardIds: Array<FlashCardId>
+    public flashCardIds: Array<FlashCardId>,
+    public createConfigData: () => any
   ) {}
 }
 

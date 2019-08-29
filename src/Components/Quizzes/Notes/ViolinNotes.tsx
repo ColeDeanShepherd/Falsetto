@@ -40,7 +40,7 @@ export function createFlashCardSet(notes?: Array<StringedInstrumentNote>): Flash
   const flashCardSet = new FlashCardSet(flashCardSetId, "Violin Notes", () => createFlashCards(notes));
   flashCardSet.configDataToEnabledFlashCardIds = (
     flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: IConfigData
-  ) => configDataToEnabledFlashCardIds(violinTuning, MAX_MAX_FRET_NUMBER, flashCardSet, flashCards, configData);
+  ) => configDataToEnabledFlashCardIds(violinTuning, MAX_MAX_FRET_NUMBER, undefined, flashCardSet, flashCards, configData);
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderNoteAnswerSelect;

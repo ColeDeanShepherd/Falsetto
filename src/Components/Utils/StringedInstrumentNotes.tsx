@@ -2,7 +2,7 @@ import * as React from "react";
 import { TextField } from "@material-ui/core";
 
 import * as Utils from "../../Utils";
-import { FlashCardId, FlashCard } from "../../FlashCard";
+import { FlashCardId, FlashCard, FlashCardSide } from "../../FlashCard";
 import { FlashCardStudySessionInfo, FlashCardSet } from "../../FlashCardSet";
 import { StringedInstrumentTuning } from './StringedInstrumentTuning';
 import { StringedInstrumentNote } from '../../StringedInstrumentNote';
@@ -12,26 +12,33 @@ export interface IConfigData {
 };
 
 export function forEachNote(
-  tuning: StringedInstrumentTuning, maxMaxFretNumber: number,
+  tuning: StringedInstrumentTuning, maxMaxFretNumber: number, notes: Array<StringedInstrumentNote> | undefined,
   callbackFn: (stringIndex: number, fretNumber: number, i: number) => void
 ) {
   let i = 0;
 
   for (let stringIndex = 0; stringIndex < tuning.stringCount; stringIndex++) {
     for (let fretNumber = 0; fretNumber <= maxMaxFretNumber; fretNumber++) {
+      if (notes) {
+        const note = tuning.getNote(stringIndex, fretNumber);
+        if (!notes.some(n => n.equals(note))) {
+          continue;
+        }
+      }
+
       callbackFn(stringIndex, fretNumber, i);
       i++;
     }
   }
 }
 export function configDataToEnabledFlashCardIds(
-  tuning: StringedInstrumentTuning, maxMaxFretNumber: number,
+  tuning: StringedInstrumentTuning, maxMaxFretNumber: number, notes: Array<StringedInstrumentNote> | undefined,
   flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: IConfigData
 ): Array<FlashCardId> {
   const flashCardIds = new Array<FlashCardId>();
 
   forEachNote(
-    tuning, maxMaxFretNumber,
+    tuning, maxMaxFretNumber, notes,
     (_, fretNumber, i) => {
       if (fretNumber <= configData.maxFret) {
         flashCardIds.push(flashCards[i].id);
@@ -46,6 +53,7 @@ export interface IStringedInstrumentNotesFlashCardMultiSelectProps {
   tuning: StringedInstrumentTuning;
   maxMaxFretNumber: number;
   studySessionInfo: FlashCardStudySessionInfo;
+  notes?: Array<StringedInstrumentNote>;
   onChange?: (newValue: Array<FlashCardId>, newConfigData: any) => void;
 }
 export interface IStringedInstrumentNotesFlashCardMultiSelectState {
@@ -98,7 +106,7 @@ export class StringedInstrumentNotesFlashCardMultiSelect extends React.Component
     }
     const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(
       this.props.tuning,
-      this.props.maxMaxFretNumber, this.props.studySessionInfo.flashCardSet,
+      this.props.maxMaxFretNumber, this.props.notes, this.props.studySessionInfo.flashCardSet,
       this.props.studySessionInfo.flashCards, newConfigData
     );
     this.props.onChange(newEnabledFlashCardIds, newConfigData);
@@ -144,10 +152,15 @@ export function createFlashCards(
       };
       const id = JSON.stringify(deserializedId);
 
-      return FlashCard.fromRenderFns(
+      return new FlashCard(
         id,
-        size => flashCardFrontSideRenderFn(tuning, maxMaxFretNumber, note),
-        note.pitch.toOneAccidentalAmbiguousString(false, true)
+        new FlashCardSide(
+          size => flashCardFrontSideRenderFn(tuning, maxMaxFretNumber, note)
+        ),
+        new FlashCardSide(
+          note.pitch.toOneAccidentalAmbiguousString(false, true),
+          note
+        ),
       );
     });
 }
