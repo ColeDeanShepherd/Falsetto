@@ -221,7 +221,6 @@ export class Tuner extends React.Component<ITunerProps, ITunerState> {
 
     getErrorDescription("", undefined, undefined, undefined, error)
       .then(errorDescription => {
-        alert(errorDescription);
         Analytics.trackException(errorDescription, false);
       });
 

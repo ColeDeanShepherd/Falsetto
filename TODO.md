@@ -1,5 +1,6 @@
 # To-Do
 ## High Priority
+* Resume microphone on touch start if suspended?
 * Violin Notes "more info" URI
 * Add "Move to next level" button, remove always-there "next level" text
 * Actually fix levels implementation.
