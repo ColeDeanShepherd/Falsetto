@@ -257,7 +257,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
           {((currentLevelIndex !== undefined) && (percentToNextLevel !== undefined))
             ? (
               <p style={{ display: "flex", lineHeight: "1.5", alignItems: "center", justifyContent: "space-between", margin: "0.5em 0" }}>
-                <span style={{paddingRight: "1em"}}> Level {1 + currentLevelIndex}: {flashCardLevels[currentLevelIndex].name}</span>
+                <span style={{paddingRight: "1em"}}>Level {this.getLevelDisplayName(currentLevelIndex)}</span>
                 {(nextLevelIndex !== undefined) ? <span>{Math.round(100 * percentToNextLevel)}%</span> : null}
                 {(nextLevelIndex !== undefined) ? (
                   <Button
@@ -265,7 +265,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
                     variant="contained"
                     style={{ textTransform: "none" }}
                   >
-                    Level {1 + nextLevelIndex}: {flashCardLevels[nextLevelIndex].name}
+                    Level {this.getLevelDisplayName(nextLevelIndex)}
                   </Button>
                 ) : null}
               </p>
@@ -369,7 +369,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
 
             return (
               <Button key={levelIndex} variant="contained" onClick={event => this.activateLevel(levelIndex)} style={style}>
-                {1 + levelIndex}. {level.name}
+                {this.getLevelDisplayName(levelIndex)}
               </Button>
             );
           })
@@ -526,5 +526,12 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
     const level = this.props.flashCardLevels[levelIndex];
     const newEnabledFlashCardIds = level.flashCardIds.slice();
     this.onEnabledFlashCardIdsChange(newEnabledFlashCardIds, this.state.configData);
+  }
+
+  private getLevelDisplayName(levelIndex: number): string {
+    const level = this.props.flashCardLevels[levelIndex];
+    return (level.name.length > 0)
+      ? `${1 + levelIndex}: ${level.name}`
+      : (1 + levelIndex).toString();
   }
 }
