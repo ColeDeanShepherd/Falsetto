@@ -2,8 +2,8 @@ import * as React from "react";
 
 import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
-import { FlashCard, FlashCardId } from "../../../FlashCard";
-import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
+import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
+import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
 import { Pitch } from "../../../Pitch";
 import { playPitches, playPitchesSequentially } from "../../../Piano";
 import {
@@ -13,7 +13,8 @@ import {
   directionsWithHarmonic as directions,
   IntervalEarTrainingFlashCardMultiSelect,
   configDataToEnabledFlashCardIds,
-  forEachInterval
+  forEachInterval,
+  intervalLevels
 } from "../../Utils/IntervalEarTrainingFlashCardMultiSelect";
 import { Button } from "@material-ui/core";
 
@@ -97,10 +98,14 @@ export function createFlashCards(): Array<FlashCard> {
       };
       const id = JSON.stringify(deserializedId);
 
-      flashCards.push(FlashCard.fromRenderFns(
+      flashCards.push(new FlashCard(
         id,
-        () => <FlashCardFrontSide key={i} interval={interval} direction={direction} />,
-        interval.toString()
+        new FlashCardSide(
+          () => <FlashCardFrontSide key={i} interval={interval} direction={direction} />
+        ),
+        new FlashCardSide(
+          interval, interval
+        )
       ));
     },
     includeHarmonicIntervals);
@@ -140,6 +145,25 @@ export function createFlashCardSet(): FlashCardSet {
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.moreInfoUri = "https://www.youtube.com/watch?v=_aDCO3h_xik";
   flashCardSet.containerHeight = "120px";
+  flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (
+    intervalLevels
+      .map(level => new FlashCardLevel(
+        level.name,
+        flashCards
+          .filter(fc => {
+            const intervalString = fc.backSide.data as string;
+            return Utils.arrayContains(level.intervalStrings, intervalString);
+          })
+          .map(fc => fc.id),
+        (curConfigData: IConfigData) => (
+          {
+            enabledFirstPitches: firstPitches.slice(),
+            enabledIntervals: level.intervalStrings.slice(),
+            enabledDirections: directions.slice()
+          } as IConfigData
+        )
+      ))
+  );
 
   return flashCardSet;
 }

@@ -37,7 +37,7 @@ export class FlashCardLevel {
   public constructor(
     public name: string,
     public flashCardIds: Array<FlashCardId>,
-    public createConfigData: () => any
+    public createConfigData: (curConfigData: any) => any
   ) {}
 }
 

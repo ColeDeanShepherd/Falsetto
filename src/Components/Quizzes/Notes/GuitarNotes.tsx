@@ -57,7 +57,11 @@ export function createFlashCardSet(guitarNotes?: Array<StringedInstrumentNote>):
               return levelNotes.some(n => n.equals(note));
             })
             .map(fc => fc.id),
-          () => null
+          (curConfigData: IConfigData) => (
+            {
+              maxFret: curConfigData.maxFret
+            } as IConfigData
+          )
         ))
     );
   }

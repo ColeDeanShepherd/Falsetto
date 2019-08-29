@@ -1,11 +1,25 @@
 # To-Do
 ## High Priority
+* Add levels to:
+  * Random Chord Generator
+  * Violin Notes
+  * Sheet Music Notes
+  * Interval Semitones
+  * Interval 2nd Notes
+  * Notes to Intervals
+  * Sheet Music Intervals
+  * Piano Intervals
+  * Guitar Intervals
+  * Scale Formulas
+  * Piano Scales
+  * Guitar Scales
+  * Scale Degree Modes
+  * Scale Chords?
+  * Scale Ear Training
+  * Key Exercises
+  * Chord Exercises
 * Resume microphone on touch start if suspended?
 * Violin Notes "more info" URI
-* Add "Move to next level" button, remove always-there "next level" text
-* Actually fix levels implementation.
-* Singing interval ear trainer (note plays, sing above & below)
-  * FFT library, pick out main tone
 * Double-check piano scales
 * Persistent data
   * Carefully review flash card IDs

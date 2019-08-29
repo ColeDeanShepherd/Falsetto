@@ -1,7 +1,8 @@
 import * as React from "react";
 
+import * as Utils from "../../../Utils";
 import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
-import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
+import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
 import { Pitch } from "../../../Pitch";
 import { playPitches } from "../../../Piano";
 import {
@@ -11,7 +12,8 @@ import {
   directions,
   IntervalEarTrainingFlashCardMultiSelect,
   configDataToEnabledFlashCardIds,
-  forEachInterval
+  forEachInterval,
+  intervalLevels
 } from "../../Utils/IntervalEarTrainingFlashCardMultiSelect";
 import { Button, Typography, Checkbox } from "@material-ui/core";
 import { Tuner } from '../../Tools/Tuner';
@@ -23,6 +25,11 @@ const flashCardSetId = "intervalSinging";
 
 export interface IConfigData extends IBaseConfigData {
   preferUseMic: boolean;
+}
+
+interface IFlashCardBackSideData {
+  pitch: Pitch;
+  intervalString: string;
 }
 
 export interface IFlashCardFrontSideProps {
@@ -169,7 +176,7 @@ export class FlashCardAnswerSelect
   }
 
   private getCorrectPitch(): Pitch {
-    return this.props.info.currentFlashCard.backSide.data as Pitch;
+    return (this.props.info.currentFlashCard.backSide.data as IFlashCardBackSideData).pitch;
   }
 
   private confirmAnswer() {
@@ -225,7 +232,7 @@ export function createFlashCards(): Array<FlashCard> {
             key={i.toString() + "b"}
             pitch={pitch2}
           />,
-          pitch2
+          { pitch: pitch2, intervalString: interval } as IFlashCardBackSideData
         ),
       ));
     },
@@ -287,6 +294,26 @@ export function createFlashCardSet(): FlashCardSet {
   flashCardSet.renderAnswerSelect = (info: FlashCardStudySessionInfo) =>
     <FlashCardAnswerSelect info={info} />;
   flashCardSet.containerHeight = "120px";
+  flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (
+    intervalLevels
+      .map(level => new FlashCardLevel(
+        level.name,
+        flashCards
+          .filter(fc => {
+            const intervalString = (fc.backSide.data as IFlashCardBackSideData).intervalString;
+            return Utils.arrayContains(level.intervalStrings, intervalString);
+          })
+          .map(fc => fc.id),
+        (curConfigData: IConfigData) => (
+          {
+            enabledFirstPitches: firstPitches.slice(),
+            enabledIntervals: level.intervalStrings.slice(),
+            enabledDirections: directions.slice(),
+            preferUseMic: curConfigData.preferUseMic
+          } as IConfigData
+        )
+      ))
+  );
   
   return flashCardSet;
 }

@@ -5,12 +5,13 @@ import { Vector2D } from '../../../Vector2D';
 import { Size2D } from "../../../Size2D";
 import { Rect2D } from '../../../Rect2D';
 import { FlashCard, FlashCardSide, FlashCardId } from "../../../FlashCard";
-import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
+import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
 import { Pitch } from "../../../Pitch";
 import { playPitchesSequentially } from "../../../Piano";
 import {
   intervals,
-  forEachInterval
+  forEachInterval,
+  intervalLevels
 } from "../../Utils/IntervalEarTrainingFlashCardMultiSelect";
 import { Button, TableRow, TableCell, Checkbox, Table, TableHead, TableBody, Grid } from "@material-ui/core";
 import { PianoKeyboard } from "../../Utils/PianoKeyboard";
@@ -56,6 +57,10 @@ export const rootNotes = [
 
 export interface IConfigData {
   enabledIntervals: string[];
+}
+export interface IFlashCardBackSideData {
+  pitch: Pitch;
+  intervalString: string;
 }
 
 export function configDataToEnabledFlashCardIds(
@@ -187,7 +192,7 @@ export function renderAnswerSelect(
   info: FlashCardStudySessionInfo
 ) {
   const key = info.flashCards.indexOf(info.currentFlashCard);
-  const correctAnswer = [info.currentFlashCard.backSide.data as Pitch];
+  const correctAnswer = [(info.currentFlashCard.backSide.data as IFlashCardBackSideData).pitch];
   const size = new Size2D(400, 100);
   
   return <PianoKeysAnswerSelect
@@ -209,8 +214,14 @@ export function createFlashCards(): Array<FlashCard> {
       flashCards.push(
         new FlashCard(
           id,
-          new FlashCardSide(size => <FlashCardFrontSide key={i} pitch1={p1} pitch2={p2} />, p1),
-          new FlashCardSide(p2.toOneAccidentalAmbiguousString(false), p2)
+          new FlashCardSide(
+            size => <FlashCardFrontSide key={i} pitch1={p1} pitch2={p2} />,
+            p1
+          ),
+          new FlashCardSide(
+            p2.toOneAccidentalAmbiguousString(false),
+            { pitch: p2, intervalString: interval } as IFlashCardBackSideData
+          )
         )
       );
     }, includeHarmonicIntervals, minPitch, maxPitch);
@@ -247,7 +258,7 @@ export function createFlashCardSet(): FlashCardSet {
     }
 
     const flashCard = studySessionInfo.currentFlashCard;
-    const secondPitch = flashCard.backSide.data as Pitch;
+    const secondPitch = (flashCard.backSide.data as IFlashCardBackSideData).pitch;
     
     return studySessionInfo.enabledFlashCardIds
       .filter(flashCardId => {
@@ -258,6 +269,23 @@ export function createFlashCardSet(): FlashCardSet {
       });
   };
   flashCardSet.containerHeight = "180px";
+  flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (
+    intervalLevels
+      .map(level => new FlashCardLevel(
+        level.name,
+        flashCards
+          .filter(fc => {
+            const intervalString = (fc.backSide.data as IFlashCardBackSideData).intervalString;
+            return Utils.arrayContains(level.intervalStrings, intervalString);
+          })
+          .map(fc => fc.id),
+        (curConfigData: IConfigData) => (
+          {
+            enabledIntervals: level.intervalStrings.slice()
+          } as IConfigData
+        )
+      ))
+  );
   
   return flashCardSet;
 }

@@ -517,15 +517,13 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
     const nextLevelIndex = this.getNextLevelIndex();
     if (!nextLevelIndex) { return; }
 
-    const nextLevel = this.props.flashCardLevels[nextLevelIndex];
-    const newEnabledFlashCardIds = nextLevel.flashCardIds.slice();
-    this.onEnabledFlashCardIdsChange(newEnabledFlashCardIds, nextLevel.createConfigData());
+    this.activateLevel(nextLevelIndex);
   }
 
   private activateLevel(levelIndex: number) {
     const level = this.props.flashCardLevels[levelIndex];
     const newEnabledFlashCardIds = level.flashCardIds.slice();
-    this.onEnabledFlashCardIdsChange(newEnabledFlashCardIds, this.state.configData);
+    this.onEnabledFlashCardIdsChange(newEnabledFlashCardIds, level.createConfigData(this.state.configData));
   }
 
   private getLevelDisplayName(levelIndex: number): string {
