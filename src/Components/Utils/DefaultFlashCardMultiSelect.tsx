@@ -12,30 +12,11 @@ import { Size2D } from '../../Size2D';
 export interface IDefaultFlashCardMultiSelectProps {
   flashCards: FlashCard[];
   configData: any;
-  flashCardLevels: Array<FlashCardLevel>;
   selectedFlashCardIds: Array<FlashCardId>;
   onChange?: (newValue: Array<FlashCardId>, newConfigData: any) => void;
 }
 export class DefaultFlashCardMultiSelect extends React.Component<IDefaultFlashCardMultiSelectProps, {}> {
   public render(): JSX.Element {
-    const levelButtons = (this.props.flashCardLevels.length > 0)
-      ? (this.props.flashCardLevels
-          .map((level, levelIndex) => {
-            const style: any = { textTransform: "none" };
-                    
-            const isPressed = Utils.areArraysEqual(this.props.selectedFlashCardIds, level.flashCardIds);
-            if (isPressed) {
-              style.backgroundColor = "#959595";
-            }
-
-            return (
-              <Button variant="contained" onClick={event => this.activateLevel(levelIndex)} style={style}>
-                {1 + levelIndex}. {level.name}
-              </Button>
-            );
-          })
-      ) : null;
-
     // TODO: calculate
     const flashCardSideSize = new Size2D(300, 300);
 
@@ -67,17 +48,7 @@ export class DefaultFlashCardMultiSelect extends React.Component<IDefaultFlashCa
       </Table>
     );
 
-    return (
-      <div>
-        {(this.props.flashCardLevels.length > 0) ? (
-          <div>
-            <span style={{ paddingRight: "1em" }}>Levels:</span>
-            {levelButtons}
-          </div>
-        ) : null}
-        {flashCardCheckboxes}
-      </div>
-    );
+    return flashCardCheckboxes;
   }
 
   private toggleFlashCardEnabled(flashCardId: string) {
@@ -91,12 +62,5 @@ export class DefaultFlashCardMultiSelect extends React.Component<IDefaultFlashCa
     if (newEnabledFlashCardIds.length > 0) {
       this.props.onChange(newEnabledFlashCardIds, this.props.configData);
     }
-  }
-  private activateLevel(levelIndex: number) {
-    if (!this.props.onChange) { return; }
-
-    const level = this.props.flashCardLevels[levelIndex];
-    const newEnabledFlashCardIds = level.flashCardIds.slice();
-    this.props.onChange(newEnabledFlashCardIds, this.props.configData);
   }
 }

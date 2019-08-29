@@ -357,18 +357,46 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
     containerSize: Size2D, flashCards: FlashCard[]
   ): JSX.Element {
     const onEnabledFlashCardIndicesChange = this.onEnabledFlashCardIdsChange.bind(this);
+    const levelButtons = (this.props.flashCardLevels.length > 0)
+      ? (this.props.flashCardLevels
+          .map((level, levelIndex) => {
+            const style: any = { textTransform: "none" };
+                    
+            const isPressed = Utils.areArraysEqual(this.state.enabledFlashCardIds, level.flashCardIds);
+            if (isPressed) {
+              style.backgroundColor = "#959595";
+            }
 
-    return this.props.flashCardSet.renderFlashCardMultiSelect
-      ? this.props.flashCardSet.renderFlashCardMultiSelect(
-        this.getStudySessionInfo(containerSize), onEnabledFlashCardIndicesChange
-      )
-      : <DefaultFlashCardMultiSelect
-          flashCards={flashCards}
-          configData={this.state.configData}
-          flashCardLevels={this.props.flashCardLevels}
-          selectedFlashCardIds={this.state.enabledFlashCardIds}
-          onChange={onEnabledFlashCardIndicesChange}
-        />;
+            return (
+              <Button key={levelIndex} variant="contained" onClick={event => this.activateLevel(levelIndex)} style={style}>
+                {1 + levelIndex}. {level.name}
+              </Button>
+            );
+          })
+      ) : null;
+
+    return (
+      <div>
+        {(this.props.flashCardLevels.length > 0) ? (
+            <div>
+              <span style={{ paddingRight: "1em" }}>Levels:</span>
+              {levelButtons}
+            </div>
+        ) : null}
+        {this.props.flashCardSet.renderFlashCardMultiSelect
+          ? this.props.flashCardSet.renderFlashCardMultiSelect(
+            this.getStudySessionInfo(containerSize), onEnabledFlashCardIndicesChange
+          )
+          : (
+            <DefaultFlashCardMultiSelect
+              flashCards={flashCards}
+              configData={this.state.configData}
+              selectedFlashCardIds={this.state.enabledFlashCardIds}
+              onChange={onEnabledFlashCardIndicesChange}
+            />
+          )}
+      </div>
+    );
   }
   
   private async getInitialStateForFlashCards(
@@ -492,5 +520,11 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
     const nextLevel = this.props.flashCardLevels[nextLevelIndex];
     const newEnabledFlashCardIds = nextLevel.flashCardIds.slice();
     this.onEnabledFlashCardIdsChange(newEnabledFlashCardIds, nextLevel.createConfigData());
+  }
+
+  private activateLevel(levelIndex: number) {
+    const level = this.props.flashCardLevels[levelIndex];
+    const newEnabledFlashCardIds = level.flashCardIds.slice();
+    this.onEnabledFlashCardIdsChange(newEnabledFlashCardIds, this.state.configData);
   }
 }

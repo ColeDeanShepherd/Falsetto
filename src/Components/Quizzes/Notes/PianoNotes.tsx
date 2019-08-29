@@ -12,7 +12,7 @@ import { PitchLetter } from "../../../PitchLetter";
 
 const flashCardSetId = "pianoNotes1Octave";
 
-function isNoteStringNatural(noteString: string): boolean {
+export function isNoteStringNatural(noteString: string): boolean {
   return noteString.length === 1;
 }
 

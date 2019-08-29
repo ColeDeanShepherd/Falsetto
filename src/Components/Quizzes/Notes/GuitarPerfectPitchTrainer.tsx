@@ -25,7 +25,7 @@ export function configDataToEnabledFlashCardIds(
 ): Array<FlashCardId> {
   const enabledFlashCardIds = new Array<FlashCardId>();
 
-  forEachNote(guitarTuning, MAX_MAX_FRET_NUMBER, (stringIndex, fretNumber, i) => {
+  forEachNote(guitarTuning, MAX_MAX_FRET_NUMBER, undefined, (stringIndex, fretNumber, i) => {
     if (fretNumber <= configData.maxFret) {
       enabledFlashCardIds.push(flashCards[i].id);
     }
