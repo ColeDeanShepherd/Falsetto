@@ -3,13 +3,13 @@ import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody } from "@mat
 
 import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
-import { FlashCard, FlashCardId } from "../../../FlashCard";
-import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
+import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
+import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
 import { Pitch, pitchRange } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 import { SheetMusicChord } from "./SheetMusicChords";
 import { Size2D } from '../../../Size2D';
-import { Interval } from '../../../Interval';
+import { Interval, createIntervalLevels } from '../../../Interval';
 
 const flashCardSetId = "sheetIntervals";
 
@@ -181,28 +181,39 @@ export class IntervalsFlashCardMultiSelect extends React.Component<IIntervalsFla
 export function renderAnswerSelect(
   info: FlashCardStudySessionInfo
 ): JSX.Element {
+  const enabledIntervals = (info.configData as IConfigData).enabledIntervals;
   return (
     <div>
-      {FlashCardUtils.renderStringAnswerSelect(intervals, info)}
+      {FlashCardUtils.renderStringAnswerSelect(enabledIntervals, info)}
     </div>
   );
 }
+
+const initialConfigData: IConfigData = {
+  enabledIntervals: intervals.slice(),
+  allowAccidentals: true
+};
 
 export function createFlashCards(): Array<FlashCard> {
   const flashCards = new Array<FlashCard>();
 
   forEachInterval((pitches, interval) => {
-    flashCards.push(FlashCard.fromRenderFns(
+    flashCards.push(new FlashCard(
       JSON.stringify({ set: flashCardSetId, pitches: pitches.map(p => p.toString(true)) }),
-      size => (
-        <div>
-          <SheetMusicChord
-            size={new Size2D(300, 200)}
-            pitches={pitches}
-          />
-        </div>
+      new FlashCardSide(
+        size => (
+          <div>
+            <SheetMusicChord
+              size={new Size2D(300, 200)}
+              pitches={pitches}
+            />
+          </div>
+        )
       ),
-      interval.toString()
+      new FlashCardSide(
+        interval.toString(),
+        interval.toString()
+      )
     ));
   });
 
@@ -220,11 +231,6 @@ export function createFlashCardSet(): FlashCardSet {
     />
     );
   };
-
-  const initialConfigData: IConfigData = {
-    enabledIntervals: intervals.slice(),
-    allowAccidentals: true
-  };
   
   const flashCardSet = new FlashCardSet(flashCardSetId,
     "Sheet Music Intervals",
@@ -234,6 +240,24 @@ export function createFlashCardSet(): FlashCardSet {
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = renderAnswerSelect;
+  flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (
+    createIntervalLevels(false, true)
+      .map(level => new FlashCardLevel(
+        level.name,
+        flashCards
+          .filter(fc => {
+            const intervalString = fc.backSide.data as string;
+            return Utils.arrayContains(level.intervalStrings, intervalString);
+          })
+          .map(fc => fc.id),
+        (curConfigData: IConfigData) => (
+          {
+            enabledIntervals: level.intervalStrings.slice(),
+            allowAccidentals: true
+          } as IConfigData
+        )
+      ))
+  );
 
   return flashCardSet;
 }
