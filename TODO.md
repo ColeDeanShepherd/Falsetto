@@ -3,8 +3,6 @@
 * Add levels to:
   * Violin Notes
   * Sheet Music Notes
-  * Piano Scales
-  * Guitar Scales
   * Scale Degree Modes
   * Scale Chords?
   * Scale Ear Training
