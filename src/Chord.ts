@@ -286,6 +286,48 @@ export class ChordType {
   }
 }
 
+export const chordTypeLevels = [
+  {
+    name: "Basic Triads",
+    chordTypes: ChordType.BasicTriads
+  },
+  {
+    name: "All Triads",
+    chordTypes: ChordType.Triads
+  },
+  {
+    name: "Common 7th Chords",
+    chordTypes: ChordType.Triads
+      .concat([
+        ChordType.Maj7,
+        ChordType.Dom7,
+        ChordType.Min7,
+        ChordType.HalfDim7,
+        ChordType.Dim7
+      ])
+  },
+  {
+    name: "More 7th Chords",
+    chordTypes: ChordType.Triads
+      .concat(ChordType.SimpleSeventhChords)
+  },
+  {
+    name: "6th Chords",
+    chordTypes: ChordType.Triads
+      .concat(ChordType.SixthChords)
+      .concat(ChordType.SimpleSeventhChords)
+  },
+  {
+    name: "Extended Chords",
+    chordTypes: ChordType.Triads
+      .concat(ChordType.SixthChords)
+      .concat(ChordType.SimpleSeventhChords)
+      .concat(ChordType.SimpleNinthChords)
+      .concat(ChordType.SimpleEleventhChords)
+      .concat(ChordType.SimpleThirteenthChords)
+  }
+];
+
 export class Chord {
   public constructor(
     public type: ChordType,

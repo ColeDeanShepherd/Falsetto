@@ -6,12 +6,12 @@ import { Size2D } from "../../../Size2D";
 import { Rect2D } from '../../../Rect2D';
 import { PianoKeyboard } from "../../Utils/PianoKeyboard";
 import { FlashCard, FlashCardSide, FlashCardId } from "../../../FlashCard";
-import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
+import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
 import { AnswerDifficulty } from "../../../AnswerDifficulty";
 import { Pitch, ambiguousKeyPitchStringsSymbols } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 import { Button, Typography } from "@material-ui/core";
-import { Chord, ChordType } from "../../../Chord";
+import { Chord, ChordType, chordTypeLevels } from "../../../Chord";
 import { CheckboxColumnsFlashCardMultiSelect, CheckboxColumn, CheckboxColumnCell } from '../../Utils/CheckboxColumnsFlashCardMultiSelect';
 
 const flashCardSetId = "pianoChords";
@@ -236,6 +236,13 @@ export class PianoChordsAnswerSelect extends React.Component<IPianoChordsAnswerS
   }
 }
 
+const initialConfigData: IConfigData = {
+  enabledRootPitches: ambiguousKeyPitchStringsSymbols.slice(),
+  enabledChordTypes: ChordType.All
+    .filter((_, chordIndex) => chordIndex <= 8)
+    .map(chord => chord.name)
+};
+
 export function createFlashCardSet(): FlashCardSet {
   const renderFlashCardMultiSelect = (
     info: FlashCardStudySessionInfo,
@@ -249,19 +256,27 @@ export function createFlashCardSet(): FlashCardSet {
     );
   };
 
-  const initialConfigData: IConfigData = {
-    enabledRootPitches: ambiguousKeyPitchStringsSymbols.slice(),
-    enabledChordTypes: ChordType.All
-      .filter((_, chordIndex) => chordIndex <= 8)
-      .map(chord => chord.name)
-  };
-
   const flashCardSet = new FlashCardSet(flashCardSetId, "Piano Chords", createFlashCards);
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = renderAnswerSelect;
   flashCardSet.containerHeight = "120px";
+  flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (
+    chordTypeLevels
+      .map(ctl =>
+        new FlashCardLevel(
+          ctl.name,
+          flashCards
+            .filter(fc => Utils.arrayContains(ctl.chordTypes, (fc.backSide.data as Chord).type))
+            .map(fc => fc.id),
+          (curConfigData: IConfigData) => ({
+            enabledRootPitches: ambiguousKeyPitchStringsSymbols.slice(),
+            enabledChordTypes: ctl.chordTypes.map(ct => ct.name)
+          } as IConfigData)
+        )
+      )
+  );
 
   return flashCardSet;
 }
@@ -295,7 +310,10 @@ export function createFlashCards(): FlashCard[] {
             },
             pitches
           ),
-          new FlashCardSide(rootPitchStr + " " + chordType.name)
+          new FlashCardSide(
+            rootPitchStr + " " + chordType.name,
+             new Chord(chordType, rootPitch)
+          )
         );
       })
     )
