@@ -5,7 +5,6 @@
   * Sheet Music Notes
   * Scale Degree Modes
   * Scale Chords?
-  * Scale Ear Training
   * Key Exercises
 * Fix level not being detected properly when disabling & re-enabling in piano notes exercise (orders don't match due to toggle).
 * Resume microphone on touch start if suspended?

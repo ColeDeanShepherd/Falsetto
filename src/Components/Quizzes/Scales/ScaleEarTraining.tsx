@@ -3,12 +3,12 @@ import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid, Butto
 
 import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
-import { FlashCard, FlashCardId } from "../../../FlashCard";
-import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
+import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
+import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
 import { Pitch, pitchRange } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 import { playPitchesSequentially } from "../../../Piano";
-import { ScaleType } from "../../../Scale";
+import { ScaleType, scaleTypeLevels } from "../../../Scale";
 import { ChordScaleFormula, ChordScaleFormulaPart } from '../../../ChordScaleFormula';
 
 const flashCardSetId = "scaleEarTraining";
@@ -189,10 +189,13 @@ export function createFlashCards(): Array<FlashCard> {
     };
     const id = JSON.stringify(deserializedId);
 
-    flashCards.push(FlashCard.fromRenderFns(
+    flashCards.push(new FlashCard(
       id,
-      () => <FlashCardFrontSide key={iCopy} scaleType={scaleType} />,
-      scaleType.name
+      new FlashCardSide(() => <FlashCardFrontSide key={iCopy} scaleType={scaleType} />),
+      new FlashCardSide(
+        scaleType.name,
+        scaleType
+      )
     ));
   }
 
@@ -226,6 +229,21 @@ export function createFlashCardSet(): FlashCardSet {
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.containerHeight = "110px";
+  flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (
+    scaleTypeLevels
+      .map(level => new FlashCardLevel(
+        level.name,
+        flashCards
+          .filter(fc => {
+            const scaleType = fc.backSide.data as ScaleType;
+            return Utils.arrayContains(level.scaleTypes, scaleType);
+          })
+          .map(fc => fc.id),
+        (curConfigData: IConfigData) => ({
+          enabledScaleTypes: level.scaleTypes.map(st => st.name)
+        } as IConfigData)
+      ))
+  );
 
   return flashCardSet;
 }
