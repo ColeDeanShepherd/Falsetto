@@ -2,7 +2,7 @@ import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
 import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardLevel, } from "../../../FlashCardSet";
-import { ScaleType, ScaleTypeLevels } from '../../../Scale';
+import { ScaleType, scaleTypeLevels } from '../../../Scale';
 
 const flashCardSetId = "scaleFormulasMajor";
 
@@ -21,7 +21,7 @@ export function createFlashCardSet(): FlashCardSet {
   flashCardSet.moreInfoUri = "/essential-music-theory/scales-and-modes";
   flashCardSet.containerHeight = "80px";
   flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (
-    ScaleTypeLevels
+    scaleTypeLevels
       .map(level => new FlashCardLevel(
         level.name,
         flashCards

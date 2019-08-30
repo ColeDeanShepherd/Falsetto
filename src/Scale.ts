@@ -245,7 +245,7 @@ export class ScaleType {
   }
 }
 
-export const ScaleTypeLevels = [
+export const scaleTypeLevels = [
   {
     name: "Major/Minor",
     scaleTypes: [

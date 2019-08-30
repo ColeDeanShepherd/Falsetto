@@ -6,10 +6,10 @@ import { Size2D } from "../../../Size2D";
 import { Rect2D } from '../../../Rect2D';
 import { Pitch, ambiguousKeyPitchStringsSymbols } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
-import { ScaleType } from "../../../Scale";
+import { ScaleType, scaleTypeLevels } from "../../../Scale";
 import { PianoKeyboard } from "../../Utils/PianoKeyboard";
 import { FlashCard, FlashCardSide, FlashCardId } from "../../../FlashCard";
-import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
+import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
 import { ScaleAnswerSelect } from "../../Utils/ScaleAnswerSelect";
 import { ChordScaleFormula, ChordScaleFormulaPart } from '../../../ChordScaleFormula';
 import { CheckboxColumnsFlashCardMultiSelect, CheckboxColumn, CheckboxColumnCell } from '../../Utils/CheckboxColumnsFlashCardMultiSelect';
@@ -106,6 +106,13 @@ export class PianoScalesFlashCardMultiSelect extends React.Component<IPianoScale
   }
 }
 
+const initialConfigData: IConfigData = {
+  enabledRootPitches: ambiguousKeyPitchStringsSymbols.slice(),
+  enabledScaleTypes: ScaleType.All
+    .filter((_, scaleIndex) => scaleIndex <= 7)
+    .map(scale => scale.name)
+};
+
 export function createFlashCardSet(): FlashCardSet {
   const renderFlashCardMultiSelect = (
     studySessionInfo: FlashCardStudySessionInfo,
@@ -119,19 +126,28 @@ export function createFlashCardSet(): FlashCardSet {
     );
   };
 
-  const initialConfigData: IConfigData = {
-    enabledRootPitches: ambiguousKeyPitchStringsSymbols.slice(),
-    enabledScaleTypes: ScaleType.All
-      .filter((_, scaleIndex) => scaleIndex <= 7)
-      .map(scale => scale.name)
-  };
-
   const flashCardSet = new FlashCardSet(flashCardSetId, "Piano Scales", createFlashCards);
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = renderAnswerSelect;
   flashCardSet.containerHeight = "110px";
+  flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (
+    scaleTypeLevels
+      .map(level => new FlashCardLevel(
+        level.name,
+        flashCards
+          .filter(fc => {
+            const scaleType = fc.backSide.data as ScaleType;
+            return Utils.arrayContains(level.scaleTypes, scaleType);
+          })
+          .map(fc => fc.id),
+        (curConfigData: IConfigData) => ({
+          enabledRootPitches: ambiguousKeyPitchStringsSymbols.slice(),
+          enabledScaleTypes: level.scaleTypes.map(st => st.name)
+        } as IConfigData)
+      ))
+  );
 
   return flashCardSet;
 }
@@ -167,7 +183,10 @@ export function createFlashCards(): FlashCard[] {
         },
         pitches
       ),
-      new FlashCardSide(rootPitchStr + " " + scaleType.name)
+      new FlashCardSide(
+        rootPitchStr + " " + scaleType.name,
+        scaleType
+      )
     );
 
     flashCards.push(flashCard);
