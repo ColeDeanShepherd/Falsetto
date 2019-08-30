@@ -101,7 +101,10 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
   public constructor(props: IStudyFlashCardsProps) {
     super(props);
 
-    if (this.props.flashCardSet.initialConfigData && !this.props.flashCardSet.configDataToEnabledFlashCardIds) {
+    if (
+      this.props.flashCardSet.initialConfigData &&
+      !this.props.flashCardSet.configDataToEnabledFlashCardIds
+    ) {
       Utils.assert(false);
     }
 
@@ -119,7 +122,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
             showConfiguration: false,
             showDetailedStats: false,
             isShowingBackSide: false,
-            configData: props.flashCardSet.initialConfigData
+            configData: this.getInitialConfigData()
           },
           partialState
         );
@@ -425,12 +428,21 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
     };
   }
 
+  private getInitialConfigData(): any {
+    return (this.props.flashCardLevels && (this.props.flashCardLevels.length > 0))
+      ? this.props.flashCardLevels[0].createConfigData(this.props.flashCardSet.initialConfigData)
+      : this.props.flashCardSet.initialConfigData;
+  }
   private getInitialEnabledFlashCardIds(): Array<FlashCardId> {
-    return this.props.flashCardSet.configDataToEnabledFlashCardIds
-      ? this.props.flashCardSet.configDataToEnabledFlashCardIds(
-        this.props.flashCardSet, this.props.flashCards, this.props.flashCardSet.initialConfigData
-      )
-      : this.props.flashCards.map(fc => fc.id)
+    if (this.props.flashCardLevels && (this.props.flashCardLevels.length > 0)) {
+      return this.props.flashCardLevels[0].flashCardIds.slice();
+    } else {
+      return this.props.flashCardSet.configDataToEnabledFlashCardIds
+        ? this.props.flashCardSet.configDataToEnabledFlashCardIds(
+          this.props.flashCardSet, this.props.flashCards, this.getInitialConfigData()
+        )
+        : this.props.flashCards.map(fc => fc.id)
+    }
   }
   private getStudySessionInfo(
     containerSize: Size2D,
