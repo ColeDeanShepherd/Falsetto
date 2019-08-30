@@ -4,9 +4,6 @@
   * Random Chord Generator
   * Violin Notes
   * Sheet Music Notes
-  * Interval Semitones
-  * Interval 2nd Notes
-  * Notes to Intervals
   * Sheet Music Intervals
   * Piano Intervals
   * Guitar Intervals
