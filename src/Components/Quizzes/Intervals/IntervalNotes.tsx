@@ -2,11 +2,11 @@ import * as React from "react";
 
 import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
-import { FlashCard, FlashCardId } from "../../../FlashCard";
-import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
+import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
+import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
 import { Pitch } from "../../../Pitch";
 import { VerticalDirection } from "../../../VerticalDirection";
-import { Interval } from "../../../Interval";
+import { Interval, createIntervalLevels } from "../../../Interval";
 import { getValidKeyPitches } from '../../../Key';
 import { CheckboxColumnsFlashCardMultiSelect, CheckboxColumn, CheckboxColumnCell } from '../../Utils/CheckboxColumnsFlashCardMultiSelect';
 
@@ -155,10 +155,15 @@ export function createFlashCards(): Array<FlashCard> {
     };
     const id = JSON.stringify(deserializedId);
     
-    const flashCard = FlashCard.fromRenderFns(
+    const flashCard = new FlashCard(
       id,
-      rootPitch.toString(true) + ", " + newPitch.toString(true),
-      interval
+      new FlashCardSide(
+        rootPitch.toString(true) + ", " + newPitch.toString(true)
+      ),
+      new FlashCardSide(
+        interval,
+        interval
+      )
     );
 
     flashCards.push(flashCard);
@@ -194,6 +199,25 @@ export function createFlashCardSet(): FlashCardSet {
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.containerHeight = "80px";
+  flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (
+    createIntervalLevels(false, true)
+      .map(level => new FlashCardLevel(
+        level.name,
+        flashCards
+          .filter(fc => {
+            const intervalString = fc.backSide.data as string;
+            return Utils.arrayContains(level.intervalStrings, intervalString);
+          })
+          .map(fc => fc.id),
+        (curConfigData: IConfigData) => (
+          {
+            enabledFirstPitches: firstPitches.slice(),
+            enabledIntervals: level.intervalStrings.slice(),
+            enabledDirections: directions.slice()
+          } as IConfigData
+        )
+      ))
+  );
 
   return flashCardSet;
 }
