@@ -1,9 +1,9 @@
 import * as React from "react";
 
 import * as Utils from "../../Utils";
-import { FlashCard, FlashCardId } from "../../FlashCard";
-import { FlashCardSet, FlashCardStudySessionInfo } from "../../FlashCardSet";
-import { ChordType } from '../../Chord';
+import { FlashCard, FlashCardId, FlashCardSide } from "../../FlashCard";
+import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../FlashCardSet";
+import { ChordType, chordTypeLevels } from '../../Chord';
 import { CheckboxColumnsFlashCardMultiSelect, CheckboxColumnCell, CheckboxColumn } from '../Utils/CheckboxColumnsFlashCardMultiSelect';
 import { getValidKeyPitches } from '../../Key';
 import { Pitch } from '../../Pitch';
@@ -102,14 +102,25 @@ export class RandomChordGeneratorFlashCardMultiSelect extends React.Component<IR
   }
 }
 
+const initialConfigData: IConfigData = {
+  enabledChordRootPitches: chordRootPitches.slice(),
+  enabledChordTypes: ChordType.All
+    .filter((_, i) => i <= 16)
+};
+
 export function createFlashCards(): Array<FlashCard> {
   const flashCards = new Array<FlashCard>();
 
   forEachChord((chordRootPitch, chordType, i) => {
-    const flashCard = FlashCard.fromRenderFns(
+    const flashCard = new FlashCard(
       JSON.stringify({ set: flashCardSetId, chord: chordRootPitch.toString(false, true) + " " + chordType.name }),
-      chordRootPitch.toString(false, true) + " " + chordType.name,
-      chordType.getPitches(chordRootPitch).map(p => p.toString(false, true)).join(" ")
+      new FlashCardSide(
+        chordRootPitch.toString(false, true) + " " + chordType.name
+      ),
+      new FlashCardSide(
+        chordType.getPitches(chordRootPitch).map(p => p.toString(false, true)).join(" "),
+        chordType
+      )
     );
     flashCards.push(flashCard);
   });
@@ -128,12 +139,6 @@ export function createFlashCardSet(): FlashCardSet {
     />
     );
   };
-
-  const initialConfigData: IConfigData = {
-    enabledChordRootPitches: chordRootPitches.slice(),
-    enabledChordTypes: ChordType.All
-      .filter((_, i) => i <= 16)
-  };
   
   const flashCardSet = new FlashCardSet(flashCardSetId,
     "Random Chord Generator",
@@ -143,6 +148,21 @@ export function createFlashCardSet(): FlashCardSet {
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.containerHeight = "80px";
+  flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (
+    chordTypeLevels
+      .map(ctl =>
+        new FlashCardLevel(
+          ctl.name,
+          flashCards
+            .filter(fc => Utils.arrayContains(ctl.chordTypes, fc.backSide.data as ChordType))
+            .map(fc => fc.id),
+          (curConfigData: IConfigData) => ({
+            enabledChordRootPitches: chordRootPitches.slice(),
+            enabledChordTypes: ctl.chordTypes.slice()
+          } as IConfigData)
+        )
+      )
+  );
 
   return flashCardSet;
 }

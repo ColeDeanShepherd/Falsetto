@@ -1,12 +1,8 @@
 # To-Do
 ## High Priority
 * Add levels to:
-  * Random Chord Generator
   * Violin Notes
   * Sheet Music Notes
-  * Sheet Music Intervals
-  * Piano Intervals
-  * Guitar Intervals
   * Scale Formulas
   * Piano Scales
   * Guitar Scales
