@@ -6,7 +6,6 @@ import {
 import { FlashCard, FlashCardId } from "../../FlashCard";
 import { renderFlashCardSide } from "../FlashCard";
 import * as Utils from "../../Utils";
-import { FlashCardLevel } from '../../FlashCardSet';
 import { Size2D } from '../../Size2D';
 
 export interface IDefaultFlashCardMultiSelectProps {

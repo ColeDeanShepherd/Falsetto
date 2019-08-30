@@ -576,6 +576,16 @@ export function shrinkRectToFit(containerSize: Size2D, rectSize: Size2D): Size2D
   return rectSize;
 }
 
+export function areSetsEqual<T>(a: Set<T>, b: Set<T>): boolean {
+  if (a.size !== b.size) { return false; }
+  
+  for (const e of a) {
+    if (!b.has(e)) { return false; }
+  }
+
+  return true;
+}
+
 export function isSuperset<T>(a: Set<T>, b: Set<T>): boolean {
   for (const e of b) {
     if (!a.has(e)) {
