@@ -3,9 +3,9 @@ import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody } from "@mat
 
 import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
-import { FlashCard, FlashCardId } from "../../../FlashCard";
-import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
-import { Interval } from "../../../Interval";
+import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
+import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
+import { Interval, createIntervalLevels } from "../../../Interval";
 import {
   GuitarFretboard
 } from "../../Utils/GuitarFretboard";
@@ -21,7 +21,7 @@ import { StringedInstrumentNote } from '../../../StringedInstrumentNote';
 const flashCardSetId = "guitarIntervals";
 const FRET_COUNT = StringedInstrumentFingerboard.DEFAULT_FRET_COUNT;
 
-const intervals = [
+const intervalStrings = [
   "m2",
   "M2",
   "m3",
@@ -40,7 +40,7 @@ const guitarTuning = standard6StringGuitarTuning;
 
 function forEachInterval(
   fn: (
-    interval: Interval,
+    intervalString: string,
     direction: VerticalDirection,
     stringIndex0: number,
     deltaStringIndex: number,
@@ -57,7 +57,7 @@ function forEachInterval(
 
   let i = 0;
 
-  for (let intervalIndex = 0; intervalIndex < intervals.length; intervalIndex++) {
+  for (let intervalIndex = 0; intervalIndex < intervalStrings.length; intervalIndex++) {
     const interval = Interval.fromHalfSteps(1 + intervalIndex);
 
     for (const direction of directions) {
@@ -72,7 +72,7 @@ function forEachInterval(
           );
 
           if (Math.abs(deltaFretNumber) <= FRET_COUNT) {
-            fn(interval, direction, stringIndex0, deltaStringIndex, deltaFretNumber, i);
+            fn(intervalStrings[intervalIndex], direction, stringIndex0, deltaStringIndex, deltaFretNumber, i);
             i++;
           }
         }
@@ -92,7 +92,7 @@ export function configDataToEnabledFlashCardIds(
   const newEnabledFlashCardIds = new Array<FlashCardId>();
 
   forEachInterval((interval, direction, stringIndex0, deltaStringIndex, deltaFretNumber, i) => {
-    if (Utils.arrayContains(configData.enabledIntervals, interval.toString())) {
+    if (Utils.arrayContains(configData.enabledIntervals, interval)) {
       newEnabledFlashCardIds.push(flashCards[i].id);
     }
   });
@@ -108,7 +108,7 @@ export class IntervalsFlashCardMultiSelect extends React.Component<IIntervalsFla
   public render(): JSX.Element {
     const configData = this.props.studySessionInfo.configData as IConfigData;
 
-    const intervalCheckboxTableRows = intervals
+    const intervalCheckboxTableRows = intervalStrings
       .map((interval, i) => {
         const isChecked = configData.enabledIntervals.indexOf(interval) >= 0;
         const isEnabled = !isChecked || (configData.enabledIntervals.length > 1);
@@ -268,6 +268,10 @@ export function renderFretboardExtras(metrics: StringedInstrumentMetrics, notes:
   );
 }
 
+const initialConfigData: IConfigData = {
+  enabledIntervals: intervalStrings.slice()
+};
+
 export function createFlashCards(): Array<FlashCard> {
   const flashCards = new Array<FlashCard>();
 
@@ -284,16 +288,21 @@ export function createFlashCards(): Array<FlashCard> {
     };
     const id = JSON.stringify(deserializedId);
 
-    const flashCard = FlashCard.fromRenderFns(
+    const flashCard = new FlashCard(
       id,
-      size => (
-        <FlashCardFrontSide
-          stringIndex0={stringIndex0}
-          deltaStringIndex={deltaStringIndex}
-          deltaFretNumber={deltaFretNumber}
-        />
+      new FlashCardSide(
+        size => (
+          <FlashCardFrontSide
+            stringIndex0={stringIndex0}
+            deltaStringIndex={deltaStringIndex}
+            deltaFretNumber={deltaFretNumber}
+          />
+        )
       ),
-      directionChar + " " + interval.toString()
+      new FlashCardSide(
+        directionChar + " " + interval,
+        interval
+      )
     );
     flashCards.push(flashCard);
   });
@@ -312,10 +321,6 @@ export function createFlashCardSet(): FlashCardSet {
     />
     );
   };
-
-  const initialConfigData: IConfigData = {
-    enabledIntervals: intervals.slice()
-  };
   
   const flashCardSet = new FlashCardSet(flashCardSetId, "Guitar Intervals", createFlashCards);
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
@@ -323,6 +328,23 @@ export function createFlashCardSet(): FlashCardSet {
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = renderAnswerSelect;
   flashCardSet.containerHeight = "100px";
+  flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (
+    createIntervalLevels(false, false)
+      .map(level => new FlashCardLevel(
+        level.name,
+        flashCards
+          .filter(fc => {
+            const intervalString = fc.backSide.data as string;
+            return Utils.arrayContains(level.intervalStrings, intervalString);
+          })
+          .map(fc => fc.id),
+        (curConfigData: IConfigData) => (
+          {
+            enabledIntervals: level.intervalStrings.slice()
+          } as IConfigData
+        )
+      ))
+  );
 
   return flashCardSet;
 }
