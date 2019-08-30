@@ -6,11 +6,12 @@ import { Vector2D } from '../../../Vector2D';
 import { Size2D } from "../../../Size2D";
 import { Rect2D } from '../../../Rect2D';
 import * as FlashCardUtils from "../Utils";
-import { FlashCard, FlashCardId } from "../../../FlashCard";
-import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
+import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
+import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
 import { Pitch } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 import { PianoKeyboard } from "../../Utils/PianoKeyboard";
+import { createIntervalLevels } from '../../../Interval';
 
 const minPitch = new Pitch(PitchLetter.C, 0, 4);
 const maxPitch = new Pitch(PitchLetter.B, 0, 5);
@@ -166,9 +167,11 @@ function forEachInterval(fn: (pitches: Array<Pitch>, intervalString: string) => 
 export function renderAnswerSelect(
   info: FlashCardStudySessionInfo
 ): JSX.Element {
+  const enabledIntervals = (info.configData as IConfigData).enabledIntervals;
+
   return (
     <div>
-      {FlashCardUtils.renderStringAnswerSelect(intervals, info)}
+      {FlashCardUtils.renderStringAnswerSelect(enabledIntervals, info)}
     </div>
   );
 }
@@ -186,30 +189,33 @@ export function createFlashCards(): Array<FlashCard> {
     };
     const id = JSON.stringify(deserializedId);
 
-    flashCards.push(FlashCard.fromRenderFns(
+    flashCards.push(new FlashCard(
       id,
-      size => {
-        
-        return (
-          <div>
-            <PianoKeyboard
-              rect={new Rect2D(new Size2D(400, 100), new Vector2D(0, 0))}
-              lowestPitch={minPitch}
-              highestPitch={maxPitch}
-              pressedPitches={pitches}
-              style={pianoStyle}
-            />
-          </div>
-        );
-      },
-      intervalString
+      new FlashCardSide(
+        size => {
+          return (
+            <div>
+              <PianoKeyboard
+                rect={new Rect2D(new Size2D(400, 100), new Vector2D(0, 0))}
+                lowestPitch={minPitch}
+                highestPitch={maxPitch}
+                pressedPitches={pitches}
+                style={pianoStyle}
+              />
+            </div>
+          );
+        }
+      ),
+      new FlashCardSide(
+        intervalString,
+        intervalString
+      )
     ));
   });
 
   return flashCards;
 }
 export function createFlashCardSet(): FlashCardSet {
-
   const renderFlashCardMultiSelect = (
     studySessionInfo: FlashCardStudySessionInfo,
     onChange: (newValue: Array<FlashCardId>, newConfigData: any) => void
@@ -236,6 +242,24 @@ export function createFlashCardSet(): FlashCardSet {
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = renderAnswerSelect;
   flashCardSet.containerHeight = "100px";
+  flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (
+    createIntervalLevels(false, false)
+      .map(level => new FlashCardLevel(
+        level.name,
+        flashCards
+          .filter(fc => {
+            const intervalString = fc.backSide.data as string;
+            return Utils.arrayContains(level.intervalStrings, intervalString);
+          })
+          .map(fc => fc.id),
+        (curConfigData: IConfigData) => (
+          {
+            enabledIntervals: level.intervalStrings.slice(),
+            allowAccidentals: true
+          } as IConfigData
+        )
+      ))
+  );
 
   return flashCardSet;
 }
