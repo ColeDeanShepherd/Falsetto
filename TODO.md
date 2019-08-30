@@ -17,7 +17,7 @@
   * Scale Chords?
   * Scale Ear Training
   * Key Exercises
-  * Chord Exercises
+* Fix level not being detected properly when disabling & re-enabling in piano notes exercise.
 * Resume microphone on touch start if suspended?
 * Violin Notes "more info" URI
 * Double-check piano scales

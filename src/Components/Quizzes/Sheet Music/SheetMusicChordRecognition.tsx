@@ -2,12 +2,12 @@ import * as React from "react";
 
 import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
-import { FlashCard, FlashCardId } from "../../../FlashCard";
-import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
+import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
+import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
 import { Pitch, pitchRange } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
 import { SheetMusicChord } from "./SheetMusicChords";
-import { Chord, ChordType } from "../../../Chord";
+import { Chord, ChordType, chordTypeLevels } from "../../../Chord";
 import { Size2D } from '../../../Size2D';
 import { CheckboxColumnsFlashCardMultiSelect, CheckboxColumn, CheckboxColumnCell } from '../../Utils/CheckboxColumnsFlashCardMultiSelect';
 
@@ -39,9 +39,7 @@ const rootPitches = pitchRange(minPitch, maxPitch, -1, 1)
       (pitch.signedAccidental === allowedPitch.signedAccidental)
     )
   );
-const chordTypes = [ChordType.Power]
-  .concat(ChordType.Triads)
-  .concat(ChordType.SimpleSeventhChords);
+const chordTypes = ChordType.All;
 
 interface IConfigData {
   enabledRootPitches: Pitch[];
@@ -139,24 +137,36 @@ export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesF
   }
 }
 
+const initialConfigData: IConfigData = {
+  enabledRootPitches: allowedRootPitches.slice(),
+  enabledChordTypes: chordTypes.map(chordType => chordType.name)
+};
+
 export function createFlashCards(): Array<FlashCard> {
   const flashCards = new Array<FlashCard>();
 
   for (const rootPitch of rootPitches) {
     for (const chordType of chordTypes) {
+      const deserializedId = { set: flashCardSetId, chord: `${rootPitch.toString(true)} ${chordType.name}` };
+      const id = JSON.stringify(deserializedId);
       const pitches = new Chord(chordType, rootPitch).getPitches();
 
-      flashCards.push(FlashCard.fromRenderFns(
-        JSON.stringify({ set: flashCardSetId, chord: `${rootPitch.toString(true)} ${chordType.name}` }),
-        size => (
-          <div>
-            <SheetMusicChord
-              size={new Size2D(300, 200)}
-              pitches={pitches}
-            />
-          </div>
+      flashCards.push(new FlashCard(
+        id,
+        new FlashCardSide(
+          size => (
+            <div>
+              <SheetMusicChord
+                size={new Size2D(300, 200)}
+                pitches={pitches}
+              />
+            </div>
+          )
         ),
-        chordType.name
+        new FlashCardSide(
+          chordType.name,
+          chordType
+        )
       ));
     }
   }
@@ -176,11 +186,6 @@ export function createFlashCardSet(): FlashCardSet {
     );
   };
 
-  const initialConfigData: IConfigData = {
-    enabledRootPitches: allowedRootPitches.slice(),
-    enabledChordTypes: chordTypes.map(chordType => chordType.name)
-  };
-  
   const flashCardSet = new FlashCardSet(flashCardSetId,
     "Sheet Music Chords",
     createFlashCards
@@ -189,6 +194,21 @@ export function createFlashCardSet(): FlashCardSet {
   flashCardSet.initialConfigData = initialConfigData;
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
+  flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (
+    chordTypeLevels
+      .map(ctl =>
+        new FlashCardLevel(
+          ctl.name,
+          flashCards
+            .filter(fc => Utils.arrayContains(ctl.chordTypes, fc.backSide.data as ChordType))
+            .map(fc => fc.id),
+          (curConfigData: IConfigData) => ({
+            enabledRootPitches: allowedRootPitches.slice(),
+            enabledChordTypes: ctl.chordTypes.map(ct => ct.name)
+          } as IConfigData)
+        )
+      )
+  );
 
   return flashCardSet;
 }

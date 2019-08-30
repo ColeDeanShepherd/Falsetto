@@ -3,11 +3,11 @@ import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid, Butto
 
 import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
-import { FlashCard, FlashCardId } from "../../../FlashCard";
-import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
+import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
+import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
 import { Pitch } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
-import { Chord, ChordType } from "../../../Chord";
+import { Chord, ChordType, chordTypeLevels } from "../../../Chord";
 import { playPitches } from "../../../Piano";
 
 const flashCardSetId = "chordEarTraining";
@@ -16,8 +16,7 @@ const minPitch = new Pitch(PitchLetter.C, -1, 2);
 const maxPitch = new Pitch(PitchLetter.C, 1, 6);
 const rootPitches = Utils.range(minPitch.midiNumber, maxPitch.midiNumber)
   .map(midiNumber => Pitch.createFromMidiNumber(midiNumber));
-const chordTypes = ChordType.Triads
-  .concat(ChordType.SimpleSeventhChords);
+const chordTypes = ChordType.All;
 
   export interface IFlashCardFrontSideProps {
     chordType: ChordType;
@@ -159,10 +158,15 @@ export function createFlashCards(): Array<FlashCard> {
     };
     const id = JSON.stringify(deserializedId);
 
-    flashCards.push(FlashCard.fromRenderFns(
+    flashCards.push(new FlashCard(
       id,
-      () => <FlashCardFrontSide key={iCopy} chordType={chordType} />,
-      chordType.name
+      new FlashCardSide(
+        () => <FlashCardFrontSide key={iCopy} chordType={chordType} />
+      ),
+      new FlashCardSide(
+        chordType.name,
+        chordType
+      )
     ));
   }
 
@@ -194,6 +198,20 @@ export function createFlashCardSet(): FlashCardSet {
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.containerHeight = "100px";
+  flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (
+    chordTypeLevels
+      .map(ctl =>
+        new FlashCardLevel(
+          ctl.name,
+          flashCards
+            .filter(fc => Utils.arrayContains(ctl.chordTypes, fc.backSide.data as ChordType))
+            .map(fc => fc.id),
+          (curConfigData: IConfigData) => ({
+            enabledChordTypes: ctl.chordTypes.map(ct => ct.name)
+          } as IConfigData)
+        )
+      )
+  );
 
   return flashCardSet;
 }

@@ -4,10 +4,10 @@ import { TableRow, TableCell, Table, TableHead, TableBody, Grid, Checkbox } from
 import * as Utils from "../../../Utils";
 import { Size2D } from "../../../Size2D";
 import { FlashCard, FlashCardSide, FlashCardId } from "../../../FlashCard";
-import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
+import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
 import { Pitch } from "../../../Pitch";
 import { PitchLetter } from "../../../PitchLetter";
-import { ChordType } from "../../../Chord";
+import { ChordType, chordTypeLevels } from "../../../Chord";
 import {  renderDistinctFlashCardSideAnswerSelect } from '../Utils';
 import { GuitarChordViewer } from '../../Utils/GuitarChordViewer';
 import { getStandardGuitarTuning } from '../../Utils/StringedInstrumentTuning';
@@ -124,6 +124,20 @@ export function createFlashCardSet(): FlashCardSet {
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.containerHeight = "120px";
+  flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (
+    chordTypeLevels
+      .map(ctl =>
+        new FlashCardLevel(
+          ctl.name,
+          flashCards
+            .filter(fc => Utils.arrayContains(ctl.chordTypes, fc.backSide.data as ChordType))
+            .map(fc => fc.id),
+          (curConfigData: IConfigData) => ({
+            enabledChordTypes: ctl.chordTypes.slice()
+          } as IConfigData)
+        )
+      )
+  );
 
   return flashCardSet;
 }
@@ -154,7 +168,10 @@ export function createFlashCards(): FlashCard[] {
         },
         pitches
       ),
-      new FlashCardSide(chordType.name)
+      new FlashCardSide(
+        chordType.name,
+        chordType
+      )
     );
   });
 }
