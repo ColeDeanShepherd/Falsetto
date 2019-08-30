@@ -10,13 +10,13 @@ import { Pitch } from "../../../Pitch";
 import { playPitchesSequentially } from "../../../Piano";
 import {
   intervals,
-  forEachInterval,
-  intervalLevels
+  forEachInterval
 } from "../../Utils/IntervalEarTrainingFlashCardMultiSelect";
 import { Button, TableRow, TableCell, Checkbox, Table, TableHead, TableBody, Grid } from "@material-ui/core";
 import { PianoKeyboard } from "../../Utils/PianoKeyboard";
 import { PitchLetter } from "../../../PitchLetter";
 import { PianoKeysAnswerSelect } from "../../Utils/PianoKeysAnswerSelect";
+import { createIntervalLevels } from '../../../Interval';
 
 const flashCardSetId = "pianoNextNoteEarTraining";
 
@@ -270,7 +270,7 @@ export function createFlashCardSet(): FlashCardSet {
   };
   flashCardSet.containerHeight = "180px";
   flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (
-    intervalLevels
+    createIntervalLevels(false, false)
       .map(level => new FlashCardLevel(
         level.name,
         flashCards

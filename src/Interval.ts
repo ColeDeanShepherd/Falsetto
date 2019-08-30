@@ -170,3 +170,44 @@ export function intervalQualityStringToNumber(intervalQualityString: string): nu
       throw new Error(`Unknown interval quality: ${intervalQualityString}`);
   }
 }
+
+export function createIntervalLevels(includeUnison: boolean, separateA4D5: boolean) {
+  const unisonIntervalStrings = includeUnison ? ["P1"] : [];
+  const tritoneIntervalStrings = separateA4D5 ? ["A4", "d5"] : ["A4/d5"];
+
+  return [
+    {
+      name: "Perfect Intervals",
+      intervalStrings: unisonIntervalStrings
+        .concat(["P4", "P5", "P8"])
+    },
+    {
+      name: "m2, A4/d5, M7",
+      intervalStrings: unisonIntervalStrings
+        .concat(["m2", "P4"])
+        .concat(tritoneIntervalStrings)
+        .concat(["P5", "M7", "P8"])
+    },
+    {
+      name: "M2, m7",
+      intervalStrings: unisonIntervalStrings
+        .concat(["m2", "M2", "P4"])
+        .concat(tritoneIntervalStrings)
+        .concat(["P5", "m7", "M7", "P8"])
+    },
+    {
+      name: "3rds",
+      intervalStrings: unisonIntervalStrings
+        .concat(["m2", "M2", "m3", "M3", "P4"])
+        .concat(tritoneIntervalStrings)
+        .concat(["P5", "m7", "M7", "P8"])
+    },
+    {
+      name: "6ths (All Intervals)",
+      intervalStrings: unisonIntervalStrings
+      .concat(["m2", "M2", "m3", "M3", "P4"])
+      .concat(tritoneIntervalStrings)
+      .concat(["P5", "m6", "M6", "m7", "M7", "P8"])
+    }
+  ];
+}

@@ -12,14 +12,14 @@ import {
   directions,
   IntervalEarTrainingFlashCardMultiSelect,
   configDataToEnabledFlashCardIds,
-  forEachInterval,
-  intervalLevels
+  forEachInterval
 } from "../../Utils/IntervalEarTrainingFlashCardMultiSelect";
 import { Button, Typography, Checkbox } from "@material-ui/core";
 import { Tuner } from '../../Tools/Tuner';
 import { DetectedPitch } from '../../PitchDetection';
 import { AnswerDifficulty } from '../../../AnswerDifficulty';
 import { PitchesAudioPlayer } from '../../Utils/PitchesAudioPlayer';
+import { createIntervalLevels } from '../../../Interval';
 
 const flashCardSetId = "intervalSinging";
 
@@ -295,7 +295,7 @@ export function createFlashCardSet(): FlashCardSet {
     <FlashCardAnswerSelect info={info} />;
   flashCardSet.containerHeight = "120px";
   flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (
-    intervalLevels
+    createIntervalLevels(false, false)
       .map(level => new FlashCardLevel(
         level.name,
         flashCards

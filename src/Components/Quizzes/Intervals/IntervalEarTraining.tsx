@@ -13,10 +13,10 @@ import {
   directionsWithHarmonic as directions,
   IntervalEarTrainingFlashCardMultiSelect,
   configDataToEnabledFlashCardIds,
-  forEachInterval,
-  intervalLevels
+  forEachInterval
 } from "../../Utils/IntervalEarTrainingFlashCardMultiSelect";
 import { Button } from "@material-ui/core";
+import { createIntervalLevels } from '../../../Interval';
 
 const flashCardSetId = "intervalEarTraining";
 
@@ -146,7 +146,7 @@ export function createFlashCardSet(): FlashCardSet {
   flashCardSet.moreInfoUri = "https://www.youtube.com/watch?v=_aDCO3h_xik";
   flashCardSet.containerHeight = "120px";
   flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (
-    intervalLevels
+    createIntervalLevels(false, false)
       .map(level => new FlashCardLevel(
         level.name,
         flashCards
