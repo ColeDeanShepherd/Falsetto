@@ -245,6 +245,71 @@ export class ScaleType {
   }
 }
 
+export const ScaleTypeLevels = [
+  {
+    name: "Major/Minor",
+    scaleTypes: [
+      ScaleType.Major,
+      ScaleType.NaturalMinor
+    ]
+  },
+  {
+    name: "More Minor Scales",
+    scaleTypes: [
+      ScaleType.Major,
+      ScaleType.NaturalMinor,
+      ScaleType.MelodicMinor,
+      ScaleType.HarmonicMinor
+    ]
+  },
+  {
+    name: "Modes of Major",
+    scaleTypes: ScaleType.MajorScaleModes
+      .concat([
+        ScaleType.NaturalMinor,
+        ScaleType.MelodicMinor,
+        ScaleType.HarmonicMinor
+      ])
+  },
+  {
+    name: "Modes of Mel. Minor",
+    scaleTypes: ScaleType.MajorScaleModes
+      .concat([
+        ScaleType.NaturalMinor,
+        ScaleType.HarmonicMinor
+      ])
+      .concat(ScaleType.MelodicMinorScaleModes)
+  },
+  {
+    name: "Diminished",
+    scaleTypes: ScaleType.MajorScaleModes
+      .concat([
+        ScaleType.NaturalMinor,
+        ScaleType.HarmonicMinor
+      ])
+      .concat(ScaleType.MelodicMinorScaleModes)
+      .concat(ScaleType.DiminishedScales)
+  },
+  {
+    name: "Whole Tone/Augmented",
+    scaleTypes: ScaleType.MajorScaleModes
+      .concat([
+        ScaleType.NaturalMinor,
+        ScaleType.HarmonicMinor
+      ])
+      .concat(ScaleType.MelodicMinorScaleModes)
+      .concat(ScaleType.DiminishedScales)
+      .concat([
+        ScaleType.WholeTone,
+        ScaleType.Augmented
+      ])
+  },
+  {
+    name: "All Scales",
+    scaleTypes: ScaleType.All
+  }
+];
+
 export class Scale {
   public constructor(
     public type: ScaleType,

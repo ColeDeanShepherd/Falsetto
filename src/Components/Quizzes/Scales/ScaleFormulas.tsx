@@ -1,7 +1,8 @@
+import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
-import { FlashCard, FlashCardId } from "../../../FlashCard";
-import { FlashCardSet, } from "../../../FlashCardSet";
-import { ScaleType } from '../../../Scale';
+import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
+import { FlashCardSet, FlashCardLevel, } from "../../../FlashCardSet";
+import { ScaleType, ScaleTypeLevels } from '../../../Scale';
 
 const flashCardSetId = "scaleFormulasMajor";
 
@@ -19,15 +20,31 @@ export function createFlashCardSet(): FlashCardSet {
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.moreInfoUri = "/essential-music-theory/scales-and-modes";
   flashCardSet.containerHeight = "80px";
+  flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (
+    ScaleTypeLevels
+      .map(level => new FlashCardLevel(
+        level.name,
+        flashCards
+          .filter(fc => {
+            const scaleType = fc.backSide.data as ScaleType;
+            return Utils.arrayContains(level.scaleTypes, scaleType);
+          })
+          .map(fc => fc.id),
+        (curConfigData: any) => null
+      ))
+  );
 
   return flashCardSet;
 }
 
 export function createFlashCards(): FlashCard[] {
   return ScaleType.All
-    .map(scaleType => FlashCard.fromRenderFns(
+    .map(scaleType => new FlashCard(
       JSON.stringify({ set: flashCardSetId, scale: scaleType.name }),
-      scaleType.name,
-      scaleType.formula.toString()
+      new FlashCardSide(scaleType.name),
+      new FlashCardSide(
+        scaleType.formula.toString(),
+        scaleType
+      )
     ));
 }

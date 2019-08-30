@@ -3,7 +3,6 @@
 * Add levels to:
   * Violin Notes
   * Sheet Music Notes
-  * Scale Formulas
   * Piano Scales
   * Guitar Scales
   * Scale Degree Modes
