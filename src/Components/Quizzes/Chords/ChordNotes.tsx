@@ -1,7 +1,8 @@
+import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
-import { FlashCard, FlashCardId } from "../../../FlashCard";
-import { FlashCardSet, } from "../../../FlashCardSet";
-import { ChordType } from '../../../Chord';
+import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
+import { FlashCardSet, FlashCardLevel, } from "../../../FlashCardSet";
+import { ChordType, chordTypeLevels } from '../../../Chord';
 
 const flashCardSetId = "chordFormulasRelativeToMajorScale";
 
@@ -18,6 +19,18 @@ export function createFlashCardSet(): FlashCardSet {
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.moreInfoUri = "/essential-music-theory/chords";
   flashCardSet.containerHeight = "80px";
+  flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (
+    chordTypeLevels
+      .map(ctl =>
+        new FlashCardLevel(
+          ctl.name,
+          flashCards
+            .filter(fc => Utils.arrayContains(ctl.chordTypes, fc.backSide.data as ChordType))
+            .map(fc => fc.id),
+          (curConfigData: any) => null
+        )
+      )
+  );
 
   return flashCardSet;
 }
@@ -27,6 +40,13 @@ export function createFlashCards(): FlashCard[] {
     .map(chordType => {
       const deserializedId = { "set": flashCardSetId, chord: chordType.symbols[0] };
       const id = JSON.stringify(deserializedId);
-      return FlashCard.fromRenderFns(id, chordType.name, chordType.formula.toString());
+      return new FlashCard(
+        id,
+        new FlashCardSide(chordType.name),
+        new FlashCardSide(
+          chordType.formula.toString(),
+          chordType
+        )
+      );
     });
 } 
