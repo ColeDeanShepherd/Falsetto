@@ -243,7 +243,7 @@ const initialConfigData: IConfigData = {
     .map(chord => chord.name)
 };
 
-export function createFlashCardSet(): FlashCardSet {
+function createFlashCardSet(): FlashCardSet {
   const renderFlashCardMultiSelect = (
     info: FlashCardStudySessionInfo,
     onChange: (newValue: Array<FlashCardId>, newConfigData: any) => void
@@ -329,3 +329,5 @@ export function renderAnswerSelect(
     enabledRootPitches={(info.configData as IConfigData).enabledRootPitches}
     enabledChordTypeNames={(info.configData as IConfigData).enabledChordTypes} />;
 }
+
+export const flashCardSet = createFlashCardSet();

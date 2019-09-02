@@ -24,7 +24,7 @@ const clefs = [
   }
 ];
 
-export function createFlashCardSet(): FlashCardSet {
+function createFlashCardSet(): FlashCardSet {
   const initialConfigData: IConfigData = {
     isTrebleClefEnabled: true,
     isBassClefEnabled: true,
@@ -315,3 +315,5 @@ export class SheetMusicNotesFlashCardMultiSelect extends React.Component<ISheetM
     this.props.onChange(newEnabledFlashCardIds, newConfigData);
   }
 }
+
+export const flashCardSet = createFlashCardSet();

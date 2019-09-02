@@ -4,7 +4,7 @@ import { FlashCardSet } from "../../../FlashCardSet";
 
 const flashCardSetId = "availableChordTensions";
 
-export function createFlashCardSet(): FlashCardSet {
+function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Available Chord Tensions", createFlashCards);
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/jazz-chords/extensions-alterations/";
@@ -43,3 +43,5 @@ export function createFlashCards(): FlashCard[] {
       "+7", "b9, 9, #9, #11, 13"),
   ];
 }
+
+export const flashCardSet = createFlashCardSet();

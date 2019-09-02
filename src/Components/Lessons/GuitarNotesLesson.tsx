@@ -467,7 +467,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           <p>Now, you can practice your knowledge on your guitar, or using the exercise below.</p>
           <p>
             {createStudyFlashCardSetComponent(
-              GuitarNotes.createFlashCardSet(), false, true, "Final Quiz", { margin: "0 auto" })}
+              GuitarNotes.flashCardSet, false, true, "Final Quiz", { margin: "0 auto" })}
           </p>
         </CardContent>
       </Card>

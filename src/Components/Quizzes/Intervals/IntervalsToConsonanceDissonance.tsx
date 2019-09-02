@@ -11,7 +11,7 @@ const orderedAnswers = [
   "sharp dissonance"
 ];
 
-export function createFlashCardSet(): FlashCardSet {
+function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Intervals Consonance/Dissonance", createFlashCards);
   flashCardSet.renderAnswerSelect = info => FlashCardUtils.renderStringAnswerSelect(orderedAnswers, info);
   flashCardSet.moreInfoUri = "/essential-music-theory/intervals";
@@ -60,3 +60,5 @@ export function createFlashCards(): FlashCard[] {
       "P8", "open consonance"),
   ];
 }
+
+export const flashCardSet = createFlashCardSet();

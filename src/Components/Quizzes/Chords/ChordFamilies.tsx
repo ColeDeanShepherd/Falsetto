@@ -4,7 +4,7 @@ import { FlashCardSet } from "../../../FlashCardSet";
 
 const flashCardSetId = "diatonicChordFamilies";
 
-export function createFlashCardSet(): FlashCardSet {
+function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Chord Harmonic Functions", createFlashCards);
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.moreInfoUri = "https://davidkulma.com/musictheory/harmonicfunction";
@@ -37,3 +37,5 @@ export function createFlashCards(): FlashCard[] {
       "7", "Dominant"),
   ];
 }
+
+export const flashCardSet = createFlashCardSet();

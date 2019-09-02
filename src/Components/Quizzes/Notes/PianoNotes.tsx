@@ -16,7 +16,7 @@ export function isNoteStringNatural(noteString: string): boolean {
   return noteString.length === 1;
 }
 
-export function createFlashCardSet(): FlashCardSet {
+function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Piano Notes", createFlashCards);
   flashCardSet.containerHeight = "120px";
   flashCardSet.moreInfoUri = "/essential-music-theory/notes";
@@ -76,3 +76,5 @@ export function createFlashCards(): FlashCard[] {
     }
   );
 }
+
+export const flashCardSet = createFlashCardSet();

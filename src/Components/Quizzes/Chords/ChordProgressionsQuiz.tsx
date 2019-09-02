@@ -4,7 +4,7 @@ import { FlashCardSet } from "../../../FlashCardSet";
 
 const flashCardSetId = "chordProgressionsQuiz";
 
-export function createFlashCardSet(): FlashCardSet {
+function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Chord Progressions Quiz", createFlashCards);
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.containerHeight = "160px";
@@ -84,3 +84,5 @@ export function createFlashCards(): FlashCard[] {
       "The diatonic chords that are considered \"dominant\" chords are:", "V, VII"),
   ];
 }
+
+export const flashCardSet = createFlashCardSet();

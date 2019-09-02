@@ -113,7 +113,7 @@ const initialConfigData: IConfigData = {
     .map(scale => scale.name)
 };
 
-export function createFlashCardSet(): FlashCardSet {
+function createFlashCardSet(): FlashCardSet {
   const renderFlashCardMultiSelect = (
     studySessionInfo: FlashCardStudySessionInfo,
     onChange: (newValue: Array<FlashCardId>, newConfigData: any) => void
@@ -208,3 +208,5 @@ export function renderAnswerSelect(
     onAnswer={info.onAnswer} lastCorrectAnswer={info.lastCorrectAnswer}
     incorrectAnswers={info.incorrectAnswers} />;
 }
+
+export const flashCardSet = createFlashCardSet();

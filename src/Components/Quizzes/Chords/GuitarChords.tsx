@@ -100,7 +100,7 @@ export class GuitarChordsFlashCardMultiSelect extends React.Component<IGuitarCho
   }
 }
 
-export function createFlashCardSet(): FlashCardSet {
+function createFlashCardSet(): FlashCardSet {
   const renderFlashCardMultiSelect = (
     info: FlashCardStudySessionInfo,
     onChange: (newValue: Array<FlashCardId>, newConfigData: any) => void
@@ -175,3 +175,5 @@ export function createFlashCards(): FlashCard[] {
     );
   });
 }
+
+export const flashCardSet = createFlashCardSet();

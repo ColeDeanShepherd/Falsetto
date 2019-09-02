@@ -12,7 +12,7 @@ function configDataToEnabledFlashCardIds(
     .map(fc => fc.id);
 }
 
-export function createFlashCardSet(): FlashCardSet {
+function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Diatonic Seventh Chords", createFlashCards);
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
@@ -162,3 +162,5 @@ export function createFlashCards(): FlashCard[] {
         "Double Harmonic Major 7 Seventh Chord Type", "7"),
     ]);
 }
+
+export const flashCardSet = createFlashCardSet();

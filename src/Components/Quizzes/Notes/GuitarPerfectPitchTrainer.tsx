@@ -171,7 +171,7 @@ export class GuitarNoteAnswerSelect extends React.Component<IGuitarNoteAnswerSel
   }
 }
 
-export function createFlashCardSet(guitarNotes?: Array<StringedInstrumentNote>): FlashCardSet {
+function createFlashCardSet(guitarNotes?: Array<StringedInstrumentNote>): FlashCardSet {
   const renderFlashCardMultiSelect = (
     studySessionInfo: FlashCardStudySessionInfo,
     onChange: (newValue: Array<FlashCardId>, newConfigData: any) => void
@@ -250,3 +250,5 @@ export function createFlashCards(notes?: Array<StringedInstrumentNote>): FlashCa
       );
     });
 }
+
+export const flashCardSet = createFlashCardSet();

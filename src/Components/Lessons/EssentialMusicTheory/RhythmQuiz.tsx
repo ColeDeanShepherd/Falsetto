@@ -4,7 +4,7 @@ import { FlashCardSet } from "../../../FlashCardSet";
 
 const flashCardSetId = "esmRhythmQuiz";
 
-export function createFlashCardSet(): FlashCardSet {
+function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Rhythm Quiz", createFlashCards);
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.containerHeight = "160px";
@@ -69,3 +69,5 @@ export function createFlashCards(): FlashCard[] {
       "In general, any time signature with a # of beats divisible by 4 (but not 3) will have a repeating pattern of: _.", "strong beat, weak beat, medium-strength beat, weak beat")
   ];
 }
+
+export const flashCardSet = createFlashCardSet();

@@ -310,8 +310,8 @@ export const ChordProgressionsSection: React.FunctionComponent<SectionProps> = p
     </NoteText>
 
     <SubSectionTitle>Interactive Exercises</SubSectionTitle>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(ChordProgressionsQuiz.createFlashCardSet(), props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "2em"}}>{createStudyFlashCardSetComponent(ChordHarmonicFunctions.createFlashCardSet(), props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(ChordProgressionsQuiz.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em"}}>{createStudyFlashCardSetComponent(ChordHarmonicFunctions.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}</div>
 
     <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory/chords", "<< Previous: Chords")} | Next: Next Steps (coming soon) >></p>
   </div>

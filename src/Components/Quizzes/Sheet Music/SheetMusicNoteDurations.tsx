@@ -25,7 +25,7 @@ function configDataToEnabledFlashCardIds(
     .map(fc => fc.id);
 }
 
-export function createFlashCardSet(): FlashCardSet {
+function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Sheet Music Note Durations", createFlashCards);
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.renderAnswerSelect = renderAnswerSelect;
@@ -239,3 +239,5 @@ function vexFlowRender(
   
   voice.draw(context, stave);
 }
+
+export const flashCardSet = createFlashCardSet();

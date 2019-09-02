@@ -4,7 +4,7 @@ import { FlashCardSet } from "../../../FlashCardSet";
 
 const flashCardSetId = "scaleDegreeNames";
 
-export function createFlashCardSet(): FlashCardSet {
+function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Scale Degree Names", createFlashCards);
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.moreInfoUri = "http://musictheoryblog.blogspot.com/2007/01/scale-degrees.html";
@@ -41,3 +41,5 @@ export function createFlashCards(): FlashCard[] {
       "7 (in minor)", "Subtonic"),
   ];
 }
+
+export const flashCardSet = createFlashCardSet();

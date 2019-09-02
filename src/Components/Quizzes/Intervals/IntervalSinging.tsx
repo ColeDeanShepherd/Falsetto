@@ -240,7 +240,7 @@ export function createFlashCards(): Array<FlashCard> {
 
   return flashCards;
 }
-export function createFlashCardSet(): FlashCardSet {
+function createFlashCardSet(): FlashCardSet {
   const renderFlashCardMultiSelect = (
     studySessionInfo: FlashCardStudySessionInfo,
     onChange: (newValue: Array<FlashCardId>, newConfigData: any) => void
@@ -317,3 +317,5 @@ export function createFlashCardSet(): FlashCardSet {
   
   return flashCardSet;
 }
+
+export const flashCardSet = createFlashCardSet();

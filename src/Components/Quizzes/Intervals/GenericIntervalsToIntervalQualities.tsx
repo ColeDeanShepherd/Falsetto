@@ -4,7 +4,7 @@ import { FlashCardSet } from "../../../FlashCardSet";
 
 const flashCardSetId = "genericIntervalQualities";
 
-export function createFlashCardSet(): FlashCardSet {
+function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Generic Intervals To Interval Qualities", createFlashCards);
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
 
@@ -39,3 +39,5 @@ export function createFlashCards(): FlashCard[] {
       "8th", "perfect"),
   ];
 }
+
+export const flashCardSet = createFlashCardSet();

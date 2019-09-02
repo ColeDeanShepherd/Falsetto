@@ -95,7 +95,7 @@ export function createFlashCards(): Array<FlashCard> {
       answers[i]
     ));
 }
-export function createFlashCardSet(): FlashCardSet {
+function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Key Signature Identification", createFlashCards);
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.moreInfoUri = "https://method-behind-the-music.com/theory/scalesandkeys/#sigs";
@@ -103,3 +103,5 @@ export function createFlashCardSet(): FlashCardSet {
 
   return flashCardSet;
 }
+
+export const flashCardSet = createFlashCardSet();

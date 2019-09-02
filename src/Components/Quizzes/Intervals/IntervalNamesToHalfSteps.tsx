@@ -6,7 +6,7 @@ import { createIntervalLevels } from '../../../Interval';
 
 const flashCardSetId = "intervalHalfSteps";
 
-export function createFlashCardSet(): FlashCardSet {
+function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Interval Semitones", createFlashCards);
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.moreInfoUri = "/essential-music-theory/intervals";
@@ -97,3 +97,5 @@ export function createFlashCards(): FlashCard[] {
     )
   ];
 }
+
+export const flashCardSet = createFlashCardSet();

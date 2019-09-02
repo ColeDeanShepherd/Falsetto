@@ -5,7 +5,7 @@ import { FlashCardSet } from "../../../FlashCardSet";
 
 const flashCardSetId = "diatonicChordFamilyDefinitions";
 
-export function createFlashCardSet(): FlashCardSet {
+function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Chord Family Definitions", createFlashCards);
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
 
@@ -24,3 +24,5 @@ export function createFlashCards(): FlashCard[] {
       "Dominant", "contains the 4th and 7th scale degrees"),
   ];
 }
+
+export const flashCardSet = createFlashCardSet();

@@ -141,68 +141,68 @@ class App extends React.Component<IAppProps, IAppState> {
       {
         title: "Notes",
         flashCardSets: [
-          PianoNotes.createFlashCardSet(),
-          GuitarNotes.createFlashCardSet(),
-          ViolinNotes.createFlashCardSet(),
-          NoteDurations.createFlashCardSet(),
-          SheetMusicNotes.createFlashCardSet(),
-          GuitarPerfectPitchTrainer.createFlashCardSet()
+          PianoNotes.flashCardSet,
+          GuitarNotes.flashCardSet,
+          ViolinNotes.flashCardSet,
+          NoteDurations.flashCardSet,
+          SheetMusicNotes.flashCardSet,
+          GuitarPerfectPitchTrainer.flashCardSet
         ]
       },
       {
         title: "Intervals",
         flashCardSets: [
-          IntervalQualitySymbolsToQualities.createFlashCardSet(),
-          GenericIntervalsToIntervalQualities.createFlashCardSet(),
-          IntervalNamesToHalfSteps.createFlashCardSet(),
-          IntervalsToConsonanceDissonance.createFlashCardSet(),
-          Interval2ndNotes.createFlashCardSet(),
-          IntervalNotes.createFlashCardSet(),
-          SheetMusicIntervalRecognition.createFlashCardSet(),
-          PianoIntervals.createFlashCardSet(),
-          GuitarIntervals.createFlashCardSet(),
-          IntervalEarTraining.createFlashCardSet(),
-          Interval2ndNoteEarTraining.createFlashCardSet(),
-          Interval2ndNoteEarTrainingPiano.createFlashCardSet(),
-          IntervalSinging.createFlashCardSet()
+          IntervalQualitySymbolsToQualities.flashCardSet,
+          GenericIntervalsToIntervalQualities.flashCardSet,
+          IntervalNamesToHalfSteps.flashCardSet,
+          IntervalsToConsonanceDissonance.flashCardSet,
+          Interval2ndNotes.flashCardSet,
+          IntervalNotes.flashCardSet,
+          SheetMusicIntervalRecognition.flashCardSet,
+          PianoIntervals.flashCardSet,
+          GuitarIntervals.flashCardSet,
+          IntervalEarTraining.flashCardSet,
+          Interval2ndNoteEarTraining.flashCardSet,
+          Interval2ndNoteEarTrainingPiano.flashCardSet,
+          IntervalSinging.flashCardSet
         ]
       },
       {
         title: "Scales",
         flashCardSets: [
-          ScaleDegreeNames.createFlashCardSet(),
-          ScaleNotes.createFlashCardSet(),
-          PianoScales.createFlashCardSet(),
-          GuitarScales.createFlashCardSet(),
-          ScaleDegreeModes.createFlashCardSet(),
-          ScaleChords.createFlashCardSet(),
-          ScaleFamilies.createFlashCardSet(),
-          ScaleCharacteristics.createFlashCardSet(),
-          ScaleEarTraining.createFlashCardSet()
+          ScaleDegreeNames.flashCardSet,
+          ScaleNotes.flashCardSet,
+          PianoScales.flashCardSet,
+          GuitarScales.flashCardSet,
+          ScaleDegreeModes.flashCardSet,
+          ScaleChords.flashCardSet,
+          ScaleFamilies.flashCardSet,
+          ScaleCharacteristics.flashCardSet,
+          ScaleEarTraining.flashCardSet
         ]
       },
       {
         title: "Keys",
         flashCardSets: [
-          KeyAccidentalCounts.createFlashCardSet(),
-          KeyAccidentalNotes.createFlashCardSet(),
-          KeySignatureIdentification.createFlashCardSet()
+          KeyAccidentalCounts.flashCardSet,
+          KeyAccidentalNotes.flashCardSet,
+          KeySignatureIdentification.flashCardSet
         ]
       },
       {
         title: "Chords",
         flashCardSets: [
-          ChordFamilyDefinitions.createFlashCardSet(),
-          ChordFamilies.createFlashCardSet(),
-          ChordNotes.createFlashCardSet(),
-          AvailableChordTensions.createFlashCardSet(),
-          DiatonicTriads.createFlashCardSet(),
-          DiatonicSeventhChords.createFlashCardSet(),
-          SheetMusicChordRecognition.createFlashCardSet(),
-          PianoChords.createFlashCardSet(),
-          GuitarChords.createFlashCardSet(),
-          ChordEarTraining.createFlashCardSet(),
-          RandomChordGenerator.createFlashCardSet()
+          ChordFamilyDefinitions.flashCardSet,
+          ChordFamilies.flashCardSet,
+          ChordNotes.flashCardSet,
+          AvailableChordTensions.flashCardSet,
+          DiatonicTriads.flashCardSet,
+          DiatonicSeventhChords.flashCardSet,
+          SheetMusicChordRecognition.flashCardSet,
+          PianoChords.flashCardSet,
+          GuitarChords.flashCardSet,
+          ChordEarTraining.flashCardSet,
+          RandomChordGenerator.flashCardSet
         ]
       }
     ];

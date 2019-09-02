@@ -1,11 +1,10 @@
-import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
 import { FlashCardSet } from "../../../FlashCardSet";
 
 const flashCardSetId = "noteVal#s";
 
-export function createFlashCardSet(): FlashCardSet {
+function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Note Value Numbers", createFlashCards);
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.containerHeight = "80px";
@@ -41,3 +40,5 @@ export function createFlashCards(): FlashCard[] {
       "128", "128th Note/Rest")
   ];
 }
+
+export const flashCardSet = createFlashCardSet();

@@ -189,3 +189,5 @@ export function createFlashCards(): Array<FlashCard> {
 
   return flashCards;
 }
+
+export const flashCardSet = createFlashCardSet();

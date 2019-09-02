@@ -29,7 +29,7 @@ export function renderAnswerSelect(
   );
 }
 
-export function createFlashCardSet(): FlashCardSet {
+function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Key Accidental Counts", createFlashCards);
   flashCardSet.renderAnswerSelect = renderAnswerSelect;
   flashCardSet.moreInfoUri = "https://www.musicnotes.com/now/tips/circle-of-fifths-guide/";
@@ -133,3 +133,5 @@ export function createFlashCards(): FlashCard[] {
       "A♭ Minor", "7 flats")
   ];
 }
+
+export const flashCardSet = createFlashCardSet();

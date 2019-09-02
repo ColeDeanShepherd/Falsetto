@@ -83,60 +83,60 @@ export const MainMenu : React.FunctionComponent<{}> = props => (
           <NavLink to="/diatonic-chord-player" onClick={event => App.instance.onNavLinkClick()} className="menu-link">Diatonic Chord Player</NavLink>
           <NavLink to="/metronome" onClick={event => App.instance.onNavLinkClick()} className="menu-link">Metronome</NavLink>
           <NavLink to="/tuner" onClick={event => App.instance.onNavLinkClick()} className="menu-link">Tuner</NavLink>
-          {App.instance.renderFlashCardSetLink(RandomChordGenerator.createFlashCardSet())}
+          {App.instance.renderFlashCardSetLink(RandomChordGenerator.flashCardSet)}
         </MenuCategory>
         <MenuCategory title="Note Exercises">
-          {App.instance.renderFlashCardSetLink(PianoNotes.createFlashCardSet())}
-          {App.instance.renderFlashCardSetLink(GuitarNotes.createFlashCardSet())}
-          {App.instance.renderFlashCardSetLink(ViolinNotes.createFlashCardSet())}
-          {App.instance.renderFlashCardSetLink(NoteDurations.createFlashCardSet())}
-          {App.instance.renderFlashCardSetLink(SheetMusicNotes.createFlashCardSet())}
-          {App.instance.renderFlashCardSetLink(GuitarPerfectPitchTrainer.createFlashCardSet())}
+          {App.instance.renderFlashCardSetLink(PianoNotes.flashCardSet)}
+          {App.instance.renderFlashCardSetLink(GuitarNotes.flashCardSet)}
+          {App.instance.renderFlashCardSetLink(ViolinNotes.flashCardSet)}
+          {App.instance.renderFlashCardSetLink(NoteDurations.flashCardSet)}
+          {App.instance.renderFlashCardSetLink(SheetMusicNotes.flashCardSet)}
+          {App.instance.renderFlashCardSetLink(GuitarPerfectPitchTrainer.flashCardSet)}
         </MenuCategory>
       </div>
       <div className="column">
         <MenuCategory title="Interval Exercises">
-          {App.instance.renderFlashCardSetLink(IntervalQualitySymbolsToQualities.createFlashCardSet())}
-          {App.instance.renderFlashCardSetLink(IntervalNamesToHalfSteps.createFlashCardSet())}
-          {App.instance.renderFlashCardSetLink(IntervalsToConsonanceDissonance.createFlashCardSet())}
-          {App.instance.renderFlashCardSetLink(Interval2ndNotes.createFlashCardSet())}
-          {App.instance.renderFlashCardSetLink(IntervalNotes.createFlashCardSet())}
-          {App.instance.renderFlashCardSetLink(SheetMusicIntervalRecognition.createFlashCardSet())}
-          {App.instance.renderFlashCardSetLink(PianoIntervals.createFlashCardSet())}
-          {App.instance.renderFlashCardSetLink(GuitarIntervals.createFlashCardSet())}
-          {App.instance.renderFlashCardSetLink(IntervalEarTraining.createFlashCardSet())}
-          {App.instance.renderFlashCardSetLink(Interval2ndNoteEarTraining.createFlashCardSet())}
-          {App.instance.renderFlashCardSetLink(Interval2ndNoteEarTrainingPiano.createFlashCardSet())}
-          {App.instance.renderFlashCardSetLink(IntervalSinging.createFlashCardSet())}
+          {App.instance.renderFlashCardSetLink(IntervalQualitySymbolsToQualities.flashCardSet)}
+          {App.instance.renderFlashCardSetLink(IntervalNamesToHalfSteps.flashCardSet)}
+          {App.instance.renderFlashCardSetLink(IntervalsToConsonanceDissonance.flashCardSet)}
+          {App.instance.renderFlashCardSetLink(Interval2ndNotes.flashCardSet)}
+          {App.instance.renderFlashCardSetLink(IntervalNotes.flashCardSet)}
+          {App.instance.renderFlashCardSetLink(SheetMusicIntervalRecognition.flashCardSet)}
+          {App.instance.renderFlashCardSetLink(PianoIntervals.flashCardSet)}
+          {App.instance.renderFlashCardSetLink(GuitarIntervals.flashCardSet)}
+          {App.instance.renderFlashCardSetLink(IntervalEarTraining.flashCardSet)}
+          {App.instance.renderFlashCardSetLink(Interval2ndNoteEarTraining.flashCardSet)}
+          {App.instance.renderFlashCardSetLink(Interval2ndNoteEarTrainingPiano.flashCardSet)}
+          {App.instance.renderFlashCardSetLink(IntervalSinging.flashCardSet)}
         </MenuCategory>
       </div>
       <div className="column">
         <MenuCategory title="Scale Exercises">
-          {App.instance.renderFlashCardSetLink(ScaleDegreeNames.createFlashCardSet())}
-          {App.instance.renderFlashCardSetLink(ScaleNotes.createFlashCardSet())}
-          {App.instance.renderFlashCardSetLink(PianoScales.createFlashCardSet())}
-          {App.instance.renderFlashCardSetLink(GuitarScales.createFlashCardSet())}
-          {App.instance.renderFlashCardSetLink(ScaleDegreeModes.createFlashCardSet())}
-          {App.instance.renderFlashCardSetLink(ScaleChords.createFlashCardSet())}
-          {App.instance.renderFlashCardSetLink(ScaleEarTraining.createFlashCardSet())}
+          {App.instance.renderFlashCardSetLink(ScaleDegreeNames.flashCardSet)}
+          {App.instance.renderFlashCardSetLink(ScaleNotes.flashCardSet)}
+          {App.instance.renderFlashCardSetLink(PianoScales.flashCardSet)}
+          {App.instance.renderFlashCardSetLink(GuitarScales.flashCardSet)}
+          {App.instance.renderFlashCardSetLink(ScaleDegreeModes.flashCardSet)}
+          {App.instance.renderFlashCardSetLink(ScaleChords.flashCardSet)}
+          {App.instance.renderFlashCardSetLink(ScaleEarTraining.flashCardSet)}
         </MenuCategory>
         <MenuCategory title="Key Exercises">
-          {App.instance.renderFlashCardSetLink(KeyAccidentalCounts.createFlashCardSet())}
-          {App.instance.renderFlashCardSetLink(KeyAccidentalNotes.createFlashCardSet())}
-          {App.instance.renderFlashCardSetLink(KeySignatureIdentification.createFlashCardSet())}
+          {App.instance.renderFlashCardSetLink(KeyAccidentalCounts.flashCardSet)}
+          {App.instance.renderFlashCardSetLink(KeyAccidentalNotes.flashCardSet)}
+          {App.instance.renderFlashCardSetLink(KeySignatureIdentification.flashCardSet)}
         </MenuCategory>
       </div>
       <div className="column">
         <MenuCategory title="Chord Exercises">
-          {App.instance.renderFlashCardSetLink(ChordFamilies.createFlashCardSet())}
-          {App.instance.renderFlashCardSetLink(ChordNotes.createFlashCardSet())}
-          {App.instance.renderFlashCardSetLink(AvailableChordTensions.createFlashCardSet())}
-          {App.instance.renderFlashCardSetLink(DiatonicTriads.createFlashCardSet())}
-          {App.instance.renderFlashCardSetLink(DiatonicSeventhChords.createFlashCardSet())}
-          {App.instance.renderFlashCardSetLink(SheetMusicChordRecognition.createFlashCardSet())}
-          {App.instance.renderFlashCardSetLink(PianoChords.createFlashCardSet())}
-          {App.instance.renderFlashCardSetLink(GuitarChords.createFlashCardSet())}
-          {App.instance.renderFlashCardSetLink(ChordEarTraining.createFlashCardSet())}
+          {App.instance.renderFlashCardSetLink(ChordFamilies.flashCardSet)}
+          {App.instance.renderFlashCardSetLink(ChordNotes.flashCardSet)}
+          {App.instance.renderFlashCardSetLink(AvailableChordTensions.flashCardSet)}
+          {App.instance.renderFlashCardSetLink(DiatonicTriads.flashCardSet)}
+          {App.instance.renderFlashCardSetLink(DiatonicSeventhChords.flashCardSet)}
+          {App.instance.renderFlashCardSetLink(SheetMusicChordRecognition.flashCardSet)}
+          {App.instance.renderFlashCardSetLink(PianoChords.flashCardSet)}
+          {App.instance.renderFlashCardSetLink(GuitarChords.flashCardSet)}
+          {App.instance.renderFlashCardSetLink(ChordEarTraining.flashCardSet)}
         </MenuCategory>
       </div>
     </div>

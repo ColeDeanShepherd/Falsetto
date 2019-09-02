@@ -24,7 +24,7 @@ const initialConfigData: IConfigData = {
   maxFret: MAX_MAX_FRET_NUMBER
 };
 
-export function createFlashCardSet(notes?: Array<StringedInstrumentNote>): FlashCardSet {
+function createFlashCardSet(notes?: Array<StringedInstrumentNote>): FlashCardSet {
   const renderFlashCardMultiSelect = (
     studySessionInfo: FlashCardStudySessionInfo,
     onChange: (newValue: Array<FlashCardId>, newConfigData: any) => void
@@ -67,3 +67,5 @@ export function createFlashCards(notes?: Array<StringedInstrumentNote>): FlashCa
     )
   );
 }
+
+export const flashCardSet = createFlashCardSet();

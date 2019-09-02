@@ -12,7 +12,7 @@ function configDataToEnabledFlashCardIds(
     .map(fc => fc.id);
 }
 
-export function createFlashCardSet(): FlashCardSet {
+function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Scale Chords", createFlashCards);
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
@@ -71,3 +71,5 @@ export function createFlashCards(): FlashCard[] {
       "Altered", "7♭5♭9#9♭13 (7alt)")
   ];
 }
+
+export const flashCardSet = createFlashCardSet();

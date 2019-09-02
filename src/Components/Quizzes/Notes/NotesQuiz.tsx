@@ -4,7 +4,7 @@ import { FlashCardSet } from "../../../FlashCardSet";
 
 const flashCardSetId = "esmNotesQuiz";
 
-export function createFlashCardSet(): FlashCardSet {
+function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Notes Quiz", createFlashCards);
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.containerHeight = "160px";
@@ -54,3 +54,5 @@ export function createFlashCards(): FlashCard[] {
       "The natural note name for E# is _.", "F")
   ];
 }
+
+export const flashCardSet = createFlashCardSet();

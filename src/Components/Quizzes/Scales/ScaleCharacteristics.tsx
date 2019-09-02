@@ -12,7 +12,7 @@ function configDataToEnabledFlashCardIds(
     .map(fc => fc.id);
 }
 
-export function createFlashCardSet(): FlashCardSet {
+function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Scale Characteristics", createFlashCards);
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
@@ -110,3 +110,5 @@ export function createFlashCards(): FlashCard[] {
       "Altered Dominant bb7", "b9, 3, b13"),
   ];
 }
+
+export const flashCardSet = createFlashCardSet();

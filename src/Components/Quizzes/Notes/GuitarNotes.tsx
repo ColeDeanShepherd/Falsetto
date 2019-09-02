@@ -85,3 +85,5 @@ export function createFlashCards(guitarNotes?: Array<StringedInstrumentNote>): F
     ), guitarNotes
   );
 }
+
+export const flashCardSet = createFlashCardSet();

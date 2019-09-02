@@ -12,7 +12,7 @@ function configDataToEnabledFlashCardIds(
     .map(fc => fc.id);
 }
 
-export function createFlashCardSet(): FlashCardSet {
+function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Scale Degree Modes", createFlashCards);
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
@@ -135,3 +135,5 @@ export function createFlashCards(): FlashCard[] {
       "Double Harmonic Major Degree 7 Mode", "Locrian ♭♭3 ♭♭7 "),
   ];
 }
+
+export const flashCardSet = createFlashCardSet();

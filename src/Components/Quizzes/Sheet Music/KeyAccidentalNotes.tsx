@@ -28,7 +28,7 @@ export function renderAnswerSelect(
   );
 }
 
-export function createFlashCardSet(): FlashCardSet {
+function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Key Accidental Notes", createFlashCards);
   flashCardSet.renderAnswerSelect = renderAnswerSelect;
   flashCardSet.moreInfoUri = "http://myguitarpal.com/the-order-of-sharps-and-flats/";
@@ -132,3 +132,5 @@ export function createFlashCards(): FlashCard[] {
       "A♭ Minor", "B♭, E♭, A♭, D♭, G♭, C♭, F♭")
   ];
 }
+
+export const flashCardSet = createFlashCardSet();

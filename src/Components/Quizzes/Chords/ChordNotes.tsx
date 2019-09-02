@@ -13,7 +13,7 @@ function configDataToEnabledFlashCardIds(
     .filter((_, i) => i <= 16)
     .map(fc => fc.id);
 }
-export function createFlashCardSet(): FlashCardSet {
+function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Chord Notes", createFlashCards);
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
@@ -49,4 +49,6 @@ export function createFlashCards(): FlashCard[] {
         )
       );
     });
-} 
+}
+
+export const flashCardSet = createFlashCardSet();
