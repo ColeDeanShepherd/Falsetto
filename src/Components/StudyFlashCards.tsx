@@ -188,6 +188,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
       
       const enableSettings = (this.props.enableSettings === undefined) || this.props.enableSettings;
 
+      const prevLevelIndex = this.getPrevLevelIndex();
       const currentLevelIndex = this.getCurrentLevelIndex();
       const nextLevelIndex = this.getNextLevelIndex();
 
@@ -259,27 +260,61 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
           
           {((currentLevelIndex !== undefined) && (percentToNextLevel !== undefined))
             ? (
-              <p style={{ display: "flex", lineHeight: "1.5", alignItems: "center", justifyContent: "space-between", margin: "0.5em 0" }}>
-                <span style={{paddingRight: "1em"}}>Level {this.getLevelDisplayName(currentLevelIndex)}</span>
-                {(nextLevelIndex !== undefined) ? <span>{Math.round(100 * percentToNextLevel)}%</span> : null}
-                {(nextLevelIndex !== undefined) ? (
-                  <Button
-                    onClick={event => this.moveToNextLevel()}
-                    variant="contained"
-                    style={{ textTransform: "none" }}
-                  >
-                    Level {this.getLevelDisplayName(nextLevelIndex)}
-                  </Button>
-                ) : null}
+              <p
+                style={{
+                  display: "flex",
+                  lineHeight: "1.5",
+                  margin: "0.5em 0"
+                }}>
+                <div style={{ flex: 1 }}>
+                  {(prevLevelIndex !== undefined) ? (
+                    <Button
+                      onClick={event => this.moveToPrevLevel()}
+                      variant="contained"
+                      style={{ textTransform: "none" }}
+                    >
+                      Level {this.getLevelDisplayName(prevLevelIndex)}
+                    </Button>
+                  ) : null}
+                </div>
+                <div style={{ flex: 1, textAlign: "center" }}>
+                  <span style={{paddingRight: "1em"}}>
+                    <span>Level {this.getLevelDisplayName(currentLevelIndex)} - </span>
+                    {(percentToNextLevel !== undefined) ? <span>{Math.round(100 * percentToNextLevel)}%</span> : null}
+                  </span>
+                </div>
+                <div style={{ flex: 1, textAlign: "right" }}>
+                  {(nextLevelIndex !== undefined) ? (
+                    <Button
+                      onClick={event => this.moveToNextLevel()}
+                      variant="contained"
+                      style={{ textTransform: "none" }}
+                    >
+                      Level {this.getLevelDisplayName(nextLevelIndex)}
+                    </Button>
+                  ) : null}
+                </div>
               </p>
             )
             : null
           }
   
-          {((percentToNextLevel !== undefined) && (nextLevelIndex !== undefined))
+          {(percentToNextLevel !== undefined)
             ? (
-              <div style={{ width: "100%", height: "0.25em", backgroundColor: "lightgray", border: "1px solid grey" }}>
-                <div style={{ width: `${Math.round(100 * percentToNextLevel)}%`, height: "100%", backgroundColor: "#0A0" }} />
+              <div
+                style={{
+                  width: "100%",
+                  height: "0.25em",
+                  backgroundColor: "lightgray",
+                  border: "1px solid grey"
+                }}>
+                <div
+                  style={{
+                    width: `${Math.round(100 * percentToNextLevel)}%`,
+                    height: "100%",
+                    backgroundColor: "#0A0"
+                  }}
+                />
               </div>
             )
             : null
@@ -346,6 +381,14 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
     return (result >= 0)
       ? result
       : undefined;
+  }
+  private getPrevLevelIndex(): number | undefined {
+    const currentLevelIndex = this.getCurrentLevelIndex();
+    if ((currentLevelIndex === undefined) || (currentLevelIndex === 0)) {
+      return undefined;
+    }
+
+    return currentLevelIndex - 1;
   }
   private getNextLevelIndex(): number | undefined {
     const currentLevelIndex = this.getCurrentLevelIndex();
@@ -527,9 +570,15 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
   }
   private moveToNextLevel() {
     const nextLevelIndex = this.getNextLevelIndex();
-    if (!nextLevelIndex) { return; }
+    if (nextLevelIndex === undefined) { return; }
 
     this.activateLevel(nextLevelIndex);
+  }
+  private moveToPrevLevel() {
+    const prevLevelIndex = this.getPrevLevelIndex();
+    if (prevLevelIndex === undefined) { return; }
+
+    this.activateLevel(prevLevelIndex);
   }
 
   private activateLevel(levelIndex: number) {
