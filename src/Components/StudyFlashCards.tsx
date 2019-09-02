@@ -278,9 +278,9 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
                   ) : null}
                 </div>
                 <div style={{ flex: 1, textAlign: "center" }}>
-                  <span style={{paddingRight: "1em"}}>
-                    <span>Level {this.getLevelDisplayName(currentLevelIndex)} - </span>
-                    {(percentToNextLevel !== undefined) ? <span>{Math.round(100 * percentToNextLevel)}%</span> : null}
+                  <span style={{ paddingRight: "1em" }}>
+                    <span>Level {this.getLevelDisplayName(currentLevelIndex)}</span>
+                    {(percentToNextLevel !== undefined) ? <span> &mdash; {Math.round(100 * percentToNextLevel)}%</span> : null}
                   </span>
                 </div>
                 <div style={{ flex: 1, textAlign: "right" }}>
