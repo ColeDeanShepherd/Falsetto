@@ -157,7 +157,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
 
     const cardStyle: any = Object.assign(this.props.isEmbedded
       ? { minHeight: "100vh", boxShadow: "none" }
-      : { maxWidth: MAX_MAIN_CARD_WIDTH }, this.props.style);
+      : { maxWidth: MAX_MAIN_CARD_WIDTH, marginBottom: "1em" }, this.props.style);
 
     let cardContents: JSX.Element;
 
@@ -359,13 +359,33 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
     }
 
     return (
-      <Card style={cardStyle}>
-        <CardContent style={{position: "relative"}}>
-          {cardContents}
-        </CardContent>
-        
-        <p style={watermarkStyle} className="watermark">https://falsetto.app</p>
-      </Card>
+      <div>
+        <Card style={cardStyle}>
+          <CardContent style={{position: "relative"}}>
+            {cardContents}
+          </CardContent>
+          
+          <p style={watermarkStyle} className="watermark">https://falsetto.app</p>
+        </Card>
+        {(!this.props.isEmbedded && (this.props.flashCardSet.relatedSets.length > 0)) ? (
+          <Card style={cardStyle}>
+            <CardContent style={{position: "relative"}}>
+              <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
+                Related Exercises
+              </Typography>
+
+              <ul>
+                {this.props.flashCardSet.relatedSets
+                  .map(relatedSet => (
+                    <li key={relatedSet.id}>
+                      {App.instance.renderFlashCardSetLink(relatedSet)}
+                    </li>
+                  ))}
+              </ul>
+            </CardContent>
+          </Card>
+        ) : null}
+      </div>
     );
   }
 

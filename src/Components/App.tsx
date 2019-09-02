@@ -116,6 +116,70 @@ export async function getErrorDescription(
   });
 }
 
+export function relateSets(...params: Array<FlashCardSet>) {
+  for (let i = 0; i < (params.length - 1); i++) {
+    for (let j = i + 1; j < params.length; j++) {
+      if (i === j) { continue; }
+
+      params[i].addRelatedSet(params[j]);
+    }
+  }
+}
+export function initFlashCardSetGraph() {
+  relateSets(
+    PianoNotes.flashCardSet,
+    GuitarNotes.flashCardSet,
+    ViolinNotes.flashCardSet,
+    SheetMusicNotes.flashCardSet,
+    NoteDurations.flashCardSet,
+    GuitarPerfectPitchTrainer.flashCardSet
+  );
+
+  relateSets(
+    IntervalQualitySymbolsToQualities.flashCardSet,
+    IntervalNamesToHalfSteps.flashCardSet,
+    IntervalsToConsonanceDissonance.flashCardSet,
+    Interval2ndNotes.flashCardSet,
+    IntervalNotes.flashCardSet,
+    SheetMusicIntervalRecognition.flashCardSet,
+    PianoIntervals.flashCardSet,
+    GuitarIntervals.flashCardSet,
+    IntervalEarTraining.flashCardSet,
+    Interval2ndNoteEarTraining.flashCardSet,
+    Interval2ndNoteEarTrainingPiano.flashCardSet,
+    IntervalSinging.flashCardSet
+  );
+
+  relateSets(
+    ScaleDegreeNames.flashCardSet,
+    ScaleNotes.flashCardSet,
+    PianoScales.flashCardSet,
+    GuitarScales.flashCardSet,
+    ScaleDegreeModes.flashCardSet,
+    ScaleChords.flashCardSet,
+    ScaleEarTraining.flashCardSet
+  );
+
+  relateSets(
+    KeyAccidentalCounts.flashCardSet,
+    KeyAccidentalNotes.flashCardSet,
+    KeySignatureIdentification.flashCardSet
+  );
+
+  relateSets(
+    ChordFamilies.flashCardSet,
+    ChordNotes.flashCardSet,
+    AvailableChordTensions.flashCardSet,
+    DiatonicTriads.flashCardSet,
+    DiatonicSeventhChords.flashCardSet,
+    SheetMusicChordRecognition.flashCardSet,
+    PianoChords.flashCardSet,
+    GuitarChords.flashCardSet,
+    ChordEarTraining.flashCardSet
+  );
+}
+initFlashCardSetGraph();
+
 interface IAppProps {
   isEmbedded: boolean;
 }

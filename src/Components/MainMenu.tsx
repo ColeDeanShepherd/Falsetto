@@ -89,8 +89,8 @@ export const MainMenu : React.FunctionComponent<{}> = props => (
           {App.instance.renderFlashCardSetLink(PianoNotes.flashCardSet)}
           {App.instance.renderFlashCardSetLink(GuitarNotes.flashCardSet)}
           {App.instance.renderFlashCardSetLink(ViolinNotes.flashCardSet)}
-          {App.instance.renderFlashCardSetLink(NoteDurations.flashCardSet)}
           {App.instance.renderFlashCardSetLink(SheetMusicNotes.flashCardSet)}
+          {App.instance.renderFlashCardSetLink(NoteDurations.flashCardSet)}
           {App.instance.renderFlashCardSetLink(GuitarPerfectPitchTrainer.flashCardSet)}
         </MenuCategory>
       </div>
