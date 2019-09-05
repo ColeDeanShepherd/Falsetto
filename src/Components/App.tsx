@@ -85,6 +85,7 @@ import { DiatonicChordPlayer } from './Tools/DiatonicChordPlayer';
 import { isDevelopment } from '../Config';
 import { IDatabase, InMemoryDatabase } from '../Database';
 import { IUserManager, UserManager } from '../UserManager';
+import { KnowledgeMapPage } from './KnowledgeMapPage';
 
 export async function getErrorDescription(
   msg: string | Event,
@@ -116,6 +117,76 @@ export async function getErrorDescription(
   });
 }
 
+export const groupedFlashCardSets = [
+  {
+    title: "Notes",
+    flashCardSets: [
+      PianoNotes.flashCardSet,
+      GuitarNotes.flashCardSet,
+      ViolinNotes.flashCardSet,
+      SheetMusicNotes.flashCardSet,
+      NoteDurations.flashCardSet,
+      GuitarPerfectPitchTrainer.flashCardSet
+    ]
+  },
+  {
+    title: "Intervals",
+    flashCardSets: [
+      IntervalQualitySymbolsToQualities.flashCardSet,
+      GenericIntervalsToIntervalQualities.flashCardSet,
+      IntervalNamesToHalfSteps.flashCardSet,
+      IntervalsToConsonanceDissonance.flashCardSet,
+      Interval2ndNotes.flashCardSet,
+      IntervalNotes.flashCardSet,
+      SheetMusicIntervalRecognition.flashCardSet,
+      PianoIntervals.flashCardSet,
+      GuitarIntervals.flashCardSet,
+      IntervalEarTraining.flashCardSet,
+      Interval2ndNoteEarTraining.flashCardSet,
+      Interval2ndNoteEarTrainingPiano.flashCardSet,
+      IntervalSinging.flashCardSet
+    ]
+  },
+  {
+    title: "Scales",
+    flashCardSets: [
+      ScaleDegreeNames.flashCardSet,
+      ScaleNotes.flashCardSet,
+      PianoScales.flashCardSet,
+      GuitarScales.flashCardSet,
+      ScaleDegreeModes.flashCardSet,
+      ScaleChords.flashCardSet,
+      //ScaleFamilies.flashCardSet,
+      //ScaleCharacteristics.flashCardSet,
+      ScaleEarTraining.flashCardSet
+    ]
+  },
+  {
+    title: "Keys",
+    flashCardSets: [
+      KeyAccidentalCounts.flashCardSet,
+      KeyAccidentalNotes.flashCardSet,
+      KeySignatureIdentification.flashCardSet
+    ]
+  },
+  {
+    title: "Chords",
+    flashCardSets: [
+      //ChordFamilyDefinitions.flashCardSet,
+      ChordFamilies.flashCardSet,
+      ChordNotes.flashCardSet,
+      AvailableChordTensions.flashCardSet,
+      DiatonicTriads.flashCardSet,
+      DiatonicSeventhChords.flashCardSet,
+      SheetMusicChordRecognition.flashCardSet,
+      PianoChords.flashCardSet,
+      GuitarChords.flashCardSet,
+      ChordEarTraining.flashCardSet,
+      RandomChordGenerator.flashCardSet
+    ]
+  }
+];
+
 export function relateSets(...params: Array<FlashCardSet>) {
   for (let i = 0; i < (params.length - 1); i++) {
     for (let j = i + 1; j < params.length; j++) {
@@ -126,57 +197,9 @@ export function relateSets(...params: Array<FlashCardSet>) {
   }
 }
 export function initFlashCardSetGraph() {
-  relateSets(
-    PianoNotes.flashCardSet,
-    GuitarNotes.flashCardSet,
-    ViolinNotes.flashCardSet,
-    SheetMusicNotes.flashCardSet,
-    NoteDurations.flashCardSet,
-    GuitarPerfectPitchTrainer.flashCardSet
-  );
-
-  relateSets(
-    IntervalQualitySymbolsToQualities.flashCardSet,
-    IntervalNamesToHalfSteps.flashCardSet,
-    IntervalsToConsonanceDissonance.flashCardSet,
-    Interval2ndNotes.flashCardSet,
-    IntervalNotes.flashCardSet,
-    SheetMusicIntervalRecognition.flashCardSet,
-    PianoIntervals.flashCardSet,
-    GuitarIntervals.flashCardSet,
-    IntervalEarTraining.flashCardSet,
-    Interval2ndNoteEarTraining.flashCardSet,
-    Interval2ndNoteEarTrainingPiano.flashCardSet,
-    IntervalSinging.flashCardSet
-  );
-
-  relateSets(
-    ScaleDegreeNames.flashCardSet,
-    ScaleNotes.flashCardSet,
-    PianoScales.flashCardSet,
-    GuitarScales.flashCardSet,
-    ScaleDegreeModes.flashCardSet,
-    ScaleChords.flashCardSet,
-    ScaleEarTraining.flashCardSet
-  );
-
-  relateSets(
-    KeyAccidentalCounts.flashCardSet,
-    KeyAccidentalNotes.flashCardSet,
-    KeySignatureIdentification.flashCardSet
-  );
-
-  relateSets(
-    ChordFamilies.flashCardSet,
-    ChordNotes.flashCardSet,
-    AvailableChordTensions.flashCardSet,
-    DiatonicTriads.flashCardSet,
-    DiatonicSeventhChords.flashCardSet,
-    SheetMusicChordRecognition.flashCardSet,
-    PianoChords.flashCardSet,
-    GuitarChords.flashCardSet,
-    ChordEarTraining.flashCardSet
-  );
+  for (const group of groupedFlashCardSets) {
+    relateSets(...group.flashCardSets);
+  }
 }
 initFlashCardSetGraph();
 
@@ -201,77 +224,11 @@ class App extends React.Component<IAppProps, IAppState> {
     this.history = createBrowserHistory();
     this.unregisterHistoryListener = this.history.listen(this.historyListener.bind(this));
 
-    this.groupedFlashCardSets = [
-      {
-        title: "Notes",
-        flashCardSets: [
-          PianoNotes.flashCardSet,
-          GuitarNotes.flashCardSet,
-          ViolinNotes.flashCardSet,
-          NoteDurations.flashCardSet,
-          SheetMusicNotes.flashCardSet,
-          GuitarPerfectPitchTrainer.flashCardSet
-        ]
-      },
-      {
-        title: "Intervals",
-        flashCardSets: [
-          IntervalQualitySymbolsToQualities.flashCardSet,
-          GenericIntervalsToIntervalQualities.flashCardSet,
-          IntervalNamesToHalfSteps.flashCardSet,
-          IntervalsToConsonanceDissonance.flashCardSet,
-          Interval2ndNotes.flashCardSet,
-          IntervalNotes.flashCardSet,
-          SheetMusicIntervalRecognition.flashCardSet,
-          PianoIntervals.flashCardSet,
-          GuitarIntervals.flashCardSet,
-          IntervalEarTraining.flashCardSet,
-          Interval2ndNoteEarTraining.flashCardSet,
-          Interval2ndNoteEarTrainingPiano.flashCardSet,
-          IntervalSinging.flashCardSet
-        ]
-      },
-      {
-        title: "Scales",
-        flashCardSets: [
-          ScaleDegreeNames.flashCardSet,
-          ScaleNotes.flashCardSet,
-          PianoScales.flashCardSet,
-          GuitarScales.flashCardSet,
-          ScaleDegreeModes.flashCardSet,
-          ScaleChords.flashCardSet,
-          ScaleFamilies.flashCardSet,
-          ScaleCharacteristics.flashCardSet,
-          ScaleEarTraining.flashCardSet
-        ]
-      },
-      {
-        title: "Keys",
-        flashCardSets: [
-          KeyAccidentalCounts.flashCardSet,
-          KeyAccidentalNotes.flashCardSet,
-          KeySignatureIdentification.flashCardSet
-        ]
-      },
-      {
-        title: "Chords",
-        flashCardSets: [
-          ChordFamilyDefinitions.flashCardSet,
-          ChordFamilies.flashCardSet,
-          ChordNotes.flashCardSet,
-          AvailableChordTensions.flashCardSet,
-          DiatonicTriads.flashCardSet,
-          DiatonicSeventhChords.flashCardSet,
-          SheetMusicChordRecognition.flashCardSet,
-          PianoChords.flashCardSet,
-          GuitarChords.flashCardSet,
-          ChordEarTraining.flashCardSet,
-          RandomChordGenerator.flashCardSet
-        ]
-      }
-    ];
+    this.groupedFlashCardSets = groupedFlashCardSets;
 
-    this.flashCardSets = Utils.flattenArrays<FlashCardSet>(this.groupedFlashCardSets.map(g => g.flashCardSets));
+    this.flashCardSets = Utils.flattenArrays<FlashCardSet>(
+      this.groupedFlashCardSets.map(g => g.flashCardSets)
+    );
     
     if (isDevelopment()) {
       this.checkFlashCardSetIds();
@@ -309,6 +266,7 @@ class App extends React.Component<IAppProps, IAppState> {
         <Route key="/" exact path="/" component={() => <DocumentTitle title="Falsetto"><HomePage /></DocumentTitle>} />,
         <Route key="/about" exact path="/about" component={() => <DocumentTitle title="About - Falsetto"><AboutPage /></DocumentTitle>} />,
         <Route key="/support-us" exact path="/support-us" component={() => <DocumentTitle title="Support Us - Falsetto"><SupportUsPage /></DocumentTitle>} />,
+        <Route key="/knowledge-map" exact path="/knowledge-map" component={() => <DocumentTitle title="Knowledge Map - Falsetto"><KnowledgeMapPage /></DocumentTitle>} />,
         <Route key="/essential-music-theory" exact path="/essential-music-theory" component={() => <DocumentTitle title="Essential Music Theory - Falsetto"><SectionContainer section={IntroSection}></SectionContainer></DocumentTitle>} />,
         <Route key="/essential-music-theory/rhythm" exact path="/essential-music-theory/rhythm" component={() => <DocumentTitle title="Rhythm - Essential Music Theory - Falsetto"><SectionContainer section={RhythmSection}></SectionContainer></DocumentTitle>} />,
         <Route key="/essential-music-theory/notes" exact path="/essential-music-theory/notes" component={() => <DocumentTitle title="Notes - Essential Music Theory - Falsetto"><SectionContainer section={NotesSection}></SectionContainer></DocumentTitle>} />,
@@ -426,8 +384,8 @@ class App extends React.Component<IAppProps, IAppState> {
 
   private history: History<any>;
   private unregisterHistoryListener: UnregisterCallback;
-  private groupedFlashCardSets: { title: string; flashCardSets: FlashCardSet[]; }[];
-  private flashCardSets: FlashCardSet[];
+  public groupedFlashCardSets: { title: string; flashCardSets: FlashCardSet[]; }[];
+  public flashCardSets: FlashCardSet[];
   private mainContainerRef: React.Ref<HTMLDivElement>;
   public database: IDatabase;
   public userManager: IUserManager;

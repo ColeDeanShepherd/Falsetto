@@ -7,7 +7,6 @@
   * Scale Chords?
   * Key Exercises
 * Fix level not being detected properly when disabling & re-enabling in piano notes exercise (orders don't match due to toggle).
-* TODO: start study sessions with lowest incomplete level.
 * Resume microphone on touch start if suspended?
 * Violin Notes "more info" URI
 * Double-check piano scales
