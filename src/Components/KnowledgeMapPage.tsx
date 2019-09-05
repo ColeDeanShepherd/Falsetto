@@ -10,7 +10,7 @@ export class KnowledgeMapPage extends React.Component<{}, {}> {
     return (
       <Card>
         <CardContent>
-          <KnowledgeMap rect={new Rect2D(new Size2D(640, 480), new Vector2D(0, 0))} />
+          <KnowledgeMap rect={new Rect2D(new Size2D(1024, 640), new Vector2D(0, 0))} />
         </CardContent>
       </Card>
     );
