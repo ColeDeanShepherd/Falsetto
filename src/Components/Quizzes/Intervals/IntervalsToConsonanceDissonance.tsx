@@ -12,7 +12,7 @@ const orderedAnswers = [
 ];
 
 function createFlashCardSet(): FlashCardSet {
-  const flashCardSet = new FlashCardSet(flashCardSetId, "Intervals Consonance/Dissonance", createFlashCards);
+  const flashCardSet = new FlashCardSet(flashCardSetId, "Interval Consonance Dissonance", createFlashCards);
   flashCardSet.renderAnswerSelect = info => FlashCardUtils.renderStringAnswerSelect(orderedAnswers, info);
   flashCardSet.moreInfoUri = "/essential-music-theory/intervals";
   flashCardSet.containerHeight = "80px";

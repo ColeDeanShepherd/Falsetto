@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import * as Utils from "../../Utils";
+import { getRectRoundedBottomPathDefString } from "../SvgUtils";
 import { Pitch } from "../../Pitch";
 import { Rect2D } from '../../Rect2D';
 import { Margin } from '../../Margin';
@@ -189,14 +190,6 @@ export function renderPianoKeyboardNoteNames(metrics: PianoKeyboardMetrics, useS
       : [pitch.toString(includeOctaveNumber, useSymbols)];
     return splitPitchString;
   });
-}
-
-export function getRectRoundedBottomPathDefString(
-  topLeftPos: Vector2D,
-  size: Size2D,
-  radius: number
-): string {
-  return `M ${topLeftPos.x} ${topLeftPos.y} h ${size.width} v ${size.height - radius} a ${radius} ${radius} 0 0 1 ${-radius} ${radius} h ${-(size.width - (2 * radius))} a ${radius} ${radius} 0 0 1 ${-radius} ${-radius} Z`;
 }
 
 export interface IPianoKeyboardProps {

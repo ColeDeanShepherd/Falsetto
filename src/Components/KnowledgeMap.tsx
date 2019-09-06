@@ -2,6 +2,8 @@ import * as React from "react";
 
 import { Rect2D } from '../Rect2D';
 import App from './App';
+import { renderMultiLineSvgText } from './SvgUtils';
+import { Vector2D } from '../Vector2D';
 
 export interface IKnowledgeMapProps {
   rect: Rect2D;
@@ -32,19 +34,19 @@ export class KnowledgeMap extends React.Component<IKnowledgeMapProps, {}> {
         const nodesInGroup = g.flashCardSets
           .map((s, si) => {
             const nodeX = baseX + (si * (nodeDiameter + xMargin));
-            const cx = nodeX + nodeRadius;
-            const cy = nodeY + nodeRadius;
+            const nodeCenter = new Vector2D(nodeX + nodeRadius, nodeY + nodeRadius);
+            const nameLines = s.name.split(' ');
 
             return (
               <g>
                 <circle
-                  cx={cx} cy={cy}
+                  cx={nodeCenter.x} cy={nodeCenter.y}
                   r={nodeRadius}
                   fill={nodeFillColor}
                   strokeWidth={nodeStrokeWidth}
                   stroke={nodeStrokeColor}
                 />
-                <text x={cx} y={cy} style={textStyle}>{s.name}</text>
+                {renderMultiLineSvgText(nameLines, nodeCenter, 1, true, { style: textStyle }, null)}
               </g>
             );
           });
