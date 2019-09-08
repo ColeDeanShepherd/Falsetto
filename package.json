@@ -16,6 +16,7 @@
     "resize-observer-polyfill": "^1.5.1",
     "source-map-explorer": "^1.8.0",
     "stacktrace-js": "^2.0.0",
+    "svg-pan-zoom": "^3.6.0",
     "vexflow": "^1.2.89"
   },
   "scripts": {

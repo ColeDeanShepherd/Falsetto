@@ -4,6 +4,7 @@ import { Rect2D } from '../Rect2D';
 import App from './App';
 import { renderMultiLineSvgText } from './SvgUtils';
 import { Vector2D } from '../Vector2D';
+import { SvgPanZoom } from './SvgPanZoom';
 
 export interface IKnowledgeMapProps {
   rect: Rect2D;
@@ -60,13 +61,13 @@ export class KnowledgeMap extends React.Component<IKnowledgeMapProps, {}> {
       });
 
     return (
-      <svg
+      <SvgPanZoom
         width={rect.size.width} height={rect.size.height}
         x={rect.position.x} y={rect.position.y}
         viewBox={`0 0 ${rect.size.width} ${rect.size.height}`}
         version="1.1" xmlns="http://www.w3.org/2000/svg">
         {nodes}
-      </svg>
+      </SvgPanZoom>
     );
   }
 }
