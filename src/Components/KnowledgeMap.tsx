@@ -12,11 +12,11 @@ export class KnowledgeMap extends React.Component<IKnowledgeMapProps, {}> {
   public render(): JSX.Element {
     const { rect } = this.props;
 
-    const nodeRadius = 30;
-    const nodeDiameter = 2 * nodeRadius;
+    const nodeWidth = 100;
+    const nodeHeight = 90;
     
-    const baseX = nodeRadius;
-    const baseY = nodeRadius;
+    const baseX = 10;
+    const baseY = 10;
 
     const nodeFillColor = "white";
     const nodeStrokeWidth = "1";
@@ -29,22 +29,23 @@ export class KnowledgeMap extends React.Component<IKnowledgeMapProps, {}> {
 
     const nodes = App.instance.groupedFlashCardSets
       .map((g, gi) => {
-        const nodeY = baseY + (gi * (nodeDiameter + yMargin));
+        const nodeY = baseY + (gi * (nodeWidth + yMargin));
 
         const nodesInGroup = g.flashCardSets
           .map((s, si) => {
-            const nodeX = baseX + (si * (nodeDiameter + xMargin));
-            const nodeCenter = new Vector2D(nodeX + nodeRadius, nodeY + nodeRadius);
+            const nodeX = baseX + (si * (nodeWidth + xMargin));
+            const nodeCenter = new Vector2D(nodeX + (nodeWidth / 2), nodeY + (nodeHeight / 2));
             const nameLines = s.name.split(' ');
 
             return (
               <g>
-                <circle
-                  cx={nodeCenter.x} cy={nodeCenter.y}
-                  r={nodeRadius}
+                <rect
+                  x={nodeX} y={nodeY}
+                  width={nodeWidth} height={nodeHeight}
                   fill={nodeFillColor}
                   strokeWidth={nodeStrokeWidth}
                   stroke={nodeStrokeColor}
+                  rx="10"
                 />
                 {renderMultiLineSvgText(nameLines, nodeCenter, 1, true, { style: textStyle }, null)}
               </g>
