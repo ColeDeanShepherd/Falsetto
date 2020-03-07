@@ -4,7 +4,7 @@ import {
 } from "@material-ui/core";
 
 import * as Utils from "../Utils";
-import * as Analytics from "../Analytics";
+import { IAnalytics } from "../Analytics";
 import { FlashCard, FlashCardId } from "../FlashCard";
 import { renderFlashCardSide } from "./FlashCard";
 import { DefaultFlashCardMultiSelect } from "./Utils/DefaultFlashCardMultiSelect";
@@ -18,14 +18,15 @@ import { IUserManager } from '../UserManager';
 import App from './App';
 import { FlashCardStats } from '../FlashCardStats';
 import { Size2D } from '../Size2D';
+import { DependencyInjector } from '../DependencyInjector';
 
 export async function getFlashCardSetStatsFromDatabase(
   database: IDatabase, userManager: IUserManager,
   flashCardSet: FlashCardSet, flashCards: Array<FlashCard>
 ): Promise<FlashCardSetStats> {
-  const userId = userManager.getCurrentUserId();
+  const userId = userManager.getCurrentUserId(); // TODO remove
   const flashCardIds = flashCards.map(fc => fc.id);
-  const answers = await database.getAnswers(flashCardIds, userId);
+  const answers = await database.getAnswers(flashCardIds, /*userId*/null); // TODO:
   const minPctCorrect = answerDifficultyToPercentCorrect(AnswerDifficulty.Easy);
   const flashCardStats = flashCards
     .map(fc => {
@@ -98,8 +99,12 @@ export interface IStudyFlashCardsState {
   isShowingBackSide: boolean;
 }
 export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStudyFlashCardsState> {
+  private analytics: IAnalytics;
+
   public constructor(props: IStudyFlashCardsProps) {
     super(props);
+
+    this.analytics = DependencyInjector.instance.getRequiredService<IAnalytics>("IAnalytics");
 
     if (
       this.props.flashCardSet.initialConfigData &&
@@ -535,14 +540,16 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
       const eventValue = undefined;
       const eventCategory = this.props.flashCardSet.id;
 
-      const userId = this.props.userManager.getCurrentUserId();
+      const userId = this.props.userManager.getCurrentUserId(); // TODO: fix
       const answeredAt = new Date();
 
-      this.props.database.addAnswer(new FlashCardAnswer(
-        this.state.currentFlashCardId, userId,
-        answerDifficultyToPercentCorrect(answerDifficulty), answeredAt
-      ));
-      Analytics.trackCustomEvent(
+      this.props.database.addAnswers([
+        new FlashCardAnswer(
+          this.state.currentFlashCardId, /*userId*/"", // TODO:
+          answerDifficultyToPercentCorrect(answerDifficulty), answeredAt
+        )
+      ]);
+      this.analytics.trackCustomEvent(
         eventId, eventLabel, eventValue, eventCategory
       );
     }

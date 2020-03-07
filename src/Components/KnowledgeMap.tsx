@@ -1,10 +1,10 @@
 import * as React from "react";
 
 import { Rect2D } from '../Rect2D';
-import App from './App';
 import { renderMultiLineSvgText } from './SvgUtils';
 import { Vector2D } from '../Vector2D';
 import { SvgPanZoom } from './SvgPanZoom';
+import { groupedFlashCardSets } from '../FlashCardGraph';
 
 export interface IKnowledgeMapProps {
   rect: Rect2D;
@@ -28,7 +28,7 @@ export class KnowledgeMap extends React.Component<IKnowledgeMapProps, {}> {
       textAnchor: "middle"
     };
 
-    const nodes = App.instance.groupedFlashCardSets
+    const nodes = groupedFlashCardSets
       .map((g, gi) => {
         const nodeY = baseY + (gi * (nodeWidth + yMargin));
 

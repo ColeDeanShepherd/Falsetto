@@ -6,7 +6,9 @@ import * as Analytics from "../../Analytics";
 import { DetectedPitch, IPitchDetector, DatalantPitchDetector } from '../PitchDetection';
 import { Size2D } from '../../Size2D';
 import { Microphone } from '../../Microphone';
-import { getErrorDescription } from '../App';
+import { getErrorDescription } from '../../Error';
+import { IAnalytics } from '../../Analytics';
+import { DependencyInjector } from '../../DependencyInjector';
 
 export interface ITunerCentsIndicatorProps {
   detuneCents: number;
@@ -101,6 +103,8 @@ export class Tuner extends React.Component<ITunerProps, ITunerState> {
   public constructor(props: ITunerProps) {
     super(props);
     
+    this.analytics = DependencyInjector.instance.getRequiredService("IAnalytics");
+
     this.pitchDetector = (this.props.pitchDetector !== undefined)
       ? this.props.pitchDetector
       : new DatalantPitchDetector();
@@ -166,6 +170,7 @@ export class Tuner extends React.Component<ITunerProps, ITunerState> {
     ) : contents;
   }
 
+  private analytics: IAnalytics;
   private microphone: Microphone | null = null;
   private sampleBuffer = new Float32Array(fftSize);
   private pitchDetector: IPitchDetector;
@@ -221,7 +226,7 @@ export class Tuner extends React.Component<ITunerProps, ITunerState> {
 
     getErrorDescription("", undefined, undefined, undefined, error)
       .then(errorDescription => {
-        Analytics.trackException(errorDescription, false);
+        this.analytics.trackException(errorDescription, false);
       });
 
     if (this.props.onMicrophoneError) {

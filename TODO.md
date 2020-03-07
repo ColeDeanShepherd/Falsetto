@@ -20,7 +20,6 @@
     * Save in local storage if you aren't logged in?
   * Allow log in/log out/account management
   * Show data specific to current account
-
 * Chord Progressions
   * Ensure it works on mobile.
 * Implement button colors for

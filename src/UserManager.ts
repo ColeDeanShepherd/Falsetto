@@ -1,11 +1,21 @@
-export type UserId = number;
+import { UserProfile } from './UserProfile';
 
 export interface IUserManager {
-  getCurrentUserId(): UserId;
+  getCurrentUserId(): number;
+  getCurrentUser(): UserProfile | null;
+  loginWithRedirect(): void;
+  logout(): void;
 }
 
 export class UserManager implements IUserManager {
-  public getCurrentUserId(): UserId {
-    return -1; // TODO: implement
+  // TODO: remove
+  public getCurrentUserId(): number {
+    return -1;
   }
+
+  public getCurrentUser(): UserProfile | null {
+    return null;
+  }
+  public loginWithRedirect(): void {}
+  public logout(): void {}
 }

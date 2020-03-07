@@ -6,6 +6,7 @@ import StackTrace from "stacktrace-js";
 import "./App.css";
 
 import * as Utils from "../Utils";
+import { DependencyInjector } from '../DependencyInjector';
 import * as Analytics from "../Analytics";
 import { StringDictionary } from "../StringDictionary";
 
@@ -86,6 +87,7 @@ import { isDevelopment } from '../Config';
 import { IDatabase, InMemoryDatabase } from '../Database';
 import { IUserManager, UserManager } from '../UserManager';
 import { KnowledgeMapPage } from './KnowledgeMapPage';
+import { IAnalytics } from '../Analytics';
 
 export async function getErrorDescription(
   msg: string | Event,
@@ -218,7 +220,7 @@ class App extends React.Component<IAppProps, IAppState> {
     window.onerror = (msg, file, line, col, error) => {
       const fatal = true;
       getErrorDescription(msg, file, line, col, error)
-        .then(errorDescription => Analytics.trackException(errorDescription, fatal));
+        .then(errorDescription => this.analytics.trackException(errorDescription, fatal));
     };
 
     this.history = createBrowserHistory();
@@ -237,6 +239,7 @@ class App extends React.Component<IAppProps, IAppState> {
 
     this.mainContainerRef = React.createRef();
 
+    this.analytics = DependencyInjector.instance.getRequiredService<IAnalytics>("IAnalytics");
     this.database = new InMemoryDatabase();
     this.userManager = new UserManager();
 
@@ -249,7 +252,7 @@ class App extends React.Component<IAppProps, IAppState> {
 
   public componentWillMount() {
     if (!this.isEmbedded) {
-      Analytics.trackPageView();
+      this.analytics.trackPageView();
     }
   }
   public componentWillUnmount() {
@@ -382,6 +385,7 @@ class App extends React.Component<IAppProps, IAppState> {
     this.setState({ isMenuVisible: false });
   }
 
+  private analytics: IAnalytics;
   private history: History<any>;
   private unregisterHistoryListener: UnregisterCallback;
   public groupedFlashCardSets: { title: string; flashCardSets: FlashCardSet[]; }[];
@@ -396,7 +400,7 @@ class App extends React.Component<IAppProps, IAppState> {
   
   private historyListener(location: Location<any>, action: Action) {
     if (!this.isEmbedded) {
-      Analytics.trackPageView();
+      this.analytics.trackPageView();
     }
   }
   private createStudyFlashCardSetComponent(currentFlashCardSet: FlashCardSet): () => JSX.Element {

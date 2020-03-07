@@ -87,11 +87,11 @@ export class StringAnswerSelect extends React.Component<StringAnswerSelectProps,
     const correctAnswer = this.props.flashCard.backSide.renderFn as string;
 
     if (answer === correctAnswer) {
-      this.props.onAnswer(AnswerDifficulty.Easy, correctAnswer);
+      this.props.onAnswer(AnswerDifficulty.Easy, answer);
     }
     else {
       this.setState({ incorrectAnswers: this.state.incorrectAnswers.concat([answer]) });
-      this.props.onAnswer(AnswerDifficulty.Incorrect, correctAnswer);
+      this.props.onAnswer(AnswerDifficulty.Incorrect, answer);
     }
   }
 }

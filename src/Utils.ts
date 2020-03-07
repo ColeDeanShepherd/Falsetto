@@ -2,6 +2,13 @@ import { Size2D } from './Size2D';
 import { Rect2D } from './Rect2D';
 import { Vector2D } from './Vector2D';
 
+export const PI = 3.14159265359;
+export const TAU = 6.28318530718;
+
+export function polarToCartesian(r: number, theta: number): Vector2D {
+  return new Vector2D(r * Math.cos(theta), r * Math.sin(theta));
+}
+
 export function identity<T>(value: T): T {
   return value;
 }
@@ -169,6 +176,13 @@ export function sum<T>(array: Array<T>, callbackFn: (value: T) => number): numbe
     (prevVal, curVal) => prevVal + callbackFn(curVal),
     0
   );
+}
+
+// TODO: add tests
+export function mean<T>(array: Array<T>, callbackFn: (value: T) => number): number {
+  if (array.length === 0) { return 0; }
+  
+  return sum(array, callbackFn) / array.length;
 }
 
 // TODO: add tests
@@ -398,6 +412,16 @@ export function newArraySplice<T>(array: T[], start: number, deleteCount: number
   return newArray;
 }
 
+export function removeElement<T>(array: T[], element: T): boolean {
+  const elementIndex = array.indexOf(element);
+  if (elementIndex >= 0) {
+    array.splice(elementIndex, 1);
+    return true;
+  } else {
+    return false;
+  }
+}
+
 export function immutableAddIfNotInArray<T>(array: T[], element: T): T[] {
   const elementIndex = array.indexOf(element);
   return (elementIndex < 0)
@@ -623,6 +647,17 @@ export function mapFilter<T>(set: Set<T>, predicate: (t: T) => boolean): Array<T
     if (predicate(e)) {
       result.push(e);
     }
+  }
+
+  return result;
+}
+
+const alphaNumericCharacters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+export function randomAlphaNumericString(length: number): string {
+  let result = '';
+
+  for (let i = length; i > 0; --i) {
+    result += alphaNumericCharacters[Math.floor(Math.random() * alphaNumericCharacters.length)];
   }
 
   return result;
