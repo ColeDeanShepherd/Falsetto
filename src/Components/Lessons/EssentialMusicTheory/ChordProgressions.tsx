@@ -1,7 +1,5 @@
 import * as React from "react";
 
-import App from '../../App';
-
 import * as Utils from "../../../Utils";
 
 import { playPitches } from "../../../Piano";
@@ -20,6 +18,8 @@ import { ScaleType, Scale } from '../../../Scale';
 import { Chord, ChordType } from "../../../Chord";
 import { PitchesAudioPlayer } from '../../Utils/PitchesAudioPlayer';
 import { SectionProps, Term, SectionTitle, SubSectionTitle, NoteText, renderIntervalLabel, renderPianoKeyLabel } from './EssentialMusicTheory';
+
+import { NavLinkView } from "../../../NavLinkView";
 
 import * as ChordProgressionsQuiz from "../../Quizzes/Chords/ChordProgressionsQuiz";
 import * as ChordHarmonicFunctions from "../../Quizzes/Chords/ChordFamilies";
@@ -198,7 +198,7 @@ const ChordTransitionDiagram: React.FunctionComponent<{ chord1Pitches: Array<Pit
 
 export const ChordProgressionsSection: React.FunctionComponent<SectionProps> = props => (
   <div>
-    <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory/chords", "<< Previous: Chords")} | Next: Next Steps (coming soon) >></p>
+    <p style={{ textAlign: "center" }}><NavLinkView to="/essential-music-theory/chords">{"<< Previous: Chords"}</NavLinkView> | <NavLinkView to="/essential-music-theory/next-steps">{"Next Steps >>"}</NavLinkView></p>
 
     <SectionTitle>Chord Progressions</SectionTitle>
     <p><Term>Chord progressions</Term> are simply sequences of chords. <Term>Chord progressions</Term> are often written with roman numeral notation instead of with pitch letters, allowing chord progressions to be described independent of the key they are played in. There are three fundamental concepts you must know to understand and compose effective chord progressions: the <Term>V - I progression</Term>, <Term>chord substitution</Term>, and <Term>voice leading</Term>.</p>
@@ -313,6 +313,6 @@ export const ChordProgressionsSection: React.FunctionComponent<SectionProps> = p
     <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(ChordProgressionsQuiz.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}</div>
     <div style={{ marginBottom: "2em"}}>{createStudyFlashCardSetComponent(ChordHarmonicFunctions.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}</div>
 
-    <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory/chords", "<< Previous: Chords")} | Next: Next Steps (coming soon) >></p>
+    <p style={{ textAlign: "center" }}><NavLinkView to="/essential-music-theory/chords">{"<< Previous: Chords"}</NavLinkView> | <NavLinkView to="/essential-music-theory/next-steps">{"Next Steps >>"}</NavLinkView></p>
   </div>
 );

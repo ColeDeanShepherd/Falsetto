@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Table, TableHead, TableBody, TableRow, TableCell } from "@material-ui/core";
 
-import App from '../../App';
 
 import * as Utils from "../../../Utils";
 
@@ -29,6 +28,7 @@ import { doesKeyUseSharps } from '../../../Key';
 import { PianoScaleDronePlayer } from '../../Utils/PianoScaleDronePlayer';
 import { ScaleAudioPlayer } from '../../Utils/ScaleAudioPlayer';
 import { SectionProps, Term, SectionTitle, SubSectionTitle, NoteText, defaultRootPitch, pianoKeyboardStyle } from './EssentialMusicTheory';
+import { NavLinkView } from '../../../NavLinkView';
 
 export const PianoScaleFormulaDiagram: React.FunctionComponent<{ scale: ScaleType }> = props => {
   const width = 300;
@@ -109,7 +109,7 @@ export const PianoScaleFormulaDiagram: React.FunctionComponent<{ scale: ScaleTyp
 
 export const ScalesAndModesSection: React.FunctionComponent<SectionProps> = props => (
   <div>
-    <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory/intervals", "<< Previous: Intervals")} | {App.instance.renderNavLink("/essential-music-theory/chords", "Next: Chords >>")}</p>
+    <p style={{ textAlign: "center" }}><NavLinkView to="/essential-music-theory/intervals">{"<< Previous: Intervals"}</NavLinkView> | <NavLinkView to="/essential-music-theory/chords">{"Next: Chords >>"}</NavLinkView></p>
 
     <SectionTitle>Scales &amp; Modes</SectionTitle>
     <SubSectionTitle>Scales</SubSectionTitle>
@@ -215,6 +215,6 @@ export const ScalesAndModesSection: React.FunctionComponent<SectionProps> = prop
     <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(GuitarScales.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}</div>
     <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(ScaleEarTraining.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}</div>
 
-    <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory/intervals", "<< Previous: Intervals")} | {App.instance.renderNavLink("/essential-music-theory/chords", "Next: Chords >>")}</p>
+    <p style={{ textAlign: "center" }}><NavLinkView to="/essential-music-theory/intervals">{"<< Previous: Intervals"}</NavLinkView> | <NavLinkView to="/essential-music-theory/chords">{"Next: Chords >>"}</NavLinkView></p>
   </div>
 );

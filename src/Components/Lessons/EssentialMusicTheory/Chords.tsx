@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Table, TableHead, TableBody, TableRow, TableCell } from "@material-ui/core";
 
-import App from '../../App';
 
 import { createStudyFlashCardSetComponent } from '../../StudyFlashCards';
 
@@ -16,10 +15,11 @@ import { DiatonicChordPlayer } from '../../Tools/DiatonicChordPlayer';
 import { ChordAudioPlayer } from "../../Utils/ChordAudioPlayer";
 import { SectionProps, Term, SectionTitle, SubSectionTitle, NoteText, defaultRootPitch } from './EssentialMusicTheory';
 import { Chord, ChordType, ChordTypeGroup } from '../../../Chord';
+import { NavLinkView } from '../../../NavLinkView';
 
 export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
   <div>
-    <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory/scales-and-modes", "<< Previous: Scales & Modes")} | {App.instance.renderNavLink("/essential-music-theory/chord-progressions", "Next: Chord Progressions >>")}</p>
+    <p style={{ textAlign: "center" }}><NavLinkView to="/essential-music-theory/scales-and-modes">{"<< Previous: Scales & Modes"}</NavLinkView> | <NavLinkView to="/essential-music-theory/chord-progressions">{"Next: Chord Progressions >>"}</NavLinkView></p>
 
     <SectionTitle>Chords</SectionTitle>
     <p><Term>Chords</Term> are groups of three or more notes played simultaneously. Chords make up <Term>harmony</Term> in music &mdash; the sounds or feelings that result from multiple notes being played simultaneously. <Term>Harmony</Term> is the third and final fundamental element of music we will study, now that we have explored the first two: <Term>rhythm</Term> and <Term>melody</Term>.</p>
@@ -244,6 +244,6 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
     <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(GuitarChords.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}</div>
     <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(ChordEarTraining.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}</div>
 
-    <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory/scales-and-modes", "<< Previous: Scales & Modes")} | {App.instance.renderNavLink("/essential-music-theory/chord-progressions", "Next: Chord Progressions >>")}</p>
+    <p style={{ textAlign: "center" }}><NavLinkView to="/essential-music-theory/scales-and-modes">{"<< Previous: Scales & Modes"}</NavLinkView> | <NavLinkView to="/essential-music-theory/chord-progressions">{"Next: Chord Progressions >>"}</NavLinkView></p>
   </div>
 );

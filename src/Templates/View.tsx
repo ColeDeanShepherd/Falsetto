@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import { TemplateAction } from "./Actions";
 import { TemplateState } from "./Model";
 
 import "./Stylesheet.css";

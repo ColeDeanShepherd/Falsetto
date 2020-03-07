@@ -7,6 +7,8 @@ import "./index.css";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
 import { polyfillWebAudio } from "./Audio";
 import registerServiceWorker from "./registerServiceWorker";
+import { isDevelopment } from './Config';
+import { checkFlashCardSetIds, checkFlashCardIds } from './FlashCardGraph';
 
 const theme = createMuiTheme({
   /*typography: {
@@ -27,13 +29,17 @@ const theme = createMuiTheme({
   }
 });
 
+polyfillWebAudio();
+
+if (isDevelopment()) {
+  checkFlashCardSetIds();
+  checkFlashCardIds();
+}
 const rootElement = (
   <MuiThemeProvider theme={theme}>
     <App isEmbedded={false} />
   </MuiThemeProvider>
 );
-
-polyfillWebAudio();
 
 ReactDOM.render(
   rootElement,

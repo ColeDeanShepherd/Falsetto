@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Table, TableHead, TableBody, TableRow, TableCell } from "@material-ui/core";
 
-import App from '../../App';
 
 import { YouTubeVideo } from "../../Utils/YouTubeVideo";
 import { TimeSignature } from "../../../TimeSignature";
@@ -37,12 +36,13 @@ import timeSignature34 from "../../../img/sheet-music/time-signature-3-4.svg";
 import { TimeSignaturePlayer } from '../../Tools/TimeSignaturePlayer';
 import { NoteValuePlayer } from '../../Tools/NoteValuePlayer';
 import { SectionProps, SectionTitle, Term, SubSectionTitle, NoteText } from './EssentialMusicTheory';
+import { NavLinkView } from '../../../NavLinkView';
 
 const noteValueTableImgWidth = 24;
 
 export const RhythmSection: React.FunctionComponent<SectionProps> = props => (
   <div>
-    <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory", "<< Previous: Introduction")} | {App.instance.renderNavLink("/essential-music-theory/notes", "Next: Notes >>")}</p>
+    <p style={{ textAlign: "center" }}><NavLinkView to="/essential-music-theory">{"<< Previous: Introduction"}</NavLinkView> | <NavLinkView to="/essential-music-theory/notes">{"Next: Notes >>"}</NavLinkView></p>
 
     <SectionTitle>Rhythm</SectionTitle>
     <p><Term>Rhythm</Term> is the purposeful arrangement of sounds over time &mdash; what you dance to when listening to a piece of music. Rhythm is the basis of all music, and some music is based solely on rhythm:</p>
@@ -177,6 +177,6 @@ export const RhythmSection: React.FunctionComponent<SectionProps> = props => (
     <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(NoteDurations.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}</div>
     <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(NoteValueNumbers.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}</div>
 
-    <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory", "<< Previous: Introduction")} | {App.instance.renderNavLink("/essential-music-theory/notes", "Next: Notes >>")}</p>
+    <p style={{ textAlign: "center" }}><NavLinkView to="/essential-music-theory">{"<< Previous: Introduction"}</NavLinkView> | <NavLinkView to="/essential-music-theory/notes">{"Next: Notes >>"}</NavLinkView></p>
   </div>
 );

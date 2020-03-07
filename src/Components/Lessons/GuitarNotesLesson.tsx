@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Card, CardContent } from '@material-ui/core';
 
-import App from "../App";
 import * as Utils from "../../Utils";
 import {
   GuitarFretboard,
@@ -16,6 +15,7 @@ import { PitchLetter } from '../../PitchLetter';
 import { createStudyFlashCardSetComponent } from '../StudyFlashCards';
 import { MAX_MAIN_CARD_WIDTH } from '../Style';
 import { StringedInstrumentNote } from '../../StringedInstrumentNote';
+import { NavLinkView } from '../../NavLinkView';
 
 const noteGroups = [
   {
@@ -444,7 +444,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
           </p>
           
           <h3>Step 10</h3>
-          <p>To identify the rest of the notes (accidental notes, whose names have added symbols as well), simply add a '#' (read "sharp") to the natural note to the left, or add a 'b' (read "flat") to the natural note to the right. Yes, each of these notes has two possible names, and which name you use depends on the context (more info. on this in the {App.instance.renderNavLink("/essential-music-theory", "Essential Music Theory")} lesson)! But for now we will just label each accidental note with both possible names.</p>
+          <p>To identify the rest of the notes (accidental notes, whose names have added symbols as well), simply add a '#' (read "sharp") to the natural note to the left, or add a 'b' (read "flat") to the natural note to the right. Yes, each of these notes has two possible names, and which name you use depends on the context (more info. on this in the <NavLinkView to="/essential-music-theory">{"Essential Music Theory"}</NavLinkView> lesson)! But for now we will just label each accidental note with both possible names.</p>
           <p style={{ textAlign: "center" }}>
             <GuitarFretboard
               width={fretboardWidth} height={fretboardHeight}

@@ -2,8 +2,6 @@
 import * as React from "react";
 import { Table, TableHead, TableBody, TableRow, TableCell } from "@material-ui/core";
 
-import App from '../../App';
-
 import { playPitches } from "../../../Piano";
 
 import { PianoKeyboard, PianoKeyboardMetrics } from "../../Utils/PianoKeyboard";
@@ -33,6 +31,7 @@ import { Vector2D } from '../../../Vector2D';
 import { Size2D } from '../../../Size2D';
 import { Margin } from '../../../Margin';
 import { SectionProps, Term, SectionTitle, SubSectionTitle, NoteText } from './EssentialMusicTheory';
+import { NavLinkView } from '../../../NavLinkView';
 
 const HalfStepsDiagram: React.FunctionComponent<{}> = props => {
   const width = 300;
@@ -254,7 +253,7 @@ const IntervalsTable: React.FunctionComponent<{ showExamples?: boolean, showCate
 
 export const IntervalsSection: React.FunctionComponent<SectionProps> = props => (
   <div>
-    <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory/notes", "<< Previous: Notes")} | {App.instance.renderNavLink("/essential-music-theory/scales-and-modes", "Next: Scales & Modes >>")}</p>
+    <p style={{ textAlign: "center" }}><NavLinkView to="/essential-music-theory/notes">{"<< Previous: Notes"}</NavLinkView> | <NavLinkView to="/essential-music-theory/scales-and-modes">{"Next: Scales & Modes >>"}</NavLinkView></p>
       
     <SectionTitle>Intervals</SectionTitle>
     <p>An <Term>interval</Term> is simply the distance between two notes. Understanding intervals and training your ear to recognize them is one of the most important skills as a musician, because a firm grasp on intervals establishes a link between your mind, your instrument, and your emotions.</p>
@@ -364,6 +363,6 @@ export const IntervalsSection: React.FunctionComponent<SectionProps> = props => 
     <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(Interval2ndNoteEarTraining.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}</div>
     <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(Interval2ndNoteEarTrainingPiano.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}</div>
     
-    <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory/notes", "<< Previous: Notes")} | {App.instance.renderNavLink("/essential-music-theory/scales-and-modes", "Next: Scales & Modes >>")}</p>
+    <p style={{ textAlign: "center" }}><NavLinkView to="/essential-music-theory/notes">{"<< Previous: Notes"}</NavLinkView> | <NavLinkView to="/essential-music-theory/scales-and-modes">{"Next: Scales & Modes >>"}</NavLinkView></p>
   </div>
 );

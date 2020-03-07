@@ -2,7 +2,6 @@ import * as React from "react";
 import { Card, CardContent, Typography } from "@material-ui/core";
 
 import * as Utils from "../../Utils";
-import * as Analytics from "../../Analytics";
 import { DetectedPitch, IPitchDetector, DatalantPitchDetector } from '../PitchDetection';
 import { Size2D } from '../../Size2D';
 import { Microphone } from '../../Microphone';

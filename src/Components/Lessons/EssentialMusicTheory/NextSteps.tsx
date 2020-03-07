@@ -1,12 +1,11 @@
 import * as React from "react";
 
-import App from '../../App';
-
 import { SectionProps, Term, SectionTitle, SubSectionTitle, NoteText } from './EssentialMusicTheory';
+import { NavLinkView } from '../../../NavLinkView';
 
 export const NextStepsSection: React.FunctionComponent<SectionProps> = props => (
   <div>
-    <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory/chord-progressions", "<< Previous: Chord Progressions")}</p>
+    <p style={{ textAlign: "center" }}><NavLinkView to="/essential-music-theory/chord-progressions">{"<< Previous: Chord Progressions"}</NavLinkView></p>
 
     <SectionTitle>Next Steps</SectionTitle>
     <p>With the essentials of music theory under your belt, you should now have a better understanding of music as a whole, and of the instrument of your choice. We encourage you to explore the exercises we have on our website, and to experiment with your knowledge to come up with original ideas and develop your musical voice.</p>
@@ -46,6 +45,6 @@ export const NextStepsSection: React.FunctionComponent<SectionProps> = props => 
       <li><a href="https://www.image-line.com/flstudio/" target="_blank">FL Studio - Digital Audio Workstation</a></li>
     </ul>
 
-    <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory/chord-progressions", "<< Previous: Chord Progressions")}</p>
+    <p style={{ textAlign: "center" }}><NavLinkView to="/essential-music-theory/chord-progressions">{"<< Previous: Chord Progressions"}</NavLinkView></p>
   </div>
 );

@@ -1,6 +1,5 @@
 import * as React from "react";
 
-import App from '../../App';
 
 import * as PianoNotes from "../../Quizzes/Notes/PianoNotes";
 import * as GuitarNotes from "../../Quizzes/Notes/GuitarNotes";
@@ -10,12 +9,12 @@ import { createStudyFlashCardSetComponent } from '../../StudyFlashCards';
 
 import * as NotesQuiz from "../../Quizzes/Notes/NotesQuiz";
 
-import { NavLink } from 'react-router-dom';
 import { SectionTitle, NoteText, Term, OctavesPlayer, SectionProps, SubSectionTitle } from './EssentialMusicTheory';
+import { NavLinkView } from "../../../NavLinkView";
 
 export const NotesSection: React.FunctionComponent<SectionProps> = props => (
   <div>
-    <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory/rhythm", "<< Previous: Rhythm")} | {App.instance.renderNavLink("/essential-music-theory/intervals", "Next: Intervals >>")}</p>
+    <p style={{ textAlign: "center" }}><NavLinkView to="/essential-music-theory/rhythm">{"<< Previous: Rhythm"}</NavLinkView> | <NavLinkView to="/essential-music-theory/intervals">{"Next: Intervals >>"}</NavLinkView></p>
 
     <SectionTitle>Notes</SectionTitle>
     <p>In music, a <Term>note</Term> is a sound with a distinct pitch and a duration, and a <Term>pitch</Term> is the "highness" or "lowness" of a sound.</p>
@@ -36,7 +35,7 @@ export const NotesSection: React.FunctionComponent<SectionProps> = props => (
     <NoteText>Though there are no black keys in-between B &amp; C and E &amp; F, you can &mdash; and sometimes must, as we will discover in a future lesson &mdash; use accidentals to name those notes relative to another. So, Cb is the same as B, B# is the same as C, Fb is the same as E, and E# is the same as F.</NoteText>
     
     <p>It is <strong>vitally</strong> important to learn where all the notes are on your instrument of choice. Please take some time to do so before moving on to the next lesson!</p>
-    <p>If your instrument of choice is piano, there is an interactive exercise below. If your instrument of choise is guitar, there is an interactive exercise below, and a comprehensive lesson: <NavLink to="/learn-guitar-notes-in-10-steps" className="menu-link">Learn the Notes on Guitar in 10 Easy Steps</NavLink></p>
+    <p>If your instrument of choice is piano, there is an interactive exercise below. If your instrument of choise is guitar, there is an interactive exercise below, and a comprehensive lesson: <NavLinkView to="/learn-guitar-notes-in-10-steps">Learn the Notes on Guitar in 10 Easy Steps</NavLinkView></p>
 
     <SubSectionTitle>Interactive Exercises</SubSectionTitle>
     <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(NotesQuiz.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}</div>
@@ -44,6 +43,6 @@ export const NotesSection: React.FunctionComponent<SectionProps> = props => (
     <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(GuitarNotes.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}</div>
     <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(SheetMusicNotes.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}</div>
     
-    <p style={{ textAlign: "center" }}>{App.instance.renderNavLink("/essential-music-theory/rhythm", "<< Previous: Rhythm")} | {App.instance.renderNavLink("/essential-music-theory/intervals", "Next: Intervals >>")}</p>
+    <p style={{ textAlign: "center" }}><NavLinkView to="/essential-music-theory/rhythm">{"<< Previous: Rhythm"}</NavLinkView> | <NavLinkView to="/essential-music-theory/intervals">{"Next: Intervals >>"}</NavLinkView></p>
   </div>
 );
