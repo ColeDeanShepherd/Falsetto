@@ -188,6 +188,12 @@ export function getPreferredNumNotesPerStringRange(scaleType: ScaleType): ({ min
         maxNotesPerString: 4,
         preferredNotesPerString: 3
       };
+    case 12:
+      return {
+        minNotesPerString: 4,
+        maxNotesPerString: 4,
+        preferredNotesPerString: 4
+      };
     default:
       throw new Error(`Unsupported scale length: ${scaleType.numPitches}`);
   }
