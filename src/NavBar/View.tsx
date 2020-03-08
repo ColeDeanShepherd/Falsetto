@@ -43,6 +43,10 @@ export class NavBarView extends React.Component<INavBarViewProps, INavBarViewSta
         </Paper>
       </div>
     ) : null;
+
+    //{!isAuthenticated ? <a href="/login" onClick={event => { this.userManager.loginWithRedirect(); event.preventDefault(); event.stopPropagation(); }} style={{ fontWeight: "normal" }}>Log In</a> : null}
+    //{(isAuthenticated && userProfile) ? <NavLinkView to="/profile" activeClassName="" style={{ fontWeight: "normal" }}>{userProfile.fullName}</NavLinkView> : null}
+    //{isAuthenticated ? <a href="/logout" onClick={event => { this.userManager.logout(); event.preventDefault(); event.stopPropagation(); }} style={{ fontWeight: "normal" }}>Log Out</a> : null}
     
     return (
       <div>

@@ -24,7 +24,6 @@ export async function getFlashCardSetStatsFromDatabase(
   database: IDatabase, userManager: IUserManager,
   flashCardSet: FlashCardSet, flashCards: Array<FlashCard>
 ): Promise<FlashCardSetStats> {
-  const userId = userManager.getCurrentUserId(); // TODO remove
   const flashCardIds = flashCards.map(fc => fc.id);
   const answers = await database.getAnswers(flashCardIds, /*userId*/null); // TODO:
 
@@ -571,7 +570,6 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
       const eventValue = undefined;
       const eventCategory = this.props.flashCardSet.id;
 
-      const userId = this.props.userManager.getCurrentUserId(); // TODO: fix
       const answeredAt = new Date();
 
       this.props.database.addAnswers([
