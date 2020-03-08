@@ -48,6 +48,19 @@ if (isDevelopment()) {
   checkFlashCardSetIds();
   checkFlashCardIds();
 }
+// A function that routes the user to the right place
+// after login
+// TODO: uncomment when authentication is re-enabled
+/*const onRedirectCallback = (appState: any) => {
+  window.history.replaceState(
+    {},
+    document.title,
+    appState && appState.targetUrl
+      ? appState.targetUrl
+      : window.location.pathname
+  );
+};*/
+
 const rootElement = (
   <MuiThemeProvider theme={theme}>
     <App isEmbedded={false} />
