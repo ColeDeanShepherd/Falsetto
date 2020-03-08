@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Button } from "@material-ui/core";
 
-import * as Utils from "../../lib/Core/Utils";
 import { Pitch } from "../../lib/TheoryLib/Pitch";
 import { AnswerDifficulty } from "../../Study/AnswerDifficulty";
 import { PianoKeyboard } from "./PianoKeyboard";

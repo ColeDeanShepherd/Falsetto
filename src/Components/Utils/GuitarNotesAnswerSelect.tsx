@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Button } from "@material-ui/core";
 
-import * as Utils from "../../lib/Core/Utils";
 import { Vector2D } from "../../lib/Core/Vector2D";
 import { Size2D } from "../../lib/Core/Size2D";
 import { Rect2D } from "../../lib/Core/Rect2D";

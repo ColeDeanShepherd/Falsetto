@@ -1,4 +1,3 @@
-import * as Utils from "../../../lib/Core/Utils";
 import * as FlashCardUtils from "../Utils";
 import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardLevel, } from "../../../FlashCardSet";

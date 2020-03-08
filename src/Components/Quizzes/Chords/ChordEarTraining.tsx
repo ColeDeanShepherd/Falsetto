@@ -21,9 +21,9 @@ const rootPitches = range(minPitch.midiNumber, maxPitch.midiNumber)
   .map(midiNumber => Pitch.createFromMidiNumber(midiNumber));
 const chordTypes = ChordType.All;
 
-  export interface IFlashCardFrontSideProps {
-    chordType: ChordType;
-  }
+export interface IFlashCardFrontSideProps {
+  chordType: ChordType;
+}
 export interface IFlashCardFrontSideState {
   pitches: Array<Pitch>;
 }

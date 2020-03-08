@@ -1,7 +1,6 @@
 import * as React from "react";
 import { TableRow, TableCell, Table, TableHead, TableBody, Grid, Checkbox } from "@material-ui/core";
 
-import * as Utils from "../../../lib/Core/Utils";
 import { Size2D } from "../../../lib/Core/Size2D";
 import { FlashCard, FlashCardSide, FlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
