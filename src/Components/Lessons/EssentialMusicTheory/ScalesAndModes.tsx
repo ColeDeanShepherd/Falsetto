@@ -10,7 +10,7 @@ import { PianoKeyboard, renderPianoKeyboardNoteNames, PianoKeyboardMetrics } fro
 import { Pitch } from '../../../Pitch';
 import { PitchLetter } from '../../../PitchLetter';
 
-import { createStudyFlashCardSetComponent } from '../../StudyFlashCards';
+import { createStudyFlashCardSetComponent } from '../../StudyFlashCards/View';
 
 import * as ScaleNotes from "../../Quizzes/Scales/ScaleFormulas";
 import * as PianoScales from "../../Quizzes/Scales/PianoScales";

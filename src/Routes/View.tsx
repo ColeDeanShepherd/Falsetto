@@ -33,7 +33,7 @@ import { LoginPage } from '../Components/LoginPage';
 import { LogoutPage } from "../Components/LogoutPage";
 import { MessagePage } from '../Components/MessagePage';
 import { FlashCardSet } from '../FlashCardSet';
-import { createStudyFlashCardSetComponent } from '../Components/StudyFlashCards';
+import { createStudyFlashCardSetComponent } from '../Components/StudyFlashCards/View';
 
 export interface IRoutesViewProps {}
 export interface IRoutesViewState {}

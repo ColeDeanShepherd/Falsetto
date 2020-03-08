@@ -5,7 +5,7 @@ import * as PianoNotes from "../../Quizzes/Notes/PianoNotes";
 import * as GuitarNotes from "../../Quizzes/Notes/GuitarNotes";
 import * as SheetMusicNotes from "../../Quizzes/Sheet Music/SheetMusicNotes";
 
-import { createStudyFlashCardSetComponent } from '../../StudyFlashCards';
+import { createStudyFlashCardSetComponent } from '../../StudyFlashCards/View';
 
 import * as NotesQuiz from "../../Quizzes/Notes/NotesQuiz";
 

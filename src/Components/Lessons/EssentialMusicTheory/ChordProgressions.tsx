@@ -8,7 +8,7 @@ import { PianoKeyboard, PianoKeyboardMetrics, renderPianoKeyboardKeyLabels } fro
 import { Pitch } from '../../../Pitch';
 import { PitchLetter } from '../../../PitchLetter';
 
-import { createStudyFlashCardSetComponent } from '../../StudyFlashCards';
+import { createStudyFlashCardSetComponent } from '../../StudyFlashCards/View';
 
 import { Rect2D } from '../../../Rect2D';
 import { Vector2D } from '../../../Vector2D';
