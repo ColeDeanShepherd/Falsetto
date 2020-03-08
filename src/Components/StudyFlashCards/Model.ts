@@ -292,6 +292,12 @@ export class StudyFlashCardsModel {
     this.handleChangeEnabledFlashCardsAction(newEnabledFlashCardIds, level.createConfigData(this.configData));
   }
 
+  private handleToggleConfigurationAction() {
+    this.showConfiguration = !this.showConfiguration;
+
+    this.publishUpdate();
+  }
+
   private handleChangeEnabledFlashCardsAction(enabledFlashCardIds2: Array<FlashCardId>, newConfigData: any) {
     const enabledFlashCardIds = enabledFlashCardIds2.slice();
     const configData = newConfigData; // TODO: copy?

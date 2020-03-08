@@ -71,7 +71,7 @@ import { IntervalChordScaleFinder } from "./Tools/IntervalChordScaleFinder";
 import { Tuner } from "./Tools/Tuner";
 import { RhythmTapper } from "./Tools/RhythmTapper";
 import { FlashCardSet } from "../FlashCardSet";
-import { createStudyFlashCardSetComponent } from "./StudyFlashCards";
+import { createStudyFlashCardSetComponent } from "./StudyFlashCards/View";
 import { AboutPage } from "./AboutPage";
 import { SupportUsPage } from "./SupportUs";
 import DocumentTitle from "react-document-title";
