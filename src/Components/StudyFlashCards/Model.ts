@@ -1,10 +1,15 @@
 import * as Utils from "../../Utils";
+import { FlashCard, FlashCardId } from "../../FlashCard";
+import { StudyAlgorithm, LeitnerStudyAlgorithm } from "../../StudyAlgorithm";
 import { AnswerDifficulty, answerDifficultyToPercentCorrect, isAnswerDifficultyCorrect } from "../../AnswerDifficulty";
-import { FlashCardSet, FlashCardLevel } from '../../FlashCardSet';
+import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from '../../FlashCardSet';
 import { IDatabase, FlashCardAnswer } from '../../Database';
+import { IUserManager } from '../../UserManager';
+import { Size2D } from '../../Size2D';
+import { DependencyInjector } from '../../DependencyInjector';
+import { IAnalytics } from '../../Analytics';
 import { FlashCardSetStats } from '../../FlashCardSetStats';
 import { FlashCardStats } from '../../FlashCardStats';
-import { FlashCard } from '../../FlashCard';
 
 export function getFlashCardSetStatsFromAnswers(
   flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, answers: Array<FlashCardAnswer>
@@ -22,6 +27,16 @@ export function getFlashCardSetStatsFromAnswers(
     });
     return new FlashCardSetStats(flashCardSet.id, flashCardStats);
 }
+export async function getFlashCardSetStatsFromDatabase(
+  database: IDatabase, userManager: IUserManager,
+  flashCardSet: FlashCardSet, flashCards: Array<FlashCard>
+): Promise<FlashCardSetStats> {
+  const user = userManager.getCurrentUser();
+  const userId = user ? user.id : "";
+  const flashCardIds = flashCards.map(fc => fc.id);
+  const answers = await database.getAnswers(flashCardIds, userId);
+  return getFlashCardSetStatsFromAnswers(flashCardSet, flashCards, answers);
+}
 
 export const MIN_PCT_CORRECT_FLASH_CARD_LEVEL = 0.85;
 export function getCurrentFlashCardLevel(
@@ -38,10 +53,341 @@ export function getCurrentFlashCardLevel(
   const lastLevelIndex = flashCardLevels.length - 1;
   return [lastLevelIndex, flashCardLevels[lastLevelIndex]];
 }
-
 export function getPercentToNextLevel(currentFlashCardLevel: FlashCardLevel, flashCardSetStats: FlashCardSetStats): number {
   const percentCorrects = flashCardSetStats.flashCardStats
     .filter(qs => Utils.arrayContains(currentFlashCardLevel.flashCardIds, qs.flashCardId))
     .map(qs => qs.percentCorrect);
-  return Utils.sum(percentCorrects, p => Math.min(p, MIN_PCT_CORRECT_FLASH_CARD_LEVEL) / percentCorrects.length) / (MIN_PCT_CORRECT_FLASH_CARD_LEVEL - 0.001);
+  return Utils.sum(percentCorrects, p => Math.min(p, MIN_PCT_CORRECT_FLASH_CARD_LEVEL) / percentCorrects.length) / MIN_PCT_CORRECT_FLASH_CARD_LEVEL;
+}
+
+// TODO: don't use global actions for specific flash card set actions
+// TODO: make study algorithm stateless? (leitner algorithm is stateful)
+export class StudyFlashCardsModel {
+  private userManager: IUserManager;
+  private database: IDatabase;
+  private analytics: IAnalytics;
+
+  public flashCardSet: FlashCardSet;
+  public flashCards: Array<FlashCard>;
+  public flashCardLevels: Array<FlashCardLevel>;
+  public configData: any; // TODO: handle "any" in a better way?
+  public enabledFlashCardIds: Array<FlashCardId>; // TODO: configData & enabled flash card IDs redundant?
+  public currentFlashCardId: FlashCardId;
+  public incorrectAnswersToCurrentFlashCard: Array<any>;
+  public isShowingBackSide: boolean;
+  public studyAlgorithm: StudyAlgorithm = new LeitnerStudyAlgorithm(5);
+
+  // old state that I might want to review
+  public sessionFlashCardNumber: number;
+  public haveGottenCurrentFlashCardWrong: boolean;
+  public lastCorrectAnswer: any;
+  public wasCorrect: boolean;
+  public incorrectAnswers: Array<any>;
+  public showConfiguration: boolean;
+  public showDetailedStats: boolean;
+
+  public get isInitialized(): boolean {
+    return this.currentFlashCardId.length > 0;
+  }
+
+  public constructor(flashCardSet: FlashCardSet) {
+    this.userManager = DependencyInjector.instance.getRequiredService<IUserManager>("IUserManager");
+    this.database = DependencyInjector.instance.getRequiredService<IDatabase>("IDatabase");
+    this.analytics = DependencyInjector.instance.getRequiredService<IAnalytics>("IAnalytics");
+
+    this.flashCardSet = flashCardSet;
+    this.flashCards = this.flashCardSet.createFlashCards();
+    
+    this.sessionFlashCardNumber = 0;
+    this.showConfiguration = false;
+    this.showDetailedStats = false;
+    this.isShowingBackSide = false;
+    this.haveGottenCurrentFlashCardWrong = false;
+    this.lastCorrectAnswer = null;
+    this.wasCorrect = false;
+    this.incorrectAnswers = [];
+    this.incorrectAnswersToCurrentFlashCard = [];
+    this.isShowingBackSide = false;
+    
+    this.studyAlgorithm.customNextFlashCardIdFilter = this.flashCardSet.customNextFlashCardIdFilter;
+
+    this.flashCardLevels = this.flashCardSet.createFlashCardLevels
+      ? this.flashCardSet.createFlashCardLevels(this.flashCardSet, this.flashCards) // TODO: don't pass in these args?
+      : [];
+    
+    // actually initialized in static create method
+    this.enabledFlashCardIds = [];
+    this.currentFlashCardId = "";
+  }
+
+  public async initAsync(): Promise<void> {
+    const flashCardSetStats = await getFlashCardSetStatsFromDatabase(
+      this.database, this.userManager,
+      this.flashCardSet, this.flashCards
+    );
+
+    this.studyAlgorithm.reset(
+      this.flashCards.map(fc => fc.id), this.flashCards, flashCardSetStats
+    );
+    
+    this.configData = this.getInitialConfigData();
+    this.enabledFlashCardIds = this.getInitialEnabledFlashCardIds();
+    this.currentFlashCardId = this.studyAlgorithm.getNextFlashCardId();
+    
+    if (this.enabledFlashCardIds) {
+      this.studyAlgorithm.enabledFlashCardIds = this.enabledFlashCardIds;
+    }
+    
+    if (
+      this.configData &&
+      !this.flashCardSet.configDataToEnabledFlashCardIds
+    ) {
+      Utils.assert(false);
+    }
+
+    this.enabledFlashCardIds = this.studyAlgorithm.enabledFlashCardIds;
+
+    this.publishUpdate(); // TODO: remove?
+  }
+  
+  // #region pub/sub
+
+  public subscribeToUpdates(updateHandler: () => void) {
+    this.updateHandlers.push(updateHandler);
+  }
+  public unsubscribeFromUpdates(updateHandler: () => void) {
+    Utils.removeElement(this.updateHandlers, updateHandler);
+  }
+
+  private publishUpdate() {
+    for (const updateHandler of this.updateHandlers) {
+      updateHandler();
+    }
+  }
+
+  private updateHandlers = new Array<() => void>();
+
+  // #endregion
+
+  public flipFlashCard() {
+    this.handleFlipFlashCardAction();
+  }
+  public skipFlashCard() {
+    this.handleSkipFlashCardAction(this.lastCorrectAnswer, this.wasCorrect);
+  }
+  public changeLevel(levelIndex: number) {
+    this.handleChangeLevelAction(levelIndex);
+  }
+  public toggleShowConfiguration() {
+    this.handleToggleConfigurationAction();
+  }
+  public changeEnabledFlashCards(newValue: Array<FlashCardId>, newConfigData: any) {
+    this.handleChangeEnabledFlashCardsAction(newValue, newConfigData);
+  }
+
+  private get hasFlashCardLevels(): boolean { return this.flashCardLevels && (this.flashCardLevels.length > 0); }
+  private getInitialConfigData(): any {
+    const setInitialConfigData = this.flashCardSet.getInitialConfigData
+      ? this.flashCardSet.getInitialConfigData()
+      : null; // TODO: get rid of this conditional. make every set define the function & a config data type
+    return this.hasFlashCardLevels
+      ? this.flashCardLevels[0].createConfigData(setInitialConfigData) // TODO: don't pass this argument?
+      : setInitialConfigData;
+  }
+  private getInitialEnabledFlashCardIds(): Array<FlashCardId> {
+    if (this.hasFlashCardLevels) {
+      const [_, level] = getCurrentFlashCardLevel(this.flashCardSet, this.flashCardLevels, this.studyAlgorithm.flashCardSetStats);
+      return level.flashCardIds.slice();
+    } else {
+      return this.flashCardSet.configDataToEnabledFlashCardIds
+        ? this.flashCardSet.configDataToEnabledFlashCardIds(
+          this.flashCardSet, this.flashCards, this.getInitialConfigData()
+        )
+        : this.flashCards.map(fc => fc.id); // TODO: get rid of this conditional. make every set define the function & a config data type
+    }
+  }
+  
+  private async handleUserAnswerAction(
+    flashCardId: FlashCardId,
+    answer: any,
+    answerDifficulty: AnswerDifficulty): Promise<void> {
+    this.studyAlgorithmHandleUserAnswerAction(flashCardId, answer, answerDifficulty);
+    await this.databaseHandleUserAnswerAction(flashCardId, answer, answerDifficulty);
+    await this.analyticsHandleUserAnswerAction(flashCardId, answer, answerDifficulty);
+  }
+  private studyAlgorithmHandleUserAnswerAction(
+    flashCardId: FlashCardId,
+    answer: any,
+    answerDifficulty: AnswerDifficulty) {
+    if (!this.haveGottenCurrentFlashCardWrong) {
+      this.studyAlgorithm.onAnswer(answerDifficulty);
+    }
+
+    if (isAnswerDifficultyCorrect(answerDifficulty)) {
+      this.moveToNextFlashCardInternal(answer, !this.haveGottenCurrentFlashCardWrong);
+    } else {
+      this.haveGottenCurrentFlashCardWrong = true;
+      this.incorrectAnswers = Utils.uniq(this.incorrectAnswers.concat(answer));
+
+      this.publishUpdate();
+    }
+  }
+  private async databaseHandleUserAnswerAction(
+    flashCardId: FlashCardId,
+    answer: any,
+    answerDifficulty: AnswerDifficulty): Promise<void> {
+    if (!this.haveGottenCurrentFlashCardWrong) {
+      const user = this.userManager.getCurrentUser();
+      const userId = user ? user.id : "";
+      const answeredAt = new Date();
+
+      await this.database.addAnswers([new FlashCardAnswer(
+        this.currentFlashCardId, userId,
+        answerDifficultyToPercentCorrect(answerDifficulty), answeredAt
+      )]);
+    }
+  }
+  private async analyticsHandleUserAnswerAction(
+    flashCardId: FlashCardId,
+    answer: any,
+    answerDifficulty: AnswerDifficulty) {
+    if (!this.haveGottenCurrentFlashCardWrong) {
+      const eventId = isAnswerDifficultyCorrect(answerDifficulty)
+        ? "answer_correct"
+        : "answer_incorrect";
+      const eventLabel = this.currentFlashCardId;
+      const eventValue = undefined;
+      const eventCategory = this.flashCardSet.id;
+      await this.analytics.trackCustomEvent(
+        eventId, eventLabel, eventValue, eventCategory
+      );
+    }
+  }
+  
+  // #region Action Handlers
+  
+  private handleFlipFlashCardAction() {
+    this.handleUserAnswerAction(this.currentFlashCardId, null, AnswerDifficulty.Incorrect);
+    this.isShowingBackSide = !this.isShowingBackSide;
+
+    this.publishUpdate();
+  }
+  private handleSkipFlashCardAction(lastCorrectAnswer: any, wasCorrect: boolean) {
+    this.currentFlashCardId = this.studyAlgorithm.getNextFlashCardId(
+      this.getStudySessionInfo(new Size2D(0, 0))
+    );
+    this.sessionFlashCardNumber = this.sessionFlashCardNumber + 1;
+    this.haveGottenCurrentFlashCardWrong = false;
+    this.isShowingBackSide = false;
+    this.lastCorrectAnswer = lastCorrectAnswer;
+    this.incorrectAnswers = [];
+    this.wasCorrect = wasCorrect
+
+    this.publishUpdate();
+  }
+
+  private handleChangeLevelAction(levelIndex: number) {
+    const level = this.flashCardLevels[levelIndex];
+    const newEnabledFlashCardIds = level.flashCardIds.slice();
+    this.handleChangeEnabledFlashCardsAction(newEnabledFlashCardIds, level.createConfigData(this.configData));
+  }
+
+  private handleChangeEnabledFlashCardsAction(enabledFlashCardIds2: Array<FlashCardId>, newConfigData: any) {
+    const enabledFlashCardIds = enabledFlashCardIds2.slice();
+    const configData = newConfigData; // TODO: copy?
+
+    this.studyAlgorithm.enabledFlashCardIds = enabledFlashCardIds;
+
+    this.enabledFlashCardIds = enabledFlashCardIds;
+    this.configData = configData;
+
+    if (!Utils.arrayContains(enabledFlashCardIds, this.currentFlashCardId)) {
+      this.moveToNextFlashCardInternal(null, false);
+    }
+
+    this.publishUpdate();
+  }
+
+  // #endregion Action Handlers
+
+  
+  private moveToNextFlashCardInternal(lastCorrectAnswer: any, wasCorrect: boolean) {
+    this.handleSkipFlashCardAction(lastCorrectAnswer, wasCorrect);
+  }
+
+  public getCurrentLevelIndex(): number | undefined {
+    if (this.flashCardLevels.length === 0) {
+      return undefined;
+    }
+
+    const result = this.flashCardLevels
+      .findIndex(level => Utils.areArraysEqual(this.enabledFlashCardIds, level.flashCardIds));
+    return (result >= 0)
+      ? result
+      : undefined;
+  }
+  public getPrevLevelIndex(): number | undefined {
+    const currentLevelIndex = this.getCurrentLevelIndex();
+    if ((currentLevelIndex === undefined) || (currentLevelIndex === 0)) {
+      return undefined;
+    }
+
+    return currentLevelIndex - 1;
+  }
+  public getNextLevelIndex(): number | undefined {
+    const currentLevelIndex = this.getCurrentLevelIndex();
+    if ((currentLevelIndex === undefined) || (currentLevelIndex >= (this.flashCardLevels.length - 1))) {
+      return undefined;
+    }
+
+    return currentLevelIndex + 1;
+  }
+
+  public getStudySessionInfo(
+    containerSize: Size2D,
+  ): FlashCardStudySessionInfo {
+    const currentFlashCard = Utils.unwrapValueOrUndefined(
+      this.flashCards.find(fc => fc.id === this.currentFlashCardId)
+    );
+    const onUserAnswer = (answerDifficulty: AnswerDifficulty, answer: any) =>
+      this.handleUserAnswerAction(this.currentFlashCardId, answer, answerDifficulty);
+    const skipFlashCard = () =>
+      this.handleSkipFlashCardAction(this.lastCorrectAnswer, this.wasCorrect);
+
+    return new FlashCardStudySessionInfo(
+      containerSize, this.flashCardSet, this.flashCards,
+      this.enabledFlashCardIds, this.configData, this.currentFlashCardId,
+      currentFlashCard, onUserAnswer, skipFlashCard, this.lastCorrectAnswer,
+      this.incorrectAnswers, this.studyAlgorithm
+    );
+  }
+
+  // TODO: move to view?
+  public getLevelDisplayName(levelIndex: number): string {
+    const level = this.flashCardLevels[levelIndex];
+    return (level.name.length > 0)
+      ? `${1 + levelIndex}: ${level.name}`
+      : (1 + levelIndex).toString();
+  }
+  
+  public moveToNextLevel() {
+    const nextLevelIndex = this.getNextLevelIndex();
+    if (nextLevelIndex === undefined) { return; }
+
+    this.activateLevel(nextLevelIndex);
+  }
+  public moveToPrevLevel() {
+    const prevLevelIndex = this.getPrevLevelIndex();
+    if (prevLevelIndex === undefined) { return; }
+
+    this.activateLevel(prevLevelIndex);
+  }
+
+  private activateLevel(levelIndex: number) {
+    const level = this.flashCardLevels[levelIndex];
+    const newEnabledFlashCardIds = level.flashCardIds.slice();
+    const newConfigData = level.createConfigData(this.configData);
+
+    this.handleChangeEnabledFlashCardsAction(newEnabledFlashCardIds, newConfigData);
+  }
 }
