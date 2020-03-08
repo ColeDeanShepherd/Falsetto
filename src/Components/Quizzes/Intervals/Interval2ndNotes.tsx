@@ -217,19 +217,17 @@ function createFlashCardSet(): FlashCardSet {
     />
     );
   };
-
-  const initialConfigData: IConfigData = {
-    enabledFirstPitches: firstPitches.slice(),
-    enabledIntervals: intervals.slice(),
-    enabledDirections: directions.slice()
-  };
   
   const flashCardSet = new FlashCardSet(flashCardSetId,
     "Interval 2nd Notes",
     createFlashCards
   );
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
-  flashCardSet.initialConfigData = initialConfigData;
+  flashCardSet.getInitialConfigData = (): IConfigData => ({
+    enabledFirstPitches: firstPitches.slice(),
+    enabledIntervals: intervals.slice(),
+    enabledDirections: directions.slice()
+  });
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = renderPitchAnswerSelect;
   flashCardSet.containerHeight = "80px";

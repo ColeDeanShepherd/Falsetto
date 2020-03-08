@@ -184,17 +184,15 @@ function createFlashCardSet(): FlashCardSet {
     />
     );
   };
-
-  const initialConfigData: IConfigData = {
-    enabledChordTypes: chordTypes.map(c => c.name)
-  };
   
   const flashCardSet = new FlashCardSet(flashCardSetId,
     "Chord Ear Training",
     createFlashCards
   );
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
-  flashCardSet.initialConfigData = initialConfigData;
+  flashCardSet.getInitialConfigData = (): IConfigData => ({
+    enabledChordTypes: chordTypes.map(c => c.name)
+  });
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.containerHeight = "100px";

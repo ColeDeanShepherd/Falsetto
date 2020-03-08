@@ -102,12 +102,6 @@ export class RandomChordGeneratorFlashCardMultiSelect extends React.Component<IR
   }
 }
 
-const initialConfigData: IConfigData = {
-  enabledChordRootPitches: chordRootPitches.slice(),
-  enabledChordTypes: ChordType.All
-    .filter((_, i) => i <= 16)
-};
-
 export function createFlashCards(): Array<FlashCard> {
   const flashCards = new Array<FlashCard>();
 
@@ -145,7 +139,11 @@ function createFlashCardSet(): FlashCardSet {
     createFlashCards
   );
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
-  flashCardSet.initialConfigData = initialConfigData;
+  flashCardSet.getInitialConfigData = (): IConfigData => ({
+    enabledChordRootPitches: chordRootPitches.slice(),
+    enabledChordTypes: ChordType.All
+      .filter((_, i) => i <= 16)
+  });
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.containerHeight = "80px";
   flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (

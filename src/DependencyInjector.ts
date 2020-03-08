@@ -25,6 +25,6 @@ export class DependencyInjector {
 
   private history = createBrowserHistory();
   private userManager = new UserManager();
-  private database = new InMemoryDatabase();
+  private database = new InMemoryDatabase(); // new TwoTierDatabase();
   private analytics = isProduction() ? (new Analytics()) : (new MockAnalytics());
 }

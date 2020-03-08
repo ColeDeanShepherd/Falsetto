@@ -275,13 +275,6 @@ function createFlashCardSet(): FlashCardSet {
     );
   };
 
-  const initialConfigData: IConfigData = {
-    enabledFirstPitches: firstPitches.slice(),
-    enabledIntervals: intervals.slice(),
-    enabledDirections: directions.slice(),
-    preferUseMic: true
-  };
-  
   const flashCardSet = new FlashCardSet(flashCardSetId,
     "Interval Singing",
     createFlashCards
@@ -289,7 +282,12 @@ function createFlashCardSet(): FlashCardSet {
   flashCardSet.configDataToEnabledFlashCardIds = (
     flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: IConfigData
   ) => configDataToEnabledFlashCardIds(false, true, flashCardSet, flashCards, configData);
-  flashCardSet.initialConfigData = initialConfigData;
+  flashCardSet.getInitialConfigData = (): IConfigData => ({
+    enabledFirstPitches: firstPitches.slice(),
+    enabledIntervals: intervals.slice(),
+    enabledDirections: directions.slice(),
+    preferUseMic: true
+  });
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = (info: FlashCardStudySessionInfo) =>
     <FlashCardAnswerSelect info={info} />;

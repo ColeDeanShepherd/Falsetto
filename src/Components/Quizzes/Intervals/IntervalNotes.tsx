@@ -184,18 +184,16 @@ function createFlashCardSet(): FlashCardSet {
     );
   };
 
-  const initialConfigData: IConfigData = {
-    enabledFirstPitches: firstPitches.slice(),
-    enabledIntervals: intervals.slice(),
-    enabledDirections: directions.slice()
-  };
-  
   const flashCardSet = new FlashCardSet(flashCardSetId,
     "Notes To Intervals",
     createFlashCards
   );
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
-  flashCardSet.initialConfigData = initialConfigData;
+  flashCardSet.getInitialConfigData = (): IConfigData => ({
+    enabledFirstPitches: firstPitches.slice(),
+    enabledIntervals: intervals.slice(),
+    enabledDirections: directions.slice()
+  });
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.containerHeight = "80px";

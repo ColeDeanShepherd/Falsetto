@@ -236,13 +236,6 @@ export class PianoChordsAnswerSelect extends React.Component<IPianoChordsAnswerS
   }
 }
 
-const initialConfigData: IConfigData = {
-  enabledRootPitches: ambiguousKeyPitchStringsSymbols.slice(),
-  enabledChordTypes: ChordType.All
-    .filter((_, chordIndex) => chordIndex <= 8)
-    .map(chord => chord.name)
-};
-
 function createFlashCardSet(): FlashCardSet {
   const renderFlashCardMultiSelect = (
     info: FlashCardStudySessionInfo,
@@ -258,7 +251,12 @@ function createFlashCardSet(): FlashCardSet {
 
   const flashCardSet = new FlashCardSet(flashCardSetId, "Piano Chords", createFlashCards);
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
-  flashCardSet.initialConfigData = initialConfigData;
+  flashCardSet.getInitialConfigData = (): IConfigData => ({
+    enabledRootPitches: ambiguousKeyPitchStringsSymbols.slice(),
+    enabledChordTypes: ChordType.All
+      .filter((_, chordIndex) => chordIndex <= 8)
+      .map(chord => chord.name)
+  });
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = renderAnswerSelect;
   flashCardSet.containerHeight = "120px";

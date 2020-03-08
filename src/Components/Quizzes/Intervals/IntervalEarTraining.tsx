@@ -127,12 +127,6 @@ function createFlashCardSet(): FlashCardSet {
     );
   };
 
-  const initialConfigData: IConfigData = {
-    enabledFirstPitches: firstPitches.slice(),
-    enabledIntervals: intervals.slice(),
-    enabledDirections: directions.slice()
-  };
-  
   const flashCardSet = new FlashCardSet(flashCardSetId,
     "Interval Ear Training",
     createFlashCards
@@ -140,7 +134,11 @@ function createFlashCardSet(): FlashCardSet {
   flashCardSet.configDataToEnabledFlashCardIds = (
     flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: IConfigData
   ) => configDataToEnabledFlashCardIds(true, false, flashCardSet, flashCards, configData);
-  flashCardSet.initialConfigData = initialConfigData;
+  flashCardSet.getInitialConfigData = (): IConfigData => ({
+    enabledFirstPitches: firstPitches.slice(),
+    enabledIntervals: intervals.slice(),
+    enabledDirections: directions.slice()
+  });
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.moreInfoUri = "https://www.youtube.com/watch?v=_aDCO3h_xik";

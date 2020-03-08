@@ -42,8 +42,8 @@ export class FlashCardLevel {
 }
 
 export class FlashCardSet {
-  public containerHeight: string = "240px";
-  public initialConfigData: any;
+  public containerHeight: string = "240px"; // TODO: remove
+  public getInitialConfigData: (() => any) | null = null; // TODO: rename to something else because if has levels not accurate?
   public configDataToEnabledFlashCardIds: ConfigDataToEnabledFlashCardIdsFunc | undefined;
   public renderFlashCardMultiSelect?: RenderFlashCardMultiSelectFunc;
   public renderAnswerSelect?: RenderAnswerSelectFunc;

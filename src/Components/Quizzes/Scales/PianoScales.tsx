@@ -106,13 +106,6 @@ export class PianoScalesFlashCardMultiSelect extends React.Component<IPianoScale
   }
 }
 
-const initialConfigData: IConfigData = {
-  enabledRootPitches: ambiguousKeyPitchStringsSymbols.slice(),
-  enabledScaleTypes: ScaleType.All
-    .filter((_, scaleIndex) => scaleIndex <= 7)
-    .map(scale => scale.name)
-};
-
 function createFlashCardSet(): FlashCardSet {
   const renderFlashCardMultiSelect = (
     studySessionInfo: FlashCardStudySessionInfo,
@@ -128,7 +121,12 @@ function createFlashCardSet(): FlashCardSet {
 
   const flashCardSet = new FlashCardSet(flashCardSetId, "Piano Scales", createFlashCards);
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
-  flashCardSet.initialConfigData = initialConfigData;
+  flashCardSet.getInitialConfigData = (): IConfigData => ({
+    enabledRootPitches: ambiguousKeyPitchStringsSymbols.slice(),
+    enabledScaleTypes: ScaleType.All
+      .filter((_, scaleIndex) => scaleIndex <= 7)
+      .map(scale => scale.name)
+  });
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = renderAnswerSelect;
   flashCardSet.containerHeight = "110px";

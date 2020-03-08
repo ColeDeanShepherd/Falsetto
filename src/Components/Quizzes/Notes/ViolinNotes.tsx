@@ -20,10 +20,6 @@ const violinTuning = standardViolinTuning;
 
 const MAX_MAX_FRET_NUMBER = 13;
 
-const initialConfigData: IConfigData = {
-  maxFret: MAX_MAX_FRET_NUMBER
-};
-
 function createFlashCardSet(notes?: Array<StringedInstrumentNote>): FlashCardSet {
   const renderFlashCardMultiSelect = (
     studySessionInfo: FlashCardStudySessionInfo,
@@ -41,7 +37,9 @@ function createFlashCardSet(notes?: Array<StringedInstrumentNote>): FlashCardSet
   flashCardSet.configDataToEnabledFlashCardIds = (
     flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: IConfigData
   ) => configDataToEnabledFlashCardIds(violinTuning, MAX_MAX_FRET_NUMBER, undefined, flashCardSet, flashCards, configData);
-  flashCardSet.initialConfigData = initialConfigData;
+  flashCardSet.getInitialConfigData = (): IConfigData => ({
+    maxFret: MAX_MAX_FRET_NUMBER
+  });
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderNoteAnswerSelect;
   //flashCardSet.moreInfoUri = "https://medium.com/@aslushnikov/memorizing-fretboard-a9f4f28dbf03";

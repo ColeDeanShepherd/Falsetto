@@ -214,18 +214,16 @@ function createFlashCardSet(): FlashCardSet {
     );
   };
 
-  const initialConfigData: IConfigData = {
-    enabledScaleTypes: ScaleType.All
-      .filter((_, scaleIndex) => scaleIndex <= 7)
-      .map(scale => scale.name)
-  };
-  
   const flashCardSet = new FlashCardSet(flashCardSetId,
     "Scale Ear Training",
     createFlashCards
   );
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
-  flashCardSet.initialConfigData = initialConfigData;
+  flashCardSet.getInitialConfigData = (): IConfigData => ({
+    enabledScaleTypes: ScaleType.All
+      .filter((_, scaleIndex) => scaleIndex <= 7)
+      .map(scale => scale.name)
+  });
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.containerHeight = "110px";

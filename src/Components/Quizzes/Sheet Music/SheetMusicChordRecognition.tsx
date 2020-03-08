@@ -137,11 +137,6 @@ export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesF
   }
 }
 
-const initialConfigData: IConfigData = {
-  enabledRootPitches: allowedRootPitches.slice(),
-  enabledChordTypes: chordTypes.map(chordType => chordType.name)
-};
-
 export function createFlashCards(): Array<FlashCard> {
   const flashCards = new Array<FlashCard>();
 
@@ -191,7 +186,10 @@ function createFlashCardSet(): FlashCardSet {
     createFlashCards
   );
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
-  flashCardSet.initialConfigData = initialConfigData;
+  flashCardSet.getInitialConfigData = (): IConfigData => ({
+    enabledRootPitches: allowedRootPitches.slice(),
+    enabledChordTypes: chordTypes.map(chordType => chordType.name)
+  });
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (

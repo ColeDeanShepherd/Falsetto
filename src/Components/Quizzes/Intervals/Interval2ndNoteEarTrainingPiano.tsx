@@ -239,17 +239,15 @@ function createFlashCardSet(): FlashCardSet {
     />
     );
   };
-
-  const initialConfigData: IConfigData = {
-    enabledIntervals: intervals.slice()
-  };
   
   const flashCardSet = new FlashCardSet(flashCardSetId,
     "Interval 2nd Note Ear Training Piano",
     createFlashCards
   );
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
-  flashCardSet.initialConfigData = initialConfigData;
+  flashCardSet.getInitialConfigData = (): IConfigData => ({
+    enabledIntervals: intervals.slice()
+  });
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = renderAnswerSelect;
   flashCardSet.customNextFlashCardIdFilter = studySessionInfo => {

@@ -25,11 +25,6 @@ const clefs = [
 ];
 
 function createFlashCardSet(): FlashCardSet {
-  const initialConfigData: IConfigData = {
-    isTrebleClefEnabled: true,
-    isBassClefEnabled: true,
-    areAccidentalsEnabled: false
-  };
   const renderFlashCardMultiSelect = (
     studySessionInfo: FlashCardStudySessionInfo,
     onChange: (newValue: Array<FlashCardId>, newConfigData: any) => void
@@ -42,7 +37,11 @@ function createFlashCardSet(): FlashCardSet {
 
   const flashCardSet = new FlashCardSet(flashCardSetId, "Sheet Music Notes", createFlashCards);
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
-  flashCardSet.initialConfigData = initialConfigData;
+  flashCardSet.getInitialConfigData = (): IConfigData => ({
+    isTrebleClefEnabled: true,
+    isBassClefEnabled: true,
+    areAccidentalsEnabled: false
+  });
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = renderNoteAnswerSelect;
   flashCardSet.containerHeight = "200px";

@@ -113,14 +113,12 @@ function createFlashCardSet(): FlashCardSet {
     );
   };
 
-  const initialConfigData: IConfigData = {
-    enabledChordTypes: chordTypes
-      .filter((_, chordIndex) => chordIndex <= 8)
-  };
-
   const flashCardSet = new FlashCardSet(flashCardSetId, "Guitar Chords", createFlashCards);
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
-  flashCardSet.initialConfigData = initialConfigData;
+  flashCardSet.getInitialConfigData = (): IConfigData => ({
+    enabledChordTypes: chordTypes
+      .filter((_, chordIndex) => chordIndex <= 8)
+  });
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.containerHeight = "120px";

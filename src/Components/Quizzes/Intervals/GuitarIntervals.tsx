@@ -268,10 +268,6 @@ export function renderFretboardExtras(metrics: StringedInstrumentMetrics, notes:
   );
 }
 
-const initialConfigData: IConfigData = {
-  enabledIntervals: intervalStrings.slice()
-};
-
 export function createFlashCards(): Array<FlashCard> {
   const flashCards = new Array<FlashCard>();
 
@@ -324,7 +320,9 @@ function createFlashCardSet(): FlashCardSet {
   
   const flashCardSet = new FlashCardSet(flashCardSetId, "Guitar Intervals", createFlashCards);
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
-  flashCardSet.initialConfigData = initialConfigData;
+  flashCardSet.getInitialConfigData = (): IConfigData => ({
+    enabledIntervals: intervalStrings.slice()
+  });
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = renderAnswerSelect;
   flashCardSet.containerHeight = "100px";

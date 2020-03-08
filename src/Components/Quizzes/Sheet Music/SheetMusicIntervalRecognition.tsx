@@ -189,11 +189,6 @@ export function renderAnswerSelect(
   );
 }
 
-const initialConfigData: IConfigData = {
-  enabledIntervals: intervals.slice(),
-  allowAccidentals: true
-};
-
 export function createFlashCards(): Array<FlashCard> {
   const flashCards = new Array<FlashCard>();
 
@@ -237,7 +232,10 @@ function createFlashCardSet(): FlashCardSet {
     createFlashCards
   );
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
-  flashCardSet.initialConfigData = initialConfigData;
+  flashCardSet.getInitialConfigData = (): IConfigData => ({
+    enabledIntervals: intervals.slice(),
+    allowAccidentals: true
+  });
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = renderAnswerSelect;
   flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (

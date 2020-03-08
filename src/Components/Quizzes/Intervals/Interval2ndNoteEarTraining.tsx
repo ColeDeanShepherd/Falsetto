@@ -99,12 +99,6 @@ function createFlashCardSet(): FlashCardSet {
     );
   };
 
-  const initialConfigData: IConfigData = {
-    enabledFirstPitches: firstPitches.slice(),
-    enabledIntervals: intervals.slice(),
-    enabledDirections: directions.slice()
-  };
-  
   const flashCardSet = new FlashCardSet(flashCardSetId,
     "Interval 2nd Note Ear Training",
     createFlashCards
@@ -112,7 +106,11 @@ function createFlashCardSet(): FlashCardSet {
   flashCardSet.configDataToEnabledFlashCardIds = (
     flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: IConfigData
   ) => configDataToEnabledFlashCardIds(false, true, flashCardSet, flashCards, configData);
-  flashCardSet.initialConfigData = initialConfigData;
+  flashCardSet.getInitialConfigData = (): IConfigData => ({
+    enabledFirstPitches: firstPitches.slice(),
+    enabledIntervals: intervals.slice(),
+    enabledDirections: directions.slice()
+  });
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderNoteAnswerSelect;
   flashCardSet.containerHeight = "120px";

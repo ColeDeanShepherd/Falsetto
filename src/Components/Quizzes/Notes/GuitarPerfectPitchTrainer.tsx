@@ -184,13 +184,11 @@ function createFlashCardSet(guitarNotes?: Array<StringedInstrumentNote>): FlashC
     />;
   };
 
-  const initialConfigData: IConfigData = {
-    maxFret: MAX_MAX_FRET_NUMBER
-  };
-
   const flashCardSet = new FlashCardSet(flashCardSetId, "Guitar Perfect Pitch Trainer", () => createFlashCards(guitarNotes));
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
-  flashCardSet.initialConfigData = initialConfigData;
+  flashCardSet.getInitialConfigData = (): IConfigData => ({
+    maxFret: MAX_MAX_FRET_NUMBER
+  });
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = (info: FlashCardStudySessionInfo) => <GuitarNoteAnswerSelect key={info.currentFlashCardId} args={info} tuning={guitarTuning} />;
   flashCardSet.containerHeight = "200px";

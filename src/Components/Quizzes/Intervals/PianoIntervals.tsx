@@ -228,17 +228,15 @@ function createFlashCardSet(): FlashCardSet {
     );
   };
 
-  const initialConfigData: IConfigData = {
-    enabledIntervals: intervals.slice(),
-    allowAccidentals: true
-  };
-  
   const flashCardSet = new FlashCardSet(flashCardSetId,
     "Piano Intervals",
     createFlashCards
   );
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
-  flashCardSet.initialConfigData = initialConfigData;
+  flashCardSet.getInitialConfigData = (): IConfigData => ({
+    enabledIntervals: intervals.slice(),
+    allowAccidentals: true
+  });
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = renderAnswerSelect;
   flashCardSet.containerHeight = "100px";

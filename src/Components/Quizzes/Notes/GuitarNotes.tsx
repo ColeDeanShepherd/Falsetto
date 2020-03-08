@@ -18,10 +18,6 @@ const flashCardSetId = "guitarNotes";
 const guitarTuning = standard6StringGuitarTuning;
 const MAX_MAX_FRET_NUMBER = 11;
 
-const initialConfigData: IConfigData = {
-  maxFret: MAX_MAX_FRET_NUMBER
-};
-
 export function createFlashCardSet(guitarNotes?: Array<StringedInstrumentNote>): FlashCardSet {
   const renderFlashCardMultiSelect = (
     studySessionInfo: FlashCardStudySessionInfo,
@@ -40,7 +36,9 @@ export function createFlashCardSet(guitarNotes?: Array<StringedInstrumentNote>):
   flashCardSet.configDataToEnabledFlashCardIds = (
     flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: IConfigData
   ) => configDataToEnabledFlashCardIds(guitarTuning, MAX_MAX_FRET_NUMBER, guitarNotes, flashCardSet, flashCards, configData);
-  flashCardSet.initialConfigData = initialConfigData;
+  flashCardSet.getInitialConfigData = (): IConfigData => ({
+    maxFret: MAX_MAX_FRET_NUMBER
+  });
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderNoteAnswerSelect;
   flashCardSet.moreInfoUri = "/learn-guitar-notes-in-10-steps";

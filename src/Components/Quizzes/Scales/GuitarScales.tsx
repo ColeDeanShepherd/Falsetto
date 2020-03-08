@@ -122,17 +122,15 @@ export function createFlashCardSet(title?: string, initialScaleTypes?: Array<Sca
     );
   };
 
-  const initialConfigData: IConfigData = {
+  const flashCardSet = new FlashCardSet(flashCardSetId, title, createFlashCards);
+  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
+  flashCardSet.getInitialConfigData = (): IConfigData => ({
     enabledScaleTypes: !initialScaleTypes
       ? ScaleType.All
         .filter((_, scaleIndex) => scaleIndex <= 7)
       : initialScaleTypes
         .map(scaleType => Utils.unwrapValueOrUndefined(ScaleType.All.find(st => st.equals(scaleType))))
-  };
-
-  const flashCardSet = new FlashCardSet(flashCardSetId, title, createFlashCards);
-  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
-  flashCardSet.initialConfigData = initialConfigData;
+  });
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.containerHeight = "180px";

@@ -106,8 +106,10 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
 
     this.analytics = DependencyInjector.instance.getRequiredService<IAnalytics>("IAnalytics");
 
+    const configData = this.getInitialConfigData();
+
     if (
-      this.props.flashCardSet.initialConfigData &&
+      configData &&
       !this.props.flashCardSet.configDataToEnabledFlashCardIds
     ) {
       Utils.assert(false);
@@ -127,7 +129,7 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
             showConfiguration: false,
             showDetailedStats: false,
             isShowingBackSide: false,
-            configData: this.getInitialConfigData()
+            configData: configData
           },
           partialState
         );
@@ -496,10 +498,14 @@ export class StudyFlashCards extends React.Component<IStudyFlashCardsProps, IStu
     };
   }
 
+  private get hasFlashCardLevels(): boolean { return this.props.flashCardLevels && (this.props.flashCardLevels.length > 0); }
   private getInitialConfigData(): any {
-    return (this.props.flashCardLevels && (this.props.flashCardLevels.length > 0))
-      ? this.props.flashCardLevels[0].createConfigData(this.props.flashCardSet.initialConfigData)
-      : this.props.flashCardSet.initialConfigData;
+    const setInitialConfigData = this.props.flashCardSet.getInitialConfigData
+      ? this.props.flashCardSet.getInitialConfigData()
+      : null; // TODO: get rid of this conditional. make every set define the function & a config data type
+    return this.hasFlashCardLevels
+      ? this.props.flashCardLevels[0].createConfigData(setInitialConfigData) // TODO: don't pass this argument?
+      : setInitialConfigData;
   }
   private getInitialEnabledFlashCardIds(): Array<FlashCardId> {
     if (this.props.flashCardLevels && (this.props.flashCardLevels.length > 0)) {
