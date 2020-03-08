@@ -3,7 +3,6 @@ import * as React from "react";
 import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
-import { AnswerDifficulty } from "../../../AnswerDifficulty";
 
 const flashCardSetId = "keyAccidentalCounts";
 
