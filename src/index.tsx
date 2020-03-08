@@ -5,7 +5,7 @@ import * as ReactDOM from "react-dom";
 import { AppView } from "./App/View";
 import "./index.css";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
-import { polyfillWebAudio } from "./Audio";
+import { polyfillWebAudio } from "./Audio/Audio";
 import registerServiceWorker from "./registerServiceWorker";
 import { Auth0Provider } from "./react-auth0-wrapper";
 import { authDomain, authClientId, authAudience, isDevelopment } from './Config';

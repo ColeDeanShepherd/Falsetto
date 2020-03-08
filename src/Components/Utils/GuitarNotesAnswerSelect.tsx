@@ -6,7 +6,7 @@ import { Vector2D } from "../../lib/Core/Vector2D";
 import { Size2D } from "../../lib/Core/Size2D";
 import { Rect2D } from "../../lib/Core/Rect2D";
 import { PianoKeyboard } from "../Utils/PianoKeyboard";
-import { AnswerDifficulty } from "../../AnswerDifficulty";
+import { AnswerDifficulty } from "../../Study/AnswerDifficulty";
 import { Pitch } from "../../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../../lib/TheoryLib/PitchLetter";
 import { toggleArrayElementCustomEquals, uniq } from '../../lib/Core/ArrayUtils';

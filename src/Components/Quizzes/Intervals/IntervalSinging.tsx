@@ -4,7 +4,7 @@ import * as Utils from "../../../lib/Core/Utils";
 import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
 import { Pitch } from "../../../lib/TheoryLib/Pitch";
-import { playPitches } from "../../../Piano";
+import { playPitches } from "../../../Audio/PianoAudio";
 import {
   IConfigData as IBaseConfigData,
   firstPitches,
@@ -17,7 +17,7 @@ import {
 import { Button, Typography, Checkbox } from "@material-ui/core";
 import { Tuner } from '../../Tools/Tuner';
 import { DetectedPitch } from '../../PitchDetection';
-import { AnswerDifficulty } from '../../../AnswerDifficulty';
+import { AnswerDifficulty } from '../../../Study/AnswerDifficulty';
 import { PitchesAudioPlayer } from '../../Utils/PitchesAudioPlayer';
 import { createIntervalLevels } from '../../../lib/TheoryLib/Interval';
 import { arrayContains } from '../../../lib/Core/ArrayUtils';

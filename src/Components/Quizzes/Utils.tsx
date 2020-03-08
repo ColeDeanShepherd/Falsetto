@@ -4,7 +4,7 @@ import { Button } from "@material-ui/core";
 import * as Utils from "../../lib/Core/Utils";
 import { FlashCard, FlashCardSideRenderFn, FlashCardId } from "../../FlashCard";
 import { callFlashCardSideRenderFn } from "../../Components/FlashCard";
-import { AnswerDifficulty } from "../../AnswerDifficulty";
+import { AnswerDifficulty } from "../../Study/AnswerDifficulty";
 import { FlashCardStudySessionInfo } from '../../FlashCardSet';
 import { Size2D } from '../../lib/Core/Size2D';
 import { arrayContains, uniq } from '../../lib/Core/ArrayUtils';

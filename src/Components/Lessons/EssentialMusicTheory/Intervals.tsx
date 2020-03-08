@@ -2,7 +2,7 @@
 import * as React from "react";
 import { Table, TableHead, TableBody, TableRow, TableCell } from "@material-ui/core";
 
-import { playPitches } from "../../../Piano";
+import { playPitches } from "../../../Audio/PianoAudio";
 
 import { PianoKeyboard, PianoKeyboardMetrics } from "../../Utils/PianoKeyboard";
 import { Pitch } from '../../../lib/TheoryLib/Pitch';

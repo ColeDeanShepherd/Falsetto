@@ -1,11 +1,11 @@
-import * as Utils from "./lib/Core/Utils";
+import * as Utils from "../lib/Core/Utils";
 import { FlashCardSetStats } from "./FlashCardSetStats";
-import { CustomNextFlashCardIdFilter as CustomNextFlashCardIdFilterFn, FlashCardStudySessionInfo } from './FlashCardSet';
-import { FlashCard, FlashCardId } from './FlashCard';
+import { CustomNextFlashCardIdFilter as CustomNextFlashCardIdFilterFn, FlashCardStudySessionInfo } from '../FlashCardSet';
+import { FlashCard, FlashCardId } from '../FlashCard';
 import { AnswerDifficulty, isAnswerDifficultyCorrect } from './AnswerDifficulty';
-import { precondition, invariant, assert } from './lib/Core/Dbc';
-import { randomElement } from './lib/Core/Random';
-import { tryRemoveArrayElement, arrayContains } from './lib/Core/ArrayUtils';
+import { precondition, invariant, assert } from '../lib/Core/Dbc';
+import { randomElement } from '../lib/Core/Random';
+import { tryRemoveArrayElement, arrayContains } from '../lib/Core/ArrayUtils';
 
 export abstract class StudyAlgorithm {
   public enabledFlashCardIds: Array<FlashCardId> = [];

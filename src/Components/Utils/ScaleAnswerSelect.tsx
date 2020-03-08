@@ -2,7 +2,7 @@ import * as React from "react";
 import { Button, Typography } from "@material-ui/core";
 
 import { ScaleType } from "../../lib/TheoryLib/Scale";
-import { AnswerDifficulty } from "../../AnswerDifficulty";
+import { AnswerDifficulty } from "../../Study/AnswerDifficulty";
 
 export interface IScaleAnswerSelectProps {
   ambiguousPitchStringsSymbols: Array<string>;

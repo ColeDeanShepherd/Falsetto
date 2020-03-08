@@ -1,4 +1,3 @@
-import * as Utils from "../lib/Core/Utils";
 import { Pitch } from '../lib/TheoryLib/Pitch';
 import { precondition } from '../lib/Core/Dbc';
 

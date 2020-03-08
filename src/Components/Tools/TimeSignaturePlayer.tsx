@@ -2,18 +2,21 @@ import * as React from "react";
 import * as Vex from "vexflow";
 import { Button, Card, CardContent, Typography, Select, CircularProgress } from "@material-ui/core";
 
-import * as Utils from "../../lib/Core/Utils";
 import { TimeSignature } from "../../lib/TheoryLib/TimeSignature";
-import * as Audio from "../../Audio";
+import * as Audio from "../../Audio/Audio";
 import { VexFlowComponent } from "../Utils/VexFlowComponent";
 import { Rational } from "../../lib/Core/Rational";
-import { noteDurationToVexFlowStr, getTimeSignatureStr } from '../../VexFlowUtils';
-import { RhythmPlayer, IRhythmNote } from '../../Rhythm';
+import { noteDurationToVexFlowStr } from '../../VexFlowUtils';
+import { RhythmPlayer, IRhythmNote } from '../../RhythmPlayer';
 import { SizeAwareContainer } from '../Utils/SizeAwareContainer';
 import { Size2D } from '../../lib/Core/Size2D';
 import { repeatGenerator } from '../../lib/Core/ArrayUtils';
 
 const clickAudioPath = "/audio/metronome_click.wav";
+
+function getTimeSignatureStr(numBeats: number, beatNoteValue: number): string {
+  return `${numBeats}/${beatNoteValue}`;
+}
 
 export enum BeatStrength {
   Strong,

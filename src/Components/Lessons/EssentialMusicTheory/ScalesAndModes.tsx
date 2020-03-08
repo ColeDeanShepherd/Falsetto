@@ -4,7 +4,7 @@ import { Table, TableHead, TableBody, TableRow, TableCell } from "@material-ui/c
 
 import * as Utils from "../../../lib/Core/Utils";
 
-import { playPitches } from "../../../Piano";
+import { playPitches } from "../../../Audio/PianoAudio";
 
 import { PianoKeyboard, renderPianoKeyboardNoteNames, PianoKeyboardMetrics } from "../../Utils/PianoKeyboard";
 import { Pitch } from '../../../lib/TheoryLib/Pitch';

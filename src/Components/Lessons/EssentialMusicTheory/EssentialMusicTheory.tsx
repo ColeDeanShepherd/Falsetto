@@ -3,7 +3,7 @@ import { CardContent, Card } from "@material-ui/core";
 
 import * as Utils from "../../../lib/Core/Utils";
 
-import { playPitchesSequentially } from "../../../Piano";
+import { playPitchesSequentially } from "../../../Audio/PianoAudio";
 
 import { PianoKeyboard, renderPianoKeyboardNoteNames, PianoKeyboardMetrics } from "../../Utils/PianoKeyboard";
 import { Pitch } from '../../../lib/TheoryLib/Pitch';

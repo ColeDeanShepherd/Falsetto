@@ -9,7 +9,7 @@ import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
 import { Pitch, pitchRange } from "../../../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
-import { playPitchesSequentially } from "../../../Piano";
+import { playPitchesSequentially } from "../../../Audio/PianoAudio";
 import { ScaleType, scaleTypeLevels } from "../../../lib/TheoryLib/Scale";
 import { ChordScaleFormula, ChordScaleFormulaPart } from '../../../lib/TheoryLib/ChordScaleFormula';
 

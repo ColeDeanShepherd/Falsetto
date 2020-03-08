@@ -8,7 +8,7 @@ import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../.
 import { Pitch } from "../../../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
 import { Chord, ChordType, chordTypeLevels } from "../../../lib/TheoryLib/Chord";
-import { playPitches } from "../../../Piano";
+import { playPitches } from "../../../Audio/PianoAudio";
 import { range } from '../../../lib/Core/MathUtils';
 import { randomElement } from '../../../lib/Core/Random';
 import { arrayContains, toggleArrayElement } from '../../../lib/Core/ArrayUtils';

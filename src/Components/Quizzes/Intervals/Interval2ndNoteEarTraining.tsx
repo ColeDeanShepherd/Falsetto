@@ -5,7 +5,7 @@ import * as FlashCardUtils from "../Utils";
 import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
 import { Pitch } from "../../../lib/TheoryLib/Pitch";
-import { playPitchesSequentially } from "../../../Piano";
+import { playPitchesSequentially } from "../../../Audio/PianoAudio";
 import {
   IConfigData,
   firstPitches,

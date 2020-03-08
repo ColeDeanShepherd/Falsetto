@@ -1,15 +1,15 @@
 import * as Utils from "../../lib/Core/Utils";
 import { FlashCard, FlashCardId } from "../../FlashCard";
-import { StudyAlgorithm, LeitnerStudyAlgorithm } from "../../StudyAlgorithm";
-import { AnswerDifficulty, answerDifficultyToPercentCorrect, isAnswerDifficultyCorrect } from "../../AnswerDifficulty";
+import { StudyAlgorithm, LeitnerStudyAlgorithm } from "../../Study/StudyAlgorithm";
+import { AnswerDifficulty, answerDifficultyToPercentCorrect, isAnswerDifficultyCorrect } from "../../Study/AnswerDifficulty";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from '../../FlashCardSet';
 import { IDatabase, FlashCardAnswer } from '../../Database';
 import { IUserManager } from '../../UserManager';
 import { Size2D } from '../../lib/Core/Size2D';
 import { DependencyInjector } from '../../DependencyInjector';
 import { IAnalytics } from '../../Analytics';
-import { FlashCardSetStats } from '../../FlashCardSetStats';
-import { FlashCardStats } from '../../FlashCardStats';
+import { FlashCardSetStats } from '../../Study/FlashCardSetStats';
+import { FlashCardStats } from '../../Study/FlashCardStats';
 import { arrayCountPassing, arrayContains, sum, removeElement, uniq, areArraysEqual } from '../../lib/Core/ArrayUtils';
 import { assert } from '../../lib/Core/Dbc';
 

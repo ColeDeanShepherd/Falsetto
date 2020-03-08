@@ -3,8 +3,8 @@ import { Button, CircularProgress } from "@material-ui/core";
 
 import * as Utils from "../../lib/Core/Utils";
 import { areArraysEqualComparer } from "../../lib/Core/ArrayUtils";
-import * as Audio from "../../Audio";
-import { getPitchAudioFilePath } from '../../Piano';
+import * as Audio from "../../Audio/Audio";
+import { getPitchAudioFilePath } from '../../Audio/PianoAudio';
 import { Pitch } from '../../lib/TheoryLib/Pitch';
 import { unwrapMaybe } from '../../lib/Core/Utils';
 

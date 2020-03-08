@@ -9,7 +9,7 @@ import { Pitch } from "../../lib/TheoryLib/Pitch";
 import { Button, Card, CardContent, Typography } from "@material-ui/core";
 import { Chord, ChordType, ChordTypeGroup } from "../../lib/TheoryLib/Chord";
 import { PianoKeyboard } from "../Utils/PianoKeyboard";
-import { playPitches } from '../../Piano';
+import { playPitches } from '../../Audio/PianoAudio';
 import * as PianoScaleDronePlayer from "../Utils/PianoScaleDronePlayer";
 import { GuitarChordViewer } from '../Utils/GuitarChordViewer';
 import { getStandardGuitarTuning } from '../Utils/StringedInstrumentTuning';

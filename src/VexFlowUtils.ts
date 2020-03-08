@@ -25,6 +25,3 @@ export function noteDurationToVexFlowStr(noteDuration: Rational): string {
     throw new Error(`Duration not implemented: ${noteDuration.toString()}`)
   }
 }
-export function getTimeSignatureStr(numBeats: number, beatNoteValue: number): string {
-  return `${numBeats}/${beatNoteValue}`;
-}

@@ -3,7 +3,7 @@ import * as React from "react";
 import * as Utils from "../../lib/Core/Utils";
 import { Scale } from '../../lib/TheoryLib/Scale';
 import { Pitch } from '../../lib/TheoryLib/Pitch';
-import { playPitches } from '../../Piano';
+import { playPitches } from '../../Audio/PianoAudio';
 import { Rect2D } from '../../lib/Core/Rect2D';
 import { Size2D } from '../../lib/Core/Size2D';
 import { Vector2D } from '../../lib/Core/Vector2D';

@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { arrayContains } from '../../../lib/Core/ArrayUtils';
 
-import { playPitches } from "../../../Piano";
+import { playPitches } from "../../../Audio/PianoAudio";
 
 import { PianoKeyboard, PianoKeyboardMetrics, renderPianoKeyboardKeyLabels } from "../../Utils/PianoKeyboard";
 import { Pitch } from '../../../lib/TheoryLib/Pitch';

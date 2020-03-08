@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Card, CardContent, Typography } from "@material-ui/core";
 
-import * as Utils from "../../lib/Core/Utils";
 import { DetectedPitch, IPitchDetector, DatalantPitchDetector } from '../PitchDetection';
 import { Size2D } from '../../lib/Core/Size2D';
 import { Microphone } from '../../Microphone';

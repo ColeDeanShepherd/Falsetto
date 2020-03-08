@@ -9,7 +9,7 @@ import { PitchLetter } from "../../lib/TheoryLib/PitchLetter";
 import { ScaleType, ScaleTypeGroup, Scale } from "../../lib/TheoryLib/Scale";
 import { Pitch } from "../../lib/TheoryLib/Pitch";
 import { PianoKeyboard } from "../Utils/PianoKeyboard";
-import { playPitches } from '../../Piano';
+import { playPitches } from '../../Audio/PianoAudio';
 import * as PianoScaleDronePlayer from "../Utils/PianoScaleDronePlayer";
 import { getPreferredGuitarScaleShape } from '../Utils/GuitarFretboard';
 import { getStandardGuitarTuning } from "../Utils/StringedInstrumentTuning";

@@ -1,6 +1,6 @@
 import { FlashCard, FlashCardId } from "./FlashCard";
-import { StudyAlgorithm } from "./StudyAlgorithm";
-import { AnswerDifficulty } from "./AnswerDifficulty";
+import { StudyAlgorithm } from "./Study/StudyAlgorithm";
+import { AnswerDifficulty } from "./Study/AnswerDifficulty";
 import { Size2D } from './lib/Core/Size2D';
 
 export class FlashCardStudySessionInfo {

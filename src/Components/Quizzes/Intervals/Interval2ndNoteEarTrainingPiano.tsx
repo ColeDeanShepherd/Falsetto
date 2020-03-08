@@ -7,7 +7,7 @@ import { Rect2D } from '../../../lib/Core/Rect2D';
 import { FlashCard, FlashCardSide, FlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
 import { Pitch } from "../../../lib/TheoryLib/Pitch";
-import { playPitchesSequentially } from "../../../Piano";
+import { playPitchesSequentially } from "../../../Audio/PianoAudio";
 import {
   intervals,
   forEachInterval

@@ -1,5 +1,5 @@
 import { FlashCardStats } from "./FlashCardStats";
-import { sumNumbers } from './lib/Core/ArrayUtils';
+import { sumNumbers } from '../lib/Core/ArrayUtils';
 
 export class FlashCardSetStats {
   public constructor(

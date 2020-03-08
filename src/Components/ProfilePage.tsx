@@ -6,7 +6,7 @@ import { FlashCardAnswer, IDatabase } from '../Database';
 import { FlashCardSet, FlashCardLevel } from '../FlashCardSet';
 import { flashCardSets, groupedFlashCardSets } from '../FlashCardGraph';
 import { FlashCardId, FlashCard } from '../FlashCard';
-import { FlashCardSetStats } from '../FlashCardSetStats';
+import { FlashCardSetStats } from '../Study/FlashCardSetStats';
 import { CircleProgressBar } from './CircleProgressBar';
 import { authDomain, authClientId } from '../Config';
 import { NavLinkView } from '../NavLinkView';

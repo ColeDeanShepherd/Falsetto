@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as Vex from "vexflow";
 
-import { IRhythmNote, RhythmPlayer } from "../../Rhythm";
+import { IRhythmNote, RhythmPlayer } from "../../RhythmPlayer";
 import { Button, Card, CardContent, Typography } from "@material-ui/core";
 import { VexFlowComponent } from "../Utils/VexFlowComponent";
 import { Rational } from "../../lib/Core/Rational";

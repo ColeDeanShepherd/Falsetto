@@ -13,7 +13,7 @@ import { ChordType, Chord } from '../../lib/TheoryLib/Chord';
 import { ScaleType, getAllModePitchIntegers } from '../../lib/TheoryLib/Scale';
 import { generateChordNames } from '../../lib/TheoryLib/ChordName';
 import { ChordScaleFormula } from '../../lib/TheoryLib/ChordScaleFormula';
-import { playPitches } from '../../Piano';
+import { playPitches } from '../../Audio/PianoAudio';
 import { StringDictionary } from '../../lib/Core/StringDictionary';
 import { areArraysEqual, uniqWithSelector, immutableAddIfNotFoundInArray, immutableRemoveIfFoundInArray } from '../../lib/Core/ArrayUtils';
 

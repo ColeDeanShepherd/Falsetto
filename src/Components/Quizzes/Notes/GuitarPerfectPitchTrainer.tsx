@@ -9,10 +9,10 @@ import { standard6StringGuitarTuning, StringedInstrumentTuning } from "../../Uti
 import { FlashCard, FlashCardSide, FlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { StringedInstrumentNote, getStringedInstrumentNotes } from '../../../lib/TheoryLib/StringedInstrumentNote';
-import { playPitches } from '../../../Guitar';
+import { playPitches } from '../../../Audio/GuitarAudio';
 import { Pitch } from '../../../lib/TheoryLib/Pitch';
 import { Vector2D } from '../../../lib/Core/Vector2D';
-import { AnswerDifficulty } from '../../../AnswerDifficulty';
+import { AnswerDifficulty } from '../../../Study/AnswerDifficulty';
 import { IConfigData, forEachNote, StringedInstrumentNotesFlashCardMultiSelect } from "../../Utils/StringedInstrumentNotes";
 import { range } from '../../../lib/Core/MathUtils';
 import { flattenArrays } from '../../../lib/Core/ArrayUtils';

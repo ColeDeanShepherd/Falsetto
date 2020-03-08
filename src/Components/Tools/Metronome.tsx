@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Card, CardContent, Typography, Button, CircularProgress } from "@material-ui/core";
 
-import * as Audio from "../../Audio";
+import * as Audio from "../../Audio/Audio";
 import { unwrapMaybe } from '../../lib/Core/Utils';
 
 var clickAudioPath = "/audio/metronome_click.wav";
