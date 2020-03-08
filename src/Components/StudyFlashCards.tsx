@@ -27,6 +27,12 @@ export async function getFlashCardSetStatsFromDatabase(
   const userId = userManager.getCurrentUserId(); // TODO remove
   const flashCardIds = flashCards.map(fc => fc.id);
   const answers = await database.getAnswers(flashCardIds, /*userId*/null); // TODO:
+
+  return getFlashCardSetStatsFromAnswers(flashCardSet, flashCards, answers);
+}
+export function getFlashCardSetStatsFromAnswers(
+  flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, answers: Array<FlashCardAnswer>
+): FlashCardSetStats {
   const minPctCorrect = answerDifficultyToPercentCorrect(AnswerDifficulty.Easy);
   const flashCardStats = flashCards
     .map(fc => {
@@ -66,11 +72,30 @@ export function createStudyFlashCardSetComponent(
   );
 }
 
+export const MIN_PCT_CORRECT_FLASH_CARD_LEVEL = 0.85;
+
 export function getPercentToNextLevel(currentFlashCardLevel: FlashCardLevel, flashCardSetStats: FlashCardSetStats): number {
   const percentCorrects = flashCardSetStats.flashCardStats
     .filter(qs => Utils.arrayContains(currentFlashCardLevel.flashCardIds, qs.flashCardId))
     .map(qs => qs.percentCorrect);
-  return Utils.sum(percentCorrects, p => Math.min(p, 0.85) / percentCorrects.length) / 0.849;
+  return Utils.sum(percentCorrects, p => Math.min(p, MIN_PCT_CORRECT_FLASH_CARD_LEVEL) / percentCorrects.length) / (MIN_PCT_CORRECT_FLASH_CARD_LEVEL - 0.001);
+}
+
+// IMPORTED FROM NEW CODE
+// TODO: handle properly
+export function getCurrentFlashCardLevel(
+  flashCardSet: FlashCardSet, flashCardLevels: Array<FlashCardLevel>, flashCardSetStats: FlashCardSetStats
+): [number, FlashCardLevel] {
+  for (let i = 0; i < flashCardLevels.length - 1; i++) {
+    const level = flashCardLevels[i];
+    const percentToNextLevel = getPercentToNextLevel(level, flashCardSetStats);
+    if (percentToNextLevel < MIN_PCT_CORRECT_FLASH_CARD_LEVEL) {
+      return [i, level];
+    }
+  }
+
+  const lastLevelIndex = flashCardLevels.length - 1;
+  return [lastLevelIndex, flashCardLevels[lastLevelIndex]];
 }
 
 export interface IStudyFlashCardsProps {

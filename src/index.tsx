@@ -9,6 +9,17 @@ import { polyfillWebAudio } from "./Audio";
 import registerServiceWorker from "./registerServiceWorker";
 import { isDevelopment } from './Config';
 import { checkFlashCardSetIds, checkFlashCardIds } from './FlashCardGraph';
+import { getErrorDescription } from './Error';
+import { DependencyInjector } from './DependencyInjector';
+import { IAnalytics } from './Analytics';
+
+const analytics = DependencyInjector.instance.getRequiredService<IAnalytics>("IAnalytics");
+
+window.onerror = (msg, file, line, col, error) => {
+  const fatal = true;
+  getErrorDescription(msg, file, line, col, error)
+    .then(errorDescription => analytics.trackException(errorDescription, fatal));
+};
 
 const theme = createMuiTheme({
   /*typography: {
@@ -30,6 +41,8 @@ const theme = createMuiTheme({
 });
 
 polyfillWebAudio();
+
+analytics.trackPageView();
 
 if (isDevelopment()) {
   checkFlashCardSetIds();

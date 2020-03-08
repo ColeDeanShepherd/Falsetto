@@ -88,6 +88,9 @@ import { IDatabase, InMemoryDatabase } from '../Database';
 import { IUserManager, UserManager } from '../UserManager';
 import { KnowledgeMapPage } from './KnowledgeMapPage';
 import { IAnalytics } from '../Analytics';
+import { IAction } from '../IAction';
+import { NavigateAction } from '../App/Actions';
+import { ActionBus, ActionHandler } from '../ActionBus';
 
 export async function getErrorDescription(
   msg: string | Event,
@@ -217,14 +220,11 @@ class App extends React.Component<IAppProps, IAppState> {
   public constructor(props: IAppProps) {
     super(props);
 
-    window.onerror = (msg, file, line, col, error) => {
-      const fatal = true;
-      getErrorDescription(msg, file, line, col, error)
-        .then(errorDescription => this.analytics.trackException(errorDescription, fatal));
-    };
-
     this.history = createBrowserHistory();
     this.unregisterHistoryListener = this.history.listen(this.historyListener.bind(this));
+    
+    this.boundHandleAction = this.handleAction.bind(this);
+    ActionBus.instance.subscribe(this.boundHandleAction);
 
     this.groupedFlashCardSets = groupedFlashCardSets;
 
@@ -250,19 +250,26 @@ class App extends React.Component<IAppProps, IAppState> {
     App.instance = this;
   }
 
-  public componentWillMount() {
-    if (!this.isEmbedded) {
-      this.analytics.trackPageView();
-    }
-  }
   public componentWillUnmount() {
     if (this.unregisterHistoryListener) {
       this.unregisterHistoryListener();
     }
+    
+    ActionBus.instance.unsubscribe(this.boundHandleAction);
   }
 
   private cachedRenderedRoutes: Array<JSX.Element> | null = null;
+  private boundHandleAction: ActionHandler;
   
+  private handleAction(action: IAction) {
+    switch (action.getId()) {
+      case NavigateAction.Id:
+        this.history.push((action as NavigateAction).to);
+        this.analytics.trackPageView();
+        break;
+    }
+  }
+
   public renderRoutes(): Array<JSX.Element> {
     if (!this.cachedRenderedRoutes) {
       this.cachedRenderedRoutes = [

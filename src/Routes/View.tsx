@@ -25,6 +25,7 @@ import { RhythmTapper } from "../Components/Tools/RhythmTapper";
 import { AboutPage } from "../Components/AboutPage";
 import { SupportUsPage } from "../Components/SupportUs";
 import { HomePage } from "../Components/HomePage";
+import { ProfilePage } from "../Components/ProfilePage";
 import { Metronome } from '../Components/Tools/Metronome';
 import { DiatonicChordPlayer } from '../Components/Tools/DiatonicChordPlayer';
 import { KnowledgeMapPage } from '../Components/KnowledgeMapPage';
@@ -48,6 +49,7 @@ export class RoutesView extends React.Component<IRoutesViewProps, IRoutesViewSta
         <Route key="/" exact path="/" component={() => <DocumentTitle title="Falsetto"><HomePage /></DocumentTitle>} />,
         <Route key="/login" exact path="/login" component={() => <DocumentTitle title="Login - Falsetto"><LoginPage /></DocumentTitle>} />,
         <Route key="/logout" exact path="/logout" component={() => <DocumentTitle title="Logout - Falsetto"><LogoutPage /></DocumentTitle>} />,
+        <Route key="/profile" exact path="/profile" component={() => <DocumentTitle title="Profile - Falsetto"><ProfilePage /></DocumentTitle>} />,
         <Route key="/reset-password" exact path="/reset-password" component={() => <DocumentTitle title="Reset Password - Falsetto"><MessagePage title="Reset Password" message="An email has been sent to your email address with instructions to reset your password." /></DocumentTitle>} />,
         <Route key="/about" exact path="/about" component={() => <DocumentTitle title="About - Falsetto"><AboutPage /></DocumentTitle>} />,
         <Route key="/support-us" exact path="/support-us" component={() => <DocumentTitle title="Support Us - Falsetto"><SupportUsPage /></DocumentTitle>} />,
