@@ -1,6 +1,6 @@
 import { IAction } from "./IAction";
-import * as Utils from "./Utils";
 import { isProduction } from './Config';
+import { removeElement } from "./lib/Core/ArrayUtils";
 
 export type ActionHandler = (action: IAction) => void;
 
@@ -20,7 +20,7 @@ export class ActionBus {
     this.actionHandlers.push(actionHandler);
   }
   public unsubscribe(actionHandler: ActionHandler) {
-    Utils.removeElement(this.actionHandlers, actionHandler);
+    removeElement(this.actionHandlers, actionHandler);
   }
 
   public dispatch(action: IAction) {

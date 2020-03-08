@@ -1,4 +1,4 @@
-import { Size2D } from './Size2D';
+import { Size2D } from './lib/Core/Size2D';
 
 export type FlashCardId = string;
 

@@ -1,4 +1,5 @@
-import * as Utils from "./Utils";
+import * as Utils from "./lib/Core/Utils";
+import { precondition } from './lib/Core/Dbc';
 
 export class Microphone {
   public audioContext: AudioContext | null = null;
@@ -29,8 +30,8 @@ export class Microphone {
     configureAnalyzer: (analyzer: AnalyserNode) => void,
     onAudioProcess?: (analyzer: AnalyserNode) => void
   ): AnalyserNode {
-    Utils.precondition(this.audioContext !== null);
-    Utils.precondition(this.mediaStream !== null);
+    precondition(this.audioContext !== null);
+    precondition(this.mediaStream !== null);
   
     const audioContext = Utils.unwrapMaybe(this.audioContext);
     const mediaStream = Utils.unwrapMaybe(this.mediaStream);

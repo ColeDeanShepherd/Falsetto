@@ -5,9 +5,9 @@ import * as FlashCardUtils from "../Utils";
 import { FlashCard } from "../../../FlashCard";
 import { FlashCardSet } from "../../../FlashCardSet";
 import { VexFlowComponent } from "../../Utils/VexFlowComponent";
-import { Pitch } from "../../../Pitch";
-import { PitchLetter } from "../../../PitchLetter";
-import { Size2D } from '../../../Size2D';
+import { Pitch } from "../../../lib/TheoryLib/Pitch";
+import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
+import { Size2D } from '../../../lib/Core/Size2D';
 
 const flashCardSetId = "keySignatureIdentification";
 

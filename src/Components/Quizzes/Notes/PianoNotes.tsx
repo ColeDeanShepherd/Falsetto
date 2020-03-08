@@ -1,14 +1,14 @@
 import * as React from "react";
 
-import { Vector2D } from '../../../Vector2D';
-import { Size2D } from "../../../Size2D";
-import { Rect2D } from '../../../Rect2D';
+import { Vector2D } from '../../../lib/Core/Vector2D';
+import { Size2D } from "../../../lib/Core/Size2D";
+import { Rect2D } from '../../../lib/Core/Rect2D';
 import * as FlashCardUtils from "../Utils";
 import { PianoKeyboard } from "../../Utils/PianoKeyboard";
 import { FlashCard, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardLevel } from "../../../FlashCardSet";
-import { Pitch, ambiguousPitchStringsSymbols } from "../../../Pitch";
-import { PitchLetter } from "../../../PitchLetter";
+import { Pitch, ambiguousPitchStringsSymbols } from "../../../lib/TheoryLib/Pitch";
+import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
 
 const flashCardSetId = "pianoNotes1Octave";
 

@@ -1,11 +1,10 @@
 import * as React from "react";
 import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody } from "@material-ui/core";
 
-import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
 import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
-import { Interval, createIntervalLevels } from "../../../Interval";
+import { Interval, createIntervalLevels } from "../../../lib/TheoryLib/Interval";
 import {
   GuitarFretboard
 } from "../../Utils/GuitarFretboard";
@@ -15,8 +14,11 @@ import {
   StringedInstrumentFingerboard
 } from "../../Utils/StringedInstrumentFingerboard";
 import { standard6StringGuitarTuning } from "../../Utils/StringedInstrumentTuning";
-import { VerticalDirection } from "../../../VerticalDirection";
-import { StringedInstrumentNote } from '../../../StringedInstrumentNote';
+import { VerticalDirection } from "../../../lib/Core/VerticalDirection";
+import { StringedInstrumentNote } from '../../../lib/TheoryLib/StringedInstrumentNote';
+import { range } from '../../../lib/Core/MathUtils';
+import { arrayContains, toggleArrayElement } from '../../../lib/Core/ArrayUtils';
+import { randomInt } from '../../../lib/Core/Random';
 
 const flashCardSetId = "guitarIntervals";
 const FRET_COUNT = StringedInstrumentFingerboard.DEFAULT_FRET_COUNT;
@@ -51,8 +53,8 @@ function forEachInterval(
   const directions = [VerticalDirection.Up, VerticalDirection.Down];
   const firstStringIndices = [0, 3];
   const stringSpansPerFirstStringIndex = [
-    Utils.range(1, 4), // E string
-    Utils.range(2, 3) // G string
+    range(1, 4), // E string
+    range(2, 3) // G string
   ];
 
   let i = 0;
@@ -92,7 +94,7 @@ export function configDataToEnabledFlashCardIds(
   const newEnabledFlashCardIds = new Array<FlashCardId>();
 
   forEachInterval((interval, direction, stringIndex0, deltaStringIndex, deltaFretNumber, i) => {
-    if (Utils.arrayContains(configData.enabledIntervals, interval)) {
+    if (arrayContains(configData.enabledIntervals, interval)) {
       newEnabledFlashCardIds.push(flashCards[i].id);
     }
   });
@@ -143,7 +145,7 @@ export class IntervalsFlashCardMultiSelect extends React.Component<IIntervalsFla
 
   private toggleIntervalEnabled(interval: string) {
     const configData = this.props.studySessionInfo.configData as IConfigData;
-    const newEnabledIntervals = Utils.toggleArrayElement(
+    const newEnabledIntervals = toggleArrayElement(
       configData.enabledIntervals, interval
     );
     
@@ -200,7 +202,7 @@ class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps, IFlas
     const minFretNumber = Math.max(-this.props.deltaFretNumber, 0);
     const maxFretNumber = Math.min(FRET_COUNT - this.props.deltaFretNumber, FRET_COUNT);
     this.state = {
-      fretNumber: Utils.randomInt(minFretNumber, maxFretNumber)
+      fretNumber: randomInt(minFretNumber, maxFretNumber)
     };
   }
   public render(): JSX.Element {
@@ -333,7 +335,7 @@ function createFlashCardSet(): FlashCardSet {
         flashCards
           .filter(fc => {
             const intervalString = fc.backSide.data as string;
-            return Utils.arrayContains(level.intervalStrings, intervalString);
+            return arrayContains(level.intervalStrings, intervalString);
           })
           .map(fc => fc.id),
         (curConfigData: IConfigData) => (

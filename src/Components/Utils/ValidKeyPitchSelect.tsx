@@ -1,10 +1,11 @@
 import * as React from "react";
 
-import * as Utils from "../../Utils";
-import { getValidKeyPitches } from '../../Key';
-import { Pitch } from '../../Pitch';
-import { pitchLetters } from '../../PitchLetter';
+import * as Utils from "../../lib/Core/Utils";
+import { getValidKeyPitches } from '../../lib/TheoryLib/Key';
+import { Pitch } from '../../lib/TheoryLib/Pitch';
+import { pitchLetters } from '../../lib/TheoryLib/PitchLetter';
 import { Button } from '@material-ui/core';
+import { toggleArrayElementCustomEquals } from '../../lib/Core/ArrayUtils';
 
 const basePitches = getValidKeyPitches(0);
 const validSharpKeyPitches = pitchLetters
@@ -81,7 +82,7 @@ export class ValidKeyPitchSelect extends React.Component<IValidKeyPitchSelectPro
     if (!this.props.isMultiSelect) {
       newValue = [pitch];
     } else {
-      newValue = Utils.toggleArrayElementCustomEquals(
+      newValue = toggleArrayElementCustomEquals(
         this.props.value,
         new Pitch(
           pitch.letter, pitch.signedAccidental,

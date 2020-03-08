@@ -1,6 +1,5 @@
 import * as React from "react";
 
-import * as Utils from "./Utils";
 import { RoutesView } from './Routes/View';
 import { FooterView } from "./Footer/View";
 import { MAX_MAIN_CARD_WIDTH } from './Components/Style';
@@ -8,6 +7,7 @@ import { flashCardSets } from './FlashCardGraph';
 import { ActionHandler, ActionBus } from './ActionBus';
 import { IAction } from './IAction';
 import { NavigateAction } from './App/Actions';
+import { flattenArrays } from './lib/Core/ArrayUtils';
 
 export class MainContainerView extends React.Component<{}, {}> {
   public constructor(props: {}) {
@@ -31,7 +31,7 @@ export class MainContainerView extends React.Component<{}, {}> {
         <div className="main">
           <div style={{ maxWidth: MAX_MAIN_CARD_WIDTH, margin: "0 auto" }}>
             <RoutesView />
-            {false ? <textarea value={Utils.flattenArrays(flashCardSets.map(fcs => fcs.createFlashCards().map(fc => fc.id))).join("\n")} readOnly /> : null}
+            {false ? <textarea value={flattenArrays(flashCardSets.map(fcs => fcs.createFlashCards().map(fc => fc.id))).join("\n")} readOnly /> : null}
           </div>
           <FooterView />
         </div>

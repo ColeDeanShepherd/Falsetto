@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Card, CardContent } from '@material-ui/core';
 
-import * as Utils from "../../Utils";
+import * as Utils from "../../lib/Core/Utils";
 import {
   GuitarFretboard,
   renderGuitarNoteHighlightsAndNoteNames,
@@ -10,12 +10,13 @@ import {
 import { StringedInstrumentMetrics } from "../Utils/StringedInstrumentFingerboard";
 import { standard6StringGuitarTuning } from "../Utils/StringedInstrumentTuning"
 import * as GuitarNotes from "../Quizzes/Notes/GuitarNotes";
-import { Pitch } from '../../Pitch';
-import { PitchLetter } from '../../PitchLetter';
+import { Pitch } from '../../lib/TheoryLib/Pitch';
+import { PitchLetter } from '../../lib/TheoryLib/PitchLetter';
 import { createStudyFlashCardSetComponent } from '../StudyFlashCards/View';
 import { MAX_MAIN_CARD_WIDTH } from '../Style';
-import { StringedInstrumentNote } from '../../StringedInstrumentNote';
+import { StringedInstrumentNote } from '../../lib/TheoryLib/StringedInstrumentNote';
 import { NavLinkView } from '../../NavLinkView';
+import { flattenArrays } from '../../lib/Core/ArrayUtils';
 
 const noteGroups = [
   {
@@ -136,7 +137,7 @@ const step3Diagram1NoteGroups = [
     notes: noteGroups[0].notes.slice(0, 7)
   }
 ];
-const step3Diagram1Notes = Utils.flattenArrays<StringedInstrumentNote>(step3Diagram1NoteGroups
+const step3Diagram1Notes = flattenArrays<StringedInstrumentNote>(step3Diagram1NoteGroups
   .map(ng => ng.notes));
 
 const step4Diagram1NoteGroups = step3Diagram1NoteGroups.concat([
@@ -145,7 +146,7 @@ const step4Diagram1NoteGroups = step3Diagram1NoteGroups.concat([
     notes: noteGroups[1].notes.slice(0, 6)
   }
 ]);
-const step4Diagram1Notes = Utils.flattenArrays<StringedInstrumentNote>(step4Diagram1NoteGroups
+const step4Diagram1Notes = flattenArrays<StringedInstrumentNote>(step4Diagram1NoteGroups
   .map(ng => ng.notes));
 
 const step5Diagram1NoteGroups = step4Diagram1NoteGroups.concat([
@@ -158,7 +159,7 @@ const step5Diagram1NoteGroups = step4Diagram1NoteGroups.concat([
     notes: noteGroups[2].notes.slice(0, 2)
   }
 ]);
-const step5Diagram1Notes = Utils.flattenArrays<StringedInstrumentNote>(step5Diagram1NoteGroups
+const step5Diagram1Notes = flattenArrays<StringedInstrumentNote>(step5Diagram1NoteGroups
   .map(ng => ng.notes));
 
 const step6Diagram1NoteGroups = step5Diagram1NoteGroups.concat([
@@ -167,7 +168,7 @@ const step6Diagram1NoteGroups = step5Diagram1NoteGroups.concat([
     notes: noteGroups[4].notes.slice(0, 6)
   }
 ]);
-const step6Diagram1Notes = Utils.flattenArrays<StringedInstrumentNote>(step6Diagram1NoteGroups
+const step6Diagram1Notes = flattenArrays<StringedInstrumentNote>(step6Diagram1NoteGroups
   .map(ng => ng.notes));
 
 const step7Diagram1NoteGroups = step6Diagram1NoteGroups.concat([
@@ -186,7 +187,7 @@ const step7Diagram1NoteGroups = step6Diagram1NoteGroups.concat([
     ]
   }
 ]);
-const step7Diagram1Notes = Utils.flattenArrays<StringedInstrumentNote>(step7Diagram1NoteGroups
+const step7Diagram1Notes = flattenArrays<StringedInstrumentNote>(step7Diagram1NoteGroups
   .map(ng => ng.notes));
 
 const step8Diagram1NoteGroups = step7Diagram1NoteGroups.concat([
@@ -213,7 +214,7 @@ const step8Diagram1NoteGroups = step7Diagram1NoteGroups.concat([
     ]
   }
 ]);
-const step8Diagram1Notes = Utils.flattenArrays<StringedInstrumentNote>(step8Diagram1NoteGroups
+const step8Diagram1Notes = flattenArrays<StringedInstrumentNote>(step8Diagram1NoteGroups
   .map(ng => ng.notes));
 
 const step9Diagram1NoteGroups = step8Diagram1NoteGroups.concat([
@@ -230,7 +231,7 @@ const step9Diagram1NoteGroups = step8Diagram1NoteGroups.concat([
     ]
   }
 ]);
-const step9Diagram1Notes = Utils.flattenArrays<StringedInstrumentNote>(step9Diagram1NoteGroups
+const step9Diagram1Notes = flattenArrays<StringedInstrumentNote>(step9Diagram1NoteGroups
   .map(ng => ng.notes));
 
 const step10Diagram1NoteGroups = step9Diagram1NoteGroups.concat([

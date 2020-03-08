@@ -1,12 +1,14 @@
 import * as React from "react";
 
-import * as Utils from "../../Utils";
-import { getRectRoundedBottomPathDefString } from "../SvgUtils";
-import { Pitch } from "../../Pitch";
-import { Rect2D } from '../../Rect2D';
-import { Margin } from '../../Margin';
-import { Size2D } from '../../Size2D';
-import { Vector2D } from '../../Vector2D';
+import * as Utils from "../../lib/Core/Utils";
+import { getRectRoundedBottomPathDefString } from "../../lib/Core/SvgUtils";
+import { Pitch } from "../../lib/TheoryLib/Pitch";
+import { Rect2D } from '../../lib/Core/Rect2D';
+import { Margin } from '../../lib/Core/Margin';
+import { Size2D } from '../../lib/Core/Size2D';
+import { Vector2D } from '../../lib/Core/Vector2D';
+import { invariant, precondition } from '../../lib/Core/Dbc';
+import { growRectAroundCenter } from '../../lib/Core/MathUtils';
 
 export class PianoKeyboardMetrics {
   public constructor(
@@ -15,7 +17,7 @@ export class PianoKeyboardMetrics {
     public lowestPitch: Pitch,
     public highestPitch: Pitch
   ) {
-    Utils.invariant(this.lowestPitch.midiNumber <= this.highestPitch.midiNumber);
+    invariant(this.lowestPitch.midiNumber <= this.highestPitch.midiNumber);
 
     // Calculate key counts.
     this.whiteKeyCount = 0;
@@ -89,8 +91,8 @@ export class PianoKeyboardMetrics {
   }
 
   public getKeyRect(pitch: Pitch): Rect2D {
-    Utils.precondition(pitch.midiNumber >= this.lowestPitch.midiNumber);
-    Utils.precondition(pitch.midiNumber <= this.highestPitch.midiNumber);
+    precondition(pitch.midiNumber >= this.lowestPitch.midiNumber);
+    precondition(pitch.midiNumber <= this.highestPitch.midiNumber);
 
     const keyIndex = pitch.midiNumber - this.lowestPitch.midiNumber;
     return new Rect2D(
@@ -163,7 +165,7 @@ export function renderPressedPianoKeys(metrics: PianoKeyboardMetrics, pressedPit
   return (
     <g className="pass-through-click">
       {pressedPitches.map(p => {
-        const keyRect = Utils.growRectAroundCenter(metrics.getKeyRect(p), -2);
+        const keyRect = growRectAroundCenter(metrics.getKeyRect(p), -2);
 
         return (
           <rect

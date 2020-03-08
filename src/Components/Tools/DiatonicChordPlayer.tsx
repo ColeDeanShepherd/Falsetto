@@ -1,13 +1,14 @@
 import * as React from "react";
 import { CardContent, Typography, Card, Table, TableHead, TableBody, TableRow, TableCell, Button, Checkbox } from '@material-ui/core';
 
-import * as Utils from "../../Utils";
-import { Chord } from '../../Chord';
+import * as Utils from "../../lib/Core/Utils";
+import { Chord } from '../../lib/TheoryLib/Chord';
 import { PitchesAudioPlayer } from '../Utils/PitchesAudioPlayer';
-import { Pitch } from '../../Pitch';
-import { PitchLetter } from '../../PitchLetter';
-import { ScaleType } from '../../Scale';
+import { Pitch } from '../../lib/TheoryLib/Pitch';
+import { PitchLetter } from '../../lib/TheoryLib/PitchLetter';
+import { ScaleType } from '../../lib/TheoryLib/Scale';
 import { ValidKeyPitchSelect } from '../Utils/ValidKeyPitchSelect';
+import { getRomanNumerals } from '../../lib/Core/Utils';
 
 export const defaultScales = [
   ScaleType.Ionian,
@@ -117,8 +118,8 @@ export class DiatonicChordPlayer extends React.Component<IDiatonicChordPlayerPro
 
   private renderCell(scaleRootPitch: Pitch, scaleDegree: number, chord: Chord): JSX.Element {
     const romanNumeral = chord.type.isMajorType
-      ? Utils.getRomanNumerals(scaleDegree)
-      : Utils.getRomanNumerals(scaleDegree).toLowerCase();
+      ? getRomanNumerals(scaleDegree)
+      : getRomanNumerals(scaleDegree).toLowerCase();
 
     let pitches = chord.getPitches();
     if (this.state.playDrone) {

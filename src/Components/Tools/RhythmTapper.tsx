@@ -1,14 +1,14 @@
 import * as React from "react";
 import * as Vex from "vexflow";
 
-import * as Utils from "../../Utils";
 import { IRhythmNote, RhythmPlayer } from "../../Rhythm";
 import { Button, Card, CardContent, Typography } from "@material-ui/core";
 import { VexFlowComponent } from "../Utils/VexFlowComponent";
-import { Rational } from "../../Rational";
+import { Rational } from "../../lib/Core/Rational";
 import { noteDurationToVexFlowStr } from '../../VexFlowUtils';
-import { TimeSignature } from '../../TimeSignature';
-import { Size2D } from '../../Size2D';
+import { TimeSignature } from '../../lib/TheoryLib/TimeSignature';
+import { Size2D } from '../../lib/Core/Size2D';
+import { randomElement, randomBoolean } from '../../lib/Core/Random';
 
 const canvasSize = new Size2D(800, 100);
 
@@ -240,14 +240,14 @@ function generateRandomRhythm(): Array<IRhythmNote> {
 
   while (durationLeft.numerator > 0) {
     // TODO: optimize
-    const noteDuration = Utils.randomElement(
+    const noteDuration = randomElement(
       noteDurations
         .filter(nd => nd.duration.isLessThanOrEqualTo(durationLeft))
     );
     
     durationLeft = durationLeft.subtract(noteDuration.duration);
     
-    const isRest = Utils.randomBoolean();
+    const isRest = randomBoolean();
 
     notes.push({
       duration: noteDuration.duration,

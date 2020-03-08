@@ -1,7 +1,5 @@
-import { isProduction } from "./Config";
-import * as Utils from "./Utils";
-
-const googleAnalyticsTrackingId = "UA-72494315-5"; // TODO: move this somewhere else?
+import { isProduction, googleAnalyticsTrackingId } from "./Config";
+import { precondition } from './lib/Core/Dbc';
 
 export interface IAnalytics {
   trackPageView(): Promise<void>;
@@ -22,7 +20,7 @@ export class Analytics implements IAnalytics {
     return Promise.resolve();
   }
   public trackCustomEvent(id: string, label?: string, value?: number, category?: string): Promise<void> {
-    Utils.precondition((value === undefined) || (Number.isInteger(value) && (value >= 0)));
+    precondition((value === undefined) || (Number.isInteger(value) && (value >= 0)));
   
     if (isProduction()) {
       const gtag = this.getGtag();

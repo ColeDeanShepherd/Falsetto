@@ -1,5 +1,7 @@
-import * as Utils from "./Utils";
+import * as Utils from "../Core/Utils";
 import { Pitch } from './Pitch';
+import { mod } from '../Core/MathUtils';
+import { precondition, invariant } from '../Core/Dbc';
 
 export class Interval {
   public static readonly upDirectionSymbol = "↑";
@@ -66,10 +68,10 @@ export class Interval {
     }
   }
   public static getSimpleIntervalType(intervalType: number): number {
-    return 1 + Utils.mod((intervalType - 1), 7);
+    return 1 + mod((intervalType - 1), 7);
   }
   public static getSimpleIntervalTypeHalfSteps(simpleIntervalType: number): number {
-    Utils.precondition((simpleIntervalType >= 1) && (simpleIntervalType <= 8));
+    precondition((simpleIntervalType >= 1) && (simpleIntervalType <= 8));
 
     switch (simpleIntervalType) {
       case 1:
@@ -94,8 +96,8 @@ export class Interval {
   }
 
   public constructor(public type: number, public quality: number) {
-    Utils.invariant(Number.isInteger(type) && (type > 0));
-    Utils.invariant(Number.isInteger(quality));
+    invariant(Number.isInteger(type) && (type > 0));
+    invariant(Number.isInteger(quality));
   }
 
   public get simpleIntervalType(): number {
@@ -210,4 +212,19 @@ export function createIntervalLevels(includeUnison: boolean, separateA4D5: boole
       .concat(["P5", "m6", "M6", "m7", "M7", "P8"])
     }
   ];
+}
+
+export function intervalQualityToNumber(intervalQuality: string): number {
+  switch (intervalQuality) {
+    case "P":
+    case "M":
+      return 0;
+    case "m":
+    case "d":
+      return -1;
+    case "A":
+      return 1;
+    default:
+      throw new Error(`Unknown interval quality: ${intervalQuality}`);
+  }
 }

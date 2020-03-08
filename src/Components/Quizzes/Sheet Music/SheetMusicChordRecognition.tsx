@@ -1,15 +1,15 @@
 import * as React from "react";
 
-import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
 import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
-import { Pitch, pitchRange } from "../../../Pitch";
-import { PitchLetter } from "../../../PitchLetter";
+import { Pitch, pitchRange } from "../../../lib/TheoryLib/Pitch";
+import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
 import { SheetMusicChord } from "./SheetMusicChords";
-import { Chord, ChordType, chordTypeLevels } from "../../../Chord";
-import { Size2D } from '../../../Size2D';
+import { Chord, ChordType, chordTypeLevels } from "../../../lib/TheoryLib/Chord";
+import { Size2D } from '../../../lib/Core/Size2D';
 import { CheckboxColumnsFlashCardMultiSelect, CheckboxColumn, CheckboxColumnCell } from '../../Utils/CheckboxColumnsFlashCardMultiSelect';
+import { arrayContains } from '../../../lib/Core/ArrayUtils';
 
 const flashCardSetId = "sheetChords";
 
@@ -66,7 +66,7 @@ export function configDataToEnabledFlashCardIds(
   forEachChord((rootPitch, chordType, i) => {
     if (
       configData.enabledRootPitches.some(erp => erp.equalsNoOctave(rootPitch)) &&
-      Utils.arrayContains(configData.enabledChordTypes, chordType.name)
+      arrayContains(configData.enabledChordTypes, chordType.name)
     ) {
       const pitches = new Chord(chordType, rootPitch).getPitches();
       
@@ -198,7 +198,7 @@ function createFlashCardSet(): FlashCardSet {
         new FlashCardLevel(
           ctl.name,
           flashCards
-            .filter(fc => Utils.arrayContains(ctl.chordTypes, fc.backSide.data as ChordType))
+            .filter(fc => arrayContains(ctl.chordTypes, fc.backSide.data as ChordType))
             .map(fc => fc.id),
           (curConfigData: IConfigData) => ({
             enabledRootPitches: allowedRootPitches.slice(),

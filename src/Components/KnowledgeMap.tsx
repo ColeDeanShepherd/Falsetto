@@ -1,8 +1,8 @@
 import * as React from "react";
 
-import { Rect2D } from '../Rect2D';
-import { renderMultiLineSvgText } from './SvgUtils';
-import { Vector2D } from '../Vector2D';
+import { Rect2D } from '../lib/Core/Rect2D';
+import { renderMultiLineSvgText } from '../lib/Core/SvgUtils';
+import { Vector2D } from '../lib/Core/Vector2D';
 import { SvgPanZoom } from './SvgPanZoom';
 import { groupedFlashCardSets } from '../FlashCardGraph';
 

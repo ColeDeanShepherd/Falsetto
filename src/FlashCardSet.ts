@@ -1,7 +1,7 @@
 import { FlashCard, FlashCardId } from "./FlashCard";
 import { StudyAlgorithm } from "./StudyAlgorithm";
 import { AnswerDifficulty } from "./AnswerDifficulty";
-import { Size2D } from './Size2D';
+import { Size2D } from './lib/Core/Size2D';
 
 export class FlashCardStudySessionInfo {
   public constructor(

@@ -1,4 +1,4 @@
-import * as Utils from "./Utils";
+import * as Utils from "./lib/Core/Utils";
 import * as IntervalNamesToHalfSteps from "./Components/Quizzes/Intervals/IntervalNamesToHalfSteps";
 import * as IntervalQualitySymbolsToQualities from "./Components/Quizzes/Intervals/IntervalQualitySymbolsToQualities";
 import * as GenericIntervalsToIntervalQualities from "./Components/Quizzes/Intervals/GenericIntervalsToIntervalQualities";
@@ -39,7 +39,8 @@ import * as SheetMusicChordRecognition from "./Components/Quizzes/Sheet Music/Sh
 import * as ChordEarTraining from "./Components/Quizzes/Chords/ChordEarTraining";
 import * as ScaleEarTraining from "./Components/Quizzes/Scales/ScaleEarTraining";
 import { FlashCardSet } from "./FlashCardSet";
-import { StringDictionary } from './StringDictionary';
+import { StringDictionary } from './lib/Core/StringDictionary';
+import { flattenArrays } from './lib/Core/ArrayUtils';
 
 export const groupedFlashCardSets = [
   {
@@ -111,7 +112,7 @@ export const groupedFlashCardSets = [
   }
 ];
 
-export const flashCardSets = Utils.flattenArrays<FlashCardSet>(
+export const flashCardSets = flattenArrays<FlashCardSet>(
   groupedFlashCardSets.map(g => g.flashCardSets)
 );
 

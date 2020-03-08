@@ -5,8 +5,8 @@ import { Table, TableHead, TableBody, TableRow, TableCell } from "@material-ui/c
 import { playPitches } from "../../../Piano";
 
 import { PianoKeyboard, PianoKeyboardMetrics } from "../../Utils/PianoKeyboard";
-import { Pitch } from '../../../Pitch';
-import { PitchLetter } from '../../../PitchLetter';
+import { Pitch } from '../../../lib/TheoryLib/Pitch';
+import { PitchLetter } from '../../../lib/TheoryLib/PitchLetter';
 
 import { createStudyFlashCardSetComponent } from '../../StudyFlashCards/View';
 
@@ -26,10 +26,10 @@ import * as Interval2ndNoteEarTrainingPiano from "../../Quizzes/Intervals/Interv
 import _32ndNote from "../../../img/sheet-music/32nd-note.svg";
 import _32ndRest from "../../../img/sheet-music/32nd-rest.svg";
 
-import { Rect2D } from '../../../Rect2D';
-import { Vector2D } from '../../../Vector2D';
-import { Size2D } from '../../../Size2D';
-import { Margin } from '../../../Margin';
+import { Rect2D } from '../../../lib/Core/Rect2D';
+import { Vector2D } from '../../../lib/Core/Vector2D';
+import { Size2D } from '../../../lib/Core/Size2D';
+import { Margin } from '../../../lib/Core/Margin';
 import { SectionProps, Term, SectionTitle, SubSectionTitle, NoteText } from './EssentialMusicTheory';
 import { NavLinkView } from '../../../NavLinkView';
 

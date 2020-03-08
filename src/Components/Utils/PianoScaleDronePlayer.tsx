@@ -1,21 +1,22 @@
 import * as React from "react";
 
-import * as Utils from "../../Utils";
-import { Scale } from '../../Scale';
-import { Pitch } from '../../Pitch';
+import * as Utils from "../../lib/Core/Utils";
+import { Scale } from '../../lib/TheoryLib/Scale';
+import { Pitch } from '../../lib/TheoryLib/Pitch';
 import { playPitches } from '../../Piano';
-import { Rect2D } from '../../Rect2D';
-import { Size2D } from '../../Size2D';
-import { Vector2D } from '../../Vector2D';
-import { PitchLetter } from '../../PitchLetter';
+import { Rect2D } from '../../lib/Core/Rect2D';
+import { Size2D } from '../../lib/Core/Size2D';
+import { Vector2D } from '../../lib/Core/Vector2D';
+import { PitchLetter } from '../../lib/TheoryLib/PitchLetter';
 import { renderPianoKeyboardNoteNames, PianoKeyboard, PianoKeyboardMetrics } from './PianoKeyboard';
-import { doesKeyUseSharps } from '../../Key';
+import { doesKeyUseSharps } from '../../lib/TheoryLib/Key';
+import { arrayContains } from '../../lib/Core/ArrayUtils';
 
 export function onKeyPress(scale: Scale, keyPitch: Pitch) {
   const pitches = scale.getPitches();
   const pitchMidiNumberNoOctaves = pitches.map(p => p.midiNumberNoOctave);
 
-  if (Utils.arrayContains(pitchMidiNumberNoOctaves, keyPitch.midiNumberNoOctave)) {
+  if (arrayContains(pitchMidiNumberNoOctaves, keyPitch.midiNumberNoOctave)) {
     if (keyPitch.midiNumber === scale.rootPitch.midiNumber) {
       playPitches([scale.rootPitch]);
     } else {
@@ -26,7 +27,7 @@ export function onKeyPress(scale: Scale, keyPitch: Pitch) {
 export function renderExtrasFn(metrics: PianoKeyboardMetrics, pitches: Array<Pitch>, rootPitch: Pitch): JSX.Element {
   const pitchMidiNumberNoOctaves = pitches.map(p => p.midiNumberNoOctave);
 
-  return renderPianoKeyboardNoteNames(metrics, doesKeyUseSharps(rootPitch.letter, rootPitch.signedAccidental), p => Utils.arrayContains(pitchMidiNumberNoOctaves, p.midiNumberNoOctave));
+  return renderPianoKeyboardNoteNames(metrics, doesKeyUseSharps(rootPitch.letter, rootPitch.signedAccidental), p => arrayContains(pitchMidiNumberNoOctaves, p.midiNumberNoOctave));
 }
 
 export const PianoScaleDronePlayer: React.FunctionComponent<{ scale: Scale, style?: any }> = props => {

@@ -1,6 +1,5 @@
 import { IAction } from '../IAction';
 
-
 export class TemplateAction implements IAction {
   public static readonly Id = "template/action";
 

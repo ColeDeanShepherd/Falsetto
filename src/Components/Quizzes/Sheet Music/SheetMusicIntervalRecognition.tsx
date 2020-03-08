@@ -1,15 +1,16 @@
 import * as React from "react";
 import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody } from "@material-ui/core";
 
-import * as Utils from "../../../Utils";
+import * as Utils from "../../../lib/Core/Utils";
 import * as FlashCardUtils from "../Utils";
 import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
-import { Pitch, pitchRange } from "../../../Pitch";
-import { PitchLetter } from "../../../PitchLetter";
+import { Pitch, pitchRange } from "../../../lib/TheoryLib/Pitch";
+import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
 import { SheetMusicChord } from "./SheetMusicChords";
-import { Size2D } from '../../../Size2D';
-import { Interval, createIntervalLevels } from '../../../Interval';
+import { Size2D } from '../../../lib/Core/Size2D';
+import { Interval, createIntervalLevels } from '../../../lib/TheoryLib/Interval';
+import { arrayContains, toggleArrayElement } from '../../../lib/Core/ArrayUtils';
 
 const flashCardSetId = "sheetIntervals";
 
@@ -67,7 +68,7 @@ export function configDataToEnabledFlashCardIds(
 
   forEachInterval((pitches, interval, i) => {
     if (
-      Utils.arrayContains(configData.enabledIntervals, interval.toString()) &&
+      arrayContains(configData.enabledIntervals, interval.toString()) &&
       (configData.allowAccidentals || pitches.every(p => p.isNatural))
     ) {
       newEnabledFlashCardIds.push(flashCards[i].id);
@@ -85,7 +86,7 @@ function forEachInterval(callbackFn: (pitches: Array<Pitch>, interval: Interval,
       const pitches = [firstPitches[note1Index], firstPitches[note2Index]];
       const interval = Interval.fromPitches(pitches[0], pitches[1]);
 
-      if (Utils.arrayContains(intervals, interval.toString())) {
+      if (arrayContains(intervals, interval.toString())) {
         callbackFn(pitches, interval, i);
         i++;
       }
@@ -145,7 +146,7 @@ export class IntervalsFlashCardMultiSelect extends React.Component<IIntervalsFla
 
   private toggleIntervalEnabled(interval: string) {
     const configData = this.props.studySessionInfo.configData as IConfigData;
-    const newEnabledIntervals = Utils.toggleArrayElement(
+    const newEnabledIntervals = toggleArrayElement(
       configData.enabledIntervals,
       interval
     );
@@ -245,7 +246,7 @@ function createFlashCardSet(): FlashCardSet {
         flashCards
           .filter(fc => {
             const intervalString = fc.backSide.data as string;
-            return Utils.arrayContains(level.intervalStrings, intervalString);
+            return arrayContains(level.intervalStrings, intervalString);
           })
           .map(fc => fc.id),
         (curConfigData: IConfigData) => (

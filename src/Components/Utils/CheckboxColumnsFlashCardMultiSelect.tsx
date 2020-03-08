@@ -1,7 +1,8 @@
 import * as React from "react";
 import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid } from "@material-ui/core";
 
-import * as Utils from "../../Utils";
+import * as Utils from "../../lib/Core/Utils";
+import { toggleArrayElementCustomEquals } from '../../lib/Core/ArrayUtils';
 
 export class CheckboxColumn {
   public constructor(
@@ -77,7 +78,7 @@ export class CheckboxColumnsFlashCardMultiSelect extends React.Component<ICheckb
     if (!this.props.onChange) { return; }
 
     const newSelectedCellDatas = this.props.selectedCellDatas.slice();
-    newSelectedCellDatas[columnIndex] = Utils.toggleArrayElementCustomEquals(
+    newSelectedCellDatas[columnIndex] = toggleArrayElementCustomEquals(
       newSelectedCellDatas[columnIndex], cell.data, column.dataEqualsFn
     );
     

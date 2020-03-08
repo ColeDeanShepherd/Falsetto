@@ -1,11 +1,11 @@
-import * as Utils from "../../Utils";
-import { Pitch } from "../../Pitch";
-import { PitchLetter } from "../../PitchLetter";
-import { StringedInstrumentNote } from '../../StringedInstrumentNote';
+import { Pitch } from "../../lib/TheoryLib/Pitch";
+import { PitchLetter } from "../../lib/TheoryLib/PitchLetter";
+import { StringedInstrumentNote } from '../../lib/TheoryLib/StringedInstrumentNote';
+import { invariant, precondition } from '../../lib/Core/Dbc';
 
 export class StringedInstrumentTuning {
   public constructor(public openStringPitches: Array<Pitch>) {
-    Utils.invariant(this.openStringPitches.length > 0);
+    invariant(this.openStringPitches.length > 0);
   }
 
   public get stringCount(): number {
@@ -13,7 +13,7 @@ export class StringedInstrumentTuning {
   }
 
   public getNote(stringIndex: number, fretNumber: number): StringedInstrumentNote {
-    Utils.precondition((stringIndex >= 0) && (stringIndex < this.stringCount));
+    precondition((stringIndex >= 0) && (stringIndex < this.stringCount));
 
     const pitch = Pitch.createFromMidiNumber(
       this.openStringPitches[stringIndex].midiNumber + fretNumber

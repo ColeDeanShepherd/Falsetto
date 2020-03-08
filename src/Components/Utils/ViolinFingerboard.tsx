@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { StringedInstrumentNote } from '../../StringedInstrumentNote';
+import { StringedInstrumentNote } from '../../lib/TheoryLib/StringedInstrumentNote';
 import { StringedInstrumentTuning } from './StringedInstrumentTuning';
 import { StringedInstrumentMetrics, StringedInstrumentFingerboard } from './StringedInstrumentFingerboard';
 

@@ -1,20 +1,21 @@
 import * as React from "react";
 
-import * as Utils from "../../Utils";
-import { Vector2D } from '../../Vector2D';
-import { Size2D } from "../../Size2D";
-import { Rect2D } from '../../Rect2D';
-import { PitchLetter } from "../../PitchLetter";
-import { Pitch } from "../../Pitch";
+import * as Utils from "../../lib/Core/Utils";
+import { Vector2D } from '../../lib/Core/Vector2D';
+import { Size2D } from "../../lib/Core/Size2D";
+import { Rect2D } from '../../lib/Core/Rect2D';
+import { PitchLetter } from "../../lib/TheoryLib/PitchLetter";
+import { Pitch } from "../../lib/TheoryLib/Pitch";
 import { Card, CardContent, Typography, Button } from "@material-ui/core";
 import { PianoKeyboard, renderPianoKeyboardNoteNames, PianoKeyboardMetrics, renderPressedPianoKeys } from "../Utils/PianoKeyboard";
-import { Interval } from '../../Interval';
-import { ChordType, Chord } from '../../Chord';
-import { ScaleType, getAllModePitchIntegers } from '../../Scale';
-import { generateChordNames } from '../../ChordName';
-import { ChordScaleFormula } from '../../ChordScaleFormula';
+import { Interval } from '../../lib/TheoryLib/Interval';
+import { ChordType, Chord } from '../../lib/TheoryLib/Chord';
+import { ScaleType, getAllModePitchIntegers } from '../../lib/TheoryLib/Scale';
+import { generateChordNames } from '../../lib/TheoryLib/ChordName';
+import { ChordScaleFormula } from '../../lib/TheoryLib/ChordScaleFormula';
 import { playPitches } from '../../Piano';
-import { StringDictionary } from '../../StringDictionary';
+import { StringDictionary } from '../../lib/Core/StringDictionary';
+import { areArraysEqual, uniqWithSelector, immutableAddIfNotFoundInArray, immutableRemoveIfFoundInArray } from '../../lib/Core/ArrayUtils';
 
 // TODO: refactor Chord, Scale
 // TODO: add support for multiple chord names
@@ -64,7 +65,7 @@ export function findScales(pitches: Array<Pitch>): Array<[ScaleType, Pitch]> {
   const allPitchIntegers = getAllModePitchIntegers(basePitchIntegers);
   const scaleTypes = allPitchIntegers
     .map((pis, i): [ScaleType | undefined, Pitch] => [
-      ScaleType.All.find(ct => Utils.areArraysEqual(ct.pitchIntegers, pis)),
+      ScaleType.All.find(ct => areArraysEqual(ct.pitchIntegers, pis)),
       pitches[i]
     ])
     .filter(t => t[0])
@@ -175,7 +176,7 @@ export class IntervalChordScaleFinder extends React.Component<IIntervalChordScal
     const pianoStyle = { width: "100%", maxWidth: "400px", height: "auto" };
     const pianoSize = new Size2D(400, 100);
 
-    const uniquePressedPitches = Utils.uniqWithSelector(this.state.pressedPitches, p => p.midiNumberNoOctave);
+    const uniquePressedPitches = uniqWithSelector(this.state.pressedPitches, p => p.midiNumberNoOctave);
     uniquePressedPitches.sort((a, b) => (a.midiNumber < b.midiNumber) ? -1 : 1);
     const intervalsChordsScales = findIntervalsChordsScales(uniquePressedPitches);
 
@@ -302,7 +303,7 @@ export class IntervalChordScaleFinder extends React.Component<IIntervalChordScal
       this.pitchCancellationFns[cancellationFnKey] = cancellationFn;
 
       this.setState({
-        pressedPitches: Utils.immutableAddIfNotFoundInArray(this.state.pressedPitches, pitch, p => p.equals(pitch))
+        pressedPitches: immutableAddIfNotFoundInArray(this.state.pressedPitches, pitch, p => p.equals(pitch))
       });
     } else {
       const cancellationFn = this.pitchCancellationFns[cancellationFnKey];
@@ -312,7 +313,7 @@ export class IntervalChordScaleFinder extends React.Component<IIntervalChordScal
       }
 
       this.setState({
-        pressedPitches: Utils.immutableRemoveIfFoundInArray(this.state.pressedPitches, p => p.equals(pitch))
+        pressedPitches: immutableRemoveIfFoundInArray(this.state.pressedPitches, p => p.equals(pitch))
       });
     }
   }

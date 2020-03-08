@@ -1,12 +1,13 @@
 import * as React from "react";
 import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid } from "@material-ui/core";
 
-import * as Utils from "../../Utils";
+import * as Utils from "../../lib/Core/Utils";
 import { FlashCard, FlashCardId } from "../../FlashCard";
-import { Pitch } from "../../Pitch";
+import { Pitch } from "../../lib/TheoryLib/Pitch";
 import { FlashCardStudySessionInfo, FlashCardSet } from '../../FlashCardSet';
-import { getValidKeyPitches } from '../../Key';
+import { getValidKeyPitches } from '../../lib/TheoryLib/Key';
 import { CheckboxColumnsFlashCardMultiSelect, CheckboxColumnCell, CheckboxColumn } from './CheckboxColumnsFlashCardMultiSelect';
+import { flattenArrays, arrayContains } from '../../lib/Core/ArrayUtils';
 
 export const firstPitches = getValidKeyPitches(4);
 export const intervals = [
@@ -77,13 +78,13 @@ export function configDataToEnabledFlashCardIds(
   const directionsToUse = enableHarmonicIntervals ? directionsWithHarmonic : directions;
 
   if (hasFlashCardPerFirstPitch) {
-    return Utils.flattenArrays<boolean>(firstPitches
+    return flattenArrays<boolean>(firstPitches
       .map(firstPitch => intervals
         .map(interval => directionsToUse
           .map(direction =>
-            Utils.arrayContains(configData.enabledFirstPitches, firstPitch) &&
-            Utils.arrayContains(configData.enabledIntervals, interval) &&
-            Utils.arrayContains(configData.enabledDirections, direction)
+            arrayContains(configData.enabledFirstPitches, firstPitch) &&
+            arrayContains(configData.enabledIntervals, interval) &&
+            arrayContains(configData.enabledDirections, direction)
           )
         )
       )
@@ -92,11 +93,11 @@ export function configDataToEnabledFlashCardIds(
       .filter(i => i >= 0)
       .map(i => flashCards[i].id);
   } else {
-    return Utils.flattenArrays<boolean>(intervals
+    return flattenArrays<boolean>(intervals
       .map(interval => directionsToUse
         .map(direction =>
-          Utils.arrayContains(configData.enabledIntervals, interval) &&
-          Utils.arrayContains(configData.enabledDirections, direction)
+          arrayContains(configData.enabledIntervals, interval) &&
+          arrayContains(configData.enabledDirections, direction)
         )
       )
     )

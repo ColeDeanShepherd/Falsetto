@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Card, CardContent } from '@material-ui/core';
 
-import * as Utils from "../../Utils";
+import * as Utils from "../../lib/Core/Utils";
 import {
   GuitarFretboard,
   renderGuitarNoteHighlightsAndLabels, renderFretNumbers,
@@ -9,17 +9,18 @@ import {
 } from '../Utils/GuitarFretboard';
 import { StringedInstrumentMetrics } from "../Utils/StringedInstrumentFingerboard";
 import { getStandardGuitarTuning } from "../Utils/StringedInstrumentTuning";
-import { Pitch } from '../../Pitch';
-import { PitchLetter } from '../../PitchLetter';
+import { Pitch } from '../../lib/TheoryLib/Pitch';
+import { PitchLetter } from '../../lib/TheoryLib/PitchLetter';
 import { MAX_MAIN_CARD_WIDTH } from '../Style';
-import { ScaleType, Scale } from '../../Scale';
+import { ScaleType, Scale } from '../../lib/TheoryLib/Scale';
 import { NoteText } from './EssentialMusicTheory/EssentialMusicTheory';
 import { ScaleAudioPlayer } from '../Utils/ScaleAudioPlayer';
 import { createStudyFlashCardSetComponent } from '../StudyFlashCards/View';
 import * as GuitarScales from "../Quizzes/Scales/GuitarScales";
 import { ScaleViewer } from '../Tools/ScaleViewer';
-import { StringedInstrumentNote } from '../../StringedInstrumentNote';
+import { StringedInstrumentNote } from '../../lib/TheoryLib/StringedInstrumentNote';
 import { NavLinkView } from '../../NavLinkView';
+import { arrayMax } from '../../lib/Core/ArrayUtils';
 
 const fretCount = 11;
 const ionianRootPitch = new Pitch(PitchLetter.F, 0, 2);
@@ -59,7 +60,7 @@ const GuitarScalePatternDiagram: React.FunctionComponent<{
     }
   }
 
-  const maxFretNumber = Utils.arrayMax(guitarNotes
+  const maxFretNumber = arrayMax(guitarNotes
     .map(gn => gn.getFretNumber(guitarTuning))
   );
   const minFretNumber = Math.max(0, maxFretNumber - fretCount);

@@ -2,16 +2,18 @@ import * as React from "react";
 import * as Vex from "vexflow";
 import { Button, Card, CardContent, Typography, Select, CircularProgress } from "@material-ui/core";
 
-import * as Utils from "../../Utils";
-import { TimeSignature } from "../../TimeSignature";
+import * as Utils from "../../lib/Core/Utils";
+import { TimeSignature } from "../../lib/TheoryLib/TimeSignature";
 import * as Audio from "../../Audio";
 import { VexFlowComponent } from "../Utils/VexFlowComponent";
-import { Rational } from "../../Rational";
+import { Rational } from "../../lib/Core/Rational";
 import { noteDurationToVexFlowStr } from '../../VexFlowUtils';
 import { RhythmPlayer, IRhythmNote } from '../../Rhythm';
 import { getBeatIntervalS } from './Metronome';
 import { SizeAwareContainer } from '../Utils/SizeAwareContainer';
-import { Size2D } from '../../Size2D';
+import { Size2D } from '../../lib/Core/Size2D';
+import { range, isPowerOf2, highestPowerOf2 } from '../../lib/Core/MathUtils';
+import { repeatGenerator } from '../../lib/Core/ArrayUtils';
 
 const clickAudioPath = "/audio/metronome_click.wav";
 const woodBlockAudioPath = "/audio/wood_block.wav";
@@ -74,7 +76,7 @@ export class NoteValuePlayer extends React.Component<INoteValuePlayerProps, INot
                   value={this.state.notesPerBeat}
                   onChange={event => this.onNoteValueChange(event.target.value)}
                 >
-                  {Utils.range(1, maxNotesPerBeat).map(n => <option key={n} value={n}>{n}</option>)}
+                  {range(1, maxNotesPerBeat).map(n => <option key={n} value={n}>{n}</option>)}
                 </Select>
               </div>
             )
@@ -157,14 +159,14 @@ export class NoteValuePlayer extends React.Component<INoteValuePlayerProps, INot
     let tuplets: Array<Vex.Flow.Tuplet> | undefined = undefined;
 
 
-    if (!Utils.isPowerOf2(this.state.notesPerBeat)) {
+    if (!isPowerOf2(this.state.notesPerBeat)) {
       tuplets = new Array<Vex.Flow.Tuplet>(this.rhythmPlayer.timeSignature.numBeats);
 
       for (let i = 0; i < tuplets.length; i++) {
         const noteStartI = this.state.notesPerBeat * i;
         tuplets[i] = new Vex.Flow.Tuplet(vexFlowNotes.slice(noteStartI, noteStartI + this.state.notesPerBeat), {
           num_notes: this.state.notesPerBeat,
-          notes_occupied: Utils.highestPowerOf2(this.state.notesPerBeat),
+          notes_occupied: highestPowerOf2(this.state.notesPerBeat),
           location: -1,
           bracketed: true,
           ratioed: false
@@ -260,7 +262,7 @@ export class NoteValuePlayer extends React.Component<INoteValuePlayerProps, INot
 
   private createRhythmNotes(timeSignature: TimeSignature, notesPerBeat: number): Array<IRhythmNote> {
     const noteCount = timeSignature.numBeats * notesPerBeat;
-    return Utils.repeatGenerator<IRhythmNote>(
+    return repeatGenerator<IRhythmNote>(
       i => ({
         duration: new Rational(1, noteCount),
         isRest: false
@@ -273,7 +275,7 @@ export class NoteValuePlayer extends React.Component<INoteValuePlayerProps, INot
       .map(rn => new Vex.Flow.StaveNote({
         clef: "treble",
         keys: ["b/4"],
-        duration: noteDurationToVexFlowStr(new Rational(1, Utils.highestPowerOf2(rn.duration.denominator))),
+        duration: noteDurationToVexFlowStr(new Rational(1, highestPowerOf2(rn.duration.denominator))),
       }));
   }
   

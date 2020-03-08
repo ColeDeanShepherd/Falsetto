@@ -1,13 +1,14 @@
 import * as React from "react";
 import { Card, CardContent, Typography } from "@material-ui/core";
 
-import * as Utils from "../../Utils";
+import * as Utils from "../../lib/Core/Utils";
 import { DetectedPitch, IPitchDetector, DatalantPitchDetector } from '../PitchDetection';
-import { Size2D } from '../../Size2D';
+import { Size2D } from '../../lib/Core/Size2D';
 import { Microphone } from '../../Microphone';
 import { getErrorDescription } from '../../Error';
 import { IAnalytics } from '../../Analytics';
 import { DependencyInjector } from '../../DependencyInjector';
+import { unwrapMaybe } from '../../lib/Core/Utils';
 
 export interface ITunerCentsIndicatorProps {
   detuneCents: number;
@@ -119,7 +120,7 @@ export class Tuner extends React.Component<ITunerProps, ITunerState> {
     this.microphone.startRecording()
       .then(() => {
         try {
-          Utils.unwrapMaybe(this.microphone).connectAnalyzer(
+          unwrapMaybe(this.microphone).connectAnalyzer(
             analyzer => {
               analyzer.fftSize = fftSize;
               analyzer.smoothingTimeConstant = 0.2;

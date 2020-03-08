@@ -1,15 +1,15 @@
-import * as Utils from "./Utils";
+import { invariant, precondition } from './Dbc';
 
 export class Rational {
   public constructor(
     public numerator: number,
     public denominator: number
   ) {
-    Utils.invariant(denominator !== 0);
+    invariant(denominator !== 0);
   }
 
   public get reciprocal(): Rational {
-    Utils.precondition(this.numerator !== 0);
+    precondition(this.numerator !== 0);
 
     return new Rational(this.denominator, this.numerator);
   }

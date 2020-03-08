@@ -3,7 +3,7 @@ import { Table, TableHead, TableBody, TableRow, TableCell } from "@material-ui/c
 
 
 import { YouTubeVideo } from "../../Utils/YouTubeVideo";
-import { TimeSignature } from "../../../TimeSignature";
+import { TimeSignature } from "../../../lib/TheoryLib/TimeSignature";
 
 import { createStudyFlashCardSetComponent } from '../../StudyFlashCards/View';
 

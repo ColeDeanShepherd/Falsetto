@@ -1,4 +1,4 @@
-import { Pitch } from "./Pitch";
+import { Pitch } from "./lib/TheoryLib/Pitch";
 import { loadAndPlaySoundsSequentially, loadAndPlaySoundsSimultaneously } from './Audio';
 
 export const guitarAudioFilePathsByMidiNumber = new Array<[number, string]>();

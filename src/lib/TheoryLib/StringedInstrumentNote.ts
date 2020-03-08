@@ -1,6 +1,8 @@
-import * as Utils from "./Utils";
 import { Pitch } from "./Pitch";
-import { StringedInstrumentTuning } from './Components/Utils/StringedInstrumentTuning';
+import { StringedInstrumentTuning } from '../../Components/Utils/StringedInstrumentTuning';
+import { precondition, invariant } from '../Core/Dbc';
+import { range } from '../Core/MathUtils';
+import { flattenArrays } from '../Core/ArrayUtils';
 
 export class StringedInstrumentNote {
   public static allNotesOfPitches(
@@ -9,11 +11,11 @@ export class StringedInstrumentNote {
     minFretNumber: number,
     maxFretNumber: number
   ): Array<StringedInstrumentNote> {
-    Utils.precondition(minFretNumber >= 0);
-    Utils.precondition(maxFretNumber >= minFretNumber);
+    precondition(minFretNumber >= 0);
+    precondition(maxFretNumber >= minFretNumber);
 
-    const fretNumbers = Utils.range(0, maxFretNumber);
-    return Utils.flattenArrays<StringedInstrumentNote>(
+    const fretNumbers = range(0, maxFretNumber);
+    return flattenArrays<StringedInstrumentNote>(
       tuning.openStringPitches
         .map((_, stringIndex) => fretNumbers
           .map(fretNumber => new StringedInstrumentNote(
@@ -29,7 +31,7 @@ export class StringedInstrumentNote {
     public pitch: Pitch,
     public stringIndex: number
   ) {
-    Utils.invariant(stringIndex >= 0);
+    invariant(stringIndex >= 0);
   }
 
   public equals(other: StringedInstrumentNote) {
@@ -44,7 +46,7 @@ export class StringedInstrumentNote {
 }
 
 export function getStringedInstrumentNotes(pitch: Pitch, tuning: StringedInstrumentTuning, minFretNumber: number, maxFretNumber: number): Array<StringedInstrumentNote> {
-  Utils.precondition(minFretNumber <= maxFretNumber);
+  precondition(minFretNumber <= maxFretNumber);
   
   const notes = new Array<StringedInstrumentNote>();
 

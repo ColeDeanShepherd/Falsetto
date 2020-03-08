@@ -1,21 +1,22 @@
 import * as React from "react";
 import { CardContent, Card } from "@material-ui/core";
 
-import * as Utils from "../../../Utils";
+import * as Utils from "../../../lib/Core/Utils";
 
 import { playPitchesSequentially } from "../../../Piano";
 
 import { PianoKeyboard, renderPianoKeyboardNoteNames, PianoKeyboardMetrics } from "../../Utils/PianoKeyboard";
-import { Pitch } from '../../../Pitch';
-import { PitchLetter } from '../../../PitchLetter';
+import { Pitch } from '../../../lib/TheoryLib/Pitch';
+import { PitchLetter } from '../../../lib/TheoryLib/PitchLetter';
 
 import _32ndNote from "../../../img/sheet-music/32nd-note.svg";
 import _32ndRest from "../../../img/sheet-music/32nd-rest.svg";
 
 import { MAX_MAIN_CARD_WIDTH } from '../../Style';
-import { Rect2D } from '../../../Rect2D';
-import { Vector2D } from '../../../Vector2D';
-import { Size2D } from '../../../Size2D';
+import { Rect2D } from '../../../lib/Core/Rect2D';
+import { Vector2D } from '../../../lib/Core/Vector2D';
+import { Size2D } from '../../../lib/Core/Size2D';
+import { range } from '../../../lib/Core/MathUtils';
 
 export const pianoKeyboardStyle = { width: "100%", maxWidth: "400px", height: "auto" };
 export const defaultRootPitch = new Pitch(PitchLetter.C, 0, 4);
@@ -33,7 +34,7 @@ export const OctavesPlayer: React.FunctionComponent<{}> = props => {
       lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
       highestPitch={new Pitch(PitchLetter.B, 0, 4)}
       pressedPitches={[]}
-      onKeyPress={p => playPitchesSequentially(Utils.range(0, 3).map(i => new Pitch(p.letter, p.signedAccidental, p.octaveNumber - 2 + i)), 500, true)}
+      onKeyPress={p => playPitchesSequentially(range(0, 3).map(i => new Pitch(p.letter, p.signedAccidental, p.octaveNumber - 2 + i)), 500, true)}
       renderExtrasFn={renderPianoKeyboardNoteNames}
       style={pianoKeyboardStyle} />
   );

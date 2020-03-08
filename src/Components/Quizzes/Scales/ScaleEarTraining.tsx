@@ -1,21 +1,23 @@
 import * as React from "react";
 import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid, Button } from "@material-ui/core";
 
-import * as Utils from "../../../Utils";
+import { arrayContains, toggleArrayElement } from "../../../lib/Core/ArrayUtils";
+import { range } from "../../../lib/Core/MathUtils";
+import { randomElement } from "../../../lib/Core/Random";
 import * as FlashCardUtils from "../Utils";
 import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
-import { Pitch, pitchRange } from "../../../Pitch";
-import { PitchLetter } from "../../../PitchLetter";
+import { Pitch, pitchRange } from "../../../lib/TheoryLib/Pitch";
+import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
 import { playPitchesSequentially } from "../../../Piano";
-import { ScaleType, scaleTypeLevels } from "../../../Scale";
-import { ChordScaleFormula, ChordScaleFormulaPart } from '../../../ChordScaleFormula';
+import { ScaleType, scaleTypeLevels } from "../../../lib/TheoryLib/Scale";
+import { ChordScaleFormula, ChordScaleFormulaPart } from '../../../lib/TheoryLib/ChordScaleFormula';
 
 const flashCardSetId = "scaleEarTraining";
 
 const minPitch = new Pitch(PitchLetter.C, -1, 2);
 const maxPitch = new Pitch(PitchLetter.C, 1, 6);
-const rootPitches = Utils.range(minPitch.midiNumber, maxPitch.midiNumber)
+const rootPitches = range(minPitch.midiNumber, maxPitch.midiNumber)
   .map(midiNumber => Pitch.createFromMidiNumber(midiNumber));
 
 // TODO: instead of generating all flash cards ahead of time, dynamically generate each one
@@ -30,7 +32,7 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
   public constructor(props: IFlashCardFrontSideProps) {
     super(props);
 
-    const rootPitch = Utils.randomElement(rootPitches);
+    const rootPitch = randomElement(rootPitches);
     const pitches = new ChordScaleFormula(
       this.props.scaleType.formula.parts
         .concat(new ChordScaleFormulaPart(8, 0, false))
@@ -92,7 +94,7 @@ export function configDataToEnabledFlashCardIds(
   const newEnabledFlashCardIds = new Array<FlashCardId>();
 
   forEachScaleType((scaleType, i) => {
-    if (Utils.arrayContains(configData.enabledScaleTypes, scaleType.name)) {
+    if (arrayContains(configData.enabledScaleTypes, scaleType.name)) {
       newEnabledFlashCardIds.push(flashCards[i].id);
     }
 
@@ -152,7 +154,7 @@ export class ScaleNotesFlashCardMultiSelect extends React.Component<IScaleNotesF
   
   private toggleScaleEnabled(scale: string) {
     const configData = this.props.studySessionInfo.configData as IConfigData;
-    const newEnabledScaleTypes = Utils.toggleArrayElement(
+    const newEnabledScaleTypes = toggleArrayElement(
       configData.enabledScaleTypes,
       scale
     );
@@ -234,7 +236,7 @@ function createFlashCardSet(): FlashCardSet {
         flashCards
           .filter(fc => {
             const scaleType = fc.backSide.data as ScaleType;
-            return Utils.arrayContains(level.scaleTypes, scaleType);
+            return arrayContains(level.scaleTypes, scaleType);
           })
           .map(fc => fc.id),
         (curConfigData: IConfigData) => ({

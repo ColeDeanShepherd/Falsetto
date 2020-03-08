@@ -1,20 +1,23 @@
 import * as React from "react";
 import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid, Button } from "@material-ui/core";
 
-import * as Utils from "../../../Utils";
+import * as Utils from "../../../lib/Core/Utils";
 import * as FlashCardUtils from "../Utils";
 import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
-import { Pitch } from "../../../Pitch";
-import { PitchLetter } from "../../../PitchLetter";
-import { Chord, ChordType, chordTypeLevels } from "../../../Chord";
+import { Pitch } from "../../../lib/TheoryLib/Pitch";
+import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
+import { Chord, ChordType, chordTypeLevels } from "../../../lib/TheoryLib/Chord";
 import { playPitches } from "../../../Piano";
+import { range } from '../../../lib/Core/MathUtils';
+import { randomElement } from '../../../lib/Core/Random';
+import { arrayContains, toggleArrayElement } from '../../../lib/Core/ArrayUtils';
 
 const flashCardSetId = "chordEarTraining";
 
 const minPitch = new Pitch(PitchLetter.C, -1, 2);
 const maxPitch = new Pitch(PitchLetter.C, 1, 6);
-const rootPitches = Utils.range(minPitch.midiNumber, maxPitch.midiNumber)
+const rootPitches = range(minPitch.midiNumber, maxPitch.midiNumber)
   .map(midiNumber => Pitch.createFromMidiNumber(midiNumber));
 const chordTypes = ChordType.All;
 
@@ -28,7 +31,7 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
   public constructor(props: IFlashCardFrontSideProps) {
     super(props);
     
-    const rootPitch = Utils.randomElement(rootPitches);
+    const rootPitch = randomElement(rootPitches);
 
     this.state = {
       pitches: new Chord(this.props.chordType, rootPitch).getPitches()
@@ -65,7 +68,7 @@ export function configDataToEnabledFlashCardIds(
   for (let i = 0; i < chordTypes.length; i++) {
     const chordType = chordTypes[i];
     
-    if (Utils.arrayContains(configData.enabledChordTypes, chordType.name)) {
+    if (arrayContains(configData.enabledChordTypes, chordType.name)) {
       newEnabledFlashCardIds.push(flashCards[i].id);
     }
   }
@@ -121,7 +124,7 @@ export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesF
   }
   
   private toggleChordEnabled(chordType: string) {
-    const newEnabledChordTypes = Utils.toggleArrayElement(
+    const newEnabledChordTypes = toggleArrayElement(
       (this.props.studySessionInfo.configData as IConfigData).enabledChordTypes,
       chordType
     );
@@ -202,7 +205,7 @@ function createFlashCardSet(): FlashCardSet {
         new FlashCardLevel(
           ctl.name,
           flashCards
-            .filter(fc => Utils.arrayContains(ctl.chordTypes, fc.backSide.data as ChordType))
+            .filter(fc => arrayContains(ctl.chordTypes, fc.backSide.data as ChordType))
             .map(fc => fc.id),
           (curConfigData: IConfigData) => ({
             enabledChordTypes: ctl.chordTypes.map(ct => ct.name)

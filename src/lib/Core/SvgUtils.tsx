@@ -1,6 +1,6 @@
 import * as React from "react";
-import { Vector2D } from '../Vector2D';
-import { Size2D } from '../Size2D';
+import { Vector2D } from './Vector2D';
+import { Size2D } from './Size2D';
 
 export function renderMultiLineSvgText(
   lines: Array<string>, position: Vector2D, lineHeightEms: number, isVerticallyAligned: boolean, textProps: any, tspanProps: any

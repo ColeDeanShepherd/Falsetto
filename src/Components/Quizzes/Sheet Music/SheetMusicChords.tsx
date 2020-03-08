@@ -1,11 +1,11 @@
 import * as React from "react";
 import * as Vex from "vexflow";
 
-import * as Utils from "../../../Utils";
-import { Pitch } from "../../../Pitch";
-import { PitchLetter } from "../../../PitchLetter";
+import { Pitch } from "../../../lib/TheoryLib/Pitch";
+import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
 import { VexFlowComponent } from "../../Utils/VexFlowComponent";
-import { Size2D } from '../../../Size2D';
+import { Size2D } from '../../../lib/Core/Size2D';
+import { assert } from '../../../lib/Core/Dbc';
 
 export interface ISheetMusicChordProps {
   size: Size2D;
@@ -18,7 +18,7 @@ export class SheetMusicChord extends React.Component<ISheetMusicChordProps, {}> 
   }
 
   private vexFlowRender(context: Vex.IRenderContext) {
-    Utils.assert(this.props.pitches.length >= 2);
+    assert(this.props.pitches.length >= 2);
 
     context.setFont("Arial", 10).setBackgroundFillStyle("#eed");
 

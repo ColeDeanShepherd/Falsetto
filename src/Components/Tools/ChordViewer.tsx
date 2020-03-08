@@ -1,19 +1,20 @@
 import * as React from "react";
 
-import * as Utils from "../../Utils";
-import { Vector2D } from '../../Vector2D';
-import { Size2D } from "../../Size2D";
-import { Rect2D } from '../../Rect2D';
-import { PitchLetter } from "../../PitchLetter";
-import { Pitch } from "../../Pitch";
+import * as Utils from "../../lib/Core/Utils";
+import { Vector2D } from '../../lib/Core/Vector2D';
+import { Size2D } from "../../lib/Core/Size2D";
+import { Rect2D } from '../../lib/Core/Rect2D';
+import { PitchLetter } from "../../lib/TheoryLib/PitchLetter";
+import { Pitch } from "../../lib/TheoryLib/Pitch";
 import { Button, Card, CardContent, Typography } from "@material-ui/core";
-import { Chord, ChordType, ChordTypeGroup } from "../../Chord";
+import { Chord, ChordType, ChordTypeGroup } from "../../lib/TheoryLib/Chord";
 import { PianoKeyboard } from "../Utils/PianoKeyboard";
 import { playPitches } from '../../Piano';
 import * as PianoScaleDronePlayer from "../Utils/PianoScaleDronePlayer";
 import { GuitarChordViewer } from '../Utils/GuitarChordViewer';
 import { getStandardGuitarTuning } from '../Utils/StringedInstrumentTuning';
 import { ValidKeyPitchSelect } from '../Utils/ValidKeyPitchSelect';
+import { arrayContains } from '../../lib/Core/ArrayUtils';
 
 const guitarTuning = getStandardGuitarTuning(6);
 
@@ -61,7 +62,7 @@ export class ChordViewer extends React.Component<IChordViewerProps, IChordViewer
     const onKeyPress = (pitch: Pitch) => {
       const pitchMidiNumberNoOctaves = pitches.map(p => p.midiNumberNoOctave);
 
-      if (Utils.arrayContains(pitchMidiNumberNoOctaves, pitch.midiNumberNoOctave)) {
+      if (arrayContains(pitchMidiNumberNoOctaves, pitch.midiNumberNoOctave)) {
         playPitches([pitch]);
       }
     };

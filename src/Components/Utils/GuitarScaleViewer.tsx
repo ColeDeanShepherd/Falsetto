@@ -1,13 +1,14 @@
 import * as React from "react";
 
-import * as Utils from "../../Utils";
-import { Size2D } from "../../Size2D";
-import { Scale } from "../../Scale";
-import { Pitch } from "../../Pitch";
-import { PitchLetter } from "../../PitchLetter";
+import * as Utils from "../../lib/Core/Utils";
+import { Size2D } from "../../lib/Core/Size2D";
+import { Scale } from "../../lib/TheoryLib/Scale";
+import { Pitch } from "../../lib/TheoryLib/Pitch";
+import { PitchLetter } from "../../lib/TheoryLib/PitchLetter";
 import { GuitarFretboard, renderGuitarFretboardScaleExtras } from "./GuitarFretboard";
 import { getPreferredGuitarScaleShape } from "./GuitarFretboard";
 import { StringedInstrumentTuning } from './StringedInstrumentTuning';
+import { arrayMax } from '../../lib/Core/ArrayUtils';
 
 export const GuitarScaleViewer: React.FunctionComponent<{
   scale: Scale,
@@ -26,7 +27,7 @@ export const GuitarScaleViewer: React.FunctionComponent<{
   }
 
   const guitarNotes = getPreferredGuitarScaleShape(props.scale, props.tuning);
-  const maxFretNumber = Utils.arrayMax(guitarNotes
+  const maxFretNumber = arrayMax(guitarNotes
     .map(gn => gn.getFretNumber(props.tuning))
   );
   const minFretNumber = Math.max(0, maxFretNumber - 11);

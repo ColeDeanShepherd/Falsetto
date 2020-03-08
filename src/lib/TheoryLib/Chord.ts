@@ -1,8 +1,11 @@
-import * as Utils from "./Utils";
+import * as Utils from "../Core/Utils";
 import { Pitch } from "./Pitch";
 import { getIntervalsFromFormula, getSimpleScaleDegree } from './Scale';
 import { Interval } from './Interval';
 import { ChordScaleFormula } from './ChordScaleFormula';
+import { flattenArrays, areArraysEqual, arrayMax } from '../Core/ArrayUtils';
+import { precondition } from '../Core/Dbc';
+import { setDifference } from '../Core/SetUtils';
 
 export function getSimpleChordNoteNumber(chordNoteNumber: number) {
   return getSimpleScaleDegree(chordNoteNumber);
@@ -161,7 +164,7 @@ export class ChordType {
     new ChordTypeGroup("Other Chords", ChordType.OtherChords)
   ];
 
-  public static All = Utils.flattenArrays<ChordType>(
+  public static All = flattenArrays<ChordType>(
     ChordType.Groups.map(ct => ct.chordTypes)
   ).concat(ChordType.Quartal4Notes);
   public static AllByNumNotesDescending = ChordType.All
@@ -190,17 +193,17 @@ export class ChordType {
   }
 
   public equals(other: ChordType): boolean {
-    return Utils.areArraysEqual(this.pitchIntegers, other.pitchIntegers);
+    return areArraysEqual(this.pitchIntegers, other.pitchIntegers);
   }
   public getSubChordType(startPitchIndex: number, numPitches: number): ChordType {
-    Utils.precondition(startPitchIndex >= 0);
-    Utils.precondition(numPitches >= 1);
-    Utils.precondition((startPitchIndex + numPitches) <= this.pitchIntegers.length);
+    precondition(startPitchIndex >= 0);
+    precondition(numPitches >= 1);
+    precondition((startPitchIndex + numPitches) <= this.pitchIntegers.length);
 
     const newPitchIntegers = this.pitchIntegers.slice(startPitchIndex, startPitchIndex + numPitches);
 
     const subChordType = ChordType.All
-      .find(chordType => Utils.areArraysEqual(chordType.pitchIntegers, newPitchIntegers));
+      .find(chordType => areArraysEqual(chordType.pitchIntegers, newPitchIntegers));
     
     return Utils.unwrapValueOrUndefined(subChordType);
   }
@@ -217,16 +220,16 @@ export class ChordType {
       .filter(p => !p.isOptional)
       .map(p => p.pitchInteger));
     
-    let remainingPitchIntegers = Utils.setDifference(pitchIntegers, requiredPitchIntegers);
+    let remainingPitchIntegers = setDifference(pitchIntegers, requiredPitchIntegers);
     if (remainingPitchIntegers.size !== (pitchIntegers.size - requiredPitchIntegers.size)) { return null; }
 
     const optionalPitchIntegers = new Set<number>(this.formula.parts
       .filter(p => p.isOptional)
       .map(p => p.pitchInteger));
-    remainingPitchIntegers = Utils.setDifference(remainingPitchIntegers, optionalPitchIntegers);
+    remainingPitchIntegers = setDifference(remainingPitchIntegers, optionalPitchIntegers);
 
     const alterations = new Array<string>();
-    const extension = Utils.arrayMax(this.formula.parts.map(p => p.chordNoteNumber));
+    const extension = arrayMax(this.formula.parts.map(p => p.chordNoteNumber));
 
     for (const pi of remainingPitchIntegers) {
       switch (pi) {

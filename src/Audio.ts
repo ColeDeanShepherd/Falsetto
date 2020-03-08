@@ -1,6 +1,6 @@
 import { Howl } from "howler";
 
-import { NumberDictionary } from "./NumberDictionary";
+import { NumberDictionary } from "./lib/Core/NumberDictionary";
 
 export function polyfillWebAudio() {
   const windowAny = window as any;

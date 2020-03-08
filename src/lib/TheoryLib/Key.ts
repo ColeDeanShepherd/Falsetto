@@ -1,6 +1,7 @@
-import * as Utils from "./Utils";
+import * as Utils from "../Core/Utils";
 import { PitchLetter } from './PitchLetter';
 import { Pitch } from './Pitch';
+import { precondition } from '../Core/Dbc';
 
 export function getValidKeyPitches(preferredOctaveNumber: number): Array<Pitch> {
   return [
@@ -100,14 +101,14 @@ export class Key {
     public signedAccidental: number,
     public isMajor: boolean
   ) {
-    Utils.precondition(validKeyPitchesOctave0
+    precondition(validKeyPitchesOctave0
       .some(kp => (kp.letter === pitchLetter) && (kp.signedAccidental === signedAccidental))
     );
   }
 }
 
 export function doesKeyUseSharps(pitchLetter: PitchLetter, signedAccidental: number): boolean {
-  Utils.precondition(Math.abs(signedAccidental) <= 1);
+  precondition(Math.abs(signedAccidental) <= 1);
 
   if (signedAccidental === 1) {
     return true;

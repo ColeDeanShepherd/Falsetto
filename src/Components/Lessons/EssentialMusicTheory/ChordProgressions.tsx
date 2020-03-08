@@ -1,21 +1,21 @@
 import * as React from "react";
 
-import * as Utils from "../../../Utils";
+import { arrayContains } from '../../../lib/Core/ArrayUtils';
 
 import { playPitches } from "../../../Piano";
 
 import { PianoKeyboard, PianoKeyboardMetrics, renderPianoKeyboardKeyLabels } from "../../Utils/PianoKeyboard";
-import { Pitch } from '../../../Pitch';
-import { PitchLetter } from '../../../PitchLetter';
+import { Pitch } from '../../../lib/TheoryLib/Pitch';
+import { PitchLetter } from '../../../lib/TheoryLib/PitchLetter';
 
 import { createStudyFlashCardSetComponent } from '../../StudyFlashCards/View';
 
-import { Rect2D } from '../../../Rect2D';
-import { Vector2D } from '../../../Vector2D';
-import { Size2D } from '../../../Size2D';
-import { Margin } from '../../../Margin';
-import { ScaleType, Scale } from '../../../Scale';
-import { Chord, ChordType } from "../../../Chord";
+import { Rect2D } from '../../../lib/Core/Rect2D';
+import { Vector2D } from '../../../lib/Core/Vector2D';
+import { Size2D } from '../../../lib/Core/Size2D';
+import { Margin } from '../../../lib/Core/Margin';
+import { ScaleType, Scale } from '../../../lib/TheoryLib/Scale';
+import { Chord, ChordType } from "../../../lib/TheoryLib/Chord";
 import { PitchesAudioPlayer } from '../../Utils/PitchesAudioPlayer';
 import { SectionProps, Term, SectionTitle, SubSectionTitle, NoteText, renderIntervalLabel, renderPianoKeyLabel } from './EssentialMusicTheory';
 
@@ -53,7 +53,7 @@ const FiveChordDiagram: React.FunctionComponent<{}> = props => {
   function onKeyPress(p: Pitch) {
     const pitchMidiNumbers = pitches.map(p => p.midiNumber);
 
-    if (Utils.arrayContains(pitchMidiNumbers, p.midiNumber)) {
+    if (arrayContains(pitchMidiNumbers, p.midiNumber)) {
       playPitches([p]);
     }
   }
@@ -112,7 +112,7 @@ const ChordDiagramInternal: React.FunctionComponent<{ pitches: Array<Pitch>, sca
   function onKeyPress(p: Pitch) {
     const pitchMidiNumbers = pitches.map(p => p.midiNumber);
 
-    if (Utils.arrayContains(pitchMidiNumbers, p.midiNumber)) {
+    if (arrayContains(pitchMidiNumbers, p.midiNumber)) {
       playPitches([p]);
     }
   }

@@ -1,6 +1,6 @@
-import { Chord, ChordScaleFormula } from "./Chord";
 import { Pitch } from "./Pitch";
 import { PitchLetter } from "./PitchLetter";
+import { ChordScaleFormula } from './ChordScaleFormula';
 
 test("getPitches(C, \"1 3 5\") is \"C E G\"", () => {
   expect(ChordScaleFormula.parse("1 3 5").getPitches(

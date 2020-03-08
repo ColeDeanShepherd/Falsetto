@@ -1,10 +1,10 @@
 import * as React from "react";
 
-import * as Utils from "../../../Utils";
+import * as Utils from "../../../lib/Core/Utils";
 import * as FlashCardUtils from "../Utils";
 import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
-import { Pitch } from "../../../Pitch";
+import { Pitch } from "../../../lib/TheoryLib/Pitch";
 import { playPitchesSequentially } from "../../../Piano";
 import {
   IConfigData,
@@ -16,7 +16,8 @@ import {
   forEachInterval
 } from "../../Utils/IntervalEarTrainingFlashCardMultiSelect";
 import { Button } from "@material-ui/core";
-import { createIntervalLevels } from '../../../Interval';
+import { createIntervalLevels } from '../../../lib/TheoryLib/Interval';
+import { arrayContains } from '../../../lib/Core/ArrayUtils';
 
 const flashCardSetId = "nextNoteEarTraining";
 
@@ -121,7 +122,7 @@ function createFlashCardSet(): FlashCardSet {
         flashCards
           .filter(fc => {
             const intervalString = fc.backSide.data as string;
-            return Utils.arrayContains(level.intervalStrings, intervalString);
+            return arrayContains(level.intervalStrings, intervalString);
           })
           .map(fc => fc.id),
         (curConfigData: IConfigData) => (

@@ -1,18 +1,19 @@
 import * as React from "react";
 
-import * as Utils from "../../../Utils";
-import { Vector2D } from '../../../Vector2D';
-import { Size2D } from "../../../Size2D";
-import { Rect2D } from '../../../Rect2D';
-import { Pitch, ambiguousKeyPitchStringsSymbols } from "../../../Pitch";
-import { PitchLetter } from "../../../PitchLetter";
-import { ScaleType, scaleTypeLevels } from "../../../Scale";
+import { Vector2D } from '../../../lib/Core/Vector2D';
+import { Size2D } from "../../../lib/Core/Size2D";
+import { Rect2D } from '../../../lib/Core/Rect2D';
+import { Pitch, ambiguousKeyPitchStringsSymbols } from "../../../lib/TheoryLib/Pitch";
+import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
+import { ScaleType, scaleTypeLevels } from "../../../lib/TheoryLib/Scale";
 import { PianoKeyboard } from "../../Utils/PianoKeyboard";
 import { FlashCard, FlashCardSide, FlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
 import { ScaleAnswerSelect } from "../../Utils/ScaleAnswerSelect";
-import { ChordScaleFormula, ChordScaleFormulaPart } from '../../../ChordScaleFormula';
+import { ChordScaleFormula, ChordScaleFormulaPart } from '../../../lib/TheoryLib/ChordScaleFormula';
 import { CheckboxColumnsFlashCardMultiSelect, CheckboxColumn, CheckboxColumnCell } from '../../Utils/CheckboxColumnsFlashCardMultiSelect';
+import { arrayContains } from '../../../lib/Core/ArrayUtils';
+import { mod } from '../../../lib/Core/MathUtils';
 
 const flashCardSetId = "pianoScalesOrderedNotes";
 
@@ -38,8 +39,8 @@ export function configDataToEnabledFlashCardIds(
 
   forEachScale((scaleType, rootPitchStr, i) => {
     if (
-      Utils.arrayContains(configData.enabledRootPitches, rootPitchStr) &&
-      Utils.arrayContains(configData.enabledScaleTypes, scaleType.name)
+      arrayContains(configData.enabledRootPitches, rootPitchStr) &&
+      arrayContains(configData.enabledScaleTypes, scaleType.name)
     ) {
       newEnabledFlashCardIds.push(flashCards[i].id);
     }
@@ -137,7 +138,7 @@ function createFlashCardSet(): FlashCardSet {
         flashCards
           .filter(fc => {
             const scaleType = fc.backSide.data as ScaleType;
-            return Utils.arrayContains(level.scaleTypes, scaleType);
+            return arrayContains(level.scaleTypes, scaleType);
           })
           .map(fc => fc.id),
         (curConfigData: IConfigData) => ({
@@ -154,7 +155,7 @@ export function createFlashCards(): FlashCard[] {
   const flashCards = new Array<FlashCard>();
 
   forEachScale((scaleType, rootPitchStr, i) => {
-    const halfStepsFromC = Utils.mod(i - 3, 12);
+    const halfStepsFromC = mod(i - 3, 12);
     const rootPitch = Pitch.createFromMidiNumber((new Pitch(PitchLetter.C, 0, 4)).midiNumber + halfStepsFromC);
     const pitches = new ChordScaleFormula(scaleType.formula.parts.concat(new ChordScaleFormulaPart(8, 0, false))).getPitches(rootPitch);
     
@@ -198,7 +199,7 @@ export function renderAnswerSelect(
   const configData = info.configData as IConfigData
   const correctAnswer = info.currentFlashCard.backSide.renderFn as string;
   const activeScales = ScaleType.All
-    .filter(scaleType => Utils.arrayContains(configData.enabledScaleTypes, scaleType.name));
+    .filter(scaleType => arrayContains(configData.enabledScaleTypes, scaleType.name));
   const rootPitchStrings = configData.enabledRootPitches;
   
   return <ScaleAnswerSelect

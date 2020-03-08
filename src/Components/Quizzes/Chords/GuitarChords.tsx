@@ -1,16 +1,17 @@
 import * as React from "react";
 import { TableRow, TableCell, Table, TableHead, TableBody, Grid, Checkbox } from "@material-ui/core";
 
-import * as Utils from "../../../Utils";
-import { Size2D } from "../../../Size2D";
+import * as Utils from "../../../lib/Core/Utils";
+import { Size2D } from "../../../lib/Core/Size2D";
 import { FlashCard, FlashCardSide, FlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
-import { Pitch } from "../../../Pitch";
-import { PitchLetter } from "../../../PitchLetter";
-import { ChordType, chordTypeLevels } from "../../../Chord";
+import { Pitch } from "../../../lib/TheoryLib/Pitch";
+import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
+import { ChordType, chordTypeLevels } from "../../../lib/TheoryLib/Chord";
 import {  renderDistinctFlashCardSideAnswerSelect } from '../Utils';
 import { GuitarChordViewer } from '../../Utils/GuitarChordViewer';
 import { getStandardGuitarTuning } from '../../Utils/StringedInstrumentTuning';
+import { arrayContains, toggleArrayElement } from '../../../lib/Core/ArrayUtils';
 
 const flashCardSetId = "guitarChordOrderedNotes";
 const guitarTuning = getStandardGuitarTuning(6);
@@ -27,7 +28,7 @@ export function configDataToEnabledFlashCardIds(
 
   for (let i = 0; i < chordTypes.length; i++) {
     const chordType = chordTypes[i];
-    if (Utils.arrayContains(configData.enabledChordTypes, chordType)) {
+    if (arrayContains(configData.enabledChordTypes, chordType)) {
       newEnabledFlashCardIds.push(flashCards[i].id);
     }
   }
@@ -78,7 +79,7 @@ export class GuitarChordsFlashCardMultiSelect extends React.Component<IGuitarCho
   }
   
   private toggleChordEnabled(chordType: ChordType) {
-    const newEnabledChordTypes = Utils.toggleArrayElement(
+    const newEnabledChordTypes = toggleArrayElement(
       (this.props.studySessionInfo.configData as IConfigData).enabledChordTypes,
       chordType
     );
@@ -128,7 +129,7 @@ function createFlashCardSet(): FlashCardSet {
         new FlashCardLevel(
           ctl.name,
           flashCards
-            .filter(fc => Utils.arrayContains(ctl.chordTypes, fc.backSide.data as ChordType))
+            .filter(fc => arrayContains(ctl.chordTypes, fc.backSide.data as ChordType))
             .map(fc => fc.id),
           (curConfigData: IConfigData) => ({
             enabledChordTypes: ctl.chordTypes.slice()

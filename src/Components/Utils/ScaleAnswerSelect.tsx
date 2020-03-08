@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Button, Typography } from "@material-ui/core";
 
-import { ScaleType } from "../../Scale";
+import { ScaleType } from "../../lib/TheoryLib/Scale";
 import { AnswerDifficulty } from "../../AnswerDifficulty";
 
 export interface IScaleAnswerSelectProps {

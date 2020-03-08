@@ -1,12 +1,14 @@
-import * as Utils from "./Utils";
+import * as Utils from "../Core/Utils";
 import { Pitch, getAccidentalString } from "./Pitch";
-import { VerticalDirection } from "./VerticalDirection";
+import { VerticalDirection } from "../Core/VerticalDirection";
 import { Interval } from './Interval';
 import { getSimpleChordNoteNumber } from './Chord';
+import { precondition, invariant } from '../Core/Dbc';
+import { isNullOrWhiteSpace, takeCharsWhile } from '../Core/StringUtils';
 
 export class ChordScaleFormula {
   public static parse(formulaString: string): ChordScaleFormula {
-    Utils.precondition(!Utils.isNullOrWhiteSpace(formulaString));
+    precondition(!isNullOrWhiteSpace(formulaString));
 
     return new ChordScaleFormula(
       formulaString.split(" ").map(ChordScaleFormulaPart.parse)
@@ -32,12 +34,12 @@ export class ChordScaleFormula {
 }
 export class ChordScaleFormulaPart {
   public static parse(formulaPartString: string): ChordScaleFormulaPart {
-    Utils.precondition(formulaPartString.length > 0);
+    precondition(formulaPartString.length > 0);
 
     const isOptional = (formulaPartString[0] === "(") && (formulaPartString[formulaPartString.length - 1] === ")");
 
     const accidentalStringStartIndex = isOptional ? 1 : 0;
-    const accidentalString = Utils.takeCharsWhile(formulaPartString, accidentalStringStartIndex, c => (c === "#") || (c === "b"));
+    const accidentalString = takeCharsWhile(formulaPartString, accidentalStringStartIndex, c => (c === "#") || (c === "b"));
 
     let signedAccidental: number;
     if (accidentalString.length === 0) {
@@ -61,7 +63,7 @@ export class ChordScaleFormulaPart {
     public signedAccidental: number,
     public isOptional: boolean
   ) {
-    Utils.invariant(chordNoteNumber >= 1);
+    invariant(chordNoteNumber >= 1);
   }
 
   public get pitchInteger(): number {

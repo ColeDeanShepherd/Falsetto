@@ -1,8 +1,11 @@
-import * as Utils from "./Utils";
+import * as Utils from "./lib/Core/Utils";
 import { FlashCardSetStats } from "./FlashCardSetStats";
 import { CustomNextFlashCardIdFilter as CustomNextFlashCardIdFilterFn, FlashCardStudySessionInfo } from './FlashCardSet';
 import { FlashCard, FlashCardId } from './FlashCard';
 import { AnswerDifficulty, isAnswerDifficultyCorrect } from './AnswerDifficulty';
+import { precondition, invariant, assert } from './lib/Core/Dbc';
+import { randomElement } from './lib/Core/Random';
+import { tryRemoveArrayElement, arrayContains } from './lib/Core/ArrayUtils';
 
 export abstract class StudyAlgorithm {
   public enabledFlashCardIds: Array<FlashCardId> = [];
@@ -27,11 +30,11 @@ export abstract class StudyAlgorithm {
     this._flashCardSetStats = stats;
   }
   public onAnswer(answerDifficulty: AnswerDifficulty): void {
-    Utils.precondition(this._currentFlashCardId !== undefined);
+    precondition(this._currentFlashCardId !== undefined);
 
     const flashCardStats = this._flashCardSetStats.flashCardStats.find(qs => qs.flashCardId === this._currentFlashCardId);
     if (!flashCardStats) {
-      Utils.assert(false);
+      assert(false);
       return;
     }
     
@@ -47,7 +50,7 @@ export abstract class StudyAlgorithm {
       ? this.customNextFlashCardIdFilter(studySessionInfo)
       : this.enabledFlashCardIds;
       
-    Utils.assert(enabledFlashCardIds.length > 0);
+    assert(enabledFlashCardIds.length > 0);
 
     return this.getNextFlashCardIdInternal(enabledFlashCardIds);
   }
@@ -74,7 +77,7 @@ export class RandomStudyAlgorithm extends StudyAlgorithm {
     
     let nextFlashCardId: FlashCardId;
     do {
-      nextFlashCardId = Utils.randomElement(enabledFlashCardIds);
+      nextFlashCardId = randomElement(enabledFlashCardIds);
     } while(nextFlashCardId === this._currentFlashCardId);
 
     this._currentFlashCardId = nextFlashCardId;
@@ -84,7 +87,7 @@ export class RandomStudyAlgorithm extends StudyAlgorithm {
 
 export class LeitnerStudyAlgorithm extends StudyAlgorithm {
   public constructor(numTiers: number) {
-    Utils.invariant(Number.isInteger(numTiers) && (numTiers > 0));
+    invariant(Number.isInteger(numTiers) && (numTiers > 0));
     super();
 
     this.tieredFlashCardIds = new Array<Array<FlashCardId>>(numTiers);
@@ -105,7 +108,7 @@ export class LeitnerStudyAlgorithm extends StudyAlgorithm {
     }
   }
   public onAnswer(answerDifficulty: AnswerDifficulty) {
-    Utils.precondition(this.currentFlashCardId !== undefined);
+    precondition(this.currentFlashCardId !== undefined);
 
     const currentFlashCardId = Utils.unwrapValueOrUndefined(this.currentFlashCardId);
 
@@ -117,11 +120,11 @@ export class LeitnerStudyAlgorithm extends StudyAlgorithm {
       : 0;
     
     if (newTierIndex !== oldTierIndex) {
-      const removedFromOldTier = Utils.tryRemoveArrayElement(
+      const removedFromOldTier = tryRemoveArrayElement(
         this.tieredFlashCardIds[oldTierIndex],
         currentFlashCardId
       );
-      Utils.assert(removedFromOldTier);
+      assert(removedFromOldTier);
 
       this.tieredFlashCardIds[newTierIndex].push(currentFlashCardId);
     }
@@ -136,11 +139,11 @@ export class LeitnerStudyAlgorithm extends StudyAlgorithm {
 
     const tierIndex = this.getLowestTierWithNewEnabledFlashCard();
     const enabledFlashCardIdsInTier = this.tieredFlashCardIds[tierIndex]
-      .filter(id => Utils.arrayContains(enabledFlashCardIds, id));
+      .filter(id => arrayContains(enabledFlashCardIds, id));
 
     let nextFlashCardId: FlashCardId;
     do {
-      nextFlashCardId = Utils.randomElement(enabledFlashCardIdsInTier);
+      nextFlashCardId = randomElement(enabledFlashCardIdsInTier);
     } while(nextFlashCardId === this._currentFlashCardId);
 
     this._currentFlashCardId = nextFlashCardId;
@@ -151,24 +154,24 @@ export class LeitnerStudyAlgorithm extends StudyAlgorithm {
 
   private getTierIndex(flashCardId: FlashCardId): number {
     for (let tierIndex = 0; tierIndex < this.tieredFlashCardIds.length; tierIndex++) {
-      if (Utils.arrayContains(this.tieredFlashCardIds[tierIndex], flashCardId)) {
+      if (arrayContains(this.tieredFlashCardIds[tierIndex], flashCardId)) {
         return tierIndex;
       }
     }
 
-    Utils.assert(false);
+    assert(false);
     return -1;
   }
   private getLowestTierWithNewEnabledFlashCard(): number {
     for (let tierIndex = 0; tierIndex < this.tieredFlashCardIds.length; tierIndex++) {
       if (this.tieredFlashCardIds[tierIndex].some(id =>
-        (id !== this._currentFlashCardId) && Utils.arrayContains(this.enabledFlashCardIds, id))
+        (id !== this._currentFlashCardId) && arrayContains(this.enabledFlashCardIds, id))
       ) {
         return tierIndex;
       }
     }
 
-    Utils.assert(false);
+    assert(false);
     return -1;
   }
 }

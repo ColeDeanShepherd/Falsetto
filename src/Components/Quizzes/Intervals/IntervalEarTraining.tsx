@@ -1,10 +1,10 @@
 import * as React from "react";
 
-import * as Utils from "../../../Utils";
+import * as Utils from "../../../lib/Core/Utils";
 import * as FlashCardUtils from "../Utils";
 import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
-import { Pitch } from "../../../Pitch";
+import { Pitch } from "../../../lib/TheoryLib/Pitch";
 import { playPitches, playPitchesSequentially } from "../../../Piano";
 import {
   IConfigData,
@@ -16,7 +16,9 @@ import {
   forEachInterval
 } from "../../Utils/IntervalEarTrainingFlashCardMultiSelect";
 import { Button } from "@material-ui/core";
-import { createIntervalLevels } from '../../../Interval';
+import { createIntervalLevels } from '../../../lib/TheoryLib/Interval';
+import { randomElement } from '../../../lib/Core/Random';
+import { arrayContains } from '../../../lib/Core/ArrayUtils';
 
 const flashCardSetId = "intervalEarTraining";
 
@@ -31,7 +33,7 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
   public constructor(props: IFlashCardFrontSideProps) {
     super(props);
 
-    const pitch1 = Utils.randomElement(firstPitches);
+    const pitch1 = randomElement(firstPitches);
 
     const intervalIndex = intervals.indexOf(this.props.interval);
     const intervalHalfSteps = (this.props.direction === "↑")
@@ -150,7 +152,7 @@ function createFlashCardSet(): FlashCardSet {
         flashCards
           .filter(fc => {
             const intervalString = fc.backSide.data as string;
-            return Utils.arrayContains(level.intervalStrings, intervalString);
+            return arrayContains(level.intervalStrings, intervalString);
           })
           .map(fc => fc.id),
         (curConfigData: IConfigData) => (

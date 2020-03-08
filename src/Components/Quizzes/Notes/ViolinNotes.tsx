@@ -1,12 +1,12 @@
 import * as React from "react";
 
-import { Size2D } from "../../../Size2D";
+import { Size2D } from "../../../lib/Core/Size2D";
 import * as FlashCardUtils from "../Utils";
 import { ViolinFingerboard } from "../../Utils/ViolinFingerboard";
 import { standardViolinTuning } from "../../Utils/StringedInstrumentTuning";
 import { FlashCard, FlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
-import { StringedInstrumentNote } from '../../../StringedInstrumentNote';
+import { StringedInstrumentNote } from '../../../lib/TheoryLib/StringedInstrumentNote';
 import {
   IConfigData,
   StringedInstrumentNotesFlashCardMultiSelect,

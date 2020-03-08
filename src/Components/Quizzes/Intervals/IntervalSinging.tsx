@@ -1,9 +1,9 @@
 import * as React from "react";
 
-import * as Utils from "../../../Utils";
+import * as Utils from "../../../lib/Core/Utils";
 import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
-import { Pitch } from "../../../Pitch";
+import { Pitch } from "../../../lib/TheoryLib/Pitch";
 import { playPitches } from "../../../Piano";
 import {
   IConfigData as IBaseConfigData,
@@ -19,7 +19,8 @@ import { Tuner } from '../../Tools/Tuner';
 import { DetectedPitch } from '../../PitchDetection';
 import { AnswerDifficulty } from '../../../AnswerDifficulty';
 import { PitchesAudioPlayer } from '../../Utils/PitchesAudioPlayer';
-import { createIntervalLevels } from '../../../Interval';
+import { createIntervalLevels } from '../../../lib/TheoryLib/Interval';
+import { arrayContains } from '../../../lib/Core/ArrayUtils';
 
 const flashCardSetId = "intervalSinging";
 
@@ -299,7 +300,7 @@ function createFlashCardSet(): FlashCardSet {
         flashCards
           .filter(fc => {
             const intervalString = (fc.backSide.data as IFlashCardBackSideData).intervalString;
-            return Utils.arrayContains(level.intervalStrings, intervalString);
+            return arrayContains(level.intervalStrings, intervalString);
           })
           .map(fc => fc.id),
         (curConfigData: IConfigData) => (

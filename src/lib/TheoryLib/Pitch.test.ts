@@ -1,6 +1,6 @@
 import { Pitch } from "./Pitch";
 import { PitchLetter } from "./PitchLetter";
-import { VerticalDirection } from "./VerticalDirection";
+import { VerticalDirection } from "../Core/VerticalDirection";
 import { Interval } from "./Interval";
 
 test("midiNumber of C-1 is 0", () => {

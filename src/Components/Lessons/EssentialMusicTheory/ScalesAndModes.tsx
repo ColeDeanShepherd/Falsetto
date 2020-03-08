@@ -2,13 +2,13 @@ import * as React from "react";
 import { Table, TableHead, TableBody, TableRow, TableCell } from "@material-ui/core";
 
 
-import * as Utils from "../../../Utils";
+import * as Utils from "../../../lib/Core/Utils";
 
 import { playPitches } from "../../../Piano";
 
 import { PianoKeyboard, renderPianoKeyboardNoteNames, PianoKeyboardMetrics } from "../../Utils/PianoKeyboard";
-import { Pitch } from '../../../Pitch';
-import { PitchLetter } from '../../../PitchLetter';
+import { Pitch } from '../../../lib/TheoryLib/Pitch';
+import { PitchLetter } from '../../../lib/TheoryLib/PitchLetter';
 
 import { createStudyFlashCardSetComponent } from '../../StudyFlashCards/View';
 
@@ -19,16 +19,17 @@ import { ScaleViewer } from "../../Tools/ScaleViewer";
 
 import * as GuitarScales from "../../Quizzes/Scales/GuitarScales";
 
-import { Rect2D } from '../../../Rect2D';
-import { Vector2D } from '../../../Vector2D';
-import { Size2D } from '../../../Size2D';
-import { Margin } from '../../../Margin';
-import { ScaleType, Scale } from '../../../Scale';
-import { doesKeyUseSharps } from '../../../Key';
+import { Rect2D } from '../../../lib/Core/Rect2D';
+import { Vector2D } from '../../../lib/Core/Vector2D';
+import { Size2D } from '../../../lib/Core/Size2D';
+import { Margin } from '../../../lib/Core/Margin';
+import { ScaleType, Scale } from '../../../lib/TheoryLib/Scale';
+import { doesKeyUseSharps } from '../../../lib/TheoryLib/Key';
 import { PianoScaleDronePlayer } from '../../Utils/PianoScaleDronePlayer';
 import { ScaleAudioPlayer } from '../../Utils/ScaleAudioPlayer';
 import { SectionProps, Term, SectionTitle, SubSectionTitle, NoteText, defaultRootPitch, pianoKeyboardStyle } from './EssentialMusicTheory';
 import { NavLinkView } from '../../../NavLinkView';
+import { arrayContains } from '../../../lib/Core/ArrayUtils';
 
 export const PianoScaleFormulaDiagram: React.FunctionComponent<{ scale: ScaleType }> = props => {
   const width = 300;
@@ -43,7 +44,7 @@ export const PianoScaleFormulaDiagram: React.FunctionComponent<{ scale: ScaleTyp
     return (
       <g>
         {renderScaleStepLabels(metrics)}
-        {renderPianoKeyboardNoteNames(metrics, doesKeyUseSharps(rootPitch.letter, rootPitch.signedAccidental), p => Utils.arrayContains(pitchMidiNumberNoOctaves, p.midiNumberNoOctave))}
+        {renderPianoKeyboardNoteNames(metrics, doesKeyUseSharps(rootPitch.letter, rootPitch.signedAccidental), p => arrayContains(pitchMidiNumberNoOctaves, p.midiNumberNoOctave))}
       </g>
     );
   }
@@ -98,7 +99,7 @@ export const PianoScaleFormulaDiagram: React.FunctionComponent<{ scale: ScaleTyp
       highestPitch={new Pitch(PitchLetter.B, 0, 4)}
       pressedPitches={[]}
       onKeyPress={p => {
-        if (Utils.arrayContains(pitchMidiNumberNoOctaves, p.midiNumberNoOctave)) {
+        if (arrayContains(pitchMidiNumberNoOctaves, p.midiNumberNoOctave)) {
           playPitches([p]);
         }
       }}

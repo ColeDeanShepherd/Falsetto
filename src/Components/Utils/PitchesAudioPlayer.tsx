@@ -1,10 +1,12 @@
 import * as React from "react";
 import { Button, CircularProgress } from "@material-ui/core";
 
-import * as Utils from "../../Utils";
+import * as Utils from "../../lib/Core/Utils";
+import { areArraysEqualComparer } from "../../lib/Core/ArrayUtils";
 import * as Audio from "../../Audio";
 import { getPitchAudioFilePath } from '../../Piano';
-import { Pitch } from '../../Pitch';
+import { Pitch } from '../../lib/TheoryLib/Pitch';
+import { unwrapMaybe } from '../../lib/Core/Utils';
 
 export enum PitchesAudioPlayerPlayState {
   PLAYABLE,
@@ -63,7 +65,7 @@ export class PitchesAudioPlayer extends React.Component<IPitchesAudioPlayerProps
   public componentDidUpdate(
     prevProps: IPitchesAudioPlayerProps,
     prevState: IPitchesAudioPlayerState) {
-    if (!Utils.areArraysEqualComparer(this.props.pitches, prevProps.pitches, (p1, p2) => p1.equals(p2))) {
+    if (!areArraysEqualComparer(this.props.pitches, prevProps.pitches, (p1, p2) => p1.equals(p2))) {
       this.stopSounds();
       this.loadSoundsPromise = null;
       this.loadedSounds = null;
@@ -92,7 +94,7 @@ export class PitchesAudioPlayer extends React.Component<IPitchesAudioPlayerProps
     const soundFilePaths = this.props.pitches
       .map(p => getPitchAudioFilePath(p))
       .filter(sfp => sfp !== null)
-      .map(sfp => Utils.unwrapMaybe(sfp));
+      .map(sfp => unwrapMaybe(sfp));
     this.loadSoundsPromise = Audio.loadSoundsAsync(soundFilePaths)
       .then(loadedSounds => {
         this.loadedSounds = loadedSounds;
@@ -107,15 +109,15 @@ export class PitchesAudioPlayer extends React.Component<IPitchesAudioPlayerProps
     this.setState({ playState: PitchesAudioPlayerPlayState.PLAYABLE }, () => {
       this.stopSounds();
 
-      const loadedSounds = Utils.unwrapMaybe(this.loadedSounds);
+      const loadedSounds = unwrapMaybe(this.loadedSounds);
 
       if (!this.props.playSequentially) {
-        for (const sound of Utils.unwrapMaybe(loadedSounds)) {
+        for (const sound of unwrapMaybe(loadedSounds)) {
           sound.play();
         }
   
         this.cancelPlayingFn = () => {
-          for (const sound of Utils.unwrapMaybe(loadedSounds)) {
+          for (const sound of unwrapMaybe(loadedSounds)) {
             sound.stop();
           }
         };

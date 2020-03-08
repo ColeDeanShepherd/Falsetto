@@ -2,15 +2,16 @@ import * as React from "react";
 import * as Vex from "vexflow";
 import { Button, Card, CardContent, Typography, Select, CircularProgress } from "@material-ui/core";
 
-import * as Utils from "../../Utils";
-import { TimeSignature } from "../../TimeSignature";
+import * as Utils from "../../lib/Core/Utils";
+import { TimeSignature } from "../../lib/TheoryLib/TimeSignature";
 import * as Audio from "../../Audio";
 import { VexFlowComponent } from "../Utils/VexFlowComponent";
-import { Rational } from "../../Rational";
+import { Rational } from "../../lib/Core/Rational";
 import { noteDurationToVexFlowStr, getTimeSignatureStr } from '../../VexFlowUtils';
 import { RhythmPlayer, IRhythmNote } from '../../Rhythm';
 import { SizeAwareContainer } from '../Utils/SizeAwareContainer';
-import { Size2D } from '../../Size2D';
+import { Size2D } from '../../lib/Core/Size2D';
+import { repeatGenerator } from '../../lib/Core/ArrayUtils';
 
 const clickAudioPath = "/audio/metronome_click.wav";
 
@@ -249,7 +250,7 @@ export class TimeSignaturePlayer extends React.Component<ITimeSignaturePlayerPro
   }
 
   private createRhythmNotes(timeSignature: TimeSignature): Array<IRhythmNote> {
-    return Utils.repeatGenerator(
+    return repeatGenerator(
       i => ({
         duration: new Rational(1, timeSignature.numBeats),
         isRest: false
@@ -258,7 +259,7 @@ export class TimeSignaturePlayer extends React.Component<ITimeSignaturePlayerPro
     );
   }
   private createVexFlowNotes(timeSignature: TimeSignature): Array<Vex.Flow.StaveNote> {
-    return Utils.repeatGenerator(
+    return repeatGenerator(
       i => {
         const note = new Vex.Flow.StaveNote({
           clef: "treble",

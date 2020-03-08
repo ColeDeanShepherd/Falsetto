@@ -1,13 +1,14 @@
 import { PitchLetter, getPitchLetterMidiNoteNumberOffset } from "./PitchLetter";
-import * as Utils from "./Utils";
-import { VerticalDirection } from "./VerticalDirection";
+import { VerticalDirection } from "../Core/VerticalDirection";
 import { Interval } from "./Interval";
+import { precondition } from '../Core/Dbc';
+import { mod } from '../Core/MathUtils';
 
 export function pitchRange(
   minPitch: Pitch, maxPitch: Pitch,
   minSignedAccidental: number, maxSignedAccidental: number
 ): Array<Pitch> {
-  Utils.precondition(minSignedAccidental <= maxSignedAccidental);
+  precondition(minSignedAccidental <= maxSignedAccidental);
 
   const minLineOrSpaceOnStaffNumber = minPitch.lineOrSpaceOnStaffNumber;
   const maxLineOrSpaceOnStaffNumber = maxPitch.lineOrSpaceOnStaffNumber;
@@ -71,7 +72,7 @@ export const ambiguousKeyPitchStringsSymbols = [
 
 export class Pitch {
   public static createFromMidiNumber(midiNumber: number, useSharps: boolean = true): Pitch {
-    const positivePitchOffsetFromC = Utils.mod(midiNumber, 12);
+    const positivePitchOffsetFromC = mod(midiNumber, 12);
     const octaveNumber = Math.floor(midiNumber / 12) - 1;
     
     switch (positivePitchOffsetFromC) {
@@ -104,7 +105,7 @@ export class Pitch {
     }
   }
   public static createFromLineOrSpaceOnStaffNumber(lineOrSpaceOnStaffNumber: number, signedAccidental: number): Pitch {
-    const letter = Utils.mod(lineOrSpaceOnStaffNumber + 2, 7) as PitchLetter;
+    const letter = mod(lineOrSpaceOnStaffNumber + 2, 7) as PitchLetter;
     const octaveNumber = Math.floor(lineOrSpaceOnStaffNumber / 7);
     return new Pitch(letter, signedAccidental, octaveNumber);
   }
@@ -145,10 +146,10 @@ export class Pitch {
     return (12 * (this.octaveNumber + 1)) + pitchLetterMidiNoteNumberOffset + this.signedAccidental;
   }
   public get midiNumberNoOctave(): number {
-    return Utils.mod(this.midiNumber, 12);
+    return mod(this.midiNumber, 12);
   }
   public get lineOrSpaceOnStaffNumber(): number {
-    return (7 * this.octaveNumber) + Utils.mod(this.letter - 2, 7);
+    return (7 * this.octaveNumber) + mod(this.letter - 2, 7);
   }
   public get isNatural(): boolean {
     return this.signedAccidental === 0;
@@ -156,7 +157,7 @@ export class Pitch {
 
   // TODO: add tests
   public get isWhiteKey(): boolean {
-    const positivePitchOffsetFromC = Utils.mod(this.midiNumber, 12);
+    const positivePitchOffsetFromC = mod(this.midiNumber, 12);
     return arePitchOffsetsFromCWhiteKeys[positivePitchOffsetFromC];
   }
   // TODO: add tests
@@ -189,7 +190,7 @@ export class Pitch {
 
   // TODO: add tests
   public toOneAccidentalAmbiguousString(includeOctaveNumber: boolean = true, useSymbols: boolean = false): string {
-    const positivePitchOffsetFromC = Utils.mod(this.midiNumber, 12);
+    const positivePitchOffsetFromC = mod(this.midiNumber, 12);
     const ambiguousPitchString = !useSymbols
       ? ambiguousPitchStrings[positivePitchOffsetFromC]
       : ambiguousPitchStringsSymbols[positivePitchOffsetFromC];

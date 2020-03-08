@@ -5,7 +5,7 @@ import * as FlashCardUtils from "../Utils";
 import { FlashCard, FlashCardId } from "../../../FlashCard";
 import { VexFlowComponent } from "../../Utils/VexFlowComponent";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
-import { Size2D } from '../../../Size2D';
+import { Size2D } from '../../../lib/Core/Size2D';
 
 const flashCardSetId = "noteDurationSymbols";
 

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { CardContent, Card, Typography } from "@material-ui/core";
 
-import * as Utils from "../Utils";
+import * as Utils from "../lib/Core/Utils";
 import { FlashCardAnswer, IDatabase } from '../Database';
 import { FlashCardSet, FlashCardLevel } from '../FlashCardSet';
 import { flashCardSets, groupedFlashCardSets } from '../FlashCardGraph';
@@ -15,6 +15,7 @@ import { IUserManager } from '../UserManager';
 import { ActionBus } from '../ActionBus';
 import { NavigateAction } from '../App/Actions';
 import { getFlashCardSetStatsFromAnswers, getPercentToNextLevel, getCurrentFlashCardLevel } from './StudyFlashCards/Model';
+import { mean } from '../lib/Core/ArrayUtils';
 
 class FlashCardSetWithAnswers {
   public constructor(
@@ -121,7 +122,7 @@ export class ProfilePage extends React.Component<{}, IProfilePageState> {
                   let setNameElem: JSX.Element;
 
                   if (!swa.levels) {
-                    progressPercent = Utils.mean(swa.flashCardAnswers, fca => fca.percentCorrect);
+                    progressPercent = mean(swa.flashCardAnswers, fca => fca.percentCorrect);
                     setNameElem = <span><NavLinkView to={swa.flashCardSet.route}>{swa.flashCardSet.name}</NavLinkView></span>;
                   } else {
                     const [currentLevelIndex, currentLevel] = getCurrentFlashCardLevel(swa.flashCardSet, swa.levels, swa.stats);

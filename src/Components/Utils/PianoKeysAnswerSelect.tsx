@@ -1,14 +1,15 @@
 import * as React from "react";
 import { Button } from "@material-ui/core";
 
-import * as Utils from "../../Utils";
-import { Pitch } from "../../Pitch";
+import * as Utils from "../../lib/Core/Utils";
+import { Pitch } from "../../lib/TheoryLib/Pitch";
 import { AnswerDifficulty } from "../../AnswerDifficulty";
 import { PianoKeyboard } from "./PianoKeyboard";
-import { PitchLetter } from "../../PitchLetter";
-import { Rect2D } from '../../Rect2D';
-import { Size2D } from '../../Size2D';
-import { Vector2D } from '../../Vector2D';
+import { PitchLetter } from "../../lib/TheoryLib/PitchLetter";
+import { Rect2D } from '../../lib/Core/Rect2D';
+import { Size2D } from '../../lib/Core/Size2D';
+import { Vector2D } from '../../lib/Core/Vector2D';
+import { toggleArrayElementCustomEquals, uniq } from '../../lib/Core/ArrayUtils';
 
 export interface IPianoKeysAnswerSelectProps {
   width: number;
@@ -57,7 +58,7 @@ export class PianoKeysAnswerSelect extends React.Component<IPianoKeysAnswerSelec
   }
 
   private onPitchClick(pitch: Pitch) {
-    let newSelectedPitches = Utils.toggleArrayElementCustomEquals(
+    let newSelectedPitches = toggleArrayElementCustomEquals(
       this.state.selectedPitches,
       pitch,
       (p1, p2) => p1.equals(p2)
@@ -70,11 +71,11 @@ export class PianoKeysAnswerSelect extends React.Component<IPianoKeysAnswerSelec
     this.setState({ selectedPitches: newSelectedPitches });
   }
   private confirmAnswer() {
-    const selectedPitchMidiNumbersNoOctave = Utils.uniq(
+    const selectedPitchMidiNumbersNoOctave = uniq(
       this.state.selectedPitches
         .map(pitch => pitch.midiNumberNoOctave)
     );
-    const correctAnswerMidiNumbersNoOctave = Utils.uniq(
+    const correctAnswerMidiNumbersNoOctave = uniq(
       this.props.correctAnswer
         .map(pitch => pitch.midiNumberNoOctave)
     );

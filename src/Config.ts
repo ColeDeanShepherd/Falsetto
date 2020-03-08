@@ -5,6 +5,7 @@ export function isProduction(): boolean {
   return process.env.NODE_ENV === "production";
 }
 
+export const googleAnalyticsTrackingId = "UA-72494315-5"; // TODO: move this somewhere else?
 export const apiBaseUri = isProduction() ? "https://api.falsetto.app" : "http://api.falsetto.app";
 export const authDomain = "falsetto.auth0.com";
 export const authClientId = "yd2xFeeGA2MrhLubI9HphqOYfe44wZIE";

@@ -1,5 +1,6 @@
-import * as Utils from "../Utils";
-import { Pitch } from '../Pitch';
+import * as Utils from "../lib/Core/Utils";
+import { Pitch } from '../lib/TheoryLib/Pitch';
+import { precondition } from '../lib/Core/Dbc';
 
 export const concertAHz = 440;
 export const concertAMidiNumber = 69;
@@ -30,7 +31,7 @@ export class DatalantPitchDetector implements IPitchDetector {
 const noteStrings = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
 function noteFromPitch(frequency: number): number {
-	Utils.precondition(!isNaN(frequency));
+	precondition(!isNaN(frequency));
 	const noteNum = 12 * (Math.log(frequency / concertAHz) / Math.log(2));
 	return Math.round(noteNum) + concertAMidiNumber;
 }

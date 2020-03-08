@@ -1,13 +1,13 @@
 import * as React from "react";
 import { Button, Card, CardContent, Typography } from "@material-ui/core";
 
-import * as Utils from "../../Utils";
-import { Vector2D } from '../../Vector2D';
-import { Size2D } from "../../Size2D";
-import { Rect2D } from '../../Rect2D';
-import { PitchLetter } from "../../PitchLetter";
-import { ScaleType, ScaleTypeGroup, Scale } from "../../Scale";
-import { Pitch } from "../../Pitch";
+import * as Utils from "../../lib/Core/Utils";
+import { Vector2D } from '../../lib/Core/Vector2D';
+import { Size2D } from "../../lib/Core/Size2D";
+import { Rect2D } from '../../lib/Core/Rect2D';
+import { PitchLetter } from "../../lib/TheoryLib/PitchLetter";
+import { ScaleType, ScaleTypeGroup, Scale } from "../../lib/TheoryLib/Scale";
+import { Pitch } from "../../lib/TheoryLib/Pitch";
 import { PianoKeyboard } from "../Utils/PianoKeyboard";
 import { playPitches } from '../../Piano';
 import * as PianoScaleDronePlayer from "../Utils/PianoScaleDronePlayer";
@@ -16,6 +16,7 @@ import { getStandardGuitarTuning } from "../Utils/StringedInstrumentTuning";
 import { ScaleAudioPlayer } from '../Utils/ScaleAudioPlayer';
 import { GuitarScaleViewer } from '../Utils/GuitarScaleViewer';
 import { ValidKeyPitchSelect } from '../Utils/ValidKeyPitchSelect';
+import { arrayContains } from '../../lib/Core/ArrayUtils';
 
 // subtract one octave for valid key pitches
 
@@ -67,7 +68,7 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
       ? ((pitch: Pitch) => {
         const pitchMidiNumberNoOctaves = pitches.map(p => p.midiNumberNoOctave);
 
-        if (Utils.arrayContains(pitchMidiNumberNoOctaves, pitch.midiNumberNoOctave)) {
+        if (arrayContains(pitchMidiNumberNoOctaves, pitch.midiNumberNoOctave)) {
           playPitches([pitch]);
         }
       })

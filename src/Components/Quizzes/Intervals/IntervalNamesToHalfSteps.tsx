@@ -1,8 +1,9 @@
-import * as Utils from "../../../Utils";
+import * as Utils from "../../../lib/Core/Utils";
 import * as FlashCardUtils from "../Utils";
 import { FlashCard, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardLevel } from "../../../FlashCardSet";
-import { createIntervalLevels } from '../../../Interval';
+import { createIntervalLevels } from '../../../lib/TheoryLib/Interval';
+import { arrayContains } from '../../../lib/Core/ArrayUtils';
 
 const flashCardSetId = "intervalHalfSteps";
 
@@ -18,7 +19,7 @@ function createFlashCardSet(): FlashCardSet {
         flashCards
           .filter(fc => {
             const intervalString = fc.backSide.data as string;
-            return Utils.arrayContains(level.intervalStrings, intervalString);
+            return arrayContains(level.intervalStrings, intervalString);
           })
           .map(fc => fc.id),
         (curConfigData: any) => null

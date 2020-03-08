@@ -1,11 +1,9 @@
-import * as Vex from "vexflow";
-
-import * as Utils from "./Utils";
-import { Rational } from "./Rational";
+import { Rational } from "./lib/Core/Rational";
+import { precondition } from './lib/Core/Dbc';
 
 export function noteDurationToVexFlowStr(noteDuration: Rational): string {
-  Utils.precondition(noteDuration.numerator === 1);
-  Utils.precondition(noteDuration.denominator >= 1);
+  precondition(noteDuration.numerator === 1);
+  precondition(noteDuration.denominator >= 1);
 
   if (noteDuration.denominator < 2) {
     return "w";

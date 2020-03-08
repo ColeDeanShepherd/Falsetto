@@ -1,15 +1,18 @@
 import * as React from "react";
 
-import * as Utils from "../../Utils";
-import { Pitch } from "../../Pitch";
-import { Size2D } from '../../Size2D';
-import { Rect2D } from '../../Rect2D';
-import { Vector2D } from '../../Vector2D';
-import { ScaleType, Scale } from '../../Scale';
-import { Chord } from '../../Chord';
-import { StringedInstrumentNote } from '../../StringedInstrumentNote';
+import * as Utils from "../../lib/Core/Utils";
+import { Pitch } from "../../lib/TheoryLib/Pitch";
+import { Size2D } from '../../lib/Core/Size2D';
+import { Rect2D } from '../../lib/Core/Rect2D';
+import { Vector2D } from '../../lib/Core/Vector2D';
+import { ScaleType, Scale } from '../../lib/TheoryLib/Scale';
+import { Chord } from '../../lib/TheoryLib/Chord';
+import { StringedInstrumentNote } from '../../lib/TheoryLib/StringedInstrumentNote';
 import { getStandardGuitarTuning, StringedInstrumentTuning } from './StringedInstrumentTuning';
 import { StringedInstrumentMetrics, StringedInstrumentFingerboard } from './StringedInstrumentFingerboard';
+import { arrayMin, arrayMax } from '../../lib/Core/ArrayUtils';
+import { precondition } from '../../lib/Core/Dbc';
+import { mod, range } from '../../lib/Core/MathUtils';
 
 export function generateGuitarScaleTextDiagram(scale: Scale, stringCount: number): string {
   const minFretNumber = 1;
@@ -60,13 +63,13 @@ export function getPreferredGuitarScaleShape(
   scaleShapes.sort((shape1, shape2) => {
     // sort by fret range
     const shape1FretNumbers = shape1.map(gn => gn.getFretNumber(tuning));
-    const shape1MinFretNumber = Utils.arrayMin(shape1FretNumbers);
-    const shape1MaxFretNumber = Utils.arrayMax(shape1FretNumbers);
+    const shape1MinFretNumber = arrayMin(shape1FretNumbers);
+    const shape1MaxFretNumber = arrayMax(shape1FretNumbers);
     const shape1FretRange = shape1MaxFretNumber - shape1MinFretNumber;
     
     const shape2FretNumbers = shape2.map(gn => gn.getFretNumber(tuning));
-    const shape2MinFretNumber = Utils.arrayMin(shape2FretNumbers);
-    const shape2MaxFretNumber = Utils.arrayMax(shape2FretNumbers);
+    const shape2MinFretNumber = arrayMin(shape2FretNumbers);
+    const shape2MaxFretNumber = arrayMax(shape2FretNumbers);
     const shape2FretRange = shape2MaxFretNumber - shape2MinFretNumber;
 
     if (shape1FretRange < shape2FretRange) { return -1; }
@@ -203,15 +206,15 @@ export function findGuitarChordShape(
   chord: Chord, inversion: number, firstStringIndex: number,
   tuning: StringedInstrumentTuning
 ): Array<StringedInstrumentNote> {
-  Utils.precondition((inversion >= 0) && (inversion < chord.type.pitchCount));
-  Utils.precondition((firstStringIndex >= 0) && (firstStringIndex < tuning.stringCount));
+  precondition((inversion >= 0) && (inversion < chord.type.pitchCount));
+  precondition((firstStringIndex >= 0) && (firstStringIndex < tuning.stringCount));
 
   const pitches = chord.getPitches();
 
   let guitarNotes = new Array<StringedInstrumentNote>();
 
   for (let i = 0; i < pitches.length; i++) {
-    const pitch = pitches[Utils.mod(i + (inversion - 1), pitches.length)];
+    const pitch = pitches[mod(i + (inversion - 1), pitches.length)];
     const stringIndex = firstStringIndex + i;
 
     guitarNotes.push(new StringedInstrumentNote(pitch, stringIndex));
@@ -431,7 +434,7 @@ export function renderFretNumber(
   );
 }
 export function renderFretNumbers(metrics: StringedInstrumentMetrics): JSX.Element {
-  const fretNumbers = Utils.range(metrics.minFretNumber, metrics.minFretNumber + metrics.fretCount);
+  const fretNumbers = range(metrics.minFretNumber, metrics.minFretNumber + metrics.fretCount);
   return (
     <g>
       {fretNumbers.map(fretNumber => renderFretNumber(metrics, fretNumber))}

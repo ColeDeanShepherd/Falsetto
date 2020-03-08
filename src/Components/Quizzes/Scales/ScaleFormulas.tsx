@@ -1,8 +1,8 @@
-import * as Utils from "../../../Utils";
 import * as FlashCardUtils from "../Utils";
 import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardLevel, } from "../../../FlashCardSet";
-import { ScaleType, scaleTypeLevels } from '../../../Scale';
+import { ScaleType, scaleTypeLevels } from '../../../lib/TheoryLib/Scale';
+import { arrayContains } from '../../../lib/Core/ArrayUtils';
 
 const flashCardSetId = "scaleFormulasMajor";
 
@@ -27,7 +27,7 @@ function createFlashCardSet(): FlashCardSet {
         flashCards
           .filter(fc => {
             const scaleType = fc.backSide.data as ScaleType;
-            return Utils.arrayContains(level.scaleTypes, scaleType);
+            return arrayContains(level.scaleTypes, scaleType);
           })
           .map(fc => fc.id),
         (curConfigData: any) => null

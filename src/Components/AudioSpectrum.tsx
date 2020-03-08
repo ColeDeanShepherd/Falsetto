@@ -1,9 +1,9 @@
 import * as React from "react";
 
-import * as Utils from "../Utils";
-import { Size2D } from "../Size2D";
-import { Vector2D } from "../Vector2D";
-import { Rect2D } from "../Rect2D";
+import { Size2D } from "../lib/Core/Size2D";
+import { Vector2D } from "../lib/Core/Vector2D";
+import { Rect2D } from "../lib/Core/Rect2D";
+import { uint8ArrayMax, uint8ArrayMap } from '../lib/Core/ArrayUtils';
 
 export interface IAudioSpectrumProps {
   spectrum: Uint8Array;
@@ -19,9 +19,9 @@ export class AudioSpectrum extends React.Component<IAudioSpectrumProps, {}> {
     const barMarginX = 1;
     const totalMarginX = barMarginX * (numBars - 1);
     const barWidth = (svgRect.size.width - totalMarginX) / numBars
-    const maxValue = Utils.uint8ArrayMax(spectrum);
+    const maxValue = uint8ArrayMax(spectrum);
 
-    const bars = Utils.uint8ArrayMap(
+    const bars = uint8ArrayMap(
       spectrum,
       (v, i) => {
         const barHeight = svgRect.size.height * (v / maxValue);

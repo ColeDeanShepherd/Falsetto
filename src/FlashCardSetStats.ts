@@ -1,5 +1,5 @@
-import * as Utils from "./Utils";
 import { FlashCardStats } from "./FlashCardStats";
+import { sumNumbers } from './lib/Core/ArrayUtils';
 
 export class FlashCardSetStats {
   public constructor(
@@ -8,9 +8,9 @@ export class FlashCardSetStats {
   ) {}
   
   public get numCorrectGuesses(): number {
-    return Utils.sumNumbers(this.flashCardStats.map(x => x.numCorrectGuesses));
+    return sumNumbers(this.flashCardStats.map(x => x.numCorrectGuesses));
   }
   public get numIncorrectGuesses(): number {
-    return Utils.sumNumbers(this.flashCardStats.map(x => x.numIncorrectGuesses));
+    return sumNumbers(this.flashCardStats.map(x => x.numIncorrectGuesses));
   }
 }

@@ -1,17 +1,18 @@
 import * as React from "react";
 import { TableRow, TableCell, Table, TableHead, TableBody, Grid, Checkbox } from "@material-ui/core";
 
-import * as Utils from "../../../Utils";
-import { Size2D } from "../../../Size2D";
-import { ScaleType, Scale, scaleTypeLevels } from "../../../Scale";
+import { Size2D } from "../../../lib/Core/Size2D";
+import { ScaleType, Scale, scaleTypeLevels } from "../../../lib/TheoryLib/Scale";
 import { FlashCard, FlashCardSide, FlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
-import { Pitch } from "../../../Pitch";
-import { PitchLetter } from "../../../PitchLetter";
+import { Pitch } from "../../../lib/TheoryLib/Pitch";
+import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
 import { getStandardGuitarTuning } from "../../Utils/StringedInstrumentTuning";
-import { ChordScaleFormula, ChordScaleFormulaPart } from '../../../ChordScaleFormula';
+import { ChordScaleFormula, ChordScaleFormulaPart } from '../../../lib/TheoryLib/ChordScaleFormula';
 import { GuitarScaleViewer } from '../../Utils/GuitarScaleViewer';
 import { renderDistinctFlashCardSideAnswerSelect } from '../Utils';
+import { arrayContains, toggleArrayElement } from '../../../lib/Core/ArrayUtils';
+import { unwrapValueOrUndefined } from '../../../lib/Core/Utils';
 
 const flashCardSetId = "guitarScalesOrderedNotes";
 
@@ -33,7 +34,7 @@ export function configDataToEnabledFlashCardIds(
   const newEnabledFlashCardIds = new Array<FlashCardId>();
 
   forEachScaleType((scaleType, i) => {
-    if (Utils.arrayContains(configData.enabledScaleTypes, scaleType)) {
+    if (arrayContains(configData.enabledScaleTypes, scaleType)) {
       newEnabledFlashCardIds.push(flashCards[i].id);
     }
   });
@@ -85,7 +86,7 @@ export class GuitarScalesFlashCardMultiSelect extends React.Component<IGuitarSca
   
   private toggleScaleEnabled(scaleType: ScaleType) {
     const configData = this.props.studySessionInfo.configData as IConfigData;
-    const newEnabledScaleTypes = Utils.toggleArrayElement(
+    const newEnabledScaleTypes = toggleArrayElement(
       configData.enabledScaleTypes,
       scaleType
     );
@@ -129,7 +130,7 @@ export function createFlashCardSet(title?: string, initialScaleTypes?: Array<Sca
       ? ScaleType.All
         .filter((_, scaleIndex) => scaleIndex <= 7)
       : initialScaleTypes
-        .map(scaleType => Utils.unwrapValueOrUndefined(ScaleType.All.find(st => st.equals(scaleType))))
+        .map(scaleType => unwrapValueOrUndefined(ScaleType.All.find(st => st.equals(scaleType))))
   });
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = renderDistinctFlashCardSideAnswerSelect;
@@ -141,7 +142,7 @@ export function createFlashCardSet(title?: string, initialScaleTypes?: Array<Sca
         flashCards
           .filter(fc => {
             const scaleType = fc.backSide.data as ScaleType;
-            return Utils.arrayContains(level.scaleTypes, scaleType);
+            return arrayContains(level.scaleTypes, scaleType);
           })
           .map(fc => fc.id),
         (curConfigData: IConfigData) => ({

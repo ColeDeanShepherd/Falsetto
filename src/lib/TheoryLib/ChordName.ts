@@ -1,8 +1,8 @@
-import * as Utils from "./Utils";
 import { ChordQuality, chordQualityToString } from './ChordQuality';
 import { ChordType } from './Chord';
 import { Pitch } from './Pitch';
 import { getAllModePitchIntegers } from './Scale';
+import { precondition } from '../Core/Dbc';
 
 export class ChordName {
   public constructor(
@@ -29,7 +29,7 @@ export class ChordName {
 }
 
 export function generateChordNames(pitches: Array<Pitch>): Array<[Pitch, string]> {
-  Utils.precondition(pitches.length > 0);
+  precondition(pitches.length > 0);
   
   const sortedPitches = pitches
     .slice()

@@ -4,7 +4,7 @@ import { DependencyInjector } from '../DependencyInjector';
 import { ActionBus, ActionHandler } from '../ActionBus';
 import { IAction } from '../IAction';
 import { NavigateAction } from './Actions';
-import { IDisposable } from '../IDisposable';
+import { IDisposable } from '../lib/Core/IDisposable';
 import { IAnalytics } from '../Analytics';
 
 export class AppState {}

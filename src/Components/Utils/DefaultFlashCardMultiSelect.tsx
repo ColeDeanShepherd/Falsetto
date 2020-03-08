@@ -5,8 +5,9 @@ import {
 
 import { FlashCard, FlashCardId } from "../../FlashCard";
 import { renderFlashCardSide } from "../FlashCard";
-import * as Utils from "../../Utils";
-import { Size2D } from '../../Size2D';
+import * as Utils from "../../lib/Core/Utils";
+import { Size2D } from '../../lib/Core/Size2D';
+import { toggleArrayElement } from '../../lib/Core/ArrayUtils';
 
 export interface IDefaultFlashCardMultiSelectProps {
   flashCards: FlashCard[];
@@ -53,7 +54,7 @@ export class DefaultFlashCardMultiSelect extends React.Component<IDefaultFlashCa
   private toggleFlashCardEnabled(flashCardId: string) {
     if (!this.props.onChange) { return; }
 
-    const newEnabledFlashCardIds = Utils.toggleArrayElement(
+    const newEnabledFlashCardIds = toggleArrayElement(
       this.props.selectedFlashCardIds,
       flashCardId
     );

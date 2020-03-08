@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Button } from "@material-ui/core";
 
-import * as Utils from "../../../Utils";
 import {
   GuitarFretboard
 } from "../../Utils/GuitarFretboard";
@@ -9,12 +8,14 @@ import { StringedInstrumentMetrics } from "../../Utils/StringedInstrumentFingerb
 import { standard6StringGuitarTuning, StringedInstrumentTuning } from "../../Utils/StringedInstrumentTuning";
 import { FlashCard, FlashCardSide, FlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
-import { StringedInstrumentNote, getStringedInstrumentNotes } from '../../../StringedInstrumentNote';
+import { StringedInstrumentNote, getStringedInstrumentNotes } from '../../../lib/TheoryLib/StringedInstrumentNote';
 import { playPitches } from '../../../Guitar';
-import { Pitch } from '../../../Pitch';
-import { Vector2D } from '../../../Vector2D';
+import { Pitch } from '../../../lib/TheoryLib/Pitch';
+import { Vector2D } from '../../../lib/Core/Vector2D';
 import { AnswerDifficulty } from '../../../AnswerDifficulty';
 import { IConfigData, forEachNote, StringedInstrumentNotesFlashCardMultiSelect } from "../../Utils/StringedInstrumentNotes";
+import { range } from '../../../lib/Core/MathUtils';
+import { flattenArrays } from '../../../lib/Core/ArrayUtils';
 
 const flashCardSetId = "guitarPerfectPitchTrainer";
 const guitarTuning = standard6StringGuitarTuning;
@@ -110,13 +111,13 @@ export class GuitarNoteAnswerSelect extends React.Component<IGuitarNoteAnswerSel
   }
 
   private renderExtras(metrics: StringedInstrumentMetrics): JSX.Element {
-    const stringIndices = Utils.range(0, metrics.stringCount - 1);
-    const fretNumbers = Utils.range(metrics.minFretNumber, metrics.minFretNumber + metrics.fretCount);
+    const stringIndices = range(0, metrics.stringCount - 1);
+    const fretNumbers = range(metrics.minFretNumber, metrics.minFretNumber + metrics.fretCount);
     
     const buttonRadius = 0.9 * metrics.fretDotRadius;
     const buttonStyle: any = { cursor: "pointer" };
 
-    const buttons = Utils.flattenArrays(
+    const buttons = flattenArrays(
       stringIndices.map(stringIndex =>
         fretNumbers.map(fretNumber => {
           if (fretNumber > (this.props.args.configData as IConfigData).maxFret) {
@@ -199,8 +200,8 @@ function createFlashCardSet(guitarNotes?: Array<StringedInstrumentNote>): FlashC
 export function createFlashCards(notes?: Array<StringedInstrumentNote>): FlashCard[] {
   const guitarStyle = { width: "100%", maxWidth: "400px" };
   notes = !notes
-    ? Utils.flattenArrays(Utils.range(0, guitarTuning.stringCount - 1)
-    .map(stringIndex => Utils.range(0, MAX_MAX_FRET_NUMBER)
+    ? flattenArrays(range(0, guitarTuning.stringCount - 1)
+    .map(stringIndex => range(0, MAX_MAX_FRET_NUMBER)
       .map(fretNumber => {
         return guitarTuning.getNote(
           stringIndex, fretNumber

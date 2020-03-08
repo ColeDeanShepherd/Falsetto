@@ -1,11 +1,13 @@
 import * as React from "react";
 import { TextField } from "@material-ui/core";
 
-import * as Utils from "../../Utils";
+import * as Utils from "../../lib/Core/Utils";
 import { FlashCardId, FlashCard, FlashCardSide } from "../../FlashCard";
 import { FlashCardStudySessionInfo, FlashCardSet } from "../../FlashCardSet";
 import { StringedInstrumentTuning } from './StringedInstrumentTuning';
-import { StringedInstrumentNote } from '../../StringedInstrumentNote';
+import { StringedInstrumentNote } from '../../lib/TheoryLib/StringedInstrumentNote';
+import { flattenArrays } from '../../lib/Core/ArrayUtils';
+import { clamp, range } from '../../lib/Core/MathUtils';
 
 export interface IConfigData {
   maxFret: number
@@ -99,7 +101,7 @@ export class StringedInstrumentNotesFlashCardMultiSelect extends React.Component
     const maxFret = parseInt(newValue, 10);
     if (isNaN(maxFret)) { return; }
 
-    const clampedMaxFret = Utils.clamp(maxFret, 0, this.props.maxMaxFretNumber);
+    const clampedMaxFret = clamp(maxFret, 0, this.props.maxMaxFretNumber);
 
     const newConfigData: IConfigData = {
       maxFret: clampedMaxFret
@@ -132,8 +134,8 @@ export function createFlashCards(
   notes?: Array<StringedInstrumentNote>
 ): FlashCard[] {
   notes = !notes
-    ? Utils.flattenArrays(Utils.range(0, tuning.stringCount - 1)
-    .map(stringIndex => Utils.range(0, maxMaxFretNumber)
+    ? flattenArrays(range(0, tuning.stringCount - 1)
+    .map(stringIndex => range(0, maxMaxFretNumber)
       .map(fretNumber => {
         return tuning.getNote(
           stringIndex, fretNumber

@@ -1,8 +1,9 @@
-import * as Utils from "../../../Utils";
+import * as Utils from "../../../lib/Core/Utils";
 import * as FlashCardUtils from "../Utils";
 import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardLevel, } from "../../../FlashCardSet";
-import { ChordType, chordTypeLevels } from '../../../Chord';
+import { ChordType, chordTypeLevels } from '../../../lib/TheoryLib/Chord';
+import { arrayContains } from '../../../lib/Core/ArrayUtils';
 
 const flashCardSetId = "chordFormulasRelativeToMajorScale";
 
@@ -25,7 +26,7 @@ function createFlashCardSet(): FlashCardSet {
         new FlashCardLevel(
           ctl.name,
           flashCards
-            .filter(fc => Utils.arrayContains(ctl.chordTypes, fc.backSide.data as ChordType))
+            .filter(fc => arrayContains(ctl.chordTypes, fc.backSide.data as ChordType))
             .map(fc => fc.id),
           (curConfigData: any) => null
         )

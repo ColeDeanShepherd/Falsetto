@@ -1,4 +1,4 @@
-import * as Utils from "./Utils";
+import { arrayContains } from "./lib/Core/ArrayUtils";
 import { FlashCardId } from './FlashCard';
 import { UserId } from './UserProfile';
 import { apiBaseUri } from './Config';
@@ -42,7 +42,7 @@ export class InMemoryDatabase implements IDatabase {
     let result = this.flashCardAnswers;
 
     if (flashCardIds !== null) {
-      result = result.filter(fca => Utils.arrayContains(flashCardIds, fca.flashCardId));
+      result = result.filter(fca => arrayContains(flashCardIds, fca.flashCardId));
     }
 
     if (userId !== null) {

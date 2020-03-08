@@ -1,8 +1,8 @@
 import * as React from "react";
 import { Card, CardContent, Typography, Button, CircularProgress } from "@material-ui/core";
 
-import * as Utils from "../../Utils";
 import * as Audio from "../../Audio";
+import { unwrapMaybe } from '../../lib/Core/Utils';
 
 var clickAudioPath = "/audio/metronome_click.wav";
 
@@ -188,7 +188,7 @@ export class Metronome extends React.Component<IMetronomeProps, IMetronomeState>
     }
   }
   private playAfterSoundsLoaded() {
-    Utils.unwrapMaybe(this.clickSound).play();
+    unwrapMaybe(this.clickSound).play();
     this.resetClickInterval(this.state.bpm);
 
     this.setState({ isPlaying: true, isLoadingSounds: false });
@@ -205,7 +205,7 @@ export class Metronome extends React.Component<IMetronomeProps, IMetronomeState>
       window.clearInterval(this.clickIntervalId);
     }
 
-    this.clickIntervalId = window.setInterval(() => Utils.unwrapMaybe(this.clickSound).play(), getBeatIntervalMs(bpm));
+    this.clickIntervalId = window.setInterval(() => unwrapMaybe(this.clickSound).play(), getBeatIntervalMs(bpm));
   }
 
   private startTappingTempo() {

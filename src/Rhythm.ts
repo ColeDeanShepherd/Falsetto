@@ -1,6 +1,7 @@
-import * as Utils from "./Utils";
-import { Rational } from "./Rational";
-import { TimeSignature } from "./TimeSignature";
+import * as Utils from "./lib/Core/Utils";
+import { Rational } from "./lib/Core/Rational";
+import { TimeSignature } from "./lib/TheoryLib/TimeSignature";
+import { wrapReal } from './lib/Core/MathUtils';
 
 export interface IRhythmNote {
   duration: Rational;
@@ -146,7 +147,7 @@ export class RhythmPlayer {
     let playTimeInSeconds = (performanceNow - Utils.unwrapMaybe(this.timeStartedPlaying)) / 1000;
 
     if (this.shouldLoop && (playTimeInSeconds > this.getMeasureDurationInSeconds())) {
-      playTimeInSeconds = Utils.wrapReal(
+      playTimeInSeconds = wrapReal(
         playTimeInSeconds, 0, this.getMeasureDurationInSeconds()
       );
     }

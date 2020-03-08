@@ -1,9 +1,9 @@
 import * as React from "react";
 import { Card, CardContent } from '@material-ui/core';
 import { KnowledgeMap } from './KnowledgeMap';
-import { Rect2D } from '../Rect2D';
-import { Size2D } from '../Size2D';
-import { Vector2D } from '../Vector2D';
+import { Rect2D } from '../lib/Core/Rect2D';
+import { Size2D } from '../lib/Core/Size2D';
+import { Vector2D } from '../lib/Core/Vector2D';
 
 export class KnowledgeMapPage extends React.Component<{}, {}> {
   public render(): JSX.Element {

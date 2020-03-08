@@ -1,10 +1,10 @@
-import * as Utils from "./Utils";
+import { precondition } from './Dbc';
 
 export class NumberRange {
   public constructor(
     public minValue: number,
     public maxValue: number
   ) {
-    Utils.precondition(minValue <= maxValue);
+    precondition(minValue <= maxValue);
   }
 }

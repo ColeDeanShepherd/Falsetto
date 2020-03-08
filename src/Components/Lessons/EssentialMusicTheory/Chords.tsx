@@ -13,7 +13,7 @@ import { ChordViewer } from "../../Tools/ChordViewer";
 import { DiatonicChordPlayer } from '../../Tools/DiatonicChordPlayer';
 import { ChordAudioPlayer } from "../../Utils/ChordAudioPlayer";
 import { SectionProps, Term, SectionTitle, SubSectionTitle, NoteText, defaultRootPitch } from './EssentialMusicTheory';
-import { Chord, ChordType, ChordTypeGroup } from '../../../Chord';
+import { Chord, ChordType, ChordTypeGroup } from '../../../lib/TheoryLib/Chord';
 import { NavLinkView } from '../../../NavLinkView';
 
 export const ChordsSection: React.FunctionComponent<SectionProps> = props => (

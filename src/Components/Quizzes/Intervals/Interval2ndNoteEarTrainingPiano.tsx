@@ -1,12 +1,12 @@
 import * as React from "react";
 
-import * as Utils from "../../../Utils";
-import { Vector2D } from '../../../Vector2D';
-import { Size2D } from "../../../Size2D";
-import { Rect2D } from '../../../Rect2D';
+import * as Utils from "../../../lib/Core/Utils";
+import { Vector2D } from '../../../lib/Core/Vector2D';
+import { Size2D } from "../../../lib/Core/Size2D";
+import { Rect2D } from '../../../lib/Core/Rect2D';
 import { FlashCard, FlashCardSide, FlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
-import { Pitch } from "../../../Pitch";
+import { Pitch } from "../../../lib/TheoryLib/Pitch";
 import { playPitchesSequentially } from "../../../Piano";
 import {
   intervals,
@@ -14,9 +14,10 @@ import {
 } from "../../Utils/IntervalEarTrainingFlashCardMultiSelect";
 import { Button, TableRow, TableCell, Checkbox, Table, TableHead, TableBody, Grid } from "@material-ui/core";
 import { PianoKeyboard } from "../../Utils/PianoKeyboard";
-import { PitchLetter } from "../../../PitchLetter";
+import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
 import { PianoKeysAnswerSelect } from "../../Utils/PianoKeysAnswerSelect";
-import { createIntervalLevels } from '../../../Interval';
+import { createIntervalLevels } from '../../../lib/TheoryLib/Interval';
+import { arrayContains, toggleArrayElement } from '../../../lib/Core/ArrayUtils';
 
 const flashCardSetId = "pianoNextNoteEarTraining";
 
@@ -69,7 +70,7 @@ export function configDataToEnabledFlashCardIds(
   const enabledFlashCardIds = new Array<string>();
   forEachInterval(rootNotes,
     (interval, direction, p1, p2, isHarmonicInterval, i) => {
-    if (Utils.arrayContains(configData.enabledIntervals, interval)) {
+    if (arrayContains(configData.enabledIntervals, interval)) {
       enabledFlashCardIds.push(flashCards[i].id);
     }
   }, includeHarmonicIntervals, minPitch, maxPitch);
@@ -166,7 +167,7 @@ export class FlashCardMultiSelect extends React.Component<IFlashCardMultiSelectP
 
   private toggleIntervalEnabled(interval: string) {
     const configData = this.props.studySessionInfo.configData as IConfigData;
-    const newEnabledIntervals = Utils.toggleArrayElement(
+    const newEnabledIntervals = toggleArrayElement(
       configData.enabledIntervals,
       interval
     );
@@ -274,7 +275,7 @@ function createFlashCardSet(): FlashCardSet {
         flashCards
           .filter(fc => {
             const intervalString = (fc.backSide.data as IFlashCardBackSideData).intervalString;
-            return Utils.arrayContains(level.intervalStrings, intervalString);
+            return arrayContains(level.intervalStrings, intervalString);
           })
           .map(fc => fc.id),
         (curConfigData: IConfigData) => (

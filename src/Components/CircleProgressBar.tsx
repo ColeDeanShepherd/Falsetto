@@ -1,6 +1,6 @@
 import * as React from "react";
-import { Vector2D } from '../Vector2D';
-import { TAU, polarToCartesian, PI } from '../Utils';
+import { Vector2D } from '../lib/Core/Vector2D';
+import { PI } from '../lib/Core/MathUtils';
 
 export interface ICircleProgressBarProps {
   width: number;

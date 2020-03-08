@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Checkbox, Button } from "@material-ui/core";
-
-import * as Utils from "../../Utils";
+import { setBitIndicesToInt } from '../../lib/Core/Utils';
+import { toggleArrayElement } from '../../lib/Core/ArrayUtils';
 
 export interface IAnswerCheckboxesProps {
   answers: string[];
@@ -28,7 +28,7 @@ export class AnswerCheckboxes extends React.Component<IAnswerCheckboxesProps, IA
         </span>
       );
     }, this);
-    const answerId = Utils.setBitIndicesToInt(this.state.checkedAnswerIndices);
+    const answerId = setBitIndicesToInt(this.state.checkedAnswerIndices);
 
     return (
       <div style={{lineHeight: 3}}>
@@ -39,7 +39,7 @@ export class AnswerCheckboxes extends React.Component<IAnswerCheckboxesProps, IA
   }
   
   private toggleAnswerChecked(answerIndex: number) {
-    const newCheckedAnswerIndices = Utils.toggleArrayElement(
+    const newCheckedAnswerIndices = toggleArrayElement(
       this.state.checkedAnswerIndices,
       answerIndex
     );

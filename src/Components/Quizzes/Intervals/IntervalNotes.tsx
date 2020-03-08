@@ -1,14 +1,15 @@
 import * as React from "react";
 
-import * as Utils from "../../../Utils";
+import * as Utils from "../../../lib/Core/Utils";
 import * as FlashCardUtils from "../Utils";
 import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
-import { Pitch } from "../../../Pitch";
-import { VerticalDirection } from "../../../VerticalDirection";
-import { Interval, createIntervalLevels } from "../../../Interval";
-import { getValidKeyPitches } from '../../../Key';
+import { Pitch } from "../../../lib/TheoryLib/Pitch";
+import { VerticalDirection } from "../../../lib/Core/VerticalDirection";
+import { Interval, createIntervalLevels, intervalQualityToNumber } from "../../../lib/TheoryLib/Interval";
+import { getValidKeyPitches } from '../../../lib/TheoryLib/Key';
 import { CheckboxColumnsFlashCardMultiSelect, CheckboxColumn, CheckboxColumnCell } from '../../Utils/CheckboxColumnsFlashCardMultiSelect';
+import { arrayContains } from '../../../lib/Core/ArrayUtils';
 
 const flashCardSetId = "notesToIntervals";
 const firstPitches = getValidKeyPitches(4);
@@ -54,9 +55,9 @@ export function configDataToEnabledFlashCardIds(
 
   forEachInterval((firstPitch, interval, direction, i) => {
     if (
-      Utils.arrayContains(configData.enabledFirstPitches, firstPitch) &&
-      Utils.arrayContains(configData.enabledIntervals, interval) &&
-      Utils.arrayContains(configData.enabledDirections, direction)
+      arrayContains(configData.enabledFirstPitches, firstPitch) &&
+      arrayContains(configData.enabledIntervals, interval) &&
+      arrayContains(configData.enabledDirections, direction)
     ) {
       flashCardIds.push(flashCards[i].id);
     }
@@ -138,7 +139,7 @@ export function createFlashCards(): Array<FlashCard> {
   
   forEachInterval((rootPitch, interval, direction, i) => {
     const intervalQuality = interval[0];
-    const intervalQualityNum = Utils.intervalQualityToNumber(intervalQuality);
+    const intervalQualityNum = intervalQualityToNumber(intervalQuality);
 
     const genericInterval = interval[1];
     const genericIntervalNum = parseInt(genericInterval, 10);
@@ -204,7 +205,7 @@ function createFlashCardSet(): FlashCardSet {
         flashCards
           .filter(fc => {
             const intervalString = fc.backSide.data as string;
-            return Utils.arrayContains(level.intervalStrings, intervalString);
+            return arrayContains(level.intervalStrings, intervalString);
           })
           .map(fc => fc.id),
         (curConfigData: IConfigData) => (

@@ -1,7 +1,7 @@
 import * as React from "react";
 
-import { Pitch } from '../../Pitch';
-import { Scale } from '../../Scale';
+import { Pitch } from '../../lib/TheoryLib/Pitch';
+import { Scale } from '../../lib/TheoryLib/Scale';
 import { PitchesAudioPlayer, PitchesAudioPlayerExports } from './PitchesAudioPlayer';
 
 export interface IScaleAudioPlayerProps {

@@ -1,18 +1,20 @@
 import * as React from "react";
 
-import * as Utils from "../../../Utils";
-import { Vector2D } from '../../../Vector2D';
-import { Size2D } from "../../../Size2D";
-import { Rect2D } from '../../../Rect2D';
+import * as Utils from "../../../lib/Core/Utils";
+import { Vector2D } from '../../../lib/Core/Vector2D';
+import { Size2D } from "../../../lib/Core/Size2D";
+import { Rect2D } from '../../../lib/Core/Rect2D';
 import { PianoKeyboard } from "../../Utils/PianoKeyboard";
 import { FlashCard, FlashCardSide, FlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
 import { AnswerDifficulty } from "../../../AnswerDifficulty";
-import { Pitch, ambiguousKeyPitchStringsSymbols } from "../../../Pitch";
-import { PitchLetter } from "../../../PitchLetter";
+import { Pitch, ambiguousKeyPitchStringsSymbols } from "../../../lib/TheoryLib/Pitch";
+import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
 import { Button, Typography } from "@material-ui/core";
-import { Chord, ChordType, chordTypeLevels } from "../../../Chord";
+import { Chord, ChordType, chordTypeLevels } from "../../../lib/TheoryLib/Chord";
 import { CheckboxColumnsFlashCardMultiSelect, CheckboxColumn, CheckboxColumnCell } from '../../Utils/CheckboxColumnsFlashCardMultiSelect';
+import { arrayContains, flattenArrays } from '../../../lib/Core/ArrayUtils';
+import { mod } from '../../../lib/Core/MathUtils';
 
 const flashCardSetId = "pianoChords";
 
@@ -38,8 +40,8 @@ export function configDataToEnabledFlashCardIds(
 
   forEachChord((rootPitchStr, chordType, i) => {
     if (
-      Utils.arrayContains(configData.enabledRootPitches, rootPitchStr) &&
-      Utils.arrayContains(configData.enabledChordTypes, chordType.name)
+      arrayContains(configData.enabledRootPitches, rootPitchStr) &&
+      arrayContains(configData.enabledChordTypes, chordType.name)
     ) {
       newEnabledFlashCardIds.push(flashCards[i].id);
     }
@@ -137,7 +139,7 @@ export class PianoChordsAnswerSelect extends React.Component<IPianoChordsAnswerS
         <div style={{padding: "1em 0"}}>
           <div>
             {ambiguousKeyPitchStringsSymbols.slice(0, 6)
-              .filter(rp => Utils.arrayContains(this.props.enabledRootPitches, rp))
+              .filter(rp => arrayContains(this.props.enabledRootPitches, rp))
                 .map(rootPitchStr => {
                 const style: any = { textTransform: "none" };
                 
@@ -160,7 +162,7 @@ export class PianoChordsAnswerSelect extends React.Component<IPianoChordsAnswerS
           </div>
           <div>
             {ambiguousKeyPitchStringsSymbols.slice(6, 12)
-              .filter(rp => Utils.arrayContains(this.props.enabledRootPitches, rp))
+              .filter(rp => arrayContains(this.props.enabledRootPitches, rp))
               .map(rootPitchStr => {
                 const style: any = { textTransform: "none" };
                 
@@ -188,7 +190,7 @@ export class PianoChordsAnswerSelect extends React.Component<IPianoChordsAnswerS
         </Typography>
         <div style={{padding: "1em 0"}}>
           {ChordType.All
-            .filter(ct => Utils.arrayContains(this.props.enabledChordTypeNames, ct.name))
+            .filter(ct => arrayContains(this.props.enabledChordTypeNames, ct.name))
             .map(chord => {
               const style: any = { textTransform: "none" };
               
@@ -266,7 +268,7 @@ function createFlashCardSet(): FlashCardSet {
         new FlashCardLevel(
           ctl.name,
           flashCards
-            .filter(fc => Utils.arrayContains(ctl.chordTypes, (fc.backSide.data as Chord).type))
+            .filter(fc => arrayContains(ctl.chordTypes, (fc.backSide.data as Chord).type))
             .map(fc => fc.id),
           (curConfigData: IConfigData) => ({
             enabledRootPitches: ambiguousKeyPitchStringsSymbols.slice(),
@@ -280,10 +282,10 @@ function createFlashCardSet(): FlashCardSet {
 }
 export function createFlashCards(): FlashCard[] {
   const pianoStyle = { width: "400px", maxWidth: "100%" };
-  return Utils.flattenArrays<FlashCard>(
+  return flattenArrays<FlashCard>(
     ambiguousKeyPitchStringsSymbols.map((rootPitchStr, i) =>
       ChordType.All.map(chordType => {
-        const halfStepsFromC = Utils.mod(i - 3, 12);
+        const halfStepsFromC = mod(i - 3, 12);
         const rootPitch = Pitch.createFromMidiNumber((new Pitch(PitchLetter.C, 0, 4)).midiNumber + halfStepsFromC);
         const pitches = new Chord(chordType, rootPitch).getPitches();
         const deserializedId = {

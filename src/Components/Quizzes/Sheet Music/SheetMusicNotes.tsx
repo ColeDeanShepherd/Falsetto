@@ -2,14 +2,15 @@ import * as React from "react";
 import { Typography, Checkbox } from "@material-ui/core";
 import * as Vex from "vexflow";
 
-import * as Utils from "../../../Utils";
+import * as Utils from "../../../lib/Core/Utils";
 import * as FlashCardUtils from "../Utils";
 import { VexFlowComponent } from "../../Utils/VexFlowComponent";
-import { PitchLetter } from "../../../PitchLetter";
+import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
 import { FlashCard, FlashCardId } from "../../../FlashCard";
-import { Pitch } from "../../../Pitch";
+import { Pitch } from "../../../lib/TheoryLib/Pitch";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
-import { Size2D } from '../../../Size2D';
+import { Size2D } from '../../../lib/Core/Size2D';
+import { range } from '../../../lib/Core/MathUtils';
 
 const flashCardSetId = "sheetMusicNotes";
 
@@ -101,8 +102,8 @@ export function allPitchesMap<TResult>(mapFn: (clef: string, pitch: Pitch, index
 
   let i = 0;
   clefs.forEach(clef => {
-    Utils.range(0, 20).forEach(pitchLetterOffset => {
-      Utils.range(-1, 1).forEach(signedAccidental => {
+    range(0, 20).forEach(pitchLetterOffset => {
+      range(-1, 1).forEach(signedAccidental => {
         const pitch = Pitch.addPitchLetters(clef.bottomLinePitch, -6 + pitchLetterOffset);
         pitch.signedAccidental = signedAccidental;
         

@@ -1,8 +1,12 @@
-import * as Utils from "./Utils";
+import * as Utils from "../Core/Utils";
 import { Pitch } from './Pitch';
 import { ChordType } from './Chord';
 import { Interval } from './Interval';
 import { ChordScaleFormula } from './ChordScaleFormula';
+import { mod } from '../Core/MathUtils';
+import { precondition } from '../Core/Dbc';
+import { isNullOrWhiteSpace } from '../Core/StringUtils';
+import { flattenArrays, areArraysEqual } from '../Core/ArrayUtils';
 
 // TODO: remove helpers?
 export function getIntervalsFromFormula(formula: ChordScaleFormula): Array<Interval> {
@@ -10,7 +14,7 @@ export function getIntervalsFromFormula(formula: ChordScaleFormula): Array<Inter
     .map(p => new Interval(p.chordNoteNumber, p.signedAccidental));
 }
 export function getIntervalsFromFormulaString(formulaString: string): Array<Interval> {
-  Utils.precondition(!Utils.isNullOrWhiteSpace(formulaString));
+  precondition(!isNullOrWhiteSpace(formulaString));
 
   return ChordScaleFormula.parse(formulaString).parts
     .map(p => p.getIntervalFromRootNote());
@@ -19,7 +23,7 @@ export function getIntervalsFromFormulaString(formulaString: string): Array<Inte
 export function getModePitchIntegers(
   pitchIntegers: Array<number>, scaleDegree: number
 ): Array<number> {
-  Utils.precondition(scaleDegree >= 1);
+  precondition(scaleDegree >= 1);
 
   const halfStepsToSubtract = pitchIntegers[scaleDegree - 1];
   const modePitchIntegers = new Array<number>(pitchIntegers.length);
@@ -27,7 +31,7 @@ export function getModePitchIntegers(
     const unwrappedBaseScaleI = (scaleDegree - 1) + modeI;
     const baseScaleI = unwrappedBaseScaleI % pitchIntegers.length;
     
-    modePitchIntegers[modeI] = Utils.mod(pitchIntegers[baseScaleI] - halfStepsToSubtract, 12);
+    modePitchIntegers[modeI] = mod(pitchIntegers[baseScaleI] - halfStepsToSubtract, 12);
   }
 
   return modePitchIntegers;
@@ -38,7 +42,7 @@ export function getAllModePitchIntegers(pitchIntegers: Array<number>): Array<Arr
 }
 
 export function getSimpleScaleDegree(scaleDegree: number): number {
-  return 1 + Utils.mod((scaleDegree - 1), 7);
+  return 1 + mod((scaleDegree - 1), 7);
 }
 
 export class ScaleTypeGroup {
@@ -182,7 +186,7 @@ export class ScaleType {
       ]
     )
   ];
-  public static All = Utils.flattenArrays<ScaleType>(
+  public static All = flattenArrays<ScaleType>(
     ScaleType.Groups.map(st => st.scaleTypes)
   );
 
@@ -200,7 +204,7 @@ export class ScaleType {
   }
   
   public equals(other: ScaleType): boolean {
-    return Utils.areArraysEqual(this.pitchIntegers, other.pitchIntegers);
+    return areArraysEqual(this.pitchIntegers, other.pitchIntegers);
   }
   public getIntervals(): Array<Interval> {
     return this.formula.parts.map(p => p.getIntervalFromRootNote());
@@ -209,20 +213,20 @@ export class ScaleType {
     return this.formula.getPitches(rootPitch);
   }
   public getMode(scaleDegree: number): ScaleType {
-    Utils.precondition(scaleDegree >= 1);
-    Utils.precondition(scaleDegree <= this.numPitches);
+    precondition(scaleDegree >= 1);
+    precondition(scaleDegree <= this.numPitches);
 
     if (scaleDegree === 1) { return this; }
 
     const modePitchIntegers = getModePitchIntegers(this.pitchIntegers, scaleDegree);
-    const mode = ScaleType.All.find(scale => Utils.areArraysEqual(modePitchIntegers, scale.pitchIntegers));
+    const mode = ScaleType.All.find(scale => areArraysEqual(modePitchIntegers, scale.pitchIntegers));
     return Utils.unwrapValueOrUndefined(mode);
   }
   public getDiatonicChordType(scaleDegree: number, numChordPitches: number): ChordType {
-    Utils.precondition(scaleDegree >= 1);
-    Utils.precondition(scaleDegree <= this.numPitches);
-    Utils.precondition(numChordPitches >= 1);
-    Utils.precondition(numChordPitches <= this.numPitches);
+    precondition(scaleDegree >= 1);
+    precondition(scaleDegree <= this.numPitches);
+    precondition(numChordPitches >= 1);
+    precondition(numChordPitches <= this.numPitches);
 
     const halfStepsToSubtract = this.pitchIntegers[scaleDegree - 1];
     const chordPitchIntegers = new Array<number>(numChordPitches);
@@ -230,15 +234,15 @@ export class ScaleType {
       const unwrappedScaleI = (scaleDegree - 1) + (2 * chordI);
       const baseScaleI = unwrappedScaleI % this.numPitches;
       
-      chordPitchIntegers[chordI] = Utils.mod(this.pitchIntegers[baseScaleI] - halfStepsToSubtract, 12);
+      chordPitchIntegers[chordI] = mod(this.pitchIntegers[baseScaleI] - halfStepsToSubtract, 12);
     }
 
-    const chordType = ChordType.All.find(chordType => Utils.areArraysEqual(chordPitchIntegers, chordType.pitchIntegers));
+    const chordType = ChordType.All.find(chordType => areArraysEqual(chordPitchIntegers, chordType.pitchIntegers));
     return Utils.unwrapValueOrUndefined(chordType);
   }
   public getDiatonicChordTypes(numChordPitches: number): Array<ChordType> {
-    Utils.precondition(numChordPitches >= 1);
-    Utils.precondition(numChordPitches <= this.numPitches);
+    precondition(numChordPitches >= 1);
+    precondition(numChordPitches <= this.numPitches);
 
     return this.pitchIntegers
       .map((_, i) => this.getDiatonicChordType(1 + i, numChordPitches));

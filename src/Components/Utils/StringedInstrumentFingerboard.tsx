@@ -1,21 +1,22 @@
 import * as React from "react";
 
-import * as Utils from "../../Utils";
-import { Vector2D } from '../../Vector2D';
-import { StringedInstrumentNote } from '../../StringedInstrumentNote';
+import { Vector2D } from '../../lib/Core/Vector2D';
+import { StringedInstrumentNote } from '../../lib/TheoryLib/StringedInstrumentNote';
 import { StringedInstrumentTuning } from './StringedInstrumentTuning';
-import { Interval } from '../../Interval';
-import { VerticalDirection } from '../../VerticalDirection';
-import { Pitch } from '../../Pitch';
+import { Interval } from '../../lib/TheoryLib/Interval';
+import { VerticalDirection } from '../../lib/Core/VerticalDirection';
+import { Pitch } from '../../lib/TheoryLib/Pitch';
+import { precondition } from '../../lib/Core/Dbc';
+import { range } from '../../lib/Core/MathUtils';
 
 export function getIntervalDeltaFretNumber(
   interval: Interval, direction: VerticalDirection, stringIndex: number,
   deltaStringIndex: number, tuning: StringedInstrumentTuning
 ): number {
-  Utils.precondition(stringIndex >= 0);
-  Utils.precondition(stringIndex < tuning.stringCount);
-  Utils.precondition((stringIndex + deltaStringIndex) >= 0);
-  Utils.precondition((stringIndex + deltaStringIndex) < tuning.stringCount);
+  precondition(stringIndex >= 0);
+  precondition(stringIndex < tuning.stringCount);
+  precondition((stringIndex + deltaStringIndex) >= 0);
+  precondition((stringIndex + deltaStringIndex) < tuning.stringCount);
 
   const signedHalfSteps = (direction === VerticalDirection.Up)
     ? interval.halfSteps
@@ -33,8 +34,8 @@ export function getIntervalDeltaFretNumber(
 }
 
 export function get1stStringedInstrumentNoteOnString(pitch: Pitch, stringIndex: number, tuning: StringedInstrumentTuning): StringedInstrumentNote {
-  Utils.precondition(stringIndex >= 0);
-  Utils.precondition(stringIndex < tuning.stringCount);
+  precondition(stringIndex >= 0);
+  precondition(stringIndex < tuning.stringCount);
 
   const openStringPitch = tuning.openStringPitches[stringIndex];
 
@@ -55,7 +56,7 @@ export class StringedInstrumentMetrics {
     public fretCount: number = StringedInstrumentFingerboard.DEFAULT_FRET_COUNT,
     public stringCount: number = 6
   ) {
-    Utils.precondition((fretCount >= 1) && (fretCount <= 24))
+    precondition((fretCount >= 1) && (fretCount <= 24))
     
     this.nutWidth = (minFretNumber === 0) ? 8 :  4;
 
@@ -161,7 +162,7 @@ export class StringedInstrumentFingerboard extends React.Component<IStringedInst
     />;
 
     const stringColor = "#dad2cb";
-    const strings = Utils.range(0, metrics.stringCount - 1)
+    const strings = range(0, metrics.stringCount - 1)
       .map(i => {
         const y = metrics.getStringY(i);
         return <line
@@ -174,7 +175,7 @@ export class StringedInstrumentFingerboard extends React.Component<IStringedInst
 
     const fretColor = "#bebeba";
     const frets = this.props.hasFrets ? (
-      Utils.range(1, metrics.fretCount)
+      range(1, metrics.fretCount)
         .map(i => {
           const x = metrics.stringsLeft + (i * metrics.fretSpacing);
           return <line
@@ -246,8 +247,8 @@ export class StringedInstrumentFingerboard extends React.Component<IStringedInst
 
     const noteCircleLineColor = "gray";
     const noteCircles = !this.props.hasFrets ? (
-      Utils.range(0, 3)
-        .map(stringIndex => Utils.range(0, metrics.fretCount)
+      range(0, 3)
+        .map(stringIndex => range(0, metrics.fretCount)
           .map(fretNumber => {
             const position = new Vector2D(
               metrics.getNoteX(fretNumber),

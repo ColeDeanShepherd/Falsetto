@@ -1,15 +1,17 @@
-import * as Utils from "../../Utils";
+import * as Utils from "../../lib/Core/Utils";
 import { FlashCard, FlashCardId } from "../../FlashCard";
 import { StudyAlgorithm, LeitnerStudyAlgorithm } from "../../StudyAlgorithm";
 import { AnswerDifficulty, answerDifficultyToPercentCorrect, isAnswerDifficultyCorrect } from "../../AnswerDifficulty";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from '../../FlashCardSet';
 import { IDatabase, FlashCardAnswer } from '../../Database';
 import { IUserManager } from '../../UserManager';
-import { Size2D } from '../../Size2D';
+import { Size2D } from '../../lib/Core/Size2D';
 import { DependencyInjector } from '../../DependencyInjector';
 import { IAnalytics } from '../../Analytics';
 import { FlashCardSetStats } from '../../FlashCardSetStats';
 import { FlashCardStats } from '../../FlashCardStats';
+import { arrayCountPassing, arrayContains, sum, removeElement, uniq, areArraysEqual } from '../../lib/Core/ArrayUtils';
+import { assert } from '../../lib/Core/Dbc';
 
 export function getFlashCardSetStatsFromAnswers(
   flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, answers: Array<FlashCardAnswer>
@@ -17,10 +19,10 @@ export function getFlashCardSetStatsFromAnswers(
   const minPctCorrect = answerDifficultyToPercentCorrect(AnswerDifficulty.Easy);
   const flashCardStats = flashCards
     .map(fc => {
-      const numCorrectGuesses = Utils.arrayCountPassing(
+      const numCorrectGuesses = arrayCountPassing(
         answers, a => (a.flashCardId === fc.id) && (a.percentCorrect >= minPctCorrect)
       );
-      const numIncorrectGuesses = Utils.arrayCountPassing(
+      const numIncorrectGuesses = arrayCountPassing(
         answers, a => (a.flashCardId === fc.id) && (a.percentCorrect < minPctCorrect)
       );
       return new FlashCardStats(fc.id, numCorrectGuesses, numIncorrectGuesses);
@@ -55,9 +57,9 @@ export function getCurrentFlashCardLevel(
 }
 export function getPercentToNextLevel(currentFlashCardLevel: FlashCardLevel, flashCardSetStats: FlashCardSetStats): number {
   const percentCorrects = flashCardSetStats.flashCardStats
-    .filter(qs => Utils.arrayContains(currentFlashCardLevel.flashCardIds, qs.flashCardId))
+    .filter(qs => arrayContains(currentFlashCardLevel.flashCardIds, qs.flashCardId))
     .map(qs => qs.percentCorrect);
-  return Utils.sum(percentCorrects, p => Math.min(p, MIN_PCT_CORRECT_FLASH_CARD_LEVEL) / percentCorrects.length) / MIN_PCT_CORRECT_FLASH_CARD_LEVEL;
+  return sum(percentCorrects, p => Math.min(p, MIN_PCT_CORRECT_FLASH_CARD_LEVEL) / percentCorrects.length) / MIN_PCT_CORRECT_FLASH_CARD_LEVEL;
 }
 
 // TODO: don't use global actions for specific flash card set actions
@@ -142,7 +144,7 @@ export class StudyFlashCardsModel {
       this.configData &&
       !this.flashCardSet.configDataToEnabledFlashCardIds
     ) {
-      Utils.assert(false);
+      assert(false);
     }
 
     this.enabledFlashCardIds = this.studyAlgorithm.enabledFlashCardIds;
@@ -156,7 +158,7 @@ export class StudyFlashCardsModel {
     this.updateHandlers.push(updateHandler);
   }
   public unsubscribeFromUpdates(updateHandler: () => void) {
-    Utils.removeElement(this.updateHandlers, updateHandler);
+    removeElement(this.updateHandlers, updateHandler);
   }
 
   private publishUpdate() {
@@ -227,7 +229,7 @@ export class StudyFlashCardsModel {
       this.moveToNextFlashCardInternal(answer, !this.haveGottenCurrentFlashCardWrong);
     } else {
       this.haveGottenCurrentFlashCardWrong = true;
-      this.incorrectAnswers = Utils.uniq(this.incorrectAnswers.concat(answer));
+      this.incorrectAnswers = uniq(this.incorrectAnswers.concat(answer));
 
       this.publishUpdate();
     }
@@ -307,7 +309,7 @@ export class StudyFlashCardsModel {
     this.enabledFlashCardIds = enabledFlashCardIds;
     this.configData = configData;
 
-    if (!Utils.arrayContains(enabledFlashCardIds, this.currentFlashCardId)) {
+    if (!arrayContains(enabledFlashCardIds, this.currentFlashCardId)) {
       this.moveToNextFlashCardInternal(null, false);
     }
 
@@ -327,7 +329,7 @@ export class StudyFlashCardsModel {
     }
 
     const result = this.flashCardLevels
-      .findIndex(level => Utils.areArraysEqual(this.enabledFlashCardIds, level.flashCardIds));
+      .findIndex(level => areArraysEqual(this.enabledFlashCardIds, level.flashCardIds));
     return (result >= 0)
       ? result
       : undefined;

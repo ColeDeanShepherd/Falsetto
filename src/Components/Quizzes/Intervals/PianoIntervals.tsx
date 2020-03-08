@@ -1,17 +1,18 @@
 import * as React from "react";
 import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody } from "@material-ui/core";
 
-import * as Utils from "../../../Utils";
-import { Vector2D } from '../../../Vector2D';
-import { Size2D } from "../../../Size2D";
-import { Rect2D } from '../../../Rect2D';
+import * as Utils from "../../../lib/Core/Utils";
+import { Vector2D } from '../../../lib/Core/Vector2D';
+import { Size2D } from "../../../lib/Core/Size2D";
+import { Rect2D } from '../../../lib/Core/Rect2D';
 import * as FlashCardUtils from "../Utils";
 import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
-import { Pitch } from "../../../Pitch";
-import { PitchLetter } from "../../../PitchLetter";
+import { Pitch } from "../../../lib/TheoryLib/Pitch";
+import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
 import { PianoKeyboard } from "../../Utils/PianoKeyboard";
-import { createIntervalLevels } from '../../../Interval';
+import { createIntervalLevels } from '../../../lib/TheoryLib/Interval';
+import { arrayContains, toggleArrayElement } from '../../../lib/Core/ArrayUtils';
 
 const minPitch = new Pitch(PitchLetter.C, 0, 4);
 const maxPitch = new Pitch(PitchLetter.B, 0, 5);
@@ -47,7 +48,7 @@ export function configDataToEnabledFlashCardIds(
 
   forEachInterval((pitches, intervalString) => {
     if (
-      Utils.arrayContains(configData.enabledIntervals, intervalString) &&
+      arrayContains(configData.enabledIntervals, intervalString) &&
       (configData.allowAccidentals || pitches.every(p => p.isNatural))
     ) {
       newEnabledFlashCardIds.push(flashCards[i].id);
@@ -111,7 +112,7 @@ export class IntervalsFlashCardMultiSelect extends React.Component<IIntervalsFla
 
   private toggleIntervalEnabled(interval: string) {
     const configData = this.props.studySessionInfo.configData as IConfigData;
-    const newEnabledIntervals = Utils.toggleArrayElement(
+    const newEnabledIntervals = toggleArrayElement(
       configData.enabledIntervals,
       interval
     );
@@ -247,7 +248,7 @@ function createFlashCardSet(): FlashCardSet {
         flashCards
           .filter(fc => {
             const intervalString = fc.backSide.data as string;
-            return Utils.arrayContains(level.intervalStrings, intervalString);
+            return arrayContains(level.intervalStrings, intervalString);
           })
           .map(fc => fc.id),
         (curConfigData: IConfigData) => (

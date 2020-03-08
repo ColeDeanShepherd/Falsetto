@@ -1,12 +1,13 @@
 import * as React from "react";
 import { Button } from "@material-ui/core";
 
-import * as Utils from "../../Utils";
+import * as Utils from "../../lib/Core/Utils";
 import { FlashCard, FlashCardSideRenderFn, FlashCardId } from "../../FlashCard";
 import { callFlashCardSideRenderFn } from "../../Components/FlashCard";
 import { AnswerDifficulty } from "../../AnswerDifficulty";
 import { FlashCardStudySessionInfo } from '../../FlashCardSet';
-import { Size2D } from '../../Size2D';
+import { Size2D } from '../../lib/Core/Size2D';
+import { arrayContains, uniq } from '../../lib/Core/ArrayUtils';
 
 export function renderNoteAnswerSelect(
   info: FlashCardStudySessionInfo
@@ -65,13 +66,13 @@ export class StringAnswerSelect extends React.Component<StringAnswerSelectProps,
     return (
       <div>
         {this.props.answers.map(a => {
-          const isIncorrectAnswer = Utils.arrayContains(this.state.incorrectAnswers, a);
+          const isIncorrectAnswer = arrayContains(this.state.incorrectAnswers, a);
 
           return (
             <Button
               key={a}
               variant="contained"
-              color={!Utils.arrayContains(this.state.incorrectAnswers, a) ? "default" : "secondary"}
+              color={!arrayContains(this.state.incorrectAnswers, a) ? "default" : "secondary"}
               onClick={_ => this.onAnswerClick(a)}
               className={((a === this.props.lastCorrectAnswer) && !isIncorrectAnswer) ? "background-green-to-initial" : ""}
               style={{ textTransform: "none" }}
@@ -103,7 +104,7 @@ export const AnswerButton: React.FunctionComponent<{
   onClick: () => void,
   disabled?: boolean
 }> = props => {
-  const isIncorrectAnswer = Utils.arrayContains(props.incorrectAnswers, props.answer);
+  const isIncorrectAnswer = arrayContains(props.incorrectAnswers, props.answer);
   
   return (
     <Button
@@ -135,7 +136,7 @@ export class FlashCardSideAnswerSelect extends React.Component<FlashCardSideAnsw
     return (
       <div>
         {this.props.answers.map((fcs, i) => {
-          const isIncorrectAnswer = Utils.arrayContains(this.props.incorrectAnswers, fcs);
+          const isIncorrectAnswer = arrayContains(this.props.incorrectAnswers, fcs);
 
           return (
             <Button
@@ -170,9 +171,9 @@ export function renderMultiRowDistinctFlashCardSideAnswerSelect(
   info: FlashCardStudySessionInfo,
   rowLengths: Array<number>
 ): JSX.Element {
-  const answers = Utils.uniq(
+  const answers = uniq(
     info.flashCards
-      .filter(fc => Utils.arrayContains(info.enabledFlashCardIds, fc.id))
+      .filter(fc => arrayContains(info.enabledFlashCardIds, fc.id))
       .map(fc => fc.backSide.renderFn)
   );
 
@@ -205,9 +206,9 @@ export function renderMultiRowDistinctFlashCardSideAnswerSelect(
 export function renderDistinctFlashCardSideAnswerSelect(
   info: FlashCardStudySessionInfo
 ): JSX.Element {
-  const distinctFlashCardSideRenderFns = Utils.uniq(
+  const distinctFlashCardSideRenderFns = uniq(
     info.flashCards
-      .filter(fc => Utils.arrayContains(info.enabledFlashCardIds, fc.id))
+      .filter(fc => arrayContains(info.enabledFlashCardIds, fc.id))
       .map(fc => fc.backSide.renderFn)
   );
 
