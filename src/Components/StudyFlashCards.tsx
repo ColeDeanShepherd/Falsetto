@@ -19,6 +19,7 @@ import App from './App';
 import { FlashCardStats } from '../FlashCardStats';
 import { Size2D } from '../Size2D';
 import { DependencyInjector } from '../DependencyInjector';
+import { getFlashCardSetStatsFromAnswers, getPercentToNextLevel } from './StudyFlashCards/Model';
 
 export async function getFlashCardSetStatsFromDatabase(
   database: IDatabase, userManager: IUserManager,
@@ -28,22 +29,6 @@ export async function getFlashCardSetStatsFromDatabase(
   const answers = await database.getAnswers(flashCardIds, /*userId*/null); // TODO:
 
   return getFlashCardSetStatsFromAnswers(flashCardSet, flashCards, answers);
-}
-export function getFlashCardSetStatsFromAnswers(
-  flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, answers: Array<FlashCardAnswer>
-): FlashCardSetStats {
-  const minPctCorrect = answerDifficultyToPercentCorrect(AnswerDifficulty.Easy);
-  const flashCardStats = flashCards
-    .map(fc => {
-      const numCorrectGuesses = Utils.arrayCountPassing(
-        answers, a => (a.flashCardId === fc.id) && (a.percentCorrect >= minPctCorrect)
-      );
-      const numIncorrectGuesses = Utils.arrayCountPassing(
-        answers, a => (a.flashCardId === fc.id) && (a.percentCorrect < minPctCorrect)
-      );
-      return new FlashCardStats(fc.id, numCorrectGuesses, numIncorrectGuesses);
-    });
-    return new FlashCardSetStats(flashCardSet.id, flashCardStats);
 }
 export function createStudyFlashCardSetComponent(
   flashCardSet: FlashCardSet, isEmbedded: boolean, hideMoreInfoUri: boolean,
@@ -72,30 +57,6 @@ export function createStudyFlashCardSetComponent(
 }
 
 export const MIN_PCT_CORRECT_FLASH_CARD_LEVEL = 0.85;
-
-export function getPercentToNextLevel(currentFlashCardLevel: FlashCardLevel, flashCardSetStats: FlashCardSetStats): number {
-  const percentCorrects = flashCardSetStats.flashCardStats
-    .filter(qs => Utils.arrayContains(currentFlashCardLevel.flashCardIds, qs.flashCardId))
-    .map(qs => qs.percentCorrect);
-  return Utils.sum(percentCorrects, p => Math.min(p, MIN_PCT_CORRECT_FLASH_CARD_LEVEL) / percentCorrects.length) / (MIN_PCT_CORRECT_FLASH_CARD_LEVEL - 0.001);
-}
-
-// IMPORTED FROM NEW CODE
-// TODO: handle properly
-export function getCurrentFlashCardLevel(
-  flashCardSet: FlashCardSet, flashCardLevels: Array<FlashCardLevel>, flashCardSetStats: FlashCardSetStats
-): [number, FlashCardLevel] {
-  for (let i = 0; i < flashCardLevels.length - 1; i++) {
-    const level = flashCardLevels[i];
-    const percentToNextLevel = getPercentToNextLevel(level, flashCardSetStats);
-    if (percentToNextLevel < MIN_PCT_CORRECT_FLASH_CARD_LEVEL) {
-      return [i, level];
-    }
-  }
-
-  const lastLevelIndex = flashCardLevels.length - 1;
-  return [lastLevelIndex, flashCardLevels[lastLevelIndex]];
-}
 
 export interface IStudyFlashCardsProps {
   database: IDatabase;
