@@ -60,12 +60,12 @@ export class NavBarView extends React.Component<INavBarViewProps, INavBarViewSta
               Support Us
             </NavLinkView>
             <a
-              href="https://docs.google.com/forms/d/e/1FAIpQLSfHT8tJTdmW_hCjxMPUf14wchM6GBPQAaq8PSMW05C01gBW4g/viewform"
+              href="https://github.com/ColeDeanShepherd/Falsetto-Client"
               target="_blank"
               className="menu-link"
               style={{ fontWeight: "normal" }}
             >
-              Contact
+              <img src="/github-logo.png" alt="GitHub" style={{display: "block", width: "32px", height: "32px", padding: "5px 0"}} />
             </a>
             <i onClick={event => this.toggleMenu()} className="cursor-pointer material-icons no-select">menu</i>
           </div>
