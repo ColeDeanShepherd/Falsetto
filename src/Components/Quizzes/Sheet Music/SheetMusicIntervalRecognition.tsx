@@ -5,7 +5,7 @@ import * as Utils from "../../../lib/Core/Utils";
 import * as FlashCardUtils from "../Utils";
 import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
-import { Pitch, pitchRange } from "../../../lib/TheoryLib/Pitch";
+import { Pitch, getAmbiguousPitchRange } from "../../../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
 import { SheetMusicChord } from "./SheetMusicChords";
 import { Size2D } from '../../../lib/Core/Size2D';
@@ -33,7 +33,7 @@ const allowedPitches = [
 ];
 const minPitch = new Pitch(PitchLetter.C, -1, 2);
 const maxPitch = new Pitch(PitchLetter.C, 1, 6);
-const firstPitches = pitchRange(minPitch, maxPitch, -1, 1)
+const firstPitches = getAmbiguousPitchRange(minPitch, maxPitch, -1, 1)
   .filter(pitch =>
     allowedPitches.some(allowedPitch =>
       (pitch.letter === allowedPitch.letter) &&

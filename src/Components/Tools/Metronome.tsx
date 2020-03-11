@@ -4,7 +4,7 @@ import { Card, CardContent, Typography, Button, CircularProgress } from "@materi
 import * as Audio from "../../Audio/Audio";
 import { unwrapMaybe } from '../../lib/Core/Utils';
 
-var clickAudioPath = "/audio/metronome_click.wav";
+const clickAudioPath = "/audio/metronome_click.wav";
 
 export function getBeatIntervalS(bpm: number): number {
   const bps = bpm / 60;

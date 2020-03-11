@@ -3,7 +3,7 @@ import * as React from "react";
 import * as FlashCardUtils from "../Utils";
 import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
-import { Pitch, pitchRange } from "../../../lib/TheoryLib/Pitch";
+import { Pitch, getAmbiguousPitchRange } from "../../../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
 import { SheetMusicChord } from "./SheetMusicChords";
 import { Chord, ChordType, chordTypeLevels } from "../../../lib/TheoryLib/Chord";
@@ -32,7 +32,7 @@ const allowedRootPitches = [
 ];
 const minPitch = new Pitch(PitchLetter.C, -1, 2);
 const maxPitch = new Pitch(PitchLetter.C, 1, 6);
-const rootPitches = pitchRange(minPitch, maxPitch, -1, 1)
+const rootPitches = getAmbiguousPitchRange(minPitch, maxPitch, -1, 1)
   .filter(pitch =>
     allowedRootPitches.some(allowedPitch =>
       (pitch.letter === allowedPitch.letter) &&

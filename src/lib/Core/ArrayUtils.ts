@@ -1,5 +1,21 @@
 import { precondition, assert } from './Dbc';
 
+export function any<T>(arr: T[]): boolean {
+  return arr.length > 0;
+}
+
+export function none<T>(arr: T[]): boolean {
+  return arr.length === 0;
+}
+
+export function first<T>(arr: T[]): T {
+  return arr[0];
+}
+
+export function last<T>(arr: T[]): T {
+  return arr[arr.length - 1];
+}
+
 // TODO: add tests
 export function areArraysEqual<T>(arr1: T[], arr2: T[]): boolean {
   if (arr1 === arr2) { return true; }

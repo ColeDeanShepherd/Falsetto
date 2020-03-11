@@ -2,7 +2,6 @@ import { Size2D } from './lib/Core/Size2D';
 
 export type FlashCardId = string;
 
-// TODO: add non-unique friendly name
 export class FlashCard {
   public static fromRenderFns(
     id: FlashCardId,

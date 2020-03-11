@@ -4,7 +4,22 @@ import { Interval } from "./Interval";
 import { precondition } from '../Core/Dbc';
 import { mod } from '../Core/MathUtils';
 
-export function pitchRange(
+export function getPitchRange(minPitch: Pitch, maxPitch: Pitch) {
+  const minMidiNumber = minPitch.midiNumber;
+  const maxMidiNumber = maxPitch.midiNumber;
+
+  precondition(minMidiNumber <= maxMidiNumber);
+
+  let pitches = new Array<Pitch>();
+
+  for (let midiNumber = minMidiNumber; midiNumber <= maxMidiNumber; midiNumber++) {
+    pitches.push(Pitch.createFromMidiNumber(midiNumber));
+  }
+
+  return pitches;
+}
+
+export function getAmbiguousPitchRange(
   minPitch: Pitch, maxPitch: Pitch,
   minSignedAccidental: number, maxSignedAccidental: number
 ): Array<Pitch> {

@@ -133,7 +133,7 @@ function initFlashCardSetGraph() {
 initFlashCardSetGraph();
 
 export function checkFlashCardSetIds() {
-  var flashCardSetIds: StringDictionary<boolean> = {};
+  const flashCardSetIds: StringDictionary<boolean> = {};
 
   for (const set of flashCardSets) {
     if (flashCardSetIds[set.id] === undefined) {
@@ -144,7 +144,7 @@ export function checkFlashCardSetIds() {
   }
 }
 export function checkFlashCardIds() {
-  var flashCardIds: StringDictionary<boolean> = {};
+  const flashCardIds: StringDictionary<boolean> = {};
 
   for (const set of flashCardSets) {
     const flashCards = set.createFlashCards();

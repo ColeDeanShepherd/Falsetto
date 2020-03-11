@@ -4,7 +4,6 @@ import { NavigateAction } from './App/Actions';
 
 export interface INavLinkViewProps {
   to: string;
-  activeClassName?: string; // TODO: implement
   style?: any;
 }
 export class NavLinkView extends React.Component<INavLinkViewProps, {}> {
