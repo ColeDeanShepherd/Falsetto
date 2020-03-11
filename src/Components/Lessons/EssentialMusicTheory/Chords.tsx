@@ -24,7 +24,7 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
     <p><Term>Chords</Term> are groups of three or more notes played simultaneously. Chords make up <Term>harmony</Term> in music &mdash; the sounds or feelings that result from multiple notes being played simultaneously. <Term>Harmony</Term> is the third and final fundamental element of music we will study, now that we have explored the first two: <Term>rhythm</Term> and <Term>melody</Term>.</p>
 
     <SubSectionTitle>Triads</SubSectionTitle>
-    <p>The simplest class of chords are the <Term>triads</Term>. <Term>Traids</Term> are chords made of exactly three notes.</p>
+    <p>The simplest class of chords are the <Term>triads</Term>. <Term>Triad</Term> are chords made of exactly three notes.</p>
     <p>All chords have a root note, and the vast majority of chords are built with thirds (m3 and M3 intervals). Triads are no exception. To build a basic triad, we pick a root note, use a m3 or M3 to get to the 2nd note, and use another m3 or M3 (adding up to a 5th) to get to the 3rd note. Because there are 4 possible combinations of major and minor 3rds, there are 4 basic types of triads:</p>
 
     <Table>
