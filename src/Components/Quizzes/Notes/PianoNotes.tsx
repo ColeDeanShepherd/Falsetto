@@ -3,30 +3,46 @@ import * as React from "react";
 import { Vector2D } from '../../../lib/Core/Vector2D';
 import { Size2D } from "../../../lib/Core/Size2D";
 import { Rect2D } from '../../../lib/Core/Rect2D';
-import * as FlashCardUtils from "../Utils";
 import { PianoKeyboard } from "../../Utils/PianoKeyboard";
 import { FlashCard, FlashCardSide } from "../../../FlashCard";
-import { FlashCardSet, FlashCardLevel } from "../../../FlashCardSet";
+import { FlashCardSet, FlashCardLevel, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { Pitch, getPitchRange } from "../../../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
+import { PianoKeysAnswerSelect } from '../../Utils/PianoKeysAnswerSelect';
 
 const flashCardSetId = "pianoNotes1Octave";
 
-const minPitch = new Pitch(PitchLetter.C, 0, 4);
-const maxPitch = new Pitch(PitchLetter.B, 0, 4);
-const pitches = getPitchRange(minPitch, maxPitch);
+const lowestPitch = new Pitch(PitchLetter.C, 0, 4);
+const highestPitch = new Pitch(PitchLetter.B, 0, 4);
+const pitches = getPitchRange(lowestPitch, highestPitch);
+
+const pianoKeyboardRect = new Rect2D(new Size2D(200, 100), new Vector2D(0, 0));
+const pianoStyle = { width: "100%", maxWidth: "200px" };
+
+function renderAnswerSelect(
+  info: FlashCardStudySessionInfo
+) {
+  const key = info.flashCards.indexOf(info.currentFlashCard);
+  const correctAnswer = [(info.currentFlashCard.frontSide.data as Pitch)];
+  
+  return <PianoKeysAnswerSelect
+    key={key} size={pianoKeyboardRect.size} lowestPitch={lowestPitch} highestPitch={highestPitch}
+    correctAnswer={correctAnswer}
+    onAnswer={info.onAnswer} maxNumPitches={1} lastCorrectAnswer={info.lastCorrectAnswer}
+    incorrectAnswers={info.incorrectAnswers} instantConfirm={true} />;
+}
 
 function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Piano Notes", createFlashCards);
   flashCardSet.containerHeight = "120px";
   flashCardSet.moreInfoUri = "/essential-music-theory/notes";
-  flashCardSet.renderAnswerSelect = FlashCardUtils.renderNoteAnswerSelect;
+  flashCardSet.renderAnswerSelect = renderAnswerSelect;
   flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (
     [
       new FlashCardLevel(
         "Natural Notes",
         flashCards
-          .filter(fc => (fc.backSide.data as Pitch).isNatural)
+          .filter(fc => (fc.frontSide.data as Pitch).isNatural)
           .map(fc => fc.id),
         (curConfigData: any) => null
       ),
@@ -42,9 +58,6 @@ function createFlashCardSet(): FlashCardSet {
 }
 
 function createFlashCards(): FlashCard[] {
-  const pianoKeyboardRect = new Rect2D(new Size2D(200, 100), new Vector2D(0, 0));
-  const pianoStyle = { width: "100%", maxWidth: "200px" };
-
   return pitches
     .map((pitch, i) => {
       const deserializedId = {
@@ -58,19 +71,19 @@ function createFlashCards(): FlashCard[] {
       return new FlashCard(
         id,
         new FlashCardSide(
+          pitchString,
+          pitch
+        ),
+        new FlashCardSide(
           () => (
             <PianoKeyboard
               rect={pianoKeyboardRect}
-              lowestPitch={minPitch}
-              highestPitch={maxPitch}
+              lowestPitch={lowestPitch}
+              highestPitch={highestPitch}
               pressedPitches={[pitch]}
               style={pianoStyle}
             />
           )
-        ),
-        new FlashCardSide(
-          pitchString,
-          pitch
         )
       );
     }

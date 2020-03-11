@@ -197,9 +197,10 @@ export function renderAnswerSelect(
   const size = new Size2D(400, 100);
   
   return <PianoKeysAnswerSelect
-    key={key} width={size.width} height={size.height} correctAnswer={correctAnswer}
+    key={key} size={size} lowestPitch={new Pitch(PitchLetter.C, 0, 4)} highestPitch={new Pitch(PitchLetter.B, 0, 5)}
+    correctAnswer={correctAnswer}
     onAnswer={info.onAnswer} maxNumPitches={1} lastCorrectAnswer={info.lastCorrectAnswer}
-    incorrectAnswers={info.incorrectAnswers} />;
+    incorrectAnswers={info.incorrectAnswers} instantConfirm={true} />;
 }
 
 export function createFlashCards(): Array<FlashCard> {

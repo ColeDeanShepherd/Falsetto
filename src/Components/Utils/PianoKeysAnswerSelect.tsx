@@ -4,24 +4,27 @@ import { Button } from "@material-ui/core";
 import { Pitch } from "../../lib/TheoryLib/Pitch";
 import { AnswerDifficulty } from "../../Study/AnswerDifficulty";
 import { PianoKeyboard } from "./PianoKeyboard";
-import { PitchLetter } from "../../lib/TheoryLib/PitchLetter";
 import { Rect2D } from '../../lib/Core/Rect2D';
 import { Size2D } from '../../lib/Core/Size2D';
 import { Vector2D } from '../../lib/Core/Vector2D';
 import { toggleArrayElementCustomEquals, uniq } from '../../lib/Core/ArrayUtils';
 
 export interface IPianoKeysAnswerSelectProps {
-  width: number;
-  height: number;
+  size: Size2D;
+  lowestPitch: Pitch;
+  highestPitch: Pitch;
   correctAnswer: Array<Pitch>;
   maxNumPitches?: number;
   onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void;
   lastCorrectAnswer: any;
   incorrectAnswers: Array<any>;
+  instantConfirm: boolean;
 }
+
 export interface IPianoKeysAnswerSelectState {
   selectedPitches: Array<Pitch>;
 }
+
 export class PianoKeysAnswerSelect extends React.Component<IPianoKeysAnswerSelectProps, IPianoKeysAnswerSelectState> {
   public constructor(props: IPianoKeysAnswerSelectProps) {
     super(props);
@@ -30,19 +33,13 @@ export class PianoKeysAnswerSelect extends React.Component<IPianoKeysAnswerSelec
       selectedPitches: []
     };
   }
+
   public render(): JSX.Element {
     // TODO: use lastCorrectAnswer
-    return (
-      <div>
-        <PianoKeyboard
-          rect={new Rect2D(new Size2D(this.props.width, this.props.height), new Vector2D(0, 0))}
-          lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-          highestPitch={new Pitch(PitchLetter.B, 0, 5)}
-          pressedPitches={this.state.selectedPitches}
-          onKeyPress={pitch => this.onPitchClick(pitch)}
-          style={{ width: "100%", maxWidth: `${this.props.width}px` }}
-        />
-        
+    const { size, lowestPitch, highestPitch, instantConfirm } = this.props;
+
+    const confirmAnswerButton = !instantConfirm
+      ? (
         <div style={{padding: "1em 0"}}>
           <Button
             onClick={event => this.confirmAnswer()}
@@ -52,6 +49,20 @@ export class PianoKeysAnswerSelect extends React.Component<IPianoKeysAnswerSelec
             Confirm Answer
           </Button>
         </div>
+      )
+      : null;
+
+    return (
+      <div>
+        <PianoKeyboard
+          rect={new Rect2D(size, new Vector2D(0, 0))}
+          lowestPitch={lowestPitch}
+          highestPitch={highestPitch}
+          pressedPitches={this.state.selectedPitches}
+          onKeyPress={pitch => this.onPitchClick(pitch)}
+          style={{ width: "100%", maxWidth: `${size.width}px` }}
+        />
+        {confirmAnswerButton}
       </div>
     );
   }
@@ -67,8 +78,13 @@ export class PianoKeysAnswerSelect extends React.Component<IPianoKeysAnswerSelec
       newSelectedPitches = newSelectedPitches.slice(1);
     }
     
-    this.setState({ selectedPitches: newSelectedPitches });
+    this.setState({ selectedPitches: newSelectedPitches }, () => {
+      if (this.props.instantConfirm) {
+        this.confirmAnswer();
+      }
+    });
   }
+
   private confirmAnswer() {
     const selectedPitchMidiNumbersNoOctave = uniq(
       this.state.selectedPitches
