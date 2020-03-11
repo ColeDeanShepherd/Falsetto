@@ -134,11 +134,12 @@ export class StudyFlashCardsModel {
     
     this.configData = this.getInitialConfigData();
     this.enabledFlashCardIds = this.getInitialEnabledFlashCardIds();
-    this.currentFlashCardId = this.studyAlgorithm.getNextFlashCardId();
     
     if (this.enabledFlashCardIds) {
       this.studyAlgorithm.enabledFlashCardIds = this.enabledFlashCardIds;
     }
+    
+    this.currentFlashCardId = this.studyAlgorithm.getNextFlashCardId();
     
     if (
       this.configData &&

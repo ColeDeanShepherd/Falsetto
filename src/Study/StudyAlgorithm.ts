@@ -45,7 +45,6 @@ export abstract class StudyAlgorithm {
     }
   }
   public getNextFlashCardId(studySessionInfo?: FlashCardStudySessionInfo): FlashCardId {
-    // TODO: fix this shit
     const enabledFlashCardIds = (this.customNextFlashCardIdFilter && studySessionInfo)
       ? this.customNextFlashCardIdFilter(studySessionInfo)
       : this.enabledFlashCardIds;
