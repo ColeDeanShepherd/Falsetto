@@ -1,17 +1,17 @@
-import * as Utils from "../../lib/Core/Utils";
-import { FlashCard, FlashCardId } from "../../FlashCard";
-import { StudyAlgorithm, LeitnerStudyAlgorithm } from "../../Study/StudyAlgorithm";
-import { AnswerDifficulty, answerDifficultyToPercentCorrect, isAnswerDifficultyCorrect } from "../../Study/AnswerDifficulty";
-import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from '../../FlashCardSet';
-import { IDatabase, FlashCardAnswer } from '../../Database';
-import { IUserManager } from '../../UserManager';
-import { Size2D } from '../../lib/Core/Size2D';
-import { DependencyInjector } from '../../DependencyInjector';
-import { IAnalytics } from '../../Analytics';
-import { FlashCardSetStats } from '../../Study/FlashCardSetStats';
-import { FlashCardStats } from '../../Study/FlashCardStats';
-import { arrayCountPassing, arrayContains, sum, removeElement, uniq, areArraysEqual } from '../../lib/Core/ArrayUtils';
-import { assert } from '../../lib/Core/Dbc';
+import * as Utils from "../lib/Core/Utils";
+import { FlashCard, FlashCardId } from "../FlashCard";
+import { StudyAlgorithm, LeitnerStudyAlgorithm } from "../Study/StudyAlgorithm";
+import { AnswerDifficulty, answerDifficultyToPercentCorrect, isAnswerDifficultyCorrect } from "../Study/AnswerDifficulty";
+import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../FlashCardSet";
+import { IDatabase, FlashCardAnswer } from "../Database";
+import { IUserManager } from "../UserManager";
+import { Size2D } from "../lib/Core/Size2D";
+import { DependencyInjector } from "../DependencyInjector";
+import { IAnalytics } from "../Analytics";
+import { FlashCardSetStats } from "../Study/FlashCardSetStats";
+import { FlashCardStats } from "../Study/FlashCardStats";
+import { arrayCountPassing, arrayContains, sum, removeElement, uniq, areArraysEqual } from "../lib/Core/ArrayUtils";
+import { assert } from "../lib/Core/Dbc";
 
 export function getFlashCardSetStatsFromAnswers(
   flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, answers: Array<FlashCardAnswer>
@@ -62,7 +62,7 @@ export function getPercentToNextLevel(currentFlashCardLevel: FlashCardLevel, fla
   return sum(percentCorrects, p => Math.min(p, MIN_PCT_CORRECT_FLASH_CARD_LEVEL) / percentCorrects.length) / MIN_PCT_CORRECT_FLASH_CARD_LEVEL;
 }
 
-// TODO: don't use global actions for specific flash card set actions
+// TODO: don"t use global actions for specific flash card set actions
 // TODO: make study algorithm stateless? (leitner algorithm is stateful)
 export class StudyFlashCardsModel {
   private userManager: IUserManager;
@@ -114,7 +114,7 @@ export class StudyFlashCardsModel {
     this.studyAlgorithm.customNextFlashCardIdFilter = this.flashCardSet.customNextFlashCardIdFilter;
 
     this.flashCardLevels = this.flashCardSet.createFlashCardLevels
-      ? this.flashCardSet.createFlashCardLevels(this.flashCardSet, this.flashCards) // TODO: don't pass in these args?
+      ? this.flashCardSet.createFlashCardLevels(this.flashCardSet, this.flashCards) // TODO: don"t pass in these args?
       : [];
     
     // actually initialized in static create method
@@ -194,7 +194,7 @@ export class StudyFlashCardsModel {
       ? this.flashCardSet.getInitialConfigData()
       : null; // TODO: get rid of this conditional. make every set define the function & a config data type
     return this.hasFlashCardLevels
-      ? this.flashCardLevels[0].createConfigData(setInitialConfigData) // TODO: don't pass this argument?
+      ? this.flashCardLevels[0].createConfigData(setInitialConfigData) // TODO: don"t pass this argument?
       : setInitialConfigData;
   }
   private getInitialEnabledFlashCardIds(): Array<FlashCardId> {

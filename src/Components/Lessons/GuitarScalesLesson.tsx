@@ -15,7 +15,7 @@ import { MAX_MAIN_CARD_WIDTH } from '../Style';
 import { ScaleType, Scale } from '../../lib/TheoryLib/Scale';
 import { NoteText } from './EssentialMusicTheory/EssentialMusicTheory';
 import { ScaleAudioPlayer } from '../Utils/ScaleAudioPlayer';
-import { createStudyFlashCardSetComponent } from '../StudyFlashCards/View';
+import { createStudyFlashCardSetComponent } from '../../StudyFlashCards/View';
 import * as GuitarScales from "../Quizzes/Scales/GuitarScales";
 import { ScaleViewer } from '../Tools/ScaleViewer';
 import { StringedInstrumentNote } from '../../lib/TheoryLib/StringedInstrumentNote';

@@ -14,7 +14,7 @@ import { DependencyInjector } from '../DependencyInjector';
 import { IUserManager } from '../UserManager';
 import { ActionBus } from '../ActionBus';
 import { NavigateAction } from '../App/Actions';
-import { getFlashCardSetStatsFromAnswers, getPercentToNextLevel, getCurrentFlashCardLevel } from './StudyFlashCards/Model';
+import { getFlashCardSetStatsFromAnswers, getPercentToNextLevel, getCurrentFlashCardLevel } from '../StudyFlashCards/Model';
 import { mean } from '../lib/Core/ArrayUtils';
 
 class FlashCardSetWithAnswers {

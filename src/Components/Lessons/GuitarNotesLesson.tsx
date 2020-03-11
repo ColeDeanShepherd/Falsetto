@@ -12,7 +12,7 @@ import { standard6StringGuitarTuning } from "../Utils/StringedInstrumentTuning"
 import * as GuitarNotes from "../Quizzes/Notes/GuitarNotes";
 import { Pitch } from '../../lib/TheoryLib/Pitch';
 import { PitchLetter } from '../../lib/TheoryLib/PitchLetter';
-import { createStudyFlashCardSetComponent } from '../StudyFlashCards/View';
+import { createStudyFlashCardSetComponent } from '../../StudyFlashCards/View';
 import { MAX_MAIN_CARD_WIDTH } from '../Style';
 import { StringedInstrumentNote } from '../../lib/TheoryLib/StringedInstrumentNote';
 import { NavLinkView } from '../../NavLinkView';

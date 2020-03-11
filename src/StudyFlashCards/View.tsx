@@ -3,16 +3,16 @@ import {
   Button, Card, CardContent, Typography, Paper
 } from "@material-ui/core";
 
-import { areArraysEqual } from "../../lib/Core/ArrayUtils";
-import { FlashCard, FlashCardId } from "../../FlashCard";
-import { renderFlashCardSide } from "../FlashCard";
-import { DefaultFlashCardMultiSelect } from "../Utils/DefaultFlashCardMultiSelect";
-import { FlashCardSet } from '../../FlashCardSet';
-import { MAX_MAIN_CARD_WIDTH } from '../Style';
-import { Size2D } from '../../lib/Core/Size2D';
-import { NavLinkView } from '../../NavLinkView';
+import { areArraysEqual } from "../lib/Core/ArrayUtils";
+import { FlashCard, FlashCardId } from "../FlashCard";
+import { renderFlashCardSide } from "../Components/FlashCard";
+import { DefaultFlashCardMultiSelect } from "../Components/Utils/DefaultFlashCardMultiSelect";
+import { FlashCardSet } from '../FlashCardSet';
+import { MAX_MAIN_CARD_WIDTH } from '../Components/Style';
+import { Size2D } from '../lib/Core/Size2D';
+import { NavLinkView } from '../NavLinkView';
 import { StudyFlashCardsModel, getPercentToNextLevel } from './Model';
-import { unwrapValueOrUndefined } from '../../lib/Core/Utils';
+import { unwrapValueOrUndefined } from '../lib/Core/Utils';
 
 export function createStudyFlashCardSetComponent(
   flashCardSet: FlashCardSet, isEmbedded: boolean, hideMoreInfoUri: boolean,

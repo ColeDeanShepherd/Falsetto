@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Table, TableHead, TableBody, TableRow, TableCell } from "@material-ui/core";
 
-import { createStudyFlashCardSetComponent } from '../../StudyFlashCards/View';
+import { createStudyFlashCardSetComponent } from '../../../StudyFlashCards/View';
 
 import * as PianoChords from "../../Quizzes/Chords/PianoChords";
 

@@ -5,7 +5,7 @@ import { Table, TableHead, TableBody, TableRow, TableCell } from "@material-ui/c
 import { YouTubeVideo } from "../../Utils/YouTubeVideo";
 import { TimeSignature } from "../../../lib/TheoryLib/TimeSignature";
 
-import { createStudyFlashCardSetComponent } from '../../StudyFlashCards/View';
+import { createStudyFlashCardSetComponent } from '../../../StudyFlashCards/View';
 
 import { Metronome } from "../../Tools/Metronome";
 

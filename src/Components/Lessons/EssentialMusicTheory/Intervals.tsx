@@ -8,7 +8,7 @@ import { PianoKeyboard, PianoKeyboardMetrics } from "../../Utils/PianoKeyboard";
 import { Pitch } from '../../../lib/TheoryLib/Pitch';
 import { PitchLetter } from '../../../lib/TheoryLib/PitchLetter';
 
-import { createStudyFlashCardSetComponent } from '../../StudyFlashCards/View';
+import { createStudyFlashCardSetComponent } from '../../../StudyFlashCards/View';
 
 import intervalQualityChart from "../../../img/interval-qualities.svg";
 
