@@ -9,6 +9,8 @@ import { noteDurationToVexFlowStr } from '../../VexFlowUtils';
 import { TimeSignature } from '../../lib/TheoryLib/TimeSignature';
 import { Size2D } from '../../lib/Core/Size2D';
 import { randomElement, randomBoolean } from '../../lib/Core/Random';
+import { ILogger } from '../../Logger';
+import { DependencyInjector } from '../../DependencyInjector';
 
 const canvasSize = new Size2D(800, 100);
 
@@ -54,6 +56,8 @@ export class RhythmTapper extends React.Component<IRhythmTapperProps, IRhythmTap
       isPlaying: false,
       timeStartedPlaying: 0
     };
+
+    this.logger = DependencyInjector.instance.getRequiredService<ILogger>("ILogger");
 
     this.rhythmPlayer = new RhythmPlayer(
       new TimeSignature(4, 4),
@@ -127,6 +131,7 @@ export class RhythmTapper extends React.Component<IRhythmTapperProps, IRhythmTap
     }
   }
 
+  private logger: ILogger;
   private rhythmPlayer: RhythmPlayer;
 
   private get playTimeInSeconds(): number {
@@ -192,7 +197,7 @@ export class RhythmTapper extends React.Component<IRhythmTapperProps, IRhythmTap
     // need to find current (if hasn"t been tapped) & next note times
     // need to find closer tap time? (maybe with threshold for next note)
     // thresholds might be dependent on note duration
-    console.log("tap");
+    this.logger.logInfo("tap");
   }
 
   private playUpdate() {

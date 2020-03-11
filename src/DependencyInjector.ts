@@ -4,12 +4,15 @@ import { UserManager } from './UserManager';
 import { InMemoryDatabase } from './Database';
 import { Analytics, MockAnalytics } from './Analytics';
 import { isProduction } from "./Config";
+import { ConsoleLogger } from './Logger';
 
 export class DependencyInjector {
   public static instance = new DependencyInjector();
 
   public getRequiredService<T>(serviceName: string): T {
     switch (serviceName) {
+      case "ILogger":
+        return this.logger as any;
       case "History":
         return this.history as any;
       case "IUserManager":
@@ -23,6 +26,7 @@ export class DependencyInjector {
     }
   }
 
+  private logger = new ConsoleLogger();
   private history = createBrowserHistory();
   private userManager = new UserManager();
   private database = new InMemoryDatabase(); // new TwoTierDatabase();

@@ -1,21 +1,27 @@
 import { IAction } from "./IAction";
 import { isProduction } from './Config';
 import { removeElement } from "./lib/Core/ArrayUtils";
+import { ILogger, ConsoleLogger } from './Logger';
+import { DependencyInjector } from './DependencyInjector';
 
 export type ActionHandler = (action: IAction) => void;
 
 export class ActionBus {
   public static get instance(): ActionBus {
     if (!ActionBus._instance) {
-      ActionBus._instance = new ActionBus();
+      ActionBus._instance = new ActionBus(
+        DependencyInjector.instance.getRequiredService<ILogger>("ILogger")
+      );
     }
 
     return ActionBus._instance;
   }
   private static _instance: ActionBus;
 
-  private static isProduction = isProduction(); // TODO: use dependency injection for logging
+  private static isProduction = isProduction();
 
+  public constructor(private logger: ILogger) {
+  }
   public subscribe(actionHandler: ActionHandler) {
     this.actionHandlers.push(actionHandler);
   }
@@ -25,7 +31,7 @@ export class ActionBus {
 
   public dispatch(action: IAction) {
     if (!ActionBus.isProduction) {
-      console.log("Action:", action.getId(), action); // TODO: use dependency injection for logging
+      this.logger.logInfo("Action:", action.getId(), action);
     }
 
     for (const actionHandler of this.actionHandlers) {
