@@ -258,7 +258,7 @@ export const ChordProgressionsSection: React.FunctionComponent<SectionProps> = p
     <NoteText>Though the 5th is not an important chord tone in most chords, it <strong>is</strong> important if it is altered in some way &mdash; for example, the #5 in an augmented triad, or the b5 in a diminished triad.</NoteText>
 
     <SectionTitle>Voice Leading</SectionTitle>
-    <p>The last fundamental concept you must know to understand and compose effective chord progressions is <Term>voice leading</Term>, which is the arrangement of the notes in chords (called "voices") to create smooth, flowing transitions between chords. Good voice leading can make just about any set of chords work together in a chord progression.</p>
+    <p>The last fundamental concept you must know to understand and compose effective chord progressions is <Term>voice leading</Term>, which is the arrangement of the notes in chord progressions (called "voices") to create smooth, flowing transitions between chords. Good voice leading can make just about any set of chords work together in a chord progression.</p>
     <p><strong>The most important rule of voice leading is to use the smallest possible movements when moving the voices of one chord to the next chord.</strong></p>
     <p>Take the V7 - I chord progression in C major (G7 - C) as an example. One way we can voice these chords is by playing both of them in root position, with the C chord below the G7 chord. These root position chords are an example of ineffective voice leading, because each voice in the G7 chord has to jump a long way to the corresponding voice in the C chord:</p>
 
