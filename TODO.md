@@ -39,6 +39,10 @@
       * Dynamics
       * Other markings
 * Base "Learn the notes on guitar in 10 steps" on the A minor scale for less steps in total. Redirect the URL.
+* Number & link to figures in lessons
+* Glossary
+  * Expand content
+  * Display synonyms
 ## Medium Priority
 * 
 ## Low Priority

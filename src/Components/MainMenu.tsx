@@ -137,6 +137,9 @@ export const MainMenu : React.FunctionComponent<{}> = props => (
           <NavLinkView to={GuitarChords.flashCardSet.route}>{GuitarChords.flashCardSet.name}</NavLinkView>
           <NavLinkView to={ChordEarTraining.flashCardSet.route}>{ChordEarTraining.flashCardSet.name}</NavLinkView>
         </MenuCategory>
+        <MenuCategory title="Other">
+          <NavLinkView to={"/glossary"}>Glossary</NavLinkView>
+        </MenuCategory>
       </div>
     </div>
   </div>
