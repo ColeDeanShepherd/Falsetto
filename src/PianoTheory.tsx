@@ -15,9 +15,37 @@ class SlideGroup {
   public constructor(public name: string, public slides: Array<Slide>) {}
 }
 
+class KeyBinding {
+  // key
+  // press/release/repeat actions
+}
+
 // TODO: dynamic width/height
+// TODO: quizzes
 const slideGroups = [
   new SlideGroup("Introduction", [
+    new Slide(() => <span>Introduction to format</span>),
+    new Slide(() => <span>This is a piano</span>),
+    new Slide(() => <span>There are 88 white &amp; black keys on a standard piano. Some pianos/keyboards are smaller.</span>),
+    new Slide(() => <span>These lessons will be on a subset of the full piano.</span>),
+
+    new Slide(() => <span>Each key on a piano plays a pitch. Defn. of pitch. Try clicking keys</span>),
+    new Slide(() => <span>Keys on the left produce lower pitches. Keys on the right produce higher pitches.</span>),
+    new Slide(() => <span>Each pitch has a specific name</span>),
+    new Slide(() => <span>Pitch names repeat</span>),
+    new Slide(() => <span>White key pitches &amp; names.</span>),
+    new Slide(() => <span>Black key pitches &amp; names.</span>),
+    new Slide(() => <span></span>),
+    new Slide(() => <span></span>),
+    new Slide(() => <span></span>),
+    new Slide(() => <span></span>),
+    new Slide(() => <span></span>),
+    new Slide(() => <span></span>),
+
+
+
+
+
     new Slide(() => (
       <PianoKeyboard
         rect={new Rect2D(new Size2D(300, 200), new Vector2D(0, 0))}
@@ -68,12 +96,17 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
     }
   }
 
+  // TODO: show slide group
   public render(): JSX.Element {
     const { slideIndex } = this.state;
+
+    const slideNumber = slideIndex + 1;
+    const numSlides = slides.length;
     const renderedSlide = slides[slideIndex].renderFn();
 
     return (
       <div style={{ width: "100%", height: "100vh" }}>
+        <div>{slideNumber} / {numSlides}</div>
         {renderedSlide}
       </div>
     );
