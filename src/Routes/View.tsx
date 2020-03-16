@@ -4,6 +4,7 @@ import DocumentTitle from "react-document-title";
 
 import { flashCardSets } from "../FlashCardGraph";
 
+import { PianoTheory } from "../PianoTheory";
 import {
   SectionContainer
 } from "../Components/Lessons/EssentialMusicTheory/EssentialMusicTheory";
@@ -54,6 +55,7 @@ export class RoutesView extends React.Component<IRoutesViewProps, IRoutesViewSta
         <Route key="/about" exact path="/about" component={() => <DocumentTitle title="About - Falsetto"><AboutPage /></DocumentTitle>} />,
         <Route key="/support-us" exact path="/support-us" component={() => <DocumentTitle title="Support Us - Falsetto"><SupportUsPage /></DocumentTitle>} />,
         <Route key="/knowledge-map" exact path="/knowledge-map" component={() => <DocumentTitle title="Knowledge Map - Falsetto"><KnowledgeMapPage /></DocumentTitle>} />,
+        <Route key="/piano-theory" exact path="/piano-theory" component={() => <DocumentTitle title="Piano Theory - Falsetto"><PianoTheory /></DocumentTitle>} />,
         <Route key="/essential-music-theory" exact path="/essential-music-theory" component={() => <DocumentTitle title="Essential Music Theory - Falsetto"><SectionContainer section={IntroSection}></SectionContainer></DocumentTitle>} />,
         <Route key="/essential-music-theory/rhythm" exact path="/essential-music-theory/rhythm" component={() => <DocumentTitle title="Rhythm - Essential Music Theory - Falsetto"><SectionContainer section={RhythmSection}></SectionContainer></DocumentTitle>} />,
         <Route key="/essential-music-theory/notes" exact path="/essential-music-theory/notes" component={() => <DocumentTitle title="Notes - Essential Music Theory - Falsetto"><SectionContainer section={NotesSection}></SectionContainer></DocumentTitle>} />,
