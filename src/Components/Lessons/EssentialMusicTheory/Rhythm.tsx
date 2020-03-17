@@ -55,8 +55,6 @@ export const RhythmSection: React.FunctionComponent<SectionProps> = props => (
     
     <Metronome hideTitle={true} />
 
-    <p>Most music is roughly 60 BPM to 180 BPM, and tempo is one of the defining characterstics of musical genres.</p>
-    
     <p style={{ textAlign: "center", textDecoration: "underline" }}>Slow Tempo</p>
     <YouTubeVideo videoId="SlTTgJau33Q" style={{ margin: "0 auto" }} />
 
