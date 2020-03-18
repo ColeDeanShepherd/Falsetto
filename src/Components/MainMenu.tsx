@@ -1,7 +1,7 @@
 /** This is the one with the ExpansionPanels. */
 import * as React from "react";
 
-import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
+//import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
@@ -73,7 +73,7 @@ export const MainMenu : React.FunctionComponent<{}> = props => (
             aria-controls="panel1a-content"
             id="panel1a-header"
             >
-            <Typography className={classes.heading}>Essential Music Theory Course</Typography>
+            <Typography>Essential Music Theory Course</Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <Typography>
@@ -95,7 +95,7 @@ export const MainMenu : React.FunctionComponent<{}> = props => (
             aria-controls="panel1a-content"
             id="panel1a-header"
             >
-            <Typography className={classes.heading}>Guitar Lessons</Typography>
+            <Typography>Guitar Lessons</Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <Typography>
@@ -111,7 +111,7 @@ export const MainMenu : React.FunctionComponent<{}> = props => (
           aria-controls="panel1a-content"
           id="panel1a-header"
           >
-            <Typography className={classes.heading}>Tools</Typography>
+            <Typography>Tools</Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <Typography>
@@ -133,7 +133,7 @@ export const MainMenu : React.FunctionComponent<{}> = props => (
           aria-controls="panel1a-content"
           id="panel1a-header"
           >
-            <Typography className={classes.heading}>Note Exercises</Typography>
+            <Typography>Note Exercises</Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <Typography>
@@ -153,7 +153,7 @@ export const MainMenu : React.FunctionComponent<{}> = props => (
           aria-controls="panel1a-content"
           id="panel1a-header"
           >
-            <Typography className={classes.heading}>Interval Exercises</Typography>
+            <Typography>Interval Exercises</Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <Typography>
@@ -179,7 +179,7 @@ export const MainMenu : React.FunctionComponent<{}> = props => (
           aria-controls="panel1a-content"
           id="panel1a-header"
           >
-            <Typography className={classes.heading}>Scale Exercises</Typography>
+            <Typography>Scale Exercises</Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <Typography>
@@ -201,7 +201,7 @@ export const MainMenu : React.FunctionComponent<{}> = props => (
           aria-controls="panel1a-content"
           id="panel1a-header"
           >
-            <Typography className={classes.heading}>Key Exercises</Typography>
+            <Typography>Key Exercises</Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <Typography>
@@ -218,7 +218,7 @@ export const MainMenu : React.FunctionComponent<{}> = props => (
           aria-controls="panel1a-content"
           id="panel1a-header"
           >
-            <Typography className={classes.heading}>Chord Exercises</Typography>
+            <Typography>Chord Exercises</Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <Typography>
@@ -241,7 +241,7 @@ export const MainMenu : React.FunctionComponent<{}> = props => (
           aria-controls="panel1a-content"
           id="panel1a-header"
           >
-            <Typography className={classes.heading}>Other</Typography>
+            <Typography>Other</Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <Typography>
