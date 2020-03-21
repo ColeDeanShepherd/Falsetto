@@ -17,6 +17,7 @@ export const NextStepsSection: React.FunctionComponent<SectionProps> = props => 
       <li><a href="https://www.youtube.com/user/havic5" target="_blank">Adam Neely's YouTube Channel</a></li>
       <li><a href="https://www.youtube.com/user/nimajqeb/videos" target="_blank">Ben Levin's YouTube Channel</a></li>
       <li><a href="https://www.youtube.com/user/MangoldProject" target="_blank">Manigold Project YouTube Channel</a></li>
+      <li><a href="https://www.youtube.com/user/the1564studios" target="_blank">Two Minute Music Theory</a></li>
       <li><a href="http://tobyrush.com/theorypages/index.html" target="_blank">Toby Rush's Music Theory Posters</a></li>
     </ul>
 
