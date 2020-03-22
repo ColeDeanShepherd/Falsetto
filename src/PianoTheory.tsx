@@ -7,8 +7,10 @@ import { Size2D } from './lib/Core/Size2D';
 import { Vector2D } from './lib/Core/Vector2D';
 import { Pitch } from './lib/TheoryLib/Pitch';
 import { PitchLetter } from './lib/TheoryLib/PitchLetter';
-import { playPitches, PianoAudio } from './Audio/PianoAudio';
+import { PianoAudio } from './Audio/PianoAudio';
 import { flattenArrays } from './lib/Core/ArrayUtils';
+
+const pianoAudio = new PianoAudio();
 
 // #region Helper Components
 
@@ -17,7 +19,8 @@ export const FullPiano: React.FunctionComponent<{}> = props => (
     rect={new Rect2D(new Size2D(400, 50), new Vector2D(0, 0))}
     lowestPitch={new Pitch(PitchLetter.A, 0, 0)}
     highestPitch={new Pitch(PitchLetter.C, 0, 8)}
-    onKeyPress={p => playPitches([p])}
+    onKeyPress={p => pianoAudio.pressKey(p, 1)}
+    onKeyRelease={p => pianoAudio.releaseKey(p)}
     style={{ width: "100%", maxWidth: "400px", height: "auto" }} />
 );
 
@@ -26,7 +29,8 @@ export const TwoOctavePiano: React.FunctionComponent<{}> = props => (
     rect={new Rect2D(new Size2D(300, 100), new Vector2D(0, 0))}
     lowestPitch={new Pitch(PitchLetter.C, 0, 3)}
     highestPitch={new Pitch(PitchLetter.B, 0, 4)}
-    onKeyPress={p => playPitches([p])}
+    onKeyPress={p => pianoAudio.pressKey(p, 1)}
+    onKeyRelease={p => pianoAudio.releaseKey(p)}
     style={{ width: "100%", maxWidth: "300px", height: "auto" }} />
 );
 
@@ -35,7 +39,8 @@ export const OneOctavePiano: React.FunctionComponent<{}> = props => (
     rect={new Rect2D(new Size2D(150, 100), new Vector2D(0, 0))}
     lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
     highestPitch={new Pitch(PitchLetter.B, 0, 4)}
-    onKeyPress={p => playPitches([p])}
+    onKeyPress={p => pianoAudio.pressKey(p, 1)}
+    onKeyRelease={p => pianoAudio.releaseKey(p)}
     style={{ width: "100%", maxWidth: "300px", height: "auto" }} />
 );
 
@@ -44,7 +49,8 @@ export const PianoNoteDiagram: React.FunctionComponent<{ pitch: Pitch }> = props
     rect={new Rect2D(new Size2D(150, 100), new Vector2D(0, 0))}
     lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
     highestPitch={new Pitch(PitchLetter.B, 0, 4)}
-    onKeyPress={p => playPitches([p])}
+    onKeyPress={p => pianoAudio.pressKey(p, 1)}
+    onKeyRelease={p => pianoAudio.releaseKey(p)}
     pressedPitches={[props.pitch]}
     style={{ width: "100%", maxWidth: "300px", height: "auto" }} />
 );
@@ -275,7 +281,8 @@ const slideGroups = [
         rect={new Rect2D(new Size2D(300, 200), new Vector2D(0, 0))}
         lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
         highestPitch={new Pitch(PitchLetter.B, 0, 4)}
-        onKeyPress={p => playPitches([p])}
+        onKeyPress={p => pianoAudio.pressKey(p, 1)}
+        onKeyRelease={p => pianoAudio.releaseKey(p)}
         style={{ width: "100%", maxWidth: "300px", height: "auto" }} />
     )),
     new Slide(() => <span>Slide 2</span>),
@@ -310,7 +317,7 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
   }
 
   public componentWillUnmount() {
-    this.pianoAudio.releaseAllKeys();
+    pianoAudio.releaseAllKeys();
     this.uninitializeMidi();
     this.unregisterKeyEventHandlers();
   }
@@ -360,7 +367,6 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
 
   // TODO: data-based bindings
   private onKeyDown(event: KeyboardEvent) {
-    console.log(event);
     if (event.type === "keydown") {
       // ArrowLeft
       if (event.keyCode === 37) {
@@ -377,8 +383,6 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
 
   // #endregion 
 
-  private pianoAudio: PianoAudio = new PianoAudio();
-
   // #region MIDI
 
   private midiInput: MidiInput | undefined = undefined;
@@ -392,19 +396,13 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
         if (WebMidi.inputs.length > 0) {
           this.midiInput = WebMidi.inputs[0];
 
-          console.log(this.midiInput);
-
           this.onNoteOn = event => {
             const pitch = Pitch.createFromMidiNumber(event.note.number);
-            console.log(pitch);
-
-            this.pianoAudio.pressKey(pitch, event.velocity);
+            pianoAudio.pressKey(pitch, event.velocity);
           };
           this.onNoteOff = event => {
             const pitch = Pitch.createFromMidiNumber(event.note.number);
-            console.log(pitch);
-            
-            this.pianoAudio.releaseKey(pitch);
+            pianoAudio.releaseKey(pitch);
           };
 
           this.midiInput.addListener("noteon", "all", this.onNoteOn);

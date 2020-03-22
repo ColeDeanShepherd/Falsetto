@@ -1,6 +1,5 @@
 import * as React from "react";
 
-import * as Utils from "../../lib/Core/Utils";
 import { getRectRoundedBottomPathDefString } from "../../lib/Core/SvgUtils";
 import { Pitch } from "../../lib/TheoryLib/Pitch";
 import { Rect2D } from '../../lib/Core/Rect2D';
@@ -200,6 +199,7 @@ export interface IPianoKeyboardProps {
   highestPitch: Pitch;
   pressedPitches?: Array<Pitch>;
   onKeyPress?: (keyPitch: Pitch) => void;
+  onKeyRelease?: (keyPitch: Pitch) => void;
   renderExtrasFn?: (metrics: PianoKeyboardMetrics) => JSX.Element;
   renderLayeredExtrasFn?: (metrics: PianoKeyboardMetrics) => { whiteKeyLayerExtras: JSX.Element, blackKeyLayerExtras: JSX.Element };
   margin?: Margin;
@@ -235,6 +235,12 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
                 event.preventDefault();
               }
             }}
+            onMouseUp={event => {
+              if (this.props.onKeyRelease) {
+                this.props.onKeyRelease(pitch);
+                event.preventDefault();
+              }
+            }}
           />
         );
       } else {
@@ -248,6 +254,12 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
             onMouseDown={event => {
               if (this.props.onKeyPress) {
                 this.props.onKeyPress(pitch);
+                event.preventDefault();
+              }
+            }}
+            onMouseUp={event => {
+              if (this.props.onKeyRelease) {
+                this.props.onKeyRelease(pitch);
                 event.preventDefault();
               }
             }}
@@ -278,6 +290,7 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
               r={noteDotRadius}
               fill="red" strokeWidth="0" className="cursor-pointer"
               onMouseDown={event => this.props.onKeyPress ? this.props.onKeyPress(pressedPitch) : null}
+              onMouseUp={event => this.props.onKeyRelease ? this.props.onKeyRelease(pressedPitch) : null}
             />;
           })
       : null;
