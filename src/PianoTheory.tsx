@@ -8,6 +8,8 @@ import { PitchLetter } from './lib/TheoryLib/PitchLetter';
 import { playPitches } from './Audio/PianoAudio';
 import { flattenArrays } from './lib/Core/ArrayUtils';
 
+// #region Helper Components
+
 export const FullPiano: React.FunctionComponent<{}> = props => (
   <PianoKeyboard
     rect={new Rect2D(new Size2D(400, 50), new Vector2D(0, 0))}
@@ -45,18 +47,22 @@ export const PianoNoteDiagram: React.FunctionComponent<{ pitch: Pitch }> = props
     style={{ width: "100%", maxWidth: "300px", height: "auto" }} />
 );
 
-class Slide {
-  public constructor(public renderFn: () => JSX.Element) {}
-}
-class SlideGroup {
-  public constructor(public name: string, public slides: Array<Slide>) {}
-}
+// #endregion Helper Components
 
 class KeyActions {
   public constructor(
     public onKeyPress: () => void,
     public onKeyRelease: () => void
   ) {}
+}
+
+// #region Slides
+
+class Slide {
+  public constructor(public renderFn: () => JSX.Element) {}
+}
+class SlideGroup {
+  public constructor(public name: string, public slides: Array<Slide>) {}
 }
 
 // TODO: dynamic width/height
@@ -277,6 +283,8 @@ const slideGroups = [
 
 // TODO: optimize
 const slides = flattenArrays<Slide>(slideGroups.map(sg => sg.slides));
+
+// #endregion Slides
 
 export interface IPianoTheoryProps {
 }
