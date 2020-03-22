@@ -19,6 +19,7 @@
     "stacktrace-js": "^2.0.0",
     "svg-pan-zoom": "^3.6.0",
     "vexflow": "^1.2.89",
+    "webmidi": "^2.5.1",
     "whatwg-fetch": "^3.0.0"
   },
   "scripts": {

@@ -1,11 +1,13 @@
 import * as React from "react";
+import WebMidi, { InputEventNoteon, InputEventNoteoff, Input as MidiInput } from "webmidi";
+
 import { PianoKeyboard } from './Components/Utils/PianoKeyboard';
 import { Rect2D } from './lib/Core/Rect2D';
 import { Size2D } from './lib/Core/Size2D';
 import { Vector2D } from './lib/Core/Vector2D';
 import { Pitch } from './lib/TheoryLib/Pitch';
 import { PitchLetter } from './lib/TheoryLib/PitchLetter';
-import { playPitches } from './Audio/PianoAudio';
+import { playPitches, PianoAudio } from './Audio/PianoAudio';
 import { flattenArrays } from './lib/Core/ArrayUtils';
 
 // #region Helper Components
@@ -304,9 +306,12 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
 
   public componentDidMount() {
     this.registerKeyEventHandlers();
+    this.initializeMidi();
   }
 
   public componentWillUnmount() {
+    this.pianoAudio.releaseAllKeys();
+    this.uninitializeMidi();
     this.unregisterKeyEventHandlers();
   }
 
@@ -371,6 +376,63 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
   }
 
   // #endregion 
+
+  private pianoAudio: PianoAudio = new PianoAudio();
+
+  // #region MIDI
+
+  private midiInput: MidiInput | undefined = undefined;
+  private onNoteOn: ((event: InputEventNoteon) => void) | undefined = undefined;
+  private onNoteOff: ((event: InputEventNoteoff) => void) | undefined = undefined;
+
+  private initializeMidi() {
+    WebMidi.enable(error => {
+      if (!error) {
+        // TODO: allow user to select MIDI device
+        if (WebMidi.inputs.length > 0) {
+          this.midiInput = WebMidi.inputs[0];
+
+          console.log(this.midiInput);
+
+          this.onNoteOn = event => {
+            const pitch = Pitch.createFromMidiNumber(event.note.number);
+            console.log(pitch);
+
+            this.pianoAudio.pressKey(pitch, event.velocity);
+          };
+          this.onNoteOff = event => {
+            const pitch = Pitch.createFromMidiNumber(event.note.number);
+            console.log(pitch);
+            
+            this.pianoAudio.releaseKey(pitch);
+          };
+
+          this.midiInput.addListener("noteon", "all", this.onNoteOn);
+          this.midiInput.addListener("noteoff", "all", this.onNoteOff);
+        }
+      } else {
+        console.log(error);
+      }
+    });
+  }
+
+  private uninitializeMidi() {
+    if (WebMidi.enabled) {
+      if (this.midiInput) {
+        if (this.onNoteOn) {
+          this.midiInput.removeListener("noteon", "all", this.onNoteOn);
+        }
+        
+        if (this.onNoteOff) {
+          this.midiInput.removeListener("noteoff", "all", this.onNoteOff);
+        }
+      }
+
+      WebMidi.disable();
+    }
+  }
+
+  // #endregion
 
   // #region Actions
 
