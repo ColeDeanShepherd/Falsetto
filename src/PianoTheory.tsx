@@ -52,9 +52,11 @@ class SlideGroup {
   public constructor(public name: string, public slides: Array<Slide>) {}
 }
 
-class KeyBinding {
-  // key
-  // press/release/repeat actions
+class KeyActions {
+  public constructor(
+    public onKeyPress: () => void,
+    public onKeyRelease: () => void
+  ) {}
 }
 
 // TODO: dynamic width/height
@@ -63,7 +65,13 @@ class KeyBinding {
 // TODO: use symbols
 const slideGroups = [
   new SlideGroup("Introduction", [
-    new Slide(() => <span>Introduction to format (when format is determined)</span>),
+    new Slide(() => (
+      <div>
+        <p>Welcome to Falsetto's "Piano Theory" course.</p>
+        <p>This is an interactive course designed to teach you the essentials of piano and music theory in a hands-on manner.</p>
+        <p>It is highly recommended to connect a MIDI piano keyboard to your computer to follow along with these lessons.</p>
+      </div>
+    )),
     new Slide(() => (
       <div>
         <p>This is a piano.</p>
@@ -284,24 +292,14 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
     };
   }
 
+  // #region React Functions
+
   public componentDidMount() {
-    this.boundOnKeyDown = this.onKeyDown.bind(this);
-    window.addEventListener("keydown", this.boundOnKeyDown);
-    
-    this.boundOnKeyUp = this.onKeyUp.bind(this);
-    window.addEventListener("keyup", this.boundOnKeyUp);
+    this.registerKeyEventHandlers();
   }
 
   public componentWillUnmount() {
-    if (this.boundOnKeyDown) {
-      window.removeEventListener("keydown", this.boundOnKeyDown);
-      this.boundOnKeyDown = undefined;
-    }
-
-    if (this.boundOnKeyUp) {
-      window.removeEventListener("keyup", this.boundOnKeyUp);
-      this.boundOnKeyUp = undefined;
-    }
+    this.unregisterKeyEventHandlers();
   }
 
   // TODO: show slide group
@@ -319,12 +317,37 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
       </div>
     );
   }
+
+  // #endregion React Functions
   
+  // #region Event Handlers
+
   private boundOnKeyDown: ((event: KeyboardEvent) => void) | undefined;
   private boundOnKeyUp: ((event: KeyboardEvent) => void) | undefined;
 
+  private registerKeyEventHandlers() {
+    this.boundOnKeyDown = this.onKeyDown.bind(this);
+    window.addEventListener("keydown", this.boundOnKeyDown);
+    
+    this.boundOnKeyUp = this.onKeyUp.bind(this);
+    window.addEventListener("keyup", this.boundOnKeyUp);
+  }
+
+  private unregisterKeyEventHandlers() {
+    if (this.boundOnKeyDown) {
+      window.removeEventListener("keydown", this.boundOnKeyDown);
+      this.boundOnKeyDown = undefined;
+    }
+
+    if (this.boundOnKeyUp) {
+      window.removeEventListener("keyup", this.boundOnKeyUp);
+      this.boundOnKeyUp = undefined;
+    }
+  }
+
   // TODO: data-based bindings
   private onKeyDown(event: KeyboardEvent) {
+    console.log(event);
     if (event.type === "keydown") {
       // ArrowLeft
       if (event.keyCode === 37) {
@@ -338,6 +361,10 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
   }
   private onKeyUp(event: KeyboardEvent) {
   }
+
+  // #endregion 
+
+  // #region Actions
 
   private moveToNextSlide() {
     const { slideIndex } = this.state;
@@ -354,4 +381,6 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
 
     this.setState({ slideIndex: slideIndex - 1 });
   }
+
+  // #endregion Actions
 }
