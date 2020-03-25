@@ -9,6 +9,10 @@ import { Pitch } from './lib/TheoryLib/Pitch';
 import { PitchLetter } from './lib/TheoryLib/PitchLetter';
 import { PianoAudio } from './Audio/PianoAudio';
 import { flattenArrays } from './lib/Core/ArrayUtils';
+import { AppModel } from './App/Model';
+import { MidiDeviceConnectedAction, MidiDeviceDisconnectedAction, MidiInputDeviceChangedAction } from './App/Actions';
+import { IAction } from './IAction';
+import { ActionHandler, ActionBus } from './ActionBus';
 
 const pianoAudio = new PianoAudio();
 
@@ -304,6 +308,8 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
   public constructor(props: IPianoTheoryProps) {
     super(props);
 
+    this.boundHandleAction = this.handleAction.bind(this);
+
     this.state = {
       slideIndex: 0
     };
@@ -311,12 +317,16 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
 
   // #region React Functions
 
+  private boundHandleAction: ActionHandler;
+  
   public componentDidMount() {
     this.registerKeyEventHandlers();
-    this.initializeMidi();
+    this.reinitializeMidi();
+    ActionBus.instance.subscribe(this.boundHandleAction);
   }
 
   public componentWillUnmount() {
+    ActionBus.instance.unsubscribe(this.boundHandleAction);
     pianoAudio.releaseAllKeys();
     this.uninitializeMidi();
     this.unregisterKeyEventHandlers();
@@ -339,6 +349,19 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
   }
 
   // #endregion React Functions
+
+  // #region Action Handlers
+  
+  private handleAction(action: IAction) {
+    switch (action.getId()) {
+      case MidiDeviceConnectedAction.Id:
+      case MidiDeviceDisconnectedAction.Id:
+      case MidiInputDeviceChangedAction.Id:
+        this.reinitializeMidi();
+    }
+  }
+
+  // #endregion
   
   // #region Event Handlers
 
@@ -385,48 +408,48 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
 
   // #region MIDI
 
-  private midiInput: MidiInput | undefined = undefined;
   private onNoteOn: ((event: InputEventNoteon) => void) | undefined = undefined;
   private onNoteOff: ((event: InputEventNoteoff) => void) | undefined = undefined;
+  private disconnectFromMidiInput: (() => void) | undefined = undefined;
 
-  private initializeMidi() {
-    WebMidi.enable(error => {
-      if (!error) {
-        // TODO: allow user to select MIDI device
-        if (WebMidi.inputs.length > 0) {
-          this.midiInput = WebMidi.inputs[0];
+  private async reinitializeMidi() {
+    await AppModel.instance.initializeMidiPromise;
 
-          this.onNoteOn = event => {
-            const pitch = Pitch.createFromMidiNumber(event.note.number);
-            pianoAudio.pressKey(pitch, event.velocity);
-          };
-          this.onNoteOff = event => {
-            const pitch = Pitch.createFromMidiNumber(event.note.number);
-            pianoAudio.releaseKey(pitch);
-          };
+    this.uninitializeMidi();
+    
+    const midiInput = AppModel.instance.getMidiInput();
 
-          this.midiInput.addListener("noteon", "all", this.onNoteOn);
-          this.midiInput.addListener("noteoff", "all", this.onNoteOff);
+    if (midiInput) {
+      this.onNoteOn = event => {
+        const pitch = Pitch.createFromMidiNumber(event.note.number);
+        pianoAudio.pressKey(pitch, event.velocity);
+      };
+      this.onNoteOff = event => {
+        const pitch = Pitch.createFromMidiNumber(event.note.number);
+        pianoAudio.releaseKey(pitch);
+      };
+
+      this.disconnectFromMidiInput = () => {
+        if (midiInput) {
+          if (this.onNoteOn) {
+            midiInput.removeListener("noteon", "all", this.onNoteOn);
+          }
+          
+          if (this.onNoteOff) {
+            midiInput.removeListener("noteoff", "all", this.onNoteOff);
+          }
         }
-      } else {
-        console.log(error);
-      }
-    });
+      };
+  
+      midiInput.addListener("noteon", "all", this.onNoteOn);
+      midiInput.addListener("noteoff", "all", this.onNoteOff);
+    }
   }
 
-  private uninitializeMidi() {
-    if (WebMidi.enabled) {
-      if (this.midiInput) {
-        if (this.onNoteOn) {
-          this.midiInput.removeListener("noteon", "all", this.onNoteOn);
-        }
-        
-        if (this.onNoteOff) {
-          this.midiInput.removeListener("noteoff", "all", this.onNoteOff);
-        }
-      }
-
-      WebMidi.disable();
+  private async uninitializeMidi() {
+    if (this.disconnectFromMidiInput) {
+      this.disconnectFromMidiInput();
+      this.disconnectFromMidiInput = undefined;
     }
   }
 

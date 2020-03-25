@@ -19,8 +19,13 @@ export function stringContains(str: string, substring: string): boolean {
 }
 
 // TODO: add tests
-export function isNullOrWhiteSpace(str: string | null): boolean {
-  if (str == null) { return true; }
+export function isNullOrEmpty(str: string | null | undefined): boolean {
+  return ((str === null) || (str === undefined) || (str.length === 0));
+}
+
+// TODO: add tests
+export function isNullOrWhiteSpace(str: string | null | undefined): boolean {
+  if ((str === null) || (str === undefined)) { return true; }
   
   for (const char of str) {
     if (!char.match(/\s/)) {
