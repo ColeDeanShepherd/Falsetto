@@ -13,6 +13,7 @@ import { AppModel } from './App/Model';
 import { MidiDeviceConnectedAction, MidiDeviceDisconnectedAction, MidiInputDeviceChangedAction } from './App/Actions';
 import { IAction } from './IAction';
 import { ActionHandler, ActionBus } from './ActionBus';
+import { Button } from '@material-ui/core';
 
 const pianoAudio = new PianoAudio();
 
@@ -342,7 +343,25 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
 
     return (
       <div style={{ textAlign: "center" }}>
-        <div>{slideNumber} / {numSlides}</div>
+        <div>
+          <Button
+            variant="contained"
+            disabled={!this.canMoveToPreviousSlide()}
+            onClick={_ => this.moveToPreviousSlide()}
+            style={{ textTransform: "none" }}
+          >
+            &lt;
+          </Button>
+          <span style={{ padding: "0 1em" }}>{slideNumber} / {numSlides}</span>
+          <Button
+            variant="contained"
+            disabled={!this.canMoveToNextSlide()}
+            onClick={_ => this.moveToNextSlide()}
+            style={{ textTransform: "none" }}
+          >
+            &gt;
+          </Button>
+        </div>
         {renderedSlide}
       </div>
     );
@@ -457,6 +476,11 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
 
   // #region Actions
 
+  private canMoveToNextSlide(): boolean {
+    const { slideIndex } = this.state;
+    return (slideIndex + 1) < slides.length;
+  }
+
   private moveToNextSlide() {
     const { slideIndex } = this.state;
 
@@ -465,6 +489,12 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
 
     this.setState({ slideIndex: newSlideIndex });
   }
+
+  private canMoveToPreviousSlide(): boolean {
+    const { slideIndex } = this.state;
+    return slideIndex > 0;
+  }
+
   private moveToPreviousSlide() {
     const { slideIndex } = this.state;
 
