@@ -341,7 +341,7 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
     const renderedSlide = slides[slideIndex].renderFn();
 
     return (
-      <div style={{ width: "100%", height: "100vh", textAlign: "center" }}>
+      <div style={{ textAlign: "center" }}>
         <div>{slideNumber} / {numSlides}</div>
         {renderedSlide}
       </div>

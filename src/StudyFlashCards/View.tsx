@@ -8,7 +8,6 @@ import { FlashCard, FlashCardId } from "../FlashCard";
 import { renderFlashCardSide } from "../Components/FlashCard";
 import { DefaultFlashCardMultiSelect } from "../Components/Utils/DefaultFlashCardMultiSelect";
 import { FlashCardSet } from '../FlashCardSet';
-import { MAX_MAIN_CARD_WIDTH } from '../Components/Style';
 import { Size2D } from '../lib/Core/Size2D';
 import { NavLinkView } from '../NavLinkView';
 import { StudyFlashCardsModel, getPercentToNextLevel } from './Model';
@@ -96,7 +95,7 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
 
     const cardStyle: any = Object.assign(this.props.isEmbedded
       ? { minHeight: "100vh", boxShadow: "none" }
-      : { maxWidth: MAX_MAIN_CARD_WIDTH, marginBottom: "1em" }, this.props.style);
+      : { marginBottom: "1em" }, this.props.style);
 
     let cardContents: JSX.Element;
 

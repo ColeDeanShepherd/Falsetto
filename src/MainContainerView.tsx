@@ -2,12 +2,9 @@ import * as React from "react";
 
 import { RoutesView } from './Routes/View';
 import { FooterView } from "./Footer/View";
-import { MAX_MAIN_CARD_WIDTH } from './Components/Style';
-import { flashCardSets } from './FlashCardGraph';
 import { ActionHandler, ActionBus } from './ActionBus';
 import { IAction } from './IAction';
 import { NavigateAction } from './App/Actions';
-import { flattenArrays } from './lib/Core/ArrayUtils';
 
 export class MainContainerView extends React.Component<{}, {}> {
   public constructor(props: {}) {
@@ -29,10 +26,7 @@ export class MainContainerView extends React.Component<{}, {}> {
     return (
       <div className="main-container" ref={this.mainContainerRef}>
         <div className="main">
-          <div style={{ maxWidth: MAX_MAIN_CARD_WIDTH, margin: "0 auto" }}>
-            <RoutesView />
-            {false ? <textarea value={flattenArrays(flashCardSets.map(fcs => fcs.createFlashCards().map(fc => fc.id))).join("\n")} readOnly /> : null}
-          </div>
+          <RoutesView />
           <FooterView />
         </div>
       </div>

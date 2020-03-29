@@ -1,11 +1,10 @@
 import * as React from "react";
 import { CardContent, Card, Typography } from "@material-ui/core";
-import { MAX_MAIN_CARD_WIDTH } from './Style';
 
 export class SupportUsPage extends React.Component<{}, {}> {
   public render(): JSX.Element {
     return (
-      <Card style={{ maxWidth: MAX_MAIN_CARD_WIDTH }}>
+      <Card>
         <CardContent>
           <Typography gutterBottom={true} variant="h5" component="h2">
             Support Us

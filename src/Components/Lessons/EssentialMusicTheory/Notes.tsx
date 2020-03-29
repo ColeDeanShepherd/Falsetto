@@ -1,6 +1,5 @@
 import * as React from "react";
 
-
 import * as PianoNotes from "../../Quizzes/Notes/PianoNotes";
 import * as GuitarNotes from "../../Quizzes/Notes/GuitarNotes";
 import * as SheetMusicNotes from "../../Quizzes/Sheet Music/SheetMusicNotes";
@@ -38,10 +37,18 @@ export const NotesSection: React.FunctionComponent<SectionProps> = props => (
     <p>If your instrument of choice is piano, there is an interactive exercise below. If your instrument of choise is guitar, there is an interactive exercise below, and a comprehensive lesson: <NavLinkView to="/learn-guitar-notes-in-10-steps">Learn the Notes on Guitar in 10 Easy Steps</NavLinkView></p>
 
     <SubSectionTitle>Interactive Exercises</SubSectionTitle>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(NotesQuiz.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(PianoNotes.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(GuitarNotes.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(SheetMusicNotes.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>
+      {createStudyFlashCardSetComponent(NotesQuiz.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}
+    </div>
+    <div style={{ marginBottom: "2em" }}>
+      {createStudyFlashCardSetComponent(PianoNotes.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}
+    </div>
+    <div style={{ marginBottom: "2em" }}>
+      {createStudyFlashCardSetComponent(GuitarNotes.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}
+    </div>
+    <div style={{ marginBottom: "2em" }}>
+      {createStudyFlashCardSetComponent(SheetMusicNotes.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}
+    </div>
     
     <p style={{ textAlign: "center" }}><NavLinkView to="/essential-music-theory/rhythm">{"<< Previous: Rhythm"}</NavLinkView> | <NavLinkView to="/essential-music-theory/intervals">{"Next: Intervals >>"}</NavLinkView></p>
   </div>
