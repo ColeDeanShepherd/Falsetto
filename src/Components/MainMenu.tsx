@@ -140,6 +140,9 @@ export const MainMenu : React.FunctionComponent<{}> = props => (
         </MenuCategory>
         <MenuCategory title="Other">
           <NavLinkView to={"/glossary"}>Glossary</NavLinkView>
+          <NavLinkView to="/support-us" style={{ fontWeight: "normal" }}>
+            Support Us
+          </NavLinkView>
           <a href="https://github.com/ColeDeanShepherd/Falsetto-Client" target="_blank">Source Code</a>
         </MenuCategory>
       </div>
