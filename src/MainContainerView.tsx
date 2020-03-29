@@ -27,7 +27,6 @@ export class MainContainerView extends React.Component<{}, {}> {
       <div className="main-container" ref={this.mainContainerRef}>
         <div className="main">
           <RoutesView />
-          <FooterView />
         </div>
       </div>
     );
