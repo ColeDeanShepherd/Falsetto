@@ -38,7 +38,7 @@ export class Settings extends React.Component<{}, {}> {
       )
       : (
         <div style={{ paddingTop: "1em" }}>
-          <p>Your web browser does not support MIDI inputs.</p>
+          <p>Your web browser does not support MIDI inputs. <a href="https://caniuse.com/#feat=midi" target="_blank">Click here</a> to find a browser which does.</p>
         </div>
       );
   }

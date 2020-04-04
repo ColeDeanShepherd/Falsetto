@@ -259,7 +259,7 @@ const slideGroups = [
     )),
 
     new Slide(() => (
-      <div>
+      <div style={{ marginTop: "1em" }}>
         {createStudyFlashCardSetComponent(
           IntroQuiz.flashCardSet,
           /*isEmbedded*/ false,

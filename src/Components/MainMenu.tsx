@@ -60,7 +60,7 @@ export const MainMenu : React.FunctionComponent<{}> = props => (
     <div className="row">
       <div className="column">
         <MenuCategory title="Essential Music Theory Course">
-          {<NavLinkView to="/piano-theory">{"Piano Theory"}</NavLinkView>}
+          {<NavLinkView to="/piano-theory">{"Piano Theory (WIP)"}</NavLinkView>}
           {<NavLinkView to="/essential-music-theory">{"Introduction"}</NavLinkView>}
           {<NavLinkView to="/essential-music-theory/rhythm">{"Rhythm"}</NavLinkView>}
           {<NavLinkView to="/essential-music-theory/notes">{"Notes"}</NavLinkView>}
