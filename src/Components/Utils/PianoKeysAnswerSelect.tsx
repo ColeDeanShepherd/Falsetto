@@ -7,7 +7,7 @@ import { PianoKeyboard } from "./PianoKeyboard";
 import { Rect2D } from '../../lib/Core/Rect2D';
 import { Size2D } from '../../lib/Core/Size2D';
 import { Vector2D } from '../../lib/Core/Vector2D';
-import { toggleArrayElementCustomEquals, uniq } from '../../lib/Core/ArrayUtils';
+import { toggleArrayElementCustomEquals, uniq, immutableRemoveIfFoundInArray, immutableAddIfNotFoundInArray } from '../../lib/Core/ArrayUtils';
 
 export interface IPianoKeysAnswerSelectProps {
   size: Size2D;
@@ -60,6 +60,7 @@ export class PianoKeysAnswerSelect extends React.Component<IPianoKeysAnswerSelec
           highestPitch={highestPitch}
           pressedPitches={this.state.selectedPitches}
           onKeyPress={pitch => this.onPitchClick(pitch)}
+          onKeyRelease={pitch => this.onPitchRelease(pitch)}
           style={{ width: "100%", maxWidth: `${size.width}px` }}
         />
         {confirmAnswerButton}
@@ -68,10 +69,10 @@ export class PianoKeysAnswerSelect extends React.Component<IPianoKeysAnswerSelec
   }
 
   private onPitchClick(pitch: Pitch) {
-    let newSelectedPitches = toggleArrayElementCustomEquals(
+    let newSelectedPitches = immutableAddIfNotFoundInArray(
       this.state.selectedPitches,
       pitch,
-      (p1, p2) => p1.equals(p2)
+      p => p.equals(pitch)
     );
 
     if (this.props.maxNumPitches && (newSelectedPitches.length > this.props.maxNumPitches)) {
@@ -83,6 +84,18 @@ export class PianoKeysAnswerSelect extends React.Component<IPianoKeysAnswerSelec
         this.confirmAnswer();
       }
     });
+  }
+  
+  private onPitchRelease(pitch: Pitch) {
+    if (!this.props.instantConfirm) { return; }
+
+    // If instantConfirm is on, we want to unselect the pitch when the key is released.
+    let newSelectedPitches = immutableRemoveIfFoundInArray(
+      this.state.selectedPitches,
+      p => p.equals(pitch)
+    );
+    
+    this.setState({ selectedPitches: newSelectedPitches });
   }
 
   private confirmAnswer() {

@@ -4,7 +4,7 @@ import DocumentTitle from "react-document-title";
 
 import { flashCardSets } from "../FlashCardGraph";
 
-import { PianoTheory } from "../PianoTheory";
+import { PianoTheory } from "../PianoTheory/PianoTheory";
 import {
   SectionContainer
 } from "../Components/Lessons/EssentialMusicTheory/EssentialMusicTheory";

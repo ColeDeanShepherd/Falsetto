@@ -10,6 +10,7 @@ import { IAnalytics } from '../Analytics';
 import { precondition } from '../lib/Core/Dbc';
 import { unwrapValueOrUndefined } from '../lib/Core/Utils';
 import { arrayContains } from '../lib/Core/ArrayUtils';
+import { ILogger } from '../Logger';
 
 export class AppState {}
 export class AppModel implements IDisposable {
@@ -23,6 +24,7 @@ export class AppModel implements IDisposable {
 
     this.analytics = DependencyInjector.instance.getRequiredService<IAnalytics>("IAnalytics");
     this.history = DependencyInjector.instance.getRequiredService<History<any>>("History");
+    this.logger = DependencyInjector.instance.getRequiredService<ILogger>("ILogger");
     this.boundHandleAction = this.handleAction.bind(this);
 
     ActionBus.instance.subscribe(this.boundHandleAction);
@@ -35,6 +37,7 @@ export class AppModel implements IDisposable {
 
   private analytics: IAnalytics;
   private history: History<any>;
+  private logger: ILogger;
   private boundHandleAction: ActionHandler;
 
   private handleAction(action: IAction) {
@@ -75,7 +78,7 @@ export class AppModel implements IDisposable {
           WebMidi.addListener("connected", event => this.onMidiDeviceConnected(event));
           WebMidi.addListener("disconnected", event => this.onMidiDeviceDisconnected(event));
         } else {
-          console.log(error);
+          this.logger.logError(error);
         }
         
         resolve();

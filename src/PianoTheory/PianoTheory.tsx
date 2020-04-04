@@ -1,54 +1,188 @@
 import * as React from "react";
-import WebMidi, { InputEventNoteon, InputEventNoteoff, Input as MidiInput } from "webmidi";
+import { InputEventNoteon, InputEventNoteoff } from "webmidi";
 
-import { PianoKeyboard } from './Components/Utils/PianoKeyboard';
-import { Rect2D } from './lib/Core/Rect2D';
-import { Size2D } from './lib/Core/Size2D';
-import { Vector2D } from './lib/Core/Vector2D';
-import { Pitch } from './lib/TheoryLib/Pitch';
-import { PitchLetter } from './lib/TheoryLib/PitchLetter';
-import { PianoAudio } from './Audio/PianoAudio';
-import { flattenArrays } from './lib/Core/ArrayUtils';
-import { AppModel } from './App/Model';
-import { MidiDeviceConnectedAction, MidiDeviceDisconnectedAction, MidiInputDeviceChangedAction } from './App/Actions';
-import { IAction } from './IAction';
-import { ActionHandler, ActionBus } from './ActionBus';
+import { PianoKeyboard } from '../Components/Utils/PianoKeyboard';
+import { Rect2D } from '../lib/Core/Rect2D';
+import { Size2D } from '../lib/Core/Size2D';
+import { Vector2D } from '../lib/Core/Vector2D';
+import { Pitch } from '../lib/TheoryLib/Pitch';
+import { PitchLetter } from '../lib/TheoryLib/PitchLetter';
+import { PianoAudio } from '../Audio/PianoAudio';
+import { flattenArrays, immutableAddIfNotFoundInArray, immutableRemoveIfFoundInArray } from '../lib/Core/ArrayUtils';
+import { AppModel } from '../App/Model';
+import { MidiDeviceConnectedAction, MidiDeviceDisconnectedAction, MidiInputDeviceChangedAction } from '../App/Actions';
+import { IAction } from '../IAction';
+import { ActionHandler, ActionBus } from '../ActionBus';
 import { Button } from '@material-ui/core';
-import { createStudyFlashCardSetComponent } from './StudyFlashCards/View';
-import * as PianoNotes from "./Components/Quizzes/Notes/PianoNotes";
+import { createStudyFlashCardSetComponent } from '../StudyFlashCards/View';
+import * as IntroQuiz from "./IntroQuiz";
+import { LimitedWidthContentContainer } from '../Components/Utils/LimitedWidthContentContainer';
 
 const pianoAudio = new PianoAudio();
 
 // #region Helper Components
 
+export interface IMidiNoteEventListenerProps {
+  onNoteOn: (pitch: Pitch, velocity: number) => void,
+  onNoteOff: (pitch: Pitch) => void
+}
+
+export class MidiNoteEventListener extends React.Component<IMidiNoteEventListenerProps, {}> {
+  public constructor(props: IMidiNoteEventListenerProps) {
+    super(props);
+
+    this.boundHandleAction = this.handleAction.bind(this);
+  }
+
+  private boundHandleAction: ActionHandler;
+  
+  public componentDidMount() {
+    this.reinitializeMidi();
+    ActionBus.instance.subscribe(this.boundHandleAction);
+  }
+
+  public componentWillUnmount() {
+    ActionBus.instance.unsubscribe(this.boundHandleAction);
+    pianoAudio.releaseAllKeys();
+    this.uninitializeMidi();
+  }
+
+  public render() { return null; }
+  
+  private handleAction(action: IAction) {
+    switch (action.getId()) {
+      case MidiDeviceConnectedAction.Id:
+      case MidiDeviceDisconnectedAction.Id:
+      case MidiInputDeviceChangedAction.Id:
+        this.reinitializeMidi();
+    }
+  }
+  private onNoteOn: ((event: InputEventNoteon) => void) | undefined = undefined;
+  private onNoteOff: ((event: InputEventNoteoff) => void) | undefined = undefined;
+  private disconnectFromMidiInput: (() => void) | undefined = undefined;
+
+  private async reinitializeMidi() {
+    await AppModel.instance.initializeMidiPromise;
+
+    this.uninitializeMidi();
+    
+    const midiInput = AppModel.instance.getMidiInput();
+
+    if (midiInput) {
+      this.onNoteOn = event => {
+        const pitch = Pitch.createFromMidiNumber(event.note.number);
+        
+        if (this.props.onNoteOn) {
+          this.props.onNoteOn(pitch, event.velocity);
+        }
+      };
+      this.onNoteOff = event => {
+        const pitch = Pitch.createFromMidiNumber(event.note.number);
+        
+        if (this.props.onNoteOff) {
+          this.props.onNoteOff(pitch);
+        }
+      };
+
+      this.disconnectFromMidiInput = () => {
+        if (midiInput) {
+          if (this.onNoteOn) {
+            midiInput.removeListener("noteon", "all", this.onNoteOn);
+          }
+          
+          if (this.onNoteOff) {
+            midiInput.removeListener("noteoff", "all", this.onNoteOff);
+          }
+        }
+      };
+  
+      midiInput.addListener("noteon", "all", this.onNoteOn);
+      midiInput.addListener("noteoff", "all", this.onNoteOff);
+    }
+  }
+
+  private async uninitializeMidi() {
+    if (this.disconnectFromMidiInput) {
+      this.disconnectFromMidiInput();
+      this.disconnectFromMidiInput = undefined;
+    }
+  }
+}
+
+export interface IPlayablePianoProps {
+  aspectRatio: Size2D,
+  maxWidth: number,
+  lowestPitch: Pitch,
+  highestPitch: Pitch
+}
+export interface IPlayablePianoState {
+  pressedPitches: Array<Pitch>
+}
+export class PlayablePiano extends React.Component<IPlayablePianoProps, IPlayablePianoState> {
+  public constructor(props: IPlayablePianoProps) {
+    super(props);
+
+    this.state = {
+      pressedPitches: []
+    };
+  }
+  public render(): JSX.Element {
+    const { aspectRatio, maxWidth, lowestPitch, highestPitch } = this.props;
+    const { pressedPitches } = this.state;
+
+    return (
+      <div>
+        <PianoKeyboard
+          rect={new Rect2D(aspectRatio, new Vector2D(0, 0))}
+          lowestPitch={lowestPitch}
+          highestPitch={highestPitch}
+          pressedPitches={pressedPitches}
+          onKeyPress={p => this.onKeyPress(p)}
+          onKeyRelease={p => this.onKeyRelease(p)}
+          style={{ width: "100%", maxWidth: `${maxWidth}px`, height: "auto" }} />
+        <MidiNoteEventListener
+          onNoteOn={(pitch, velocity) => this.onKeyPress(pitch)}
+          onNoteOff={pitch => this.onKeyRelease(pitch)} />
+      </div>
+    );
+  }
+
+  private onKeyPress(pitch: Pitch) {
+    pianoAudio.pressKey(pitch, /*velocity*/ 1);
+    this.setState((prevState, props) => {
+      return { pressedPitches: immutableAddIfNotFoundInArray(prevState.pressedPitches, pitch, (p, i) => p.equals(pitch)) };
+    });
+  }
+  private onKeyRelease(pitch: Pitch) {
+    pianoAudio.releaseKey(pitch);
+    this.setState((prevState, props) => {
+      return { pressedPitches: immutableRemoveIfFoundInArray(prevState.pressedPitches, (p, i) => p.equals(pitch)) };
+    });
+  }
+}
+
 export const FullPiano: React.FunctionComponent<{}> = props => (
-  <PianoKeyboard
-    rect={new Rect2D(new Size2D(400, 50), new Vector2D(0, 0))}
+  <PlayablePiano
+    aspectRatio={new Size2D(400, 50)}
+    maxWidth={400}
     lowestPitch={new Pitch(PitchLetter.A, 0, 0)}
-    highestPitch={new Pitch(PitchLetter.C, 0, 8)}
-    onKeyPress={p => pianoAudio.pressKey(p, 1)}
-    onKeyRelease={p => pianoAudio.releaseKey(p)}
-    style={{ width: "100%", maxWidth: "400px", height: "auto" }} />
+    highestPitch={new Pitch(PitchLetter.C, 0, 8)} />
 );
 
 export const TwoOctavePiano: React.FunctionComponent<{}> = props => (
-  <PianoKeyboard
-    rect={new Rect2D(new Size2D(300, 100), new Vector2D(0, 0))}
+  <PlayablePiano
+    aspectRatio={new Size2D(300, 100)}
+    maxWidth={300}
     lowestPitch={new Pitch(PitchLetter.C, 0, 3)}
-    highestPitch={new Pitch(PitchLetter.B, 0, 4)}
-    onKeyPress={p => pianoAudio.pressKey(p, 1)}
-    onKeyRelease={p => pianoAudio.releaseKey(p)}
-    style={{ width: "100%", maxWidth: "300px", height: "auto" }} />
+    highestPitch={new Pitch(PitchLetter.B, 0, 4)} />
 );
 
 export const OneOctavePiano: React.FunctionComponent<{}> = props => (
-  <PianoKeyboard
-    rect={new Rect2D(new Size2D(150, 100), new Vector2D(0, 0))}
+  <PlayablePiano
+    aspectRatio={new Size2D(150, 100)}
+    maxWidth={300}
     lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-    highestPitch={new Pitch(PitchLetter.B, 0, 4)}
-    onKeyPress={p => pianoAudio.pressKey(p, 1)}
-    onKeyRelease={p => pianoAudio.releaseKey(p)}
-    style={{ width: "100%", maxWidth: "300px", height: "auto" }} />
+    highestPitch={new Pitch(PitchLetter.B, 0, 4)} />
 );
 
 export const PianoNoteDiagram: React.FunctionComponent<{ pitch: Pitch }> = props => (
@@ -90,20 +224,23 @@ const slideGroups = [
       <div>
         <h2>Welcome to Falsetto's "Piano Theory" course!</h2>
         <p>This is an interactive course designed to teach you the essentials of piano and music theory in a hands-on manner.</p>
-        <p>It is highly recommended to connect a MIDI piano keyboard to your computer to follow along with these lessons. Click the settings icon (<i className="material-icons" style={{ verticalAlign: "bottom" }}>settings</i>) in the bar at the top of the screen to configure your MIDI input device.</p>
+        <p>It is highly recommended to connect a MIDI piano keyboard to your computer to follow along with these lessons.</p>
+        <p>Click the settings icon (<i className="material-icons" style={{ verticalAlign: "bottom" }}>settings</i>) in the bar at the top of the screen to configure your MIDI input device.</p>
+        <p>If your MIDI input device and audio settings are configured properly, then pressing keys will produce piano sounds.</p>
       </div>
     )),
     new Slide(() => (
       <div>
         <p>This is a piano.</p>
         <p>Pianos are made of white &amp; black "keys".</p>
-        <p>Standard pianos have 88 white &amp; black keys. Some pianos/keyboards are smaller.</p>
         <FullPiano />
       </div>
     )),
     new Slide(() => (
       <div>
+        <p>Standard pianos have 88 white &amp; black keys.</p>
         <p>These lessons will generally only show a portion of the 88 keys due to screen size limitations.</p>
+        <p>This slide is only showing the middle 24 keys of a standard piano.</p>
         <TwoOctavePiano />
       </div>
     )),
@@ -120,7 +257,7 @@ const slideGroups = [
     new Slide(() => (
       <div>
         {createStudyFlashCardSetComponent(
-          PianoNotes.flashCardSet,
+          IntroQuiz.flashCardSet,
           /*isEmbedded*/ false,
           /*hideMoreInfoUri*/ false,
           /*title*/ undefined,
@@ -309,8 +446,7 @@ const slides = flattenArrays<Slide>(slideGroups.map(sg => sg.slides));
 
 // #endregion Slides
 
-export interface IPianoTheoryProps {
-}
+export interface IPianoTheoryProps { }
 export interface IPianoTheoryState {
   slideIndex: number;
 }
@@ -318,27 +454,19 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
   public constructor(props: IPianoTheoryProps) {
     super(props);
 
-    this.boundHandleAction = this.handleAction.bind(this);
-
     this.state = {
       slideIndex: 0
     };
   }
 
   // #region React Functions
-
-  private boundHandleAction: ActionHandler;
   
   public componentDidMount() {
     this.registerKeyEventHandlers();
-    this.reinitializeMidi();
-    ActionBus.instance.subscribe(this.boundHandleAction);
   }
 
   public componentWillUnmount() {
-    ActionBus.instance.unsubscribe(this.boundHandleAction);
     pianoAudio.releaseAllKeys();
-    this.uninitializeMidi();
     this.unregisterKeyEventHandlers();
   }
 
@@ -351,46 +479,39 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
     const renderedSlide = slides[slideIndex].renderFn();
 
     return (
-      <div style={{ textAlign: "center" }}>
-        <div>
-          <Button
-            variant="contained"
-            disabled={!this.canMoveToPreviousSlide()}
-            onClick={_ => this.moveToPreviousSlide()}
-            style={{ textTransform: "none" }}
-          >
-            &lt;
-          </Button>
-          <span style={{ padding: "0 1em" }}>{slideNumber} / {numSlides}</span>
-          <Button
-            variant="contained"
-            disabled={!this.canMoveToNextSlide()}
-            onClick={_ => this.moveToNextSlide()}
-            style={{ textTransform: "none" }}
-          >
-            &gt;
-          </Button>
+      <LimitedWidthContentContainer>
+        <div style={{ textAlign: "center" }}>
+          <div>
+            <Button
+              variant="contained"
+              disabled={!this.canMoveToPreviousSlide()}
+              onClick={_ => this.moveToPreviousSlide()}
+              style={{ textTransform: "none" }}
+            >
+              &lt;
+            </Button>
+            <span style={{ padding: "0 1em" }}>{slideNumber} / {numSlides}</span>
+            <Button
+              variant="contained"
+              disabled={!this.canMoveToNextSlide()}
+              onClick={_ => this.moveToNextSlide()}
+              style={{ textTransform: "none" }}
+            >
+              &gt;
+            </Button>
+          </div>
+          {renderedSlide}
         </div>
-        {renderedSlide}
-      </div>
+
+        <MidiNoteEventListener
+          onNoteOn={(pitch, velocity) => pianoAudio.pressKey(pitch, velocity)}
+          onNoteOff={pitch => pianoAudio.releaseKey(pitch)} />
+      </LimitedWidthContentContainer>
     );
   }
 
   // #endregion React Functions
 
-  // #region Action Handlers
-  
-  private handleAction(action: IAction) {
-    switch (action.getId()) {
-      case MidiDeviceConnectedAction.Id:
-      case MidiDeviceDisconnectedAction.Id:
-      case MidiInputDeviceChangedAction.Id:
-        this.reinitializeMidi();
-    }
-  }
-
-  // #endregion
-  
   // #region Event Handlers
 
   private boundOnKeyDown: ((event: KeyboardEvent) => void) | undefined;
@@ -433,55 +554,6 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
   }
 
   // #endregion 
-
-  // #region MIDI
-
-  private onNoteOn: ((event: InputEventNoteon) => void) | undefined = undefined;
-  private onNoteOff: ((event: InputEventNoteoff) => void) | undefined = undefined;
-  private disconnectFromMidiInput: (() => void) | undefined = undefined;
-
-  private async reinitializeMidi() {
-    await AppModel.instance.initializeMidiPromise;
-
-    this.uninitializeMidi();
-    
-    const midiInput = AppModel.instance.getMidiInput();
-
-    if (midiInput) {
-      this.onNoteOn = event => {
-        const pitch = Pitch.createFromMidiNumber(event.note.number);
-        pianoAudio.pressKey(pitch, event.velocity);
-      };
-      this.onNoteOff = event => {
-        const pitch = Pitch.createFromMidiNumber(event.note.number);
-        pianoAudio.releaseKey(pitch);
-      };
-
-      this.disconnectFromMidiInput = () => {
-        if (midiInput) {
-          if (this.onNoteOn) {
-            midiInput.removeListener("noteon", "all", this.onNoteOn);
-          }
-          
-          if (this.onNoteOff) {
-            midiInput.removeListener("noteoff", "all", this.onNoteOff);
-          }
-        }
-      };
-  
-      midiInput.addListener("noteon", "all", this.onNoteOn);
-      midiInput.addListener("noteoff", "all", this.onNoteOff);
-    }
-  }
-
-  private async uninitializeMidi() {
-    if (this.disconnectFromMidiInput) {
-      this.disconnectFromMidiInput();
-      this.disconnectFromMidiInput = undefined;
-    }
-  }
-
-  // #endregion
 
   // #region Actions
 
