@@ -1,5 +1,7 @@
+import { History } from "history";
 import * as React from "react";
 import { InputEventNoteon, InputEventNoteoff } from "webmidi";
+import * as QueryString from "query-string";
 
 import { PianoKeyboard } from '../Components/Utils/PianoKeyboard';
 import { Rect2D } from '../lib/Core/Rect2D';
@@ -17,6 +19,8 @@ import { Button } from '@material-ui/core';
 import { createStudyFlashCardSetComponent } from '../StudyFlashCards/View';
 import * as IntroQuiz from "./IntroQuiz";
 import { LimitedWidthContentContainer } from '../Components/Utils/LimitedWidthContentContainer';
+import { DependencyInjector } from '../DependencyInjector';
+import { clamp } from '../lib/Core/MathUtils';
 
 const pianoAudio = new PianoAudio();
 
@@ -453,9 +457,14 @@ export interface IPianoTheoryState {
 export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheoryState> {
   public constructor(props: IPianoTheoryProps) {
     super(props);
+    
+    this.history = DependencyInjector.instance.getRequiredService<History<any>>("History");
+    const urlSearchParams = QueryString.parse(this.history.location.search);
 
     this.state = {
-      slideIndex: 0
+      slideIndex: (urlSearchParams.slide && (typeof urlSearchParams.slide === 'string'))
+        ? clamp(parseInt(urlSearchParams.slide, 10) - 1, 0, slides.length - 1)
+        : 0
     };
   }
 
@@ -509,6 +518,8 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
       </LimitedWidthContentContainer>
     );
   }
+  
+  private history: History<any>;
 
   // #endregion React Functions
 
@@ -568,7 +579,7 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
     const newSlideIndex = slideIndex + 1;
     if (newSlideIndex == slides.length) { return; }
 
-    this.setState({ slideIndex: newSlideIndex });
+    this.moveToSlide(newSlideIndex);
   }
 
   private canMoveToPreviousSlide(): boolean {
@@ -581,7 +592,19 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
 
     if (slideIndex === 0) { return; }
 
-    this.setState({ slideIndex: slideIndex - 1 });
+    this.moveToSlide(slideIndex - 1);
+  }
+
+  private moveToSlide(slideIndex: number) {
+    this.setState({ slideIndex: slideIndex }, () => {
+      const oldSearchParams = QueryString.parse(this.history.location.search);
+      const newSearchParams = { ...oldSearchParams, slide: slideIndex + 1 };
+
+      this.history.push({
+        pathname: this.history.location.pathname,
+        search: `?${QueryString.stringify(newSearchParams)}`
+      });
+    });
   }
 
   // #endregion Actions
