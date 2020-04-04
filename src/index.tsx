@@ -16,6 +16,7 @@ import { getErrorDescription } from './Error';
 import { DependencyInjector } from './DependencyInjector';
 import { IAnalytics } from './Analytics';
 import { Auth0InjectorView } from './Auth0Injector/Auth0InjectorView';
+import "pepjs";
 
 const analytics = DependencyInjector.instance.getRequiredService<IAnalytics>("IAnalytics");
 

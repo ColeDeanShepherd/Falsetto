@@ -230,19 +230,20 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
             key={i}
             d={getRectRoundedBottomPathDefString(position, size, whiteKeyRadius)}
             fill="white" stroke="black" strokeWidth="2" className="cursor-pointer"
-            onMouseDown={event => {
+            touch-action="none"
+            onPointerDown={event => {
               if (this.props.onKeyPress) {
                 this.props.onKeyPress(pitch);
                 event.preventDefault();
               }
             }}
-            onMouseUp={event => {
+            onPointerUp={event => {
               if (this.props.onKeyRelease) {
                 this.props.onKeyRelease(pitch);
                 event.preventDefault();
               }
             }}
-            onMouseEnter={event => {
+            onPointerOver={event => {
               if (isBitSet(event.buttons, 0)) {
                 if (this.props.onKeyPress) {
                   this.props.onKeyPress(pitch);
@@ -250,7 +251,7 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
                 }
               }
             }}
-            onMouseLeave={event => {
+            onPointerOut={event => {
               if (this.props.onKeyRelease) {
                 this.props.onKeyRelease(pitch);
                 event.preventDefault();
@@ -266,19 +267,20 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
             key={i}
             d={getRectRoundedBottomPathDefString(position, size, blackKeyRadius)}
             fill="black" strokeWidth="0" className="cursor-pointer"
-            onMouseDown={event => {
+            touch-action="none"
+            onPointerDown={event => {
               if (this.props.onKeyPress) {
                 this.props.onKeyPress(pitch);
                 event.preventDefault();
               }
             }}
-            onMouseUp={event => {
+            onPointerUp={event => {
               if (this.props.onKeyRelease) {
                 this.props.onKeyRelease(pitch);
                 event.preventDefault();
               }
             }}
-            onMouseEnter={event => {
+            onPointerOver={event => {
               if (isBitSet(event.buttons, 0)) {
                 if (this.props.onKeyPress) {
                   this.props.onKeyPress(pitch);
@@ -286,7 +288,7 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
                 }
               }
             }}
-            onMouseLeave={event => {
+            onPointerOut={event => {
               if (this.props.onKeyRelease) {
                 this.props.onKeyRelease(pitch);
                 event.preventDefault();

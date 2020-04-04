@@ -9,6 +9,7 @@
     "clone": "^2.1.2",
     "core-js": "^2.6.9",
     "howler": "^2.1.2",
+    "pepjs": "^0.5.2",
     "query-string": "^6.11.1",
     "react": "^16.9.0",
     "react-document-title": "^2.0.3",

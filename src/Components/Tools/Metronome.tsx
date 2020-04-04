@@ -140,7 +140,7 @@ export class Metronome extends React.Component<IMetronomeProps, IMetronomeState>
     return (
       <div>
         {this.renderTempoText(this.tempoTapper.tappedBpm)}
-        <div><Button variant="contained" onMouseDown={e => this.tapTempo()}>Tap</Button></div>
+        <div><Button variant="contained" onPointerDown={e => this.tapTempo()} touch-action="none">Tap</Button></div>
         <div>
           <Button variant="contained" onClick={e => this.confirmTappedTempo()}>OK</Button>
           <Button variant="contained" onClick={e => this.cancelTappingTempo()}>Cancel</Button>
