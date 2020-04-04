@@ -30,8 +30,8 @@ export class Settings extends React.Component<{}, {}> {
         <div style={{ paddingTop: "1em" }}>
           <h3>Settings</h3>
           <span style={{ paddingRight: "1em" }}>MIDI Input Device: </span>
-          <Select value={midiInput ? midiInput.id : ""} onChange={e => this.onMidiInputChange(e.target.value)}>
-            <MenuItem value="" key={""}>None</MenuItem>
+          <Select value={midiInput ? midiInput.id : -1} onChange={e => this.onMidiInputChange(e.target.value)}>
+            <MenuItem key={-1} value={-1}>None</MenuItem>
             {WebMidi.inputs.map(i => <MenuItem key={i.id} value={i.id}>{i.name}</MenuItem>)}
           </Select>
         </div>
@@ -52,7 +52,7 @@ export class Settings extends React.Component<{}, {}> {
     }
   }
 
-  private onMidiInputChange(inputId: string) {
+  private onMidiInputChange(inputId: any) {
     const newMidiInput = WebMidi.inputs.find(i => i.id === inputId);
     AppModel.instance.setMidiInput(newMidiInput);
   }

@@ -14,6 +14,8 @@ import { MidiDeviceConnectedAction, MidiDeviceDisconnectedAction, MidiInputDevic
 import { IAction } from './IAction';
 import { ActionHandler, ActionBus } from './ActionBus';
 import { Button } from '@material-ui/core';
+import { createStudyFlashCardSetComponent } from './StudyFlashCards/View';
+import * as PianoNotes from "./Components/Quizzes/Notes/PianoNotes";
 
 const pianoAudio = new PianoAudio();
 
@@ -86,25 +88,15 @@ const slideGroups = [
   new SlideGroup("Introduction", [
     new Slide(() => (
       <div>
-        <p>Welcome to Falsetto's "Piano Theory" course.</p>
+        <h2>Welcome to Falsetto's "Piano Theory" course!</h2>
         <p>This is an interactive course designed to teach you the essentials of piano and music theory in a hands-on manner.</p>
-        <p>It is highly recommended to connect a MIDI piano keyboard to your computer to follow along with these lessons.</p>
+        <p>It is highly recommended to connect a MIDI piano keyboard to your computer to follow along with these lessons. Click the settings icon (<i className="material-icons" style={{ verticalAlign: "bottom" }}>settings</i>) in the bar at the top of the screen to configure your MIDI input device.</p>
       </div>
     )),
     new Slide(() => (
       <div>
         <p>This is a piano.</p>
-        <FullPiano />
-      </div>
-    )),
-    new Slide(() => (
-      <div>
         <p>Pianos are made of white &amp; black "keys".</p>
-        <FullPiano />
-      </div>
-    )),
-    new Slide(() => (
-      <div>
         <p>Standard pianos have 88 white &amp; black keys. Some pianos/keyboards are smaller.</p>
         <FullPiano />
       </div>
@@ -118,18 +110,25 @@ const slideGroups = [
 
     new Slide(() => (
       <div>
-        <p>Each key produces a particular "pitch" &ndash; the "highness" or "lowness" of a sound &ndash; when pressed. Try pressing some of the keys on your screen, or try connecting a MIDI keyboard and physically pressing keys, to hear the pitches they produce.</p>
-        <TwoOctavePiano />
-      </div>
-    )),
-    new Slide(() => (
-      <div>
+        <p>Each key produces a particular "pitch" &ndash; the "highness" or "lowness" of a sound &ndash; when pressed.</p>
         <p>Keys further to the left produce lower pitches, and keys further to the right produce higher pitches.</p>
+        <p>Try pressing some of the keys on your screen, or try connecting a MIDI keyboard and physically pressing keys, to hear the pitches they produce.</p>
         <TwoOctavePiano />
       </div>
     )),
 
-    // quiz
+    new Slide(() => (
+      <div>
+        {createStudyFlashCardSetComponent(
+          PianoNotes.flashCardSet,
+          /*isEmbedded*/ false,
+          /*hideMoreInfoUri*/ false,
+          /*title*/ undefined,
+          /*style*/ undefined,
+          /*enableSettings*/ undefined,
+          /*showRelatedExercises*/ false)}
+      </div>
+    )),
 
     new Slide(() => (
       <div>
@@ -193,7 +192,12 @@ const slideGroups = [
         <PianoNoteDiagram pitch={new Pitch(PitchLetter.B, 0, 4)} />
       </div>
     )),
-    // quiz
+    
+    new Slide(() => (
+      <div>
+        <p>QUIZ</p>
+      </div>
+    )),
     
     new Slide(() => <span>Now let's learn the names of the black keys.</span>),
     
@@ -238,7 +242,12 @@ const slideGroups = [
         <PianoNoteDiagram pitch={new Pitch(PitchLetter.B, -1, 4)} />
       </div>
     )),
-    // quiz
+    
+    new Slide(() => (
+      <div>
+        <p>QUIZ</p>
+      </div>
+    )),
 
     new Slide(() => (
       <div>

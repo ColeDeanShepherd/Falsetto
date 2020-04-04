@@ -241,6 +241,12 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
                 event.preventDefault();
               }
             }}
+            onMouseLeave={event => {
+              if (this.props.onKeyRelease) {
+                this.props.onKeyRelease(pitch);
+                event.preventDefault();
+              }
+            }}
           />
         );
       } else {

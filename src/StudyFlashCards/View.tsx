@@ -15,7 +15,7 @@ import { unwrapValueOrUndefined } from '../lib/Core/Utils';
 
 export function createStudyFlashCardSetComponent(
   flashCardSet: FlashCardSet, isEmbedded: boolean, hideMoreInfoUri: boolean,
-  title?: string, style?: any, enableSettings?: boolean
+  title?: string, style?: any, enableSettings?: boolean, showRelatedExercises?: boolean
 ): JSX.Element {
   return (
     <StudyFlashCardsView
@@ -25,6 +25,7 @@ export function createStudyFlashCardSetComponent(
       hideMoreInfoUri={hideMoreInfoUri}
       enableSettings={enableSettings}
       isEmbedded={isEmbedded} // TODO: remove
+      showRelatedExercises={showRelatedExercises}
       style={style}
     />
   );
@@ -41,6 +42,7 @@ export interface IStudyFlashCardsViewProps {
   enableSettings?: boolean;
   isEmbedded?: boolean;
   style?: any;
+  showRelatedExercises?: boolean;
 }
 export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewProps, {}> {
   private model: StudyFlashCardsModel;
@@ -136,7 +138,7 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
       const currentFlashCardKey = `${model.sessionFlashCardNumber}.${model.currentFlashCardId}`;
       const moreInfoUri = !this.props.hideMoreInfoUri ? flashCardSet.moreInfoUri : "";
 
-      cardContents =  (
+      cardContents = (
         <div>
           <div style={{display: "flex"}}>
             <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
@@ -295,8 +297,12 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
       cardContents = <p>Loading...</p>;
     }
 
+    const showRelatedExercises = (this.props.showRelatedExercises !== undefined)
+      ? this.props.showRelatedExercises
+      : true;
+
     return (
-      <div>
+      <div style={{ textAlign: "left" }}>
         <Card style={cardStyle}>
           <CardContent style={{position: "relative"}}>
             {cardContents}
@@ -304,7 +310,7 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
           
           <p style={watermarkStyle} className="watermark">https://falsetto.app</p>
         </Card>
-        {(!this.props.isEmbedded && (flashCardSet.relatedSets.length > 0)) ? (
+        {(!this.props.isEmbedded && showRelatedExercises && (flashCardSet.relatedSets.length > 0)) ? (
           <Card style={cardStyle}>
             <CardContent style={{position: "relative"}}>
               <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
