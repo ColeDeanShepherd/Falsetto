@@ -446,9 +446,7 @@ const slideGroups = [
 ];
 
 // TODO: optimize
-let slides = flattenArrays<Slide>(slideGroups.map(sg => sg.slides))
-  .slice(0, 5)
-  .concat([new Slide(() => <h3>More coming soon!</h3>)]);
+let slides = flattenArrays<Slide>(slideGroups.map(sg => sg.slides));
 
 // #endregion Slides
 
