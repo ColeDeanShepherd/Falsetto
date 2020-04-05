@@ -8,6 +8,35 @@ import { Rect2D } from '../../lib/Core/Rect2D';
 import { Size2D } from '../../lib/Core/Size2D';
 import { Vector2D } from '../../lib/Core/Vector2D';
 import { toggleArrayElementCustomEquals, uniq, immutableRemoveIfFoundInArray, immutableAddIfNotFoundInArray } from '../../lib/Core/ArrayUtils';
+import { MidiNoteEventListener } from '../../PianoTheory/PianoTheory';
+import { precondition } from '../../lib/Core/Dbc';
+
+function tryWrapPitchOctave(
+  pitch: Pitch,
+  lowestPitch: Pitch,
+  highestPitch: Pitch
+): Pitch | undefined {
+  const lowestPitchMidiNumber = lowestPitch.midiNumber;
+  const highestPitchMidiNumber = highestPitch.midiNumber;
+
+  precondition(lowestPitchMidiNumber <= highestPitchMidiNumber);
+
+  let wrappedPitch = new Pitch(pitch.letter, pitch.signedAccidental, pitch.octaveNumber);
+
+  while(wrappedPitch.midiNumber < lowestPitchMidiNumber) {
+    wrappedPitch.octaveNumber += 1;
+  }
+  
+  while(wrappedPitch.midiNumber > highestPitchMidiNumber) {
+    wrappedPitch.octaveNumber -= 1;
+  }
+
+  const wrappedPitchMidiNumber = wrappedPitch.midiNumber;
+
+  return ((wrappedPitchMidiNumber >= lowestPitchMidiNumber) && (wrappedPitchMidiNumber <= highestPitchMidiNumber))
+    ? wrappedPitch
+    : undefined;
+}
 
 export interface IPianoKeysAnswerSelectProps {
   size: Size2D;
@@ -19,6 +48,7 @@ export interface IPianoKeysAnswerSelectProps {
   lastCorrectAnswer: any;
   incorrectAnswers: Array<any>;
   instantConfirm: boolean;
+  wrapOctave?: boolean;
 }
 
 export interface IPianoKeysAnswerSelectState {
@@ -64,11 +94,25 @@ export class PianoKeysAnswerSelect extends React.Component<IPianoKeysAnswerSelec
           style={{ width: "100%", maxWidth: `${size.width}px` }}
         />
         {confirmAnswerButton}
+        <MidiNoteEventListener
+          onNoteOn={(pitch, velocity) => this.onPitchClick(pitch)}
+          onNoteOff={pitch => this.onPitchRelease(pitch)} />
       </div>
     );
   }
 
   private onPitchClick(pitch: Pitch) {
+    const { lowestPitch, highestPitch, wrapOctave } = this.props;
+
+    if (wrapOctave) {
+      const wrappedPitch = tryWrapPitchOctave(pitch, lowestPitch, highestPitch);
+      if (!wrappedPitch) { return; }
+
+      pitch = wrappedPitch;
+    } else if ((pitch.midiNumber < lowestPitch.midiNumber) || (pitch.midiNumber > highestPitch.midiNumber)) {
+      return;
+    }
+
     let newSelectedPitches = immutableAddIfNotFoundInArray(
       this.state.selectedPitches,
       pitch,
@@ -87,6 +131,17 @@ export class PianoKeysAnswerSelect extends React.Component<IPianoKeysAnswerSelec
   }
   
   private onPitchRelease(pitch: Pitch) {
+    const { lowestPitch, highestPitch, wrapOctave } = this.props;
+
+    if (wrapOctave) {
+      const wrappedPitch = tryWrapPitchOctave(pitch, lowestPitch, highestPitch);
+      if (!wrappedPitch) { return; }
+
+      pitch = wrappedPitch;
+    } else if ((pitch.midiNumber < lowestPitch.midiNumber) || (pitch.midiNumber > highestPitch.midiNumber)) {
+      return;
+    }
+
     if (!this.props.instantConfirm) { return; }
 
     // If instantConfirm is on, we want to unselect the pitch when the key is released.

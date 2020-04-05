@@ -3,7 +3,7 @@ import * as React from "react";
 import { InputEventNoteon, InputEventNoteoff } from "webmidi";
 import * as QueryString from "query-string";
 
-import { PianoKeyboard } from '../Components/Utils/PianoKeyboard';
+import { PianoKeyboard, renderPianoKeyboardNoteNames } from '../Components/Utils/PianoKeyboard';
 import { Rect2D } from '../lib/Core/Rect2D';
 import { Size2D } from '../lib/Core/Size2D';
 import { Vector2D } from '../lib/Core/Vector2D';
@@ -17,10 +17,13 @@ import { IAction } from '../IAction';
 import { ActionHandler, ActionBus } from '../ActionBus';
 import { Button } from '@material-ui/core';
 import { createStudyFlashCardSetComponent } from '../StudyFlashCards/View';
-import * as IntroQuiz from "./IntroQuiz";
 import { LimitedWidthContentContainer } from '../Components/Utils/LimitedWidthContentContainer';
 import { DependencyInjector } from '../DependencyInjector';
 import { clamp } from '../lib/Core/MathUtils';
+
+import * as IntroQuiz from "./IntroQuiz";
+import * as PianoNotes from "../Components/Quizzes/Notes/PianoNotes";
+import { naturalPitches } from '../Components/Quizzes/Notes/PianoNotes';
 
 const pianoAudio = new PianoAudio();
 
@@ -197,6 +200,11 @@ export const PianoNoteDiagram: React.FunctionComponent<{ pitch: Pitch }> = props
     onKeyPress={p => pianoAudio.pressKey(p, 1)}
     onKeyRelease={p => pianoAudio.releaseKey(p)}
     pressedPitches={[props.pitch]}
+    renderExtrasFn={metrics => renderPianoKeyboardNoteNames(
+      metrics,
+      /*useSharps*/ undefined,
+      /*showLetterPredicate*/ p => (p.isWhiteKey == props.pitch.isWhiteKey) && (p.midiNumber <= props.pitch.midiNumber)
+    )}
     style={{ width: "100%", maxWidth: "300px", height: "auto" }} />
 );
 
@@ -263,7 +271,7 @@ const slideGroups = [
         {createStudyFlashCardSetComponent(
           IntroQuiz.flashCardSet,
           /*isEmbedded*/ false,
-          /*hideMoreInfoUri*/ false,
+          /*hideMoreInfoUri*/ true,
           /*title*/ undefined,
           /*style*/ undefined,
           /*enableSettings*/ undefined,
@@ -273,21 +281,15 @@ const slideGroups = [
 
     new Slide(() => (
       <div>
-        <p>Each pitch has a specific name.</p>
-        <TwoOctavePiano />
-      </div>
-    )),
-    
-    new Slide(() => (
-      <div>
-        <p>Let's first focus on the white keys in a small section of the keyboard.</p>
+        <p>Now let's learn the names of the pitches that piano keys produce.</p>
+        <p>Let's first focus on the white keys in the small section of piano keyboard below.</p>
         <OneOctavePiano />
       </div>
     )),
     
     new Slide(() => (
       <div>
-        <p>This key, immediately to the left of the group of 3 black keys, is called C.</p>
+        <p>This key, immediately to the left of the group of 2 black keys, is called C.</p>
         <PianoNoteDiagram pitch={new Pitch(PitchLetter.C, 0, 4)} />
       </div>
     )),
@@ -308,7 +310,7 @@ const slideGroups = [
     
     new Slide(() => (
       <div>
-        <p>This key is called F.</p>
+        <p>This key, immediately to the left of the group of 3 black keys, is called F.</p>
         <PianoNoteDiagram pitch={new Pitch(PitchLetter.F, 0, 4)} />
       </div>
     )),
@@ -335,8 +337,15 @@ const slideGroups = [
     )),
     
     new Slide(() => (
-      <div>
-        <p>QUIZ</p>
+      <div style={{ marginTop: "1em" }}>
+        {createStudyFlashCardSetComponent(
+          PianoNotes.createFlashCardSet(naturalPitches),
+          /*isEmbedded*/ false,
+          /*hideMoreInfoUri*/ true,
+          /*title*/ "White Piano Key Names Exercise",
+          /*style*/ undefined,
+          /*enableSettings*/ undefined,
+          /*showRelatedExercises*/ false)}
       </div>
     )),
     
