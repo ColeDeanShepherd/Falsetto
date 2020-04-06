@@ -469,7 +469,7 @@ const slideGroups = [
           PianoNotes.createFlashCardSet(allPitches),
           /*isEmbedded*/ false,
           /*hideMoreInfoUri*/ true,
-          /*title*/ undefined,
+          /*title*/ "Piano Notes Exercise",
           /*style*/ undefined,
           /*enableSettings*/ undefined,
           /*showRelatedExercises*/ false)}
@@ -532,7 +532,9 @@ const slideGroups = [
 ];
 
 // TODO: optimize
-let slides = flattenArrays<Slide>(slideGroups.map(sg => sg.slides));
+let slides = flattenArrays<Slide>(slideGroups.map(sg => sg.slides))
+  .slice(0, 25)
+  .concat([new Slide(() => <h3>More coming soon!</h3>)]);
 
 // #endregion Slides
 
