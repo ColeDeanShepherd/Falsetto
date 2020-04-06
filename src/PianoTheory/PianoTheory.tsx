@@ -533,11 +533,7 @@ const slideGroups = [
 
 // TODO: optimize
 let slides = flattenArrays<Slide>(slideGroups.map(sg => sg.slides))
-<<<<<<< HEAD
-  .slice(0, 14)
-=======
   .slice(0, 25)
->>>>>>> pianoTheory_blackNotes
   .concat([new Slide(() => <h3>More coming soon!</h3>)]);
 
 // #endregion Slides
