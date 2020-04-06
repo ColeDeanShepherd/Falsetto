@@ -23,7 +23,7 @@ import { clamp } from '../lib/Core/MathUtils';
 
 import * as IntroQuiz from "./IntroQuiz";
 import * as PianoNotes from "../Components/Quizzes/Notes/PianoNotes";
-import { naturalPitches } from '../Components/Quizzes/Notes/PianoNotes';
+import { naturalPitches, accidentalPitches, allPitches } from '../Components/Quizzes/Notes/PianoNotes';
 
 const pianoAudio = new PianoAudio();
 
@@ -156,9 +156,12 @@ export class PlayablePiano extends React.Component<IPlayablePianoProps, IPlayabl
 
   private onKeyPress(pitch: Pitch) {
     pianoAudio.pressKey(pitch, /*velocity*/ 1);
-    this.setState((prevState, props) => {
-      return { pressedPitches: immutableAddIfNotFoundInArray(prevState.pressedPitches, pitch, (p, i) => p.equals(pitch)) };
-    });
+
+    if (Pitch.isInRange(pitch, this.props.lowestPitch, this.props.highestPitch)) {
+      this.setState((prevState, props) => {
+        return { pressedPitches: immutableAddIfNotFoundInArray(prevState.pressedPitches, pitch, (p, i) => p.equals(pitch)) };
+      });
+    }
   }
   private onKeyRelease(pitch: Pitch) {
     pianoAudio.releaseKey(pitch);
@@ -192,7 +195,13 @@ export const OneOctavePiano: React.FunctionComponent<{}> = props => (
     highestPitch={new Pitch(PitchLetter.B, 0, 4)} />
 );
 
-export const PianoNoteDiagram: React.FunctionComponent<{ pitch: Pitch }> = props => (
+export const PianoNoteDiagram: React.FunctionComponent<{
+  pitch: Pitch,
+  labelWhiteKeys: boolean,
+  labelBlackKeys: boolean,
+  showLetterPredicate?: (pitch: Pitch) => boolean,
+  useSharps?: boolean
+}> = props => (
   <PianoKeyboard
     rect={new Rect2D(new Size2D(150, 100), new Vector2D(0, 0))}
     lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
@@ -202,8 +211,26 @@ export const PianoNoteDiagram: React.FunctionComponent<{ pitch: Pitch }> = props
     pressedPitches={[props.pitch]}
     renderExtrasFn={metrics => renderPianoKeyboardNoteNames(
       metrics,
+      /*useSharps*/ props.useSharps,
+      /*showLetterPredicate*/ props.showLetterPredicate
+        ? props.showLetterPredicate
+        : p => ((props.labelWhiteKeys && p.isWhiteKey) || (props.labelBlackKeys && p.isBlackKey)) && (p.midiNumber <= props.pitch.midiNumber)
+    )}
+    style={{ width: "100%", maxWidth: "300px", height: "auto" }} />
+);
+
+export const OneOctavePianoNotesDiagram: React.FunctionComponent<{}> = props => (
+  <PianoKeyboard
+    rect={new Rect2D(new Size2D(150, 100), new Vector2D(0, 0))}
+    lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
+    highestPitch={new Pitch(PitchLetter.B, 0, 4)}
+    onKeyPress={p => pianoAudio.pressKey(p, 1)}
+    onKeyRelease={p => pianoAudio.releaseKey(p)}
+    pressedPitches={[]}
+    renderExtrasFn={metrics => renderPianoKeyboardNoteNames(
+      metrics,
       /*useSharps*/ undefined,
-      /*showLetterPredicate*/ p => (p.isWhiteKey == props.pitch.isWhiteKey) && (p.midiNumber <= props.pitch.midiNumber)
+      /*showLetterPredicate*/ p => true
     )}
     style={{ width: "100%", maxWidth: "300px", height: "auto" }} />
 );
@@ -290,49 +317,49 @@ const slideGroups = [
     new Slide(() => (
       <div>
         <p>This key, immediately to the left of the group of 2 black keys, is called C.</p>
-        <PianoNoteDiagram pitch={new Pitch(PitchLetter.C, 0, 4)} />
+        <PianoNoteDiagram pitch={new Pitch(PitchLetter.C, 0, 4)} labelWhiteKeys={true} labelBlackKeys={false} />
       </div>
     )),
     
     new Slide(() => (
       <div>
         <p>This key is called D.</p>
-        <PianoNoteDiagram pitch={new Pitch(PitchLetter.D, 0, 4)} />
+        <PianoNoteDiagram pitch={new Pitch(PitchLetter.D, 0, 4)} labelWhiteKeys={true} labelBlackKeys={false} />
       </div>
     )),
     
     new Slide(() => (
       <div>
         <p>This key is called E.</p>
-        <PianoNoteDiagram pitch={new Pitch(PitchLetter.E, 0, 4)} />
+        <PianoNoteDiagram pitch={new Pitch(PitchLetter.E, 0, 4)} labelWhiteKeys={true} labelBlackKeys={false} />
       </div>
     )),
     
     new Slide(() => (
       <div>
         <p>This key, immediately to the left of the group of 3 black keys, is called F.</p>
-        <PianoNoteDiagram pitch={new Pitch(PitchLetter.F, 0, 4)} />
+        <PianoNoteDiagram pitch={new Pitch(PitchLetter.F, 0, 4)} labelWhiteKeys={true} labelBlackKeys={false} />
       </div>
     )),
     
     new Slide(() => (
       <div>
         <p>This key is called G.</p>
-        <PianoNoteDiagram pitch={new Pitch(PitchLetter.G, 0, 4)} />
+        <PianoNoteDiagram pitch={new Pitch(PitchLetter.G, 0, 4)} labelWhiteKeys={true} labelBlackKeys={false} />
       </div>
     )),
     
     new Slide(() => (
       <div>
         <p>This key is called A.</p>
-        <PianoNoteDiagram pitch={new Pitch(PitchLetter.A, 0, 4)} />
+        <PianoNoteDiagram pitch={new Pitch(PitchLetter.A, 0, 4)} labelWhiteKeys={true} labelBlackKeys={false} />
       </div>
     )),
     
     new Slide(() => (
       <div>
         <p>This key is called B.</p>
-        <PianoNoteDiagram pitch={new Pitch(PitchLetter.B, 0, 4)} />
+        <PianoNoteDiagram pitch={new Pitch(PitchLetter.B, 0, 4)} labelWhiteKeys={true} labelBlackKeys={false} />
       </div>
     )),
     
@@ -349,53 +376,103 @@ const slideGroups = [
       </div>
     )),
     
-    new Slide(() => <span>Now let's learn the names of the black keys.</span>),
-    
     new Slide(() => (
       <div>
-        <p>This key, like all black keys, has multiple names. One of the names for it is C#. Another name for it is Db. The reason for multiple names will be explained later.</p>
-        <PianoNoteDiagram pitch={new Pitch(PitchLetter.C, 1, 4)} />
-      </div>
-    )),
-    
-    new Slide(() => (
-      <div>
-        <p>Sharps &amp; flats explanation.</p>
+        <p>Now let's learn the names of the pitches that black piano keys produce.</p>
         <OneOctavePiano />
       </div>
     )),
     
     new Slide(() => (
       <div>
+        <p>This key, like all black keys, has multiple names &ndash; one name for it is C♯, and another name for it is D♭.</p>
+        <PianoNoteDiagram pitch={new Pitch(PitchLetter.C, 1, 4)} labelWhiteKeys={false} labelBlackKeys={true} />
+      </div>
+    )),
+    
+    new Slide(() => (
+      <div>
+        <p>The '♯' symbol means the pitch is raised by one key, so C♯ means "the key to the right of C".</p>
+        <PianoNoteDiagram
+          pitch={new Pitch(PitchLetter.C, 1, 4)}
+          labelWhiteKeys={true}
+          labelBlackKeys={true}
+          useSharps={true}
+          showLetterPredicate={p => (p.midiNumber <= (new Pitch(PitchLetter.C, 1, 4)).midiNumber)} />
+      </div>
+    )),
+    
+    new Slide(() => (
+      <div>
+        <p>The '♭' symbol means the pitch is lowered by one key, so D♭ means "the key to the left of D".</p>
+        <PianoNoteDiagram
+          pitch={new Pitch(PitchLetter.C, 1, 4)}
+          labelWhiteKeys={true}
+          labelBlackKeys={true}
+          useSharps={false}
+          showLetterPredicate={p => p.isEnharmonic(new Pitch(PitchLetter.D, 0, 4)) || p.isEnharmonic(new Pitch(PitchLetter.D, -1, 4))} />
+      </div>
+    )),
+    
+    new Slide(() => (
+      <div>
         <p>This key is called D#, or Eb.</p>
-        <PianoNoteDiagram pitch={new Pitch(PitchLetter.D, 1, 4)} />
+        <PianoNoteDiagram pitch={new Pitch(PitchLetter.D, 1, 4)} labelWhiteKeys={false} labelBlackKeys={true} />
       </div>
     )),
 
     new Slide(() => (
       <div>
         <p>This key is called F#, or Gb.</p>
-        <PianoNoteDiagram pitch={new Pitch(PitchLetter.F, 1, 4)} />
+        <PianoNoteDiagram pitch={new Pitch(PitchLetter.F, 1, 4)} labelWhiteKeys={false} labelBlackKeys={true} />
       </div>
     )),
 
     new Slide(() => (
       <div>
         <p>This key is called G#, or Ab.</p>
-        <PianoNoteDiagram pitch={new Pitch(PitchLetter.G, 1, 4)} />
+        <PianoNoteDiagram pitch={new Pitch(PitchLetter.G, 1, 4)} labelWhiteKeys={false} labelBlackKeys={true} />
       </div>
     )),
 
     new Slide(() => (
       <div>
         <p>This key is called A#, or Bb.</p>
-        <PianoNoteDiagram pitch={new Pitch(PitchLetter.B, -1, 4)} />
+        <PianoNoteDiagram pitch={new Pitch(PitchLetter.B, -1, 4)} labelWhiteKeys={false} labelBlackKeys={true} />
+      </div>
+    )),
+    
+    new Slide(() => (
+      <div style={{ marginTop: "1em" }}>
+        {createStudyFlashCardSetComponent(
+          PianoNotes.createFlashCardSet(accidentalPitches),
+          /*isEmbedded*/ false,
+          /*hideMoreInfoUri*/ true,
+          /*title*/ "Black Piano Key Names Exercise",
+          /*style*/ undefined,
+          /*enableSettings*/ undefined,
+          /*showRelatedExercises*/ false)}
       </div>
     )),
     
     new Slide(() => (
       <div>
-        <p>QUIZ</p>
+        <p>You have now learned all of the names of the keys in this section of the piano!</p>
+        <p>Let's solidify our knowledge with a comprehensive exercise on the next slide.</p>
+        <OneOctavePianoNotesDiagram />
+      </div>
+    )),
+    
+    new Slide(() => (
+      <div style={{ marginTop: "1em" }}>
+        {createStudyFlashCardSetComponent(
+          PianoNotes.createFlashCardSet(allPitches),
+          /*isEmbedded*/ false,
+          /*hideMoreInfoUri*/ true,
+          /*title*/ undefined,
+          /*style*/ undefined,
+          /*enableSettings*/ undefined,
+          /*showRelatedExercises*/ false)}
       </div>
     )),
 
