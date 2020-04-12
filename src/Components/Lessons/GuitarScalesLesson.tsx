@@ -11,7 +11,6 @@ import { StringedInstrumentMetrics } from "../Utils/StringedInstrumentFingerboar
 import { getStandardGuitarTuning } from "../Utils/StringedInstrumentTuning";
 import { Pitch } from '../../lib/TheoryLib/Pitch';
 import { PitchLetter } from '../../lib/TheoryLib/PitchLetter';
-import { MAX_MAIN_CARD_WIDTH } from '../Style';
 import { ScaleType, Scale } from '../../lib/TheoryLib/Scale';
 import { NoteText } from './EssentialMusicTheory/EssentialMusicTheory';
 import { ScaleAudioPlayer } from '../Utils/ScaleAudioPlayer';
@@ -112,7 +111,7 @@ export class GuitarScalesLesson extends React.Component<IGuitarScalesLessonProps
   public render(): JSX.Element {
 
     return (
-      <Card style={{ maxWidth: MAX_MAIN_CARD_WIDTH }}>
+      <Card>
         <CardContent>
           <h1>Learn Guitar Scale Shapes</h1>
           <p>Knowing common scales &amp; modes on your instrument is vital to becoming a skilled musician. There are countless scales &amp; modes to learn, but we will leverage some repeating patterns that arise on the guitar fretboard to quickly and easily learn some common scales &amp; modes on guitar.</p>

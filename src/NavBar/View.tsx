@@ -7,10 +7,12 @@ import { IUserManager } from "../UserManager";
 import { Paper } from '@material-ui/core';
 import { MainMenu } from '../Components/MainMenu';
 import { NavLinkView } from '../NavLinkView';
+import { Settings } from '../SettingsView';
 
 export interface INavBarViewProps {}
 export interface INavBarViewState {
   isMenuVisible: boolean;
+  isSettingsVisible: boolean;
 }
 export class NavBarView extends React.Component<INavBarViewProps, INavBarViewState> {
   public constructor(props: INavBarViewProps) {
@@ -20,7 +22,8 @@ export class NavBarView extends React.Component<INavBarViewProps, INavBarViewSta
     this.userManager = DependencyInjector.instance.getRequiredService<IUserManager>("IUserManager");
 
     this.state = {
-      isMenuVisible: false
+      isMenuVisible: false,
+      isSettingsVisible: false
     };
   }
 
@@ -40,6 +43,14 @@ export class NavBarView extends React.Component<INavBarViewProps, INavBarViewSta
       <div className="menu-container">
         <Paper style={{ padding: "0 1em 1em 1em" }}>
           <MainMenu />
+        </Paper>
+      </div>
+    ) : null;
+    
+    const settings = this.state.isSettingsVisible ? (
+      <div className="menu-container">
+        <Paper style={{ padding: "0 1em 1em 1em" }}>
+          <Settings />
         </Paper>
       </div>
     ) : null;
@@ -68,9 +79,11 @@ export class NavBarView extends React.Component<INavBarViewProps, INavBarViewSta
               <img src="/github-logo.png" alt="GitHub" style={{display: "block", width: "32px", height: "32px", padding: "5px 0"}} />
             </a>
             <i onClick={event => this.toggleMenu()} className="cursor-pointer material-icons no-select">menu</i>
+            <i onClick={event => this.toggleSettings()} className="cursor-pointer material-icons no-select">settings</i>
           </div>
         </div>
         {menu}
+        {settings}
       </div>
     );
   }
@@ -83,8 +96,23 @@ export class NavBarView extends React.Component<INavBarViewProps, INavBarViewSta
         this.setState({ isMenuVisible: false });
     }
   }
+
   private toggleMenu() {
-    this.setState({ isMenuVisible: !this.state.isMenuVisible });
+    const newIsMenuVisible = !this.state.isMenuVisible;
+    const newState: any = newIsMenuVisible
+      // hide settings if the menu is visible
+      ? { isMenuVisible: newIsMenuVisible, isSettingsVisible: false }
+      : { isMenuVisible: newIsMenuVisible };
+    this.setState(newState);
+  }
+
+  private toggleSettings() {
+    const newIsSettingsVisible = !this.state.isSettingsVisible;
+    const newState: any = newIsSettingsVisible
+      // hide the menu if settings are visible
+      ? { isMenuVisible: false, isSettingsVisible: newIsSettingsVisible }
+      : { isSettingsVisible: newIsSettingsVisible };
+    this.setState(newState);
   }
 
   // TODO: separate menu

@@ -1,5 +1,7 @@
 import { Pitch } from "../lib/TheoryLib/Pitch";
 import { loadAndPlaySoundsSequentially, loadAndPlaySoundsSimultaneously } from './Audio';
+import { StringDictionary } from '../lib/Core/StringDictionary';
+import { addIfNotFoundInArray, removeIfFoundInArray } from '../lib/Core/ArrayUtils';
 
 export const pianoAudioFilePathsByMidiNumber = new Array<[number, string]>();
 pianoAudioFilePathsByMidiNumber.push([21, "/audio/piano/A0.mp3"]);
@@ -116,4 +118,53 @@ export function playPitchesSequentially(pitches: Array<Pitch>, delayInMs: number
     .map(fp => fp as string);
   
   return loadAndPlaySoundsSequentially(soundFilePaths, delayInMs, cutOffSounds);
+}
+
+// TODO: preload
+export class PianoAudio {
+  // TODO: use velocity
+  public pressKey(pitch: Pitch, velocity: number): boolean {
+    const cancellationFnKey = this.getPitchCancellationFnKey(pitch);
+
+    // Return if the key is already pressed.
+    const isKeyPressed = this.pitchCancellationFns[cancellationFnKey] !== undefined;
+    if (isKeyPressed) {
+      return false;
+    }
+
+    // Play the key's pitch & save the audio cancellation function.
+    const cancellationFn = playPitches([pitch])[1];
+    this.pitchCancellationFns[cancellationFnKey] = cancellationFn;
+
+    this.pressedPitches.push(pitch);
+    return true;
+  }
+
+  public releaseKey(pitch: Pitch): boolean {
+    const cancellationFnKey = this.getPitchCancellationFnKey(pitch);
+
+    const cancellationFn = this.pitchCancellationFns[cancellationFnKey];
+    if (cancellationFn) {
+      cancellationFn();
+      delete this.pitchCancellationFns[cancellationFnKey];
+    }
+
+    return removeIfFoundInArray(this.pressedPitches, p => p.equals(pitch));
+  }
+
+  public releaseAllKeys() {
+    for (const cancellationFnKey in this.pitchCancellationFns) {
+      this.pitchCancellationFns[cancellationFnKey]();
+    }
+
+    this.pitchCancellationFns = {};
+    this.pressedPitches = [];
+  }
+
+  private pressedPitches: Array<Pitch> = [];
+  private pitchCancellationFns: StringDictionary<() => void> = {};
+
+  private getPitchCancellationFnKey(pitch: Pitch): string {
+    return pitch.midiNumber.toString();
+  }
 }

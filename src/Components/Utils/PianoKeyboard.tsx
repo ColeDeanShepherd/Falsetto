@@ -1,6 +1,5 @@
 import * as React from "react";
 
-import * as Utils from "../../lib/Core/Utils";
 import { getRectRoundedBottomPathDefString } from "../../lib/Core/SvgUtils";
 import { Pitch } from "../../lib/TheoryLib/Pitch";
 import { Rect2D } from '../../lib/Core/Rect2D';
@@ -9,6 +8,7 @@ import { Size2D } from '../../lib/Core/Size2D';
 import { Vector2D } from '../../lib/Core/Vector2D';
 import { invariant, precondition } from '../../lib/Core/Dbc';
 import { growRectAroundCenter } from '../../lib/Core/MathUtils';
+import { isBitSet } from '../../lib/Core/Utils';
 
 export class PianoKeyboardMetrics {
   public constructor(
@@ -200,6 +200,7 @@ export interface IPianoKeyboardProps {
   highestPitch: Pitch;
   pressedPitches?: Array<Pitch>;
   onKeyPress?: (keyPitch: Pitch) => void;
+  onKeyRelease?: (keyPitch: Pitch) => void;
   renderExtrasFn?: (metrics: PianoKeyboardMetrics) => JSX.Element;
   renderLayeredExtrasFn?: (metrics: PianoKeyboardMetrics) => { whiteKeyLayerExtras: JSX.Element, blackKeyLayerExtras: JSX.Element };
   margin?: Margin;
@@ -229,9 +230,30 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
             key={i}
             d={getRectRoundedBottomPathDefString(position, size, whiteKeyRadius)}
             fill="white" stroke="black" strokeWidth="2" className="cursor-pointer"
-            onMouseDown={event => {
+            touch-action="none"
+            onPointerDown={event => {
               if (this.props.onKeyPress) {
                 this.props.onKeyPress(pitch);
+                event.preventDefault();
+              }
+            }}
+            onPointerUp={event => {
+              if (this.props.onKeyRelease) {
+                this.props.onKeyRelease(pitch);
+                event.preventDefault();
+              }
+            }}
+            onPointerOver={event => {
+              if (isBitSet(event.buttons, 0)) {
+                if (this.props.onKeyPress) {
+                  this.props.onKeyPress(pitch);
+                  event.preventDefault();
+                }
+              }
+            }}
+            onPointerOut={event => {
+              if (this.props.onKeyRelease) {
+                this.props.onKeyRelease(pitch);
                 event.preventDefault();
               }
             }}
@@ -245,9 +267,30 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
             key={i}
             d={getRectRoundedBottomPathDefString(position, size, blackKeyRadius)}
             fill="black" strokeWidth="0" className="cursor-pointer"
-            onMouseDown={event => {
+            touch-action="none"
+            onPointerDown={event => {
               if (this.props.onKeyPress) {
                 this.props.onKeyPress(pitch);
+                event.preventDefault();
+              }
+            }}
+            onPointerUp={event => {
+              if (this.props.onKeyRelease) {
+                this.props.onKeyRelease(pitch);
+                event.preventDefault();
+              }
+            }}
+            onPointerOver={event => {
+              if (isBitSet(event.buttons, 0)) {
+                if (this.props.onKeyPress) {
+                  this.props.onKeyPress(pitch);
+                  event.preventDefault();
+                }
+              }
+            }}
+            onPointerOut={event => {
+              if (this.props.onKeyRelease) {
+                this.props.onKeyRelease(pitch);
                 event.preventDefault();
               }
             }}
@@ -255,31 +298,12 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
         );
       }
     }
-    
-    const noteDotRadius = metrics.blackKeyWidth / 3;
 
-    const noteHighlights = this.props.pressedPitches
-      ? this.props.pressedPitches
-          .map(pressedPitch => {
-            const noteIndex = pressedPitch.midiNumber - metrics.lowestPitch.midiNumber;
-            if ((noteIndex < 0) || (noteIndex >= metrics.keyLeftXs.length)) {
-              return;
-            }
-
-            const highlightedNoteX = pressedPitch.isWhiteKey
-              ? metrics.keyLeftXs[noteIndex] + (metrics.whiteKeyWidth / 2)
-              : metrics.keyLeftXs[noteIndex] + (metrics.blackKeyWidth / 2);
-            const highlightedNoteY = pressedPitch.isWhiteKey
-              ? (0.75 * metrics.whiteKeyHeight)
-              : (metrics.blackKeyHeight / 2);
-            return <circle
-              key={pressedPitch.toString(true)}
-              cx={highlightedNoteX} cy={highlightedNoteY}
-              r={noteDotRadius}
-              fill="red" strokeWidth="0" className="cursor-pointer"
-              onMouseDown={event => this.props.onKeyPress ? this.props.onKeyPress(pressedPitch) : null}
-            />;
-          })
+    const whiteNoteHighlights = this.props.pressedPitches
+      ? renderPressedPianoKeys(metrics, this.props.pressedPitches.filter(p => p.isWhiteKey))
+      : null;
+    const blackNoteHighlights = this.props.pressedPitches
+      ? renderPressedPianoKeys(metrics, this.props.pressedPitches.filter(p => p.isBlackKey))
       : null;
 
     const extraElements = this.props.renderExtrasFn
@@ -299,10 +323,11 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
         style={this.props.style}>
         <g transform={`translate(${margin.left}, ${margin.top})`}>
           {whiteKeys}
+          {whiteNoteHighlights}
           {layeredExtraElements ? layeredExtraElements.whiteKeyLayerExtras : null}
           {blackKeys}
+          {blackNoteHighlights}
           {layeredExtraElements ? layeredExtraElements.blackKeyLayerExtras : null}
-          {noteHighlights}
           {extraElements}
         </g>
       </svg>

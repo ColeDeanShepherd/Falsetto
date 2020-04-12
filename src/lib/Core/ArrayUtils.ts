@@ -181,6 +181,54 @@ export function removeElement<T>(array: T[], element: T): boolean {
   }
 }
 
+export function addIfNotInArray<T>(array: T[], element: T): boolean {
+  const elementIndex = array.indexOf(element);
+
+  if (elementIndex < 0) {
+    array.push(element);
+    return true;
+  } else {
+    return false;
+  }
+}
+
+export function removeIfInArray<T>(array: T[], element: T): boolean {
+  const elementIndex = array.indexOf(element);
+
+  if (elementIndex >= 0) {
+    array.splice(elementIndex, 1);
+    return true;
+  } else {
+    return false;
+  }
+}
+
+export function addIfNotFoundInArray<T>(
+  array: T[], element: T, predicate: (value: T, index: number) => boolean
+): boolean {
+  const elementIndex = array.findIndex(predicate);
+
+  if (elementIndex < 0) {
+    array.push(element);
+    return true;
+  } else {
+    return false;
+  }
+}
+
+export function removeIfFoundInArray<T>(
+  array: T[], predicate: (value: T, index: number) => boolean
+): boolean {
+  const elementIndex = array.findIndex(predicate);
+
+  if (elementIndex >= 0) {
+    array.splice(elementIndex, 1);
+    return true;
+  } else {
+    return false;
+  }
+}
+
 export function immutableAddIfNotInArray<T>(array: T[], element: T): T[] {
   const elementIndex = array.indexOf(element);
   return (elementIndex < 0)

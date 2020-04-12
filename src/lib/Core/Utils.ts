@@ -1,4 +1,5 @@
 import { reverseString } from './StringUtils';
+import { precondition } from './Dbc';
 
 export function identity<T>(value: T): T {
   return value;
@@ -40,6 +41,12 @@ export function setBitIndicesToInt(setBitIndices: number[]): number {
   }
 
   return result;
+}
+
+export function isBitSet(bits: number, bitIndex: number): boolean {
+  precondition(bitIndex >= 0);
+
+  return (bits & (1 << bitIndex)) !== 0;
 }
 
 // TODO: add tests

@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Card, CardContent } from '@material-ui/core';
 
-import * as Utils from "../../lib/Core/Utils";
 import {
   GuitarFretboard,
   renderGuitarNoteHighlightsAndNoteNames,
@@ -13,7 +12,6 @@ import * as GuitarNotes from "../Quizzes/Notes/GuitarNotes";
 import { Pitch } from '../../lib/TheoryLib/Pitch';
 import { PitchLetter } from '../../lib/TheoryLib/PitchLetter';
 import { createStudyFlashCardSetComponent } from '../../StudyFlashCards/View';
-import { MAX_MAIN_CARD_WIDTH } from '../Style';
 import { StringedInstrumentNote } from '../../lib/TheoryLib/StringedInstrumentNote';
 import { NavLinkView } from '../../NavLinkView';
 import { flattenArrays } from '../../lib/Core/ArrayUtils';
@@ -276,7 +274,7 @@ export class GuitarNotesLesson extends React.Component<IGuitarNotesLessonProps, 
     const fretboardStyle = { width: "100%", maxWidth: "400px", height: "auto" };
 
     return (
-      <Card style={{ maxWidth: MAX_MAIN_CARD_WIDTH }}>
+      <Card>
         <CardContent>
           <h1>Learn the Notes on Guitar in 10 Easy Steps</h1>
 

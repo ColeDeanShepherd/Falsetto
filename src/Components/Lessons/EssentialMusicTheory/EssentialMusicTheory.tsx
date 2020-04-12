@@ -12,7 +12,6 @@ import { PitchLetter } from '../../../lib/TheoryLib/PitchLetter';
 import _32ndNote from "../../../img/sheet-music/32nd-note.svg";
 import _32ndRest from "../../../img/sheet-music/32nd-rest.svg";
 
-import { MAX_MAIN_CARD_WIDTH } from '../../Style';
 import { Rect2D } from '../../../lib/Core/Rect2D';
 import { Vector2D } from '../../../lib/Core/Vector2D';
 import { Size2D } from '../../../lib/Core/Size2D';
@@ -124,7 +123,7 @@ export interface ISectionProps {
 export class SectionContainer extends React.Component<ISectionProps, {}> {
   public render(): JSX.Element {
     return (
-      <Card style={{ maxWidth: MAX_MAIN_CARD_WIDTH }}>
+      <Card>
         <CardContent>
           {React.createElement(this.props.section, { isEmbedded: this.isEmbedded, hideMoreInfoUri: this.hideMoreInfoUri })}
         </CardContent>

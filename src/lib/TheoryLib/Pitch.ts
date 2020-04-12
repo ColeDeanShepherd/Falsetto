@@ -130,6 +130,14 @@ export class Pitch {
       pitch.signedAccidental
     );
   }
+  public static isInRange(pitch: Pitch, minPitch: Pitch, maxPitch: Pitch): boolean {
+    const minPitchMidiNumber = minPitch.midiNumber;
+    const maxPitchMidiNumber = maxPitch.midiNumber;
+    precondition(minPitchMidiNumber <= maxPitchMidiNumber);
+
+    const pitchMidiNumber = pitch.midiNumber;
+    return (pitchMidiNumber >= minPitchMidiNumber) && (pitchMidiNumber <= maxPitchMidiNumber);
+  }
 
   public static addInterval(
     pitch: Pitch,
