@@ -69,6 +69,7 @@ export const MainMenu : React.FunctionComponent<{}> = props => (
           {<NavLinkView to="/essential-music-theory/chords">{"Chords"}</NavLinkView>}
           {<NavLinkView to="/essential-music-theory/chord-progressions">{"Chord Progressions"}</NavLinkView>}
           {<NavLinkView to="/essential-music-theory/next-steps">{"Next Steps"}</NavLinkView>}
+          {<NavLinkView to="/piano-theory">{"Piano Theory (Early WIP)"}</NavLinkView>}
         </MenuCategory>
         <MenuCategory title="Guitar Lessons">
           <NavLinkView to="/learn-guitar-notes-in-10-steps">Learn the Notes on Guitar in 10 Easy Steps</NavLinkView>
