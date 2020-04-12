@@ -85,6 +85,7 @@ export const MainMenu : React.FunctionComponent<{}> = props => (
               {<NavLinkView to="/essential-music-theory/chords">{"Chords"}</NavLinkView>}
               {<NavLinkView to="/essential-music-theory/chord-progressions">{"Chord Progressions"}</NavLinkView>}
               {<NavLinkView to="/essential-music-theory/next-steps">{"Next Steps"}</NavLinkView>}
+              {<NavLinkView to="/piano-theory">{"Piano Theory (Early WIP)"}</NavLinkView>}
             </Typography>
           </ExpansionPanelDetails>
         </ExpansionPanel>
