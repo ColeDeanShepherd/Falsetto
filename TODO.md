@@ -2,18 +2,6 @@
 ## High Priority
 * Interactive piano exercises/lessons
   * Document title changes
-  * PowerPoint style?
-  * Intro
-    * Introduce format of lesson, can use your real piano too
-    * Start by introducing the piano
-    * "keys"
-    * show full 88 keys
-    * left - lower pitch, right - higher pitch
-    * zoom into smaller range for teaching
-  * Piano keys
-    * White keys - natural notes
-    * Black keys - accidentals
-    * Names
   * Should chords be next???
   * Scales
     * Fingering

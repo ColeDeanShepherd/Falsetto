@@ -219,21 +219,30 @@ export const PianoNoteDiagram: React.FunctionComponent<{
     style={{ width: "100%", maxWidth: "300px", height: "auto" }} />
 );
 
-export const OneOctavePianoNotesDiagram: React.FunctionComponent<{}> = props => (
-  <PianoKeyboard
-    rect={new Rect2D(new Size2D(150, 100), new Vector2D(0, 0))}
-    lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-    highestPitch={new Pitch(PitchLetter.B, 0, 4)}
-    onKeyPress={p => pianoAudio.pressKey(p, 1)}
-    onKeyRelease={p => pianoAudio.releaseKey(p)}
-    pressedPitches={[]}
-    renderExtrasFn={metrics => renderPianoKeyboardNoteNames(
-      metrics,
-      /*useSharps*/ undefined,
-      /*showLetterPredicate*/ p => true
-    )}
-    style={{ width: "100%", maxWidth: "300px", height: "auto" }} />
-);
+export const PianoNotesDiagram: React.FunctionComponent<{
+  octaveCount: number,
+  labelWhiteKeys?: boolean,
+  labelBlackKeys?: boolean
+}> = props => {
+  const labelWhiteKeys = (props.labelWhiteKeys !== undefined) ? props.labelWhiteKeys : true;
+  const labelBlackKeys = (props.labelBlackKeys !== undefined) ? props.labelBlackKeys : true;
+
+  return (
+    <PianoKeyboard
+      rect={new Rect2D(new Size2D(props.octaveCount * 150, 100), new Vector2D(0, 0))}
+      lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
+      highestPitch={new Pitch(PitchLetter.B, 0, 4 + (props.octaveCount - 1))}
+      onKeyPress={p => pianoAudio.pressKey(p, 1)}
+      onKeyRelease={p => pianoAudio.releaseKey(p)}
+      pressedPitches={[]}
+      renderExtrasFn={metrics => renderPianoKeyboardNoteNames(
+        metrics,
+        /*useSharps*/ undefined,
+        /*showLetterPredicate*/ p => p.isWhiteKey ? labelWhiteKeys : labelBlackKeys
+      )}
+      style={{ width: "100%", maxWidth: "300px", height: "auto" }} />
+  );
+}
 
 // #endregion Helper Components
 
@@ -364,6 +373,14 @@ const slideGroups = [
     )),
     
     new Slide(() => (
+      <div>
+        <p>You have now learned the names of all of the white piano keys in this section of the piano!</p>
+        <p>Study this slide, then move to the next slide to test your knowledge with a quiz.</p>
+        <PianoNotesDiagram octaveCount={1} labelBlackKeys={false} />
+      </div>
+    )),
+    
+    new Slide(() => (
       <div style={{ marginTop: "1em" }}>
         {createStudyFlashCardSetComponent(
           PianoNotes.createFlashCardSet(naturalPitches),
@@ -443,6 +460,14 @@ const slideGroups = [
     )),
     
     new Slide(() => (
+      <div>
+        <p>You have now learned the names of all of the black piano keys in this section of the piano!</p>
+        <p>Study this slide, then move to the next slide to test your knowledge with a quiz.</p>
+        <PianoNotesDiagram octaveCount={1} labelWhiteKeys={false} />
+      </div>
+    )),
+    
+    new Slide(() => (
       <div style={{ marginTop: "1em" }}>
         {createStudyFlashCardSetComponent(
           PianoNotes.createFlashCardSet(accidentalPitches),
@@ -458,11 +483,26 @@ const slideGroups = [
     new Slide(() => (
       <div>
         <p>You have now learned all of the names of the keys in this section of the piano!</p>
-        <p>Let's solidify our knowledge with a comprehensive exercise on the next slide.</p>
-        <OneOctavePianoNotesDiagram />
+        <PianoNotesDiagram octaveCount={1} />
       </div>
     )),
     
+    new Slide(() => (
+      <div>
+        <p>Now let's zoom out.</p>
+        <p>The names of the other keys are simply repetitions of the pattern we've learned, so you have actually learned the names of all 88 piano keys!</p>
+        <PianoNotesDiagram octaveCount={2} />
+      </div>
+    )),
+
+    
+    new Slide(() => (
+      <div>
+        <p>Study this slide, then move to the next slide to comprehensively test your knowledge of piano key names with a quiz.</p>
+        <PianoNotesDiagram octaveCount={1} />
+      </div>
+    )),
+
     new Slide(() => (
       <div style={{ marginTop: "1em" }}>
         {createStudyFlashCardSetComponent(
@@ -475,28 +515,7 @@ const slideGroups = [
           /*showRelatedExercises*/ false)}
       </div>
     )),
-
-    new Slide(() => (
-      <div>
-        <p>Now that we've learned the names of the keys in the section, let's zoom out.</p>
-        <TwoOctavePiano />
-      </div>
-    )),
     
-    new Slide(() => (
-      <div>
-        <p>You can see that the piano keys are simply a repetition of the pattern we've learned.</p>
-        <TwoOctavePiano />
-      </div>
-    )),
-    
-    new Slide(() => (
-      <div>
-        <p>Each repetition of the pattern has the same pitch names, so we've now learned all the notes on the piano!</p>
-        <TwoOctavePiano />
-      </div>
-    )),
-
     // quiz?
 
     new Slide(() => <span>Now let's learn about scales.</span>),
@@ -533,7 +552,7 @@ const slideGroups = [
 
 // TODO: optimize
 let slides = flattenArrays<Slide>(slideGroups.map(sg => sg.slides))
-  .slice(0, 25)
+  .slice(0, 29)
   .concat([new Slide(() => <h3>More coming soon!</h3>)]);
 
 // #endregion Slides
