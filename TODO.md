@@ -4,6 +4,8 @@
   * Document title changes
   * Should chords be next???
   * Scales
+    * Play buttons for scales
+    * Figure out how to handle centered lists
     * Fingering
     * Major
     * Natural minor
@@ -58,9 +60,11 @@
 * Glossary
   * Expand content
   * Display synonyms
+* Settings
+  * Volume slider
 ## Medium Priority
 * 
 ## Low Priority
 * 
 ## Refactoring
-* 
+* ScaleViewer render()

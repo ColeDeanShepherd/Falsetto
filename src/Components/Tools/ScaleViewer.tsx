@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Button, Card, CardContent, Typography } from "@material-ui/core";
 
-import * as Utils from "../../lib/Core/Utils";
 import { Vector2D } from '../../lib/Core/Vector2D';
 import { Size2D } from "../../lib/Core/Size2D";
 import { Rect2D } from '../../lib/Core/Rect2D';
@@ -64,15 +63,23 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
     const pianoSize = new Size2D(400, 100);
     const guitarSize = new Size2D(400, 140);
     
-    const onKeyPress = this.props.playSimultaneously
-      ? ((pitch: Pitch) => {
+    const onKeyPress = (pitch: Pitch) => {
+      const { playSimultaneously } = this.props;
+      
+      if (this.stopPlayingKeysAudioFn) {
+        this.stopPlayingKeysAudioFn();
+      }
+
+      if (playSimultaneously) {
         const pitchMidiNumberNoOctaves = pitches.map(p => p.midiNumberNoOctave);
 
         if (arrayContains(pitchMidiNumberNoOctaves, pitch.midiNumberNoOctave)) {
-          playPitches([pitch]);
+          this.stopPlayingKeysAudioFn = playPitches([pitch])[1];
         }
-      })
-      : (pitch: Pitch) => PianoScaleDronePlayer.onKeyPress(this.state.scale, pitch);
+      } else {
+        this.stopPlayingKeysAudioFn = PianoScaleDronePlayer.onKeyPress(this.state.scale, pitch)
+      }
+    };
     
     const showPianoKeyboard = (this.props.showPianoKeyboard !== undefined)
       ? this.props.showPianoKeyboard
@@ -160,7 +167,7 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
 
             <div>
               <p>
-                <ScaleAudioPlayer scale={this.state.scale} pitchCount={numPitchesToPlay} onGetExports={e => this.stopPlayingAudioFn = e.stopPlayingFn} />
+                <ScaleAudioPlayer scale={this.state.scale} pitchCount={numPitchesToPlay} onGetExports={e => this.stopPlayingScaleAudioFn = e.stopPlayingFn} />
               </p>
             </div>
 
@@ -212,12 +219,13 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
     this.setState({ scale: newScale }, this.onScaleChange.bind(this));
   }
 
-  private stopPlayingAudioFn: (() => void) | null = null;
+  private stopPlayingKeysAudioFn: (() => void) | undefined = undefined;
+  private stopPlayingScaleAudioFn: (() => void) | null = null;
 
   private onScaleChange() {
-    if (this.stopPlayingAudioFn) {
-      this.stopPlayingAudioFn();
-      this.stopPlayingAudioFn = null;
+    if (this.stopPlayingScaleAudioFn) {
+      this.stopPlayingScaleAudioFn();
+      this.stopPlayingScaleAudioFn = null;
     }
   }
 }

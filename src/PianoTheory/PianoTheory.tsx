@@ -24,6 +24,10 @@ import { clamp } from '../lib/Core/MathUtils';
 import * as IntroQuiz from "./IntroQuiz";
 import * as PianoNotes from "../Components/Quizzes/Notes/PianoNotes";
 import { naturalPitches, accidentalPitches, allPitches } from '../Components/Quizzes/Notes/PianoNotes';
+import { PianoScaleFormulaDiagram } from '../Components/Utils/PianoScaleFormulaDiagram';
+import { ScaleType, Scale } from '../lib/TheoryLib/Scale';
+import { PianoScaleDronePlayer } from '../Components/Utils/PianoScaleDronePlayer';
+import { PianoScaleFingeringDiagram } from '../Components/Utils/PianoScaleFingeringDiagram';
 
 const pianoAudio = new PianoAudio();
 
@@ -272,6 +276,7 @@ const slideGroups = [
       <div>
         <h2>Welcome to Falsetto's "Piano Theory" course!</h2>
         <p>This is an interactive course designed to teach you the essentials of piano and music theory in a hands-on manner.</p>
+        <p>You can navigate the course using the buttons above, or with the right &amp; left arrow keys on a computer keyboard.</p>
         <p>It is highly recommended to connect a MIDI piano keyboard to your computer to follow along with these lessons.</p>
         <p>Click the settings icon (<i className="material-icons" style={{ verticalAlign: "bottom" }}>settings</i>) in the bar at the top of the screen to configure your MIDI input device.</p>
         <p>If your MIDI input device and audio settings are configured properly, then pressing keys will produce piano sounds.</p>
@@ -313,8 +318,9 @@ const slideGroups = [
           /*enableSettings*/ undefined,
           /*showRelatedExercises*/ false)}
       </div>
-    )),
-
+    ))
+  ]),
+  new SlideGroup("Notes", [
     new Slide(() => (
       <div>
         <p>Now let's learn the names of the pitches that piano keys produce.</p>
@@ -515,10 +521,45 @@ const slideGroups = [
           /*showRelatedExercises*/ false)}
       </div>
     )),
-    
-    // quiz?
-
-    new Slide(() => <span>Now let's learn about scales.</span>),
+  ]),
+  new SlideGroup("Scales", [
+    new Slide(() => (
+      <div>
+        <p>Now let's learn about scales.</p>
+        <p>Scales are sets of notes (usually 7 notes in Western musical scales) with a designated "root note", which generally "sounds like home" in the scale.</p>
+      </div>
+    )),
+    new Slide(() => (
+      <div>
+        <p>One of the most commonly used scales is the major scale.</p>
+        <p>Below is an interactive diagram of the "C Major" scale, which comprises of the notes: C, D, E, F, G, A, B.</p>
+        <p>Pressing the keys will play both the pressed note and the root note (C) to give you a feel for how the scale sounds.</p>
+        <p><PianoScaleDronePlayer scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))} /></p>
+      </div>
+    )),
+    new Slide(() => (
+      <div>
+        <p>Major scales are built using the formula "R W W H W W W H", where:</p>
+        <ul>
+          <li>"R" means the root note</li>
+          <li>"W" means the next note is a whole step (2 keys) to the right of the previous note</li>
+          <li>"H" means the next note is a half step (1 key) to the right of the previous note.</li>
+        </ul>
+        <p>Below is a diagram of the C major scale along with its formula.</p>
+        <p><PianoScaleFormulaDiagram scale={ScaleType.Ionian} /></p>
+      </div>
+    )),
+    new Slide(() => (
+      <div>
+        <p>Here is a common "fingering" &mdash; instructions for which fingers to use when playing piano keys &mdash; for playing the C major scale with your left hand:</p>
+        <p><PianoScaleFingeringDiagram scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))} /></p>
+      </div>
+    )),
+    new Slide(() => (
+      <div>
+        <p></p>
+      </div>
+    )),
     new Slide(() => <span>Scales are ...</span>),
     new Slide(() => <span>Most music is based on only a few scales.</span>),
     new Slide(() => <span>Here is an example of a scale.</span>),
@@ -546,13 +587,12 @@ const slideGroups = [
         style={{ width: "100%", maxWidth: "300px", height: "auto" }} />
     )),
     new Slide(() => <span>Slide 2</span>),
-    new Slide(() => <span>Slide 3</span>)
-  ])
+    new Slide(() => <span>Slide 3</span>)])
 ];
 
 // TODO: optimize
 let slides = flattenArrays<Slide>(slideGroups.map(sg => sg.slides))
-  .slice(0, 29)
+  .slice(0, 35)
   .concat([new Slide(() => <h3>More coming soon!</h3>)]);
 
 // #endregion Slides
