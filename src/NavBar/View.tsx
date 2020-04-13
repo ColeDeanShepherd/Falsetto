@@ -42,7 +42,7 @@ export class NavBarView extends React.Component<INavBarViewProps, INavBarViewSta
     const menu = this.state.isMenuVisible ? (
       <div className="menu-container">
         <Paper style={{ padding: "0 1em 1em 1em" }}>
-          <MainMenu />
+          <MainMenu collapseCategories={false} />
         </Paper>
       </div>
     ) : null;
