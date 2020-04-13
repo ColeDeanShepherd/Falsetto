@@ -9,7 +9,7 @@ export class HomePage extends React.Component<{}, {}> {
       <Card>
         <CardContent>
           <p>Falsetto is a collection of free, interactive music theory lessons &amp; exercises. Get started by clicking a link below!</p>
-          <MainMenu />
+          <MainMenu collapseCategories={true} />
         </CardContent>
       </Card>
     );
