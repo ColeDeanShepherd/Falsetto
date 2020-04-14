@@ -32,7 +32,7 @@ export const ScalesAndModesSection: React.FunctionComponent<SectionProps> = prop
     <SubSectionTitle>The Major Scale</SubSectionTitle>
     <p>One of the most common scales, upon which other scales are often built by modifying notes, is the <Term>major scale</Term>. The <Term>major scale</Term> is a 7 note scale which can be built using the formula: "R W W H W W W", where "R" denotes the root name, "W" means the next note is a whole step higher, and "H" means the next note is a half step higher.</p>
     <p>So, a C major scale, a scale with a <Term>root note</Term> of C following the major scale formula, is comprised of the notes: C, D, E, F, G, A, B.</p>
-    <p style={{ textAlign: "center" }}><PianoScaleFormulaDiagram scale={ScaleType.Ionian} /></p>
+    <p style={{ textAlign: "center" }}><PianoScaleFormulaDiagram scaleType={ScaleType.Ionian} /></p>
 
     <NoteText>Though the notes of scales are often given in ascending order, they can be played in any order or repeated any number of times and still be considered the same scale. What makes a scale distinct is simply the set of notes it contains, not the order or the count of the notes.</NoteText>
 
@@ -40,7 +40,7 @@ export const ScalesAndModesSection: React.FunctionComponent<SectionProps> = prop
     <p>C Major scale formula: R, M2, M3, P4, P5, M6, M7</p>
 
     <p>Major scales often sound "happy" or "bright". Try playing the piano keyboard below to hear each note of the C major scale at the same time as the root note to internalize the sound of the major scale yourself.</p>
-    <p style={{ textAlign: "center" }}><PianoScaleDronePlayer scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))} style={pianoKeyboardStyle} /></p>
+    <p style={{ textAlign: "center" }}><PianoScaleDronePlayer scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))} octaveCount={1} maxWidth={400} /></p>
     
     <SubSectionTitle>Scale Degrees</SubSectionTitle>
     <p>Each note in a scale is sometimes called a <Term>scale degree</Term>, with the first note (the <Term>root note</Term>) called the 1st scale degree (C in C major), the next note above that called the 2nd scale degree (D in C major), the next note above that called the 3rd scale degree (E in C major), and so on.</p>
@@ -48,7 +48,7 @@ export const ScalesAndModesSection: React.FunctionComponent<SectionProps> = prop
     <p>The <Term>natural minor scale</Term> (commonly referred to simply as the <Term>minor scale</Term>) is another common scale with a "darker" sound. Relative to the major scale, the natural minor scale has the following formula: 1 2 b3 4 5 b6 b7, meaning the natural minor scale is a major scale with the 3rd, 6th, and 7th scale degrees flattened. So, a C natural minor scale is comprised of the notes C, D, E♭, F, G, A♭, B♭.</p>
     
     <p>Try playing the piano keyboard below to get a feel for the natural minor scale.</p>
-    <p style={{ textAlign: "center" }}><PianoScaleDronePlayer scale={new Scale(ScaleType.Aeolian, new Pitch(PitchLetter.C, 0, 4))} style={pianoKeyboardStyle} /></p>
+    <p style={{ textAlign: "center" }}><PianoScaleDronePlayer scale={new Scale(ScaleType.Aeolian, new Pitch(PitchLetter.C, 0, 4))} octaveCount={1} maxWidth={400} /></p>
 
     <SubSectionTitle>Modes</SubSectionTitle>
     <p>The <Term>modes</Term> of a scale are the different scales you get when you start on different notes of a "base" scale, and consider those starting notes the new <Term>root notes</Term>.</p>

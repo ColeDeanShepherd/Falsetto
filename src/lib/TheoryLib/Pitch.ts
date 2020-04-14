@@ -143,7 +143,7 @@ export class Pitch {
     pitch: Pitch,
     direction: VerticalDirection,
     interval: Interval
-  ) {
+  ): Pitch {
     const offsetSign = direction as number;
     
     const halfStepsOffset = offsetSign * interval.halfSteps;
@@ -156,6 +156,12 @@ export class Pitch {
     result.signedAccidental += newMidiNumber - result.midiNumber;
 
     return result;
+  }
+
+  public static addOctaves(
+    pitch: Pitch, octaves: number
+  ): Pitch {
+    return new Pitch(pitch.letter, pitch.signedAccidental, pitch.octaveNumber + octaves);
   }
 
   public constructor(

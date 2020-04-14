@@ -10,6 +10,7 @@ import { PitchLetter } from '../../lib/TheoryLib/PitchLetter';
 import { renderPianoKeyboardNoteNames, PianoKeyboard, PianoKeyboardMetrics } from './PianoKeyboard';
 import { doesKeyUseSharps } from '../../lib/TheoryLib/Key';
 import { arrayContains } from '../../lib/Core/ArrayUtils';
+import { getPianoKeyboardAspectRatio } from './PianoUtils';
 
 export function onKeyPress(scale: Scale, keyPitch: Pitch): (() => void) | undefined {
   const pitches = scale.getPitches();
@@ -35,20 +36,23 @@ export function renderExtrasFn(metrics: PianoKeyboardMetrics, pitches: Array<Pit
 
 export interface IPianoScaleDronePlayerProps {
   scale: Scale;
-  style?: any;
+  octaveCount: number;
+  maxWidth: number;
 }
 
 export class PianoScaleDronePlayer extends React.Component<IPianoScaleDronePlayerProps, {}> {
   public render(): JSX.Element {
-    const { scale, style } = this.props;
+    const { scale, octaveCount, maxWidth } = this.props;
     
-    const pitches = scale.getPitches();
+    const pitches = scale.getPitches().concat([Pitch.addOctaves(scale.rootPitch, 1)]);
+    const aspectRatio = getPianoKeyboardAspectRatio(octaveCount);
+    const style = { width: "100%", maxWidth: `${maxWidth}px`, height: "auto" };
   
     return (
       <PianoKeyboard
-        rect={new Rect2D(new Size2D(300, 150), new Vector2D(0, 0))}
+        rect={new Rect2D(new Size2D(aspectRatio * 100, 100), new Vector2D(0, 0))}
         lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-        highestPitch={new Pitch(PitchLetter.C, 0, 5)}
+        highestPitch={new Pitch(PitchLetter.C, 0, 4 + octaveCount)}
         pressedPitches={[]}
         renderExtrasFn={metrics => renderExtrasFn(metrics, pitches, scale.rootPitch)}
         onKeyPress={pitch => this.onKeyPress(pitch)}

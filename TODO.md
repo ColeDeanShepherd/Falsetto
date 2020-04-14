@@ -10,6 +10,10 @@
     * Major
     * Natural minor
     * Chromatic
+    * Multiple mastery steps:
+      * Play scale in 2nds, 3rd, etc.
+      * What is the nth scale degree?
+      * Diatonic chords (triads, seventh, etc)
   * Modes
   * Chords
     * Triads
