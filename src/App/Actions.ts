@@ -9,6 +9,15 @@ export class NavigateAction implements IAction {
   }
 }
 
+export class WebMidiInitializedAction implements IAction {
+  public static readonly Id = "app/webMidiInitializedAction";
+
+  public constructor() {}
+  public getId() {
+    return WebMidiInitializedAction.Id;
+  }
+}
+
 export class MidiDeviceConnectedAction implements IAction {
   public static readonly Id = "app/midiDeviceConnected";
 

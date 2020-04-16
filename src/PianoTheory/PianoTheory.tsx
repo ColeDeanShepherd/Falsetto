@@ -28,6 +28,8 @@ import { PianoScaleFormulaDiagram } from '../Components/Utils/PianoScaleFormulaD
 import { ScaleType, Scale } from '../lib/TheoryLib/Scale';
 import { PianoScaleDronePlayer } from '../Components/Utils/PianoScaleDronePlayer';
 import { PianoScaleFingeringDiagram } from '../Components/Utils/PianoScaleFingeringDiagram';
+import { MidiInputDeviceSelect } from '../Components/Utils/MidiInputDeviceSelect';
+import { fullPianoLowestPitch, fullPianoHighestPitch } from '../Components/Utils/PianoUtils';
 
 const pianoAudio = new PianoAudio();
 
@@ -179,8 +181,8 @@ export const FullPiano: React.FunctionComponent<{}> = props => (
   <PlayablePiano
     aspectRatio={new Size2D(400, 50)}
     maxWidth={400}
-    lowestPitch={new Pitch(PitchLetter.A, 0, 0)}
-    highestPitch={new Pitch(PitchLetter.C, 0, 8)} />
+    lowestPitch={fullPianoLowestPitch}
+    highestPitch={fullPianoHighestPitch} />
 );
 
 export const TwoOctavePiano: React.FunctionComponent<{}> = props => (
@@ -272,7 +274,7 @@ class SlideGroup {
 // TODO: use symbols
 const slideGroups = [
   new SlideGroup("Introduction", [
-    new Slide(() => (
+    /*new Slide(() => (
       <div>
         <h2>Welcome to Falsetto's "Piano Theory" course!</h2>
         <p>This is an interactive course designed to teach you the essentials of piano and music theory in a hands-on manner.</p>
@@ -280,6 +282,15 @@ const slideGroups = [
         <p>It is highly recommended to connect a MIDI piano keyboard to your computer to follow along with these lessons.</p>
         <p>Click the settings icon (<i className="material-icons" style={{ verticalAlign: "bottom" }}>settings</i>) in the bar at the top of the screen to configure your MIDI input device.</p>
         <p>If your MIDI input device and audio settings are configured properly, then pressing keys will produce piano sounds.</p>
+      </div>
+    )),*/
+    new Slide(() => (
+      <div style={{ display: "flex", flexDirection: "column", flexGrow: 1, justifyContent: "space-evenly" }}>
+        <p>Step 1: Connect a MIDI piano keyboard and select it below.</p>
+        <p><MidiInputDeviceSelect /></p>
+        <p>Step 2: Press the lowest &amp; highest keys on your MIDI keyboard.</p>
+        <FullPiano />
+        <p>START BUTTON HERE</p>
       </div>
     )),
     new Slide(() => (
@@ -700,8 +711,8 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
     const renderedSlide = slides[slideIndex].renderFn();
 
     return (
-      <LimitedWidthContentContainer>
-        <div style={{ textAlign: "center" }}>
+      <div style={{ height: "100%" }}>
+        <div style={{ display: "flex", flexDirection: "column", textAlign: "center", height: "100%" }}>
           <div>
             <Button
               variant="contained"
@@ -727,7 +738,7 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
         <MidiNoteEventListener
           onNoteOn={(pitch, velocity) => pianoAudio.pressKey(pitch, velocity)}
           onNoteOff={pitch => pianoAudio.releaseKey(pitch)} />
-      </LimitedWidthContentContainer>
+      </div>
     );
   }
   

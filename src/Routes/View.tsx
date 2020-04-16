@@ -241,7 +241,7 @@ export class RoutesView extends React.Component<IRoutesViewProps, IRoutesViewSta
       );
     }
 
-    return <div>{this.cachedRenderedRoutes}</div>;
+    return <div style={{ height: "100%" }}>{this.cachedRenderedRoutes}</div>;
   }
   
   private cachedRenderedRoutes: Array<JSX.Element> | null = null;

@@ -4,7 +4,7 @@ import WebMidi, { Input as MidiInput, WebMidiEventConnected, WebMidiEventDisconn
 import { DependencyInjector } from '../DependencyInjector';
 import { ActionBus, ActionHandler } from '../ActionBus';
 import { IAction } from '../IAction';
-import { NavigateAction, MidiDeviceDisconnectedAction, MidiDeviceConnectedAction, MidiInputDeviceChangedAction } from './Actions';
+import { NavigateAction, MidiDeviceDisconnectedAction, MidiDeviceConnectedAction, MidiInputDeviceChangedAction, WebMidiInitializedAction } from './Actions';
 import { IDisposable } from '../lib/Core/IDisposable';
 import { IAnalytics } from '../Analytics';
 import { precondition } from '../lib/Core/Dbc';
@@ -77,6 +77,8 @@ export class AppModel implements IDisposable {
           
           WebMidi.addListener("connected", event => this.onMidiDeviceConnected(event));
           WebMidi.addListener("disconnected", event => this.onMidiDeviceDisconnected(event));
+          
+    ActionBus.instance.dispatch(new WebMidiInitializedAction());
         } else {
           this.logger.logError(error);
         }
