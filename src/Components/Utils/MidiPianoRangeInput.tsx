@@ -9,7 +9,7 @@ import { PianoKeyboard } from "../../Components/Utils/PianoKeyboard";
 import { fullPianoLowestPitch, fullPianoHighestPitch } from "../../Components/Utils/PianoUtils";
 import { AppModel } from "../../App/Model";
 import { ActionBus, ActionHandler } from "../../ActionBus";
-import { MidiInputDevicePitchRangeChangedAction, WebMidiInitializedAction } from '../../AppMidi/Actions';
+import { MidiInputDevicePitchRangeChangedAction, WebMidiInitializedAction, MidiDeviceConnectedAction, MidiDeviceDisconnectedAction, MidiInputDeviceChangedAction } from '../../AppMidi/Actions';
 import { IAction } from "../../IAction";
 import { MidiNoteEventListener } from "./MidiNoteEventListener";
 import { Pitch, expandPitchRangeToIncludePitch, getPitchRange, getNumPitchesInRange } from '../../lib/TheoryLib/Pitch';
@@ -24,45 +24,51 @@ export class MidiPianoRangeInput extends React.Component<{}, {}> {
   public render(): JSX.Element {
     const { midiModel } = AppModel.instance;
 
-    const aspectRatio = new Size2D(400, 50);
-    const maxWidth = 400;
-    const lowestPitch = fullPianoLowestPitch;
-    const highestPitch = fullPianoHighestPitch;
-    const pressedPitches = this.getPianoKeyboardDarkenedPitches(lowestPitch, highestPitch);
-    
-    const midiInputPitchRange = midiModel.getMidiInputPitchRange();
-    const numPitchesInRange = midiInputPitchRange
-      ? getNumPitchesInRange(midiInputPitchRange)
-      : 0;
+    const midiInput = midiModel.getMidiInput();
 
-    return (
-      <div>
-        <p>{numPitchesInRange} keys</p>
+    if (midiInput) {
+      const aspectRatio = new Size2D(400, 50);
+      const maxWidth = 400;
+      const lowestPitch = fullPianoLowestPitch;
+      const highestPitch = fullPianoHighestPitch;
+      const pressedPitches = this.getPianoKeyboardDarkenedPitches(lowestPitch, highestPitch);
+      
+      const midiInputPitchRange = midiModel.getMidiInputPitchRange();
+      const numPitchesInRange = midiInputPitchRange
+        ? getNumPitchesInRange(midiInputPitchRange)
+        : 0;
 
+      return (
         <div>
-          <PianoKeyboard
-            rect={new Rect2D(aspectRatio, new Vector2D(0, 0))}
-            lowestPitch={lowestPitch}
-            highestPitch={highestPitch}
-            pressedPitches={pressedPitches}
-            style={{ width: "100%", maxWidth: `${maxWidth}px`, height: "auto" }} />
-        </div>
-          
-        <p>
-          <Button
-            variant="contained"
-            onClick={_ => this.reset()}
-            style={{ textTransform: "none" }}
-          >
-            Reset
-          </Button>
-        </p>
+          <p>{numPitchesInRange} keys</p>
 
-        <MidiNoteEventListener
-          onNoteOn={(pitch, velocity) => this.onKeyPress(pitch)}
-          onNoteOff={pitch => this.onKeyRelease(pitch)} />
-      </div>
-    );
+          <div>
+            <PianoKeyboard
+              rect={new Rect2D(aspectRatio, new Vector2D(0, 0))}
+              lowestPitch={lowestPitch}
+              highestPitch={highestPitch}
+              pressedPitches={pressedPitches}
+              style={{ width: "100%", maxWidth: `${maxWidth}px`, height: "auto" }} />
+          </div>
+            
+          <p>
+            <Button
+              variant="contained"
+              onClick={_ => this.reset()}
+              style={{ textTransform: "none" }}
+            >
+              Reset
+            </Button>
+          </p>
+
+          <MidiNoteEventListener
+            onNoteOn={(pitch, velocity) => this.onKeyPress(pitch)}
+            onNoteOff={pitch => this.onKeyRelease(pitch)} />
+        </div>
+      );
+    } else {
+      return <p>No MIDI input device selected!</p>;
+    }
   }
   
   public componentDidMount() {
@@ -78,6 +84,9 @@ export class MidiPianoRangeInput extends React.Component<{}, {}> {
   private handleAction(action: IAction) {
     switch (action.getId()) {
       case WebMidiInitializedAction.Id:
+      case MidiDeviceConnectedAction.Id:
+      case MidiDeviceDisconnectedAction.Id:
+      case MidiInputDeviceChangedAction.Id:
       case MidiInputDevicePitchRangeChangedAction.Id:
         this.forceUpdate();
     }

@@ -198,7 +198,7 @@ const slideGroups = [
         <p><strong>Step 1: Connect a MIDI piano keyboard and select it below.</strong></p>
         <p><MidiInputDeviceSelect /></p>
 
-        <p><strong>Step 2: Press the lowest &amp; highest keys on your MIDI keyboard.</strong></p>
+        <p><strong>Step 2: Press the leftmost and rightmost keys on your MIDI keyboard.</strong></p>
         <p><MidiPianoRangeInput /></p>
 
         <p><strong>Step 3: Press the ">" arrow button above, or press the right arrow key on your computer keyboard, to move to the next slide.</strong></p>
