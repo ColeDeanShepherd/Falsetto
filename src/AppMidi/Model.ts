@@ -1,12 +1,13 @@
 import WebMidi, { Input as MidiInput, WebMidiEventConnected, WebMidiEventDisconnected } from "webmidi";
 
-import { DependencyInjector } from '../DependencyInjector';
-import { ActionBus } from '../ActionBus';
-import { MidiDeviceDisconnectedAction, MidiDeviceConnectedAction, MidiInputDeviceChangedAction, WebMidiInitializedAction } from './Actions';
-import { IDisposable } from '../lib/Core/IDisposable';
-import { unwrapValueOrUndefined } from '../lib/Core/Utils';
-import { arrayContains } from '../lib/Core/ArrayUtils';
-import { ILogger } from '../Logger';
+import { DependencyInjector } from "../DependencyInjector";
+import { ActionBus } from "../ActionBus";
+import { MidiDeviceDisconnectedAction, MidiDeviceConnectedAction, MidiInputDeviceChangedAction, WebMidiInitializedAction, MidiInputDevicePitchRangeChangedAction } from './Actions';
+import { IDisposable } from "../lib/Core/IDisposable";
+import { unwrapValueOrUndefined } from "../lib/Core/Utils";
+import { arrayContains } from "../lib/Core/ArrayUtils";
+import { ILogger } from "../Logger";
+import { Pitch } from "../lib/TheoryLib/Pitch";
 
 export class AppMidiModel implements IDisposable {
   public constructor() {
@@ -32,10 +33,20 @@ export class AppMidiModel implements IDisposable {
     ActionBus.instance.dispatch(new MidiInputDeviceChangedAction());
   }
 
+  public getMidiInputPitchRange(): [Pitch, Pitch] | undefined {
+    return this.midiInputPitchRange;
+  }
+
+  public setMidiInputPitchRange(value: [Pitch, Pitch] | undefined) {
+    this.midiInputPitchRange = value;
+    ActionBus.instance.dispatch(new MidiInputDevicePitchRangeChangedAction());
+  }
+
   private logger: ILogger;
 
   private _initializeMidiPromise: Promise<void> | undefined;
   private midiInput: MidiInput | undefined;
+  private midiInputPitchRange: [Pitch, Pitch] | undefined;
 
   private initializeMidi() {
     this._initializeMidiPromise = new Promise<void>((resolve, reject) => {
@@ -43,6 +54,7 @@ export class AppMidiModel implements IDisposable {
         if (!error) {
           if (!this.midiInput && (WebMidi.inputs.length > 0)) {
             this.midiInput = WebMidi.inputs[0];
+            this.midiInputPitchRange = undefined; // TODO: load
           }
           
           WebMidi.addListener("connected", event => this.onMidiDeviceConnected(event));
@@ -61,6 +73,7 @@ export class AppMidiModel implements IDisposable {
   private uninitializeMidi() {
     if (WebMidi.enabled) {
       this.midiInput = undefined;
+      this.midiInputPitchRange = undefined;
       WebMidi.disable();
     }
   }
@@ -68,6 +81,7 @@ export class AppMidiModel implements IDisposable {
   private onMidiDeviceConnected(event: WebMidiEventConnected) {
     if (!this.midiInput && (WebMidi.inputs.length > 0)) {
       this.midiInput = WebMidi.inputs[0];
+      this.midiInputPitchRange = undefined; // TODO: load
     }
 
     ActionBus.instance.dispatch(new MidiDeviceConnectedAction(event.port.id));
@@ -76,10 +90,12 @@ export class AppMidiModel implements IDisposable {
   private onMidiDeviceDisconnected(event: WebMidiEventDisconnected) {
     if (!arrayContains(WebMidi.inputs, this.midiInput)) {
       this.midiInput = undefined;
+      this.midiInputPitchRange = undefined;
     }
 
     if (!this.midiInput && (WebMidi.inputs.length > 0)) {
       this.midiInput = WebMidi.inputs[0];
+      this.midiInputPitchRange = undefined; // TODO: load
     }
 
     ActionBus.instance.dispatch(new MidiDeviceDisconnectedAction(event.port.id));

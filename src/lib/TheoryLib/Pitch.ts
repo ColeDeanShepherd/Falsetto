@@ -8,8 +8,6 @@ export function getPitchRange(minPitch: Pitch, maxPitch: Pitch) {
   const minMidiNumber = minPitch.midiNumber;
   const maxMidiNumber = maxPitch.midiNumber;
 
-  precondition(minMidiNumber <= maxMidiNumber);
-
   let pitches = new Array<Pitch>();
 
   for (let midiNumber = minMidiNumber; midiNumber <= maxMidiNumber; midiNumber++) {
@@ -58,6 +56,25 @@ export function getAccidentalString(signedAccidental: number, useSymbols: boolea
     ? useSymbols ? "♯" : "#"
     : useSymbols ? "♭" : "b";
   return accidentalCharacter.repeat(Math.abs(signedAccidental));
+}
+
+export function expandPitchRangeToIncludePitch(pitchRange: [Pitch, Pitch], pitch: Pitch): [Pitch, Pitch] {
+  // If the pitch is lower than the range's min pitch, lower the range's min pitch to the lower pitch.
+  if (pitch.midiNumber < pitchRange[0].midiNumber) {
+    return [pitch, pitchRange[1]];
+  }
+  // If the pitch is higher than the range's max pitch, raise the range's max pitch to the higher pitch.
+  else if (pitch.midiNumber > pitchRange[1].midiNumber) {
+    return [pitchRange[0], pitch];
+  }
+  // If the pitch is already in the range, we don't need to expand the range.
+  else {
+    return pitchRange;
+  }
+}
+
+export function getNumPitchesInRange(pitchRange: [Pitch, Pitch]): number {
+  return pitchRange[1].midiNumber - pitchRange[0].midiNumber + 1;
 }
 
 export const arePitchOffsetsFromCWhiteKeys = [
@@ -137,6 +154,10 @@ export class Pitch {
 
     const pitchMidiNumber = pitch.midiNumber;
     return (pitchMidiNumber >= minPitchMidiNumber) && (pitchMidiNumber <= maxPitchMidiNumber);
+  }
+
+  public static addHalfSteps(pitch: Pitch, numHalfSteps: number): Pitch {
+    return this.createFromMidiNumber(pitch.midiNumber + numHalfSteps);
   }
 
   public static addInterval(

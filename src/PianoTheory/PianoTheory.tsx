@@ -29,6 +29,7 @@ import { MidiInputDeviceSelect } from "../Components/Utils/MidiInputDeviceSelect
 import { fullPianoLowestPitch, fullPianoHighestPitch } from "../Components/Utils/PianoUtils";
 import { MidiNoteEventListener } from "../Components/Utils/MidiNoteEventListener";
 import { AppModel } from "../App/Model";
+import { MidiPianoRangeInput } from "../Components/Utils/MidiPianoRangeInput";
 
 // #region Helper Components
 
@@ -82,15 +83,10 @@ export class PlayablePiano extends React.Component<IPlayablePianoProps, IPlayabl
 
   private onKeyRelease(pitch: Pitch) {
     AppModel.instance.pianoAudio.releaseKey(pitch);
+
     this.setState((prevState, props) => {
       return { pressedPitches: immutableRemoveIfFoundInArray(prevState.pressedPitches, (p, i) => p.equals(pitch)) };
     });
-  }
-}
-
-export class MidiPianoRangeInput extends React.Component<{}, {}> {
-  public render(): JSX.Element {
-    return <FullPiano />;
   }
 }
 
@@ -206,7 +202,7 @@ const slideGroups = [
         <p>Step 1: Connect a MIDI piano keyboard and select it below.</p>
         <p><MidiInputDeviceSelect /></p>
         <p>Step 2: Press the lowest &amp; highest keys on your MIDI keyboard.</p>
-        <MidiPianoRangeInput />
+        <p><MidiPianoRangeInput /></p>
         <p>START BUTTON HERE</p>
       </div>
     )),

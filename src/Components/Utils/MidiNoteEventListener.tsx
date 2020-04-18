@@ -44,6 +44,7 @@ export class MidiNoteEventListener extends React.Component<IMidiNoteEventListene
         this.reinitializeMidi();
     }
   }
+  
   private onNoteOn: ((event: InputEventNoteon) => void) | undefined = undefined;
   private onNoteOff: ((event: InputEventNoteoff) => void) | undefined = undefined;
   private disconnectFromMidiInput: (() => void) | undefined = undefined;

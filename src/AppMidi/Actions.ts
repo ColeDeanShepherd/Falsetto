@@ -35,3 +35,12 @@ export class MidiInputDeviceChangedAction implements IAction {
     return MidiInputDeviceChangedAction.Id;
   }
 }
+
+export class MidiInputDevicePitchRangeChangedAction implements IAction {
+  public static readonly Id = "app/midiInputDevicePitchRangeChanged";
+
+  public constructor() {}
+  public getId() {
+    return MidiInputDevicePitchRangeChangedAction.Id;
+  }
+}

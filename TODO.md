@@ -21,6 +21,7 @@
   * Chord progressions
   * Rhythm
   * Exercises
+  * Save MIDI input range?
 * Fix level not being detected properly when disabling & re-enabling in piano notes exercise (orders don't match due to toggle).
 * Turn exercises into "active" exercises
   * Piano Intervals
