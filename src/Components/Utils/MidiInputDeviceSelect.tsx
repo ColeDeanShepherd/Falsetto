@@ -4,7 +4,7 @@ import WebMidi from "webmidi";
 
 import { AppModel } from '../../App/Model';
 import { ActionHandler, ActionBus } from '../../ActionBus';
-import { MidiDeviceConnectedAction, MidiDeviceDisconnectedAction, MidiInputDeviceChangedAction, WebMidiInitializedAction } from '../../App/Actions';
+import { MidiDeviceConnectedAction, MidiDeviceDisconnectedAction, MidiInputDeviceChangedAction, WebMidiInitializedAction } from '../../AppMidi/Actions';
 import { IAction } from '../../IAction';
 
 export class MidiInputDeviceSelect extends React.Component<{}, {}> {
@@ -23,7 +23,7 @@ export class MidiInputDeviceSelect extends React.Component<{}, {}> {
   }
   
   public render() {
-    const midiInput = AppModel.instance.getMidiInput();
+    const midiInput = AppModel.instance.midiModel.getMidiInput();
     
     return WebMidi.enabled
       ? (
@@ -50,6 +50,6 @@ export class MidiInputDeviceSelect extends React.Component<{}, {}> {
 
   private onMidiInputChange(inputId: any) {
     const newMidiInput = WebMidi.inputs.find(i => i.id === inputId);
-    AppModel.instance.setMidiInput(newMidiInput);
+    AppModel.instance.midiModel.setMidiInput(newMidiInput);
   }
 }

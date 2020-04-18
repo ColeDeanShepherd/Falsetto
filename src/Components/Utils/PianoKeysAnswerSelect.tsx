@@ -4,12 +4,12 @@ import { Button } from "@material-ui/core";
 import { Pitch } from "../../lib/TheoryLib/Pitch";
 import { AnswerDifficulty } from "../../Study/AnswerDifficulty";
 import { PianoKeyboard } from "./PianoKeyboard";
-import { Rect2D } from '../../lib/Core/Rect2D';
-import { Size2D } from '../../lib/Core/Size2D';
-import { Vector2D } from '../../lib/Core/Vector2D';
-import { toggleArrayElementCustomEquals, uniq, immutableRemoveIfFoundInArray, immutableAddIfNotFoundInArray } from '../../lib/Core/ArrayUtils';
-import { MidiNoteEventListener } from '../../PianoTheory/PianoTheory';
-import { precondition } from '../../lib/Core/Dbc';
+import { Rect2D } from "../../lib/Core/Rect2D";
+import { Size2D } from "../../lib/Core/Size2D";
+import { Vector2D } from "../../lib/Core/Vector2D";
+import { uniq, immutableRemoveIfFoundInArray, immutableAddIfNotFoundInArray } from "../../lib/Core/ArrayUtils";
+import { precondition } from "../../lib/Core/Dbc";
+import { MidiNoteEventListener } from "./MidiNoteEventListener";
 
 function tryWrapPitchOctave(
   pitch: Pitch,
