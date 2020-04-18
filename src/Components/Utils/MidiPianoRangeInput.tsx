@@ -9,7 +9,7 @@ import { PianoKeyboard } from "../../Components/Utils/PianoKeyboard";
 import { fullPianoLowestPitch, fullPianoHighestPitch } from "../../Components/Utils/PianoUtils";
 import { AppModel } from "../../App/Model";
 import { ActionBus, ActionHandler } from "../../ActionBus";
-import { MidiInputDevicePitchRangeChangedAction } from "../../AppMidi/Actions";
+import { MidiInputDevicePitchRangeChangedAction, WebMidiInitializedAction } from '../../AppMidi/Actions';
 import { IAction } from "../../IAction";
 import { MidiNoteEventListener } from "./MidiNoteEventListener";
 import { Pitch, expandPitchRangeToIncludePitch, getPitchRange, getNumPitchesInRange } from '../../lib/TheoryLib/Pitch';
@@ -77,6 +77,7 @@ export class MidiPianoRangeInput extends React.Component<{}, {}> {
   
   private handleAction(action: IAction) {
     switch (action.getId()) {
+      case WebMidiInitializedAction.Id:
       case MidiInputDevicePitchRangeChangedAction.Id:
         this.forceUpdate();
     }
