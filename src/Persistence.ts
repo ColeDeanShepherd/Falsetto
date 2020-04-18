@@ -1,6 +1,8 @@
 import { Pitch } from "./lib/TheoryLib/Pitch";
 
-export function createFromPersistedData(persistedData: IMidiInputDeviceSettingsPersistedData): MidiInputDeviceSettings {
+export function createFromPersistedData(
+  persistedData: IMidiInputDeviceSettingsPersistedData
+): MidiInputDeviceSettings {
   return new MidiInputDeviceSettings(
     persistedData.activeInputDeviceName,
     persistedData.activeInputDeviceMidiNumberRange
@@ -36,9 +38,7 @@ export interface IMidiInputDeviceSettingsPersistedData {
   activeInputDeviceMidiNumberRange?: [number, number]
 }
 
-export const midiInputDeviceSettingsStorageKey = "midiInputDeviceSettings";
-
-export function serializeMidiInputDeviceSettings(settings: MidiInputDeviceSettings) {
+export function serializeMidiInputDeviceSettings(settings: MidiInputDeviceSettings): string {
   return JSON.stringify(toPersistedData(settings));
 }
 
@@ -49,6 +49,8 @@ export function deserializeMidiInputDeviceSettings(serializedSettings: string): 
 
   return createFromPersistedData(persistedData);
 }
+
+export const midiInputDeviceSettingsStorageKey = "midiInputDeviceSettings";
 
 export function loadMidiInputDeviceSettings(): MidiInputDeviceSettings | undefined {
   const serializedSettings = localStorage.getItem(midiInputDeviceSettingsStorageKey);
