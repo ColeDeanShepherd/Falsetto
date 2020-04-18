@@ -99,7 +99,7 @@ export class AppMidiModel implements IDisposable {
   private setMidiInputPitchRangeInternal(value: [Pitch, Pitch] | undefined) {
     this.midiInputPitchRange = value;
 
-    if (this.midiInput && this.midiInputPitchRange) {
+    if (this.midiInput) {
       this.saveMidiInputDeviceSettings();
     }
   }

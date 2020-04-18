@@ -187,23 +187,21 @@ class SlideGroup {
 // TODO: use symbols
 const slideGroups = [
   new SlideGroup("Introduction", [
-    /*new Slide(() => (
-      <div>
-        <h2>Welcome to Falsetto's "Piano Theory" course!</h2>
-        <p>This is an interactive course designed to teach you the essentials of piano and music theory in a hands-on manner.</p>
-        <p>You can navigate the course using the buttons above, or with the right &amp; left arrow keys on a computer keyboard.</p>
-        <p>It is highly recommended to connect a MIDI piano keyboard to your computer to follow along with these lessons.</p>
-        <p>Click the settings icon (<i className="material-icons" style={{ verticalAlign: "bottom" }}>settings</i>) in the bar at the top of the screen to configure your MIDI input device.</p>
-        <p>If your MIDI input device and audio settings are configured properly, then pressing keys will produce piano sounds.</p>
-      </div>
-    )),*/
     new Slide(() => (
       <div style={{ display: "flex", flexDirection: "column", flexGrow: 1, justifyContent: "space-evenly" }}>
-        <p>Step 1: Connect a MIDI piano keyboard and select it below.</p>
+        <div>
+          <h2>Welcome to Falsetto's "Piano Theory" course!</h2>
+          <p>This is an interactive course designed to teach you the essentials of piano and music theory in a hands-on manner.</p>
+          <p>This course is designed to be viewed on tablets and computer monitors, and it is highly recommended to connect a MIDI piano keyboard to follow along.</p>
+        </div>
+
+        <p><strong>Step 1: Connect a MIDI piano keyboard and select it below.</strong></p>
         <p><MidiInputDeviceSelect /></p>
-        <p>Step 2: Press the lowest &amp; highest keys on your MIDI keyboard.</p>
+
+        <p><strong>Step 2: Press the lowest &amp; highest keys on your MIDI keyboard.</strong></p>
         <p><MidiPianoRangeInput /></p>
-        <p>START BUTTON HERE</p>
+
+        <p><strong>Step 3: Press the ">" arrow button above, or press the right arrow key on your computer keyboard, to move to the next slide.</strong></p>
       </div>
     )),
     new Slide(() => (
@@ -635,7 +633,7 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
             >
               &lt;
             </Button>
-            <span style={{ padding: "0 1em" }}>{slideNumber} / {numSlides}</span>
+            <span style={{ padding: "0 1em" }}>Slide {slideNumber} / {numSlides}</span>
             <Button
               variant="contained"
               disabled={!this.canMoveToNextSlide()}
