@@ -192,16 +192,17 @@ const slideGroups = [
         <div>
           <h2>Welcome to Falsetto's "Piano Theory" course!</h2>
           <p>This is an interactive course designed to teach you the essentials of piano and music theory in a hands-on manner.</p>
-          <p>This course is designed to be viewed on tablets and computer monitors, and it is highly recommended to connect a MIDI piano keyboard to follow along.</p>
+          <p>This course is designed to be viewed on tablets and computer monitors.</p>
+          <p>It is highly recommended to connect a MIDI piano keyboard to follow along.</p>
         </div>
 
         <p><strong>Step 1: Connect a MIDI piano keyboard and select it below.</strong></p>
         <p><MidiInputDeviceSelect /></p>
 
-        <p><strong>Step 2: Press the leftmost and rightmost keys on your MIDI keyboard.</strong></p>
+        <p><strong>Step 2: Press the leftmost and rightmost keys on your MIDI keyboard to detect the number of keys it has.</strong></p>
         <p><MidiPianoRangeInput /></p>
 
-        <p><strong>Step 3: Press the ">" arrow button above, or press the right arrow key on your computer keyboard, to move to the next slide.</strong></p>
+        <p><strong>Step 3: Press the ">" arrow button at the top of this page, or press the right arrow key on your computer keyboard, to move to the next slide.</strong></p>
       </div>
     )),
     new Slide(() => (
