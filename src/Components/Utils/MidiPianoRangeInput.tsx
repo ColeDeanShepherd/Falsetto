@@ -13,6 +13,7 @@ import { MidiInputDevicePitchRangeChangedAction, WebMidiInitializedAction, MidiD
 import { IAction } from "../../IAction";
 import { MidiNoteEventListener } from "./MidiNoteEventListener";
 import { Pitch, expandPitchRangeToIncludePitch, getPitchRange, getNumPitchesInRange } from '../../lib/TheoryLib/Pitch';
+import { fullPianoAspectRatio } from './PianoUtils';
 
 export class MidiPianoRangeInput extends React.Component<{}, {}> {
   public constructor(props: {}) {
@@ -27,8 +28,6 @@ export class MidiPianoRangeInput extends React.Component<{}, {}> {
     const midiInput = midiModel.getMidiInput();
 
     if (midiInput) {
-      const aspectRatio = new Size2D(400, 50);
-      const maxWidth = 400;
       const lowestPitch = fullPianoLowestPitch;
       const highestPitch = fullPianoHighestPitch;
       const pressedPitches = this.getPianoKeyboardDarkenedPitches(lowestPitch, highestPitch);
@@ -44,11 +43,11 @@ export class MidiPianoRangeInput extends React.Component<{}, {}> {
 
           <div>
             <PianoKeyboard
-              rect={new Rect2D(aspectRatio, new Vector2D(0, 0))}
+              rect={new Rect2D(new Size2D(fullPianoAspectRatio * 100, 100), new Vector2D(0, 0))}
               lowestPitch={lowestPitch}
               highestPitch={highestPitch}
               pressedPitches={pressedPitches}
-              style={{ width: "100%", maxWidth: `${maxWidth}px`, height: "auto" }} />
+              style={{ width: "100%", height: "auto" }} />
           </div>
             
           <p>

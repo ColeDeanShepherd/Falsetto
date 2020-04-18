@@ -200,7 +200,7 @@ const slideGroups = [
         <p><MidiInputDeviceSelect /></p>
 
         <p><strong>Step 2: Press the leftmost and rightmost keys on your MIDI keyboard to detect the number of keys it has.</strong></p>
-        <p><MidiPianoRangeInput /></p>
+        <div style={{ maxWidth: `${1000}px`, margin: "0 auto" }}><MidiPianoRangeInput /></div>
 
         <p><strong>Step 3: Press the ">" arrow button at the top of this page, or press the right arrow key on your computer keyboard, to move to the next slide.</strong></p>
       </div>

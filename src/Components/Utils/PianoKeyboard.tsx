@@ -9,6 +9,7 @@ import { Vector2D } from '../../lib/Core/Vector2D';
 import { invariant, precondition } from '../../lib/Core/Dbc';
 import { growRectAroundCenter } from '../../lib/Core/MathUtils';
 import { isBitSet } from '../../lib/Core/Utils';
+import { blackKeyWidthOverWhiteKeyWidth, blackKeyHeightOverWhiteKeyHeight } from './PianoUtils';
 
 export class PianoKeyboardMetrics {
   public constructor(
@@ -31,29 +32,25 @@ export class PianoKeyboardMetrics {
     }
 
     // Calculate key widths.
-    const blackKeyWhiteKeyWidthRatio = 0.66;
-
     if (this.whiteKeyCount > 0) {
       let widthAsMultipleOfWhiteKeyWidth = this.whiteKeyCount;
       if (this.lowestPitch.isBlackKey) {
-        widthAsMultipleOfWhiteKeyWidth += (blackKeyWhiteKeyWidthRatio / 2);
+        widthAsMultipleOfWhiteKeyWidth += (blackKeyWidthOverWhiteKeyWidth / 2);
       }
       if (this.highestPitch.isBlackKey) {
-        widthAsMultipleOfWhiteKeyWidth += (blackKeyWhiteKeyWidthRatio / 2);
+        widthAsMultipleOfWhiteKeyWidth += (blackKeyWidthOverWhiteKeyWidth / 2);
       }
   
       this.whiteKeyWidth = width / widthAsMultipleOfWhiteKeyWidth;
-      this.blackKeyWidth = blackKeyWhiteKeyWidthRatio * this.whiteKeyWidth;
+      this.blackKeyWidth = blackKeyWidthOverWhiteKeyWidth * this.whiteKeyWidth;
     } else {
       this.blackKeyWidth = width;
-      this.whiteKeyWidth = this.blackKeyWidth / blackKeyWhiteKeyWidthRatio;
+      this.whiteKeyWidth = this.blackKeyWidth / blackKeyWidthOverWhiteKeyWidth;
     }
 
     // Calculate key heights.
-    const blackKeyWhiteKeyHeightRatio = 0.6;
-
     this.whiteKeyHeight = height;
-    this.blackKeyHeight = blackKeyWhiteKeyHeightRatio * this.whiteKeyHeight;
+    this.blackKeyHeight = blackKeyHeightOverWhiteKeyHeight * this.whiteKeyHeight;
 
     // Calculate key left x"s.
     this.keyLeftXs = new Array<number>(this.keyCount);
@@ -165,14 +162,15 @@ export function renderPressedPianoKeys(metrics: PianoKeyboardMetrics, pressedPit
   return (
     <g className="pass-through-click">
       {pressedPitches.map(p => {
-        const keyRect = growRectAroundCenter(metrics.getKeyRect(p), -2);
+        const keyRect = metrics.getKeyRect(p);
+        const highlightRect = growRectAroundCenter(keyRect, -(keyRect.size.width / 6));
+        const highlightRadius = highlightRect.size.width / 8;
 
         return (
-          <rect
+          <path
             key={`p${p.midiNumber}`}
-            x={keyRect.position.x} y={keyRect.position.y}
-            width={keyRect.size.width} height={keyRect.size.height}
-            fill="gray"
+            d={getRectRoundedBottomPathDefString(highlightRect.position, highlightRect.size, highlightRadius)}
+            fill="gray" strokeWidth={0}
           />
         );
       })}
@@ -215,8 +213,10 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
     const whiteKeys = new Array<JSX.Element>();
     const blackKeys = new Array<JSX.Element>();
 
-    const whiteKeyRadius = 4;
-    const blackKeyRadius = 2;
+    const whiteKeyRadius = metrics.whiteKeyWidth / 8;
+    const blackKeyRadius = metrics.blackKeyWidth / 8;
+
+    const whiteKeyStrokeWidth = metrics.whiteKeyWidth / 15;
     
     for (let i = 0; i < metrics.keyCount; i++) {
       const midiNumber = metrics.lowestPitch.midiNumber + i;
@@ -229,7 +229,7 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
           <path
             key={i}
             d={getRectRoundedBottomPathDefString(position, size, whiteKeyRadius)}
-            fill="white" stroke="black" strokeWidth="2" className="cursor-pointer"
+            fill="white" stroke="black" strokeWidth={whiteKeyStrokeWidth} className="cursor-pointer"
             touch-action="none"
             onPointerDown={event => {
               if (this.props.onKeyPress) {
