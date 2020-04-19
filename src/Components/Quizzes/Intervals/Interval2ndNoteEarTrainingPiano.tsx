@@ -18,6 +18,7 @@ import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
 import { PianoKeysAnswerSelect } from "../../Utils/PianoKeysAnswerSelect";
 import { createIntervalLevels } from '../../../lib/TheoryLib/Interval';
 import { arrayContains, toggleArrayElement } from '../../../lib/Core/ArrayUtils';
+import { getPianoKeyboardAspectRatio } from '../../Utils/PianoUtils';
 
 const flashCardSetId = "pianoNextNoteEarTraining";
 
@@ -194,10 +195,10 @@ export function renderAnswerSelect(
 ) {
   const key = info.flashCards.indexOf(info.currentFlashCard);
   const correctAnswer = [(info.currentFlashCard.backSide.data as IFlashCardBackSideData).pitch];
-  const size = new Size2D(400, 100);
+  const aspectRatio = getPianoKeyboardAspectRatio(/*octaveCount*/ 2);
   
   return <PianoKeysAnswerSelect
-    key={key} size={size} lowestPitch={new Pitch(PitchLetter.C, 0, 4)} highestPitch={new Pitch(PitchLetter.B, 0, 5)}
+    key={key} aspectRatio={aspectRatio} maxWidth={400} lowestPitch={new Pitch(PitchLetter.C, 0, 4)} highestPitch={new Pitch(PitchLetter.B, 0, 5)}
     correctAnswer={correctAnswer}
     onAnswer={info.onAnswer} maxNumPitches={1} lastCorrectAnswer={info.lastCorrectAnswer}
     incorrectAnswers={info.incorrectAnswers} instantConfirm={true} />;

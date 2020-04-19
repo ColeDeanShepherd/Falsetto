@@ -9,19 +9,23 @@ import { FlashCardSet, FlashCardLevel, FlashCardStudySessionInfo } from "../../.
 import { Pitch, getPitchRange } from "../../../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
 import { PianoKeysAnswerSelect } from '../../Utils/PianoKeysAnswerSelect';
+import { getPianoKeyboardAspectRatio } from '../../Utils/PianoUtils';
 
 const flashCardSetId = "pianoNotes1Octave";
 
 const lowestPitch = new Pitch(PitchLetter.C, 0, 4);
 const highestPitch = new Pitch(PitchLetter.B, 0, 4);
+
 export const allPitches = getPitchRange(lowestPitch, highestPitch);
 export const naturalPitches = allPitches
   .filter(p => p.isNatural);
 export const accidentalPitches = allPitches
   .filter(p => !p.isNatural);
 
-const pianoKeyboardRect = new Rect2D(new Size2D(200, 100), new Vector2D(0, 0));
-const pianoStyle = { width: "100%", maxWidth: "200px" };
+const pianoKeyboardAspectRatio = getPianoKeyboardAspectRatio(/*octaveCount*/ 1);
+const pianoKeyboardRect = new Rect2D(new Size2D(pianoKeyboardAspectRatio * 100, 100), new Vector2D(0, 0));
+const pianoMaxWidth = 200;
+const pianoStyle = { width: "100%", maxWidth: `${pianoMaxWidth}px`, height: "auto" };
 
 function renderAnswerSelect(
   info: FlashCardStudySessionInfo
@@ -30,7 +34,7 @@ function renderAnswerSelect(
   const correctAnswer = [(info.currentFlashCard.frontSide.data as Pitch)];
   
   return <PianoKeysAnswerSelect
-    key={key} size={pianoKeyboardRect.size} lowestPitch={lowestPitch} highestPitch={highestPitch}
+    key={key} aspectRatio={pianoKeyboardAspectRatio} maxWidth={pianoMaxWidth} lowestPitch={lowestPitch} highestPitch={highestPitch}
     correctAnswer={correctAnswer}
     onAnswer={info.onAnswer} maxNumPitches={1} lastCorrectAnswer={info.lastCorrectAnswer}
     incorrectAnswers={info.incorrectAnswers} instantConfirm={true} wrapOctave={true} />;
@@ -38,7 +42,7 @@ function renderAnswerSelect(
 
 export function createFlashCardSet(pitches?: Array<Pitch>): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Piano Notes", () => createFlashCards(pitches));
-  flashCardSet.containerHeight = "120px";
+  flashCardSet.containerHeight = `${200}px`;
   flashCardSet.moreInfoUri = "/essential-music-theory/notes";
   flashCardSet.renderAnswerSelect = renderAnswerSelect;
 

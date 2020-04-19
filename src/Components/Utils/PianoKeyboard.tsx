@@ -141,7 +141,7 @@ export function renderPianoKeyboardKeyLabels(metrics: PianoKeyboardMetrics, useS
       ? metrics.keyLeftXs[keyIndex] + (metrics.whiteKeyWidth / 2)
       : metrics.keyLeftXs[keyIndex] + (metrics.blackKeyWidth / 2);
     const highlightedNoteY = pitch.isWhiteKey
-      ? (0.75 * metrics.whiteKeyHeight)
+      ? (0.82 * metrics.whiteKeyHeight)
       : (metrics.blackKeyHeight / 2);
 
     for (let i = 0; i < labels.length; i++) {
@@ -196,6 +196,7 @@ export interface IPianoKeyboardProps {
   rect: Rect2D;
   lowestPitch: Pitch;
   highestPitch: Pitch;
+  allowDragPresses?: boolean;
   pressedPitches?: Array<Pitch>;
   onKeyPress?: (keyPitch: Pitch) => void;
   onKeyRelease?: (keyPitch: Pitch) => void;
@@ -206,6 +207,8 @@ export interface IPianoKeyboardProps {
 }
 export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
   public render(): JSX.Element {
+    const allowDragPresses = (this.props.allowDragPresses !== undefined) ? this.props.allowDragPresses : true;
+
     const margin = this.getMargin();
     const svgSize = new Size2D(margin.horizontal + this.props.rect.size.width, margin.vertical + this.props.rect.size.height);
     const metrics = this.getMetrics();
@@ -217,10 +220,26 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
     const blackKeyRadius = metrics.blackKeyWidth / 8;
 
     const whiteKeyStrokeWidth = metrics.whiteKeyWidth / 15;
-    
+
     for (let i = 0; i < metrics.keyCount; i++) {
       const midiNumber = metrics.lowestPitch.midiNumber + i;
       const pitch = Pitch.createFromMidiNumber(midiNumber);
+      
+      const onPointerOver = (event: React.PointerEvent<SVGPathElement>) => {
+        if (isBitSet(event.buttons, 0)) {
+          if (this.props.onKeyPress) {
+            this.props.onKeyPress(pitch);
+            event.preventDefault();
+          }
+        }
+      };
+      
+      const onPointerOut = (event: React.PointerEvent<SVGPathElement>) => {
+        if (this.props.onKeyRelease) {
+          this.props.onKeyRelease(pitch);
+          event.preventDefault();
+        }
+      };
 
       if (pitch.isWhiteKey) {
         const position = new Vector2D(metrics.keyLeftXs[i], 0);
@@ -243,20 +262,8 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
                 event.preventDefault();
               }
             }}
-            onPointerOver={event => {
-              if (isBitSet(event.buttons, 0)) {
-                if (this.props.onKeyPress) {
-                  this.props.onKeyPress(pitch);
-                  event.preventDefault();
-                }
-              }
-            }}
-            onPointerOut={event => {
-              if (this.props.onKeyRelease) {
-                this.props.onKeyRelease(pitch);
-                event.preventDefault();
-              }
-            }}
+            onPointerOver={allowDragPresses ? onPointerOver : undefined}
+            onPointerOut={allowDragPresses ? onPointerOut : undefined}
           />
         );
       } else {
@@ -280,20 +287,8 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
                 event.preventDefault();
               }
             }}
-            onPointerOver={event => {
-              if (isBitSet(event.buttons, 0)) {
-                if (this.props.onKeyPress) {
-                  this.props.onKeyPress(pitch);
-                  event.preventDefault();
-                }
-              }
-            }}
-            onPointerOut={event => {
-              if (this.props.onKeyRelease) {
-                this.props.onKeyRelease(pitch);
-                event.preventDefault();
-              }
-            }}
+            onPointerOver={allowDragPresses ? onPointerOver : undefined}
+            onPointerOut={allowDragPresses ? onPointerOut : undefined}
           />
         );
       }

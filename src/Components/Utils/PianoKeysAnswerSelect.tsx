@@ -39,7 +39,8 @@ function tryWrapPitchOctave(
 }
 
 export interface IPianoKeysAnswerSelectProps {
-  size: Size2D;
+  aspectRatio: number;
+  maxWidth: number;
   lowestPitch: Pitch;
   highestPitch: Pitch;
   correctAnswer: Array<Pitch>;
@@ -66,7 +67,7 @@ export class PianoKeysAnswerSelect extends React.Component<IPianoKeysAnswerSelec
 
   public render(): JSX.Element {
     // TODO: use lastCorrectAnswer
-    const { size, lowestPitch, highestPitch, instantConfirm } = this.props;
+    const { aspectRatio, maxWidth, lowestPitch, highestPitch, instantConfirm } = this.props;
 
     const confirmAnswerButton = !instantConfirm
       ? (
@@ -85,13 +86,14 @@ export class PianoKeysAnswerSelect extends React.Component<IPianoKeysAnswerSelec
     return (
       <div>
         <PianoKeyboard
-          rect={new Rect2D(size, new Vector2D(0, 0))}
+          rect={new Rect2D(new Size2D(aspectRatio * 100, 100), new Vector2D(0, 0))}
           lowestPitch={lowestPitch}
           highestPitch={highestPitch}
           pressedPitches={this.state.selectedPitches}
           onKeyPress={pitch => this.onPitchClick(pitch)}
           onKeyRelease={pitch => this.onPitchRelease(pitch)}
-          style={{ width: "100%", maxWidth: `${size.width}px` }}
+          allowDragPresses={false}
+          style={{ width: "100%", maxWidth: `${maxWidth}px`, height: "auto" }}
         />
         {confirmAnswerButton}
         <MidiNoteEventListener

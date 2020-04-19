@@ -265,16 +265,18 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
             key={currentFlashCardKey}
             style={flashCardContainerStyle}
           >
-            <div style={model.isShowingBackSide ? { display: "none" } : {}}>{renderedFlashCardFrontSide}</div>
-            <div style={!model.isShowingBackSide ? { display: "none" } : {}}>{renderedFlashCardBackSide}</div>
+            <div style={model.isShowingBackSide ? { display: "none" } : { width: "100%" }}>{renderedFlashCardFrontSide}</div>
+            <div style={!model.isShowingBackSide ? { display: "none" } : { width: "100%" }}>{renderedFlashCardBackSide}</div>
           </div>
   
           <div style={{textAlign: "center"}}>
-            {flashCardSet.renderAnswerSelect ? (
-              flashCardSet.renderAnswerSelect(
-                model.getStudySessionInfo(containerSize)
-              )
-              ) : null}
+            <div style={{ visibility: !model.isShowingBackSide ? "visible" : "hidden" }}>
+              {flashCardSet.renderAnswerSelect ? (
+                flashCardSet.renderAnswerSelect(
+                  model.getStudySessionInfo(containerSize)
+                )
+                ) : null}
+            </div>
   
             <div style={{marginTop: "1em"}}>
               <Button
