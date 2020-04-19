@@ -16,6 +16,7 @@ import { PianoKeyboard, renderPianoKeyboardNoteNames, PianoKeyboardMetrics } fro
 
 import { playPitches } from "../../Audio/PianoAudio";
 import * as PianoScaleDronePlayer from './PianoScaleDronePlayer';
+import { getPianoKeyboardAspectRatio } from './PianoUtils';
 
 export interface IPianoScaleFormulaDiagramProps {
   scaleType: ScaleType
@@ -25,10 +26,10 @@ export class PianoScaleFormulaDiagram extends React.Component<IPianoScaleFormula
     const { rootPitch } = this;
     const { scaleType } = this.props;
 
-    const width = 300;
-    const height = 200;
+    const maxWidth = 300;
+    const aspectRatio = getPianoKeyboardAspectRatio(/*octaveCount*/ 1);
     const margin = new Margin(0, 50, 0, 0);
-    const style = { width: "100%", maxWidth: "300px", height: "auto" };
+    const style = { width: "100%", maxWidth: `${maxWidth}px`, height: "auto" };
     const pitches = scaleType.getPitches(rootPitch);
     const pitchMidiNumberNoOctaves = pitches.map(p => p.midiNumberNoOctave);
     
@@ -36,13 +37,18 @@ export class PianoScaleFormulaDiagram extends React.Component<IPianoScaleFormula
       return (
         <g>
           {renderScaleStepLabels(metrics)}
-          {renderPianoKeyboardNoteNames(metrics, doesKeyUseSharps(rootPitch.letter, rootPitch.signedAccidental), p => arrayContains(pitchMidiNumberNoOctaves, p.midiNumberNoOctave))}
+          {renderPianoKeyboardNoteNames(
+            metrics,
+            doesKeyUseSharps(rootPitch.letter, rootPitch.signedAccidental),
+            p => arrayContains(pitchMidiNumberNoOctaves, p.midiNumberNoOctave))}
         </g>
       );
     }
+
     function renderScaleStepLabels(metrics: PianoKeyboardMetrics): JSX.Element {
       return <g>{pitches.map((_, i) => renderScaleStepLabel(metrics, i))}</g>;
     }
+
     function renderScaleStepLabel(metrics: PianoKeyboardMetrics, scaleStepIndex: number): JSX.Element {
       const leftPitch = pitches[(scaleStepIndex === 0) ? 0 : scaleStepIndex - 1];
       const rightPitch = pitches[(scaleStepIndex === 0) ? 0 : scaleStepIndex];
@@ -52,9 +58,10 @@ export class PianoScaleFormulaDiagram extends React.Component<IPianoScaleFormula
 
       const textPos = new Vector2D(
         (scaleStepIndex === 0) ? leftKeyRect.position.x + (leftKeyRect.size.width / 2) : leftKeyRect.right,
-        -35
+        -(maxWidth / 20)
       );
       const textStyle: any = {
+        fontSize: `${9}px`,
         textAnchor: "middle"
       };
       const halfStepConnectionPos = new Vector2D(textPos.x, textPos.y + 5);
@@ -64,6 +71,8 @@ export class PianoScaleFormulaDiagram extends React.Component<IPianoScaleFormula
       const halfSteps = rightPitch.midiNumber - leftPitch.midiNumber;
       const formulaPart = (scaleStepIndex === 0) ? 'R' : ((halfSteps === 1) ? 'H' : 'W');
 
+      const strokeWidth = maxWidth / 200;
+
       return (
         <g>
           <text x={textPos.x} y={textPos.y} style={textStyle}>
@@ -72,12 +81,12 @@ export class PianoScaleFormulaDiagram extends React.Component<IPianoScaleFormula
           <line
             x1={halfStepConnectionPos.x} y1={halfStepConnectionPos.y}
             x2={leftKeyLinePos.x} y2={leftKeyLinePos.y}
-            stroke="red" strokeWidth={4} />
+            stroke="red" strokeWidth={strokeWidth} />
           {(scaleStepIndex > 0) ? (
             <line
               x1={halfStepConnectionPos.x} y1={halfStepConnectionPos.y}
               x2={rightKeyLinePos.x} y2={rightKeyLinePos.y}
-              stroke="red" strokeWidth={4} />
+              stroke="red" strokeWidth={strokeWidth} />
           ) : null}
         </g>
       );
@@ -85,7 +94,7 @@ export class PianoScaleFormulaDiagram extends React.Component<IPianoScaleFormula
 
     return (
       <PianoKeyboard
-        rect={new Rect2D(new Size2D(width, height), new Vector2D(0, 0))}
+        rect={new Rect2D(new Size2D(aspectRatio * 100, 100), new Vector2D(0, 0))}
         margin={margin}
         lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
         highestPitch={new Pitch(PitchLetter.B, 0, 4)}

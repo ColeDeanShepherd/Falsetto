@@ -438,131 +438,40 @@ const slideGroups = [
         <p>Scales are sets of notes (usually 7 notes in Western musical scales) with a designated "root note" (which generally "sounds like home" in the scale).</p>
         <p>Below is an interactive diagram of the "C Major" scale, which has a root note of C and comprises of the notes: C, D, E, F, G, A, B.</p>
         <p>Try pressing the piano keys below to get a feel for how the scale sounds. Pressing keys will play both the pressed note and the root note (C).</p>
-        <p><PianoScaleDronePlayer scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))} octaveCount={1} maxWidth={maxPianoWidth} /></p>
+        <p><PianoScaleDronePlayer scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))} octaveCount={1} maxWidth={maxOneOctavePianoWidth} /></p>
       </div>
     )),
     new Slide(() => (
       <div>
         <p>Major scales are very commonly used, and are built with the same formula: "R W W H W W W H", where:</p>
-        <ul>
-          <li>"R" means the root note</li>
-          <li>"W" means the next note is a whole step (2 keys) to the right of the previous note</li>
-          <li>"H" means the next note is a half step (1 key) to the right of the previous note.</li>
-        </ul>
+        <p><strong>"R"</strong> means the root note<br /><strong>"W"</strong> means the next note is a whole step (2 keys) to the right of the previous note<br /><strong>"H"</strong> means the next note is a half step (1 key) to the right of the previous note.</p>
         <p>Below is another diagram of the C major scale along with its formula.</p>
         <p><PianoScaleFormulaDiagram scaleType={ScaleType.Ionian} /></p>
       </div>
     )),
     new Slide(() => (
       <div>
-        <p>This is the C Major scale.</p>
-        <p><PianoScaleDronePlayer scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))} octaveCount={2} maxWidth={300} /></p>
+        <p>QUIZ</p>
       </div>
     )),
-    new Slide(() => (
-      <div>
-        <p>This is the C♯ Major scale.</p>
-        <p><PianoScaleDronePlayer scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 1, 4))} octaveCount={2} maxWidth={300} /></p>
-        <p>Another name for the C♯ Major scale is Db Major, which uses flats instead of sharps.</p>
-        <p><PianoScaleDronePlayer scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.D, -1, 4))} octaveCount={2} maxWidth={300} /></p>
-      </div>
-    )),
-    new Slide(() => (
-      <div>
-        <p>This is the D Major scale.</p>
-        <p><PianoScaleDronePlayer scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.D, 0, 4))} octaveCount={2} maxWidth={300} /></p>
-      </div>
-    )),
-    new Slide(() => (
-      <div>
-        <p>This is the Eb Major scale.</p>
-        <p><PianoScaleDronePlayer scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.E, -1, 4))} octaveCount={2} maxWidth={300} /></p>
-      </div>
-    )),
-    new Slide(() => (
-      <div>
-        <p>This is the E Major scale.</p>
-        <p><PianoScaleDronePlayer scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.E, 0, 4))} octaveCount={2} maxWidth={300} /></p>
-      </div>
-    )),
-    new Slide(() => (
-      <div>
-        <p>This is the F Major scale.</p>
-        <p><PianoScaleDronePlayer scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.F, 0, 4))} octaveCount={2} maxWidth={300} /></p>
-      </div>
-    )),
-    new Slide(() => (
-      <div>
-        <p>This is the F♯ Major scale.</p>
-        <p><PianoScaleDronePlayer scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.F, 1, 4))} octaveCount={2} maxWidth={300} /></p>
-        <p>Another name for the F♯ Major scale is Gb Major, which uses flats instead of sharps.</p>
-        <p><PianoScaleDronePlayer scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.G, -1, 4))} octaveCount={2} maxWidth={300} /></p>
-      </div>
-    )),
-    new Slide(() => (
-      <div>
-        <p>This is the G Major scale.</p>
-        <p><PianoScaleDronePlayer scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.G, 0, 4))} octaveCount={2} maxWidth={300} /></p>
-      </div>
-    )),
-    new Slide(() => (
-      <div>
-        <p>This is the Ab Major scale.</p>
-        <p><PianoScaleDronePlayer scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.A, -1, 4))} octaveCount={2} maxWidth={300} /></p>
-      </div>
-    )),
-    new Slide(() => (
-      <div>
-        <p>This is the A Major scale.</p>
-        <p><PianoScaleDronePlayer scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.A, 0, 4))} octaveCount={2} maxWidth={300} /></p>
-      </div>
-    )),
-    new Slide(() => (
-      <div>
-        <p>This is the Bb Major scale.</p>
-        <p><PianoScaleDronePlayer scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.B, -1, 4))} octaveCount={2} maxWidth={300} /></p>
-      </div>
-    )),
-    new Slide(() => (
-      <div>
-        <p>This is the B Major scale.</p>
-        <p><PianoScaleDronePlayer scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.B, 0, 4))} octaveCount={2} maxWidth={300} /></p>
-        <p>Another name for the B Major scale is Cb Major, which uses flats instead of sharps.</p>
-        <p><PianoScaleDronePlayer scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.G, -1, 4))} octaveCount={2} maxWidth={300} /></p>
-      </div>
-    )),
-
-    // Quiz
-
-
-
-    /*new Slide(() => (
-      <div>
-        <p>Here is a common "fingering" &mdash; instructions for which fingers to use when playing piano keys &mdash; for playing the C major scale with your left hand:</p>
-        <p><PianoScaleFingeringDiagram scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))} /></p>
-      </div>
-    )),*/
-    new Slide(() => (
-      <div>
-        <p></p>
-      </div>
-    )),
-
-
-
-
-    new Slide(() => (
-      <PianoKeyboard
-        rect={new Rect2D(new Size2D(300, 200), new Vector2D(0, 0))}
-        lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-        highestPitch={new Pitch(PitchLetter.B, 0, 4)}
-        onKeyPress={p => AppModel.instance.pianoAudio.pressKey(p, 1)}
-        onKeyRelease={p => AppModel.instance.pianoAudio.releaseKey(p)}
-        style={{ width: "100%", maxWidth: "300px", height: "auto" }} />
-    )),
-    new Slide(() => <span>Slide 2</span>),
-    new Slide(() => <span>Slide 3</span>)])
+  ])
 ];
+
+function getSlideGroup(slideIndex: number): SlideGroup | undefined {
+  let numSlidesSeen = 0;
+
+  for (let slideGroupIndex = 0; slideGroupIndex < slideGroups.length; slideGroupIndex++) {
+    const slideGroup = slideGroups[slideGroupIndex];
+
+    numSlidesSeen += slideGroup.slides.length;
+
+    if (numSlidesSeen > slideIndex) {
+      return slideGroup;
+    }
+  }
+
+  return undefined;
+}
 
 // TODO: optimize
 let slides = flattenArrays<Slide>(slideGroups.map(sg => sg.slides))
@@ -607,6 +516,7 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
     const slideNumber = slideIndex + 1;
     const numSlides = slides.length;
     const renderedSlide = slides[slideIndex].renderFn();
+    const slideGroup = getSlideGroup(slideIndex);
 
     return (
       <div style={{ height: "100%" }}>
@@ -620,7 +530,7 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
             >
               &lt;
             </Button>
-            <span style={{ padding: "0 1em" }}>Slide {slideNumber} / {numSlides}</span>
+            <span style={{ padding: "0 1em" }}>Slide {slideNumber} / {numSlides} - {slideGroup ? slideGroup.name : ""}</span>
             <Button
               variant="contained"
               disabled={!this.canMoveToNextSlide()}
