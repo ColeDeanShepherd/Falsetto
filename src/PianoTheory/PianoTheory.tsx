@@ -29,6 +29,7 @@ import { MidiNoteEventListener } from "../Components/Utils/MidiNoteEventListener
 import { AppModel } from "../App/Model";
 import { MidiPianoRangeInput } from "../Components/Utils/MidiPianoRangeInput";
 import { LimitedWidthContentContainer } from "../Components/Utils/LimitedWidthContentContainer";
+import { serializeMidiInputDeviceSettings } from '../Persistence';
 
 const maxPianoWidth = 1000;
 const maxOneOctavePianoWidth = 400;
@@ -181,7 +182,7 @@ class KeyActions {
 // #region Slides
 
 class Slide {
-  public constructor(public renderFn: () => JSX.Element) {}
+  public constructor(public url: string, public renderFn: () => JSX.Element) {}
 }
 class SlideGroup {
   public constructor(public name: string, public slides: Array<Slide>) {}
@@ -193,10 +194,10 @@ class SlideGroup {
 // TODO: use symbols
 const slideGroups = [
   new SlideGroup("Introduction", [
-    new Slide(() => (
+    new Slide("introduction", () => (
       <div style={{ display: "flex", flexDirection: "column", flexGrow: 1, justifyContent: "space-evenly" }}>
         <div>
-          <h2>Welcome to Falsetto's "Piano Theory" course!</h2>
+          <h2>Section 1: Introduction</h2>
           <p>This is an interactive course designed to teach you the essentials of piano and music theory in a hands-on manner.</p>
           <p>This course is designed to be viewed on tablets and computer monitors.</p>
           <p>It is highly recommended to connect a MIDI piano keyboard to follow along.</p>
@@ -211,70 +212,71 @@ const slideGroups = [
         <p><strong>Step 3: Press the ">" arrow button at the top of this page, or press the right arrow key on your computer keyboard, to move to the next slide.</strong></p>
       </div>
     )),
-    new Slide(() => (
+    new Slide("piano-basics", () => (
       <div>
         <p>This is a standard-size piano which has 88 white &amp; black keys.</p>
         <p>When pressed, each key produces a particular "pitch" &ndash; the "highness" or "lowness" of a sound.</p>
         <p>Keys further to the left produce lower pitches, and keys further to the right produce higher pitches.</p>
-        <p>Try pressing they keys of your MIDI piano keyboard, or clicking the keys, to hear how the produced pitches change as you move left and right.</p>
+        <p>Note that it is common to use the word "note" interchangably with "pitch", and we may do so in this course.</p>
+        <p>Try pressing the keys of your MIDI piano keyboard, or pressing the keys on your screen, to hear how the produced pitches change as you move left and right.</p>
         <FullPiano />
       </div>
     ))
   ]),
   new SlideGroup("Notes", [
-    new Slide(() => (
+    new Slide("note-c", () => (
       <div>
-        <p>Every piano key has one or more names that we must learn, starting with the white keys in the small section of a piano keyboard below.</p>
-        <p>The highlighted key below, to the left of the group of 2 black keys, is called <strong>C</strong>.</p>
+        <h2>Section 2: Notes</h2>
+        <p>Every piano key has one or more names, which we must learn in order to navigate the instrument and communicate with other musicians.</p>
+        <p>We will start with the white keys in the small section of a piano keyboard below. The highlighted key below, to the left of the group of 2 black keys, is called <strong>C</strong>.</p>
         <PianoNoteDiagram pitch={new Pitch(PitchLetter.C, 0, 4)} labelWhiteKeys={true} labelBlackKeys={false} />
       </div>
     )),
     
-    new Slide(() => (
+    new Slide("note-d", () => (
       <div>
-        <p>This key is called <strong>D</strong>.</p>
+        <p>When moving one white key to the right, we also move forward by one letter in the English alphabet, so this key is called <strong>D</strong>.</p>
         <PianoNoteDiagram pitch={new Pitch(PitchLetter.D, 0, 4)} labelWhiteKeys={true} labelBlackKeys={false} />
       </div>
     )),
     
-    new Slide(() => (
+    new Slide("note-e", () => (
       <div>
         <p>This key is called <strong>E</strong>.</p>
         <PianoNoteDiagram pitch={new Pitch(PitchLetter.E, 0, 4)} labelWhiteKeys={true} labelBlackKeys={false} />
       </div>
     )),
     
-    new Slide(() => (
+    new Slide("note-f", () => (
       <div>
         <p>This key is called <strong>F</strong>.</p>
         <PianoNoteDiagram pitch={new Pitch(PitchLetter.F, 0, 4)} labelWhiteKeys={true} labelBlackKeys={false} />
       </div>
     )),
     
-    new Slide(() => (
+    new Slide("note-g", () => (
       <div>
         <p>This key is called <strong>G</strong>.</p>
         <PianoNoteDiagram pitch={new Pitch(PitchLetter.G, 0, 4)} labelWhiteKeys={true} labelBlackKeys={false} />
       </div>
     )),
     
-    new Slide(() => (
+    new Slide("note-a", () => (
       <div>
-        <p>This key is called <strong>A</strong>.</p>
+        <p>After "G" there is no "H" key &mdash; instead we jump backwards through the English alphabet to <strong>A</strong>.</p>
         <PianoNoteDiagram pitch={new Pitch(PitchLetter.A, 0, 4)} labelWhiteKeys={true} labelBlackKeys={false} />
       </div>
     )),
     
-    new Slide(() => (
+    new Slide("note-b", () => (
       <div>
-        <p>This key is called <strong>B</strong>.</p>
+        <p>The last white key is called <strong>B</strong>.</p>
         <PianoNoteDiagram pitch={new Pitch(PitchLetter.B, 0, 4)} labelWhiteKeys={true} labelBlackKeys={false} />
       </div>
     )),
     
-    new Slide(() => (
+    new Slide("white-notes-summary", () => (
       <div>
-        <p>Notice that the names are simply letters of the English alphabet, and that they jump to <strong>A</strong> to the right of the <strong>G</strong> key.</p>
         <p>Study this slide, then move to the next slide to test your knowledge of white key names with a quiz.</p>
         <PianoNotesDiagram
           lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
@@ -284,7 +286,7 @@ const slideGroups = [
       </div>
     )),
     
-    new Slide(() => (
+    new Slide("white-notes-quiz", () => (
       <LimitedWidthContentContainer>
         <div style={{ marginTop: "1em" }}>
           {createStudyFlashCardSetComponent(
@@ -299,17 +301,11 @@ const slideGroups = [
       </LimitedWidthContentContainer>
     )),
     
-    new Slide(() => (
+    new Slide("note-c-sharp", () => (
       <div>
-        <p>Now let's learn the names of the pitches that black piano keys produce.</p>
-        <p>This key, like all black keys, has multiple names &ndash; one name for it is <strong>C♯</strong>, and another name for it is <strong>D♭</strong>.</p>
-        <PianoNoteDiagram pitch={new Pitch(PitchLetter.C, 1, 4)} labelWhiteKeys={false} labelBlackKeys={true} />
-      </div>
-    )),
-    
-    new Slide(() => (
-      <div>
-        <p>The '♯' symbol means the pitch is raised by one key, so C♯ means "the key to the right of C".</p>
+        <p>Now let's learn the names of the black piano keys in this section of the piano.</p>
+        <p>The key highlighted below, like all black keys, has multiple names. One name for it is <strong>C♯</strong> (pronounced "C sharp").</p>
+        <p>The '♯' ("sharp") symbol means the pitch is raised by one key, so C♯ means "the key to the right of C".</p>
         <PianoNoteDiagram
           pitch={new Pitch(PitchLetter.C, 1, 4)}
           labelWhiteKeys={true}
@@ -319,9 +315,10 @@ const slideGroups = [
       </div>
     )),
     
-    new Slide(() => (
+    new Slide("note-d-flat", () => (
       <div>
-        <p>The '♭' symbol means the pitch is lowered by one key, so D♭ means "the key to the left of D".</p>
+        <p>Another name for the same key is <strong>D♭</strong> (pronounced "D flat").</p>
+        <p>The '♭' ("flat") symbol means the pitch is lowered by one key, so D♭ means "the key to the left of D".</p>
         <PianoNoteDiagram
           pitch={new Pitch(PitchLetter.C, 1, 4)}
           labelWhiteKeys={true}
@@ -331,35 +328,35 @@ const slideGroups = [
       </div>
     )),
     
-    new Slide(() => (
+    new Slide("note-d-sharp-e-flat", () => (
       <div>
         <p>This key is called <strong>D♯</strong>, or <strong>E♭</strong>.</p>
         <PianoNoteDiagram pitch={new Pitch(PitchLetter.D, 1, 4)} labelWhiteKeys={false} labelBlackKeys={true} />
       </div>
     )),
 
-    new Slide(() => (
+    new Slide("note-f-sharp-g-flat", () => (
       <div>
         <p>This key is called <strong>F♯</strong>, or <strong>G♭</strong>.</p>
         <PianoNoteDiagram pitch={new Pitch(PitchLetter.F, 1, 4)} labelWhiteKeys={false} labelBlackKeys={true} />
       </div>
     )),
 
-    new Slide(() => (
+    new Slide("note-g-sharp-a-flat", () => (
       <div>
         <p>This key is called <strong>G♯</strong>, or <strong>A♭</strong>.</p>
         <PianoNoteDiagram pitch={new Pitch(PitchLetter.G, 1, 4)} labelWhiteKeys={false} labelBlackKeys={true} />
       </div>
     )),
 
-    new Slide(() => (
+    new Slide("note-a-sharp-b-flat", () => (
       <div>
-        <p>This key is called <strong>A♯</strong>, or <strong>B♭</strong>.</p>
+        <p>The last black key is called <strong>A♯</strong>, or <strong>B♭</strong>.</p>
         <PianoNoteDiagram pitch={new Pitch(PitchLetter.B, -1, 4)} labelWhiteKeys={false} labelBlackKeys={true} />
       </div>
     )),
     
-    new Slide(() => (
+    new Slide("black-notes-summary", () => (
       <div>
         <p>Study this slide, then move to the next slide to test your knowledge of black key names with a quiz.</p>
         <PianoNotesDiagram
@@ -370,7 +367,7 @@ const slideGroups = [
       </div>
     )),
     
-    new Slide(() => (
+    new Slide("black-notes-quiz", () => (
       <LimitedWidthContentContainer>
         <div style={{ marginTop: "1em" }}>
           {createStudyFlashCardSetComponent(
@@ -385,28 +382,19 @@ const slideGroups = [
       </LimitedWidthContentContainer>
     )),
     
-    new Slide(() => (
+    new Slide("all-notes", () => (
       <div>
-        <p>You have now learned all of the names of the keys in this section of the piano!</p>
-        <PianoNotesDiagram
-          lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-          highestPitch={new Pitch(PitchLetter.B, 0, 4)}
-          maxWidth={maxOneOctavePianoWidth} />
-      </div>
-    )),
-    
-    new Slide(() => (
-      <div>
-        <p>Now let's zoom out. The names of the other keys are simply repetitions of the pattern we've learned, so you have actually learned the names of all 88 piano keys!</p>
+        <p>You have learned the names of all the keys in this section of the piano!</p>
+        <p>But what about the rest of the piano? Let's zoom out...</p>
+        <p>Here we see that the names of the other keys are simply repetitions of the pattern you've learned. So you have actually learned the names of all 88 piano keys!</p>
         <PianoNotesDiagram
           lowestPitch={fullPianoLowestPitch}
           highestPitch={fullPianoHighestPitch}
           maxWidth={maxPianoWidth} />
       </div>
     )),
-
     
-    new Slide(() => (
+    new Slide("notes-summary", () => (
       <div>
         <p>Study this slide, then move to the next slide to comprehensively test your knowledge of piano key names with a quiz.</p>
         <PianoNotesDiagram
@@ -416,7 +404,7 @@ const slideGroups = [
       </div>
     )),
 
-    new Slide(() => (
+    new Slide("notes-quiz", () => (
       <LimitedWidthContentContainer>
         <div style={{ marginTop: "1em" }}>
           {createStudyFlashCardSetComponent(
@@ -431,25 +419,83 @@ const slideGroups = [
       </LimitedWidthContentContainer>
     )),
   ]),
-  new SlideGroup("Major Scales", [
-    new Slide(() => (
+
+  new SlideGroup("Scales", [
+    new Slide("scales-introduction", () => (
       <div>
-        <p>Now let's learn about scales.</p>
-        <p>Scales are sets of notes (usually 7 notes in Western musical scales) with a designated "root note" (which generally "sounds like home" in the scale).</p>
-        <p>Below is an interactive diagram of the "C Major" scale, which has a root note of C and comprises of the notes: C, D, E, F, G, A, B.</p>
-        <p>Try pressing the piano keys below to get a feel for how the scale sounds. Pressing keys will play both the pressed note and the root note (C).</p>
+        <h2>Section 3: Scales</h2>
+        <p>Now let's learn about <strong>scales</strong>. Scales are sets of notes with a designated "root note" that generally "sounds like home" in the scale.</p>
+        <p>Scales are important to learn about because it's common for pieces of music to mostly use notes from a small handful of scales.</p>
+        <p>Below is an interactive diagram of the <strong>C Major</strong> scale, which has a root note of C and comprises of the notes: C, D, E, F, G, A, B.</p>
+        <p>Try pressing the piano keys below to get a feel for how the scale sounds. Pressing keys will play both the pressed note <strong>and</strong> the root note (C), which helps convey the "feeling" of the scale.</p>
         <p><PianoScaleDronePlayer scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))} octaveCount={1} maxWidth={maxOneOctavePianoWidth} /></p>
       </div>
     )),
-    new Slide(() => (
+    new Slide("major-scale", () => (
       <div>
-        <p>Major scales are very commonly used, and are built with the same formula: "R W W H W W W H", where:</p>
-        <p><strong>"R"</strong> means the root note<br /><strong>"W"</strong> means the next note is a whole step (2 keys) to the right of the previous note<br /><strong>"H"</strong> means the next note is a half step (1 key) to the right of the previous note.</p>
-        <p>Below is another diagram of the C major scale along with its formula.</p>
+        <p>Major scales, like the "C Major" scale we saw on the last slide, are very common in music.</p>
+        <p>All major scales are built with the same formula: "<strong>R W W H W W W</strong>", where:</p>
+        <p>
+          <strong>"R"</strong> means the <strong>root note</strong> ("C" in the case of the C Major scale)
+          <br />
+          <strong>"W"</strong> means the next note is a <strong>whole step</strong> (2 keys) to the right of the previous note
+          <br />
+          <strong>"H"</strong> means the next note is a <strong>half step</strong> (1 key) to the right of the previous note.
+        </p>
+        <p>Though scale formulas define the notes of a scale in a particular order starting with the root note, you are free to play the notes in any order you like.</p>
+        <p>Below is another interactive diagram of the C Major scale, along with the major scale formula.</p>
         <p><PianoScaleFormulaDiagram scaleType={ScaleType.Ionian} /></p>
       </div>
     )),
-    new Slide(() => (
+    new Slide("natural-minor-scale", () => (
+      <div>
+        <p>"Natural Minor" scales are also common in music, and are built with the formula: "<strong>R W H W W H W</strong>".</p>
+        <p>Below is an interactive diagram of the <strong>C Natural Minor</strong> scale, along with the natural minor scale formula.</p>
+        <p>Press the piano keys below to get a feel for how the scale sounds.</p>
+        <p><PianoScaleFormulaDiagram scaleType={ScaleType.Aeolian} /></p>
+      </div>
+    )),
+    new Slide("scales-summary", () => (
+      <div>
+        <p>There are many other scales, but we will cover them later.</p>
+        <p>For now, take some time to review material below, then move to the next slide to test your knowledge of scales a quiz.</p>
+        <br />
+        <p><strong>Scales are sets of notes with a designated "root note"</strong> that generally "sounds like home" in the scale.</p>
+        <p>Though scale formulas define the notes of a scale in a particular order starting with the root note, <strong>you are free to play the notes in any order you like</strong>.</p>
+        <p>In scale formulas, <strong>"R" means "root note"</strong>.</p>
+        <p>In scale formulas, <strong>"H" means the next note is a "half step" (1 key) to the right of the previous note</strong>.</p>
+        <p>In scale formulas, <strong>"W" means the next note is a "whole step" (2 keys) to the right of the previous note</strong>.</p>
+        <p>The formula for all major scales is <strong>R W W H W W W</strong>.</p>
+        <p>The formula for all natural minor scales is <strong>R W H W W H W</strong>.</p>
+      </div>
+    )),
+    new Slide("scales-quiz", () => (
+      <div>
+        <p>QUIZ</p>
+      </div>
+    )),
+  ]),
+
+  new SlideGroup("Chords", [
+    new Slide("chords-introduction", () => (
+      <div>
+        <h2>Section 4: Chords</h2>
+      </div>
+    )),
+    new Slide("chords-quiz", () => (
+      <div>
+        <p>QUIZ</p>
+      </div>
+    )),
+  ]),
+
+  new SlideGroup("Chord Progressions", [
+    new Slide("chord-progressions-introduction", () => (
+      <div>
+        <h2>Section 5: Chord Progressions</h2>
+      </div>
+    )),
+    new Slide("chord-progressions-quiz", () => (
       <div>
         <p>QUIZ</p>
       </div>
@@ -475,8 +521,8 @@ function getSlideGroup(slideIndex: number): SlideGroup | undefined {
 
 // TODO: optimize
 let slides = flattenArrays<Slide>(slideGroups.map(sg => sg.slides))
-  .slice(0, 43)
-  .concat([new Slide(() => <h3>More coming soon!</h3>)]);
+//  .slice(0, 43)
+  .concat([new Slide("coming-soon", () => <h3>More coming soon!</h3>)]);
 
 // #endregion Slides
 
@@ -489,12 +535,9 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
     super(props);
     
     this.history = DependencyInjector.instance.getRequiredService<History<any>>("History");
-    const urlSearchParams = QueryString.parse(this.history.location.search);
 
     this.state = {
-      slideIndex: (urlSearchParams.slide && (typeof urlSearchParams.slide === 'string'))
-        ? clamp(parseInt(urlSearchParams.slide, 10) - 1, 0, slides.length - 1)
-        : 0
+      slideIndex: this.getSlideIndexFromUriParams()
     };
   }
 
@@ -629,7 +672,7 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
   private moveToSlide(slideIndex: number) {
     this.setState({ slideIndex: slideIndex }, () => {
       const oldSearchParams = QueryString.parse(this.history.location.search);
-      const newSearchParams = { ...oldSearchParams, slide: slideIndex + 1 };
+      const newSearchParams = { ...oldSearchParams, slide: slides[slideIndex].url };
 
       this.history.push({
         pathname: this.history.location.pathname,
@@ -639,4 +682,12 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
   }
 
   // #endregion Actions
+
+  private getSlideIndexFromUriParams(): number {
+    const urlSearchParams = QueryString.parse(this.history.location.search);
+    if (!(urlSearchParams.slide && (typeof urlSearchParams.slide === 'string'))) { return 0; }
+
+    const slideIndex = slides.findIndex(s => s.url === urlSearchParams.slide);
+    return Math.max(slideIndex, 0);
+  }
 }

@@ -28,7 +28,7 @@ export class PianoScaleFormulaDiagram extends React.Component<IPianoScaleFormula
 
     const maxWidth = 300;
     const aspectRatio = getPianoKeyboardAspectRatio(/*octaveCount*/ 1);
-    const margin = new Margin(0, 50, 0, 0);
+    const margin = new Margin(0, 30, 0, 0);
     const style = { width: "100%", maxWidth: `${maxWidth}px`, height: "auto" };
     const pitches = scaleType.getPitches(rootPitch);
     const pitchMidiNumberNoOctaves = pitches.map(p => p.midiNumberNoOctave);
@@ -57,7 +57,9 @@ export class PianoScaleFormulaDiagram extends React.Component<IPianoScaleFormula
       const rightKeyRect = metrics.getKeyRect(rightPitch);
 
       const textPos = new Vector2D(
-        (scaleStepIndex === 0) ? leftKeyRect.position.x + (leftKeyRect.size.width / 2) : leftKeyRect.right,
+        (scaleStepIndex === 0)
+          ? (leftKeyRect.position.x + (leftKeyRect.size.width / 2))
+          : ((leftKeyRect.position.x + rightKeyRect.right) / 2),
         -(maxWidth / 20)
       );
       const textStyle: any = {
@@ -65,8 +67,8 @@ export class PianoScaleFormulaDiagram extends React.Component<IPianoScaleFormula
         textAnchor: "middle"
       };
       const halfStepConnectionPos = new Vector2D(textPos.x, textPos.y + 5);
-      const leftKeyLinePos = new Vector2D(leftKeyRect.center.x, 20);
-      const rightKeyLinePos = new Vector2D(rightKeyRect.center.x, 20);
+      const leftKeyLinePos = new Vector2D(leftKeyRect.center.x, 10);
+      const rightKeyLinePos = new Vector2D(rightKeyRect.center.x, 10);
 
       const halfSteps = rightPitch.midiNumber - leftPitch.midiNumber;
       const formulaPart = (scaleStepIndex === 0) ? 'R' : ((halfSteps === 1) ? 'H' : 'W');
