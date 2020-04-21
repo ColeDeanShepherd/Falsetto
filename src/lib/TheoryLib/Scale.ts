@@ -52,63 +52,63 @@ export class ScaleTypeGroup {
   ) {}
 }
 export class ScaleType {
-  public static Ionian = new ScaleType("Major (Ionian)", ChordScaleFormula.parse("1 2 3 4 5 6 7"));
-  public static Dorian = new ScaleType("Dorian", ChordScaleFormula.parse("1 2 b3 4 5 6 b7"));
-  public static Phrygian = new ScaleType("Phrygian", ChordScaleFormula.parse("1 b2 b3 4 5 b6 b7"));
-  public static Lydian = new ScaleType("Lydian", ChordScaleFormula.parse("1 2 3 #4 5 6 7"));
-  public static Mixolydian = new ScaleType("Mixolydian", ChordScaleFormula.parse("1 2 3 4 5 6 b7"));
-  public static Aeolian = new ScaleType("Natural Minor (Aeolian)", ChordScaleFormula.parse("1 2 b3 4 5 b6 b7"));
-  public static Locrian = new ScaleType("Locrian", ChordScaleFormula.parse("1 b2 b3 4 b5 b6 b7"));
+  public static Ionian = new ScaleType("ionian", "Major (Ionian)", ChordScaleFormula.parse("1 2 3 4 5 6 7"));
+  public static Dorian = new ScaleType("dorian", "Dorian", ChordScaleFormula.parse("1 2 b3 4 5 6 b7"));
+  public static Phrygian = new ScaleType("phrygian", "Phrygian", ChordScaleFormula.parse("1 b2 b3 4 5 b6 b7"));
+  public static Lydian = new ScaleType("lydian", "Lydian", ChordScaleFormula.parse("1 2 3 #4 5 6 7"));
+  public static Mixolydian = new ScaleType("mixolydian", "Mixolydian", ChordScaleFormula.parse("1 2 3 4 5 6 b7"));
+  public static Aeolian = new ScaleType("aeolian", "Natural Minor (Aeolian)", ChordScaleFormula.parse("1 2 b3 4 5 b6 b7"));
+  public static Locrian = new ScaleType("locrian", "Locrian", ChordScaleFormula.parse("1 b2 b3 4 b5 b6 b7"));
   
   public static Major = ScaleType.Ionian;
   public static NaturalMinor = ScaleType.Aeolian;
 
-  public static MelodicMinor = new ScaleType("Melodic Minor", ChordScaleFormula.parse("1 2 b3 4 5 6 7"));
-  public static Dorianb2 = new ScaleType("Dorian b2", ChordScaleFormula.parse("1 b2 b3 4 5 6 b7"));
-  public static LydianAug = new ScaleType("Lydian Aug.", ChordScaleFormula.parse("1 2 3 #4 #5 6 7"));
-  public static MixolydianSharp11 = new ScaleType("Mixolydian #11", ChordScaleFormula.parse("1 2 3 #4 5 6 b7"));
-  public static Mixolydianb6 = new ScaleType("Mixolydian b6", ChordScaleFormula.parse("1 2 3 4 5 b6 b7"));
-  public static LocrianNat9 = new ScaleType("Locrian Nat. 9", ChordScaleFormula.parse("1 2 b3 4 b5 b6 b7"));
-  public static AlteredDominant = new ScaleType("Altered Dominant", ChordScaleFormula.parse("1 b2 b3 b4 b5 b6 b7"));
+  public static MelodicMinor = new ScaleType("melodicMinor", "Melodic Minor", ChordScaleFormula.parse("1 2 b3 4 5 6 7"));
+  public static Dorianb2 = new ScaleType("dorianb2", "Dorian b2", ChordScaleFormula.parse("1 b2 b3 4 5 6 b7"));
+  public static LydianAug = new ScaleType("lydianAug", "Lydian Aug.", ChordScaleFormula.parse("1 2 3 #4 #5 6 7"));
+  public static MixolydianSharp11 = new ScaleType("mixolydian#11", "Mixolydian #11", ChordScaleFormula.parse("1 2 3 #4 5 6 b7"));
+  public static Mixolydianb6 = new ScaleType("mixolydianb6", "Mixolydian b6", ChordScaleFormula.parse("1 2 3 4 5 b6 b7"));
+  public static LocrianNat9 = new ScaleType("locrianNat9", "Locrian Nat. 9", ChordScaleFormula.parse("1 2 b3 4 b5 b6 b7"));
+  public static AlteredDominant = new ScaleType("alteredDominant", "Altered Dominant", ChordScaleFormula.parse("1 b2 b3 b4 b5 b6 b7"));
 
-  public static HarmonicMinor = new ScaleType("Harmonic Minor", ChordScaleFormula.parse("1 2 b3 4 5 b6 7"));
-  public static LocrianNat6 = new ScaleType("Locrian Nat. 6", ChordScaleFormula.parse("1 b2 b3 4 b5 6 b7"));
-  public static IonianAug = new ScaleType("Ionian Aug.", ChordScaleFormula.parse("1 2 3 4 #5 6 7"));
-  public static DorianSharp11 = new ScaleType("Dorian #11", ChordScaleFormula.parse("1 2 b3 #4 5 6 b7"));
-  public static PhrygianMajor = new ScaleType("Phrygian Dominant", ChordScaleFormula.parse("1 b2 3 4 5 b6 b7"));
-  public static LydianSharp9 = new ScaleType("Lydian #9", ChordScaleFormula.parse("1 #2 3 #4 5 6 7"));
-  public static AlteredDominantbb7 = new ScaleType("Altered Dominant bb7", ChordScaleFormula.parse("1 b2 b3 b4 b5 b6 bb7"));
+  public static HarmonicMinor = new ScaleType("harmonicMinor", "Harmonic Minor", ChordScaleFormula.parse("1 2 b3 4 5 b6 7"));
+  public static LocrianNat6 = new ScaleType("locrianNat6", "Locrian Nat. 6", ChordScaleFormula.parse("1 b2 b3 4 b5 6 b7"));
+  public static IonianAug = new ScaleType("ionianAug", "Ionian Aug.", ChordScaleFormula.parse("1 2 3 4 #5 6 7"));
+  public static DorianSharp11 = new ScaleType("dorian#11", "Dorian #11", ChordScaleFormula.parse("1 2 b3 #4 5 6 b7"));
+  public static PhrygianMajor = new ScaleType("phrygianDominant", "Phrygian Dominant", ChordScaleFormula.parse("1 b2 3 4 5 b6 b7"));
+  public static LydianSharp9 = new ScaleType("lydian#9", "Lydian #9", ChordScaleFormula.parse("1 #2 3 #4 5 6 7"));
+  public static AlteredDominantbb7 = new ScaleType("alteredDominantbb7", "Altered Dominant bb7", ChordScaleFormula.parse("1 b2 b3 b4 b5 b6 bb7"));
 
-  public static HarmonicMajor = new ScaleType("Harmonic Major", ChordScaleFormula.parse("1 2 3 4 5 b6 7"));
-  public static Dorianb5 = new ScaleType("Dorian b5", ChordScaleFormula.parse("1 2 b3 4 b5 6 b7"));
-  public static Phrygianb4 = new ScaleType("Phrygian b4", ChordScaleFormula.parse("1 b2 b3 b4 5 b6 b7"));
-  public static Lydianb3 = new ScaleType("Lydian b3", ChordScaleFormula.parse("1 2 b3 #4 5 6 7"));
-  public static Mixolydianb2 = new ScaleType("Mixolydian b2", ChordScaleFormula.parse("1 b2 3 4 5 6 b7"));
-  public static LydianAugmentedSharp2 = new ScaleType("Lydian Augmented #2", ChordScaleFormula.parse("1 #2 3 #4 #5 6 7"));
-  public static Locrianbb7 = new ScaleType("Locrian bb7", ChordScaleFormula.parse("1 b2 b3 4 b5 b6 bb7"));
+  public static HarmonicMajor = new ScaleType("harmonicMajor", "Harmonic Major", ChordScaleFormula.parse("1 2 3 4 5 b6 7"));
+  public static Dorianb5 = new ScaleType("dorianb5", "Dorian b5", ChordScaleFormula.parse("1 2 b3 4 b5 6 b7"));
+  public static Phrygianb4 = new ScaleType("phrygianb4", "Phrygian b4", ChordScaleFormula.parse("1 b2 b3 b4 5 b6 b7"));
+  public static Lydianb3 = new ScaleType("lydianb3", "Lydian b3", ChordScaleFormula.parse("1 2 b3 #4 5 6 7"));
+  public static Mixolydianb2 = new ScaleType("mixolydianb2", "Mixolydian b2", ChordScaleFormula.parse("1 b2 3 4 5 6 b7"));
+  public static LydianAugmentedSharp2 = new ScaleType("lydianaug#2", "Lydian Augmented #2", ChordScaleFormula.parse("1 #2 3 #4 #5 6 7"));
+  public static Locrianbb7 = new ScaleType("locrianbb7", "Locrian bb7", ChordScaleFormula.parse("1 b2 b3 4 b5 b6 bb7"));
 
-  public static DoubleHarmonicMajor = new ScaleType("Double Harmonic Major", ChordScaleFormula.parse("1 b2 3 4 5 b6 7"));
-  public static LydianSharp2Sharp6 = new ScaleType("Lydian #2 #6", ChordScaleFormula.parse("1 #2 3 #4 5 #6 7"));
-  public static Ultraphrygian = new ScaleType("Ultraphrygian", ChordScaleFormula.parse("1 b2 b3 b4 5 b6 bb7"));
-  public static HungarianMinor = new ScaleType("Hungarian Minor", ChordScaleFormula.parse("1 2 b3 #4 5 b6 7"));
-  public static Oriental = new ScaleType("Oriental", ChordScaleFormula.parse("1 b2 3 4 b5 6 b7"));
-  public static IonianAugmentedSharp2 = new ScaleType("Ionian Augmented #2", ChordScaleFormula.parse("1 #2 3 4 #5 6 7"));
-  public static Locrianbb3bb7 = new ScaleType("Locrian bb3 bb7", ChordScaleFormula.parse("1 b2 bb3 4 b5 b6 bb7"));
+  public static DoubleHarmonicMajor = new ScaleType("doubleHarmonicMajor", "Double Harmonic Major", ChordScaleFormula.parse("1 b2 3 4 5 b6 7"));
+  public static LydianSharp2Sharp6 = new ScaleType("lydian#2#6", "Lydian #2 #6", ChordScaleFormula.parse("1 #2 3 #4 5 #6 7"));
+  public static Ultraphrygian = new ScaleType("ultraphrygian", "Ultraphrygian", ChordScaleFormula.parse("1 b2 b3 b4 5 b6 bb7"));
+  public static HungarianMinor = new ScaleType("hungarianMinor", "Hungarian Minor", ChordScaleFormula.parse("1 2 b3 #4 5 b6 7"));
+  public static Oriental = new ScaleType("oriental", "Oriental", ChordScaleFormula.parse("1 b2 3 4 b5 6 b7"));
+  public static IonianAugmentedSharp2 = new ScaleType("ionianAug#2", "Ionian Augmented #2", ChordScaleFormula.parse("1 #2 3 4 #5 6 7"));
+  public static Locrianbb3bb7 = new ScaleType("locrianbb3bb7", "Locrian bb3 bb7", ChordScaleFormula.parse("1 b2 bb3 4 b5 b6 bb7"));
 
-  public static TonicDiminished = new ScaleType("Tonic Diminished", ChordScaleFormula.parse("1 2 b3 4 b5 b6 bb7 7"));
-  public static DominantDiminished = new ScaleType("Dominant Diminished", ChordScaleFormula.parse("1 b2 b3 b4 b5 5 6 b7"));
-  public static WholeTone = new ScaleType("Whole Tone", ChordScaleFormula.parse("1 2 3 #4 #5 b7"));
-  public static Augmented = new ScaleType("Augmented", ChordScaleFormula.parse("1 #2 3 5 #5 7"));
+  public static TonicDiminished = new ScaleType("tonicDiminished", "Tonic Diminished", ChordScaleFormula.parse("1 2 b3 4 b5 b6 bb7 7"));
+  public static DominantDiminished = new ScaleType("dominantDiminished", "Dominant Diminished", ChordScaleFormula.parse("1 b2 b3 b4 b5 5 6 b7"));
+  public static WholeTone = new ScaleType("wholeTone", "Whole Tone", ChordScaleFormula.parse("1 2 3 #4 #5 b7"));
+  public static Augmented = new ScaleType("augmented", "Augmented", ChordScaleFormula.parse("1 #2 3 5 #5 7"));
 
-  public static MajorPentatonic = new ScaleType("Major Pentatonic", ChordScaleFormula.parse("1 2 3 5 6"));
-  public static MajorPentatonicMode2 = new ScaleType("Major Pentatonic Mode 2", ChordScaleFormula.parse("1 2 4 5 b7"));
-  public static MajorPentatonicMode3 = new ScaleType("Major Pentatonic Mode 3", ChordScaleFormula.parse("1 b3 4 b6 b7"));
-  public static MajorPentatonicMode4 = new ScaleType("Major Pentatonic Mode 4", ChordScaleFormula.parse("1 2 4 5 6"));
-  public static MinorPentatonic = new ScaleType("Minor Pentatonic", ChordScaleFormula.parse("1 b3 4 5 b7"));
+  public static MajorPentatonic = new ScaleType("majorPentatonic", "Major Pentatonic", ChordScaleFormula.parse("1 2 3 5 6"));
+  public static MajorPentatonicMode2 = new ScaleType("majorPentatonicMode2", "Major Pentatonic Mode 2", ChordScaleFormula.parse("1 2 4 5 b7"));
+  public static MajorPentatonicMode3 = new ScaleType("majorPentatonicMode3", "Major Pentatonic Mode 3", ChordScaleFormula.parse("1 b3 4 b6 b7"));
+  public static MajorPentatonicMode4 = new ScaleType("majorPentatonicMode4", "Major Pentatonic Mode 4", ChordScaleFormula.parse("1 2 4 5 6"));
+  public static MinorPentatonic = new ScaleType("minorPentatonic", "Minor Pentatonic", ChordScaleFormula.parse("1 b3 4 5 b7"));
 
-  public static MajorBlues = new ScaleType("Major Blues", ChordScaleFormula.parse("1 2 b3 3 5 6"));
-  public static MinorBlues = new ScaleType("Minor Blues", ChordScaleFormula.parse("1 b3 4 b5 5 b7"));
-  public static Chromatic = new ScaleType("Chromatic", ChordScaleFormula.parse("1 b2 2 b3 3 4 b5 5 b6 6 b7 7"));
+  public static MajorBlues = new ScaleType("majorBlues", "Major Blues", ChordScaleFormula.parse("1 2 b3 3 5 6"));
+  public static MinorBlues = new ScaleType("minorBlues", "Minor Blues", ChordScaleFormula.parse("1 b3 4 b5 5 b7"));
+  public static Chromatic = new ScaleType("chromatic", "Chromatic", ChordScaleFormula.parse("1 b2 2 b3 3 4 b5 5 b6 6 b7 7"));
 
   public static MajorScaleModes = [
     ScaleType.Ionian,
@@ -193,6 +193,7 @@ export class ScaleType {
   public pitchIntegers: Array<number>;
 
   public constructor(
+    public id: string,
     public name: string,
     public formula: ChordScaleFormula
   ) {

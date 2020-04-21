@@ -1,15 +1,17 @@
 # To-Do
 ## High Priority
+* Debug & fix scale viewer
 * Interactive piano exercises/lessons
-  * Document title changes
-  * Should chords be next???
+  * General
+    * Document title changes?
+    * Progress bars for quizzes?
+  * Notes
+    * Press all of a given note on keyboard before continuing.
+  * Scales
+    * 
   * Scales
     * Play buttons for scales
-    * Figure out how to handle centered lists
     * Fingering
-    * Major
-    * Natural minor
-    * Chromatic
     * Multiple mastery steps:
       * Play scale in 2nds, 3rd, etc.
       * What is the nth scale degree?
@@ -21,7 +23,6 @@
   * Chord progressions
   * Rhythm
   * Exercises
-  * Save MIDI input range?
 * Fix level not being detected properly when disabling & re-enabling in piano notes exercise (orders don't match due to toggle).
 * Turn exercises into "active" exercises
   * Piano Intervals

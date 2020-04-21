@@ -16,10 +16,9 @@ import { ScaleAudioPlayer } from '../Utils/ScaleAudioPlayer';
 import { GuitarScaleViewer } from '../Utils/GuitarScaleViewer';
 import { ValidKeyPitchSelect } from '../Utils/ValidKeyPitchSelect';
 import { arrayContains } from '../../lib/Core/ArrayUtils';
+import { ScaleSelect } from "../Utils/ScaleSelect";
 
-// subtract one octave for valid key pitches
-
-interface IScaleViewerProps {
+export interface IScaleViewerProps {
   title?: string;
   scaleTypeGroups?: Array<ScaleTypeGroup>;
   renderAllScaleShapes: boolean;
@@ -28,7 +27,7 @@ interface IScaleViewerProps {
   showGuitarFretboard?: boolean;
   isEmbedded?: boolean;
 }
-interface IScaleViewerState {
+export interface IScaleViewerState {
   scaleTypeGroup: ScaleTypeGroup;
   scale: Scale;
 }
@@ -87,8 +86,6 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
     const showGuitarFretboard = (this.props.showGuitarFretboard !== undefined)
       ? this.props.showGuitarFretboard
       : true;
-    
-    const baseButtonStyle: any = { textTransform: "none" };
 
     const guitarTuning = getStandardGuitarTuning(6);
 
@@ -106,58 +103,11 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
           </div>
         
           <div style={{textAlign: "center"}}>
-            <Typography gutterBottom={true} variant="h6" component="h4">
-              Root Pitch
-            </Typography>
-            <div style={{padding: "1em 0"}}>
-              <ValidKeyPitchSelect
-                preferredOctaveNumber={4}
-                value={[this.state.scale.rootPitch]}
-                onChange={rootPitches => this.onRootPitchClick(rootPitches[0])}
-              />
-            </div>
+            <ScaleSelect
+              scaleTypeGroups={this.scaleTypeGroups}
+              value={[this.state.scaleTypeGroup, this.state.scale]}
+              onChange={newValue => this.onScaleChange(newValue)} />
             
-            <Typography gutterBottom={true} variant="h6" component="h4">
-              Category
-            </Typography>
-            <div style={{padding: "1em 0"}}>
-              {this.scaleTypeGroups.map(scaleTypeGroup => {
-                return (
-                  <Button
-                    key={scaleTypeGroup.name}
-                    onClick={event => this.onScaleTypeGroupClick(scaleTypeGroup)}
-                    variant="contained"
-                    style={baseButtonStyle}
-                  >
-                    {scaleTypeGroup.name}
-                  </Button>
-                );
-              })}
-            </div>
-
-            <Typography gutterBottom={true} variant="h6" component="h4">
-              Type
-            </Typography>
-            <div style={{padding: "1em 0"}}>
-              {this.state.scaleTypeGroup.scaleTypes.map(scaleType => {
-                const buttonStyle: any = { ...baseButtonStyle };
-                const isPressed = scaleType.name === this.state.scale.type.name;
-                if (isPressed) {
-                  buttonStyle.backgroundColor = "#959595";
-                }
-
-                return (
-                  <Button
-                    key={scaleType.name}
-                    onClick={event => this.onScaleTypeClick(scaleType)}
-                    variant="contained"
-                    style={buttonStyle}
-                  >
-                    {scaleType.name}
-                  </Button>
-                );
-            })}
-            </div>
             <div style={{fontSize: "1.5em"}}>
               <p>{this.state.scale.rootPitch.toString(false)} {this.state.scale.type.name}</p>
               <p>{pitchesString}</p>
@@ -207,22 +157,15 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
       : ScaleType.Groups;
   }
 
-  private onRootPitchClick(rootPitch: Pitch) {
-    const newScale = new Scale(this.state.scale.type, rootPitch);
-    this.setState({ scale: newScale }, this.onScaleChange.bind(this));
-  }
-  private onScaleTypeGroupClick(scaleTypeGroup: ScaleTypeGroup) {
-    this.setState({ scaleTypeGroup: scaleTypeGroup }, this.onScaleChange.bind(this));
-  }
-  private onScaleTypeClick(scaleType: ScaleType) {
-    const newScale = new Scale(scaleType, this.state.scale.rootPitch);
-    this.setState({ scale: newScale }, this.onScaleChange.bind(this));
+  private onScaleChange(newValue: [ScaleTypeGroup, Scale]) {
+    const [ newScaleTypeGroup, newScale ] = newValue;
+    this.setState({ scaleTypeGroup: newScaleTypeGroup, scale: newScale }, this.postScaleChange.bind(this));
   }
 
   private stopPlayingKeysAudioFn: (() => void) | undefined = undefined;
   private stopPlayingScaleAudioFn: (() => void) | null = null;
 
-  private onScaleChange() {
+  private postScaleChange() {
     if (this.stopPlayingScaleAudioFn) {
       this.stopPlayingScaleAudioFn();
       this.stopPlayingScaleAudioFn = null;

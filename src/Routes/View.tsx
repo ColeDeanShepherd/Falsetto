@@ -37,6 +37,7 @@ import { MessagePage } from '../Components/MessagePage';
 import { FlashCardSet } from '../FlashCardSet';
 import { createStudyFlashCardSetComponent } from '../StudyFlashCards/View';
 import { LimitedWidthContentContainer } from '../Components/Utils/LimitedWidthContentContainer';
+import { ScaleExercisesPage } from "../Components/ScaleExercisesPage";
 
 export interface IRoutesViewProps {}
 export interface IRoutesViewState {}
@@ -170,6 +171,13 @@ export class RoutesView extends React.Component<IRoutesViewProps, IRoutesViewSta
           <DocumentTitle title="Glossary - Falsetto">
             <LimitedWidthContentContainer>
               <Glossary />
+            </LimitedWidthContentContainer>
+          </DocumentTitle>
+        )} />,
+        <Route key="/scale-exercises" exact path="/scale-exercises" component={() => (
+          <DocumentTitle title={"Scale Exercises - Falsetto"}>
+            <LimitedWidthContentContainer>
+              <ScaleExercisesPage />
             </LimitedWidthContentContainer>
           </DocumentTitle>
         )} />,
