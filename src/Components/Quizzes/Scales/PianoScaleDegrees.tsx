@@ -7,20 +7,22 @@ import { PianoKeyboard } from "../../Utils/PianoKeyboard";
 import { FlashCard, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 
-import { Pitch, getPitchRange } from "../../../lib/TheoryLib/Pitch";
+import { Pitch, getPitchRange, tryWrapPitchOctave } from '../../../lib/TheoryLib/Pitch';
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
 import { Scale } from '../../../lib/TheoryLib/Scale';
 
 import { PianoKeysAnswerSelect } from '../../Utils/PianoKeysAnswerSelect';
 import { getPianoKeyboardAspectRatio } from '../../Utils/PianoUtils';
+import { unwrapValueOrUndefined } from '../../../lib/Core/Utils';
 
 function getFlashCardSetId(scale: Scale): string {
   const rootPitchString = scale.rootPitch.toOneAccidentalAmbiguousString(/*includeOctaveNumber*/ false, /*useSymbols*/ false);
   return `${rootPitchString} ${scale.type.id}`;
 }
 
-const lowestPitch = new Pitch(PitchLetter.C, 0, 4);
-const highestPitch = new Pitch(PitchLetter.B, 0, 4);
+const octaveNumber = 4;
+const lowestPitch = new Pitch(PitchLetter.C, 0, octaveNumber);
+const highestPitch = new Pitch(PitchLetter.B, 0, octaveNumber);
 
 const pianoKeyboardAspectRatio = getPianoKeyboardAspectRatio(/*octaveCount*/ 1);
 const pianoKeyboardRect = new Rect2D(new Size2D(pianoKeyboardAspectRatio * 100, 100), new Vector2D(0, 0));
@@ -46,7 +48,7 @@ export function createFlashCardSet(scale: Scale): FlashCardSet {
     flashCardSetId,
     `${scale.rootPitch.toString(/*includeOctaveNumber*/ false)} ${scale.type.name} Scale Degrees`,
     () => createFlashCards(flashCardSetId, scale));
-  flashCardSet.route = ``;
+  flashCardSet.route = `scale/${encodeURIComponent(scale.id)}/degrees-exercise`;
   flashCardSet.containerHeight = `${200}px`;
   flashCardSet.moreInfoUri = "/essential-music-theory/notes";
   flashCardSet.renderAnswerSelect = renderAnswerSelect;
@@ -55,8 +57,10 @@ export function createFlashCardSet(scale: Scale): FlashCardSet {
 }
 
 function createFlashCards(flashCardSetId: string, scale: Scale): FlashCard[] {
-  const scalePitches = scale.getPitches();
+  const scalePitches = scale.getPitches()
+    .map(p => unwrapValueOrUndefined(tryWrapPitchOctave(p, lowestPitch, highestPitch)));
 
+  // Create flash cards.
   return scalePitches
     .map((pitch, i) => {
       const scaleDegreeNumber = 1 + i;

@@ -1,8 +1,9 @@
-import { PitchLetter, getPitchLetterMidiNoteNumberOffset } from "./PitchLetter";
+import { PitchLetter, getPitchLetterMidiNoteNumberOffset, parsePitchLetter } from './PitchLetter';
 import { VerticalDirection } from "../Core/VerticalDirection";
 import { Interval } from "./Interval";
 import { precondition } from '../Core/Dbc';
 import { mod } from '../Core/MathUtils';
+import { numMatchingCharsAtStart } from '../Core/StringUtils';
 
 export function getPitchRange(minPitch: Pitch, maxPitch: Pitch) {
   const minMidiNumber = minPitch.midiNumber;
@@ -77,6 +78,50 @@ export function getNumPitchesInRange(pitchRange: [Pitch, Pitch]): number {
   return pitchRange[1].midiNumber - pitchRange[0].midiNumber + 1;
 }
 
+export function parseSignedAccidental(str: string): number | undefined {
+  if (str.length === 0) { return 0; }
+
+  const firstChar = str[0];
+
+  switch (firstChar) {
+    case '#':
+    case '♯':
+      return numMatchingCharsAtStart(str, firstChar);
+    case 'b':
+    case '♭':
+      return -numMatchingCharsAtStart(str, firstChar);
+    default:
+      return undefined;
+  }
+}
+
+export function tryWrapPitchOctave(
+  pitch: Pitch,
+  lowestPitch: Pitch,
+  highestPitch: Pitch
+): Pitch | undefined {
+  const lowestPitchMidiNumber = lowestPitch.midiNumber;
+  const highestPitchMidiNumber = highestPitch.midiNumber;
+
+  precondition(lowestPitchMidiNumber <= highestPitchMidiNumber);
+
+  let wrappedPitch = new Pitch(pitch.letter, pitch.signedAccidental, pitch.octaveNumber);
+
+  while(wrappedPitch.midiNumber < lowestPitchMidiNumber) {
+    wrappedPitch.octaveNumber += 1;
+  }
+  
+  while(wrappedPitch.midiNumber > highestPitchMidiNumber) {
+    wrappedPitch.octaveNumber -= 1;
+  }
+
+  const wrappedPitchMidiNumber = wrappedPitch.midiNumber;
+
+  return ((wrappedPitchMidiNumber >= lowestPitchMidiNumber) && (wrappedPitchMidiNumber <= highestPitchMidiNumber))
+    ? wrappedPitch
+    : undefined;
+}
+
 export const arePitchOffsetsFromCWhiteKeys = [
   true, // C
   false, // C#/Db
@@ -136,17 +181,31 @@ export class Pitch {
         throw new Error(`Invalid positivePitchOffsetFromC: ${positivePitchOffsetFromC}`);
     }
   }
+  
   public static createFromLineOrSpaceOnStaffNumber(lineOrSpaceOnStaffNumber: number, signedAccidental: number): Pitch {
     const letter = mod(lineOrSpaceOnStaffNumber + 2, 7) as PitchLetter;
     const octaveNumber = Math.floor(lineOrSpaceOnStaffNumber / 7);
     return new Pitch(letter, signedAccidental, octaveNumber);
   }
+
+  public static parseNoOctave(str: string, octaveNumber: number): Pitch | undefined {
+    const pitchLetter = parsePitchLetter(str);
+    if (!pitchLetter) { return undefined; }
+
+    const signedAccidentalStr = str.substring(1, 2);
+    const signedAccidental = parseSignedAccidental(signedAccidentalStr);
+    if (signedAccidental === undefined) { return undefined; }
+
+    return new Pitch(pitchLetter, signedAccidental, octaveNumber);
+  }
+
   public static addPitchLetters(pitch: Pitch, pitchLetterOffset: number): Pitch {
     return Pitch.createFromLineOrSpaceOnStaffNumber(
       pitch.lineOrSpaceOnStaffNumber + pitchLetterOffset,
       pitch.signedAccidental
     );
   }
+
   public static isInRange(pitch: Pitch, minPitch: Pitch, maxPitch: Pitch): boolean {
     const minPitchMidiNumber = minPitch.midiNumber;
     const maxPitchMidiNumber = maxPitch.midiNumber;

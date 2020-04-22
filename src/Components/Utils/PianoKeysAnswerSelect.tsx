@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Button } from "@material-ui/core";
 
-import { Pitch } from "../../lib/TheoryLib/Pitch";
+import { Pitch, tryWrapPitchOctave } from "../../lib/TheoryLib/Pitch";
 import { AnswerDifficulty } from "../../Study/AnswerDifficulty";
 import { PianoKeyboard } from "./PianoKeyboard";
 import { Rect2D } from "../../lib/Core/Rect2D";
@@ -10,33 +10,6 @@ import { Vector2D } from "../../lib/Core/Vector2D";
 import { uniq, immutableRemoveIfFoundInArray, immutableAddIfNotFoundInArray } from "../../lib/Core/ArrayUtils";
 import { precondition } from "../../lib/Core/Dbc";
 import { MidiNoteEventListener } from "./MidiNoteEventListener";
-
-function tryWrapPitchOctave(
-  pitch: Pitch,
-  lowestPitch: Pitch,
-  highestPitch: Pitch
-): Pitch | undefined {
-  const lowestPitchMidiNumber = lowestPitch.midiNumber;
-  const highestPitchMidiNumber = highestPitch.midiNumber;
-
-  precondition(lowestPitchMidiNumber <= highestPitchMidiNumber);
-
-  let wrappedPitch = new Pitch(pitch.letter, pitch.signedAccidental, pitch.octaveNumber);
-
-  while(wrappedPitch.midiNumber < lowestPitchMidiNumber) {
-    wrappedPitch.octaveNumber += 1;
-  }
-  
-  while(wrappedPitch.midiNumber > highestPitchMidiNumber) {
-    wrappedPitch.octaveNumber -= 1;
-  }
-
-  const wrappedPitchMidiNumber = wrappedPitch.midiNumber;
-
-  return ((wrappedPitchMidiNumber >= lowestPitchMidiNumber) && (wrappedPitchMidiNumber <= highestPitchMidiNumber))
-    ? wrappedPitch
-    : undefined;
-}
 
 export interface IPianoKeysAnswerSelectProps {
   aspectRatio: number;

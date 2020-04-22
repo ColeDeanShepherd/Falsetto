@@ -52,12 +52,12 @@ export class ScaleTypeGroup {
   ) {}
 }
 export class ScaleType {
-  public static Ionian = new ScaleType("ionian", "Major (Ionian)", ChordScaleFormula.parse("1 2 3 4 5 6 7"));
+  public static Ionian = new ScaleType("major", "Major (Ionian)", ChordScaleFormula.parse("1 2 3 4 5 6 7"));
   public static Dorian = new ScaleType("dorian", "Dorian", ChordScaleFormula.parse("1 2 b3 4 5 6 b7"));
   public static Phrygian = new ScaleType("phrygian", "Phrygian", ChordScaleFormula.parse("1 b2 b3 4 5 b6 b7"));
   public static Lydian = new ScaleType("lydian", "Lydian", ChordScaleFormula.parse("1 2 3 #4 5 6 7"));
   public static Mixolydian = new ScaleType("mixolydian", "Mixolydian", ChordScaleFormula.parse("1 2 3 4 5 6 b7"));
-  public static Aeolian = new ScaleType("aeolian", "Natural Minor (Aeolian)", ChordScaleFormula.parse("1 2 b3 4 5 b6 b7"));
+  public static Aeolian = new ScaleType("minor", "Natural Minor (Aeolian)", ChordScaleFormula.parse("1 2 b3 4 5 b6 b7"));
   public static Locrian = new ScaleType("locrian", "Locrian", ChordScaleFormula.parse("1 b2 b3 4 b5 b6 b7"));
   
   public static Major = ScaleType.Ionian;
@@ -316,10 +316,29 @@ export const scaleTypeLevels = [
 ];
 
 export class Scale {
+  public static parseId(id: string): Scale | undefined {
+    const splitId = (id as string).split("-");
+    if (splitId.length !== 2) { return undefined; }
+
+    const scaleTypeId = splitId[1];
+    const scaleType = ScaleType.All.find(st => st.id === scaleTypeId);
+    if (!scaleType) { return undefined; }
+
+    const scaleRootPitchString = splitId[0];
+    const rootPitch = Pitch.parseNoOctave(scaleRootPitchString, 4);
+    if (!rootPitch) { return undefined; }
+
+    return new Scale(scaleType, rootPitch);
+  }
+
   public constructor(
     public type: ScaleType,
     public rootPitch: Pitch
   ) {}
+
+  public get id(): string {
+    return `${this.rootPitch.toString(/*includeOctaveNumber*/ false)}-${this.type.id}`;
+  }
 
   public getPitches(): Array<Pitch> {
     return this.type.formula.getPitches(this.rootPitch);

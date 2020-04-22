@@ -58,3 +58,13 @@ export function takeCharsWhile(
 
   return str.substring(startIndex, endIndexExclusive);
 }
+
+export function numMatchingCharsAtStart(str: string, character: string): number {
+  for (let i = 0; i < str.length; i++) {
+    if (str[i] !== character) {
+      return i;
+    }
+  }
+
+  return str.length;
+}
