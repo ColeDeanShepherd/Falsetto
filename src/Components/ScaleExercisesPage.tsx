@@ -79,9 +79,9 @@ export class ScaleExercisesPage extends React.Component<IScaleExercisesProps, IS
   
   private createFlashCardSetsForScale(scale: Scale): Array<FlashCardSet> {
     return [
-      PianoScaleDegrees.createFlashCardSet(scale),
-      PianoDiatonicChords.createFlashCardSet(scale, /*numChordPitches*/ 3)
-    ];
+      PianoScaleDegrees.createFlashCardSet(scale)
+    ]
+      .concat([3, 4].map(numChordPitches => PianoDiatonicChords.createFlashCardSet(scale, numChordPitches)));
   }
 
   private onScaleChange(newValue: [ScaleTypeGroup, Scale]) {

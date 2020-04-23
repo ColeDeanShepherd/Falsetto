@@ -13,8 +13,8 @@ import { PianoKeysAnswerSelect } from "../../Utils/PianoKeysAnswerSelect";
 import { Scale } from "../../../lib/TheoryLib/Scale";
 import { getRomanNumerals } from "../../../lib/Core/Utils";
 
-function getFlashCardSetId(scale: Scale): string {
-  return `${scale.id}DiatonicChords`;
+function getFlashCardSetId(scale: Scale, numChordPitches: number): string {
+  return `${scale.id}${numChordPitches}NoteDiatonicChords`;
 }
 
 const pianoLowestPitch = new Pitch(PitchLetter.C, 0, 4);
@@ -25,12 +25,12 @@ const pianoMaxWidth = 300;
 const pianoStyle = { width: `${pianoMaxWidth}px`, maxWidth: "100%", height: "auto" };
 
 export function createFlashCardSet(scale: Scale, numChordPitches: number): FlashCardSet {
-  const flashCardSetId = getFlashCardSetId(scale);
+  const flashCardSetId = getFlashCardSetId(scale, numChordPitches);
   const flashCardSet = new FlashCardSet(
     flashCardSetId,
-    `${scale.rootPitch.toString(/*includeOctaveNumber*/ false)} ${scale.type.name} Diatonic Chords`,
+    `${scale.rootPitch.toString(/*includeOctaveNumber*/ false)} ${scale.type.name} ${numChordPitches}-Note Diatonic Chords`,
     () => createFlashCards(flashCardSetId, scale, numChordPitches));
-  flashCardSet.route = `scale/${encodeURIComponent(scale.id)}/diatonic-chords-exercise`;
+  flashCardSet.route = `scale/${encodeURIComponent(scale.id)}/diatonic-${numChordPitches}-note-chords-exercise`;
   flashCardSet.renderAnswerSelect = renderAnswerSelect;
   flashCardSet.containerHeight = `${150}px`;
 

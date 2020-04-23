@@ -287,17 +287,22 @@ export class RoutesView extends React.Component<IRoutesViewProps, IRoutesViewSta
               return this.renderStudyFlashCardSetComponent(flashCardSet);
             }} />
           )} />
-      ]).concat([
-        <Route
-          key="/scale/:scaleId/diatonic-chords-exercise"
-          exact path="/scale/:scaleId/diatonic-chords-exercise"
-          component={(props: any) => (
-            <ScaleRoute routeParams={props.match.params} renderRoute={scale => {
-              const flashCardSet = PianoDiatonicChords.createFlashCardSet(scale, /*numChordPitches*/ 3);
-              return this.renderStudyFlashCardSetComponent(flashCardSet);
-            }} />
-          )} />
-      ]);
+      ]).concat([3, 4]
+        .map(numChordPitches => {
+          const path = `/scale/:scaleId/diatonic-${numChordPitches}-note-chords-exercise`;
+
+          return (
+            <Route
+              key={path}
+              exact path={path}
+              component={(props: any) => (
+                <ScaleRoute routeParams={props.match.params} renderRoute={scale => {
+                  const flashCardSet = PianoDiatonicChords.createFlashCardSet(scale, numChordPitches);
+                  return this.renderStudyFlashCardSetComponent(flashCardSet);
+                }} />
+              )} />
+          );
+        }));
     }
 
     return <div style={{ height: "100%" }}>{this.cachedRenderedRoutes}</div>;
