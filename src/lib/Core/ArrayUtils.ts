@@ -107,32 +107,12 @@ export function arrayJoin<T>(array: T[], separator: T) {
 
 // TODO: add tests
 export function toggleArrayElement<T>(array: T[], element: T): T[] {
-  const newArray = array.slice();
-  const i = newArray.indexOf(element);
-  const wasElementInArray = i >= 0;
-
-  if (!wasElementInArray) {
-    newArray.push(element);
-  } else {
-    newArray.splice(i, 1);
-  }
-
-  return newArray;
+  return immutableToggleArrayElement(array, element);
 }
 
 // TODO: add tests
 export function toggleArrayElementCustomEquals<T>(array: T[], element: T, equalsFn: (a: T, b: T) => boolean): T[] {
-  const newArray = array.slice();
-  const i = newArray.findIndex(e => equalsFn(e, element));
-  const wasElementInArray = i >= 0;
-
-  if (!wasElementInArray) {
-    newArray.push(element);
-  } else {
-    newArray.splice(i, 1);
-  }
-
-  return newArray;
+  return immutableToggleArrayElementCustomEquals(array, element, equalsFn);
 }
 
 // TODO: add tests
@@ -266,6 +246,36 @@ export function immutableRemoveIfFoundInArray<T>(
     newArray.splice(elementIndex, 1);
   } 
   
+  return newArray;
+}
+
+// TODO: add tests
+export function immutableToggleArrayElement<T>(array: T[], element: T): T[] {
+  const newArray = array.slice();
+  const i = newArray.indexOf(element);
+  const wasElementInArray = i >= 0;
+
+  if (!wasElementInArray) {
+    newArray.push(element);
+  } else {
+    newArray.splice(i, 1);
+  }
+
+  return newArray;
+}
+
+// TODO: add tests
+export function immutableToggleArrayElementCustomEquals<T>(array: T[], element: T, equalsFn: (a: T, b: T) => boolean): T[] {
+  const newArray = array.slice();
+  const i = newArray.findIndex(e => equalsFn(e, element));
+  const wasElementInArray = i >= 0;
+
+  if (!wasElementInArray) {
+    newArray.push(element);
+  } else {
+    newArray.splice(i, 1);
+  }
+
   return newArray;
 }
 

@@ -102,23 +102,30 @@ export function tryWrapPitchOctave(
 ): Pitch | undefined {
   const lowestPitchMidiNumber = lowestPitch.midiNumber;
   const highestPitchMidiNumber = highestPitch.midiNumber;
-
-  precondition(lowestPitchMidiNumber <= highestPitchMidiNumber);
-
-  let wrappedPitch = new Pitch(pitch.letter, pitch.signedAccidental, pitch.octaveNumber);
-
-  while(wrappedPitch.midiNumber < lowestPitchMidiNumber) {
-    wrappedPitch.octaveNumber += 1;
-  }
   
-  while(wrappedPitch.midiNumber > highestPitchMidiNumber) {
-    wrappedPitch.octaveNumber -= 1;
+  const pitchCountInRange = (highestPitchMidiNumber - lowestPitchMidiNumber) + 1;
+  const pitchOctaveSpan = Math.ceil(pitchCountInRange / 12);
+  
+  // If the pitch is below the pitch range, shift it up by octaves until it isn't.
+  if (pitch.midiNumber < lowestPitchMidiNumber) {
+    // TODO: optimize
+    do {
+      pitch = Pitch.addOctaves(pitch, pitchOctaveSpan);
+    } while (pitch.midiNumber < lowestPitchMidiNumber);
+  }
+  // Otherwise, if the pitch is above the pitch range, shift it down by octaves until it isn't.
+  else if (pitch.midiNumber > highestPitchMidiNumber) {
+    // TODO: optimize
+    do {
+      pitch = Pitch.addOctaves(pitch, -pitchOctaveSpan);
+    } while (pitch.midiNumber > highestPitchMidiNumber);
   }
 
-  const wrappedPitchMidiNumber = wrappedPitch.midiNumber;
+  // If the pitch is in range now, return it. Otherwise, return undefined.
+  const pitchMidiNumber = pitch.midiNumber;
 
-  return ((wrappedPitchMidiNumber >= lowestPitchMidiNumber) && (wrappedPitchMidiNumber <= highestPitchMidiNumber))
-    ? wrappedPitch
+  return ((pitchMidiNumber >= lowestPitchMidiNumber) && (pitchMidiNumber <= highestPitchMidiNumber))
+    ? pitch
     : undefined;
 }
 

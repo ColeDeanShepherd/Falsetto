@@ -30,11 +30,10 @@ const pianoStyle = { width: "100%", maxWidth: `${pianoMaxWidth}px`, height: "aut
 function renderAnswerSelect(
   info: FlashCardStudySessionInfo
 ) {
-  const key = info.flashCards.indexOf(info.currentFlashCard);
-  const correctAnswer = [(info.currentFlashCard.frontSide.data as Pitch)];
+  const correctAnswer = [info.currentFlashCard.frontSide.data as Pitch];
   
   return <PianoKeysAnswerSelect
-    key={key} aspectRatio={pianoKeyboardAspectRatio} maxWidth={pianoMaxWidth} lowestPitch={lowestPitch} highestPitch={highestPitch}
+    aspectRatio={pianoKeyboardAspectRatio} maxWidth={pianoMaxWidth} lowestPitch={lowestPitch} highestPitch={highestPitch}
     correctAnswer={correctAnswer}
     onAnswer={info.onAnswer} maxNumPitches={1} lastCorrectAnswer={info.lastCorrectAnswer}
     incorrectAnswers={info.incorrectAnswers} instantConfirm={true} wrapOctave={true} />;

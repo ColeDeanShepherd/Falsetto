@@ -15,6 +15,7 @@ import { CheckboxColumnsFlashCardMultiSelect, CheckboxColumn, CheckboxColumnCell
 import { arrayContains, flattenArrays } from '../../../lib/Core/ArrayUtils';
 import { mod } from '../../../lib/Core/MathUtils';
 import { getPianoKeyboardAspectRatio } from '../../Utils/PianoUtils';
+import { PianoKeysAnswerSelect } from "../../Utils/PianoKeysAnswerSelect";
 
 const flashCardSetId = "pianoChords";
 
@@ -22,8 +23,8 @@ const pianoLowestPitch = new Pitch(PitchLetter.C, 0, 4);
 const pianoHighestPitch = new Pitch(PitchLetter.B, 0, 5);
 
 const pianoAspectRatio = getPianoKeyboardAspectRatio(/*octaveCount*/ 2);
-const maxPianoWidth = 300;
-const pianoStyle = { width: `${maxPianoWidth}px`, maxWidth: "100%", height: "auto" };
+const pianoMaxWidth = 300;
+const pianoStyle = { width: `${pianoMaxWidth}px`, maxWidth: "100%", height: "auto" };
 
 interface IConfigData {
   enabledRootPitches: string[];
@@ -115,7 +116,7 @@ export class PianoChordsFlashCardMultiSelect extends React.Component<IPianoChord
   }
 }
 
-export interface IPianoChordsAnswerSelectProps {
+export interface IPianoChordsButtonAnswerSelectProps {
   correctAnswer: string;
   onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void;
   lastCorrectAnswer: any;
@@ -123,12 +124,14 @@ export interface IPianoChordsAnswerSelectProps {
   enabledRootPitches: Array<string>;
   enabledChordTypeNames: Array<string>;
 }
-export interface IPianoChordsAnswerSelectState {
+
+export interface IPianoChordsButtonAnswerSelectState {
   selectedRootPitch: string | undefined;
   selectedChordType: string | undefined;
 }
-export class PianoChordsAnswerSelect extends React.Component<IPianoChordsAnswerSelectProps, IPianoChordsAnswerSelectState> {
-  public constructor(props: IPianoChordsAnswerSelectProps) {
+
+export class PianoChordsButtonAnswerSelect extends React.Component<IPianoChordsButtonAnswerSelectProps, IPianoChordsButtonAnswerSelectState> {
+  public constructor(props: IPianoChordsButtonAnswerSelectProps) {
     super(props);
     
     this.state = {
@@ -303,6 +306,7 @@ export function createFlashCards(): FlashCard[] {
 
         return new FlashCard(
           id,
+
           new FlashCardSide(
             size => {
               return (
@@ -317,9 +321,10 @@ export function createFlashCards(): FlashCard[] {
             },
             pitches
           ),
+
           new FlashCardSide(
             rootPitchStr + " " + chordType.name,
-             new Chord(chordType, rootPitch)
+            new Chord(chordType, rootPitch)
           )
         );
       })
@@ -330,12 +335,13 @@ export function createFlashCards(): FlashCard[] {
 export function renderAnswerSelect(
   info: FlashCardStudySessionInfo
 ) {
-  const correctAnswer = info.currentFlashCard.backSide.renderFn as string;
-  return <PianoChordsAnswerSelect
-    key={correctAnswer} correctAnswer={correctAnswer} onAnswer={info.onAnswer}
-    lastCorrectAnswer={info.lastCorrectAnswer} incorrectAnswers={info.incorrectAnswers}
-    enabledRootPitches={(info.configData as IConfigData).enabledRootPitches}
-    enabledChordTypeNames={(info.configData as IConfigData).enabledChordTypes} />;
+  const correctAnswer = info.currentFlashCard.frontSide.data as Array<Pitch>;
+
+  return <PianoKeysAnswerSelect
+    aspectRatio={pianoAspectRatio} maxWidth={pianoMaxWidth} lowestPitch={pianoLowestPitch} highestPitch={pianoHighestPitch}
+    correctAnswer={correctAnswer}
+    onAnswer={info.onAnswer} lastCorrectAnswer={info.lastCorrectAnswer}
+    incorrectAnswers={info.incorrectAnswers} instantConfirm={false} wrapOctave={true} />;
 }
 
 export const flashCardSet = createFlashCardSet();
