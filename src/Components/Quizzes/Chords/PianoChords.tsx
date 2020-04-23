@@ -14,8 +14,16 @@ import { Chord, ChordType, chordTypeLevels } from "../../../lib/TheoryLib/Chord"
 import { CheckboxColumnsFlashCardMultiSelect, CheckboxColumn, CheckboxColumnCell } from '../../Utils/CheckboxColumnsFlashCardMultiSelect';
 import { arrayContains, flattenArrays } from '../../../lib/Core/ArrayUtils';
 import { mod } from '../../../lib/Core/MathUtils';
+import { getPianoKeyboardAspectRatio } from '../../Utils/PianoUtils';
 
 const flashCardSetId = "pianoChords";
+
+const pianoLowestPitch = new Pitch(PitchLetter.C, 0, 4);
+const pianoHighestPitch = new Pitch(PitchLetter.B, 0, 5);
+
+const pianoAspectRatio = getPianoKeyboardAspectRatio(/*octaveCount*/ 2);
+const maxPianoWidth = 300;
+const pianoStyle = { width: `${maxPianoWidth}px`, maxWidth: "100%", height: "auto" };
 
 interface IConfigData {
   enabledRootPitches: string[];
@@ -260,7 +268,7 @@ function createFlashCardSet(): FlashCardSet {
   });
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = renderAnswerSelect;
-  flashCardSet.containerHeight = "120px";
+  flashCardSet.containerHeight = "150px";
   flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (
     chordTypeLevels
       .map(ctl =>
@@ -279,8 +287,8 @@ function createFlashCardSet(): FlashCardSet {
 
   return flashCardSet;
 }
+
 export function createFlashCards(): FlashCard[] {
-  const pianoStyle = { width: "400px", maxWidth: "100%" };
   return flattenArrays<FlashCard>(
     ambiguousKeyPitchStringsSymbols.map((rootPitchStr, i) =>
       ChordType.All.map(chordType => {
@@ -299,9 +307,9 @@ export function createFlashCards(): FlashCard[] {
             size => {
               return (
                 <PianoKeyboard
-                  rect={new Rect2D(new Size2D(400, 100), new Vector2D(0, 0))}
-                  lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-                  highestPitch={new Pitch(PitchLetter.B, 0, 5)}
+                  rect={new Rect2D(new Size2D(pianoAspectRatio * 100, 100), new Vector2D(0, 0))}
+                  lowestPitch={pianoLowestPitch}
+                  highestPitch={pianoHighestPitch}
                   pressedPitches={pitches}
                   style={pianoStyle}
                 />
@@ -318,6 +326,7 @@ export function createFlashCards(): FlashCard[] {
     )
   );
 }
+
 export function renderAnswerSelect(
   info: FlashCardStudySessionInfo
 ) {
