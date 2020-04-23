@@ -7,7 +7,7 @@ import { PianoKeyboard } from "../../Utils/PianoKeyboard";
 import { FlashCard, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 
-import { Pitch, getPitchRange, tryWrapPitchOctave } from '../../../lib/TheoryLib/Pitch';
+import { Pitch, tryWrapPitchOctave } from '../../../lib/TheoryLib/Pitch';
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
 import { Scale } from '../../../lib/TheoryLib/Scale';
 
@@ -16,8 +16,7 @@ import { getPianoKeyboardAspectRatio } from '../../Utils/PianoUtils';
 import { unwrapValueOrUndefined } from '../../../lib/Core/Utils';
 
 function getFlashCardSetId(scale: Scale): string {
-  const rootPitchString = scale.rootPitch.toOneAccidentalAmbiguousString(/*includeOctaveNumber*/ false, /*useSymbols*/ false);
-  return `${rootPitchString} ${scale.type.id}`;
+  return `${scale.id}ScaleDegrees`;
 }
 
 const octaveNumber = 4;

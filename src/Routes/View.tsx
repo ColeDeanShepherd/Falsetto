@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Route, RouteComponentProps } from "react-router-dom";
+import { Route } from "react-router-dom";
 import DocumentTitle from "react-document-title";
 
 import { flashCardSets } from "../FlashCardGraph";
@@ -39,8 +39,8 @@ import { createStudyFlashCardSetComponent } from '../StudyFlashCards/View';
 import { LimitedWidthContentContainer } from '../Components/Utils/LimitedWidthContentContainer';
 import { ScaleExercisesPage } from "../Components/ScaleExercisesPage";
 import * as PianoScaleDegrees from "../Components/Quizzes/Scales/PianoScaleDegrees";
-import { ScaleType, Scale } from '../lib/TheoryLib/Scale';
-import { Pitch } from "../lib/TheoryLib/Pitch";
+import * as PianoDiatonicChords from "../Components/Quizzes/Chords/PianoDiatonicChords";
+import { Scale } from '../lib/TheoryLib/Scale';
 
 export interface IScaleRouteProps {
   routeParams: {};
@@ -284,6 +284,16 @@ export class RoutesView extends React.Component<IRoutesViewProps, IRoutesViewSta
           component={(props: any) => (
             <ScaleRoute routeParams={props.match.params} renderRoute={scale => {
               const flashCardSet = PianoScaleDegrees.createFlashCardSet(scale);
+              return this.renderStudyFlashCardSetComponent(flashCardSet);
+            }} />
+          )} />
+      ]).concat([
+        <Route
+          key="/scale/:scaleId/diatonic-chords-exercise"
+          exact path="/scale/:scaleId/diatonic-chords-exercise"
+          component={(props: any) => (
+            <ScaleRoute routeParams={props.match.params} renderRoute={scale => {
+              const flashCardSet = PianoDiatonicChords.createFlashCardSet(scale, /*numChordPitches*/ 3);
               return this.renderStudyFlashCardSetComponent(flashCardSet);
             }} />
           )} />

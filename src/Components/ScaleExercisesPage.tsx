@@ -10,6 +10,7 @@ import * as ScaleDegreeModes from "./Quizzes/Scales/ScaleDegreeModes";
 import * as ScaleChords from "./Quizzes/Chords/ScaleChords";
 import * as ScaleEarTraining from "./Quizzes/Scales/ScaleEarTraining";
 import * as PianoScaleDegrees from "./Quizzes/Scales/PianoScaleDegrees";
+import * as PianoDiatonicChords from "./Quizzes/Chords/PianoDiatonicChords";
 import { ScaleTypeGroup, ScaleType, Scale } from '../lib/TheoryLib/Scale';
 import { Pitch } from "../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../lib/TheoryLib/PitchLetter";
@@ -65,7 +66,11 @@ export class ScaleExercisesPage extends React.Component<IScaleExercisesProps, IS
           </div>
           <div>
             {this.state.flashCardSets
-              .map(fcs => <NavLinkView to={fcs.route}>{fcs.name}</NavLinkView>)}
+              .map(fcs => (
+                <div>
+                  <NavLinkView to={fcs.route}>{fcs.name}</NavLinkView>
+                </div>
+              ))}
           </div>
         </CardContent>
       </Card>
@@ -74,7 +79,8 @@ export class ScaleExercisesPage extends React.Component<IScaleExercisesProps, IS
   
   private createFlashCardSetsForScale(scale: Scale): Array<FlashCardSet> {
     return [
-      PianoScaleDegrees.createFlashCardSet(scale)
+      PianoScaleDegrees.createFlashCardSet(scale),
+      PianoDiatonicChords.createFlashCardSet(scale, /*numChordPitches*/ 3)
     ];
   }
 

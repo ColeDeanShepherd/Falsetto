@@ -1,6 +1,6 @@
 import * as Utils from "../Core/Utils";
 import { Pitch } from './Pitch';
-import { ChordType } from './Chord';
+import { ChordType, Chord } from './Chord';
 import { Interval } from './Interval';
 import { ChordScaleFormula } from './ChordScaleFormula';
 import { mod } from '../Core/MathUtils';
@@ -207,12 +207,15 @@ export class ScaleType {
   public equals(other: ScaleType): boolean {
     return areArraysEqual(this.pitchIntegers, other.pitchIntegers);
   }
+
   public getIntervals(): Array<Interval> {
     return this.formula.parts.map(p => p.getIntervalFromRootNote());
   }
+
   public getPitches(rootPitch: Pitch): Array<Pitch> {
     return this.formula.getPitches(rootPitch);
   }
+
   public getMode(scaleDegree: number): ScaleType {
     precondition(scaleDegree >= 1);
     precondition(scaleDegree <= this.numPitches);
@@ -223,6 +226,7 @@ export class ScaleType {
     const mode = ScaleType.All.find(scale => areArraysEqual(modePitchIntegers, scale.pitchIntegers));
     return Utils.unwrapValueOrUndefined(mode);
   }
+
   public getDiatonicChordType(scaleDegree: number, numChordPitches: number): ChordType {
     precondition(scaleDegree >= 1);
     precondition(scaleDegree <= this.numPitches);
@@ -241,6 +245,7 @@ export class ScaleType {
     const chordType = ChordType.All.find(chordType => areArraysEqual(chordPitchIntegers, chordType.pitchIntegers));
     return Utils.unwrapValueOrUndefined(chordType);
   }
+
   public getDiatonicChordTypes(numChordPitches: number): Array<ChordType> {
     precondition(numChordPitches >= 1);
     precondition(numChordPitches <= this.numPitches);
@@ -342,5 +347,23 @@ export class Scale {
 
   public getPitches(): Array<Pitch> {
     return this.type.formula.getPitches(this.rootPitch);
+  }
+  
+  public getDiatonicChord(scaleDegree: number, numChordPitches: number): Chord {
+    const chordType = this.type.getDiatonicChordType(scaleDegree, numChordPitches);
+    return new Chord(chordType, this.rootPitch);
+  }
+
+  public getDiatonicChords(numChordPitches: number): Array<Chord> {
+    precondition(numChordPitches >= 1);
+    precondition(numChordPitches <= this.type.numPitches);
+
+    const pitches = this.getPitches();
+
+    return this.type.pitchIntegers
+      .map((_, i) => new Chord(
+        this.type.getDiatonicChordType(1 + i, numChordPitches),
+        pitches[i]
+      ));
   }
 }
