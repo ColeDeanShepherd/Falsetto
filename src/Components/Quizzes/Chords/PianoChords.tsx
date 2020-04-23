@@ -308,6 +308,11 @@ export function createFlashCards(): FlashCard[] {
           id,
 
           new FlashCardSide(
+            rootPitchStr + " " + chordType.name,
+            pitches
+          ),
+
+          new FlashCardSide(
             size => {
               return (
                 <PianoKeyboard
@@ -319,11 +324,6 @@ export function createFlashCards(): FlashCard[] {
                 />
               );
             },
-            pitches
-          ),
-
-          new FlashCardSide(
-            rootPitchStr + " " + chordType.name,
             new Chord(chordType, rootPitch)
           )
         );
