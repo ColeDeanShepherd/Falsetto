@@ -227,10 +227,13 @@ const slideGroups = [
     new Slide("introduction", () => (
       <div style={{ display: "flex", flexDirection: "column", flexGrow: 1, justifyContent: "space-evenly" }}>
         <div>
+          <h1>Piano Theory Course by Falsetto</h1>
           <h2>Section 1: Introduction</h2>
           <p>This is an interactive course designed to teach you the essentials of piano and music theory in a hands-on manner.</p>
           <p>This course is designed to be viewed on tablets and computer monitors.</p>
           <p>It is highly recommended to connect a MIDI piano keyboard to follow along.</p>
+          <p>Note that, at the time of writing, <a href="https://www.google.com/chrome/" target="_blank">Chrome</a> is the only web browser supporting MIDI input devices.</p>
+          <p><a href="https://caniuse.com/#feat=midi" target="_blank">Click here</a> for an up-to-date list of browsers supporting MIDI.</p>
         </div>
 
         <p><strong>Step 1: Connect a MIDI piano keyboard and select it below.</strong></p>

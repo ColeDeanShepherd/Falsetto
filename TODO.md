@@ -4,24 +4,16 @@
 * Interactive piano exercises/lessons
   * General
     * Document title changes?
-    * Progress bars for quizzes?
   * Notes
     * Press all of a given note on keyboard before continuing.
-  * Scales
-    * 
   * Scales
     * Play buttons for scales
     * Fingering
     * Multiple mastery steps:
       * Play scale in 2nds, 3rd, etc.
-      * What is the nth scale degree?
-      * Diatonic chords (triads, seventh, etc)
-  * Modes
+      * Diatonic chord inversions
   * Chords
-    * Triads
-    * Seventh chords
-  * Chord progressions
-  * Rhythm
+  * Chord progressionsa
   * Exercises
 * Fix level not being detected properly when disabling & re-enabling in piano notes exercise (orders don't match due to toggle).
 * Turn exercises into "active" exercises

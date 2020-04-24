@@ -7,7 +7,7 @@ import { areArraysEqual } from "../lib/Core/ArrayUtils";
 import { FlashCard, FlashCardId } from "../FlashCard";
 import { renderFlashCardSide } from "../Components/FlashCard";
 import { DefaultFlashCardMultiSelect } from "../Components/Utils/DefaultFlashCardMultiSelect";
-import { FlashCardSet } from '../FlashCardSet';
+import { FlashCardSet, FlashCardLevel } from '../FlashCardSet';
 import { Size2D } from '../lib/Core/Size2D';
 import { NavLinkView } from '../NavLinkView';
 import { StudyFlashCardsModel, getPercentToNextLevel } from './Model';
@@ -31,6 +31,54 @@ export function createStudyFlashCardSetComponent(
   );
 }
 
+export interface ILevelProgressBarViewProps {
+  percentToNextLevel: number;
+}
+export class LevelProgressBarView extends React.Component<ILevelProgressBarViewProps, {}> {
+  public render(): JSX.Element {
+    const { percentToNextLevel } = this.props;
+
+    return (
+      <div
+        style={{
+          width: "100%",
+          height: "0.25em",
+          backgroundColor: "lightgray",
+          border: "1px solid grey"
+        }}>
+        <div
+          style={{
+            width: `${Math.round(100 * percentToNextLevel)}%`,
+            height: "100%",
+            backgroundColor: "#0A0"
+          }}
+        />
+      </div>
+    );
+  }
+}
+
+export interface IWatermarkViewProps {
+  isEmbedded: boolean;
+}
+export class WatermarkView extends React.Component<IWatermarkViewProps, {}> {
+  public render(): JSX.Element {
+    const { isEmbedded } = this.props;
+
+    const watermarkStyle: any = {
+      display: isEmbedded ? "block" : "none",
+      position: "absolute",
+      bottom: 0,
+      right: 0,
+      margin: "0.25em",
+      fontWeight: "bold",
+      opacity: 0.25
+    };
+
+    return <p style={watermarkStyle} className="watermark">https://falsetto.app</p>;
+  }
+}
+
 // TODO: make flash card studying work without a view (use model & actions)
 // TODO: optimize levels?
 // TODO: cache local answers & try to upload them to the DB if you're logged in
@@ -51,6 +99,7 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
     super(props);
 
     const { flashCardSet } = this.props;
+
     this.model = new StudyFlashCardsModel(flashCardSet);
 
     this.onModelUpdate = () => this.forceUpdate();
@@ -62,6 +111,7 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
   // #region Lifecycle Methods
 
   private onModelUpdate: () => void;
+
   public componentWillUnmount() {
     this.model.unsubscribeFromUpdates(this.onModelUpdate);
   }
@@ -69,10 +119,12 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
   // #endregion
 
   // #region Render
+
   // TODO: break up
   public render(): JSX.Element {
-    const model = this.model;
-    const { flashCardSet, flashCards, flashCardLevels, studyAlgorithm } = this.model;
+    const { model } = this;
+    const { flashCardSet, flashCards, flashCardLevels, studyAlgorithm } = model;
+    const { isEmbedded } = this.props;
 
     // TODO: move consts out of here
     const flashCardContainerStyle: any = {
@@ -83,16 +135,6 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
       display: "flex",
       justifyContent: "center",
       alignItems: "center"
-    };
-
-    const watermarkStyle: any = {
-      display: this.props.isEmbedded ? "block" : "none",
-      position: "absolute",
-      bottom: 0,
-      right: 0,
-      margin: "0.25em",
-      fontWeight: "bold",
-      opacity: 0.25
     };
 
     const cardStyle: any = Object.assign(this.props.isEmbedded
@@ -131,8 +173,12 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
       const currentLevelIndex = model.getCurrentLevelIndex();
       const nextLevelIndex = model.getNextLevelIndex();
 
-      const percentToNextLevel = (currentLevelIndex !== undefined)
-        ? getPercentToNextLevel(flashCardLevels[currentLevelIndex], studyAlgorithm.flashCardSetStats)
+      const currentLevel = (currentLevelIndex !== undefined)
+        ? flashCardLevels[currentLevelIndex]
+        : new FlashCardLevel(flashCardSet.name, model.enabledFlashCardIds, () => null);
+
+      const percentToNextLevel = (currentLevel !== undefined)
+        ? getPercentToNextLevel(currentLevel, studyAlgorithm.flashCardSetStats)
         : undefined;
 
       const currentFlashCardKey = `${model.sessionFlashCardNumber}.${model.currentFlashCardId}`;
@@ -197,7 +243,7 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
             : null
           }
           
-          {((currentLevelIndex !== undefined) && (percentToNextLevel !== undefined))
+          {(percentToNextLevel !== undefined)
             ? (
               <p
                 style={{
@@ -218,8 +264,10 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
                 </div>
                 <div style={{ flex: 1, textAlign: "center" }}>
                   <span style={{ paddingRight: "1em" }}>
-                    <span>Level {model.getLevelDisplayName(currentLevelIndex)}</span>
-                    {(percentToNextLevel !== undefined) ? <span> &mdash; {Math.round(100 * percentToNextLevel)}%</span> : null}
+                    {(currentLevelIndex !== undefined) ? (
+                      <span>Level {model.getLevelDisplayName(currentLevelIndex)} &mdash; </span>
+                    ) : null}
+                    {(percentToNextLevel !== undefined) ? <span>{Math.round(100 * percentToNextLevel)}%</span> : null}
                   </span>
                 </div>
                 <div style={{ flex: 1, textAlign: "right" }}>
@@ -239,23 +287,7 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
           }
   
           {(percentToNextLevel !== undefined)
-            ? (
-              <div
-                style={{
-                  width: "100%",
-                  height: "0.25em",
-                  backgroundColor: "lightgray",
-                  border: "1px solid grey"
-                }}>
-                <div
-                  style={{
-                    width: `${Math.round(100 * percentToNextLevel)}%`,
-                    height: "100%",
-                    backgroundColor: "#0A0"
-                  }}
-                />
-              </div>
-            )
+            ? <LevelProgressBarView percentToNextLevel={percentToNextLevel} />
             : null
           }
   
@@ -310,7 +342,7 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
             {cardContents}
           </CardContent>
           
-          <p style={watermarkStyle} className="watermark">https://falsetto.app</p>
+          <WatermarkView isEmbedded={isEmbedded ? isEmbedded : false} />
         </Card>
         {(!this.props.isEmbedded && showRelatedExercises && (flashCardSet.relatedSets.length > 0)) ? (
           <Card style={cardStyle}>
@@ -337,7 +369,8 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
   private renderFlashCardMultiSelect(
     containerSize: Size2D, flashCards: FlashCard[]
   ): JSX.Element {
-    const model = this.model;
+    const { model } = this;
+
     const onEnabledFlashCardIndicesChange = this.onEnabledFlashCardIdsChange.bind(this);
     const levelButtons = (model.flashCardLevels.length > 0)
       ? (model.flashCardLevels
@@ -380,12 +413,15 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
       </div>
     );
   }
+
   // #endregion Render
 
   // #region UI Events
+
   private flipFlashCard() {
     this.model.flipFlashCard();
   }
+
   private moveToNextFlashCard(lastCorrectAnswer: any, wasCorrect: boolean) {
     this.model.skipFlashCard();
   }
@@ -393,9 +429,11 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
   private changeLevel(levelIndex: number) {
     this.model.changeLevel(levelIndex);
   }
+
   private toggleConfiguration() {
     this.model.toggleShowConfiguration();
   }
+
   private onEnabledFlashCardIdsChange(newValue: Array<FlashCardId>, newConfigData: any) {
     this.model.changeEnabledFlashCards(newValue, newConfigData);
   }
