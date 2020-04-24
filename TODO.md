@@ -19,7 +19,6 @@
 * Turn exercises into "active" exercises
   * Piano Intervals
   * Piano Scales
-  * Piano Chords
   * Guitar Notes
   * Guitar Intervals
   * Guitar Scales
