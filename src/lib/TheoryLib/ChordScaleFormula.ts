@@ -70,8 +70,8 @@ export class ChordScaleFormulaPart {
     return Interval.getSimpleIntervalTypeHalfSteps(Interval.getSimpleIntervalType(this.chordNoteNumber)) + this.signedAccidental;
   }
 
-  public toString(): string {
-    return this.chordNoteNumber.toString() + getAccidentalString(this.signedAccidental);
+  public toString(useSymbols?: boolean): string {
+    return this.chordNoteNumber.toString() + getAccidentalString(this.signedAccidental, useSymbols);
   }
   public getIntervalFromRootNote(): Interval {
     return new Interval(this.chordNoteNumber, this.signedAccidental);

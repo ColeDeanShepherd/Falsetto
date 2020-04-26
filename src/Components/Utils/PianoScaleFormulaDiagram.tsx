@@ -9,28 +9,29 @@ import { Margin } from "../../lib/Core/Margin";
 import { Pitch } from "../../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../../lib/TheoryLib/PitchLetter";
 
-import { ScaleType, Scale } from "../../lib/TheoryLib/Scale";
+import { Scale } from "../../lib/TheoryLib/Scale";
 import { doesKeyUseSharps } from "../../lib/TheoryLib/Key";
 
 import { PianoKeyboard, renderPianoKeyboardNoteNames, PianoKeyboardMetrics } from "../Utils/PianoKeyboard";
 
-import { playPitches } from "../../Audio/PianoAudio";
 import * as PianoScaleDronePlayer from './PianoScaleDronePlayer';
 import { getPianoKeyboardAspectRatio } from './PianoUtils';
 
 export interface IPianoScaleFormulaDiagramProps {
-  scaleType: ScaleType
+  scale: Scale;
+  octaveCount: number;
+  maxWidth: number;
 }
 export class PianoScaleFormulaDiagram extends React.Component<IPianoScaleFormulaDiagramProps, {}> {
   public render(): JSX.Element {
-    const { rootPitch } = this;
-    const { scaleType } = this.props;
+    const { scale, octaveCount, maxWidth } = this.props;
 
-    const maxWidth = 300;
-    const aspectRatio = getPianoKeyboardAspectRatio(/*octaveCount*/ 1);
+    const pianoLowestPitch = new Pitch(PitchLetter.C, 0, scale.rootPitch.octaveNumber);
+    const pianoHighestPitch = new Pitch(PitchLetter.B, 0, scale.rootPitch.octaveNumber + (octaveCount - 1));
+    const aspectRatio = getPianoKeyboardAspectRatio(octaveCount);
     const margin = new Margin(0, 30, 0, 0);
     const style = { width: "100%", maxWidth: `${maxWidth}px`, height: "auto" };
-    const pitches = scaleType.getPitches(rootPitch);
+    const pitches = scale.getPitches();
     const pitchMidiNumberNoOctaves = pitches.map(p => p.midiNumberNoOctave);
     
     function renderExtrasFn(metrics: PianoKeyboardMetrics): JSX.Element {
@@ -39,7 +40,7 @@ export class PianoScaleFormulaDiagram extends React.Component<IPianoScaleFormula
           {renderScaleStepLabels(metrics)}
           {renderPianoKeyboardNoteNames(
             metrics,
-            doesKeyUseSharps(rootPitch.letter, rootPitch.signedAccidental),
+            doesKeyUseSharps(scale.rootPitch.letter, scale.rootPitch.signedAccidental),
             p => arrayContains(pitchMidiNumberNoOctaves, p.midiNumberNoOctave))}
         </g>
       );
@@ -60,7 +61,7 @@ export class PianoScaleFormulaDiagram extends React.Component<IPianoScaleFormula
         (scaleStepIndex === 0)
           ? (leftKeyRect.position.x + (leftKeyRect.size.width / 2))
           : ((leftKeyRect.position.x + rightKeyRect.right) / 2),
-        -(maxWidth / 20)
+        -(1.5 * metrics.blackKeyWidth)
       );
       const textStyle: any = {
         fontSize: `${9}px`,
@@ -73,7 +74,7 @@ export class PianoScaleFormulaDiagram extends React.Component<IPianoScaleFormula
       const halfSteps = rightPitch.midiNumber - leftPitch.midiNumber;
       const formulaPart = (scaleStepIndex === 0) ? 'R' : ((halfSteps === 1) ? 'H' : 'W');
 
-      const strokeWidth = maxWidth / 200;
+      const strokeWidth = metrics.blackKeyWidth / 5;
 
       return (
         <g>
@@ -98,26 +99,24 @@ export class PianoScaleFormulaDiagram extends React.Component<IPianoScaleFormula
       <PianoKeyboard
         rect={new Rect2D(new Size2D(aspectRatio * 100, 100), new Vector2D(0, 0))}
         margin={margin}
-        lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-        highestPitch={new Pitch(PitchLetter.B, 0, 4)}
+        lowestPitch={pianoLowestPitch}
+        highestPitch={pianoHighestPitch}
         pressedPitches={[]}
         onKeyPress={p => this.onKeyPress(p)}
         renderExtrasFn={renderExtrasFn}
         style={style} />
     );
   }
-  
-  private rootPitch = new Pitch(PitchLetter.C, 0, 4);
 
   private audioCancellationFn: (() => void) | undefined = undefined;
 
   private onKeyPress(pitch: Pitch) {
-    const { scaleType } = this.props;
+    const { scale } = this.props;
 
     if (this.audioCancellationFn) {
       this.audioCancellationFn();
     }
 
-    this.audioCancellationFn = PianoScaleDronePlayer.onKeyPress(new Scale(scaleType, this.rootPitch), pitch);
+    this.audioCancellationFn = PianoScaleDronePlayer.onKeyPress(scale, pitch);
   }
 }

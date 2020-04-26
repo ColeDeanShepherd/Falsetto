@@ -251,6 +251,10 @@ export class Pitch {
     return new Pitch(pitch.letter, pitch.signedAccidental, pitch.octaveNumber + octaves);
   }
 
+  public static max(a: Pitch, b: Pitch): Pitch {
+    return (a.midiNumber >= b.midiNumber) ? a : b;
+  }
+
   public constructor(
     public letter: PitchLetter,
     public signedAccidental: number,

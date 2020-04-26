@@ -34,6 +34,8 @@ import { ActionBus, ActionHandler } from "../ActionBus";
 import { IAction } from "../IAction";
 import { WebMidiInitializedAction, MidiDeviceConnectedAction, MidiDeviceDisconnectedAction, MidiInputDeviceChangedAction, MidiInputDevicePitchRangeChangedAction } from "../AppMidi/Actions";
 import { NoteText } from '../Components/Utils/NoteText';
+import { PianoScaleMajorRelativeFormulaDiagram } from "../Components/Utils/PianoScaleMajorRelativeFormulaDiagram";
+import { NavLinkView } from "../NavLinkView";
 
 const maxPianoWidth = 1000;
 const maxOneOctavePianoWidth = 400;
@@ -672,50 +674,73 @@ const slideGroups = [
     new Slide("scales-introduction", () => (
       <div>
         <h2>Section 3: Scales</h2>
-        <p></p>
-        <p>Now let's learn about <strong>scales</strong>. Scales are sets of notes with a designated "root note" that generally "sounds like home" in the scale.</p>
-        <p>Scales are important to learn about because it's common for pieces of music to mostly use notes from a small handful of scales.</p>
-        <p>Below is an interactive diagram of the <strong>C Major</strong> scale, which has a root note of C and comprises of the notes: C, D, E, F, G, A, B.</p>
-        <p>Try pressing the piano keys below to get a feel for how the scale sounds. Pressing keys will play both the pressed note <strong>and</strong> the root note (C), which helps convey the "feeling" of the scale.</p>
-        <p><PianoScaleDronePlayer scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))} octaveCount={1} maxWidth={maxOneOctavePianoWidth} /></p>
+        <p>As you've learned, there are 12 different piano key names.</p>
+        <p>Though musicians are free to use any of the 12 keys at any time, it is common to restrict the choice of keys to the keys in a particular <strong>scale</strong>.</p>
+        <p><strong>Scales</strong> are sets of notes with a designated "root note" that generally "sounds like home" in the scale.</p>
+        <p>Below is an interactive diagram of the <strong>C Major</strong> scale, which has a root note of <strong>C</strong> (indicated by the <strong>C</strong> scale's name) and comprises of the 7 notes: <strong>C, D, E, F, G, A, B</strong>.</p>
+        <p>Try pressing the piano keys below to get a feel for how the scale sounds. Pressing keys will play both the pressed note and the lowest root note (C) in the diagram, which helps convey the "feeling" of the scale.</p>
+        <p><PianoScaleDronePlayer scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))} octaveCount={2} maxWidth={maxOneOctavePianoWidth} /></p>
       </div>
     )),
     new Slide("major-scale", () => (
       <div>
-        <p>Major scales, like the "C Major" scale we saw on the last slide, are very common in music.</p>
+        <p>Major scales, like the <strong>C Major</strong> scale we saw on the last slide, are very common in music.</p>
         <p>All major scales are built with the same formula: "<strong>R W W H W W W</strong>", where:</p>
         <p>
-          <strong>"R"</strong> means the <strong>root note</strong> ("C" in the case of the C Major scale)
+          <strong>"R"</strong> means the <strong>root note</strong> (<strong>C</strong> in the case of the <strong>C Major</strong> scale)
           <br />
           <strong>"W"</strong> means the next note is a <strong>whole step</strong> (2 keys) to the right of the previous note
           <br />
           <strong>"H"</strong> means the next note is a <strong>half step</strong> (1 key) to the right of the previous note.
         </p>
-        <p>Though scale formulas define the notes of a scale in a particular order starting with the root note, you are free to play the notes in any order you like.</p>
-        <p>Below is another interactive diagram of the C Major scale, along with the major scale formula.</p>
-        <p><PianoScaleFormulaDiagram scaleType={ScaleType.Ionian} /></p>
+        <p>Below is an interactive diagram of the C Major scale and the major scale formula.</p>
+        <p><PianoScaleFormulaDiagram scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))} octaveCount={2} maxWidth={maxTwoOctavePianoWidth} /></p>
+        <div style={{ display: "inline-block" }}><NoteText>Though scale formulas define the notes of a scale in a particular order starting with the root note, you are free to play the notes in any order you like.</NoteText></div>
+      </div>
+    )),
+    new Slide("another-major-scale", () => (
+      <div>
+        <p>To figure out the notes in any other major scale, you simply pick a root note and follow the major scale formula.</p>
+        <p>For example, picking a root note of <strong>E</strong> and following the formula gives you the <strong>E Major</strong> scale below:</p>
+        <p><PianoScaleFormulaDiagram scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.E, 0, 4))} octaveCount={2} maxWidth={maxTwoOctavePianoWidth} /></p>
       </div>
     )),
     new Slide("natural-minor-scale", () => (
       <div>
-        <p>"Natural Minor" scales are also common in music, and are built with the formula: "<strong>R W H W W H W</strong>".</p>
+        <p><strong>Natural Minor</strong> scales (sometimes simply called <strong>Minor</strong> scales) are another common type of scale, and they are built with the formula: "<strong>R W H W W H W</strong>".</p>
+        <p>We can use this formula to find the notes in any natural minor scale, for example the <strong>C Natural Minor</strong> scale, which comprises of the 7 notes: <strong>C, D, E♭, F, G, A♭, B♭</strong></p>
         <p>Below is an interactive diagram of the <strong>C Natural Minor</strong> scale, along with the natural minor scale formula.</p>
         <p>Press the piano keys below to get a feel for how the scale sounds.</p>
-        <p><PianoScaleFormulaDiagram scaleType={ScaleType.Aeolian} /></p>
+        <p><PianoScaleFormulaDiagram scale={new Scale(ScaleType.Aeolian, new Pitch(PitchLetter.C, 0, 4))} octaveCount={2} maxWidth={maxTwoOctavePianoWidth} /></p>
+      </div>
+    )),
+    new Slide("natural-minor-scale-2", () => (
+      <div>
+        <p>Another common way to write scale formulas is <strong>relative to the major scale</strong>.</p>
+        <p>Recall the notes of the following scales:</p>
+        <p><strong>C Major</strong>: C, D, E, F, G, A, B</p>
+        <p><strong>C Minor</strong>: C, D, E♭, F, G, A♭, B♭</p>
+        <p>Note that the <strong>C Minor</strong> scale is almost the same as the <strong>C Major</strong> scale, but the <strong>3rd</strong>, <strong>6th</strong>, and <strong>7th</strong> notes are flattened.</p>
+        <p>We can use this knowledge to write formulas for the major &amp; minor scales like this:</p>
+        <p><strong>C Major</strong>: 1, 2, 3, 4, 5, 6, 7</p>
+        <p><strong>C Minor</strong>: 1, 2, 3♭, 4, 5, 6♭, 7♭</p>
+        <p>This is useful to quickly find scales similar to major scales you have already memorized.</p>
+        <p>Below is an interactive diagram of the <strong>C Natural Minor</strong> scale, along with its major-scale-relative formula.</p>
+        <p><PianoScaleMajorRelativeFormulaDiagram scale={new Scale(ScaleType.Aeolian, new Pitch(PitchLetter.C, 0, 4))} octaveCount={2} maxWidth={maxTwoOctavePianoWidth} /></p>
       </div>
     )),
     new Slide("scales-summary", () => (
       <div>
-        <p>There are many other scales, but we will cover them later.</p>
-        <p>For now, take some time to review material below, then move to the next slide to test your knowledge of scales a quiz.</p>
+        <p>There are many other scales you can learn about in your own time here: <NavLinkView to="/scale-exercises" openNewTab={true}>Self-Paced Scale Mastery</NavLinkView>.</p>
+        <p>For now, take some time to review material below, then move to the next slide to test your knowledge of scales with a quiz.</p>
         <br />
-        <p><strong>Scales are sets of notes with a designated "root note"</strong> that generally "sounds like home" in the scale.</p>
-        <p>Though scale formulas define the notes of a scale in a particular order starting with the root note, <strong>you are free to play the notes in any order you like</strong>.</p>
+        <p>Scales are <strong>sets of notes with a designated "root note"</strong> that generally "sounds like home" in the scale.</p>
+        <p>The formula for all major scales is <strong>R W W H W W W</strong>.</p>
         <p>In scale formulas, <strong>"R" means "root note"</strong>.</p>
         <p>In scale formulas, <strong>"H" means the next note is a "half step" (1 key) to the right of the previous note</strong>.</p>
         <p>In scale formulas, <strong>"W" means the next note is a "whole step" (2 keys) to the right of the previous note</strong>.</p>
-        <p>The formula for all major scales is <strong>R W W H W W W</strong>.</p>
-        <p>The formula for all natural minor scales is <strong>R W H W W H W</strong>.</p>
+        <p>Though scale formulas define the notes of a scale in a particular order starting with the root note, <strong>you are free to play the notes in any order you like</strong>.</p>
+        <p>The major-scale-relative formula for all natural minor scales (also simply called "minor scales") is <strong>1, 2, 3♭, 4, 5, 6♭, 7♭</strong>.</p>
       </div>
     )),
     new Slide("scales-quiz", () => (

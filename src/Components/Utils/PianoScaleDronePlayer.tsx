@@ -44,7 +44,7 @@ export class PianoScaleDronePlayer extends React.Component<IPianoScaleDronePlaye
   public render(): JSX.Element {
     const { scale, octaveCount, maxWidth } = this.props;
     
-    const pitches = scale.getPitches().concat([Pitch.addOctaves(scale.rootPitch, 1)]);
+    const pitches = scale.getPitches();
     const aspectRatio = getPianoKeyboardAspectRatio(octaveCount);
     const style = { width: "100%", maxWidth: `${maxWidth}px`, height: "auto" };
   
@@ -52,7 +52,7 @@ export class PianoScaleDronePlayer extends React.Component<IPianoScaleDronePlaye
       <PianoKeyboard
         rect={new Rect2D(new Size2D(aspectRatio * 100, 100), new Vector2D(0, 0))}
         lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-        highestPitch={new Pitch(PitchLetter.C, 0, 4 + octaveCount)}
+        highestPitch={new Pitch(PitchLetter.B, 0, 4 + (octaveCount - 1))}
         pressedPitches={[]}
         renderExtrasFn={metrics => renderExtrasFn(metrics, pitches, scale.rootPitch)}
         onKeyPress={pitch => this.onKeyPress(pitch)}

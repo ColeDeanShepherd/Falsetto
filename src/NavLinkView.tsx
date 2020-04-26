@@ -4,21 +4,29 @@ import { NavigateAction } from './App/Actions';
 
 export interface INavLinkViewProps {
   to: string;
+  openNewTab?: boolean;
   style?: any;
 }
 export class NavLinkView extends React.Component<INavLinkViewProps, {}> {
   public render(): JSX.Element | null {
-    return <a href={this.props.to} onClick={event => this.onClick(event)} style={this.props.style}>{this.props.children}</a>;
+    const { to, style, children } = this.props;
+
+    return <a href={to} onClick={event => this.onClick(event)} style={style}>{children}</a>;
   }
 
   private onClick(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
+    const { to } = this.props;
+    const openNewTab = (this.props.openNewTab !== undefined)
+      ? this.props.openNewTab
+      : false;
+
     event.stopPropagation();
     event.preventDefault();
 
-    if (!event.ctrlKey) {
-      ActionBus.instance.dispatch(new NavigateAction(this.props.to));
+    if (!openNewTab && !event.ctrlKey) {
+      ActionBus.instance.dispatch(new NavigateAction(to));
     } else {
-      window.open(this.props.to, "_blank");
+      window.open(to, "_blank");
     }
   }
 }

@@ -33,7 +33,7 @@ export const ScalesAndModesSection: React.FunctionComponent<SectionProps> = prop
     <SubSectionTitle>The Major Scale</SubSectionTitle>
     <p>One of the most common scales, upon which other scales are often built by modifying notes, is the <Term>major scale</Term>. The <Term>major scale</Term> is a 7 note scale which can be built using the formula: "R W W H W W W", where "R" denotes the root name, "W" means the next note is a whole step higher, and "H" means the next note is a half step higher.</p>
     <p>So, a C major scale, a scale with a <Term>root note</Term> of C following the major scale formula, is comprised of the notes: C, D, E, F, G, A, B.</p>
-    <p style={{ textAlign: "center" }}><PianoScaleFormulaDiagram scaleType={ScaleType.Ionian} /></p>
+    <p style={{ textAlign: "center" }}><PianoScaleFormulaDiagram scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))} octaveCount={1} maxWidth={400} /></p>
 
     <NoteText>Though the notes of scales are often given in ascending order, they can be played in any order or repeated any number of times and still be considered the same scale. What makes a scale distinct is simply the set of notes it contains, not the order or the count of the notes.</NoteText>
 
