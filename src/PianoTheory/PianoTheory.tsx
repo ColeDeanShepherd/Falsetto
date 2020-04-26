@@ -742,16 +742,17 @@ const slideGroups = [
   ])
 ];
 
-function getSlideGroup(slideIndex: number): SlideGroup | undefined {
+function getSlideGroup(slideIndex: number): [SlideGroup, number] | undefined {
   let numSlidesSeen = 0;
 
   for (let slideGroupIndex = 0; slideGroupIndex < slideGroups.length; slideGroupIndex++) {
     const slideGroup = slideGroups[slideGroupIndex];
+    const newNumSlidesSeen = numSlidesSeen + slideGroup.slides.length;
 
-    numSlidesSeen += slideGroup.slides.length;
-
-    if (numSlidesSeen > slideIndex) {
-      return slideGroup;
+    if (newNumSlidesSeen > slideIndex) {
+      return [slideGroup, slideIndex - numSlidesSeen];
+    } else {
+      numSlidesSeen = newNumSlidesSeen;
     }
   }
 
@@ -818,33 +819,12 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
   public render(): JSX.Element {
     const { slideIndex } = this.state;
 
-    const slideNumber = slideIndex + 1;
-    const numSlides = slides.length;
     const renderedSlide = slides[slideIndex].renderFn(this);
-    const slideGroup = getSlideGroup(slideIndex);
 
     return (
       <div style={{ height: "100%" }}>
         <div style={{ display: "flex", flexDirection: "column", textAlign: "center", height: "100%" }}>
-          <div>
-            <Button
-              variant="contained"
-              disabled={!this.canMoveToPreviousSlide()}
-              onClick={_ => this.moveToPreviousSlideInternal()}
-              style={{ textTransform: "none" }}
-            >
-              &lt;
-            </Button>
-            <span style={{ padding: "0 1em" }}>Slide {slideNumber} / {numSlides} - {slideGroup ? slideGroup.name : ""}</span>
-            <Button
-              variant="contained"
-              disabled={!this.canMoveToNextSlide()}
-              onClick={_ => this.moveToNextSlideInternal()}
-              style={{ textTransform: "none" }}
-            >
-              &gt;
-            </Button>
-          </div>
+          {this.renderSlideControls()}
           {renderedSlide}
         </div>
 
@@ -852,6 +832,49 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
           onNoteOn={(pitch, velocity) => AppModel.instance.pianoAudio.pressKey(pitch, velocity)}
           onNoteOff={pitch => AppModel.instance.pianoAudio.releaseKey(pitch)} />
       </div>
+    );
+  }
+
+  private renderSlideControls(): JSX.Element {
+    return (
+      <div>
+        <Button
+          variant="contained"
+          disabled={!this.canMoveToPreviousSlide()}
+          onClick={_ => this.moveToPreviousSlideInternal()}
+          style={{ textTransform: "none" }}
+        >
+          &lt;
+        </Button>
+
+        {this.renderSlideLocation()}
+
+        <Button
+          variant="contained"
+          disabled={!this.canMoveToNextSlide()}
+          onClick={_ => this.moveToNextSlideInternal()}
+          style={{ textTransform: "none" }}
+        >
+          &gt;
+        </Button>
+      </div>
+    );
+  }
+
+  private renderSlideLocation(): JSX.Element {
+    const { slideIndex } = this.state;
+
+    const slideGroupInfo = getSlideGroup(slideIndex);
+    if (!slideGroupInfo) {
+      return <span style={{ padding: "0 1em" }}>Falsetto - Piano Theory</span>;
+    }
+
+    const slideGroup = slideGroupInfo[0];
+    const indexOfSlideInGroup = slideGroupInfo[1];
+    const slideNumberInGroup = 1 + indexOfSlideInGroup;
+
+    return (
+      <span style={{ padding: "0 1em" }}>{slideGroup.name} - Slide {slideNumberInGroup} / {slideGroup.slides.length}</span>
     );
   }
   
