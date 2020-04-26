@@ -14,6 +14,11 @@ export class NavLinkView extends React.Component<INavLinkViewProps, {}> {
   private onClick(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
     event.stopPropagation();
     event.preventDefault();
-    ActionBus.instance.dispatch(new NavigateAction(this.props.to));
+
+    if (!event.ctrlKey) {
+      ActionBus.instance.dispatch(new NavigateAction(this.props.to));
+    } else {
+      window.open(this.props.to, "_blank");
+    }
   }
 }
