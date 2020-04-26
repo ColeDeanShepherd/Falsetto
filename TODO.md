@@ -1,6 +1,8 @@
 # To-Do
 ## High Priority
 * Debug & fix scale viewer
+* Get rid of material UI
+* Fix piano aspect ratios.
 * Interactive piano exercises/lessons
   * General
     * Document title changes?
@@ -57,8 +59,6 @@
 * Glossary
   * Expand content
   * Display synonyms
-* Settings
-  * Volume slider
 ## Medium Priority
 * 
 ## Low Priority
