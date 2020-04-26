@@ -1,7 +1,12 @@
 import { Pitch } from "../lib/TheoryLib/Pitch";
 import { loadAndPlaySoundsSequentially, loadAndPlaySoundsSimultaneously } from './Audio';
 import { StringDictionary } from '../lib/Core/StringDictionary';
-import { addIfNotFoundInArray, removeIfFoundInArray } from '../lib/Core/ArrayUtils';
+import { removeIfFoundInArray } from '../lib/Core/ArrayUtils';
+import { IPitchesAudio } from './IPitchesAudio';
+
+export const PianoPitchesAudio: IPitchesAudio = {
+  getAudioFilePath: getPitchAudioFilePath
+};
 
 export const pianoAudioFilePathsByMidiNumber = new Array<[number, string]>();
 pianoAudioFilePathsByMidiNumber.push([21, "/audio/piano/A0.mp3"]);
@@ -93,10 +98,10 @@ pianoAudioFilePathsByMidiNumber.push([106, "/audio/piano/As7.mp3"]);
 pianoAudioFilePathsByMidiNumber.push([107, "/audio/piano/B7.mp3"]);
 pianoAudioFilePathsByMidiNumber.push([108, "/audio/piano/C8.mp3"]);
 
-export function getPitchAudioFilePath(pitch: Pitch): string | null {
+export function getPitchAudioFilePath(pitch: Pitch): string | undefined {
   const kvp = pianoAudioFilePathsByMidiNumber
     .find(x => x[0] === pitch.midiNumber);
-  if (!kvp) { return null; }
+  if (!kvp) { return undefined; }
 
   return kvp[1];
 }
@@ -104,7 +109,7 @@ export function getPitchAudioFilePath(pitch: Pitch): string | null {
 export function playPitches(pitches: Array<Pitch>): [Promise<Array<Howl>>, () => void] {
   const soundFilePaths = pitches
     .map(getPitchAudioFilePath)
-    .filter(fp => fp !== null)
+    .filter(fp => fp !== undefined)
     .map(fp => fp as string);
 
   return loadAndPlaySoundsSimultaneously(soundFilePaths);
@@ -114,7 +119,7 @@ export function playPitches(pitches: Array<Pitch>): [Promise<Array<Howl>>, () =>
 export function playPitchesSequentially(pitches: Array<Pitch>, delayInMs: number, cutOffSounds: boolean = false): () => void {
   const soundFilePaths = pitches
     .map(getPitchAudioFilePath)
-    .filter(fp => fp !== null)
+    .filter(fp => fp !== undefined)
     .map(fp => fp as string);
   
   return loadAndPlaySoundsSequentially(soundFilePaths, delayInMs, cutOffSounds);
