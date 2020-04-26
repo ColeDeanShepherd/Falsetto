@@ -1,4 +1,4 @@
-import { History } from "history";
+import { History, UnregisterCallback } from "history";
 import * as React from "react";
 import * as QueryString from "query-string";
 import { Button } from "@material-ui/core";
@@ -680,7 +680,7 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
     this.history = DependencyInjector.instance.getRequiredService<History<any>>("History");
 
     this.state = {
-      slideIndex: this.getSlideIndexFromUriParams()
+      slideIndex: this.getSlideIndexFromUriParams(this.history.location.search)
     };
   }
 
@@ -699,12 +699,23 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
   // #region React Functions
   
   public componentDidMount() {
+    this.historyUnregisterCallback = this.history.listen((location, action) => {
+      this.setState({
+        slideIndex: this.getSlideIndexFromUriParams(location.search)
+      });
+    });
     this.registerKeyEventHandlers();
   }
 
   public componentWillUnmount() {
     AppModel.instance.pianoAudio.releaseAllKeys();
+
     this.unregisterKeyEventHandlers();
+
+    if (this.historyUnregisterCallback) {
+      this.historyUnregisterCallback();
+      this.historyUnregisterCallback = undefined;
+    }
   }
 
   // TODO: show slide group
@@ -749,6 +760,7 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
   }
   
   private history: History<any>;
+  private historyUnregisterCallback: UnregisterCallback | undefined;
 
   // #endregion React Functions
 
@@ -838,8 +850,8 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
 
   // #endregion Actions
 
-  private getSlideIndexFromUriParams(): number {
-    const urlSearchParams = QueryString.parse(this.history.location.search);
+  private getSlideIndexFromUriParams(search: string): number {
+    const urlSearchParams = QueryString.parse(search);
     if (!(urlSearchParams.slide && (typeof urlSearchParams.slide === 'string'))) { return 0; }
 
     const slideIndex = slides.findIndex(s => s.url === urlSearchParams.slide);
