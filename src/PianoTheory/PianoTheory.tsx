@@ -352,13 +352,13 @@ const slideGroups = [
       </div>
     ))
   ]),
-  
+
   new SlideGroup("Notes", [
     new Slide("note-c", (pianoTheory) => (
       <div>
         <h2>Section 2: Notes</h2>
         <p>Every piano key has one or more names, which we must learn in order to navigate the instrument and communicate with other musicians.</p>
-        <p>We will start with the white keys in the small section of a piano keyboard below. The highlighted key below, to the left of the group of 2 black keys, is called <strong>C</strong>.</p>
+        <p>We will start with the 7 white keys in the small section of a piano keyboard below. The highlighted key below, to the left of the group of 2 black keys, is called <strong>C</strong>.</p>
         <p>Press a <strong>C</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
         <PianoNoteDiagram
           pitch={new Pitch(PitchLetter.C, 0, 4)}
@@ -496,7 +496,7 @@ const slideGroups = [
     
     new Slide("note-c-sharp", (pianoTheory) => (
       <div>
-        <p>Now let's learn the names of the black piano keys in this section of the piano.</p>
+        <p>Now let's learn the names of the 5 black piano keys in this section of the piano.</p>
         <p>The key highlighted below, like all black keys, has multiple names. One name for it is <strong>C♯</strong> (pronounced "C sharp").</p>
         <p>The '♯' ("sharp") symbol means the pitch is raised by one key, so C♯ means "the key to the right of C".</p>
         <p>Press a <strong>C♯</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
@@ -624,7 +624,14 @@ const slideGroups = [
     
     new Slide("all-notes", () => (
       <div>
-        <p>You have learned the names of all the keys in this section of the piano!</p>
+        <p>You have now learned the names of all 12 keys in this small section of the piano!</p>
+        <p>
+          <PianoNotesDiagram
+            lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
+            highestPitch={new Pitch(PitchLetter.B, 0, 4)}
+            maxWidth={maxOneOctavePianoWidth / 2}
+            labelWhiteKeys={false} />
+        </p>
         <p>But what about the rest of the piano? Let's zoom out...</p>
         <p>Here we see that the names of the other keys are simply repetitions of the pattern you've learned. So you have actually learned the names of all 88 piano keys!</p>
         <PianoNotesDiagram
@@ -664,6 +671,7 @@ const slideGroups = [
     new Slide("scales-introduction", () => (
       <div>
         <h2>Section 3: Scales</h2>
+        <p></p>
         <p>Now let's learn about <strong>scales</strong>. Scales are sets of notes with a designated "root note" that generally "sounds like home" in the scale.</p>
         <p>Scales are important to learn about because it's common for pieces of music to mostly use notes from a small handful of scales.</p>
         <p>Below is an interactive diagram of the <strong>C Major</strong> scale, which has a root note of C and comprises of the notes: C, D, E, F, G, A, B.</p>
