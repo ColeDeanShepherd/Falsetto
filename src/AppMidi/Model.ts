@@ -7,7 +7,7 @@ import { IDisposable } from "../lib/Core/IDisposable";
 import { unwrapValueOrUndefined } from "../lib/Core/Utils";
 import { arrayContains } from "../lib/Core/ArrayUtils";
 import { ILogger } from "../Logger";
-import { Pitch } from "../lib/TheoryLib/Pitch";
+import { Pitch, getNumPitchesInRange } from '../lib/TheoryLib/Pitch';
 import { saveMidiInputDeviceSettings, MidiInputDeviceSettings, loadMidiInputDeviceSettings } from '../Persistence';
 
 export class AppMidiModel implements IDisposable {
@@ -19,6 +19,12 @@ export class AppMidiModel implements IDisposable {
 
   public dispose() {
     this.uninitializeMidi();
+  }
+
+  public get isMidiInputDeviceSetup(): boolean {
+    return (this.midiInput !== undefined) &&
+      (this.midiInputPitchRange !== undefined) &&
+      (getNumPitchesInRange(this.midiInputPitchRange) > 0);
   }
 
   public get initializeMidiPromise(): Promise<void> {

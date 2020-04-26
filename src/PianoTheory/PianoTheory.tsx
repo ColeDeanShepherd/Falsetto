@@ -30,6 +30,9 @@ import { AppModel } from "../App/Model";
 import { MidiPianoRangeInput } from "../Components/Utils/MidiPianoRangeInput";
 import { LimitedWidthContentContainer } from "../Components/Utils/LimitedWidthContentContainer";
 import { serializeMidiInputDeviceSettings } from '../Persistence';
+import { ActionBus, ActionHandler } from "../ActionBus";
+import { IAction } from "../IAction";
+import { WebMidiInitializedAction, MidiDeviceConnectedAction, MidiDeviceDisconnectedAction, MidiInputDeviceChangedAction, MidiInputDevicePitchRangeChangedAction } from "../AppMidi/Actions";
 
 const maxPianoWidth = 1000;
 const maxOneOctavePianoWidth = 400;
@@ -218,6 +221,107 @@ class SlideGroup {
   public constructor(public name: string, public slides: Array<Slide>) {}
 }
 
+const GreenCheckmarkView: React.FunctionComponent<{}> = props => (
+  <i
+    className="material-icons"
+    style={{
+      color: "green",
+      verticalAlign: "bottom",
+      display: "inline-block"
+    }}>
+    check_circle
+  </i>
+);
+
+const RedXView: React.FunctionComponent<{}> = props => (
+  <i
+    className="material-icons"
+    style={{
+      color: "red",
+      verticalAlign: "bottom",
+      display: "inline-block"
+    }}>
+    cancel
+  </i>
+);
+
+export class SetupSlideView extends React.Component<{}, {}> {
+  public constructor(props: {}) {
+    super(props);
+
+    this.boundHandleAction = this.handleAction.bind(this);
+  }
+
+  // #region React Lifecycle Methods
+
+  public componentDidMount() {
+    ActionBus.instance.subscribe(this.boundHandleAction);
+  }
+
+  public componentWillUnmount() {
+    ActionBus.instance.unsubscribe(this.boundHandleAction);
+  }
+
+  public render(): JSX.Element {
+    const isStep1Complete = AppModel.instance.midiModel.getMidiInput() !== undefined;
+    const isStep2Complete = isStep1Complete && AppModel.instance.midiModel.getMidiInputPitchRange() !== undefined;
+    const isMidiKeyboardSetup = AppModel.instance.midiModel.isMidiInputDeviceSetup;
+
+    return (
+      <div style={{ display: "flex", flexDirection: "column", flexGrow: 1 }}>
+        <div>
+          <p>It is highly recommended to connect a MIDI piano keyboard to follow along with the course interactively.</p>
+          <p>Note that, at the time of writing, <a href="https://www.google.com/chrome/" target="_blank">Chrome</a> is the only web browser supporting MIDI input devices (<a href="https://caniuse.com/#feat=midi" target="_blank">click here for an up-to-date list of browsers supporting MIDI</a>).</p>
+          <p>Follow the steps below to setup your MIDI piano keyboard if you have one, then continue to the next slide.</p>
+        </div>
+        
+        <div style={{ display: "flex", flexDirection: "column", flexGrow: 1, justifyContent: "space-evenly" }}>
+          <p>
+            <strong>Step 1: Connect a MIDI piano keyboard and select it below.</strong>
+            {isStep1Complete ? <GreenCheckmarkView /> : <RedXView />}
+          </p>
+          <p><MidiInputDeviceSelect /></p>
+
+          <p>
+            <strong>Step 2: Press the leftmost and rightmost keys on your MIDI piano keyboard to detect the number of keys it has.</strong>
+            {isStep2Complete ? <GreenCheckmarkView /> : <RedXView />}
+          </p>
+          <div style={{ width: `${maxPianoWidth}px`, margin: "0 auto" }}><MidiPianoRangeInput /></div>
+
+          <p>{isMidiKeyboardSetup ? (
+            <span>
+              <GreenCheckmarkView />
+              
+              <span style={{ paddingLeft: "0.5em" }}>Setup Complete</span>
+            </span>
+          ) : (
+            <span>
+              <RedXView />
+              
+              <span style={{ paddingLeft: "0.5em" }}>Setup Incomplete</span>
+            </span>
+          )}</p>
+        </div>
+      </div>
+    );
+  }
+
+  // #endregion
+  
+  private boundHandleAction: ActionHandler;
+  
+  private handleAction(action: IAction) {
+    switch (action.getId()) {
+      case WebMidiInitializedAction.Id:
+      case MidiDeviceConnectedAction.Id:
+      case MidiDeviceDisconnectedAction.Id:
+      case MidiInputDeviceChangedAction.Id:
+      case MidiInputDevicePitchRangeChangedAction.Id:
+        this.forceUpdate();
+    }
+  }
+}
+
 // TODO: dynamic width/height
 // TODO: quizzes
 // TODO: slide links
@@ -225,26 +329,18 @@ class SlideGroup {
 const slideGroups = [
   new SlideGroup("Introduction", [
     new Slide("introduction", () => (
-      <div style={{ display: "flex", flexDirection: "column", flexGrow: 1, justifyContent: "space-evenly" }}>
+      <div>
         <div>
           <h1>Piano Theory Course by Falsetto</h1>
           <h2>Section 1: Introduction</h2>
+          <p>Welcome to Falsetto's "Piano Theory" course!</p>
           <p>This is an interactive course designed to teach you the essentials of piano and music theory in a hands-on manner.</p>
-          <p>This course is designed to be viewed on tablets and computer monitors.</p>
-          <p>It is highly recommended to connect a MIDI piano keyboard to follow along.</p>
-          <p>Note that, at the time of writing, <a href="https://www.google.com/chrome/" target="_blank">Chrome</a> is the only web browser supporting MIDI input devices.</p>
-          <p><a href="https://caniuse.com/#feat=midi" target="_blank">Click here</a> for an up-to-date list of browsers supporting MIDI.</p>
+          <p>This course is designed to be viewed on tablets and computer monitors, not on mobile phones.</p>
+          <p>Press the ">" arrow button at the top of this page, or press the right arrow key on your computer keyboard, to move to the next slide.</p>
         </div>
-
-        <p><strong>Step 1: Connect a MIDI piano keyboard and select it below.</strong></p>
-        <p><MidiInputDeviceSelect /></p>
-
-        <p><strong>Step 2: Press the leftmost and rightmost keys on your MIDI piano keyboard to detect the number of keys it has.</strong></p>
-        <div style={{ width: `${maxPianoWidth}px`, margin: "0 auto" }}><MidiPianoRangeInput /></div>
-
-        <p><strong>Step 3: Press the ">" arrow button at the top of this page, or press the right arrow key on your computer keyboard, to move to the next slide.</strong></p>
       </div>
     )),
+    new Slide("setup", () => <SetupSlideView />),
     new Slide("piano-basics", () => (
       <div>
         <p>This is a standard-size piano which has 88 white &amp; black keys.</p>

@@ -56,7 +56,7 @@ export class MidiPianoRangeInput extends React.Component<{}, {}> {
               onClick={_ => this.reset()}
               style={{ textTransform: "none" }}
             >
-              Reset
+              Reset Detected Keys
             </Button>
           </p>
 
