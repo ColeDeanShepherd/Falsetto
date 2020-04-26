@@ -17,12 +17,13 @@ import { Margin } from '../../../lib/Core/Margin';
 import { ScaleType, Scale } from '../../../lib/TheoryLib/Scale';
 import { Chord, ChordType } from "../../../lib/TheoryLib/Chord";
 import { PitchesAudioPlayer } from '../../Utils/PitchesAudioPlayer';
-import { SectionProps, Term, SectionTitle, SubSectionTitle, NoteText, renderIntervalLabel, renderPianoKeyLabel } from './EssentialMusicTheory';
+import { SectionProps, Term, SectionTitle, SubSectionTitle, renderIntervalLabel, renderPianoKeyLabel } from './EssentialMusicTheory';
 
 import { NavLinkView } from "../../../NavLinkView";
 
 import * as ChordProgressionsQuiz from "../../Quizzes/Chords/ChordProgressionsQuiz";
 import * as ChordHarmonicFunctions from "../../Quizzes/Chords/ChordFamilies";
+import { NoteText } from "../../Utils/NoteText";
 
 const FiveChordDiagram: React.FunctionComponent<{}> = props => {
   const width = 600;

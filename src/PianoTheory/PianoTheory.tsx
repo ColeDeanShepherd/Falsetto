@@ -33,6 +33,7 @@ import { serializeMidiInputDeviceSettings } from '../Persistence';
 import { ActionBus, ActionHandler } from "../ActionBus";
 import { IAction } from "../IAction";
 import { WebMidiInitializedAction, MidiDeviceConnectedAction, MidiDeviceDisconnectedAction, MidiInputDeviceChangedAction, MidiInputDevicePitchRangeChangedAction } from "../AppMidi/Actions";
+import { NoteText } from '../Components/Utils/NoteText';
 
 const maxPianoWidth = 1000;
 const maxOneOctavePianoWidth = 400;

@@ -6,10 +6,12 @@
 * Interactive piano exercises/lessons
   * General
     * Document title changes?
+    * Improve navigation when jumping between sections.
   * Notes
     * Press all of a given note on keyboard before continuing.
   * Scales
     * Play buttons for scales
+    * Piano drone player MIDI keyboard support
     * Fingering
     * Multiple mastery steps:
       * Play scale in 2nds, 3rd, etc.

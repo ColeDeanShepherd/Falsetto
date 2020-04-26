@@ -16,9 +16,10 @@ import * as GuitarScales from "../../Quizzes/Scales/GuitarScales";
 import { ScaleType, Scale } from "../../../lib/TheoryLib/Scale";
 import { PianoScaleDronePlayer } from "../../Utils/PianoScaleDronePlayer";
 import { ScaleAudioPlayer } from "../../Utils/ScaleAudioPlayer";
-import { SectionProps, Term, SectionTitle, SubSectionTitle, NoteText, defaultRootPitch, pianoKeyboardStyle } from "./EssentialMusicTheory";
+import { SectionProps, Term, SectionTitle, SubSectionTitle, defaultRootPitch } from "./EssentialMusicTheory";
 import { NavLinkView } from "../../../NavLinkView";
 import { PianoScaleFormulaDiagram } from "../../Utils/PianoScaleFormulaDiagram";
+import { NoteText } from "../../Utils/NoteText";
 
 export const ScalesAndModesSection: React.FunctionComponent<SectionProps> = props => (
   <div>

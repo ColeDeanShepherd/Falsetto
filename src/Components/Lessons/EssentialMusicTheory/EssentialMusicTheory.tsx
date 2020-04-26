@@ -1,8 +1,6 @@
 import * as React from "react";
 import { CardContent, Card } from "@material-ui/core";
 
-import * as Utils from "../../../lib/Core/Utils";
-
 import { playPitchesSequentially } from "../../../Audio/PianoAudio";
 
 import { PianoKeyboard, renderPianoKeyboardNoteNames, PianoKeyboardMetrics } from "../../Utils/PianoKeyboard";
@@ -23,8 +21,6 @@ export const defaultRootPitch = new Pitch(PitchLetter.C, 0, 4);
 export const MainTitle: React.FunctionComponent<{}> = props => <h1>{props.children}</h1>;
 export const SectionTitle: React.FunctionComponent<{}> = props => <h2>{props.children}</h2>;
 export const SubSectionTitle: React.FunctionComponent<{}> = props => <h3>{props.children}</h3>;
-
-export const NoteText: React.FunctionComponent<{}> = props => <p style={{ color: "#004085", backgroundColor: "#cce5ff", padding: "1em", border: "1px solid #b8daff", borderRadius: "4px" }}>NOTE: {props.children}</p>;
 
 export const OctavesPlayer: React.FunctionComponent<{}> = props => {
   return (
