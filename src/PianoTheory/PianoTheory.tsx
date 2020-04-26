@@ -327,12 +327,12 @@ export class SetupSlideView extends React.Component<{}, {}> {
 // TODO: slide links
 // TODO: use symbols
 const slideGroups = [
-  new SlideGroup("Introduction", [
+  new SlideGroup("Introduction & Setup", [
     new Slide("introduction", () => (
       <div>
         <div>
           <h1>Piano Theory Course by Falsetto</h1>
-          <h2>Section 1: Introduction</h2>
+          <h2>Section 1: Introduction &amp; Setup</h2>
           <p>Welcome to Falsetto's "Piano Theory" course!</p>
           <p>This is an interactive course designed to teach you the essentials of piano and music theory in a hands-on manner.</p>
           <p>This course is designed to be viewed on tablets and computer monitors, not on mobile phones.</p>
@@ -352,6 +352,7 @@ const slideGroups = [
       </div>
     ))
   ]),
+  
   new SlideGroup("Notes", [
     new Slide("note-c", (pianoTheory) => (
       <div>

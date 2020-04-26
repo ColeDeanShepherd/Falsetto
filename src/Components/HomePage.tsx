@@ -18,7 +18,9 @@ export class HomePage extends React.Component<{}, {}> {
             <div>
               <h2>1. Introduction &amp; Setup</h2>
               <ol>
-                <li><NavLinkView to="/piano-theory?slide=introduction">Introduction &amp; Setup</NavLinkView></li>
+                <li><NavLinkView to="/piano-theory?slide=introduction">Introduction</NavLinkView></li>
+                <li><NavLinkView to="/piano-theory?slide=setup">Setup</NavLinkView></li>
+                <li><NavLinkView to="/piano-theory?slide=piano-basics">Piano Introduction</NavLinkView></li>
               </ol>
             </div>
 
