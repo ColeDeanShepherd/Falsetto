@@ -283,7 +283,7 @@ export class SetupSlideView extends React.Component<{}, {}> {
           <p><MidiInputDeviceSelect /></p>
 
           <p>
-            <strong>Step 2: Press the leftmost and rightmost keys on your MIDI piano keyboard to detect the number of keys it has.</strong>
+            <strong>Step 2: Detect the # of keys your MIDI piano keyboard has.</strong>
             {isStep2Complete ? <GreenCheckmarkView /> : <RedXView />}
           </p>
           <div style={{ width: `${maxPianoWidth}px`, margin: "0 auto" }}><MidiPianoRangeInput /></div>
