@@ -36,6 +36,8 @@ import { WebMidiInitializedAction, MidiDeviceConnectedAction, MidiDeviceDisconne
 import { NoteText } from '../Components/Utils/NoteText';
 import { PianoScaleMajorRelativeFormulaDiagram } from "../Components/Utils/PianoScaleMajorRelativeFormulaDiagram";
 import { NavLinkView } from "../NavLinkView";
+import { ChordViewer } from "../Components/Tools/ChordViewer";
+import { ChordTypeGroup, ChordType } from "../lib/TheoryLib/Chord";
 
 const maxPianoWidth = 1000;
 const maxOneOctavePianoWidth = 400;
@@ -754,6 +756,15 @@ const slideGroups = [
     new Slide("chords-introduction", () => (
       <div>
         <h2>Section 4: Chords</h2>
+        <p><strong>Chords</strong> are sets of two or more notes played simultaneously.</p>
+        <p>For example, here is a <strong>C Major</strong> chord.</p>
+        <ChordViewer
+          title={"C Major Chord"}
+          chordTypeGroups={[new ChordTypeGroup("Basic Triads", ChordType.BasicTriads)]}
+          renderOnCard={false}
+          showChordSelect={false}
+          showChordInfoText={false}
+          showGuitarFretboard={false} />
       </div>
     )),
     new Slide("chords-quiz", () => (

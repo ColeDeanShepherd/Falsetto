@@ -29,7 +29,8 @@ export class HomePage extends React.Component<{}, {}> {
               <ol>
                 <li><NavLinkView to="/piano-theory?slide=note-c">White Keys</NavLinkView></li>
                 <li><NavLinkView to="/piano-theory?slide=note-c-sharp">Black Keys</NavLinkView></li>
-                <li><NavLinkView to="/piano-theory?slide=all-notes">Review &amp; Quiz</NavLinkView></li>
+                <li><NavLinkView to="/piano-theory?slide=all-notes">Review</NavLinkView></li>
+                <li><NavLinkView to="/piano-theory?slide=notes-quiz">Quiz</NavLinkView></li>
               </ol>
             </div>
 
@@ -39,7 +40,8 @@ export class HomePage extends React.Component<{}, {}> {
                 <li><NavLinkView to="/piano-theory?slide=scales-introduction">Introduction</NavLinkView></li>
                 <li><NavLinkView to="/piano-theory?slide=major-scale">Major Scale</NavLinkView></li>
                 <li><NavLinkView to="/piano-theory?slide=natural-minor-scale">Natural Minor Scale</NavLinkView></li>
-                <li><NavLinkView to="/piano-theory?slide=scales-summary">Review &amp; Quiz</NavLinkView></li>
+                <li><NavLinkView to="/piano-theory?slide=scales-summary">Review</NavLinkView></li>
+                <li><NavLinkView to="/piano-theory?slide=scales-quiz">Quiz</NavLinkView></li>
               </ol>
 
               <p><NavLinkView to="/scale-exercises">Self-Paced Scale Mastery</NavLinkView></p>

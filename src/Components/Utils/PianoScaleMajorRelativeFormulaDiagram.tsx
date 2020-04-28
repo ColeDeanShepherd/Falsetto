@@ -42,8 +42,8 @@ export class PianoScaleMajorRelativeFormulaDiagram extends React.Component<IPian
         if (pitchIndex < 0) { return []; }
 
         return [
-          pitch.toString(/*includeOctaveNumber*/ false, useSymbols),
-          scale.type.formula.parts[pitchIndex].toString(useSymbols)
+          scale.type.formula.parts[pitchIndex].toString(useSymbols),
+          pitch.toString(/*includeOctaveNumber*/ false, useSymbols)
         ];
       });
     }
