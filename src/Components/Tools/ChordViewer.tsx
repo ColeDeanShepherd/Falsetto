@@ -166,24 +166,11 @@ export class ChordViewer extends React.Component<IChordViewerProps, IChordViewer
     
     const renderChordInfoText = () => {
       return (
-        <div>
-          <div style={{fontSize: "1.5em"}}>
-            <p>{this.state.chord.rootPitch.toString(false)} {this.state.chord.type.name}</p>
-            {renderPitchesText()}
-            {renderScaleDegreesText()}
-            {renderIntervalsText()}
-          </div>
-
-          <div>
-            <p>
-              <Button
-                onClick={event => this.onListenClick()}
-                variant="contained"
-              >
-                Listen
-              </Button>
-            </p>
-          </div>
+        <div style={{fontSize: "1.5em"}}>
+          <p>{this.state.chord.rootPitch.toString(false)} {this.state.chord.type.name}</p>
+          {renderPitchesText()}
+          {renderScaleDegreesText()}
+          {renderIntervalsText()}
         </div>
       );
     };
@@ -242,6 +229,18 @@ export class ChordViewer extends React.Component<IChordViewerProps, IChordViewer
         <div style={{textAlign: "center"}}>
           {showChordSelect ? renderChordSelect() : null}
           {showChordInfoText ? renderChordInfoText() : null}
+          
+          <div>
+            <p>
+              <Button
+                onClick={event => this.onListenClick()}
+                variant="contained"
+              >
+                Listen
+              </Button>
+            </p>
+          </div>
+
           {showPianoKeyboard ? renderPianoKeyboard() : null}
           {showGuitarFretboard ? renderGuitarFretboard() : null }
         </div>
