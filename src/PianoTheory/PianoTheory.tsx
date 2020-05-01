@@ -757,7 +757,7 @@ const slideGroups = [
       <div>
         <h2>Section 4: Chords</h2>
         <p><strong>Chords</strong> are sets of two or more notes played simultaneously.</p>
-        <p>For example, here is a <strong>C Major</strong> chord.</p>
+        <p>For example, here is a <strong>C Major</strong> chord, which consists of the notes <strong>C, E, G</strong>.</p>
         <ChordViewer
           title={"C Major Chord"}
           chordTypeGroups={[new ChordTypeGroup("Basic Triads", ChordType.BasicTriads)]}
@@ -765,6 +765,60 @@ const slideGroups = [
           showChordSelect={false}
           showChordInfoText={false}
           showGuitarFretboard={false} />
+      </div>
+    )),
+    new Slide("needs-name-1", () => (
+      <div>
+        <p>There are many possible chords, but generally musicians will restrict themselves (mostly) to the chords derived from the notes of a specific scale.</p>
+        <p>Notes that are part of a particular scale are called "diatonic", and the other notes are called "chromatic".</p>
+        <p>The same terminology can extend to chords as well. Chords consisting only of notes in a scale are "diatonic", other chords are "chromatic".</p>
+        <p>For example, let's take the C Major scale, which consists of the notes: C, D, E, F, G, A, B</p>
+        <p>Within this scale, any combination of two or more notes is a unique chord.</p>
+        <p>That is still a lot of chords. Musicians generally limit themselves even further than that.</p>
+        <p>The most common chords are built in thirds and consist of 3 to 5 notes.</p>
+        <p>Built in thirds means each note in the chord is a third above the previous note in the chords.</p>
+        <p>A note being a third above another note means the two notes span 3 scale notes (there's one excluded scale note in the middle).</p>
+      </div>
+    )),
+    new Slide("needs-name-2", () => (
+      <div>
+        <p>The C Major chord we saw, which consists of the notes C, E, G, is built in this way - it has 3 notes, and each note is a third apart from the previous note.</p>
+        <p>Note that, in practice, you can play the notes of a chord in any order, and repeat notes if you'd like.</p>
+        <p>If we take a look at all the 3-note chords (also called "triads") built in the C Major scale, we get 7 chords.</p>
+        <ul>
+          <li>C E G - called C Major</li>
+          <li>D F A - called D Minor</li>
+          <li>E G B - called E Minor</li>
+          <li>F A C - called F Major</li>
+          <li>G B D - called G Major</li>
+          <li>A C E - called A Minor</li>
+          <li>B D F - called B Diminished</li>
+        </ul>
+        <p>"Major" in triad names means the 2nd note in the chord (called the 3rd because it's a 3rd away from the root note of the chord) is a major third above the root note.</p>
+        <p>Major 3rds are 4 half steps</p>
+        <p>"Minor" in triad names means the 3rd is a minor third away from the root note.</p>
+        <p>Minor 3rds are 3 half steps</p>
+      </div>
+    )),
+    new Slide("needs-name-3", () => (
+      <div>
+        <p>Again, you are free to play the notes of chords in any order, with any number of repeat notes.</p>
+        <p>Whichever note you choose to play in the bass (the lowest of the notes) determines the "inversion" the chord is in.</p>
+        <p>root position means the root is in the bass</p>
+        <p>1st inversion means the 3rd is in the bass</p>
+        <p>2nd inversion means the 5th is in the bass</p>
+        <p>If a chord has 4 notes it can be in 3rd inversion, where the 7th is in the bass.</p>
+        <p>The pattern continues:</p>
+        <p>4th inversion - 9th in the bass</p>
+        <p>5th inversion - 11th in the bass</p>
+        <p>6th inversion - 13th in the bass</p>
+        <p>Notice we're referring to "9th", "11th", and "13th", yet there are only 7 notes in the C Major scale.</p>
+        <p>9th is equivalent to the 2nd note in the scale</p>
+        <p>11th is equivalent to the 4th note in the scale</p>
+        <p>13th is equivalent to the 6th note in the scale.</p>
+        <p>There is no 15th, you're back to the root note!</p>
+        <p>Note about inversions - only the bass note determines the inversion! The other, higher notes can be in any order!</p>
+        <p>Arpeggios are the notes of the chords played separately.</p>
       </div>
     )),
     new Slide("chords-quiz", () => (
@@ -778,6 +832,35 @@ const slideGroups = [
     new Slide("chord-progressions-introduction", () => (
       <div>
         <h2>Section 5: Chord Progressions</h2>
+      </div>
+    )),
+    new Slide("needs-name-4", () => (
+      <div>
+        <p>Chord progressions are sequences of chords.</p>
+        <p>We often label diatonic chords with roman numerals.</p>
+        <p>Chords built on the 1st scale degree are "I" chords.</p>
+        <p>Chords built on the 2nd scale degree are "II" chords.</p>
+        <p>And so on, until the 7th scale degree.</p>
+        <p>In C Major, the I chord is C E G (C Major), the II chord is D F A (D Minor), the III chord is E G B (E Minor), and so on.</p>
+        <p>With roman numerals, we can write out chord progressions independent of the scale the progression is in.</p>
+      </div>
+    )),
+    new Slide("needs-name-5", () => (
+      <div>
+        <p>One of the most common chord progressions is V - I.</p>
+        <p>This is one of the strongest progressions, especially if the V is a seventh chord, because of the voices of the chord.</p>
+        <p>The voices of V all lead into I.</p>
+        <p>You can extend the V - I progression by adding the V of V - II - to make II - V - I.</p>
+        <p>You can keep extending this if you like to make: IV - VII - III - VI - II - V - I</p>
+        <p>This is the circle progression, one of the strongest progressions.</p>
+      </div>
+    )),
+    new Slide("needs-name-6", () => (
+      <div>
+        <p>You can use chord substitutions to spice up your progressions - similar chords.</p>
+        <p>Chords are similar if they share notes or make similar resolutions.</p>
+        <p>Also, voice leading is very important. Arrange the notes of your chords in such a way that the movement between the notes of the two chords is small.</p>
+        <p>Experiment with chord progressions!</p>
       </div>
     )),
     new Slide("chord-progressions-quiz", () => (
