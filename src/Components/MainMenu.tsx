@@ -83,8 +83,7 @@ const MenuCategory: React.FunctionComponent<{ title: string, collapseCategories:
 
 export const MainMenu : React.FunctionComponent<{ collapseCategories: boolean }> = props => {
   const essentialTheoryCategory = (
-    <MenuCategory title="Essential Music Theory Course" collapseCategories={props.collapseCategories}>
-      {<NavLinkView to="/piano-theory">{"Essential Music Theory for Piano (WIP)"}</NavLinkView>}
+    <MenuCategory title="(Old) Essential Music Theory Course" collapseCategories={props.collapseCategories}>
       {<NavLinkView to="/essential-music-theory">{"Introduction"}</NavLinkView>}
       {<NavLinkView to="/essential-music-theory/rhythm">{"Rhythm"}</NavLinkView>}
       {<NavLinkView to="/essential-music-theory/notes">{"Notes"}</NavLinkView>}
