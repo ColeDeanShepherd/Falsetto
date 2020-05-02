@@ -691,9 +691,9 @@ const slideGroups = [
         <p>
           <strong>"R"</strong> means the <strong>root note</strong> (<strong>C</strong> in the case of the <strong>C Major</strong> scale)
           <br />
-          <strong>"W"</strong> means the next note is a <strong>whole step</strong> (2 keys) to the right of the previous note
+          <strong>"W"</strong> means the next note is a <strong>whole step</strong> (2 keys) higher than the previous note.
           <br />
-          <strong>"H"</strong> means the next note is a <strong>half step</strong> (1 key) to the right of the previous note.
+          <strong>"H"</strong> means the next note is a <strong>half step</strong> (1 key) higher than of the previous note.
         </p>
         <p>Below is an interactive diagram of the C Major scale and the major scale formula.</p>
         <p><PianoScaleFormulaDiagram scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))} octaveCount={2} maxWidth={maxTwoOctavePianoWidth} /></p>

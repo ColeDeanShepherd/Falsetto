@@ -32,6 +32,7 @@ export class ChordScaleFormula {
       .join(" ");
   }
 }
+
 export class ChordScaleFormulaPart {
   public static parse(formulaPartString: string): ChordScaleFormulaPart {
     precondition(formulaPartString.length > 0);

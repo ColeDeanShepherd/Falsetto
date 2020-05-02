@@ -7,6 +7,8 @@ import { mod } from '../Core/MathUtils';
 import { precondition } from '../Core/Dbc';
 import { isNullOrWhiteSpace } from '../Core/StringUtils';
 import { flattenArrays, areArraysEqual } from '../Core/ArrayUtils';
+import { getValidKeyPitches } from "./Key";
+import { areSetsEqual } from '../Core/SetUtils';
 
 // TODO: remove helpers?
 export function getIntervalsFromFormula(formula: ChordScaleFormula): Array<Interval> {
@@ -227,7 +229,7 @@ export class ScaleType {
     return Utils.unwrapValueOrUndefined(mode);
   }
 
-  public getDiatonicChordType(scaleDegree: number, numChordPitches: number): ChordType {
+  public getDiatonicChordPitchIntegers(scaleDegree: number, numChordPitches: number): Array<number> {
     precondition(scaleDegree >= 1);
     precondition(scaleDegree <= this.numPitches);
     precondition(numChordPitches >= 1);
@@ -235,6 +237,7 @@ export class ScaleType {
 
     const halfStepsToSubtract = this.pitchIntegers[scaleDegree - 1];
     const chordPitchIntegers = new Array<number>(numChordPitches);
+
     for (let chordI = 0; chordI < chordPitchIntegers.length; chordI++) {
       const unwrappedScaleI = (scaleDegree - 1) + (2 * chordI);
       const baseScaleI = unwrappedScaleI % this.numPitches;
@@ -242,7 +245,13 @@ export class ScaleType {
       chordPitchIntegers[chordI] = mod(this.pitchIntegers[baseScaleI] - halfStepsToSubtract, 12);
     }
 
-    const chordType = ChordType.All.find(chordType => areArraysEqual(chordPitchIntegers, chordType.pitchIntegers));
+    return chordPitchIntegers;
+  }
+
+  public getDiatonicChordType(scaleDegree: number, numChordPitches: number): ChordType {
+    const chordPitchIntegers = new Set<number>(this.getDiatonicChordPitchIntegers(scaleDegree, numChordPitches));
+    const chordType = ChordType.All.find(chordType =>
+      areSetsEqual(chordPitchIntegers, new Set<number>(chordType.pitchIntegers)));
     return Utils.unwrapValueOrUndefined(chordType);
   }
 
@@ -321,6 +330,20 @@ export const scaleTypeLevels = [
 ];
 
 export class Scale {
+  public static forAll(callback: (scale: Scale, i: number) => void) {
+    const rootPitches = getValidKeyPitches(/*preferredOctaveNumber*/ 0);
+    let i = 0;
+
+    for (const scaleType of ScaleType.All) {
+      for (const rootPitch of rootPitches) {
+        const scale = new Scale(scaleType, rootPitch);
+
+        callback(scale, i); 
+        i++;
+      }
+    }
+  }
+
   public static parseId(id: string): Scale | undefined {
     const splitId = (id as string).split("-");
     if (splitId.length !== 2) { return undefined; }

@@ -1,6 +1,7 @@
 # To-Do
 ## High Priority
 * Re-enable main menu
+* Improve chord finder (E G B D F is Emin7b9)
 * Debug & fix scale viewer
 * Get rid of material UI
 * Fix piano aspect ratios.
@@ -69,6 +70,6 @@
 ## Medium Priority
 * 
 ## Low Priority
-* 
+* Get rid of flash card set container height.
 ## Refactoring
 * ScaleViewer render()
