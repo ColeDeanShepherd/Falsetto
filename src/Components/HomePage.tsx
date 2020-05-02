@@ -47,34 +47,53 @@ export class HomePage extends React.Component<{}, {}> {
               <p><NavLinkView to="/scale-exercises">Self-Paced Scale Mastery</NavLinkView></p>
             </div>
 
-            <div>
-              <h2>4. Chords</h2>
-              <ol>
-                <li>Introduction</li>
-                <li>C Major Chord</li>
-                <li>Diatonic Chords &amp; Roman Numeral Notation</li>
-                <li>Chord Inversions</li>
-                <li>Seventh Chords</li>
-                <li>Extended Chords &amp; Chord/Scale Relationships</li>
-                <li>Arpeggios</li>
-                <li>Quiz</li>
-              </ol>
+            {false
+              ? (
+                <div>
+                  <div>
+                    <h2>4. Chords</h2>
+                    <ol>
+                      <li>Introduction</li>
+                      <li>C Major Chord</li>
+                      <li>Diatonic Chords &amp; Roman Numeral Notation</li>
+                      <li>Chord Inversions</li>
+                      <li>Seventh Chords</li>
+                      <li>Extended Chords &amp; Chord/Scale Relationships</li>
+                      <li>Arpeggios</li>
+                      <li>Quiz</li>
+                    </ol>
 
-              <p>Self-Paced Scale Mastery</p>
-            </div>
+                    <p>Self-Paced Chord Mastery</p>
+                  </div>
 
-            <div>
-              <h2>5. Chord Progressions</h2>
-              <ol>
-                <li>Introduction</li>
-                <li>V - I Progression</li>
-                <li>Chord Substitution</li>
-                <li>Voice Leading</li>
-                <li>Quiz</li>
-              </ol>
-            </div>
+                  <div>
+                    <h2>5. Chord Progressions</h2>
+                    <ol>
+                      <li>Introduction</li>
+                      <li>V - I Progression</li>
+                      <li>Chord Substitution</li>
+                      <li>Voice Leading</li>
+                      <li>Quiz</li>
+                    </ol>
+                  </div>
+                </div>
+              )
+              : (
+                <div>
+                  <div>
+                    <h2>4. Chords</h2>
+                    <p>Coming soon!</p>
+                  </div>
+
+                  <div>
+                    <h2>5. Chord Progressions</h2>
+                    <p>Coming soon!</p>
+                  </div>
+                </div>
+              )}
           </div>
-
+          
+          <h2>Other Lessons, Tools, &amp; Exercises</h2>
           <MainMenu collapseCategories={true} />
         </CardContent>
       </Card>
