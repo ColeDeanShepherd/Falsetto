@@ -13,7 +13,9 @@ import { ChordViewer } from "../../Tools/ChordViewer";
 import { DiatonicChordPlayer } from '../../Tools/DiatonicChordPlayer';
 import { ChordAudioPlayer } from "../../Utils/ChordAudioPlayer";
 import { SectionProps, Term, SectionTitle, SubSectionTitle, defaultRootPitch } from './EssentialMusicTheory';
-import { Chord, ChordType, ChordTypeGroup } from '../../../lib/TheoryLib/Chord';
+import { Chord } from '../../../lib/TheoryLib/Chord';
+import { ChordTypeGroup } from "../../../lib/TheoryLib/ChordTypeGroup";
+import { ChordType } from "../../../lib/TheoryLib/ChordType";
 import { NavLinkView } from '../../../NavLinkView';
 import { NoteText } from "../../Utils/NoteText";
 

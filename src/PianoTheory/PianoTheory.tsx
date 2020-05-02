@@ -37,7 +37,8 @@ import { NoteText } from '../Components/Utils/NoteText';
 import { PianoScaleMajorRelativeFormulaDiagram } from "../Components/Utils/PianoScaleMajorRelativeFormulaDiagram";
 import { NavLinkView } from "../NavLinkView";
 import { ChordViewer } from "../Components/Tools/ChordViewer";
-import { ChordTypeGroup, ChordType } from "../lib/TheoryLib/Chord";
+import { ChordTypeGroup } from "../lib/TheoryLib/ChordTypeGroup";
+import { ChordType } from "../lib/TheoryLib/ChordType";
 
 const maxPianoWidth = 1000;
 const maxOneOctavePianoWidth = 400;

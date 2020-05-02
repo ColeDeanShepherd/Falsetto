@@ -15,7 +15,8 @@ import { Vector2D } from '../../../lib/Core/Vector2D';
 import { Size2D } from '../../../lib/Core/Size2D';
 import { Margin } from '../../../lib/Core/Margin';
 import { ScaleType, Scale } from '../../../lib/TheoryLib/Scale';
-import { Chord, ChordType } from "../../../lib/TheoryLib/Chord";
+import { Chord } from "../../../lib/TheoryLib/Chord";
+import { ChordType } from "../../../lib/TheoryLib/ChordType";
 import { PitchesAudioPlayer } from '../../Utils/PitchesAudioPlayer';
 import { SectionProps, Term, SectionTitle, SubSectionTitle, renderIntervalLabel, renderPianoKeyLabel } from './EssentialMusicTheory';
 

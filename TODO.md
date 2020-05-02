@@ -1,6 +1,7 @@
 # To-Do
 ## High Priority
 * Re-enable main menu
+* Improve chord types (support arbitrary pitch integers)
 * Improve chord finder (E G B D F is Emin7b9)
 * Debug & fix scale viewer
 * Get rid of material UI

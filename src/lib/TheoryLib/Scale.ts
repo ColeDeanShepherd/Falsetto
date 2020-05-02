@@ -1,6 +1,7 @@
 import * as Utils from "../Core/Utils";
 import { Pitch } from './Pitch';
-import { ChordType, Chord } from './Chord';
+import { Chord } from './Chord';
+import { ChordType } from "./ChordType";
 import { Interval } from './Interval';
 import { ChordScaleFormula } from './ChordScaleFormula';
 import { mod } from '../Core/MathUtils';

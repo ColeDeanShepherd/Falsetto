@@ -3,7 +3,7 @@ import { Button, Typography } from "@material-ui/core";
 
 import { AnswerDifficulty } from "../../Study/AnswerDifficulty";
 import { ambiguousKeyPitchStringsSymbols } from "../../lib/TheoryLib/Pitch";
-import { ChordType } from "../../lib/TheoryLib/Chord";
+import { ChordType } from "../../lib/TheoryLib/ChordType";
 import { arrayContains } from '../../lib/Core/ArrayUtils';
 
 export interface IPianoChordsButtonAnswerSelectProps {
