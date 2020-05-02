@@ -1,5 +1,6 @@
 # To-Do
 ## High Priority
+* Re-enable main menu
 * Debug & fix scale viewer
 * Get rid of material UI
 * Fix piano aspect ratios.

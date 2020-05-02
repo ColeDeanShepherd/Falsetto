@@ -24,7 +24,7 @@ import { IntervalChordScaleFinder } from "../Components/Tools/IntervalChordScale
 import { Tuner } from "../Components/Tools/Tuner";
 import { RhythmTapper } from "../Components/Tools/RhythmTapper";
 import { AboutPage } from "../Components/AboutPage";
-import { SupportUsPage } from "../Components/SupportUs";
+import { ContributePage } from "../Components/ContributePage";
 import { HomePage } from "../Components/HomePage";
 import { Glossary } from "../Glossary";
 import { ProfilePage } from "../Components/ProfilePage";
@@ -123,10 +123,10 @@ export class RoutesView extends React.Component<IRoutesViewProps, IRoutesViewSta
             </LimitedWidthContentContainer>
           </DocumentTitle>
         )} />,
-        <Route key="/support-us" exact path="/support-us" component={() => (
-          <DocumentTitle title="Support Us - Falsetto">
+        <Route key="/contribute" exact path="/contribute" component={() => (
+          <DocumentTitle title="Contribute - Falsetto">
             <LimitedWidthContentContainer>
-              <SupportUsPage />
+              <ContributePage />
             </LimitedWidthContentContainer>
           </DocumentTitle>
         )} />,

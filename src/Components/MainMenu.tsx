@@ -181,10 +181,9 @@ export const MainMenu : React.FunctionComponent<{ collapseCategories: boolean }>
   const otherCategory = (
     <MenuCategory title="Other" collapseCategories={props.collapseCategories}>
       <NavLinkView to={"/glossary"}>Glossary</NavLinkView>
-      <NavLinkView to="/support-us" style={{ fontWeight: "normal" }}>
-        Support Us
+      <NavLinkView to="/contribute" style={{ fontWeight: "normal" }}>
+        Contribute
       </NavLinkView>
-      <a href="https://github.com/ColeDeanShepherd/Falsetto-Client" target="_blank">Source Code</a>
     </MenuCategory>
   );
 
