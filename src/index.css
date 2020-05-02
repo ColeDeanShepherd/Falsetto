@@ -3,6 +3,7 @@ body {
   padding: 0;
   background-color: #EEEEEE;
   font-family: 'Roboto', sans-serif;
+  line-height: 1.4;
 }
 
 .cursor-pointer {
@@ -18,7 +19,7 @@ hr {
 
 a,
 a:visited {
-  color: #0645ad;
+  color: #0366d6;
   text-decoration: none;
 }
 a:hover {
