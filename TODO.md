@@ -4,6 +4,9 @@
 * Debug & fix scale viewer
 * Get rid of material UI
 * Fix piano aspect ratios.
+  * EMT Notes section, intervals
+  * Chord Viewer
+  * Chord Progressions
 * Interactive piano exercises/lessons
   * General
     * Document title changes?
@@ -11,6 +14,7 @@
   * Notes
     * Press all of a given note on keyboard before continuing.
   * Scales
+    * Quiz
     * Play buttons for scales
     * Piano drone player MIDI keyboard support
     * Fingering
