@@ -49,6 +49,11 @@ export function createFlashCards(): FlashCard[] {
       "How many keys does a whole step span?",
       "two"
     ),
+    FlashCard.fromRenderFns(
+      JSON.stringify({ set: flashCardSetId, id: "scaleUnordered" }),
+      "Do scale notes need to be played in the same order as they are defined in scale formulas?",
+      "no"
+    ),
   ];
 }
 

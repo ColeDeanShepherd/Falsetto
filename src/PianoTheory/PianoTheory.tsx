@@ -12,33 +12,39 @@ import { Vector2D } from "../lib/Core/Vector2D";
 import { Pitch } from "../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../lib/TheoryLib/PitchLetter";
 import { ScaleType, Scale } from "../lib/TheoryLib/Scale";
+import { ChordTypeGroup } from "../lib/TheoryLib/ChordTypeGroup";
+import { ChordType } from "../lib/TheoryLib/ChordType";
 
 import { DependencyInjector } from "../DependencyInjector";
+
+import { serializeMidiInputDeviceSettings } from '../Persistence';
+import { ActionBus, ActionHandler } from "../ActionBus";
+import { IAction } from "../IAction";
+
+import { WebMidiInitializedAction, MidiDeviceConnectedAction, MidiDeviceDisconnectedAction,
+  MidiInputDeviceChangedAction, MidiInputDevicePitchRangeChangedAction } from "../AppMidi/Actions";
+  import { AppModel } from "../App/Model";
 
 import { createStudyFlashCardSetComponent } from "../StudyFlashCards/View";
 
 import { PianoKeyboard, renderPianoKeyboardNoteNames } from "../Components/Utils/PianoKeyboard";
+
 import * as IntroQuiz from "./IntroQuiz";
 import * as PianoNotes from "../Components/Quizzes/Notes/PianoNotes";
+import * as ScalesQuiz from "./ScalesQuiz";
+
 import { naturalPitches, accidentalPitches, allPitches } from "../Components/Quizzes/Notes/PianoNotes";
 import { PianoScaleFormulaDiagram } from "../Components/Utils/PianoScaleFormulaDiagram";
 import { PianoScaleDronePlayer, onKeyPress } from '../Components/Utils/PianoScaleDronePlayer';
 import { MidiInputDeviceSelect } from "../Components/Utils/MidiInputDeviceSelect";
 import { fullPianoLowestPitch, fullPianoHighestPitch, fullPianoAspectRatio, getPianoKeyboardAspectRatio } from '../Components/Utils/PianoUtils';
 import { MidiNoteEventListener } from "../Components/Utils/MidiNoteEventListener";
-import { AppModel } from "../App/Model";
 import { MidiPianoRangeInput } from "../Components/Utils/MidiPianoRangeInput";
 import { LimitedWidthContentContainer } from "../Components/Utils/LimitedWidthContentContainer";
-import { serializeMidiInputDeviceSettings } from '../Persistence';
-import { ActionBus, ActionHandler } from "../ActionBus";
-import { IAction } from "../IAction";
-import { WebMidiInitializedAction, MidiDeviceConnectedAction, MidiDeviceDisconnectedAction, MidiInputDeviceChangedAction, MidiInputDevicePitchRangeChangedAction } from "../AppMidi/Actions";
 import { NoteText } from '../Components/Utils/NoteText';
 import { PianoScaleMajorRelativeFormulaDiagram } from "../Components/Utils/PianoScaleMajorRelativeFormulaDiagram";
 import { NavLinkView } from "../NavLinkView";
 import { ChordViewer } from "../Components/Tools/ChordViewer";
-import { ChordTypeGroup } from "../lib/TheoryLib/ChordTypeGroup";
-import { ChordType } from "../lib/TheoryLib/ChordType";
 
 const maxPianoWidth = 1000;
 const maxOneOctavePianoWidth = 400;
@@ -747,9 +753,18 @@ const slideGroups = [
       </div>
     )),
     new Slide("scales-quiz", () => (
-      <div>
-        <p>QUIZ</p>
-      </div>
+      <LimitedWidthContentContainer>
+        <div style={{ marginTop: "1em" }}>
+          {createStudyFlashCardSetComponent(
+            ScalesQuiz.flashCardSet,
+            /*isEmbedded*/ false,
+            /*hideMoreInfoUri*/ true,
+            /*title*/ undefined,
+            /*style*/ undefined,
+            /*enableSettings*/ undefined,
+            /*showRelatedExercises*/ false)}
+        </div>
+      </LimitedWidthContentContainer>
     )),
   ]),
 
