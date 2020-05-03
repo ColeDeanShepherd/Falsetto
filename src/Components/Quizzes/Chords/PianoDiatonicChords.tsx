@@ -58,7 +58,7 @@ export function createFlashCards(flashCardSetId: string, scale: Scale, numChordP
       const chordPitches = getPitchClasses(canonicalChord)
         .map(pitchClass => Pitch.createFromPitchClass(
           pitchClass,
-          /*octaveNumber*/ 0,
+          /*octaveNumber*/ 4,
           /*useSharps*/ true
         ));
 
