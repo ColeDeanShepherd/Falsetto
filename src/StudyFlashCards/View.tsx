@@ -220,24 +220,24 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
             ? (
               <p style={{marginBottom: "0", marginTop: "0", lineHeight: "1.5"}}>
                 <span style={{paddingRight: "1em"}}>{studyAlgorithm.flashCardSetStats.numCorrectGuesses} / {studyAlgorithm.flashCardSetStats.numIncorrectGuesses} correct ({(100 * percentCorrect).toFixed(2)}%)</span>
-                <span key={currentFlashCardKey}>
+                <span key={`ca.${model.correctAnswerIconKeySuffix}`}>
                   <i
                     className="material-icons fade-out"
                     style={{
                       color: "green",
                       verticalAlign: "bottom",
-                      display: (model.wasCorrect && !model.haveGottenCurrentFlashCardWrong) ? "inline-block" : "none"
+                      display: model.startShowingCorrectAnswerIcon ? "inline-block" : "none"
                     }}>
                     check_circle
                   </i>
                 </span>
-                <span key={model.incorrectAnswers.length}>
+                <span key={`ia.${model.incorrectAnswerIconKeySuffix}`}>
                   <i
                     className="material-icons fade-out"
                     style={{
                       color: "red",
                       verticalAlign: "bottom",
-                      display: model.haveGottenCurrentFlashCardWrong ? "inline-block" : "none"
+                      display: model.startShowingIncorrectAnswerIcon ? "inline-block" : "none"
                     }}>
                     cancel
                   </i>
@@ -395,10 +395,10 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
     return (
       <div>
         {(model.flashCardLevels.length > 0) ? (
-            <div>
-              <span style={{ paddingRight: "1em" }}>Levels:</span>
-              {levelButtons}
-            </div>
+          <div>
+            <span style={{ paddingRight: "1em" }}>Levels:</span>
+            {levelButtons}
+          </div>
         ) : null}
         {model.flashCardSet.renderFlashCardMultiSelect
           ? model.flashCardSet.renderFlashCardMultiSelect(

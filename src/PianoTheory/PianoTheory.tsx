@@ -906,7 +906,7 @@ function getSlideGroup(slideIndex: number): [SlideGroup, number] | undefined {
 
 // TODO: optimize
 let slides = flattenArrays<Slide>(slideGroups.map(sg => sg.slides))
-//  .slice(0, 43)
+  .slice(0, 30)
   .concat([new Slide("coming-soon", () => <h3>More coming soon!</h3>)]);
 
 // #endregion Slides
