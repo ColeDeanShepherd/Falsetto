@@ -320,7 +320,7 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
                 Show {model.isShowingBackSide ? "Question" : "Answer"}
               </Button>
               <Button
-                onClick={event => this.moveToNextFlashCard(null, false)}
+                onClick={event => this.moveToNextFlashCard(null)}
                 variant="contained"
               >
                 {!flashCardSet.renderAnswerSelect ? "Next" : "Skip"}
@@ -424,7 +424,7 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
     this.model.flipFlashCard();
   }
 
-  private moveToNextFlashCard(lastCorrectAnswer: any, wasCorrect: boolean) {
+  private moveToNextFlashCard(lastCorrectAnswer: any) {
     this.model.skipFlashCard();
   }
 

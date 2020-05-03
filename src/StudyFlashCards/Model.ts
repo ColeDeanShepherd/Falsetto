@@ -90,7 +90,6 @@ export class StudyFlashCardsModel {
   public sessionFlashCardNumber: number;
   public haveGottenCurrentFlashCardWrong: boolean;
   public lastCorrectAnswer: any;
-  public wasCorrect: boolean;
   public incorrectAnswers: Array<any>;
   public showConfiguration: boolean;
   public showDetailedStats: boolean;
@@ -113,7 +112,6 @@ export class StudyFlashCardsModel {
     this.isShowingBackSide = false;
     this.haveGottenCurrentFlashCardWrong = false;
     this.lastCorrectAnswer = null;
-    this.wasCorrect = false;
     this.incorrectAnswers = [];
     this.incorrectAnswersToCurrentFlashCard = [];
     this.isShowingBackSide = false;
@@ -190,7 +188,7 @@ export class StudyFlashCardsModel {
     this.handleFlipFlashCardAction();
   }
   public skipFlashCard() {
-    this.handleSkipFlashCardAction(this.lastCorrectAnswer, this.wasCorrect);
+    this.handleSkipFlashCardAction(this.lastCorrectAnswer);
   }
   public changeLevel(levelIndex: number) {
     this.handleChangeLevelAction(levelIndex);
@@ -310,13 +308,7 @@ export class StudyFlashCardsModel {
       const isCurrentAnswerCorrect = isAnswerDifficultyCorrect(answerDifficulty);
   
       if (currentFlashCard.doesUserDetermineCorrectness || isCurrentAnswerCorrect) {
-        const wasCorrect = currentFlashCard.doesUserDetermineCorrectness
-          // If the user determines their correctness, we only look at the current (and only) answer to determine whether they were correct or not.
-          ? isCurrentAnswerCorrect
-          // If the user doesn't determine their correctness, they are only correct if they haven't already answered incorrectly.
-          : !this.haveGottenCurrentFlashCardWrong;
-  
-        this.moveToNextFlashCardInternal(answer, wasCorrect);
+        this.moveToNextFlashCardInternal(answer);
       }
       // Otherwise, register the incorrect answer and don't move to the next flash card.
       else {
@@ -344,7 +336,7 @@ export class StudyFlashCardsModel {
 
     this.publishUpdate();
   }
-  private handleSkipFlashCardAction(lastCorrectAnswer: any, wasCorrect: boolean) {
+  private handleSkipFlashCardAction(lastCorrectAnswer: any) {
     this.currentFlashCardId = this.studyAlgorithm.getNextFlashCardId(
       this.getStudySessionInfo(new Size2D(0, 0))
     );
@@ -353,7 +345,6 @@ export class StudyFlashCardsModel {
     this.isShowingBackSide = false;
     this.lastCorrectAnswer = lastCorrectAnswer;
     this.incorrectAnswers = [];
-    this.wasCorrect = wasCorrect
 
     this.publishUpdate();
   }
@@ -380,7 +371,7 @@ export class StudyFlashCardsModel {
     this.configData = configData;
 
     if (!arrayContains(enabledFlashCardIds, this.currentFlashCardId)) {
-      this.moveToNextFlashCardInternal(null, false);
+      this.moveToNextFlashCardInternal(null);
     }
 
     this.publishUpdate();
@@ -389,8 +380,8 @@ export class StudyFlashCardsModel {
   // #endregion Action Handlers
 
   
-  private moveToNextFlashCardInternal(lastCorrectAnswer: any, wasCorrect: boolean) {
-    this.handleSkipFlashCardAction(lastCorrectAnswer, wasCorrect);
+  private moveToNextFlashCardInternal(lastCorrectAnswer: any) {
+    this.handleSkipFlashCardAction(lastCorrectAnswer);
   }
 
   public getCurrentLevelIndex(): number | undefined {
@@ -430,7 +421,7 @@ export class StudyFlashCardsModel {
     const onUserAnswer = (answerDifficulty: AnswerDifficulty, answer: any) =>
       this.handleUserAnswerAction(this.currentFlashCardId, answer, answerDifficulty);
     const skipFlashCard = () =>
-      this.handleSkipFlashCardAction(this.lastCorrectAnswer, this.wasCorrect);
+      this.handleSkipFlashCardAction(this.lastCorrectAnswer);
 
     return new FlashCardStudySessionInfo(
       containerSize, this.flashCardSet, this.flashCards,
