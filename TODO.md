@@ -1,6 +1,7 @@
 # To-Do
 ## High Priority
 * Re-enable main menu
+* Fix Confirm then Show Answer showing red X twice
 * Improve chord types (support arbitrary pitch integers)
 * Improve chord finder (E G B D F is Emin7b9)
 * Debug & fix scale viewer

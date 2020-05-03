@@ -184,6 +184,10 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
       const currentFlashCardKey = `${model.sessionFlashCardNumber}.${model.currentFlashCardId}`;
       const moreInfoUri = !this.props.hideMoreInfoUri ? flashCardSet.moreInfoUri : "";
 
+      const renderAnswerSelect = currentFlashCard.renderAnswerSelectFn
+        ? currentFlashCard.renderAnswerSelectFn
+        : flashCardSet.renderAnswerSelect;
+
       cardContents = (
         <div>
           <div style={{display: "flex"}}>
@@ -303,11 +307,9 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
   
           <div style={{textAlign: "center"}}>
             <div style={{ visibility: !model.isShowingBackSide ? "visible" : "hidden" }}>
-              {flashCardSet.renderAnswerSelect ? (
-                flashCardSet.renderAnswerSelect(
-                  model.getStudySessionInfo(containerSize)
-                )
-                ) : null}
+              {renderAnswerSelect
+                ? renderAnswerSelect(model.getStudySessionInfo(containerSize))
+                : null}
             </div>
   
             <div style={{marginTop: "1em"}}>

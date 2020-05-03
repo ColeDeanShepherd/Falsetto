@@ -209,6 +209,12 @@ export function removeIfFoundInArray<T>(
   }
 }
 
+export function immutableArraySetElement<T>(array: T[], i: number, newValue: T): Array<T> {
+  let newArray = array.slice();
+  newArray[i] = newValue;
+  return newArray;
+}
+
 export function immutableAddIfNotInArray<T>(array: T[], element: T): T[] {
   const elementIndex = array.indexOf(element);
   return (elementIndex < 0)

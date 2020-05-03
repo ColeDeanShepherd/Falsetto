@@ -1,4 +1,5 @@
 import { Size2D } from './lib/Core/Size2D';
+import { RenderAnswerSelectFunc } from './FlashCardSet';
 
 export type FlashCardId = string;
 
@@ -6,19 +7,22 @@ export class FlashCard {
   public static fromRenderFns(
     id: FlashCardId,
     frontSideRenderFn: FlashCardSideRenderFn,
-    backSideRenderFn: FlashCardSideRenderFn
+    backSideRenderFn: FlashCardSideRenderFn,
+    renderAnswerSelectFn?: RenderAnswerSelectFunc
   ): FlashCard {
     return new FlashCard(
       id,
       new FlashCardSide(frontSideRenderFn),
-      new FlashCardSide(backSideRenderFn)
+      new FlashCardSide(backSideRenderFn),
+      renderAnswerSelectFn
     );
   }
 
   public constructor(
     public id: FlashCardId,
     public frontSide: FlashCardSide,
-    public backSide: FlashCardSide
+    public backSide: FlashCardSide,
+    public renderAnswerSelectFn?: RenderAnswerSelectFunc
   ) {}
 }
 

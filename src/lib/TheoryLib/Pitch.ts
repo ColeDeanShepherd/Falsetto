@@ -22,6 +22,8 @@ import { numMatchingCharsAtStart } from '../Core/StringUtils';
  */
 export type PitchClass = number;
 
+export type SignedAccidental = number;
+
 export function getPitchRange(minPitch: Pitch, maxPitch: Pitch) {
   const minMidiNumber = minPitch.midiNumber;
   const maxMidiNumber = maxPitch.midiNumber;

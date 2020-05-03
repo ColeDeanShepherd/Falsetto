@@ -1,8 +1,6 @@
-import * as Utils from "../Core/Utils";
 import { Pitch, getAccidentalString } from "./Pitch";
 import { VerticalDirection } from "../Core/VerticalDirection";
 import { Interval } from './Interval';
-import { getSimpleChordNoteNumber } from './Chord';
 import { precondition, invariant } from '../Core/Dbc';
 import { isNullOrWhiteSpace, takeCharsWhile } from '../Core/StringUtils';
 
