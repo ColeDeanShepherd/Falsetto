@@ -155,7 +155,7 @@ function forEachFlashCardSet(callback: (fcs: FlashCardSet) => void) {
 
   Scale.forAll(scale => callback(PianoScaleDegrees.createFlashCardSet(scale)));
   Scale.forAll(scale =>
-    range(3, 7)
+    range(3, scale.type.numPitches)
       .forEach(numChordPitches => callback(PianoDiatonicChords.createFlashCardSet(scale, numChordPitches))));
 }
 

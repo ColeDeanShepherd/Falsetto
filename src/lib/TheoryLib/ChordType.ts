@@ -159,6 +159,7 @@ export class ChordType {
   public static All = flattenArrays<ChordType>(
     ChordType.Groups.map(ct => ct.chordTypes)
   ).concat(ChordType.Quartal4Notes);
+  
   public static AllByNumNotesDescending = ChordType.All
     .slice()
     .sort((a, b) => (a.pitchCount > b.pitchCount) ? -1 : 1);

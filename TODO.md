@@ -72,5 +72,7 @@
 * 
 ## Low Priority
 * Get rid of flash card set container height.
+* Split scale types up into files.
+* Refactor pitch class into multiple (canonical, ambiguous)
 ## Refactoring
 * ScaleViewer render()

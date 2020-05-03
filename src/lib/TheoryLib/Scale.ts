@@ -10,6 +10,7 @@ import { isNullOrWhiteSpace } from '../Core/StringUtils';
 import { flattenArrays, areArraysEqual } from '../Core/ArrayUtils';
 import { getValidKeyPitches } from "./Key";
 import { areSetsEqual } from '../Core/SetUtils';
+import { CanonicalChordType, CanonicalChord } from './CanonicalChord';
 
 // TODO: remove helpers?
 export function getIntervalsFromFormula(formula: ChordScaleFormula): Array<Interval> {
@@ -248,6 +249,10 @@ export class ScaleType {
 
     return chordPitchIntegers;
   }
+  
+  public getDiatonicCanonicalChordType(scaleDegree: number, numChordPitches: number): CanonicalChordType {
+    return new Set<number>(this.getDiatonicChordPitchIntegers(scaleDegree, numChordPitches));
+  }
 
   public getDiatonicChordType(scaleDegree: number, numChordPitches: number): ChordType {
     const chordPitchIntegers = new Set<number>(this.getDiatonicChordPitchIntegers(scaleDegree, numChordPitches));
@@ -376,6 +381,23 @@ export class Scale {
   public getDiatonicChord(scaleDegree: number, numChordPitches: number): Chord {
     const chordType = this.type.getDiatonicChordType(scaleDegree, numChordPitches);
     return new Chord(chordType, this.rootPitch);
+  }
+
+  public getDiatonicCanonicalChords(numChordPitches: number): Array<CanonicalChord> {
+    precondition(numChordPitches >= 1);
+    precondition(numChordPitches <= this.type.numPitches);
+
+    const pitchClasses = this.getPitches()
+      .map(p => p.class);
+
+    return pitchClasses
+      .map((pitchClass, i) => ({
+        type: this.type.getDiatonicCanonicalChordType(
+          /*scaleDegree*/ 1 + i,
+          numChordPitches
+        ),
+        rootPitchClass: pitchClass
+      } as CanonicalChord));
   }
 
   public getDiatonicChords(numChordPitches: number): Array<Chord> {

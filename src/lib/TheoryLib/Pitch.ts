@@ -5,6 +5,23 @@ import { precondition } from '../Core/Dbc';
 import { mod } from '../Core/MathUtils';
 import { numMatchingCharsAtStart } from '../Core/StringUtils';
 
+/**
+ * A "pitch class" represented by a number from 0 to 11, where:
+ * 0 = C
+ * 1 = C#/Db
+ * 2 = D
+ * 3 = D#/Eb
+ * 4 = E
+ * 5 = F
+ * 6 = F#/Gb
+ * 7 = G
+ * 8 = G#/Ab
+ * 9 = A
+ * 10 = A#/Bb
+ * 11 = B
+ */
+export type PitchClass = number;
+
 export function getPitchRange(minPitch: Pitch, maxPitch: Pitch) {
   const minMidiNumber = minPitch.midiNumber;
   const maxMidiNumber = maxPitch.midiNumber;
@@ -155,11 +172,8 @@ export const ambiguousKeyPitchStringsSymbols = [
 ];
 
 export class Pitch {
-  public static createFromMidiNumber(midiNumber: number, useSharps: boolean = true): Pitch {
-    const positivePitchOffsetFromC = mod(midiNumber, 12);
-    const octaveNumber = Math.floor(midiNumber / 12) - 1;
-    
-    switch (positivePitchOffsetFromC) {
+  public static createFromPitchClass(pitchClass: number, octaveNumber: number, useSharps: boolean = true): Pitch {
+    switch (pitchClass) {
       case 0:
         return new Pitch(PitchLetter.C, 0, octaveNumber);
       case 1:
@@ -185,8 +199,14 @@ export class Pitch {
       case 11:
         return new Pitch(PitchLetter.B, 0, octaveNumber);
       default:
-        throw new Error(`Invalid positivePitchOffsetFromC: ${positivePitchOffsetFromC}`);
+        throw new Error(`Invalid pitch class: ${pitchClass}`);
     }
+  }
+
+  public static createFromMidiNumber(midiNumber: number, useSharps: boolean = true): Pitch {
+    const pitchClass = mod(midiNumber, 12);
+    const octaveNumber = Math.floor(midiNumber / 12) - 1;
+    return this.createFromPitchClass(pitchClass, octaveNumber, useSharps);
   }
   
   public static createFromLineOrSpaceOnStaffNumber(lineOrSpaceOnStaffNumber: number, signedAccidental: number): Pitch {
@@ -261,16 +281,23 @@ export class Pitch {
     public octaveNumber: number
   ) {}
 
+  public get class(): PitchClass {
+    return this.midiNumberNoOctave;
+  }
+
   public get midiNumber(): number {
     const pitchLetterMidiNoteNumberOffset = getPitchLetterMidiNoteNumberOffset(this.letter);
     return (12 * (this.octaveNumber + 1)) + pitchLetterMidiNoteNumberOffset + this.signedAccidental;
   }
+
   public get midiNumberNoOctave(): number {
     return mod(this.midiNumber, 12);
   }
+
   public get lineOrSpaceOnStaffNumber(): number {
     return (7 * this.octaveNumber) + mod(this.letter - 2, 7);
   }
+
   public get isNatural(): boolean {
     return this.signedAccidental === 0;
   }
@@ -280,6 +307,7 @@ export class Pitch {
     const positivePitchOffsetFromC = mod(this.midiNumber, 12);
     return arePitchOffsetsFromCWhiteKeys[positivePitchOffsetFromC];
   }
+
   // TODO: add tests
   public get isBlackKey(): boolean {
     return !this.isWhiteKey;
