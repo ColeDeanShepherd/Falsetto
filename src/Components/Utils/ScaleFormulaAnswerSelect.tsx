@@ -32,7 +32,7 @@ export class ScaleFormulaAnswerSelect extends React.Component<IScaleFormulaAnswe
       <div>
         <p>{formulaString}</p>
 
-        <div>
+        <p>
           <Button
             onClick={event => this.onRootNoteClick()}
             variant="contained"
@@ -64,7 +64,9 @@ export class ScaleFormulaAnswerSelect extends React.Component<IScaleFormulaAnswe
           >
             <i className="material-icons">backspace</i>
           </Button>
-          
+        </p>
+
+        <p>
           <Button
             onClick={event => this.confirmAnswer()}
             variant="contained"
@@ -72,7 +74,7 @@ export class ScaleFormulaAnswerSelect extends React.Component<IScaleFormulaAnswe
           >
             Confirm
           </Button>
-        </div>
+        </p>
       </div>
     );
   }

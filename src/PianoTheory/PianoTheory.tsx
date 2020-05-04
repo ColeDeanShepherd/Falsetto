@@ -3,13 +3,9 @@ import * as React from "react";
 import * as QueryString from "query-string";
 import { Button } from "@material-ui/core";
 
-import { flattenArrays, immutableAddIfNotFoundInArray, immutableRemoveIfFoundInArray } from "../lib/Core/ArrayUtils";
-import { clamp } from "../lib/Core/MathUtils";
-import { Rect2D } from "../lib/Core/Rect2D";
-import { Size2D } from "../lib/Core/Size2D";
-import { Vector2D } from "../lib/Core/Vector2D";
+import { flattenArrays } from '../lib/Core/ArrayUtils';
 
-import { Pitch } from "../lib/TheoryLib/Pitch";
+import { Pitch } from '../lib/TheoryLib/Pitch';
 import { PitchLetter } from "../lib/TheoryLib/PitchLetter";
 import { ScaleType, Scale } from "../lib/TheoryLib/Scale";
 import { ChordTypeGroup } from "../lib/TheoryLib/ChordTypeGroup";
@@ -17,7 +13,6 @@ import { ChordType } from "../lib/TheoryLib/ChordType";
 
 import { DependencyInjector } from "../DependencyInjector";
 
-import { serializeMidiInputDeviceSettings } from '../Persistence';
 import { ActionBus, ActionHandler } from "../ActionBus";
 import { IAction } from "../IAction";
 
@@ -27,9 +22,8 @@ import { WebMidiInitializedAction, MidiDeviceConnectedAction, MidiDeviceDisconne
 
 import { createStudyFlashCardSetComponent } from "../StudyFlashCards/View";
 
-import { PianoKeyboard, renderPianoKeyboardNoteNames } from "../Components/Utils/PianoKeyboard";
+import { renderPianoKeyboardNoteNames } from "../Components/Utils/PianoKeyboard";
 
-import * as IntroQuiz from "./IntroQuiz";
 import * as PianoNotes from "../Components/Quizzes/Notes/PianoNotes";
 import * as ScalesQuiz from "./ScalesQuiz";
 
@@ -45,6 +39,7 @@ import { NoteText } from '../Components/Utils/NoteText';
 import { PianoScaleMajorRelativeFormulaDiagram } from "../Components/Utils/PianoScaleMajorRelativeFormulaDiagram";
 import { NavLinkView } from "../NavLinkView";
 import { ChordViewer } from "../Components/Tools/ChordViewer";
+import { PlayablePianoKeyboard } from "../Components/Utils/PlayablePianoKeyboard";
 
 const maxPianoWidth = 1000;
 const maxOneOctavePianoWidth = 400;
@@ -52,65 +47,8 @@ const maxTwoOctavePianoWidth = 500;
 
 // #region Helper Components
 
-export interface IPlayablePianoProps {
-  aspectRatio: number,
-  maxWidth: number,
-  lowestPitch: Pitch,
-  highestPitch: Pitch
-}
-export interface IPlayablePianoState {
-  pressedPitches: Array<Pitch>
-}
-export class PlayablePiano extends React.Component<IPlayablePianoProps, IPlayablePianoState> {
-  public constructor(props: IPlayablePianoProps) {
-    super(props);
-
-    this.state = {
-      pressedPitches: []
-    };
-  }
-  public render(): JSX.Element {
-    const { aspectRatio, maxWidth, lowestPitch, highestPitch } = this.props;
-    const { pressedPitches } = this.state; 
-
-    return (
-      <div>
-        <PianoKeyboard
-          rect={new Rect2D(new Size2D(aspectRatio * 100, 100), new Vector2D(0, 0))}
-          lowestPitch={lowestPitch}
-          highestPitch={highestPitch}
-          pressedPitches={pressedPitches}
-          onKeyPress={p => this.onKeyPress(p)}
-          onKeyRelease={p => this.onKeyRelease(p)}
-          style={{ width: "100%", maxWidth: `${maxWidth}px`, height: "auto" }} />
-        <MidiNoteEventListener
-          onNoteOn={(pitch, velocity) => this.onKeyPress(pitch)}
-          onNoteOff={pitch => this.onKeyRelease(pitch)} />
-      </div>
-    );
-  }
-
-  private onKeyPress(pitch: Pitch) {
-    AppModel.instance.pianoAudio.pressKey(pitch, /*velocity*/ 1);
-
-    if (Pitch.isInRange(pitch, this.props.lowestPitch, this.props.highestPitch)) {
-      this.setState((prevState, props) => {
-        return { pressedPitches: immutableAddIfNotFoundInArray(prevState.pressedPitches, pitch, (p, i) => p.equals(pitch)) };
-      });
-    }
-  }
-
-  private onKeyRelease(pitch: Pitch) {
-    AppModel.instance.pianoAudio.releaseKey(pitch);
-
-    this.setState((prevState, props) => {
-      return { pressedPitches: immutableRemoveIfFoundInArray(prevState.pressedPitches, (p, i) => p.equals(pitch)) };
-    });
-  }
-}
-
 export const FullPiano: React.FunctionComponent<{}> = props => (
-  <PlayablePiano
+  <PlayablePianoKeyboard
     aspectRatio={fullPianoAspectRatio}
     maxWidth={maxPianoWidth}
     lowestPitch={fullPianoLowestPitch}
@@ -118,7 +56,7 @@ export const FullPiano: React.FunctionComponent<{}> = props => (
 );
 
 export const OneOctavePiano: React.FunctionComponent<{}> = props => (
-  <PlayablePiano
+  <PlayablePianoKeyboard
     aspectRatio={getPianoKeyboardAspectRatio(/*octaveCount*/ 1)}
     maxWidth={maxOneOctavePianoWidth}
     lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
@@ -126,7 +64,7 @@ export const OneOctavePiano: React.FunctionComponent<{}> = props => (
 );
 
 export const TwoOctavePiano: React.FunctionComponent<{}> = props => (
-  <PlayablePiano
+  <PlayablePianoKeyboard
     aspectRatio={getPianoKeyboardAspectRatio(/*octaveCount*/ 2)}
     maxWidth={maxTwoOctavePianoWidth}
     lowestPitch={new Pitch(PitchLetter.C, 0, 3)}
@@ -141,19 +79,24 @@ export interface IPianoNoteDiagramProps {
   useSharps?: boolean,
   onKeyPress?: (keyPitch: Pitch) => void
 }
+
 export class PianoNoteDiagram extends React.Component<IPianoNoteDiagramProps, {}> {
   public render(): JSX.Element {
     const { pitch, labelWhiteKeys, labelBlackKeys, showLetterPredicate, useSharps }  = this.props;
+    const aspectRatio = getPianoKeyboardAspectRatio(/*octaveCount*/ 1);
+    const lowestPitch = new Pitch(PitchLetter.C, 0, 4);
+    const highestPitch = new Pitch(PitchLetter.B, 0, 4);
 
     return (
       <div>
-        <PianoKeyboard
-          rect={new Rect2D(new Size2D(getPianoKeyboardAspectRatio(/*octaveCount*/ 1) * 100, 100), new Vector2D(0, 0))}
-          lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-          highestPitch={new Pitch(PitchLetter.B, 0, 4)}
+        <PlayablePianoKeyboard
+          aspectRatio={aspectRatio}
+          maxWidth={maxOneOctavePianoWidth}
+          lowestPitch={lowestPitch}
+          highestPitch={highestPitch}
           onKeyPress={p => this.onKeyPress(p)}
           onKeyRelease={p => this.onKeyRelease(p)}
-          pressedPitches={[pitch]}
+          forcePressedPitches={[pitch]}
           renderExtrasFn={metrics => renderPianoKeyboardNoteNames(
             metrics,
             /*useSharps*/ useSharps,
@@ -161,10 +104,7 @@ export class PianoNoteDiagram extends React.Component<IPianoNoteDiagramProps, {}
               ? showLetterPredicate
               : p => ((labelWhiteKeys && p.isWhiteKey) || (labelBlackKeys && p.isBlackKey)) && (p.midiNumber <= pitch.midiNumber)
           )}
-          style={{ width: "100%", maxWidth: `${maxOneOctavePianoWidth}px`, height: "auto" }} />
-        <MidiNoteEventListener
-          onNoteOn={(pitch, velocity) => this.onKeyPress(pitch)}
-          onNoteOff={pitch => this.onKeyRelease(pitch)} />
+          wrapOctave={true} />
       </div>
     );
   }
@@ -194,21 +134,20 @@ export const PianoNotesDiagram: React.FunctionComponent<{
   const labelWhiteKeys = (props.labelWhiteKeys !== undefined) ? props.labelWhiteKeys : true;
   const labelBlackKeys = (props.labelBlackKeys !== undefined) ? props.labelBlackKeys : true;
   const octaveCount = Math.ceil((props.highestPitch.midiNumber - props.lowestPitch.midiNumber) / 12);
+  const aspectRatio = getPianoKeyboardAspectRatio(octaveCount);
 
   return (
-    <PianoKeyboard
-      rect={new Rect2D(new Size2D(getPianoKeyboardAspectRatio(octaveCount) * 100, 100), new Vector2D(0, 0))}
+    <PlayablePianoKeyboard
+      aspectRatio={aspectRatio}
+      maxWidth={props.maxWidth}
       lowestPitch={props.lowestPitch}
       highestPitch={props.highestPitch}
-      onKeyPress={p => AppModel.instance.pianoAudio.pressKey(p, 1)}
-      onKeyRelease={p => AppModel.instance.pianoAudio.releaseKey(p)}
-      pressedPitches={[]}
       renderExtrasFn={metrics => renderPianoKeyboardNoteNames(
         metrics,
         /*useSharps*/ undefined,
         /*showLetterPredicate*/ p => p.isWhiteKey ? labelWhiteKeys : labelBlackKeys
       )}
-      style={{ width: "100%", maxWidth: `${props.maxWidth}px`, height: "auto" }} />
+      wrapOctave={true} />
   );
 }
 
@@ -688,7 +627,12 @@ const slideGroups = [
         <p><strong>Scales</strong> are sets of notes with a designated "root note" that generally "sounds like home" in the scale.</p>
         <p>Below is an interactive diagram of the <strong>C Major</strong> scale, which has a root note of <strong>C</strong> (indicated by the <strong>C</strong> scale's name) and comprises of the 7 notes: <strong>C, D, E, F, G, A, B</strong>.</p>
         <p>Try pressing the piano keys below to get a feel for how the scale sounds. Pressing keys will play both the pressed note and the lowest root note (C) in the diagram, which helps convey the "feeling" of the scale.</p>
-        <p><PianoScaleDronePlayer scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))} octaveCount={2} maxWidth={maxOneOctavePianoWidth} /></p>
+        <p>
+          <PianoScaleDronePlayer
+            scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))}
+            octaveCount={2}
+            maxWidth={maxOneOctavePianoWidth} />
+        </p>
       </div>
     )),
     new Slide("major-scale", () => (

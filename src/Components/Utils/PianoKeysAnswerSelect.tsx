@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Button } from "@material-ui/core";
 
-import { uniq, immutableRemoveIfFoundInArray, immutableAddIfNotFoundInArray, toggleArrayElement, immutableToggleArrayElementCustomEquals } from '../../lib/Core/ArrayUtils';
+import { uniq, immutableRemoveIfFoundInArray, immutableAddIfNotFoundInArray, toggleArrayElement, immutableToggleArrayElementCustomEquals, areArraysEqual, areArraysEqualComparer } from '../../lib/Core/ArrayUtils';
 import { Size2D } from "../../lib/Core/Size2D";
 import { Vector2D } from "../../lib/Core/Vector2D";
 import { Rect2D } from "../../lib/Core/Rect2D";
@@ -36,14 +36,12 @@ export class PianoKeysAnswerSelect extends React.Component<IPianoKeysAnswerSelec
   public constructor(props: IPianoKeysAnswerSelectProps) {
     super(props);
     
-    this.state = {
-      selectedPitches: []
-    };
+    this.state = this.getStateFromProps(props);
   }
 
   public componentWillReceiveProps(nextProps: IPianoKeysAnswerSelectProps) {
-    if (nextProps.correctAnswer !== this.props.correctAnswer) {
-      this.setState({ selectedPitches: [] });
+    if (!areArraysEqualComparer(nextProps.correctAnswer, this.props.correctAnswer, (a, b) => a.equals(b))) {
+      this.setState(this.getStateFromProps(nextProps));
     }
   }
 
@@ -51,6 +49,7 @@ export class PianoKeysAnswerSelect extends React.Component<IPianoKeysAnswerSelec
     // TODO: use lastCorrectAnswer
 
     const { aspectRatio, maxWidth, lowestPitch, highestPitch, instantConfirm } = this.props;
+    const { selectedPitches } = this.state;
 
     return (
       <div>
@@ -58,10 +57,10 @@ export class PianoKeysAnswerSelect extends React.Component<IPianoKeysAnswerSelec
           rect={new Rect2D(new Size2D(aspectRatio * 100, 100), new Vector2D(0, 0))}
           lowestPitch={lowestPitch}
           highestPitch={highestPitch}
-          pressedPitches={this.state.selectedPitches}
+          pressedPitches={selectedPitches}
           onKeyPress={pitch => this.onKeyPress(pitch, /*wasClick*/ true)}
           onKeyRelease={pitch => this.onKeyRelease(pitch, /*wasClick*/ true)}
-          allowDragPresses={false}
+          allowDragPresses={instantConfirm}
           style={{ width: "100%", maxWidth: `${maxWidth}px`, height: "auto" }}
         />
 
@@ -72,6 +71,12 @@ export class PianoKeysAnswerSelect extends React.Component<IPianoKeysAnswerSelec
           onNoteOff={pitch => this.onKeyRelease(pitch, /*wasClick*/ false)} />
       </div>
     );
+  }
+
+  private getStateFromProps(props: IPianoKeysAnswerSelectProps): IPianoKeysAnswerSelectState {
+    return {
+      selectedPitches: []
+    };
   }
 
   private renderConfirmAnswerButton(): JSX.Element {
@@ -137,10 +142,11 @@ export class PianoKeysAnswerSelect extends React.Component<IPianoKeysAnswerSelec
   }
   
   private onKeyRelease(pitch: Pitch, wasClick: boolean) {
+    const { instantConfirm } = this.props;
     const { selectedPitches } = this.state;
 
     // If the key wasn't released through a MIDI event, early-out.
-    if (wasClick) { return; }
+    if (wasClick && !instantConfirm) { return; }
 
     // Process & validate the pitch.
     const newPitch = this.processAndValidatePitch(pitch);
