@@ -163,11 +163,15 @@ export class PianoScaleDronePlayer extends React.Component<IPianoScaleDronePlaye
       : pitch;
     
     this.setState((prevState, props) => {
-      // Remove the released pitch.
-      let newPressedPitches = immutableRemoveIfFoundInArray(prevState.pressedPitches, p => p.equals(wrappedPitch));
+      // Remove the released pitch if it's not the root pitch of the scale.
+      let newPressedPitches = !wrappedPitch.equals(scale.rootPitch)
+        ? immutableRemoveIfFoundInArray(prevState.pressedPitches, p => p.equals(wrappedPitch))
+        : prevState.pressedPitches.slice();
 
-      // Remove the root pitch of the scale.
-      removeIfFoundInArray(newPressedPitches, p => p.equals(scale.rootPitch))
+      // Remove the root pitch of the scale if no other pitches are still pressed.
+      if ((newPressedPitches.length === 1) && newPressedPitches.find(p => p.equals(scale.rootPitch))) {
+        removeIfFoundInArray(newPressedPitches, p => p.equals(scale.rootPitch));
+      }
 
       return { pressedPitches: newPressedPitches };
     });

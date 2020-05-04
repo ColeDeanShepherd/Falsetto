@@ -72,6 +72,10 @@
 ## Medium Priority
 * 
 ## Low Priority
+* Piano Theory
+  * Piano scale drone player release stop playing?
+  * Pressing the correct note doesn't play the sound...
+  * Piano notes exercises all have the same progress... Do I want that?
 * Get rid of flash card set container height.
 * Split scale types up into files.
 * Refactor pitch class into multiple (canonical, ambiguous)

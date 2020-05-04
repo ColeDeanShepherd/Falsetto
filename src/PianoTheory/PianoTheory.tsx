@@ -916,10 +916,6 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
           {this.renderSlideControls()}
           {renderedSlide}
         </div>
-
-        <MidiNoteEventListener
-          onNoteOn={(pitch, velocity) => AppModel.instance.pianoAudio.pressKey(pitch, velocity)}
-          onNoteOff={pitch => AppModel.instance.pianoAudio.releaseKey(pitch)} />
       </div>
     );
   }
