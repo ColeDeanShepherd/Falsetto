@@ -1,7 +1,8 @@
 import * as FlashCardUtils from "../Utils";
 import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardLevel, } from "../../../FlashCardSet";
-import { ChordType, chordTypeLevels } from '../../../lib/TheoryLib/Chord';
+import { chordTypeLevels } from '../../../lib/TheoryLib/ChordType';
+import { ChordType } from "../../../lib/TheoryLib/ChordType";
 import { arrayContains } from '../../../lib/Core/ArrayUtils';
 
 const flashCardSetId = "chordFormulasRelativeToMajorScale";

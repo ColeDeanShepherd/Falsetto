@@ -1,25 +1,36 @@
 # To-Do
 ## High Priority
+* Re-enable main menu
+* Fix Confirm then Show Answer showing red X twice
+* Improve chord types (support arbitrary pitch integers)
+* Improve chord finder (E G B D F is Emin7b9)
+* Debug & fix scale viewer
+* Get rid of material UI
+* Fix piano aspect ratios.
+  * EMT Notes section, intervals
+  * Chord Viewer
+  * Chord Progressions
 * Interactive piano exercises/lessons
-  * Document title changes
-  * Should chords be next???
+  * General
+    * Document title changes?
+    * Improve navigation when jumping between sections.
+  * Notes
+    * Press all of a given note on keyboard before continuing.
   * Scales
+    * Quiz
+    * Play buttons for scales
+    * Piano drone player MIDI keyboard support
     * Fingering
-    * Major
-    * Natural minor
-    * Chromatic
-  * Modes
+    * Multiple mastery steps:
+      * Play scale in 2nds, 3rd, etc.
+      * Diatonic chord inversions
   * Chords
-    * Triads
-    * Seventh chords
-  * Chord progressions
-  * Rhythm
+  * Chord progressionsa
   * Exercises
 * Fix level not being detected properly when disabling & re-enabling in piano notes exercise (orders don't match due to toggle).
 * Turn exercises into "active" exercises
   * Piano Intervals
   * Piano Scales
-  * Piano Chords
   * Guitar Notes
   * Guitar Intervals
   * Guitar Scales
@@ -61,6 +72,12 @@
 ## Medium Priority
 * 
 ## Low Priority
-* 
+* Piano Theory
+  * Piano scale drone player release stop playing?
+  * Pressing the correct note doesn't play the sound...
+  * Piano notes exercises all have the same progress... Do I want that?
+* Get rid of flash card set container height.
+* Split scale types up into files.
+* Refactor pitch class into multiple (canonical, ambiguous)
 ## Refactoring
-* 
+* ScaleViewer render()

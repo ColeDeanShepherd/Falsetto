@@ -1,5 +1,10 @@
 import { Pitch } from "../lib/TheoryLib/Pitch";
 import { loadAndPlaySoundsSequentially, loadAndPlaySoundsSimultaneously } from './Audio';
+import { IPitchesAudio } from "./IPitchesAudio";
+
+export const GuitarPitchesAudio: IPitchesAudio = {
+  getAudioFilePath: getPitchAudioFilePath
+};
 
 export const guitarAudioFilePathsByMidiNumber = new Array<[number, string]>();
 guitarAudioFilePathsByMidiNumber.push([21, "/audio/guitar/A0.mp3"]);
@@ -91,10 +96,10 @@ guitarAudioFilePathsByMidiNumber.push([106, "/audio/guitar/As7.mp3"]);
 guitarAudioFilePathsByMidiNumber.push([107, "/audio/guitar/B7.mp3"]);
 guitarAudioFilePathsByMidiNumber.push([108, "/audio/guitar/C8.mp3"]);
 
-export function getPitchAudioFilePath(pitch: Pitch): string | null {
+export function getPitchAudioFilePath(pitch: Pitch): string | undefined {
   const kvp = guitarAudioFilePathsByMidiNumber
     .find(x => x[0] === pitch.midiNumber);
-  if (!kvp) { return null; }
+  if (!kvp) { return undefined; }
 
   return kvp[1];
 }
@@ -102,7 +107,7 @@ export function getPitchAudioFilePath(pitch: Pitch): string | null {
 export function playPitches(pitches: Array<Pitch>): [Promise<Array<Howl>>, () => void] {
   const soundFilePaths = pitches
     .map(getPitchAudioFilePath)
-    .filter(fp => fp !== null)
+    .filter(fp => fp !== undefined)
     .map(fp => fp as string);
 
   return loadAndPlaySoundsSimultaneously(soundFilePaths);
@@ -112,7 +117,7 @@ export function playPitches(pitches: Array<Pitch>): [Promise<Array<Howl>>, () =>
 export function playPitchesSequentially(pitches: Array<Pitch>, delayInMs: number, cutOffSounds: boolean = false): () => void {
   const soundFilePaths = pitches
     .map(getPitchAudioFilePath)
-    .filter(fp => fp !== null)
+    .filter(fp => fp !== undefined)
     .map(fp => fp as string);
   
   return loadAndPlaySoundsSequentially(soundFilePaths, delayInMs, cutOffSounds);

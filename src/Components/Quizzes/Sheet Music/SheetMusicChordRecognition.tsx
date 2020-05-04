@@ -6,7 +6,8 @@ import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../.
 import { Pitch, getAmbiguousPitchRange } from "../../../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
 import { SheetMusicChord } from "./SheetMusicChords";
-import { Chord, ChordType, chordTypeLevels } from "../../../lib/TheoryLib/Chord";
+import { Chord } from "../../../lib/TheoryLib/Chord";
+import { ChordType, chordTypeLevels } from "../../../lib/TheoryLib/ChordType";
 import { Size2D } from '../../../lib/Core/Size2D';
 import { CheckboxColumnsFlashCardMultiSelect, CheckboxColumn, CheckboxColumnCell } from '../../Utils/CheckboxColumnsFlashCardMultiSelect';
 import { arrayContains } from '../../../lib/Core/ArrayUtils';

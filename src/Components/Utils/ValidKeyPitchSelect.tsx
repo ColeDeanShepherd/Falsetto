@@ -7,7 +7,7 @@ import { pitchLetters } from '../../lib/TheoryLib/PitchLetter';
 import { Button } from '@material-ui/core';
 import { toggleArrayElementCustomEquals } from '../../lib/Core/ArrayUtils';
 
-const basePitches = getValidKeyPitches(0);
+const basePitches = getValidKeyPitches(/*preferredOctaveNumber*/ 0);
 const validSharpKeyPitches = pitchLetters
   .map(pitchLetter => {
     const basePitch = basePitches.find(

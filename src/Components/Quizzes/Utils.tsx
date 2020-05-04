@@ -218,6 +218,31 @@ export function renderDistinctFlashCardSideAnswerSelect(
     info
   );
 }
+
+export function renderUserDeterminedCorrectnessAnswerSelect(
+  info: FlashCardStudySessionInfo
+): JSX.Element {
+  return (
+    <div>
+      <Button
+        variant="contained"
+        onClick={e => info.onAnswer(AnswerDifficulty.Incorrect, null)}
+        style={{ textTransform: "none" }}
+      >
+        I Was Incorrect
+      </Button>
+
+      <Button
+        variant="contained"
+        onClick={e => info.onAnswer(AnswerDifficulty.Easy, null)}
+        style={{ textTransform: "none" }}
+      >
+        I Was Correct
+      </Button>
+    </div>
+  );
+}
+
 export function renderDistinctFlashCardSideAnswerSelectInternal(
   key: string,
   answers: Array<FlashCardSideRenderFn>,

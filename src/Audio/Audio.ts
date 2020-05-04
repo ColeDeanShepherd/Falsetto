@@ -181,7 +181,18 @@ export function playSoundsSequentially(sounds: Array<Howl>, delayInMs: number, c
 
     if (sound) {
       setTimeout(() => {
-        if (isCancelled) { return; }
+        if (isCancelled) {
+          // stop the previous sound if necessary
+          if (i > 0) {
+            const previousLoadedSound = sounds[i - 1];
+
+            if (previousLoadedSound) {
+              previousLoadedSound.fade(1, 0, 300);
+            }
+          }
+
+          return;
+        }
 
         // stop the previous sound if necessary
         if (cutOffSounds && (i > 0)) {

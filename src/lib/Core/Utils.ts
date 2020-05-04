@@ -62,6 +62,8 @@ export function getRomanNumerals(x: number): string {
     case 8: return "VIII";
     case 9: return "IX";
     case 10: return "X";
+    case 11: return "XI";
+    case 12: return "XII";
     default:
       throw new Error(`Failed converting ${x} to a roman numeral.`);
   }

@@ -3,7 +3,7 @@ import * as React from "react";
 import * as Utils from "../../lib/Core/Utils";
 import { FlashCard, FlashCardId, FlashCardSide } from "../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../FlashCardSet";
-import { ChordType, chordTypeLevels } from '../../lib/TheoryLib/Chord';
+import { ChordType, chordTypeLevels } from "../../lib/TheoryLib/ChordType";
 import { CheckboxColumnsFlashCardMultiSelect, CheckboxColumnCell, CheckboxColumn } from '../Utils/CheckboxColumnsFlashCardMultiSelect';
 import { getValidKeyPitches } from '../../lib/TheoryLib/Key';
 import { Pitch } from '../../lib/TheoryLib/Pitch';

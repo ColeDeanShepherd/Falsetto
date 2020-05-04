@@ -38,3 +38,28 @@ export function getPitchLetterMidiNoteNumberOffset(pitchLetter: PitchLetter): nu
       return -1;
   }
 }
+
+export function parsePitchLetter(str: string): PitchLetter | undefined {
+  if (str.length === 0) { return undefined; }
+
+  const pitchLetterStr = str[0].toUpperCase();
+
+  switch (pitchLetterStr) {
+    case 'A':
+      return PitchLetter.A;
+    case 'B':
+      return PitchLetter.B;
+    case 'C':
+      return PitchLetter.C;
+    case 'D':
+      return PitchLetter.D;
+    case 'E':
+      return PitchLetter.E;
+    case 'F':
+      return PitchLetter.F;
+    case 'G':
+      return PitchLetter.G;
+    default:
+      return undefined;
+  }
+}

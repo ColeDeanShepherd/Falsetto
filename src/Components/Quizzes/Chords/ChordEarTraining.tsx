@@ -1,13 +1,13 @@
 import * as React from "react";
 import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid, Button } from "@material-ui/core";
 
-import * as Utils from "../../../lib/Core/Utils";
 import * as FlashCardUtils from "../Utils";
 import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
 import { Pitch } from "../../../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
-import { Chord, ChordType, chordTypeLevels } from "../../../lib/TheoryLib/Chord";
+import { Chord } from "../../../lib/TheoryLib/Chord";
+import { ChordType, chordTypeLevels } from "../../../lib/TheoryLib/ChordType";
 import { playPitches } from "../../../Audio/PianoAudio";
 import { range } from '../../../lib/Core/MathUtils';
 import { randomElement } from '../../../lib/Core/Random';

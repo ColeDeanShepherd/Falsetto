@@ -1,5 +1,5 @@
 import { ChordQuality, chordQualityToString } from './ChordQuality';
-import { ChordType } from './Chord';
+import { ChordType } from "./ChordType";
 import { Pitch } from './Pitch';
 import { getAllModePitchIntegers } from './Scale';
 import { precondition } from '../Core/Dbc';

@@ -14,6 +14,7 @@ import { ChordScaleFormula, ChordScaleFormulaPart } from '../../../lib/TheoryLib
 import { CheckboxColumnsFlashCardMultiSelect, CheckboxColumn, CheckboxColumnCell } from '../../Utils/CheckboxColumnsFlashCardMultiSelect';
 import { arrayContains } from '../../../lib/Core/ArrayUtils';
 import { mod } from '../../../lib/Core/MathUtils';
+import { getPianoKeyboardAspectRatio } from '../../Utils/PianoUtils';
 
 const flashCardSetId = "pianoScalesOrderedNotes";
 
@@ -130,7 +131,7 @@ function createFlashCardSet(): FlashCardSet {
   });
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = renderAnswerSelect;
-  flashCardSet.containerHeight = "110px";
+  flashCardSet.containerHeight = "120px";
   flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (
     scaleTypeLevels
       .map(level => new FlashCardLevel(
@@ -151,13 +152,14 @@ function createFlashCardSet(): FlashCardSet {
   return flashCardSet;
 }
 export function createFlashCards(): FlashCard[] {
-  const pianoStyle: any = { width: "100%", maxWidth: "400px" };
+  const pianoStyle: any = { width: "100%", maxWidth: `${240}px`, height: "auto" };
   const flashCards = new Array<FlashCard>();
 
   forEachScale((scaleType, rootPitchStr, i) => {
     const halfStepsFromC = mod(i - 3, 12);
     const rootPitch = Pitch.createFromMidiNumber((new Pitch(PitchLetter.C, 0, 4)).midiNumber + halfStepsFromC);
     const pitches = new ChordScaleFormula(scaleType.formula.parts.concat(new ChordScaleFormulaPart(8, 0, false))).getPitches(rootPitch);
+    const aspectRatio = getPianoKeyboardAspectRatio(/*octaveCount*/ 2);
     
     const deserializedId = {
       set: flashCardSetId,
@@ -172,7 +174,7 @@ export function createFlashCards(): FlashCard[] {
 
           return (
             <PianoKeyboard
-              rect={new Rect2D(new Size2D(400, 100), new Vector2D(0, 0))}
+              rect={new Rect2D(new Size2D(aspectRatio * 100, 100), new Vector2D(0, 0))}
               lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
               highestPitch={new Pitch(PitchLetter.B, 0, 5)}
               pressedPitches={pitches}

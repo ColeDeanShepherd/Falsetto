@@ -30,8 +30,9 @@ import { Rect2D } from '../../../lib/Core/Rect2D';
 import { Vector2D } from '../../../lib/Core/Vector2D';
 import { Size2D } from '../../../lib/Core/Size2D';
 import { Margin } from '../../../lib/Core/Margin';
-import { SectionProps, Term, SectionTitle, SubSectionTitle, NoteText } from './EssentialMusicTheory';
+import { SectionProps, Term, SectionTitle, SubSectionTitle } from './EssentialMusicTheory';
 import { NavLinkView } from '../../../NavLinkView';
+import { NoteText } from "../../Utils/NoteText";
 
 const HalfStepsDiagram: React.FunctionComponent<{}> = props => {
   const width = 300;

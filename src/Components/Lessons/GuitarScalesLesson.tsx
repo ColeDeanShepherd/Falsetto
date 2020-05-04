@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Card, CardContent } from '@material-ui/core';
 
-import * as Utils from "../../lib/Core/Utils";
 import {
   GuitarFretboard,
   renderGuitarNoteHighlightsAndLabels, renderFretNumbers,
@@ -12,7 +11,6 @@ import { getStandardGuitarTuning } from "../Utils/StringedInstrumentTuning";
 import { Pitch } from '../../lib/TheoryLib/Pitch';
 import { PitchLetter } from '../../lib/TheoryLib/PitchLetter';
 import { ScaleType, Scale } from '../../lib/TheoryLib/Scale';
-import { NoteText } from './EssentialMusicTheory/EssentialMusicTheory';
 import { ScaleAudioPlayer } from '../Utils/ScaleAudioPlayer';
 import { createStudyFlashCardSetComponent } from '../../StudyFlashCards/View';
 import * as GuitarScales from "../Quizzes/Scales/GuitarScales";
@@ -20,6 +18,8 @@ import { ScaleViewer } from '../Tools/ScaleViewer';
 import { StringedInstrumentNote } from '../../lib/TheoryLib/StringedInstrumentNote';
 import { NavLinkView } from '../../NavLinkView';
 import { arrayMax } from '../../lib/Core/ArrayUtils';
+import { GuitarPitchesAudio } from '../../Audio/GuitarAudio';
+import { NoteText } from "../Utils/NoteText";
 
 const fretCount = 11;
 const ionianRootPitch = new Pitch(PitchLetter.F, 0, 2);
@@ -68,7 +68,14 @@ const GuitarScalePatternDiagram: React.FunctionComponent<{
 
   return (
     <div>
-      {canListen ? <p style={{ textAlign: "center" }}><ScaleAudioPlayer scale={props.scale} pitchCount={guitarNotes.length} /></p> : null}
+      {canListen ? (
+        <p style={{ textAlign: "center" }}>
+          <ScaleAudioPlayer
+            scale={props.scale}
+            pitchCount={guitarNotes.length}
+            pitchesAudio={GuitarPitchesAudio} />
+        </p>
+      ) : null}
       <p style={{ textAlign: "center" }}>
         <GuitarFretboard
           width={fretboardWidth} height={fretboardHeight}

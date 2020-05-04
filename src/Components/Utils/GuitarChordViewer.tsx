@@ -4,7 +4,7 @@ import { Size2D } from "../../lib/Core/Size2D";
 import { Pitch } from "../../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../../lib/TheoryLib/PitchLetter";
 import { StringedInstrumentNote } from '../../lib/TheoryLib/StringedInstrumentNote';
-import { ChordType } from "../../lib/TheoryLib/Chord";
+import { ChordType } from "../../lib/TheoryLib/ChordType";
 import { GuitarFretboard, renderGuitarNoteHighlightsAndLabels } from "./GuitarFretboard";
 import { StringedInstrumentTuning } from "./StringedInstrumentTuning";
 

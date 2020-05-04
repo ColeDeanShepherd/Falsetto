@@ -12,13 +12,9 @@ import * as IntervalNamesToHalfSteps from "./Quizzes/Intervals/IntervalNamesToHa
 import * as IntervalQualitySymbolsToQualities from "./Quizzes/Intervals/IntervalQualitySymbolsToQualities";
 import * as GenericIntervalsToIntervalQualities from "./Quizzes/Intervals/GenericIntervalsToIntervalQualities";
 import * as IntervalsToConsonanceDissonance from "./Quizzes/Intervals/IntervalsToConsonanceDissonance";
-import * as ScaleDegreeModes from "./Quizzes/Scales/ScaleDegreeModes";
 import * as ChordNotes from "./Quizzes/Chords/ChordNotes";
-import * as ScaleNotes from "./Quizzes/Scales/ScaleFormulas";
-import * as ScaleChords from "./Quizzes/Chords/ScaleChords";
 import * as ScaleCharacteristics from "./Quizzes/Scales/ScaleCharacteristics";
 import * as ScaleFamilies from "./Quizzes/Scales/ScaleFamilies";
-import * as ScaleDegreeNames from "./Quizzes/Scales/ScaleDegreeNames";
 import * as ChordFamilies from "./Quizzes/Chords/ChordFamilies";
 import * as ChordFamilyDefinitions from "./Quizzes/Chords/ChordFamilyDefinitions";
 import * as AvailableChordTensions from "./Quizzes/Chords/AvailableChordTensions";
@@ -29,9 +25,7 @@ import * as GuitarNotes from "./Quizzes/Notes/GuitarNotes";
 import * as GuitarPerfectPitchTrainer from "./Quizzes/Notes/GuitarPerfectPitchTrainer";
 import * as ViolinNotes from "./Quizzes/Notes/ViolinNotes";
 import * as PianoNotes from "./Quizzes/Notes/PianoNotes";
-import * as PianoScales from "./Quizzes/Scales/PianoScales";
 import * as PianoChords from "./Quizzes/Chords/PianoChords";
-import * as GuitarScales from "./Quizzes/Scales/GuitarScales";
 import * as GuitarChords from "./Quizzes/Chords/GuitarChords";
 import * as SheetMusicNotes from "./Quizzes/Sheet Music/SheetMusicNotes";
 import * as NoteDurations from "./Quizzes/Sheet Music/SheetMusicNoteDurations";
@@ -49,7 +43,15 @@ import * as PianoIntervals from "./Quizzes/Intervals/PianoIntervals";
 import * as GuitarIntervals from "./Quizzes/Intervals/GuitarIntervals";
 import * as SheetMusicChordRecognition from "./Quizzes/Sheet Music/SheetMusicChordRecognition";
 import * as ChordEarTraining from "./Quizzes/Chords/ChordEarTraining";
+
+import * as ScaleDegreeNames from "./Quizzes/Scales/ScaleDegreeNames";
+import * as ScaleNotes from "./Quizzes/Scales/ScaleFormulas";
+import * as PianoScales from "./Quizzes/Scales/PianoScales";
+import * as GuitarScales from "./Quizzes/Scales/GuitarScales";
+import * as ScaleDegreeModes from "./Quizzes/Scales/ScaleDegreeModes";
+import * as ScaleChords from "./Quizzes/Chords/ScaleChords";
 import * as ScaleEarTraining from "./Quizzes/Scales/ScaleEarTraining";
+
 import { RhythmTapper } from "./Tools/RhythmTapper";
 import { NavLinkView } from "../NavLinkView";
 
@@ -81,8 +83,7 @@ const MenuCategory: React.FunctionComponent<{ title: string, collapseCategories:
 
 export const MainMenu : React.FunctionComponent<{ collapseCategories: boolean }> = props => {
   const essentialTheoryCategory = (
-    <MenuCategory title="Essential Music Theory Course" collapseCategories={props.collapseCategories}>
-      {<NavLinkView to="/piano-theory">{"Piano Theory (Early WIP)"}</NavLinkView>}
+    <MenuCategory title="(Old) Essential Music Theory Course" collapseCategories={props.collapseCategories}>
       {<NavLinkView to="/essential-music-theory">{"Introduction"}</NavLinkView>}
       {<NavLinkView to="/essential-music-theory/rhythm">{"Rhythm"}</NavLinkView>}
       {<NavLinkView to="/essential-music-theory/notes">{"Notes"}</NavLinkView>}
@@ -150,6 +151,7 @@ export const MainMenu : React.FunctionComponent<{ collapseCategories: boolean }>
       <NavLinkView to={ScaleDegreeModes.flashCardSet.route}>{ScaleDegreeModes.flashCardSet.name}</NavLinkView>
       <NavLinkView to={ScaleChords.flashCardSet.route}>{ScaleChords.flashCardSet.name}</NavLinkView>
       <NavLinkView to={ScaleEarTraining.flashCardSet.route}>{ScaleEarTraining.flashCardSet.name}</NavLinkView>
+      <NavLinkView to="/scale-exercises">More</NavLinkView>
     </MenuCategory>
   );
 
@@ -178,10 +180,9 @@ export const MainMenu : React.FunctionComponent<{ collapseCategories: boolean }>
   const otherCategory = (
     <MenuCategory title="Other" collapseCategories={props.collapseCategories}>
       <NavLinkView to={"/glossary"}>Glossary</NavLinkView>
-      <NavLinkView to="/support-us" style={{ fontWeight: "normal" }}>
-        Support Us
+      <NavLinkView to="/contribute" style={{ fontWeight: "normal" }}>
+        Contribute
       </NavLinkView>
-      <a href="https://github.com/ColeDeanShepherd/Falsetto-Client" target="_blank">Source Code</a>
     </MenuCategory>
   );
 

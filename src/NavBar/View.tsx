@@ -67,19 +67,11 @@ export class NavBarView extends React.Component<INavBarViewProps, INavBarViewSta
               <img src="/logo-white.svg" style={{height: "24px", verticalAlign: "sub"}} />
               <span style={{paddingLeft: "0.5em"}} className="hide-on-mobile">Falsetto</span>
             </NavLinkView>
-            <NavLinkView to="/support-us" style={{ fontWeight: "normal" }}>
-              Support Us
-            </NavLinkView>
-            <a
-              href="https://github.com/ColeDeanShepherd/Falsetto-Client"
-              target="_blank"
-              className="menu-link"
-              style={{ fontWeight: "normal" }}
-            >
-              <img src="/github-logo.png" alt="GitHub" style={{display: "block", width: "32px", height: "32px", padding: "5px 0"}} />
-            </a>
-            <i onClick={event => this.toggleMenu()} className="cursor-pointer material-icons no-select">menu</i>
+            {false ? <i onClick={event => this.toggleMenu()} className="cursor-pointer material-icons no-select">menu</i> : null}
             <i onClick={event => this.toggleSettings()} className="cursor-pointer material-icons no-select">settings</i>
+            <NavLinkView to="/contribute" style={{ fontWeight: "normal" }}>
+              Contribute
+            </NavLinkView>
           </div>
         </div>
         {menu}

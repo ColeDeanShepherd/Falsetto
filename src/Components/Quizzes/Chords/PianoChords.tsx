@@ -10,12 +10,22 @@ import { AnswerDifficulty } from "../../../Study/AnswerDifficulty";
 import { Pitch, ambiguousKeyPitchStringsSymbols } from "../../../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
 import { Button, Typography } from "@material-ui/core";
-import { Chord, ChordType, chordTypeLevels } from "../../../lib/TheoryLib/Chord";
+import { Chord } from "../../../lib/TheoryLib/Chord";
+import { ChordType, chordTypeLevels } from "../../../lib/TheoryLib/ChordType";
 import { CheckboxColumnsFlashCardMultiSelect, CheckboxColumn, CheckboxColumnCell } from '../../Utils/CheckboxColumnsFlashCardMultiSelect';
 import { arrayContains, flattenArrays } from '../../../lib/Core/ArrayUtils';
 import { mod } from '../../../lib/Core/MathUtils';
+import { getPianoKeyboardAspectRatio } from '../../Utils/PianoUtils';
+import { PianoKeysAnswerSelect } from "../../Utils/PianoKeysAnswerSelect";
 
 const flashCardSetId = "pianoChords";
+
+const pianoLowestPitch = new Pitch(PitchLetter.C, 0, 4);
+const pianoHighestPitch = new Pitch(PitchLetter.B, 0, 5);
+
+const pianoAspectRatio = getPianoKeyboardAspectRatio(/*octaveCount*/ 2);
+const pianoMaxWidth = 300;
+const pianoStyle = { width: `${pianoMaxWidth}px`, maxWidth: "100%", height: "auto" };
 
 interface IConfigData {
   enabledRootPitches: string[];
@@ -32,6 +42,7 @@ export function forEachChord(callbackFn: (rootPitchString: string, chordType: Ch
     }
   }
 }
+
 export function configDataToEnabledFlashCardIds(
   flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: IConfigData
 ): Array<FlashCardId> {
@@ -48,12 +59,14 @@ export function configDataToEnabledFlashCardIds(
 
   return newEnabledFlashCardIds;
 }
+
 export interface IPianoChordsFlashCardMultiSelectProps {
   studySessionInfo: FlashCardStudySessionInfo,
   onChange?: (newValue: Array<FlashCardId>, newConfigData: any) => void;
 }
 
 export interface IPianoChordsFlashCardMultiSelectState {}
+
 export class PianoChordsFlashCardMultiSelect extends React.Component<IPianoChordsFlashCardMultiSelectProps, IPianoChordsFlashCardMultiSelectState> {
   public render(): JSX.Element {
     const configData = this.props.studySessionInfo.configData as IConfigData;
@@ -107,136 +120,6 @@ export class PianoChordsFlashCardMultiSelect extends React.Component<IPianoChord
   }
 }
 
-export interface IPianoChordsAnswerSelectProps {
-  correctAnswer: string;
-  onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void;
-  lastCorrectAnswer: any;
-  incorrectAnswers: Array<any>;
-  enabledRootPitches: Array<string>;
-  enabledChordTypeNames: Array<string>;
-}
-export interface IPianoChordsAnswerSelectState {
-  selectedRootPitch: string | undefined;
-  selectedChordType: string | undefined;
-}
-export class PianoChordsAnswerSelect extends React.Component<IPianoChordsAnswerSelectProps, IPianoChordsAnswerSelectState> {
-  public constructor(props: IPianoChordsAnswerSelectProps) {
-    super(props);
-    
-    this.state = {
-      selectedRootPitch: undefined,
-      selectedChordType: undefined
-    };
-  }
-  public render(): JSX.Element {
-    // TODO: use lastCorrectAnswer
-    return (
-      <div>
-        <Typography gutterBottom={true} variant="h6" component="h4">
-          Root Pitch
-        </Typography>
-        <div style={{padding: "1em 0"}}>
-          <div>
-            {ambiguousKeyPitchStringsSymbols.slice(0, 6)
-              .filter(rp => arrayContains(this.props.enabledRootPitches, rp))
-                .map(rootPitchStr => {
-                const style: any = { textTransform: "none" };
-                
-                const isPressed = rootPitchStr === this.state.selectedRootPitch;
-                if (isPressed) {
-                  style.backgroundColor = "#959595";
-                }
-
-                return (
-                  <Button
-                    key={rootPitchStr}
-                    onClick={event => this.onRootPitchClick(rootPitchStr)}
-                    variant="contained"
-                    style={style}
-                  >
-                    {rootPitchStr}
-                  </Button>
-                );
-              })}
-          </div>
-          <div>
-            {ambiguousKeyPitchStringsSymbols.slice(6, 12)
-              .filter(rp => arrayContains(this.props.enabledRootPitches, rp))
-              .map(rootPitchStr => {
-                const style: any = { textTransform: "none" };
-                
-                const isPressed = rootPitchStr === this.state.selectedRootPitch;
-                if (isPressed) {
-                  style.backgroundColor = "#959595";
-                }
-
-                return (
-                  <Button
-                    key={rootPitchStr}
-                    onClick={event => this.onRootPitchClick(rootPitchStr)}
-                    variant="contained"
-                    style={style}
-                  >
-                    {rootPitchStr}
-                  </Button>
-                );
-              })}
-          </div>
-        </div>
-        
-        <Typography gutterBottom={true} variant="h6" component="h4">
-          Chord
-        </Typography>
-        <div style={{padding: "1em 0"}}>
-          {ChordType.All
-            .filter(ct => arrayContains(this.props.enabledChordTypeNames, ct.name))
-            .map(chord => {
-              const style: any = { textTransform: "none" };
-              
-              const isPressed = chord.name === this.state.selectedChordType;
-              if (isPressed) {
-                style.backgroundColor = "#959595";
-              }
-              
-              return (
-                <Button
-                  key={chord.name}
-                  onClick={event => this.onChordTypeClick(chord.name)}
-                  variant="contained"
-                  style={style}
-                >
-                  {chord.name}
-                </Button>
-              );
-            })}
-        </div>
-
-        <div style={{padding: "1em 0"}}>
-          <Button
-            onClick={event => this.confirmAnswer()}
-            disabled={!this.state.selectedRootPitch || !this.state.selectedChordType}
-            variant="contained"
-          >
-            Confirm Answer
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
-  private onRootPitchClick(rootPitch: string) {
-    this.setState({ selectedRootPitch: rootPitch });
-  }
-  private onChordTypeClick(chordType: string) {
-    this.setState({ selectedChordType: chordType });
-  }
-  private confirmAnswer() {
-    const selectedAnswer = this.state.selectedRootPitch + " " + this.state.selectedChordType;
-    const isCorrect = selectedAnswer === this.props.correctAnswer;
-    this.props.onAnswer(isCorrect ? AnswerDifficulty.Easy : AnswerDifficulty.Incorrect, selectedAnswer);
-  }
-}
-
 function createFlashCardSet(): FlashCardSet {
   const renderFlashCardMultiSelect = (
     info: FlashCardStudySessionInfo,
@@ -260,7 +143,7 @@ function createFlashCardSet(): FlashCardSet {
   });
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = renderAnswerSelect;
-  flashCardSet.containerHeight = "120px";
+  flashCardSet.containerHeight = "150px";
   flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (
     chordTypeLevels
       .map(ctl =>
@@ -279,8 +162,8 @@ function createFlashCardSet(): FlashCardSet {
 
   return flashCardSet;
 }
+
 export function createFlashCards(): FlashCard[] {
-  const pianoStyle = { width: "400px", maxWidth: "100%" };
   return flattenArrays<FlashCard>(
     ambiguousKeyPitchStringsSymbols.map((rootPitchStr, i) =>
       ChordType.All.map(chordType => {
@@ -295,38 +178,42 @@ export function createFlashCards(): FlashCard[] {
 
         return new FlashCard(
           id,
+
+          new FlashCardSide(
+            rootPitchStr + " " + chordType.name,
+            pitches
+          ),
+
           new FlashCardSide(
             size => {
               return (
                 <PianoKeyboard
-                  rect={new Rect2D(new Size2D(400, 100), new Vector2D(0, 0))}
-                  lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-                  highestPitch={new Pitch(PitchLetter.B, 0, 5)}
+                  rect={new Rect2D(new Size2D(pianoAspectRatio * 100, 100), new Vector2D(0, 0))}
+                  lowestPitch={pianoLowestPitch}
+                  highestPitch={pianoHighestPitch}
                   pressedPitches={pitches}
                   style={pianoStyle}
                 />
               );
             },
-            pitches
-          ),
-          new FlashCardSide(
-            rootPitchStr + " " + chordType.name,
-             new Chord(chordType, rootPitch)
+            new Chord(chordType, rootPitch)
           )
         );
       })
     )
   );
 }
+
 export function renderAnswerSelect(
   info: FlashCardStudySessionInfo
 ) {
-  const correctAnswer = info.currentFlashCard.backSide.renderFn as string;
-  return <PianoChordsAnswerSelect
-    key={correctAnswer} correctAnswer={correctAnswer} onAnswer={info.onAnswer}
-    lastCorrectAnswer={info.lastCorrectAnswer} incorrectAnswers={info.incorrectAnswers}
-    enabledRootPitches={(info.configData as IConfigData).enabledRootPitches}
-    enabledChordTypeNames={(info.configData as IConfigData).enabledChordTypes} />;
+  const correctAnswer = info.currentFlashCard.frontSide.data as Array<Pitch>;
+
+  return <PianoKeysAnswerSelect
+    aspectRatio={pianoAspectRatio} maxWidth={pianoMaxWidth} lowestPitch={pianoLowestPitch} highestPitch={pianoHighestPitch}
+    correctAnswer={correctAnswer}
+    onAnswer={info.onAnswer} lastCorrectAnswer={info.lastCorrectAnswer}
+    incorrectAnswers={info.incorrectAnswers} instantConfirm={false} wrapOctave={true} />;
 }
 
 export const flashCardSet = createFlashCardSet();

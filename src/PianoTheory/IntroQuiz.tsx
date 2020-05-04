@@ -11,6 +11,7 @@ function createFlashCardSet(): FlashCardSet {
 
   return flashCardSet;
 }
+
 export function createFlashCards(): FlashCard[] {
   return [
     FlashCard.fromRenderFns(

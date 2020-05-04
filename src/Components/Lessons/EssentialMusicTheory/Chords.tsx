@@ -12,9 +12,12 @@ import { ChordViewer } from "../../Tools/ChordViewer";
 
 import { DiatonicChordPlayer } from '../../Tools/DiatonicChordPlayer';
 import { ChordAudioPlayer } from "../../Utils/ChordAudioPlayer";
-import { SectionProps, Term, SectionTitle, SubSectionTitle, NoteText, defaultRootPitch } from './EssentialMusicTheory';
-import { Chord, ChordType, ChordTypeGroup } from '../../../lib/TheoryLib/Chord';
+import { SectionProps, Term, SectionTitle, SubSectionTitle, defaultRootPitch } from './EssentialMusicTheory';
+import { Chord } from '../../../lib/TheoryLib/Chord';
+import { ChordTypeGroup } from "../../../lib/TheoryLib/ChordTypeGroup";
+import { ChordType } from "../../../lib/TheoryLib/ChordType";
 import { NavLinkView } from '../../../NavLinkView';
+import { NoteText } from "../../Utils/NoteText";
 
 export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
   <div>
@@ -223,7 +226,7 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
     <p>As you omit notes from a thirteenth chord to form an eleventh chord, then a ninth chord, then a seventh chord, and lastly a triad, the chord has less notes (obviously) and therefore does not have to have as many notes in common with scales to "fit" with them. So chords with less notes can "fit" more scales, but are more ambiguous in meaning than chords with more notes.</p>
     <p>In this way, chords &amp; scales are inextricably tied in a relationship Jazz musicians call the "chord-scale system".</p>
     <p>Use the interactive digram below to explore extended chords (and other chords we haven't covered):</p>
-    <ChordViewer isEmbedded={props.isEmbedded} />
+    <ChordViewer />
 
     <SubSectionTitle>Diatonic Chords &amp; Roman Numeral Notation</SubSectionTitle>
     <p>One way to build chords is to exclusively pick notes out from a scale, separated by thirds. Because these chords are built solely with scale notes, they naturally "fit" well with the underlying scale, and lend themselves well to accompanying melodies built with the same scale. Chords which are derived in this manner are called <Term>diatonic chords</Term>, which make up <strong>most</strong> of the chords you find in Western music.</p>

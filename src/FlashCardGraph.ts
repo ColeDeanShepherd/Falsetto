@@ -1,4 +1,3 @@
-import * as Utils from "./lib/Core/Utils";
 import * as IntervalNamesToHalfSteps from "./Components/Quizzes/Intervals/IntervalNamesToHalfSteps";
 import * as IntervalQualitySymbolsToQualities from "./Components/Quizzes/Intervals/IntervalQualitySymbolsToQualities";
 import * as GenericIntervalsToIntervalQualities from "./Components/Quizzes/Intervals/GenericIntervalsToIntervalQualities";
@@ -38,9 +37,18 @@ import * as GuitarIntervals from "./Components/Quizzes/Intervals/GuitarIntervals
 import * as SheetMusicChordRecognition from "./Components/Quizzes/Sheet Music/SheetMusicChordRecognition";
 import * as ChordEarTraining from "./Components/Quizzes/Chords/ChordEarTraining";
 import * as ScaleEarTraining from "./Components/Quizzes/Scales/ScaleEarTraining";
+
+import * as IntroQuiz from "./PianoTheory/IntroQuiz";
+import * as ScalesQuiz from "./PianoTheory/ScalesQuiz";
+
+import * as PianoScaleDegrees from "./Components/Quizzes/Scales/PianoScaleDegrees";
+import * as PianoDiatonicChords from "./Components/Quizzes/Chords/PianoDiatonicChords";
+
 import { FlashCardSet } from "./FlashCardSet";
 import { StringDictionary } from './lib/Core/StringDictionary';
 import { flattenArrays } from './lib/Core/ArrayUtils';
+import { Scale } from './lib/TheoryLib/Scale';
+import { range } from "./lib/Core/MathUtils";
 
 export const groupedFlashCardSets = [
   {
@@ -83,7 +91,8 @@ export const groupedFlashCardSets = [
       ScaleChords.flashCardSet,
       //ScaleFamilies.flashCardSet,
       //ScaleCharacteristics.flashCardSet,
-      ScaleEarTraining.flashCardSet
+      ScaleEarTraining.flashCardSet,
+      ScalesQuiz.flashCardSet
     ]
   },
   {
@@ -109,6 +118,12 @@ export const groupedFlashCardSets = [
       ChordEarTraining.flashCardSet,
       RandomChordGenerator.flashCardSet
     ]
+  },
+  {
+    title: "Other",
+    flashCardSets: [
+      IntroQuiz.flashCardSet
+    ]
   }
 ];
 
@@ -125,6 +140,7 @@ export function relateSets(...params: Array<FlashCardSet>) {
     }
   }
 }
+
 function initFlashCardSetGraph() {
   for (const group of groupedFlashCardSets) {
     relateSets(...group.flashCardSets);
@@ -132,21 +148,33 @@ function initFlashCardSetGraph() {
 }
 initFlashCardSetGraph();
 
+function forEachFlashCardSet(callback: (fcs: FlashCardSet) => void) {
+  for (const set of flashCardSets) {
+    callback(set);
+  }
+
+  Scale.forAll(scale => callback(PianoScaleDegrees.createFlashCardSet(scale)));
+  Scale.forAll(scale =>
+    range(3, scale.type.numPitches)
+      .forEach(numChordPitches => callback(PianoDiatonicChords.createFlashCardSet(scale, numChordPitches))));
+}
+
 export function checkFlashCardSetIds() {
   const flashCardSetIds: StringDictionary<boolean> = {};
 
-  for (const set of flashCardSets) {
+  forEachFlashCardSet(set => {
     if (flashCardSetIds[set.id] === undefined) {
       flashCardSetIds[set.id] = true;
     } else {
       throw new Error(`Duplicate flash card set ID: ${set.id}`);
     }
-  }
+  });
 }
+
 export function checkFlashCardIds() {
   const flashCardIds: StringDictionary<boolean> = {};
 
-  for (const set of flashCardSets) {
+  forEachFlashCardSet(set => {
     const flashCards = set.createFlashCards();
 
     for (const flashCard of flashCards) {
@@ -156,5 +184,5 @@ export function checkFlashCardIds() {
         throw new Error(`Duplicate flash card ID: ${flashCard.id}`);
       }
     }
-  }
+  });
 }

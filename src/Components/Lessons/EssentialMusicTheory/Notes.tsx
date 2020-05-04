@@ -8,8 +8,9 @@ import { createStudyFlashCardSetComponent } from '../../../StudyFlashCards/View'
 
 import * as NotesQuiz from "../../Quizzes/Notes/NotesQuiz";
 
-import { SectionTitle, NoteText, Term, OctavesPlayer, SectionProps, SubSectionTitle } from './EssentialMusicTheory';
+import { SectionTitle, Term, OctavesPlayer, SectionProps, SubSectionTitle } from './EssentialMusicTheory';
 import { NavLinkView } from "../../../NavLinkView";
+import { NoteText } from "../../Utils/NoteText";
 
 export const NotesSection: React.FunctionComponent<SectionProps> = props => (
   <div>

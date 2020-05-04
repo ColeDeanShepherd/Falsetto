@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Table, TableHead, TableBody, TableRow, TableCell } from "@material-ui/core";
 
-
 import { YouTubeVideo } from "../../Utils/YouTubeVideo";
 import { TimeSignature } from "../../../lib/TheoryLib/TimeSignature";
 
@@ -35,8 +34,9 @@ import timeSignature34 from "../../../img/sheet-music/time-signature-3-4.svg";
 
 import { TimeSignaturePlayer } from '../../Tools/TimeSignaturePlayer';
 import { NoteValuePlayer } from '../../Tools/NoteValuePlayer';
-import { SectionProps, SectionTitle, Term, SubSectionTitle, NoteText } from './EssentialMusicTheory';
+import { SectionProps, SectionTitle, Term, SubSectionTitle } from './EssentialMusicTheory';
 import { NavLinkView } from '../../../NavLinkView';
+import { NoteText } from "../../Utils/NoteText";
 
 const noteValueTableImgWidth = 24;
 

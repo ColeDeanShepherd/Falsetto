@@ -3,9 +3,10 @@ import { Button, CircularProgress } from "@material-ui/core";
 
 import { areArraysEqualComparer } from "../../lib/Core/ArrayUtils";
 import * as Audio from "../../Audio/Audio";
-import { getPitchAudioFilePath } from '../../Audio/PianoAudio';
 import { Pitch } from '../../lib/TheoryLib/Pitch';
 import { unwrapMaybe } from '../../lib/Core/Utils';
+import { IPitchesAudio } from '../../Audio/IPitchesAudio';
+import { PianoPitchesAudio } from '../../Audio/PianoAudio';
 
 export enum PitchesAudioPlayerPlayState {
   PLAYABLE,
@@ -22,6 +23,7 @@ export interface IPitchesAudioPlayerProps {
   playSequentially: boolean;
   delayInMs?: number;
   cutOffSounds?: boolean;
+  pitchesAudio?: IPitchesAudio
   onGetExports?: (exports: PitchesAudioPlayerExports) => void;
 }
 export interface IPitchesAudioPlayerState {
@@ -88,12 +90,16 @@ export class PitchesAudioPlayer extends React.Component<IPitchesAudioPlayerProps
     } // else we are currently loading the sounds
   }
   private startLoadingSounds() {
+    const pitchesAudio = this.props.pitchesAudio
+      ? this.props.pitchesAudio
+      : PianoPitchesAudio;
+
     this.setState({ playState: PitchesAudioPlayerPlayState.LOADING });
 
     const soundFilePaths = this.props.pitches
-      .map(p => getPitchAudioFilePath(p))
-      .filter(sfp => sfp !== null)
-      .map(sfp => unwrapMaybe(sfp));
+      .map(p => pitchesAudio.getAudioFilePath(p))
+      .filter(sfp => sfp !== undefined)
+      .map(sfp => sfp as string);
     this.loadSoundsPromise = Audio.loadSoundsAsync(soundFilePaths)
       .then(loadedSounds => {
         this.loadedSounds = loadedSounds;

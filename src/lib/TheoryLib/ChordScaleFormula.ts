@@ -1,8 +1,6 @@
-import * as Utils from "../Core/Utils";
 import { Pitch, getAccidentalString } from "./Pitch";
 import { VerticalDirection } from "../Core/VerticalDirection";
 import { Interval } from './Interval';
-import { getSimpleChordNoteNumber } from './Chord';
 import { precondition, invariant } from '../Core/Dbc';
 import { isNullOrWhiteSpace, takeCharsWhile } from '../Core/StringUtils';
 
@@ -32,6 +30,7 @@ export class ChordScaleFormula {
       .join(" ");
   }
 }
+
 export class ChordScaleFormulaPart {
   public static parse(formulaPartString: string): ChordScaleFormulaPart {
     precondition(formulaPartString.length > 0);
@@ -70,8 +69,8 @@ export class ChordScaleFormulaPart {
     return Interval.getSimpleIntervalTypeHalfSteps(Interval.getSimpleIntervalType(this.chordNoteNumber)) + this.signedAccidental;
   }
 
-  public toString(): string {
-    return this.chordNoteNumber.toString() + getAccidentalString(this.signedAccidental);
+  public toString(useSymbols?: boolean): string {
+    return this.chordNoteNumber.toString() + getAccidentalString(this.signedAccidental, useSymbols);
   }
   public getIntervalFromRootNote(): Interval {
     return new Interval(this.chordNoteNumber, this.signedAccidental);
