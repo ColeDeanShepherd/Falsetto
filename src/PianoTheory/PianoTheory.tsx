@@ -32,7 +32,6 @@ import { PianoScaleFormulaDiagram } from "../Components/Utils/PianoScaleFormulaD
 import { PianoScaleDronePlayer, onKeyPress } from '../Components/Utils/PianoScaleDronePlayer';
 import { MidiInputDeviceSelect } from "../Components/Utils/MidiInputDeviceSelect";
 import { fullPianoLowestPitch, fullPianoHighestPitch, fullPianoAspectRatio, getPianoKeyboardAspectRatio } from '../Components/Utils/PianoUtils';
-import { MidiNoteEventListener } from "../Components/Utils/MidiNoteEventListener";
 import { MidiPianoRangeInput } from "../Components/Utils/MidiPianoRangeInput";
 import { LimitedWidthContentContainer } from "../Components/Utils/LimitedWidthContentContainer";
 import { NoteText } from '../Components/Utils/NoteText';
@@ -885,11 +884,14 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
   // #region React Functions
   
   public componentDidMount() {
+    AppModel.instance.pianoAudio.preloadSounds();
+    
     this.historyUnregisterCallback = this.history.listen((location, action) => {
       this.setState({
         slideIndex: this.getSlideIndexFromUriParams(location.search)
       });
     });
+
     this.registerKeyEventHandlers();
   }
 

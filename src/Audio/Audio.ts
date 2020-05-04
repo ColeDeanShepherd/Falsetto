@@ -55,8 +55,9 @@ export function loadSoundAsync(soundFilePath: string): Promise<Howl> {
     });
   });
 }
+
 export function loadSoundsAsync(soundFilePaths: Array<string>): Promise<Array<Howl>> {
-  return new Promise((resolve, reject) => {
+  return new Promise<Array<Howl>>((resolve, reject) => {
     const soundCount = soundFilePaths.length;
     const loadedSounds = new Array<Howl>(soundCount);
     let loadedSoundCount = 0;
@@ -87,6 +88,7 @@ export function loadAndPlaySound(soundFilePath: string, volume: number = 1): How
 
   return howl;
 }
+
 export function loadAndPlaySoundsSimultaneously(
   soundFilePaths: Array<string>
 ): [Promise<Array<Howl>>, () => void] {

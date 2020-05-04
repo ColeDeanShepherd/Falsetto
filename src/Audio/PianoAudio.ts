@@ -1,5 +1,5 @@
 import { Pitch } from "../lib/TheoryLib/Pitch";
-import { loadAndPlaySoundsSequentially, loadAndPlaySoundsSimultaneously } from './Audio';
+import { loadAndPlaySoundsSequentially, loadAndPlaySoundsSimultaneously, loadSoundsAsync } from './Audio';
 import { StringDictionary } from '../lib/Core/StringDictionary';
 import { removeIfFoundInArray } from '../lib/Core/ArrayUtils';
 import { IPitchesAudio } from './IPitchesAudio';
@@ -127,6 +127,13 @@ export function playPitchesSequentially(pitches: Array<Pitch>, delayInMs: number
 
 // TODO: preload
 export class PianoAudio {
+  public async preloadSounds(): Promise<Array<Howl>> {
+    const soundFilePaths = pianoAudioFilePathsByMidiNumber
+      .map(t => t[1]);
+
+    return await loadSoundsAsync(soundFilePaths);
+  }
+
   // TODO: use velocity
   public pressKey(pitch: Pitch, velocity: number): boolean {
     const cancellationFnKey = this.getPitchCancellationFnKey(pitch);
