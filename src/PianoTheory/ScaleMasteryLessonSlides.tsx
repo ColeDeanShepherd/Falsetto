@@ -56,6 +56,10 @@ export function createSlideGroups(scale: Scale): Array<SlideGroup> {
       // TODO: play in different intervals?
       // TODO: diatonic chords (triads, seventh, extended)
       //PianoDiatonicChords.createFlashCardSet(scale, numChordPitches))
+    ]),
+    
+    new SlideGroup("Coming Soon", [
+      new Slide("coming-soon", () => <h3>More coming soon!</h3>)
     ])
   ];
 }
