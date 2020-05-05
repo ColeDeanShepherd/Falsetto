@@ -40,6 +40,7 @@ export class ScaleExercisesPage extends React.Component<IScaleExercisesProps, IS
   }
 
   public render(): JSX.Element {
+    const { flashCardSets, scale, scaleTypeGroup } = this.state;
     return (
       <Card>
         <CardContent>
@@ -57,15 +58,22 @@ export class ScaleExercisesPage extends React.Component<IScaleExercisesProps, IS
           <div><NavLinkView to={ScaleEarTraining.flashCardSet.route}>{ScaleEarTraining.flashCardSet.name}</NavLinkView></div>
 
           <h3>Per-Scale Exercises</h3>
+
           <div style={{textAlign: "center"}}>
             <ScaleSelect
               scaleTypeGroups={ScaleType.Groups}
-              value={[this.state.scaleTypeGroup, this.state.scale]}
+              value={[scaleTypeGroup, scale]}
               onChange={newValue => this.onScaleChange(newValue)} />
-            <p style={{fontSize: "1.5em"}}>{this.state.scale.rootPitch.toString(false)} {this.state.scale.type.name}</p>
+              
+            <p style={{fontSize: "1.5em"}}>{scale.rootPitch.toString(false)} {scale.type.name}</p>
           </div>
+
           <div>
-            {this.state.flashCardSets
+            <div><NavLinkView to={`/scale/${scale.id}/lesson`}>{scale.rootPitch.toString(/*includeOctaveNumber*/ false)} {scale.type.name} Lesson</NavLinkView></div>
+          </div>
+
+          <div>
+            {flashCardSets
               .map(fcs => (
                 <div>
                   <NavLinkView to={fcs.route}>{fcs.name}</NavLinkView>

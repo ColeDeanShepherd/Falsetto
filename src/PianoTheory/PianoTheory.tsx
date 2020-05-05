@@ -29,7 +29,7 @@ import * as ScalesQuiz from "./ScalesQuiz";
 
 import { naturalPitches, accidentalPitches, allPitches } from "../Components/Quizzes/Notes/PianoNotes";
 import { PianoScaleFormulaDiagram } from "../Components/Utils/PianoScaleFormulaDiagram";
-import { PianoScaleDronePlayer, onKeyPress } from '../Components/Utils/PianoScaleDronePlayer';
+import { PianoScaleDronePlayer } from '../Components/Utils/PianoScaleDronePlayer';
 import { MidiInputDeviceSelect } from "../Components/Utils/MidiInputDeviceSelect";
 import { fullPianoLowestPitch, fullPianoHighestPitch, fullPianoAspectRatio, getPianoKeyboardAspectRatio } from '../Components/Utils/PianoUtils';
 import { MidiPianoRangeInput } from "../Components/Utils/MidiPianoRangeInput";
@@ -40,11 +40,35 @@ import { NavLinkView } from "../NavLinkView";
 import { ChordViewer } from "../Components/Tools/ChordViewer";
 import { PlayablePianoKeyboard } from "../Components/Utils/PlayablePianoKeyboard";
 
-const maxPianoWidth = 1000;
-const maxOneOctavePianoWidth = 400;
-const maxTwoOctavePianoWidth = 500;
+export const maxPianoWidth = 1000;
+export const maxOneOctavePianoWidth = 400;
+export const maxTwoOctavePianoWidth = 500;
 
 // #region Helper Components
+
+const GreenCheckmarkView: React.FunctionComponent<{}> = props => (
+  <i
+    className="material-icons"
+    style={{
+      color: "green",
+      verticalAlign: "bottom",
+      display: "inline-block"
+    }}>
+    check_circle
+  </i>
+);
+
+const RedXView: React.FunctionComponent<{}> = props => (
+  <i
+    className="material-icons"
+    style={{
+      color: "red",
+      verticalAlign: "bottom",
+      display: "inline-block"
+    }}>
+    cancel
+  </i>
+);
 
 export const FullPiano: React.FunctionComponent<{}> = props => (
   <PlayablePianoKeyboard
@@ -161,39 +185,16 @@ class KeyActions {
 
 // #region Slides
 
-class Slide {
+export class Slide {
   public constructor(
     public url: string,
     public renderFn: (pianoTheory: PianoTheory) => JSX.Element
   ) {}
 }
-class SlideGroup {
+
+export class SlideGroup {
   public constructor(public name: string, public slides: Array<Slide>) {}
 }
-
-const GreenCheckmarkView: React.FunctionComponent<{}> = props => (
-  <i
-    className="material-icons"
-    style={{
-      color: "green",
-      verticalAlign: "bottom",
-      display: "inline-block"
-    }}>
-    check_circle
-  </i>
-);
-
-const RedXView: React.FunctionComponent<{}> = props => (
-  <i
-    className="material-icons"
-    style={{
-      color: "red",
-      verticalAlign: "bottom",
-      display: "inline-block"
-    }}>
-    cancel
-  </i>
-);
 
 export class SetupSlideView extends React.Component<{}, {}> {
   public constructor(props: {}) {
@@ -273,10 +274,7 @@ export class SetupSlideView extends React.Component<{}, {}> {
 }
 
 // TODO: dynamic width/height
-// TODO: quizzes
-// TODO: slide links
-// TODO: use symbols
-const slideGroups = [
+export const pianoTheorySlideGroups = [
   new SlideGroup("Introduction & Setup", [
     new Slide("introduction", () => (
       <div>
@@ -711,7 +709,7 @@ const slideGroups = [
     )),
   ]),
 
-  new SlideGroup("Chords", [
+  /*new SlideGroup("Chords", [
     new Slide("chords-introduction", () => (
       <div>
         <h2>Section 4: Chords</h2>
@@ -827,10 +825,14 @@ const slideGroups = [
         <p>QUIZ</p>
       </div>
     )),
+  ]),*/
+  
+  new SlideGroup("Coming Soon", [
+    new Slide("coming-soon", () => <h3>More coming soon!</h3>)
   ])
 ];
 
-function getSlideGroup(slideIndex: number): [SlideGroup, number] | undefined {
+function getSlideGroup(slideGroups: Array<SlideGroup>, slideIndex: number): [SlideGroup, number] | undefined {
   let numSlidesSeen = 0;
 
   for (let slideGroupIndex = 0; slideGroupIndex < slideGroups.length; slideGroupIndex++) {
@@ -847,26 +849,23 @@ function getSlideGroup(slideIndex: number): [SlideGroup, number] | undefined {
   return undefined;
 }
 
-// TODO: optimize
-let slides = flattenArrays<Slide>(slideGroups.map(sg => sg.slides))
-  .slice(0, 30)
-  .concat([new Slide("coming-soon", () => <h3>More coming soon!</h3>)]);
-
 // #endregion Slides
 
-export interface IPianoTheoryProps { }
+export interface IPianoTheoryProps {
+  slideGroups: Array<SlideGroup>;
+}
+
 export interface IPianoTheoryState {
   slideIndex: number;
 }
+
 export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheoryState> {
   public constructor(props: IPianoTheoryProps) {
     super(props);
     
     this.history = DependencyInjector.instance.getRequiredService<History<any>>("History");
 
-    this.state = {
-      slideIndex: this.getSlideIndexFromUriParams(this.history.location.search)
-    };
+    [this.state, this.slides] = this.getStateFromProps(props);
   }
 
   public tryToMoveToNextSlide() {
@@ -884,11 +883,13 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
   // #region React Functions
   
   public componentDidMount() {
+    const { slides } = this;
+
     AppModel.instance.pianoAudio.preloadSounds();
     
     this.historyUnregisterCallback = this.history.listen((location, action) => {
       this.setState({
-        slideIndex: this.getSlideIndexFromUriParams(location.search)
+        slideIndex: this.getSlideIndexFromUriParams(slides, location.search)
       });
     });
 
@@ -908,6 +909,7 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
 
   // TODO: show slide group
   public render(): JSX.Element {
+    const { slides } = this;
     const { slideIndex } = this.state;
 
     const renderedSlide = slides[slideIndex].renderFn(this);
@@ -920,6 +922,18 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
         </div>
       </div>
     );
+  }
+
+  private slides: Array<Slide>;
+
+  private getStateFromProps(props: IPianoTheoryProps): [IPianoTheoryState, Array<Slide>] {
+    const slides = flattenArrays<Slide>(props.slideGroups.map(sg => sg.slides));
+
+    const state = {
+      slideIndex: this.getSlideIndexFromUriParams(slides, this.history.location.search)
+    } as IPianoTheoryState;
+
+    return [state, slides];
   }
 
   private renderSlideControls(): JSX.Element {
@@ -949,9 +963,10 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
   }
 
   private renderSlideLocation(): JSX.Element {
+    const { slideGroups } = this.props;
     const { slideIndex } = this.state;
 
-    const slideGroupInfo = getSlideGroup(slideIndex);
+    const slideGroupInfo = getSlideGroup(slideGroups, slideIndex);
     if (!slideGroupInfo) {
       return <span style={{ padding: "0 1em" }}>Falsetto - Piano Theory</span>;
     }
@@ -1008,6 +1023,7 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
       }
     }
   }
+
   private onKeyUp(event: KeyboardEvent) {
   }
 
@@ -1016,11 +1032,14 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
   // #region Actions
 
   private canMoveToNextSlide(): boolean {
+    const { slides } = this;
     const { slideIndex } = this.state;
+
     return (slideIndex + 1) < slides.length;
   }
 
   private moveToNextSlideInternal() {
+    const { slides } = this;
     const { slideIndex } = this.state;
 
     const newSlideIndex = slideIndex + 1;
@@ -1043,6 +1062,8 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
   }
 
   private moveToSlide(slideIndex: number) {
+    const { slides } = this;
+
     this.setState({ slideIndex: slideIndex }, () => {
       const oldSearchParams = QueryString.parse(this.history.location.search);
       const newSearchParams = { ...oldSearchParams, slide: slides[slideIndex].url };
@@ -1056,7 +1077,7 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
 
   // #endregion Actions
 
-  private getSlideIndexFromUriParams(search: string): number {
+  private getSlideIndexFromUriParams(slides: Array<Slide>, search: string): number {
     const urlSearchParams = QueryString.parse(search);
     if (!(urlSearchParams.slide && (typeof urlSearchParams.slide === 'string'))) { return 0; }
 

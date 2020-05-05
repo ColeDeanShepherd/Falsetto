@@ -62,7 +62,6 @@ export function getPercentToNextLevel(currentFlashCardLevel: FlashCardLevel, fla
   return sum(percentCorrects, p => Math.min(p, MIN_PCT_CORRECT_FLASH_CARD_LEVEL) / percentCorrects.length) / MIN_PCT_CORRECT_FLASH_CARD_LEVEL;
 }
 
-// TODO: don"t use global actions for specific flash card set actions
 // TODO: make study algorithm stateless? (leitner algorithm is stateful)
 export class StudyFlashCardsModel {
   private userManager: IUserManager;
@@ -236,7 +235,8 @@ export class StudyFlashCardsModel {
   private uiStateHandleUserAnswerAction(
     flashCardId: FlashCardId,
     answer: any,
-    answerDifficulty: AnswerDifficulty) {
+    answerDifficulty: AnswerDifficulty
+  ) {
     if (!this.haveGottenCurrentFlashCardWrong) {
       this.startShowingCorrectAnswerIcon = false;
       this.startShowingIncorrectAnswerIcon = false;

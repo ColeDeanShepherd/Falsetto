@@ -24,9 +24,9 @@ export class ChordScaleFormula {
       .map(p => p.getIntervalFromRootNote())
       .map(interval => Pitch.addInterval(rootPitch, VerticalDirection.Up, interval));
   }
-  public toString(): string {
+  public toString(useSymbols: boolean = false): string {
     return this.parts
-      .map(p => p.toString())
+      .map(p => p.toString(useSymbols))
       .join(" ");
   }
 }

@@ -60,7 +60,7 @@ export class PianoKeysAnswerSelect extends React.Component<IPianoKeysAnswerSelec
           pressedPitches={selectedPitches}
           onKeyPress={pitch => this.onKeyPress(pitch, /*wasClick*/ true)}
           onKeyRelease={pitch => this.onKeyRelease(pitch, /*wasClick*/ true)}
-          allowDragPresses={instantConfirm}
+          allowDragPresses={false}
           style={{ width: "100%", maxWidth: `${maxWidth}px`, height: "auto" }}
         />
 

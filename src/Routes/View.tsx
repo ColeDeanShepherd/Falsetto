@@ -4,7 +4,7 @@ import DocumentTitle from "react-document-title";
 
 import { flashCardSets } from "../FlashCardGraph";
 
-import { PianoTheory } from "../PianoTheory/PianoTheory";
+import { PianoTheory, pianoTheorySlideGroups } from "../PianoTheory/PianoTheory";
 import {
   SectionContainer
 } from "../Components/Lessons/EssentialMusicTheory/EssentialMusicTheory";
@@ -41,6 +41,7 @@ import { ScaleExercisesPage } from "../Components/ScaleExercisesPage";
 import * as PianoScaleDegrees from "../Components/Quizzes/Scales/PianoScaleDegrees";
 import * as PianoDiatonicChords from "../Components/Quizzes/Chords/PianoDiatonicChords";
 import { Scale } from '../lib/TheoryLib/Scale';
+import { createSlideGroups } from '../PianoTheory/ScaleMasteryLessonSlides';
 
 export interface IScaleRouteProps {
   routeParams: {};
@@ -139,7 +140,7 @@ export class RoutesView extends React.Component<IRoutesViewProps, IRoutesViewSta
         )} />,
         <Route key="/piano-theory" exact path="/piano-theory" component={() => (
           <DocumentTitle title="Piano Theory - Falsetto">
-            <PianoTheory />
+            <PianoTheory slideGroups={pianoTheorySlideGroups} />
           </DocumentTitle>
         )} />,
         <Route key="/essential-music-theory" exact path="/essential-music-theory" component={() => (
@@ -285,6 +286,16 @@ export class RoutesView extends React.Component<IRoutesViewProps, IRoutesViewSta
             <ScaleRoute routeParams={props.match.params} renderRoute={scale => {
               const flashCardSet = PianoScaleDegrees.createFlashCardSet(scale);
               return this.renderStudyFlashCardSetComponent(flashCardSet);
+            }} />
+          )} />
+      ]).concat([
+        <Route
+          key="/scale/:scaleId/lesson"
+          exact path="/scale/:scaleId/lesson"
+          component={(props: any) => (
+            <ScaleRoute routeParams={props.match.params} renderRoute={scale => {
+              const slideGroups = createSlideGroups(scale);
+              return <PianoTheory slideGroups={slideGroups} />
             }} />
           )} />
       ]).concat([3, 4]

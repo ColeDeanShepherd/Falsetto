@@ -219,7 +219,7 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
           {flashCardSet.renderAnswerSelect
             ? (
               <p style={{marginBottom: "0", marginTop: "0", lineHeight: "1.5"}}>
-                <span style={{paddingRight: "1em"}}>{studyAlgorithm.flashCardSetStats.numCorrectGuesses} / {studyAlgorithm.flashCardSetStats.numIncorrectGuesses} correct ({(100 * percentCorrect).toFixed(2)}%)</span>
+                <span style={{paddingRight: "1em"}}>{studyAlgorithm.flashCardSetStats.numCorrectGuesses} / {studyAlgorithm.flashCardSetStats.numCorrectGuesses + studyAlgorithm.flashCardSetStats.numIncorrectGuesses} correct ({(100 * percentCorrect).toFixed(2)}%)</span>
                 <span key={`ca.${model.correctAnswerIconKeySuffix}`}>
                   <i
                     className="material-icons fade-out"

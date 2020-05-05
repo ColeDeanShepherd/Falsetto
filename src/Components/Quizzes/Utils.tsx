@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Button } from "@material-ui/core";
 
-import * as Utils from "../../lib/Core/Utils";
 import { FlashCard, FlashCardSideRenderFn, FlashCardId } from "../../FlashCard";
 import { callFlashCardSideRenderFn } from "../../Components/FlashCard";
 import { AnswerDifficulty } from "../../Study/AnswerDifficulty";

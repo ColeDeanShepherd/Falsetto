@@ -263,7 +263,7 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
               }
             }}
             onPointerOver={allowDragPresses ? onPointerOver : undefined}
-            onPointerOut={allowDragPresses ? onPointerOut : undefined}
+            onPointerOut={onPointerOut}
           />
         );
       } else {
@@ -288,7 +288,7 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
               }
             }}
             onPointerOver={allowDragPresses ? onPointerOver : undefined}
-            onPointerOut={allowDragPresses ? onPointerOut : undefined}
+            onPointerOut={onPointerOut}
           />
         );
       }
