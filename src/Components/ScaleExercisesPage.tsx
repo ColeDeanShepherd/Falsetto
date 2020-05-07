@@ -12,6 +12,8 @@ import * as ScaleEarTraining from "./Quizzes/Scales/ScaleEarTraining";
 import { Scale, ScaleTypeGroup, ScaleType } from '../lib/TheoryLib/Scale';
 import { ScaleTypeSelect } from "./Utils/ScaleTypeSelect";
 import { getValidKeyPitches } from '../lib/TheoryLib/Key';
+import { isDevelopment } from '../Config';
+import { flattenArrays } from '../lib/Core/ArrayUtils';
 
 export interface IScaleExercisesProps {}
 
@@ -86,5 +88,28 @@ export class ScaleExercisesPage extends React.Component<IScaleExercisesProps, IS
       scaleTypeGroup: newScaleTypeGroup,
       scaleType: newScaleType
     });
+  }
+}
+
+// TODO: remove
+if (isDevelopment()) {
+  var failedScaleTypeNames = new Set<string>();
+
+  flattenArrays<ScaleType>(ScaleType.Groups.map(g => g.scaleTypes))
+    .map(st => getValidKeyPitches(4)
+      .map(p => [3, 4]
+        .map(numChordPitches => {
+          const scale = new Scale(st, p);
+
+          try {
+            scale.getDiatonicChords(numChordPitches)
+          } catch {
+            failedScaleTypeNames.add(scale.type.name);
+          }
+        }))
+    );
+  
+  for (const stn of failedScaleTypeNames) {
+    console.error(stn);
   }
 }

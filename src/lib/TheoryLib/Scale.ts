@@ -216,6 +216,10 @@ export class ScaleType {
     return this.formula.parts.map(p => p.getIntervalFromRootNote());
   }
 
+  public getPitch(rootPitch: Pitch, scaleDegree: number): Pitch {
+    return this.formula.getPitch(rootPitch, scaleDegree);
+  }
+
   public getPitches(rootPitch: Pitch): Array<Pitch> {
     return this.formula.getPitches(rootPitch);
   }
@@ -231,17 +235,37 @@ export class ScaleType {
     return Utils.unwrapValueOrUndefined(mode);
   }
 
+  public getDiatonicChordScaleDegreeNumbers(scaleDegree: number, numChordPitches: number): Array<number> {
+    precondition(scaleDegree >= 1);
+    precondition(scaleDegree <= this.numPitches);
+    precondition(numChordPitches >= 1);
+    precondition(numChordPitches <= this.numPitches);
+
+    const i = scaleDegree - 1;
+    const chordScaleDegreeNumbers = new Array<number>(numChordPitches);
+
+    for (let chordI = 0; chordI < numChordPitches; chordI++) {
+      const unwrappedScaleI = i + (2 * chordI);
+      const baseScaleI = unwrappedScaleI % this.numPitches;
+      
+      chordScaleDegreeNumbers[chordI] = 1 + baseScaleI;
+    }
+
+    return chordScaleDegreeNumbers;
+  }
+
   public getDiatonicChordPitchIntegers(scaleDegree: number, numChordPitches: number): Array<number> {
     precondition(scaleDegree >= 1);
     precondition(scaleDegree <= this.numPitches);
     precondition(numChordPitches >= 1);
     precondition(numChordPitches <= this.numPitches);
 
-    const halfStepsToSubtract = this.pitchIntegers[scaleDegree - 1];
+    const i = scaleDegree - 1;
+    const halfStepsToSubtract = this.pitchIntegers[i];
     const chordPitchIntegers = new Array<number>(numChordPitches);
 
     for (let chordI = 0; chordI < chordPitchIntegers.length; chordI++) {
-      const unwrappedScaleI = (scaleDegree - 1) + (2 * chordI);
+      const unwrappedScaleI = i + (2 * chordI);
       const baseScaleI = unwrappedScaleI % this.numPitches;
       
       chordPitchIntegers[chordI] = mod(this.pitchIntegers[baseScaleI] - halfStepsToSubtract, 12);
@@ -374,13 +398,25 @@ export class Scale {
     return `${this.rootPitch.toString(/*includeOctaveNumber*/ false)}-${this.type.id}`;
   }
 
+  public getPitch(scaleDegree: number): Pitch {
+    return this.type.getPitch(this.rootPitch, scaleDegree);
+  }
+
   public getPitches(): Array<Pitch> {
     return this.type.formula.getPitches(this.rootPitch);
   }
+
+  public getDiatonicCanonicalChord(scaleDegree: number, numChordPitches: number): CanonicalChord {
+    return {
+      type: this.type.getDiatonicCanonicalChordType(scaleDegree, numChordPitches),
+      rootPitchClass: this.type.formula.getPitch(this.rootPitch, scaleDegree).class
+    } as CanonicalChord;
+  }
   
   public getDiatonicChord(scaleDegree: number, numChordPitches: number): Chord {
+    const rootPitch = this.type.formula.getPitch(this.rootPitch, scaleDegree);
     const chordType = this.type.getDiatonicChordType(scaleDegree, numChordPitches);
-    return new Chord(chordType, this.rootPitch);
+    return new Chord(chordType, rootPitch);
   }
 
   public getDiatonicCanonicalChords(numChordPitches: number): Array<CanonicalChord> {

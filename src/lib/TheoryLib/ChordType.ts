@@ -323,3 +323,14 @@ export const chordTypeLevels = [
       .concat(ChordType.SimpleThirteenthChords)
   }
 ];
+
+export function getChordExtensionTypeName(numChordPitches: number, capitalize: boolean): string {
+  switch (numChordPitches) {
+    case 3: return capitalize ? "Triad" : "triad";
+    case 4: return capitalize ? "Seventh Chord" : "seventh chord";
+    case 5: return capitalize ? "Ninth Chord" : "ninth chord";
+    case 6: return capitalize ? "Eleventh Chord" : "eleventh chord";
+    case 7: return capitalize ? "Thirteenth Chord" : "thirteenth chord";
+    default: return capitalize ? `${numChordPitches}-Note Chord` : `${numChordPitches}-note chord`;
+  }
+}

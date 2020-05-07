@@ -1,17 +1,23 @@
+// TODO: fingering
+// TODO: play in different intervals?
+// TODO: diatonic chords (triads, seventh, extended)
+
 import * as React from "react";
 
 import {  Scale } from "../lib/TheoryLib/Scale";
 
 import { createStudyFlashCardSetComponent } from "../StudyFlashCards/View";
 
-import * as ScalesQuiz from "./ScalesQuiz";
-
 import { LimitedWidthContentContainer } from "../Components/Utils/LimitedWidthContentContainer";
 import { PianoScaleMajorRelativeFormulaDiagram } from "../Components/Utils/PianoScaleMajorRelativeFormulaDiagram";
-import { NavLinkView } from "../NavLinkView";
 import { SlideGroup, Slide, maxTwoOctavePianoWidth } from "./PianoTheory";
 import * as PianoScaleDegrees from "../Components/Quizzes/Scales/PianoScaleDegrees";
+import * as PianoDiatonicChords from "../Components/Quizzes/Chords/PianoDiatonicChords";
 import { NoteText } from "../Components/Utils/NoteText";
+import { getRomanNumerals, unwrapMaybe } from '../lib/Core/Utils';
+import { range } from "../lib/Core/MathUtils";
+import { getChordExtensionTypeName } from '../lib/TheoryLib/ChordType';
+import { ChordView } from '../Components/Utils/ChordView';
 
 export function createSlideGroups(scale: Scale): Array<SlideGroup> {
   const scaleName = `${scale.rootPitch.toString(/*includeOctaveNumber*/ false)} ${scale.type.name}`;
@@ -21,8 +27,8 @@ export function createSlideGroups(scale: Scale): Array<SlideGroup> {
     .join(' ');
   const majorScaleRelativeFormulaString = scale.type.formula.toString(/*useSymbols*/ true);
 
-  return [
-    new SlideGroup("Scales", [
+  const notesSlideGroup = new SlideGroup(
+    "Notes", [
       new Slide("introduction", () => (
         <div>
           <h1>{scaleName} Lesson</h1>
@@ -30,7 +36,8 @@ export function createSlideGroups(scale: Scale): Array<SlideGroup> {
           <p><strong>Notes:</strong> {scalePitchesString}</p>
           <p>All <strong>{scale.type.name}</strong> scales have the following formula relative to the major scale:</p>
           <p><strong>Formula (Relative to the Major Scale)</strong>: {majorScaleRelativeFormulaString}</p>
-          <p>Below is an interactive diagram of the <strong>{scaleName}</strong> scale. Try pressing the piano keys below to get a feel for how the scale sounds.</p>
+          <p>Below is an interactive diagram of the <strong>{scaleName}</strong> scale, including the major-scale-relative formula and note names.</p>
+          <p>Try pressing the piano keys below (or on your MIDI keyboard) to get a feel for how the scale sounds.</p>
           <p><PianoScaleMajorRelativeFormulaDiagram scale={scale} octaveCount={2} maxWidth={maxTwoOctavePianoWidth} /></p>
           <p>Study this slide, then move to the next slide to test your knowledge of the notes in the <strong>{scaleName}</strong> with a quiz.</p>
           <div style={{ display: "inline-block" }}><NoteText>We recommend playing the scale forwards and backwards in various intervals (2nds, 3rds, etc.) to effectively memorize it.</NoteText></div>
@@ -51,15 +58,67 @@ export function createSlideGroups(scale: Scale): Array<SlideGroup> {
           </div>
         </LimitedWidthContentContainer>
       )),
+    ]);
 
-      // TODO: fingering
-      // TODO: play in different intervals?
-      // TODO: diatonic chords (triads, seventh, extended)
-      //PianoDiatonicChords.createFlashCardSet(scale, numChordPitches))
-    ]),
-    
-    new SlideGroup("Coming Soon", [
-      new Slide("coming-soon", () => <h3>More coming soon!</h3>)
-    ])
-  ];
+  return [notesSlideGroup]
+    .concat([3, 4]
+      .map(numChordPitches => {
+        // TODO: fix this
+        try {
+          const chordExtensionTypeName = getChordExtensionTypeName(numChordPitches, /*capitalize*/ true);
+
+          return (
+            new SlideGroup(
+              `Diatonic ${chordExtensionTypeName}s`,
+              range(1, scale.type.numPitches)
+                .map(scaleDegreeNumber => {
+                  const scaleDegreeRomanNumerals = getRomanNumerals(scaleDegreeNumber);
+        
+                  const chord = scale.getDiatonicChord(scaleDegreeNumber, numChordPitches);
+                  const chordScaleDegreeNumbers = scale.type.getDiatonicChordScaleDegreeNumbers(scaleDegreeNumber, numChordPitches);
+                  const chordScaleDegreesString = chordScaleDegreeNumbers.join(' ');
+                  const chordName = `${chord.rootPitch.toString(/*includeOctaveNumber*/ false)} ${chord.type.name}`;
+                  const chordPitches = chord.getPitches();
+                  const chordPitchesString = chordPitches
+                    .map(p => p.toString(/*includeOctaveNumber*/ false, /*useSymbols*/ true))
+                    .join(' ');
+        
+                  return (
+                    new Slide(`${numChordPitches}-note-diatonic-chord-${scaleDegreeRomanNumerals}`, () => (
+                      <div>
+                        <p>The {scaleDegreeRomanNumerals} {chordExtensionTypeName} of {scaleName} is <strong>{chordName}</strong>, which consists of the notes <strong>{chordPitchesString}</strong> (scale degrees <strong>{chordScaleDegreesString}</strong>).</p>
+                        <ChordView
+                          chord={chord}
+                          showChordInfoText={false}
+                          showGuitarFretboard={false} />
+                      </div>
+                    ))
+                  );
+                })
+                .concat([
+                  new Slide(`${numChordPitches}-note-diatonic-chords-quiz`, () => (
+                    <LimitedWidthContentContainer>
+                      <div style={{ marginTop: "1em" }}>
+                        {createStudyFlashCardSetComponent(
+                          PianoDiatonicChords.createFlashCardSet(scale, numChordPitches),
+                          /*isEmbedded*/ false,
+                          /*hideMoreInfoUri*/ true,
+                          /*title*/ undefined,
+                          /*style*/ undefined,
+                          /*enableSettings*/ undefined,
+                          /*showRelatedExercises*/ false)}
+                      </div>
+                    </LimitedWidthContentContainer>
+                  ))
+                ])
+            )
+          );
+        } catch {
+          console.error(scale);
+          return null;
+        }
+      })
+      .filter(x => x !== null)
+      .map(x => unwrapMaybe(x))
+    );
 }

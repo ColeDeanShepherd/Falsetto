@@ -16,6 +16,7 @@ import { getPianoKeyboardAspectRatio } from '../../Utils/PianoUtils';
 import { PianoKeyboard } from "../../Utils/PianoKeyboard";
 import { PianoKeysAnswerSelect } from "../../Utils/PianoKeysAnswerSelect";
 import { canonicalChordTypeToString, getPitchClasses } from '../../../lib/TheoryLib/CanonicalChord';
+import { getChordExtensionTypeName } from "../../../lib/TheoryLib/ChordType";
 
 const pianoLowestPitch = new Pitch(PitchLetter.C, 0, 4);
 const pianoHighestPitch = new Pitch(PitchLetter.B, 0, 5);
@@ -29,11 +30,12 @@ export function getFlashCardSetId(scale: Scale, numChordPitches: number): string
 }
 
 export function createFlashCardSet(scale: Scale, numChordPitches: number): FlashCardSet {
+  const chordExtensionTypeName = getChordExtensionTypeName(numChordPitches, /*capitalize*/ true);
   const flashCardSetId = getFlashCardSetId(scale, numChordPitches);
 
   const flashCardSet = new FlashCardSet(
     flashCardSetId,
-    `${scale.rootPitch.toString(/*includeOctaveNumber*/ false)} ${scale.type.name} ${numChordPitches}-Note Diatonic Chords`,
+    `${scale.rootPitch.toString(/*includeOctaveNumber*/ false)} ${scale.type.name} Diatonic ${chordExtensionTypeName}s`,
     () => createFlashCards(flashCardSetId, scale, numChordPitches));
   flashCardSet.route = `scale/${encodeURIComponent(scale.id)}/diatonic-${numChordPitches}-note-chords-exercise`;
   flashCardSet.renderAnswerSelect = renderAnswerSelect;

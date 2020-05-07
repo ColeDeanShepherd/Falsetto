@@ -19,11 +19,18 @@ export class ChordScaleFormula {
     return this.parts.map(p => p.pitchInteger);
   }
 
+  public getPitch(rootPitch: Pitch, scaleDegree: number): Pitch {
+    precondition(scaleDegree >= 1);
+    precondition(scaleDegree <= this.parts.length);
+
+    return this.parts[scaleDegree - 1].getPitch(rootPitch);
+  }
+
   public getPitches(rootPitch: Pitch): Array<Pitch> {
     return this.parts
-      .map(p => p.getIntervalFromRootNote())
-      .map(interval => Pitch.addInterval(rootPitch, VerticalDirection.Up, interval));
+      .map(p => p.getPitch(rootPitch));
   }
+
   public toString(useSymbols: boolean = false): string {
     return this.parts
       .map(p => p.toString(useSymbols))
@@ -72,7 +79,15 @@ export class ChordScaleFormulaPart {
   public toString(useSymbols?: boolean): string {
     return this.chordNoteNumber.toString() + getAccidentalString(this.signedAccidental, useSymbols);
   }
+
   public getIntervalFromRootNote(): Interval {
     return new Interval(this.chordNoteNumber, this.signedAccidental);
+  }
+
+  public getPitch(rootPitch: Pitch): Pitch {
+    const interval = this.getIntervalFromRootNote();
+    const pitch = Pitch.addInterval(rootPitch, VerticalDirection.Up, interval);
+
+    return pitch;
   }
 }

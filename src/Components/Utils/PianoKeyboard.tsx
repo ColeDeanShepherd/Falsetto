@@ -177,6 +177,7 @@ export function renderPressedPianoKeys(metrics: PianoKeyboardMetrics, pressedPit
     </g>
   );
 }
+
 export function renderPianoKeyboardNoteNames(metrics: PianoKeyboardMetrics, useSharps?: boolean, showLetterPredicate?: (pitch: Pitch) => boolean): JSX.Element {
   return renderPianoKeyboardKeyLabels(metrics, useSharps, pitch => {
     if (showLetterPredicate && !showLetterPredicate(pitch)) {
