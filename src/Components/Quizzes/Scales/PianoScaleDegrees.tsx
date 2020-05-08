@@ -9,7 +9,7 @@ import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 
 import { Pitch, tryWrapPitchOctave } from '../../../lib/TheoryLib/Pitch';
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
-import { Scale } from '../../../lib/TheoryLib/Scale';
+import { Scale, getUriComponent } from '../../../lib/TheoryLib/Scale';
 
 import { PianoKeysAnswerSelect } from '../../Utils/PianoKeysAnswerSelect';
 import { getPianoKeyboardAspectRatio } from '../../Utils/PianoUtils';
@@ -47,7 +47,7 @@ export function createFlashCardSet(scale: Scale): FlashCardSet {
     flashCardSetId,
     `${scale.rootPitch.toString(/*includeOctaveNumber*/ false)} ${scale.type.name} Scale Degrees`,
     () => createFlashCards(flashCardSetId, scale));
-  flashCardSet.route = `scale/${encodeURIComponent(scale.id)}/degrees-exercise`;
+  flashCardSet.route = `scale/${getUriComponent(scale)}/degrees-exercise`;
   flashCardSet.containerHeight = `${200}px`;
   flashCardSet.moreInfoUri = "/essential-music-theory/notes";
   flashCardSet.renderAnswerSelect = renderAnswerSelect;

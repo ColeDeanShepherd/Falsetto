@@ -40,7 +40,7 @@ import { LimitedWidthContentContainer } from '../Components/Utils/LimitedWidthCo
 import { ScaleExercisesPage } from "../Components/ScaleExercisesPage";
 import * as PianoScaleDegrees from "../Components/Quizzes/Scales/PianoScaleDegrees";
 import * as PianoDiatonicChords from "../Components/Quizzes/Chords/PianoDiatonicChords";
-import { Scale } from '../lib/TheoryLib/Scale';
+import { Scale, parseScaleFromUriComponent } from '../lib/TheoryLib/Scale';
 import { createSlideGroups } from '../PianoTheory/ScaleMasteryLessonSlides';
 
 export interface IScaleRouteProps {
@@ -61,7 +61,7 @@ export class ScaleRoute extends React.Component<IScaleRouteProps, {}> {
       return null;
     }
 
-    const scale = Scale.parseId(decodeURIComponent(scaleId));
+    const scale = parseScaleFromUriComponent(scaleId);
     
     return scale
       ? renderRoute(scale)

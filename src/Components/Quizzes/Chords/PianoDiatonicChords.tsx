@@ -7,7 +7,7 @@ import { Rect2D } from '../../../lib/Core/Rect2D';
 
 import { Pitch } from "../../../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
-import { Scale } from "../../../lib/TheoryLib/Scale";
+import { Scale, getUriComponent } from "../../../lib/TheoryLib/Scale";
 
 import { FlashCard, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
@@ -37,7 +37,7 @@ export function createFlashCardSet(scale: Scale, numChordPitches: number): Flash
     flashCardSetId,
     `${scale.rootPitch.toString(/*includeOctaveNumber*/ false)} ${scale.type.name} Diatonic ${chordExtensionTypeName}s`,
     () => createFlashCards(flashCardSetId, scale, numChordPitches));
-  flashCardSet.route = `scale/${encodeURIComponent(scale.id)}/diatonic-${numChordPitches}-note-chords-exercise`;
+  flashCardSet.route = `scale/${getUriComponent(scale)}/diatonic-${numChordPitches}-note-chords-exercise`;
   flashCardSet.renderAnswerSelect = renderAnswerSelect;
   flashCardSet.containerHeight = `${150}px`;
 
