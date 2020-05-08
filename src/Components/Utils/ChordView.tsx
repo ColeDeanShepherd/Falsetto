@@ -25,7 +25,8 @@ export interface IChordViewProps {
   chord: Chord;
   showChordInfoText?: boolean;
   showPianoKeyboard?: boolean;
-  showGuitarFretboard?: boolean;
+  showScaleDegreesOnPiano?: boolean;
+  showGuitarFretboard?: boolean; 
 }
 
 export class ChordView extends React.Component<IChordViewProps, {}> {
@@ -99,7 +100,7 @@ export class ChordView extends React.Component<IChordViewProps, {}> {
             lowestPitch={pianoLowestPitch}
             highestPitch={pianoHighestPitch}
             onKeyPress={onKeyPress}
-            renderExtrasFn={metrics => this.renderExtrasFn(metrics, pitches)}
+            renderExtrasFn={metrics => this.renderPianoExtrasFn(metrics, pitches)}
             style={pianoGuitarStyle}
           />
         </div>
@@ -155,7 +156,13 @@ export class ChordView extends React.Component<IChordViewProps, {}> {
     return containerContents;
   }
   
-  private renderExtrasFn(metrics: PianoKeyboardMetrics, pitches: Array<Pitch>): JSX.Element {
+  private renderPianoExtrasFn(metrics: PianoKeyboardMetrics, pitches: Array<Pitch>): JSX.Element {
+    const { chord } = this.props;
+
+    const showScaleDegreesOnPiano = (this.props.showScaleDegreesOnPiano !== undefined)
+      ? this.props.showScaleDegreesOnPiano
+      : true;
+
     const pitchMidiNumberNoOctaves = pitches.map(p => p.midiNumberNoOctave);
     
     return renderPianoKeyboardKeyLabels(
@@ -169,7 +176,11 @@ export class ChordView extends React.Component<IChordViewProps, {}> {
       
       const includeOctaveNumber = false;
       const useSymbols = true;
-      return [visualPitch.toString(includeOctaveNumber, useSymbols)];
+      const visualPitchString = visualPitch.toString(includeOctaveNumber, useSymbols);
+      
+      return showScaleDegreesOnPiano
+        ? [chord.type.formula.parts[visualPitchIndex].toString(/*useSymbols*/ true), visualPitchString]
+        : [visualPitchString];
     });
   }
 

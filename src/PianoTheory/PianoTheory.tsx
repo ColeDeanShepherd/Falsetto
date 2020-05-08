@@ -39,6 +39,8 @@ import { PianoScaleMajorRelativeFormulaDiagram } from "../Components/Utils/Piano
 import { NavLinkView } from "../NavLinkView";
 import { ChordViewer } from "../Components/Tools/ChordViewer";
 import { PlayablePianoKeyboard } from "../Components/Utils/PlayablePianoKeyboard";
+import { ChordView } from '../Components/Utils/ChordView';
+import { Chord } from "../lib/TheoryLib/Chord";
 
 export const maxPianoWidth = 1000;
 export const maxOneOctavePianoWidth = 400;
@@ -676,7 +678,12 @@ export const pianoTheorySlideGroups = [
         <p><strong>C Minor</strong>: 1, 2, 3♭, 4, 5, 6♭, 7♭</p>
         <p>This is useful to quickly find scales similar to major scales you have already memorized.</p>
         <p>Below is an interactive diagram of the <strong>C Natural Minor</strong> scale, along with its major-scale-relative formula.</p>
-        <p><PianoScaleMajorRelativeFormulaDiagram scale={new Scale(ScaleType.Aeolian, new Pitch(PitchLetter.C, 0, 4))} octaveCount={2} maxWidth={maxTwoOctavePianoWidth} /></p>
+        <p>
+          <PianoScaleMajorRelativeFormulaDiagram
+            scale={new Scale(ScaleType.Aeolian, new Pitch(PitchLetter.C, 0, 4))}
+            octaveCount={2}
+            maxWidth={maxTwoOctavePianoWidth} />
+        </p>
       </div>
     )),
     new Slide("scales-summary", () => (
@@ -709,21 +716,55 @@ export const pianoTheorySlideGroups = [
     )),
   ]),
 
-  /*new SlideGroup("Chords", [
+  new SlideGroup("Chords", [
     new Slide("chords-introduction", () => (
       <div>
         <h2>Section 4: Chords</h2>
         <p><strong>Chords</strong> are sets of two or more notes played simultaneously.</p>
-        <p>For example, here is a <strong>C Major</strong> chord, which consists of the notes <strong>C, E, G</strong>.</p>
-        <ChordViewer
-          title={"C Major Chord"}
-          chordTypeGroups={[new ChordTypeGroup("Basic Triads", ChordType.BasicTriads)]}
-          renderOnCard={false}
-          showChordSelect={false}
+        <p>For example, here is a <strong>C Major</strong> chord, which consists of the three notes <strong>C, E, G</strong>, and has the root note <strong>C</strong>.</p>
+        <ChordView
+          chord={new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))}
           showChordInfoText={false}
+          showScaleDegreesOnPiano={false}
           showGuitarFretboard={false} />
+        <div style={{ display: "inline-block" }}><NoteText>Chords with 3 notes are sometimes called "triads".</NoteText></div>
       </div>
     )),
+    new Slide("chords-introduction-2", () => (
+      <div>
+        <p>Like scales, chords have major-scale-relative formulas.</p>
+        <p>The major-scale-relative formula for all major chords is <strong>1 3 5</strong>, meaning major chords consist of the 1st, 3rd, and 5th notes of the major scale associated with the root note of the chord.</p>
+        <p>So C Major chords consist the 1st, 3rd, and 5th notes of the C Major scale: C, E, G.</p>
+        <ChordView
+          chord={new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))}
+          showChordInfoText={false}
+          showGuitarFretboard={false} />
+        <LimitedWidthContentContainer>
+        <NoteText>Chords notes are sometimes referred to by the number of the note in the scale they come from. So, the "C" in a C Major chord may be called the "1st" of the chord, the "E" may be called the "3rd" of the chord, and the "G" may be called the "5th" of the chord.</NoteText>
+        </LimitedWidthContentContainer>
+      </div>
+    )),
+    new Slide("chords-introduction-3", () => (
+      <div>
+        <p>It is important to note that you are free to repeat chord notes as many times as you like, and play chord notes in any order, when playing a chord.</p>
+        <p>The note you choose to make the lowest note in the chord (the bass) determines which <strong>inversion</strong> the chord is in.</p>
+        <p>For example, a C Major chord played with a C (the root note) in the bass is said to be in "root position":</p>
+        <p>diagram</p>
+        <p>A C Major chord played with an E (the 2nd chord note up from the root note) in the bass is said to be in "1st inversion":</p>
+        <p>diagram</p>
+        <p>A C Major chord played with an G (the 3rd chord note up from the root note) in the bass is said to be in "2nd inversion":</p>
+        <p>diagram</p>
+        <p>And so on for chords with more than 3 notes...</p>
+      </div>
+    )),
+    new Slide("chord-introduction-4", () => (
+      <div>
+        <p>You are also free to play the notes of a chord separately instead of simultaneously.</p>
+        <p>In this case, we say that you are playing an <strong>arpeggio</strong>, or an <strong>arpeggiated chord</strong>.</p>
+        <p>diagram</p>
+      </div>
+    )),
+
     new Slide("needs-name-1", () => (
       <div>
         <p>There are many possible chords, but generally musicians will restrict themselves (mostly) to the chords derived from the notes of a specific scale.</p>
@@ -759,11 +800,6 @@ export const pianoTheorySlideGroups = [
     )),
     new Slide("needs-name-3", () => (
       <div>
-        <p>Again, you are free to play the notes of chords in any order, with any number of repeat notes.</p>
-        <p>Whichever note you choose to play in the bass (the lowest of the notes) determines the "inversion" the chord is in.</p>
-        <p>root position means the root is in the bass</p>
-        <p>1st inversion means the 3rd is in the bass</p>
-        <p>2nd inversion means the 5th is in the bass</p>
         <p>If a chord has 4 notes it can be in 3rd inversion, where the 7th is in the bass.</p>
         <p>The pattern continues:</p>
         <p>4th inversion - 9th in the bass</p>
@@ -774,7 +810,6 @@ export const pianoTheorySlideGroups = [
         <p>11th is equivalent to the 4th note in the scale</p>
         <p>13th is equivalent to the 6th note in the scale.</p>
         <p>There is no 15th, you're back to the root note!</p>
-        <p>Note about inversions - only the bass note determines the inversion! The other, higher notes can be in any order!</p>
         <p>Arpeggios are the notes of the chords played separately.</p>
       </div>
     )),
@@ -785,7 +820,7 @@ export const pianoTheorySlideGroups = [
     )),
   ]),
 
-  new SlideGroup("Chord Progressions", [
+  /*new SlideGroup("Chord Progressions", [
     new Slide("chord-progressions-introduction", () => (
       <div>
         <h2>Section 5: Chord Progressions</h2>
