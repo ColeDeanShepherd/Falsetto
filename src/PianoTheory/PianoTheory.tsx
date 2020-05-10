@@ -734,7 +734,7 @@ export const pianoTheorySlideGroups = [
       <div>
         <p>Like scales, chords have major-scale-relative formulas.</p>
         <p>The major-scale-relative formula for all major chords is <strong>1 3 5</strong>, meaning major chords consist of the 1st, 3rd, and 5th notes of the major scale associated with the root note of the chord.</p>
-        <p>So C Major chords consist the 1st, 3rd, and 5th notes of the C Major scale: C, E, G.</p>
+        <p>So, C Major chords consist the 1st, 3rd, and 5th notes of the C Major scale: C, E, G.</p>
         <ChordView
           chord={new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))}
           showChordInfoText={false}

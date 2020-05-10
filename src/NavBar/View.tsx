@@ -85,7 +85,7 @@ export class NavBarView extends React.Component<INavBarViewProps, INavBarViewSta
   private handleAction(action: IAction) {
     switch (action.getId()) {
       case NavigateAction.Id:
-        this.setState({ isMenuVisible: false });
+        this.setState({ isMenuVisible: false, isSettingsVisible: false });
     }
   }
 
