@@ -9,7 +9,7 @@ import * as GuitarScales from "./Quizzes/Scales/GuitarScales";
 import * as ScaleDegreeModes from "./Quizzes/Scales/ScaleDegreeModes";
 import * as ScaleChords from "./Quizzes/Chords/ScaleChords";
 import * as ScaleEarTraining from "./Quizzes/Scales/ScaleEarTraining";
-import { Scale, ScaleTypeGroup, ScaleType } from '../lib/TheoryLib/Scale';
+import { Scale, ScaleTypeGroup, ScaleType, getUriComponent } from '../lib/TheoryLib/Scale';
 import { ScaleTypeSelect } from "./Utils/ScaleTypeSelect";
 import { getValidKeyPitches } from '../lib/TheoryLib/Key';
 import { isDevelopment } from '../Config';
@@ -63,7 +63,7 @@ export class ScaleExercisesPage extends React.Component<IScaleExercisesProps, IS
           <div>
             {scales.map(scale => (
               <div>
-                <NavLinkView to={`/scale/${encodeURIComponent(scale.id)}/lesson`}>{scale.rootPitch.toString(/*includeOctaveNumber*/ false)} {scale.type.name} Lesson</NavLinkView>
+                <NavLinkView to={`/scale/${getUriComponent(scale)}/lesson`}>{scale.rootPitch.toString(/*includeOctaveNumber*/ false)} {scale.type.name} Lesson</NavLinkView>
               </div>
             ))}
           </div>

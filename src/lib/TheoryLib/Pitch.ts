@@ -3,7 +3,7 @@ import { VerticalDirection } from "../Core/VerticalDirection";
 import { Interval } from "./Interval";
 import { precondition } from '../Core/Dbc';
 import { mod } from '../Core/MathUtils';
-import { numMatchingCharsAtStart } from '../Core/StringUtils';
+import { numMatchingCharsAtStart, numSubstringOccurrences } from '../Core/StringUtils';
 
 /**
  * A "pitch class" represented by a number from 0 to 11, where:
@@ -67,15 +67,19 @@ export function getAmbiguousPitchRange(
   return possibleNotes;
 }
 
-export function getAccidentalString(signedAccidental: number, useSymbols: boolean = false): string {
+function getAccidentalStringInternal(signedAccidental: number, sharpText: string, flatText: string): string {
   if (signedAccidental === 0) {
     return "";
   }
 
   const accidentalCharacter = (signedAccidental > 0)
-    ? useSymbols ? "♯" : "#"
-    : useSymbols ? "♭" : "b";
+    ? sharpText
+    : flatText;
   return accidentalCharacter.repeat(Math.abs(signedAccidental));
+}
+
+export function getAccidentalString(signedAccidental: number, useSymbols: boolean = false): string {
+  return getAccidentalStringInternal(signedAccidental, useSymbols ? "♯" : "#", useSymbols ? "♭" : "b");
 }
 
 export function expandPitchRangeToIncludePitch(pitchRange: [Pitch, Pitch], pitch: Pitch): [Pitch, Pitch] {
@@ -172,6 +176,40 @@ export const ambiguousPitchStringsSymbols = [
 export const ambiguousKeyPitchStringsSymbols = [
   "A", "A♯/B♭", "B", "C", "C♯/D♭", "D", "D♯/E♭", "E", "F", "F♯/G♭", "G", "G♯/A♭"
 ];
+
+export function getEnglishAccidentalString(signedAccidental: number): string {
+  return getAccidentalStringInternal(signedAccidental, "sharp", "flat");
+}
+
+export function parseEnglishSignedAccidental(str: string): number | undefined {
+  if (str.length === 0) { return 0; }
+
+  const firstChar = str[0];
+
+  switch (firstChar) {
+    case 's':
+      return numSubstringOccurrences(str, "sharp", /*allowOverlapping*/ false);
+    case 'f':
+      return -numSubstringOccurrences(str, "flat", /*allowOverlapping*/ false);
+    default:
+      return undefined;
+  }
+}
+
+export function getUriComponent(pitch: Pitch, includeOctaveNumber: boolean = false): string {
+  return PitchLetter[pitch.letter] + getEnglishAccidentalString(pitch.signedAccidental) + (includeOctaveNumber ? pitch.octaveNumber.toString() : "");
+}
+
+export function parseFromUriComponent(uriComponent: string, octaveNumber: number): Pitch | undefined {
+  const pitchLetter = parsePitchLetter(uriComponent);
+  if (!pitchLetter) { return undefined; }
+
+  const signedAccidentalStr = uriComponent.substring(1);
+  const signedAccidental = parseEnglishSignedAccidental(signedAccidentalStr);
+  if (signedAccidental === undefined) { return undefined; }
+
+  return new Pitch(pitchLetter, signedAccidental, octaveNumber);
+}
 
 export class Pitch {
   public static createFromPitchClass(pitchClass: number, octaveNumber: number, useSharps: boolean = true): Pitch {
