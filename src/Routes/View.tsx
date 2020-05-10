@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Route } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import DocumentTitle from "react-document-title";
 
 import { flashCardSets } from "../FlashCardGraph";
@@ -42,6 +42,7 @@ import * as PianoScaleDegrees from "../Components/Quizzes/Scales/PianoScaleDegre
 import * as PianoDiatonicChords from "../Components/Quizzes/Chords/PianoDiatonicChords";
 import { Scale, parseScaleFromUriComponent } from '../lib/TheoryLib/Scale';
 import { createSlideGroups } from '../PianoTheory/ScaleMasteryLessonSlides';
+import { PageNotFoundView } from '../Components/PageNotFoundView';
 
 export interface IScaleRouteProps {
   routeParams: {};
@@ -313,10 +314,19 @@ export class RoutesView extends React.Component<IRoutesViewProps, IRoutesViewSta
                 }} />
               )} />
           );
-        }));
+        }))
+        .concat([
+          <Route key={'/page-not-found'} component={PageNotFoundView} />
+        ]);
     }
 
-    return <div style={{ height: "100%" }}>{this.cachedRenderedRoutes}</div>;
+    return (
+      <div style={{ height: "100%" }}>
+        <Switch>
+          {this.cachedRenderedRoutes}
+        </Switch>
+      </div>
+    );
   }
   
   private cachedRenderedRoutes: Array<JSX.Element> | null = null;
