@@ -281,15 +281,15 @@ export class RoutesView extends React.Component<IRoutesViewProps, IRoutesViewSta
         flashCardSets.map(fcs => <Route key={fcs.route} exact path={fcs.route} component={this.createStudyFlashCardSetComponent(fcs)} />)
       ).concat([
         <Route
-          key="/scale/:scaleId/degrees-exercise"
-          exact path="/scale/:scaleId/degrees-exercise"
+          key="/scale/:scaleId"
+          exact path="/scale/:scaleId"
           component={(props: any) => (
             <ScaleRoute routeParams={props.match.params} renderRoute={scale => {
-              const flashCardSet = PianoScaleDegrees.createFlashCardSet(scale);
-              return this.renderStudyFlashCardSetComponent(flashCardSet);
+              const slideGroups = createSlideGroups(scale);
+              return <PianoTheory slideGroups={slideGroups} />
             }} />
-          )} />
-      ]).concat([
+          )} />,
+        
         <Route
           key="/scale/:scaleId/lesson"
           exact path="/scale/:scaleId/lesson"
@@ -297,6 +297,16 @@ export class RoutesView extends React.Component<IRoutesViewProps, IRoutesViewSta
             <ScaleRoute routeParams={props.match.params} renderRoute={scale => {
               const slideGroups = createSlideGroups(scale);
               return <PianoTheory slideGroups={slideGroups} />
+            }} />
+          )} />,
+        
+        <Route
+          key="/scale/:scaleId/degrees-exercise"
+          exact path="/scale/:scaleId/degrees-exercise"
+          component={(props: any) => (
+            <ScaleRoute routeParams={props.match.params} renderRoute={scale => {
+              const flashCardSet = PianoScaleDegrees.createFlashCardSet(scale);
+              return this.renderStudyFlashCardSetComponent(flashCardSet);
             }} />
           )} />
       ]).concat([3, 4]
