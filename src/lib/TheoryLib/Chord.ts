@@ -1,9 +1,24 @@
-import { Pitch } from "./Pitch";
+import { Pitch, parseFromUriComponent } from "./Pitch";
 import { getSimpleScaleDegree } from './Scale';
-import { ChordType } from "./ChordType";
+import { ChordType, parseChordTypeFromUriComponent } from "./ChordType";
 
 export function getSimpleChordNoteNumber(chordNoteNumber: number) {
   return getSimpleScaleDegree(chordNoteNumber);
+}
+
+export function parseChordFromUriComponent(uriComponent: string): Chord | undefined {
+  const splitStr = uriComponent.split("-");
+  if (splitStr.length !== 2) { return undefined; }
+
+  const chordTypeUriComponent = splitStr[1];
+  const chordType = parseChordTypeFromUriComponent(chordTypeUriComponent);
+  if (!chordType) { return undefined; }
+
+  const rootPitchString = splitStr[0];
+  const rootPitch = parseFromUriComponent(rootPitchString, /*octaveNumber*/ 4);
+  if (!rootPitch) { return undefined; }
+
+  return new Chord(chordType, rootPitch);
 }
 
 export class Chord {
@@ -18,6 +33,7 @@ export class Chord {
       : this.rootPitch.toString(false);
     return `${rootPitchString}${this.type.symbols[0]}`;
   }
+  
   public getPitches(): Array<Pitch> {
     return this.type.formula.getPitches(this.rootPitch);
   }

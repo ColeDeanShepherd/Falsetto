@@ -43,6 +43,8 @@ import * as PianoDiatonicChords from "../Components/Quizzes/Chords/PianoDiatonic
 import { Scale, parseScaleFromUriComponent } from '../lib/TheoryLib/Scale';
 import { createSlideGroups } from '../PianoTheory/ScaleMasteryLessonSlides';
 import { PageNotFoundView } from '../Components/PageNotFoundView';
+import { Chord, parseChordFromUriComponent } from "../lib/TheoryLib/Chord";
+import { ChordPage } from "../Components/ChordPage";
 
 export interface IScaleRouteProps {
   routeParams: {};
@@ -66,6 +68,32 @@ export class ScaleRoute extends React.Component<IScaleRouteProps, {}> {
     
     return scale
       ? renderRoute(scale)
+      : null;
+  }
+}
+
+export interface IChordRouteProps {
+  routeParams: {};
+  renderRoute: (chord: Chord) => JSX.Element;
+}
+
+export class ChordRoute extends React.Component<IChordRouteProps, {}> {
+  public constructor(props: IChordRouteProps) {
+    super(props);
+  }
+
+  public render(): JSX.Element | null {
+    const { routeParams, renderRoute } = this.props;
+
+    const chordId = routeParams["chordId"];
+    if (!chordId) {
+      return null;
+    }
+
+    const chord = parseChordFromUriComponent(chordId);
+    
+    return chord
+      ? renderRoute(chord)
       : null;
   }
 }
@@ -279,14 +307,15 @@ export class RoutesView extends React.Component<IRoutesViewProps, IRoutesViewSta
         )} />
       ].concat(
         flashCardSets.map(fcs => <Route key={fcs.route} exact path={fcs.route} component={this.createStudyFlashCardSetComponent(fcs)} />)
-      ).concat([
+      )
+      .concat([
         <Route
           key="/scale/:scaleId"
           exact path="/scale/:scaleId"
           component={(props: any) => (
             <ScaleRoute routeParams={props.match.params} renderRoute={scale => {
               const slideGroups = createSlideGroups(scale);
-              return <PianoTheory slideGroups={slideGroups} />
+              return <PianoTheory slideGroups={slideGroups} />;
             }} />
           )} />,
         
@@ -296,7 +325,7 @@ export class RoutesView extends React.Component<IRoutesViewProps, IRoutesViewSta
           component={(props: any) => (
             <ScaleRoute routeParams={props.match.params} renderRoute={scale => {
               const slideGroups = createSlideGroups(scale);
-              return <PianoTheory slideGroups={slideGroups} />
+              return <PianoTheory slideGroups={slideGroups} />;
             }} />
           )} />,
         
@@ -309,7 +338,18 @@ export class RoutesView extends React.Component<IRoutesViewProps, IRoutesViewSta
               return this.renderStudyFlashCardSetComponent(flashCardSet);
             }} />
           )} />
-      ]).concat([3, 4]
+      ])
+      .concat([
+        <Route
+          key="/chord/:chordId"
+          exact path="/chord/:chordId"
+          component={(props: any) => (
+            <ChordRoute routeParams={props.match.params} renderRoute={chord => {
+              return <ChordPage chord={chord} />;
+            }} />
+          )} />
+      ])
+      .concat([3, 4]
         .map(numChordPitches => {
           const path = `/scale/:scaleId/diatonic-${numChordPitches}-note-chords-exercise`;
 

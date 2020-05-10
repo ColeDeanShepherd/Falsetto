@@ -725,71 +725,46 @@ export const pianoTheorySlideGroups = [
         <ChordView
           chord={new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))}
           showChordInfoText={false}
-          showChordFormulaOnPiano={false} />
-        <div style={{ display: "inline-block" }}><NoteText>Chords with 3 notes are sometimes called "triads".</NoteText></div>
+          showChordFormulaOnPiano={false}
+          maxWidth={maxTwoOctavePianoWidth} />
       </div>
     )),
-    new Slide("chord-major-relative-formula", () => (
+    new Slide("tertial-chords", () => (
       <div>
-        <p>Like scales, chords have major-scale-relative formulas.</p>
-        <p>The major-scale-relative formula for all major chords is <strong>1 3 5</strong>, meaning major chords consist of the 1st, 3rd, and 5th notes of the major scale associated with the root note of the chord.</p>
-        <p>So, C Major chords consist the 1st, 3rd, and 5th notes of the C Major scale: C, E, G.</p>
-        <ChordView
-          chord={new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))}
-          showChordInfoText={false}
-          showChordFormulaOnPiano={true} />
-        <LimitedWidthContentContainer>
-        <NoteText>Chords notes are sometimes referred to by the number of the note in the scale they come from. So, the "C" in a C Major chord may be called the "1st" of the chord, the "E" may be called the "3rd" of the chord, and the "G" may be called the "5th" of the chord.</NoteText>
-        </LimitedWidthContentContainer>
+        <p>In practice, most diatonic chords are built with <strong>thirds</strong>.</p>
+        <p>This means that every note in the chord is spans 3 scale notes compared to the previous note in the chord.</p>
+        <p>Here are some examples of pairs of notes that are thirds apart in the C Major scale, which consists of the notes C, D, E, F, G, A, B:</p>
+        <p>C &amp; E (which span the 3 notes C, D, &amp; E)</p>
+        <p>G &amp; B (which span the 3 notes G, A, &amp; B)</p>
+        <p>B &amp; D (which span the 3 notes B, C, &amp; D)</p>
+        <p>An example of a diatonic chord in the C Major scale built with thirds is the <strong>C Major chord</strong>, which consists of the notes <strong>C, E, &amp; G</strong> &mdash; C &amp; E are a third apart, and E &amp; G are a third apart.</p>
       </div>
     )),
     new Slide("chord-note-order-repeats", () => (
       <div>
         <p>It is important to note that you are free to repeat chord notes as many times as you like, and play chord notes in any order, when playing a chord.</p>
-        <p>The following is still considered a C Major chord:</p>
+        <p>The following is still considered a <strong>C Major</strong> chord because it consists of the notes C, E, G:</p>
         <ChordDiagram
           pitches={[new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5), new Pitch(PitchLetter.G, 0, 5),]}
-          scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))} />
-      </div>
-    )),
-    new Slide("root-position", () => (
-      <div>
-        <p>The note you choose to make the lowest note in the chord (the bass) determines which <strong>inversion</strong> the chord is in.</p>
-        <p>For example, a C Major chord played with a C (the root note) in the bass is said to be in <strong>root position</strong>:</p>
-        <ChordDiagram
-          pitches={[new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5), new Pitch(PitchLetter.E, 0, 5),]}
-          scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))} />
-      </div>
-    )),
-    new Slide("1st-inversion", () => (
-      <div>
-        <p>A C Major chord played with an E (the 2nd chord note up from the root note) in the bass is said to be in <strong>1st inversion</strong>:</p>
-        <ChordDiagram
-          pitches={[new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.C, 0, 5), new Pitch(PitchLetter.E, 0, 5), new Pitch(PitchLetter.G, 0, 5)]}
-          scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))} />
-      </div>
-    )),
-    new Slide("2nd-inversion", () => (
-      <div>
-        <p>A C Major chord played with an G (the 3rd chord note up from the root note) in the bass is said to be in <strong>2nd inversion</strong>:</p>
-        <ChordDiagram
-          pitches={[new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5), new Pitch(PitchLetter.E, 0, 5), new Pitch(PitchLetter.G, 0, 5)]}
-          scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))} />
-        <p>And so on for chords with more than 3 notes...</p>
-      </div>
-    )),
-    new Slide("arpeggio", () => (
-      <div>
-        <p>You are also free to play the notes of a chord separately instead of simultaneously.</p>
-        <p>In this case, we say that you are playing an <strong>arpeggio</strong>, or an <strong>arpeggiated chord</strong>.</p>
-        <p>Listen to the diagram below to hear a C Major arpeggio.</p>
-        <ChordDiagram
-          pitches={[new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5), new Pitch(PitchLetter.E, 0, 5), new Pitch(PitchLetter.G, 0, 5)]}
           scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))}
-          isArpeggio={true} />
+          showScaleDegreeNumbers={false}
+          maxWidth={maxTwoOctavePianoWidth} />
       </div>
     )),
-
+    new Slide("chord-major-relative-formula", () => (
+      <div>
+        <LimitedWidthContentContainer>
+          <p>Like scales, chords have major-scale-relative formulas.</p>
+          <p>The major-scale-relative formula for all major chords is <strong>1 3 5</strong>, meaning major chords consist of the 1st, 3rd, and 5th notes of the major scale associated with the root note of the chord.</p>
+          <p>So, C Major chords consist the 1st, 3rd, and 5th notes of the C Major scale: C, E, G.</p>
+          <ChordView
+            chord={new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))}
+            showChordInfoText={false}
+            showChordFormulaOnPiano={true} />
+          <NoteText>Chords notes are sometimes referred to by the number of the note in the scale they come from. So, the "C" in a C Major chord may be called the "1st" of the chord, the "E" may be called the "3rd" of the chord, and the "G" may be called the "5th" of the chord.</NoteText>
+        </LimitedWidthContentContainer>
+      </div>
+    )),
     new Slide("diatonic-chords-1", () => (
       <div>
         <p>Generally, in a section of music, musicians will restrict themselves to the chords consisting solely of notes from a particular scale.</p>
@@ -812,30 +787,6 @@ export const pianoTheorySlideGroups = [
             scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
             showScaleDegreesOnPiano={true} />
         </p>
-      </div>
-    )),
-    new Slide("diatonic-chords-2", () => (
-      <div>
-        <p>In practice, most diatonic chords are built with <strong>thirds</strong>.</p>
-        <p>This means that every note in the chord is spans 3 scale notes compared to the previous note in the chord.</p>
-        <p>Here are some examples of pairs of notes that are thirds apart in the C Major scale, which consists of the notes C, D, E, F, G, A, B:</p>
-        <p>C &amp; E (which span the 3 notes C, D, &amp; E)</p>
-        <p>G &amp; B (which span the 3 notes G, A, &amp; B)</p>
-        <p>B &amp; D (which span the 3 notes B, C, &amp; D)</p>
-        <p>An example of a diatonic chord in the C Major scale built with thirds is the <strong>C Major chord</strong>, which consists of the notes <strong>C, E, &amp; G</strong> &mdash; C &amp; E are a third apart, and E &amp; G are a third apart.</p>
-      </div>
-    )),
-    new Slide("diatonic-chords-3", () => (
-      <div>
-        <ul>
-          <li>C E G - called <strong>C Major</strong></li>
-          <li>D F A - called <strong>D Minor</strong></li>
-          <li>E G B - called <strong>E Minor</strong></li>
-          <li>F A C - called <strong>F Major</strong></li>
-          <li>G B D - called <strong>G Major</strong></li>
-          <li>A C E - called <strong>A Minor</strong></li>
-          <li>B D F - called <strong>B Diminished</strong></li>
-        </ul>
       </div>
     )),
     new Slide("c-major-diatonic-triad-1", () => (
@@ -909,6 +860,46 @@ export const pianoTheorySlideGroups = [
           showScaleDegreesOnPiano={true} />
       </div>
     )),
+
+    new Slide("root-position", () => (
+      <div>
+        <p>The note you choose to make the lowest note in the chord (the bass) determines which <strong>inversion</strong> the chord is in.</p>
+        <p>For example, a C Major chord played with a C (the root note) in the bass is said to be in <strong>root position</strong>:</p>
+        <ChordDiagram
+          pitches={[new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5), new Pitch(PitchLetter.E, 0, 5),]}
+          scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))} />
+      </div>
+    )),
+    new Slide("1st-inversion", () => (
+      <div>
+        <p>A C Major chord played with an E (the 2nd chord note up from the root note) in the bass is said to be in <strong>1st inversion</strong>:</p>
+        <ChordDiagram
+          pitches={[new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.C, 0, 5), new Pitch(PitchLetter.E, 0, 5), new Pitch(PitchLetter.G, 0, 5)]}
+          scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))} />
+      </div>
+    )),
+    new Slide("2nd-inversion", () => (
+      <div>
+        <p>A C Major chord played with an G (the 3rd chord note up from the root note) in the bass is said to be in <strong>2nd inversion</strong>:</p>
+        <ChordDiagram
+          pitches={[new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5), new Pitch(PitchLetter.E, 0, 5), new Pitch(PitchLetter.G, 0, 5)]}
+          scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))} />
+        <p>And so on for chords with more than 3 notes...</p>
+      </div>
+    )),
+    new Slide("arpeggio", () => (
+      <div>
+        <p>You are also free to play the notes of a chord separately instead of simultaneously.</p>
+        <p>In this case, we say that you are playing an <strong>arpeggio</strong>, or an <strong>arpeggiated chord</strong>.</p>
+        <p>Listen to the diagram below to hear a C Major arpeggio.</p>
+        <ChordDiagram
+          pitches={[new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5), new Pitch(PitchLetter.E, 0, 5), new Pitch(PitchLetter.G, 0, 5)]}
+          scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))}
+          isArpeggio={true} />
+      </div>
+    )),
+
+    
     new Slide("diatonic-chords-77", () => (
       <div>
         <p>"Major" in triad names means the 2nd note in the chord (called the 3rd because it's a 3rd away from the root note of the chord) is a major third above the root note.</p>

@@ -84,7 +84,9 @@ export const ChordDiagram: React.FunctionComponent<{
   pitches: Array<Pitch>,
   scale: Scale,
   canListen?: boolean,
-  isArpeggio?: boolean
+  maxWidth?: number,
+  isArpeggio?: boolean,
+  showScaleDegreeNumbers?: boolean;
 }> = props => {
   const canListen = (props.canListen !== undefined) ? props.canListen : true;
   const isArpeggio = (props.isArpeggio !== undefined) ? props.isArpeggio : false;
@@ -101,30 +103,37 @@ const ChordDiagramInternal: React.FunctionComponent<{
   pitches: Array<Pitch>,
   scale: Scale,
   canListen?: boolean,
+  maxWidth?: number,
   position?: Vector2D,
-  lowestPitch?: Pitch
+  lowestPitch?: Pitch,
+  showScaleDegreeNumbers?: boolean;
 }> = props => {
   const { pitches, scale } = props;
 
   const position = (props.position !== undefined) ? props.position : new Vector2D(0, 0);
   const lowestPitch = (props.lowestPitch !== undefined) ? props.lowestPitch : new Pitch(PitchLetter.C, 0, 4);
+  const showScaleDegreeNumbers = (props.showScaleDegreeNumbers !== undefined) ? props.showScaleDegreeNumbers : true;
 
   const highestPitch = new Pitch(PitchLetter.B, 0, 5);
 
-  const maxWidth = 300;
+  const maxWidth = (props.maxWidth !== undefined) ? props.maxWidth : 300;
   const aspectRatio = getPianoKeyboardAspectRatio(/*octaveCount*/ 2);
   const margin = new Margin(0, 0, 0, 0);
   const style = { width: "100%", maxWidth: `${maxWidth}px`, height: "auto" };
-  
-  const scalePitches = scale.getPitches();
-  const scaleDegreeLabels = pitches
-    .map(p => 1 + scalePitches.findIndex(sp => sp.midiNumberNoOctave == p.midiNumberNoOctave));
 
   function renderLabels(metrics: PianoKeyboardMetrics): JSX.Element {
+    const scalePitches = scale.getPitches();
+    const scaleDegreeLabels = pitches
+      .map(p => 1 + scalePitches.findIndex(sp => sp.midiNumberNoOctave == p.midiNumberNoOctave));
+
     const getKeyScaleDegreeLabels = (pitch: Pitch) => {
       const pitchIndex = pitches.findIndex(p => p.midiNumber === pitch.midiNumber);
       return (pitchIndex >= 0)
-        ? [scaleDegreeLabels[pitchIndex].toString(), pitch.toOneAccidentalAmbiguousString(false)]
+        ? (
+          showScaleDegreeNumbers
+            ? [scaleDegreeLabels[pitchIndex].toString(), pitch.toOneAccidentalAmbiguousString(false)]
+            : [pitch.toOneAccidentalAmbiguousString(false)]
+        )
         : null;
     };
 

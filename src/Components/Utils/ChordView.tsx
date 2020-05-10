@@ -46,6 +46,7 @@ export interface IChordViewProps {
   showChordFormulaOnPiano?: boolean;
   scale?: Scale;
   showScaleDegreesOnPiano?: boolean;
+  maxWidth?: number;
 }
 
 export class ChordView extends React.Component<IChordViewProps, {}> {
@@ -90,7 +91,8 @@ export class ChordView extends React.Component<IChordViewProps, {}> {
       }
     };
 
-    const pianoStyle = { width: "100%", maxWidth: "400px", height: "auto" };
+    const maxWidth = (this.props.maxWidth !== undefined) ? this.props.maxWidth : 400;
+    const pianoStyle = { width: "100%", maxWidth: `${maxWidth}px`, height: "auto" };
     
     const showChordInfoText = (this.props.showChordInfoText !== undefined)
       ? this.props.showChordInfoText
