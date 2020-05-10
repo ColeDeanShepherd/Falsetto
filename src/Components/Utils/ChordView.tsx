@@ -9,24 +9,43 @@ import { Button } from "@material-ui/core";
 import { Chord } from "../../lib/TheoryLib/Chord";
 import { PianoKeyboard, PianoKeyboardMetrics, renderPianoKeyboardNoteNames, renderPianoKeyboardKeyLabels } from "../Utils/PianoKeyboard";
 import { playPitches } from '../../Audio/PianoAudio';
-import { GuitarChordViewer } from '../Utils/GuitarChordViewer';
-import { getStandardGuitarTuning } from '../Utils/StringedInstrumentTuning';
 import { arrayContains } from '../../lib/Core/ArrayUtils';
 import { getPianoKeyboardAspectRatio } from '../Utils/PianoUtils';
+import { Scale } from "../../lib/TheoryLib/Scale";
+import { unwrapValueOrUndefined } from '../../lib/Core/Utils';
 
 const pianoLowestPitch = new Pitch(PitchLetter.C, 0, 4);
 const pianoHighestPitch = new Pitch(PitchLetter.B, 0, 5);
 const pianoOctaveCount = 2;
 const pianoAspectRatio = getPianoKeyboardAspectRatio(pianoOctaveCount);
 
-const guitarTuning = getStandardGuitarTuning(6);
+function getPitchesInRange(lowestPitch: Pitch, highestPitch: Pitch, pitchesNoOctaveNumber: Array<Pitch>): Array<Pitch> {
+  const pitchMidiNumberNoOctaves = pitchesNoOctaveNumber.map(p => p.midiNumberNoOctave);
+
+  const lowestPitchMidiNumber = lowestPitch.midiNumber;
+  const highestPitchMidiNumber = highestPitch.midiNumber;
+
+  let result = new Array<Pitch>();
+
+  for (let midiNumber = lowestPitchMidiNumber; midiNumber <= highestPitchMidiNumber; midiNumber++) {
+    const pitch = Pitch.createFromMidiNumber(midiNumber);
+
+    const pitchIndex = pitchMidiNumberNoOctaves.indexOf(pitch.midiNumberNoOctave);
+    if (pitchIndex < 0) { continue; }
+    
+    result.push(pitch);
+  }
+
+  return result;
+}
 
 export interface IChordViewProps {
   chord: Chord;
   showChordInfoText?: boolean;
   showPianoKeyboard?: boolean;
+  showChordFormulaOnPiano?: boolean;
+  scale?: Scale;
   showScaleDegreesOnPiano?: boolean;
-  showGuitarFretboard?: boolean; 
 }
 
 export class ChordView extends React.Component<IChordViewProps, {}> {
@@ -71,7 +90,7 @@ export class ChordView extends React.Component<IChordViewProps, {}> {
       }
     };
 
-    const pianoGuitarStyle = { width: "100%", maxWidth: "400px", height: "auto" };
+    const pianoStyle = { width: "100%", maxWidth: "400px", height: "auto" };
     
     const showChordInfoText = (this.props.showChordInfoText !== undefined)
       ? this.props.showChordInfoText
@@ -101,32 +120,8 @@ export class ChordView extends React.Component<IChordViewProps, {}> {
             highestPitch={pianoHighestPitch}
             onKeyPress={onKeyPress}
             renderExtrasFn={metrics => this.renderPianoExtrasFn(metrics, pitches)}
-            style={pianoGuitarStyle}
+            style={pianoStyle}
           />
-        </div>
-      );
-    };
-
-    const showGuitarFretboard = (this.props.showGuitarFretboard !== undefined)
-      ? this.props.showGuitarFretboard
-      : true;
-
-    const renderGuitarFretboard = () => {
-      const guitarSize = new Size2D(400, 140);
-      
-      const guitarRootPitch = new Pitch(
-        chord.rootPitch.letter,
-        chord.rootPitch.signedAccidental,
-        chord.rootPitch.octaveNumber - 2
-      );
-
-      return (
-        <div style={{marginTop: "1em"}}>
-          <GuitarChordViewer
-            chordType={chord.type}
-            rootPitch={guitarRootPitch}
-            tuning={guitarTuning}
-            size={guitarSize} />
         </div>
       );
     };
@@ -148,7 +143,6 @@ export class ChordView extends React.Component<IChordViewProps, {}> {
           </div>
 
           {showPianoKeyboard ? renderPianoKeyboard() : null}
-          {showGuitarFretboard ? renderGuitarFretboard() : null }
         </div>
       </div>
     );
@@ -159,9 +153,13 @@ export class ChordView extends React.Component<IChordViewProps, {}> {
   private renderPianoExtrasFn(metrics: PianoKeyboardMetrics, pitches: Array<Pitch>): JSX.Element {
     const { chord } = this.props;
 
-    const showScaleDegreesOnPiano = (this.props.showScaleDegreesOnPiano !== undefined)
+    const showChordFormulaOnPiano = (this.props.showChordFormulaOnPiano !== undefined)
+      ? this.props.showChordFormulaOnPiano
+      : false;
+      
+    const showScaleDegreesOnPiano = ((this.props.showScaleDegreesOnPiano !== undefined) && (this.props.scale !== undefined))
       ? this.props.showScaleDegreesOnPiano
-      : true;
+      : false;
 
     const pitchMidiNumberNoOctaves = pitches.map(p => p.midiNumberNoOctave);
     
@@ -169,18 +167,37 @@ export class ChordView extends React.Component<IChordViewProps, {}> {
       metrics,
       /*useSharps*/ false, // TODO: remove
       pitch => {
-      const visualPitchIndex = pitchMidiNumberNoOctaves.indexOf(pitch.midiNumberNoOctave);
-      if (visualPitchIndex < 0) { return null; }
+        const visualPitchIndex = pitchMidiNumberNoOctaves.indexOf(pitch.midiNumberNoOctave);
+        if (visualPitchIndex < 0) { return null; }
 
-      const visualPitch = pitches[visualPitchIndex];
-      
-      const includeOctaveNumber = false;
-      const useSymbols = true;
-      const visualPitchString = visualPitch.toString(includeOctaveNumber, useSymbols);
-      
-      return showScaleDegreesOnPiano
-        ? [chord.type.formula.parts[visualPitchIndex].toString(/*useSymbols*/ true), visualPitchString]
-        : [visualPitchString];
+        const visualPitch = pitches[visualPitchIndex];
+        
+        const includeOctaveNumber = false;
+        const useSymbols = true;
+        const visualPitchString = visualPitch.toString(includeOctaveNumber, useSymbols);
+
+        
+          
+        let labels = new Array<string>();
+
+        if (showChordFormulaOnPiano) {
+          labels.push(chord.type.formula.parts[visualPitchIndex].toString(/*useSymbols*/ true));
+        }
+
+        if (showScaleDegreesOnPiano) {
+          const { scale } = this.props;
+          const scalePitches = unwrapValueOrUndefined(scale).getPitches();
+          const scaleDegreeIndex = scalePitches.findIndex(sp => sp.midiNumberNoOctave == pitch.midiNumberNoOctave);
+
+          if (scaleDegreeIndex >= 0) {
+            const scaleDegreeNumber = 1 + scaleDegreeIndex;
+            labels.push(scaleDegreeNumber.toString());
+          }
+        }
+
+        labels.push(visualPitchString);
+        
+        return labels;
     });
   }
 
@@ -194,6 +211,8 @@ export class ChordView extends React.Component<IChordViewProps, {}> {
       this.playAudioCancelFn = null;
     }
 
-    this.playAudioCancelFn = playPitches(chord.getPitches())[1];
+    const pitches = chord.getPitches();
+    const allChordPitches = getPitchesInRange(pianoLowestPitch, pianoHighestPitch, pitches);
+    this.playAudioCancelFn = playPitches(allChordPitches)[1];
   }
 }

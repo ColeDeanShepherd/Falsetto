@@ -6,12 +6,8 @@ import { Card, CardContent, Typography } from "@material-ui/core";
 import { Chord } from "../../lib/TheoryLib/Chord";
 import { ChordTypeGroup } from "../../lib/TheoryLib/ChordTypeGroup";
 import { ChordType } from "../../lib/TheoryLib/ChordType";
-import { getStandardGuitarTuning } from '../Utils/StringedInstrumentTuning';
-import { getPianoKeyboardAspectRatio } from '../Utils/PianoUtils';
 import { ChordSelectView } from "../Utils/ChordSelectView";
 import { ChordView } from "../Utils/ChordView";
-
-const pianoOctaveCount = 2;
 
 export interface IChordViewerProps {
   title?: string;
@@ -21,7 +17,6 @@ export interface IChordViewerProps {
   showChordSelect?: boolean;
   showChordInfoText?: boolean;
   showPianoKeyboard?: boolean;
-  showGuitarFretboard?: boolean;
 }
 
 export interface IChordViewerState {
@@ -66,10 +61,6 @@ export class ChordViewer extends React.Component<IChordViewerProps, IChordViewer
       ? this.props.showPianoKeyboard
       : true;
 
-    const showGuitarFretboard = (this.props.showGuitarFretboard !== undefined)
-      ? this.props.showGuitarFretboard
-      : true;
-
     const containerContents = (
       <div>
         {showTitle ? (
@@ -90,8 +81,7 @@ export class ChordViewer extends React.Component<IChordViewerProps, IChordViewer
           <ChordView
             chord={chord}
             showChordInfoText={showChordInfoText}
-            showPianoKeyboard={showPianoKeyboard}
-            showGuitarFretboard={showGuitarFretboard} />
+            showPianoKeyboard={showPianoKeyboard} />
         </div>
       </div>
     );

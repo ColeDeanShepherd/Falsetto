@@ -97,7 +97,7 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
 
     <p>Use the interactive diagram below to explore these triads:</p>
 
-    <ChordViewer title={"Triad Viewer"} chordTypeGroups={[new ChordTypeGroup("Basic Triads", ChordType.BasicTriads)]} showGuitarFretboard={false} />
+    <ChordViewer title={"Triad Viewer"} chordTypeGroups={[new ChordTypeGroup("Basic Triads", ChordType.BasicTriads)]} />
 
     <SubSectionTitle>Inversions</SubSectionTitle>
     <p><strong>You are free to play the notes of a chord in any order, spaced out as close or as far as you like, and any note in a chord can be repeated in different octaves.</strong> Whichever note you decide to play in the bass (the lowest note) of a chord determines which "inversion" a chord is in. If the root note is in the bass, the chord is considered in "root position". If "3rd" of the chord is in the bass, the chord is in "1st inversion". If the "5th" of the chord is in the bass, the chord is in "2nd inversion". And so on for the 7th, 9th, 11th, and 13th (more on seventh chords and extended chords later).</p>
@@ -213,7 +213,7 @@ export const ChordsSection: React.FunctionComponent<SectionProps> = props => (
     <NoteText>Note that if you try to build a seventh chord with the root and 3 major thirds, you end up with an augmented triad with a repeated root an octave higher.</NoteText>
 
     <p>Use the interactive diagram below to explore the basic seventh chords:</p>
-    <ChordViewer title={"Seventh Chord Viewer"} chordTypeGroups={[new ChordTypeGroup("Seventh Chords", ChordType.SimpleSeventhChords)]} showGuitarFretboard={false} />
+    <ChordViewer title={"Seventh Chord Viewer"} chordTypeGroups={[new ChordTypeGroup("Seventh Chords", ChordType.SimpleSeventhChords)]} />
 
     <SubSectionTitle>Extended Chords &amp; Chord/Scale Relationships</SubSectionTitle>
     <p>You can continue to add 3rds to chords to form ninth chords (5 notes), eleventh chords (6 notes), and thirteenth (7 notes) chords. These chords are categorized as <Term>extended</Term> chords.</p>

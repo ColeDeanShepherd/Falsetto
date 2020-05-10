@@ -89,8 +89,7 @@ export function createSlideGroups(scale: Scale): Array<SlideGroup> {
                         <p>The {scaleDegreeRomanNumerals} {chordExtensionTypeName} of {scaleName} is <strong>{chordName}</strong>, which consists of the notes <strong>{chordPitchesString}</strong> (scale degrees <strong>{chordScaleDegreesString}</strong>).</p>
                         <ChordView
                           chord={chord}
-                          showChordInfoText={false}
-                          showGuitarFretboard={false} />
+                          showChordInfoText={false} />
                       </div>
                     ))
                   );
