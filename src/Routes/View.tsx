@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Route } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import DocumentTitle from "react-document-title";
 
 import { flashCardSets } from "../FlashCardGraph";
@@ -40,8 +40,9 @@ import { LimitedWidthContentContainer } from '../Components/Utils/LimitedWidthCo
 import { ScaleExercisesPage } from "../Components/ScaleExercisesPage";
 import * as PianoScaleDegrees from "../Components/Quizzes/Scales/PianoScaleDegrees";
 import * as PianoDiatonicChords from "../Components/Quizzes/Chords/PianoDiatonicChords";
-import { Scale } from '../lib/TheoryLib/Scale';
+import { Scale, parseScaleFromUriComponent } from '../lib/TheoryLib/Scale';
 import { createSlideGroups } from '../PianoTheory/ScaleMasteryLessonSlides';
+import { PageNotFoundView } from '../Components/PageNotFoundView';
 
 export interface IScaleRouteProps {
   routeParams: {};
@@ -61,7 +62,7 @@ export class ScaleRoute extends React.Component<IScaleRouteProps, {}> {
       return null;
     }
 
-    const scale = Scale.parseId(decodeURIComponent(scaleId));
+    const scale = parseScaleFromUriComponent(scaleId);
     
     return scale
       ? renderRoute(scale)
@@ -280,15 +281,15 @@ export class RoutesView extends React.Component<IRoutesViewProps, IRoutesViewSta
         flashCardSets.map(fcs => <Route key={fcs.route} exact path={fcs.route} component={this.createStudyFlashCardSetComponent(fcs)} />)
       ).concat([
         <Route
-          key="/scale/:scaleId/degrees-exercise"
-          exact path="/scale/:scaleId/degrees-exercise"
+          key="/scale/:scaleId"
+          exact path="/scale/:scaleId"
           component={(props: any) => (
             <ScaleRoute routeParams={props.match.params} renderRoute={scale => {
-              const flashCardSet = PianoScaleDegrees.createFlashCardSet(scale);
-              return this.renderStudyFlashCardSetComponent(flashCardSet);
+              const slideGroups = createSlideGroups(scale);
+              return <PianoTheory slideGroups={slideGroups} />
             }} />
-          )} />
-      ]).concat([
+          )} />,
+        
         <Route
           key="/scale/:scaleId/lesson"
           exact path="/scale/:scaleId/lesson"
@@ -296,6 +297,16 @@ export class RoutesView extends React.Component<IRoutesViewProps, IRoutesViewSta
             <ScaleRoute routeParams={props.match.params} renderRoute={scale => {
               const slideGroups = createSlideGroups(scale);
               return <PianoTheory slideGroups={slideGroups} />
+            }} />
+          )} />,
+        
+        <Route
+          key="/scale/:scaleId/degrees-exercise"
+          exact path="/scale/:scaleId/degrees-exercise"
+          component={(props: any) => (
+            <ScaleRoute routeParams={props.match.params} renderRoute={scale => {
+              const flashCardSet = PianoScaleDegrees.createFlashCardSet(scale);
+              return this.renderStudyFlashCardSetComponent(flashCardSet);
             }} />
           )} />
       ]).concat([3, 4]
@@ -313,10 +324,19 @@ export class RoutesView extends React.Component<IRoutesViewProps, IRoutesViewSta
                 }} />
               )} />
           );
-        }));
+        }))
+        .concat([
+          <Route key={'/page-not-found'} component={PageNotFoundView} />
+        ]);
     }
 
-    return <div style={{ height: "100%" }}>{this.cachedRenderedRoutes}</div>;
+    return (
+      <div style={{ height: "100%" }}>
+        <Switch>
+          {this.cachedRenderedRoutes}
+        </Switch>
+      </div>
+    );
   }
   
   private cachedRenderedRoutes: Array<JSX.Element> | null = null;

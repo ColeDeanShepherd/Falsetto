@@ -68,3 +68,27 @@ export function numMatchingCharsAtStart(str: string, character: string): number 
 
   return str.length;
 }
+
+export function numSubstringOccurrences(string: string, substring: string, allowOverlapping: boolean) {
+  string += "";
+  substring += "";
+
+  if (substring.length <= 0) { return (string.length + 1) };
+
+  let n = 0;
+  let pos = 0;
+  const step = allowOverlapping ? 1 : substring.length;
+
+  while (true) {
+    pos = string.indexOf(substring, pos);
+
+    if (pos >= 0) {
+        ++n;
+        pos += step;
+    } else {
+      break
+    };
+  }
+
+  return n;
+}

@@ -1,5 +1,5 @@
 import * as Utils from "../Core/Utils";
-import { Pitch } from './Pitch';
+import { Pitch, getUriComponent as getPitchUriComponent, parseFromUriComponent } from './Pitch';
 import { Chord } from './Chord';
 import { ChordType } from "./ChordType";
 import { Interval } from './Interval';
@@ -47,6 +47,33 @@ export function getAllModePitchIntegers(pitchIntegers: Array<number>): Array<Arr
 
 export function getSimpleScaleDegree(scaleDegree: number): number {
   return 1 + mod((scaleDegree - 1), 7);
+}
+
+export function getUriComponent(scale: Scale): string {
+  return `${getPitchUriComponent(scale.rootPitch)}-${getScaleTypeUriComponent(scale.type)}`;
+}
+
+export function parseScaleFromUriComponent(uriComponent: string): Scale | undefined {
+  const splitStr = uriComponent.split("-");
+  if (splitStr.length !== 2) { return undefined; }
+
+  const scaleTypeUriComponent = splitStr[1];
+  const scaleType = parseScaleTypeFromUriComponent(scaleTypeUriComponent);
+  if (!scaleType) { return undefined; }
+
+  const scaleRootPitchString = splitStr[0];
+  const rootPitch = parseFromUriComponent(scaleRootPitchString, /*octaveNumber*/ 4);
+  if (!rootPitch) { return undefined; }
+
+  return new Scale(scaleType, rootPitch);
+}
+
+export function getScaleTypeUriComponent(scaleType: ScaleType): string {
+  return scaleType.id;
+}
+
+export function parseScaleTypeFromUriComponent(uriComponent: string): ScaleType | undefined {
+  return ScaleType.All.find(st => st.id === uriComponent);
 }
 
 export class ScaleTypeGroup {
