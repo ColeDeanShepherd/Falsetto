@@ -45,6 +45,7 @@ import { createSlideGroups } from '../PianoTheory/ScaleMasteryLessonSlides';
 import { PageNotFoundView } from '../Components/PageNotFoundView';
 import { Chord, parseChordFromUriComponent } from "../lib/TheoryLib/Chord";
 import { ChordPage } from "../Components/ChordPage";
+import { ChordExercisesPage } from '../Components/ChordExercisesPage';
 
 export interface IScaleRouteProps {
   routeParams: {};
@@ -246,6 +247,13 @@ export class RoutesView extends React.Component<IRoutesViewProps, IRoutesViewSta
           <DocumentTitle title={"Scale Viewer - Falsetto"}>
             <LimitedWidthContentContainer>
               <ScaleViewer renderAllScaleShapes={false} />
+            </LimitedWidthContentContainer>
+          </DocumentTitle>
+        )} />,
+        <Route key="/chord-exercises" exact path="/chord-exercises" component={() => (
+          <DocumentTitle title={"Chord Exercises - Falsetto"}>
+            <LimitedWidthContentContainer>
+              <ChordExercisesPage />
             </LimitedWidthContentContainer>
           </DocumentTitle>
         )} />,

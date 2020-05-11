@@ -12,7 +12,6 @@ export class ContributePage extends React.Component<{}, {}> {
           </Typography>
           <p>I combine my passions for music and software to create free, interactive music theory lessons and exercises. Your patronage can help me allocate more of my time towards creating and improving music theory lessons without resorting to a paywall or intrusive advertisements. If this website is valuable to you, please consider becoming a patron using the button below!</p>
           <p style={{ textAlign: "center", margin: "2em 0" }}><BecomeAPatronButton /></p>
-          <p>If you're a developer or designer looking to get involved with the project directly please visit our <a href="https://github.com/ColeDeanShepherd/Falsetto-Client" target="_blank">GitHub page</a>.</p>
         </CardContent>
       </Card>
     );

@@ -339,3 +339,7 @@ export function getChordExtensionTypeName(numChordPitches: number, capitalize: b
 export function parseChordTypeFromUriComponent(uriComponent: string): ChordType | undefined {
   return ChordType.All.find(ct => ct.id === uriComponent);
 }
+
+export function getUriComponent(chordType: ChordType): string {
+  return chordType.id;
+}

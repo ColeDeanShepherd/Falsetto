@@ -46,26 +46,21 @@ export class HomePage extends React.Component<{}, {}> {
 
               <p><NavLinkView to="/scale-exercises">Self-Paced Scale Mastery</NavLinkView></p>
             </div>
+            
+            <div>
+              <h2>4. Chords</h2>
+              <ol>
+                <li><NavLinkView to="/piano-theory?slide=chords-introduction">Lesson</NavLinkView></li>
+                <li><NavLinkView to="/piano-theory?slide=chords-review">Review</NavLinkView></li>
+                <li><NavLinkView to="/piano-theory?slide=chords-quiz">Quiz</NavLinkView></li>
+              </ol>
+
+              <p><NavLinkView to="/chord-exercises">Self-Paced Chord Mastery</NavLinkView></p>
+            </div>
 
             {false
               ? (
                 <div>
-                  <div>
-                    <h2>4. Chords</h2>
-                    <ol>
-                      <li>Introduction</li>
-                      <li>C Major Chord</li>
-                      <li>Diatonic Chords &amp; Roman Numeral Notation</li>
-                      <li>Chord Inversions</li>
-                      <li>Seventh Chords</li>
-                      <li>Extended Chords &amp; Chord/Scale Relationships</li>
-                      <li>Arpeggios</li>
-                      <li>Quiz</li>
-                    </ol>
-
-                    <p>Self-Paced Chord Mastery</p>
-                  </div>
-
                   <div>
                     <h2>5. Chord Progressions</h2>
                     <ol>
@@ -80,11 +75,6 @@ export class HomePage extends React.Component<{}, {}> {
               )
               : (
                 <div>
-                  <div>
-                    <h2>4. Chords</h2>
-                    <p>Coming soon!</p>
-                  </div>
-
                   <div>
                     <h2>5. Chord Progressions</h2>
                     <p>Coming soon!</p>

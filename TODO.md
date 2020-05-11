@@ -1,5 +1,29 @@
 # To-Do
 ## High Priority
+* Chords Lesson
+  * Split up into multiple lessons?
+  * Quiz(zes)
+  * Extended chords
+  * Chord-scale equivalence
+  * Roman Numeral Notation? (or in prog lesson?)
+  * Self-Paced Chord Mastery
+    * Pick a type of chord
+    * For all root notes
+      * Play chord
+      * Inversions
+      * Note name -> scale degree
+      * Know intervals
+      * Know major scale based formula?
+* Chord Progressions Lesson
+
+
+
+
+
+
+
+
+
 * Re-enable main menu
 * Improve chord types (support arbitrary pitch integers)
 * Improve chord finder (E G B D F is Emin7b9)
