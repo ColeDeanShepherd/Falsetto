@@ -221,7 +221,7 @@ const ChordTransitionDiagram: React.FunctionComponent<{ chord1Pitches: Array<Pit
               orient="auto-start-reverse">
             <path d="M 0 2 L 10 5 L 0 8 z" fill="red" />
           </marker>
-        </defs>.
+        </defs>
 
         <ChordDiagramInternal pitches={props.chord1Pitches} scale={props.scale} canListen={false} lowestPitch={props.lowestPitch} />
         <ChordDiagramInternal pitches={props.chord2Pitches} scale={props.scale} canListen={false} position={chordDiagram2Position} lowestPitch={props.lowestPitch} />

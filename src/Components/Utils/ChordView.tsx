@@ -178,8 +178,6 @@ export class ChordView extends React.Component<IChordViewProps, {}> {
         const useSymbols = true;
         const visualPitchString = visualPitch.toString(includeOctaveNumber, useSymbols);
 
-        
-          
         let labels = new Array<string>();
 
         if (showChordFormulaOnPiano) {
