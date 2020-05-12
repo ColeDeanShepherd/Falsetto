@@ -1,7 +1,6 @@
 # To-Do
 ## High Priority
 * Chords Lesson
-  * Split up into multiple lessons?
   * Quiz(zes)
   * Extended chords
   * Chord-scale equivalence
