@@ -27,6 +27,18 @@
   * document title changes?
 * Debug & fix scale viewer & chord viewer
 * Fix level not being detected properly when disabling & re-enabling in piano notes exercise (orders don't match due to toggle).
+* Improve Home Page
+* Improve Quizzes
+  * One-time quizzes?
+  * Better positioning of "Show Question/Answer" for user-determined answers?
+  * Save quiz completion?
+* Account system
+  * Creation
+  * Changes
+  * Recover password
+  * 2FA?
+  * Save data
+* Monetize
 ## Medium Priority
 * Improve chord finder (E G B D F is Emin7b9)
 * Fix piano aspect ratios.
