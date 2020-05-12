@@ -4,12 +4,15 @@ import * as QueryString from "query-string";
 import { Button } from "@material-ui/core";
 
 import { flattenArrays } from '../lib/Core/ArrayUtils';
+import { Margin } from "../lib/Core/Margin";
+import { Vector2D } from "../lib/Core/Vector2D";
 
 import { Pitch } from '../lib/TheoryLib/Pitch';
 import { PitchLetter } from "../lib/TheoryLib/PitchLetter";
 import { ScaleType, Scale } from "../lib/TheoryLib/Scale";
 import { ChordTypeGroup } from "../lib/TheoryLib/ChordTypeGroup";
 import { ChordType } from "../lib/TheoryLib/ChordType";
+import { Chord } from "../lib/TheoryLib/Chord";
 
 import { DependencyInjector } from "../DependencyInjector";
 
@@ -26,6 +29,7 @@ import { renderPianoKeyboardNoteNames, PianoKeyboardMetrics, PianoKeyboard } fro
 
 import * as PianoNotes from "../Components/Quizzes/Notes/PianoNotes";
 import * as ScalesQuiz from "./ScalesQuiz";
+import * as ChordsIntroQuiz from "./ChordsIntroQuiz";
 
 import { naturalPitches, accidentalPitches, allPitches } from "../Components/Quizzes/Notes/PianoNotes";
 import { PianoScaleFormulaDiagram } from "../Components/Utils/PianoScaleFormulaDiagram";
@@ -39,14 +43,7 @@ import { PianoScaleMajorRelativeFormulaDiagram } from "../Components/Utils/Piano
 import { NavLinkView } from "../NavLinkView";
 import { PlayablePianoKeyboard } from "../Components/Utils/PlayablePianoKeyboard";
 import { ChordView } from '../Components/Utils/ChordView';
-import { Chord } from "../lib/TheoryLib/Chord";
 import { ChordDiagram } from "../Components/Lessons/EssentialMusicTheory/ChordProgressions";
-import { Margin } from "../lib/Core/Margin";
-import { Vector2D } from "../lib/Core/Vector2D";
-import { Rect2D } from "../lib/Core/Rect2D";
-import { Size2D } from "../lib/Core/Size2D";
-import { playPitches } from "../Audio/GuitarAudio";
-import { renderIntervalLabel } from '../Components/Lessons/EssentialMusicTheory/EssentialMusicTheory';
 
 export const maxPianoWidth = 1000;
 export const maxOneOctavePianoWidth = 400;
@@ -924,10 +921,19 @@ export const pianoTheorySlideGroups = [
       </div>
     )),
     
-    new Slide("chords-quiz", () => (
-      <div>
-        <p>QUIZ</p>
-      </div>
+    new Slide("chords-intro-quiz", () => (
+      <LimitedWidthContentContainer>
+        <div style={{ marginTop: "1em" }}>
+          {createStudyFlashCardSetComponent(
+            ChordsIntroQuiz.flashCardSet,
+            /*isEmbedded*/ false,
+            /*hideMoreInfoUri*/ true,
+            /*title*/ undefined,
+            /*style*/ undefined,
+            /*enableSettings*/ undefined,
+            /*showRelatedExercises*/ false)}
+        </div>
+      </LimitedWidthContentContainer>
     )),
 
     new Slide("diatonic-chords", () => (
