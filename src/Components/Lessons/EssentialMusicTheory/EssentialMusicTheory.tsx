@@ -37,13 +37,19 @@ export const OctavesPlayer: React.FunctionComponent<{}> = props => {
 
 export const Term: React.FunctionComponent<{}> = props => <span style={{ fontWeight: "bold" }}>{props.children}</span>;
 
-export function renderPianoKeyLabel(metrics: PianoKeyboardMetrics, pitch: Pitch, label: string, isAboveKeyboard: boolean, textOffset: Vector2D = new Vector2D(0, 0)): JSX.Element {
+export function renderPianoKeyLabel(
+  metrics: PianoKeyboardMetrics,
+  pitch: Pitch,
+  label: string,
+  isAboveKeyboard: boolean,
+  textOffset: Vector2D = new Vector2D(0, 0)): JSX.Element {
   const keyRect = metrics.getKeyRect(pitch);
 
-  const fontSizePx = 30;
+  const fontSizePx = metrics.height / 8;
+  const unsignedYOffset = metrics.height / 4;
   const textPos = new Vector2D(
     textOffset.x + keyRect.center.x,
-    textOffset.y + (isAboveKeyboard ? -35 : (metrics.height + fontSizePx + 35)));
+    textOffset.y + (isAboveKeyboard ? -unsignedYOffset : (metrics.height + fontSizePx + unsignedYOffset)));
   const textStyle: any = {
     textAnchor: "middle",
     fontSize: `${fontSizePx}px`
@@ -53,9 +59,10 @@ export function renderPianoKeyLabel(metrics: PianoKeyboardMetrics, pitch: Pitch,
     isAboveKeyboard ? (textPos.y + 5) : (textPos.y - fontSizePx)
   );
 
+  const keyLineUnsignedYOffset = metrics.height / 15;
   const keyLinePos = new Vector2D(
     keyRect.center.x,
-    isAboveKeyboard ? 20 : (metrics.height - 20)
+    isAboveKeyboard ? keyLineUnsignedYOffset : (metrics.height - keyLineUnsignedYOffset)
   );
 
   return (
@@ -74,10 +81,11 @@ export function renderIntervalLabel(metrics: PianoKeyboardMetrics, leftPitch: Pi
   const leftKeyRect = metrics.getKeyRect(leftPitch);
   const rightKeyRect = metrics.getKeyRect(rightPitch);
 
-  const fontSizePx = 30;
+  const fontSizePx = metrics.height / 8;
+  const unsignedYOffset = metrics.height / 4;
   const textPos = new Vector2D(
     (leftKeyRect.center.x + rightKeyRect.center.x) / 2,
-    isAboveKeyboard ? -35 : (metrics.height + fontSizePx + 35));
+    isAboveKeyboard ? -unsignedYOffset : (metrics.height + fontSizePx + unsignedYOffset));
   const textStyle: any = {
     textAnchor: "middle",
     fontSize: `${fontSizePx}px`
@@ -87,7 +95,8 @@ export function renderIntervalLabel(metrics: PianoKeyboardMetrics, leftPitch: Pi
     isAboveKeyboard ? (textPos.y + 5) : (textPos.y - fontSizePx)
   );
 
-  const linePosY = isAboveKeyboard ? 20 : (metrics.height - 20);
+  const keyLineUnsignedYOffset = metrics.height / 15;
+  const linePosY = isAboveKeyboard ? keyLineUnsignedYOffset : (metrics.height - keyLineUnsignedYOffset);
   const leftKeyLinePos = new Vector2D(leftKeyRect.center.x, linePosY);
   const rightKeyLinePos = new Vector2D(rightKeyRect.center.x, linePosY);
 

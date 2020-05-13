@@ -1,30 +1,13 @@
 import * as React from "react";
 
-import { Vector2D } from '../../lib/Core/Vector2D';
-import { Size2D } from "../../lib/Core/Size2D";
-import { Rect2D } from '../../lib/Core/Rect2D';
 import { PitchLetter } from "../../lib/TheoryLib/PitchLetter";
 import { Pitch } from "../../lib/TheoryLib/Pitch";
-import { Button, Card, CardContent, Typography } from "@material-ui/core";
+import { Card, CardContent, Typography } from "@material-ui/core";
 import { Chord } from "../../lib/TheoryLib/Chord";
 import { ChordTypeGroup } from "../../lib/TheoryLib/ChordTypeGroup";
 import { ChordType } from "../../lib/TheoryLib/ChordType";
-import { PianoKeyboard } from "../Utils/PianoKeyboard";
-import { playPitches } from '../../Audio/PianoAudio';
-import * as PianoScaleDronePlayer from "../Utils/PianoScaleDronePlayer";
-import { GuitarChordViewer } from '../Utils/GuitarChordViewer';
-import { getStandardGuitarTuning } from '../Utils/StringedInstrumentTuning';
-import { arrayContains } from '../../lib/Core/ArrayUtils';
-import { getPianoKeyboardAspectRatio } from '../Utils/PianoUtils';
 import { ChordSelectView } from "../Utils/ChordSelectView";
 import { ChordView } from "../Utils/ChordView";
-
-const pianoLowestPitch = new Pitch(PitchLetter.C, 0, 4);
-const pianoHighestPitch = new Pitch(PitchLetter.B, 0, 5);
-const pianoOctaveCount = 2;
-const pianoAspectRatio = getPianoKeyboardAspectRatio(pianoOctaveCount);
-
-const guitarTuning = getStandardGuitarTuning(6);
 
 export interface IChordViewerProps {
   title?: string;
@@ -34,7 +17,6 @@ export interface IChordViewerProps {
   showChordSelect?: boolean;
   showChordInfoText?: boolean;
   showPianoKeyboard?: boolean;
-  showGuitarFretboard?: boolean;
 }
 
 export interface IChordViewerState {
@@ -79,10 +61,6 @@ export class ChordViewer extends React.Component<IChordViewerProps, IChordViewer
       ? this.props.showPianoKeyboard
       : true;
 
-    const showGuitarFretboard = (this.props.showGuitarFretboard !== undefined)
-      ? this.props.showGuitarFretboard
-      : true;
-
     const containerContents = (
       <div>
         {showTitle ? (
@@ -103,8 +81,7 @@ export class ChordViewer extends React.Component<IChordViewerProps, IChordViewer
           <ChordView
             chord={chord}
             showChordInfoText={showChordInfoText}
-            showPianoKeyboard={showPianoKeyboard}
-            showGuitarFretboard={showGuitarFretboard} />
+            showPianoKeyboard={showPianoKeyboard} />
         </div>
       </div>
     );

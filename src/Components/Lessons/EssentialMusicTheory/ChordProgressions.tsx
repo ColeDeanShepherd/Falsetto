@@ -25,12 +25,15 @@ import { NavLinkView } from "../../../NavLinkView";
 import * as ChordProgressionsQuiz from "../../Quizzes/Chords/ChordProgressionsQuiz";
 import * as ChordHarmonicFunctions from "../../Quizzes/Chords/ChordFamilies";
 import { NoteText } from "../../Utils/NoteText";
+import { getPianoKeyboardAspectRatio } from '../../Utils/PianoUtils';
 
-const FiveChordDiagram: React.FunctionComponent<{}> = props => {
-  const width = 600;
-  const height = 200;
+export const FiveChordDiagram: React.FunctionComponent<{}> = props => {
+  const lowestPitch = new Pitch(PitchLetter.C, 0, 4);
+  const highestPitch = new Pitch(PitchLetter.B, 0, 5);
+  const maxWidth = 300;
+  const aspectRatio = getPianoKeyboardAspectRatio(/*octaveCount*/ 2);
   const margin = new Margin(0, 80, 0, 80);
-  const style = { width: "100%", maxWidth: "300px", height: "auto" };
+  const style = { width: "100%", maxWidth: `${maxWidth}px`, height: "auto" };
   const chord = new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4));
   const pitches = chord.getPitches();
   const scaleDegreeLabels = ["5", "7", "2", "4"];
@@ -47,11 +50,12 @@ const FiveChordDiagram: React.FunctionComponent<{}> = props => {
       <g>
         {renderPianoKeyboardKeyLabels(metrics, true, getKeyScaleDegreeLabels)}
         {renderIntervalLabel(metrics, pitches[1], pitches[3], "tritone", true)}
-        {renderPianoKeyLabel(metrics, pitches[1], "leading tone", false, new Vector2D(-60, 0))}
-        {renderPianoKeyLabel(metrics, new Pitch(PitchLetter.C, 0, 5), "root note", false, new Vector2D(60, 0))}
+        {renderPianoKeyLabel(metrics, pitches[1], "leading tone", false, new Vector2D(-40, 0))}
+        {renderPianoKeyLabel(metrics, new Pitch(PitchLetter.C, 0, 5), "root note", false, new Vector2D(40, 0))}
       </g>
     );
   }
+
   function onKeyPress(p: Pitch) {
     const pitchMidiNumbers = pitches.map(p => p.midiNumber);
 
@@ -64,10 +68,10 @@ const FiveChordDiagram: React.FunctionComponent<{}> = props => {
     <div>
       <p><PitchesAudioPlayer pitches={pitches} playSequentially={false} /></p>
       <PianoKeyboard
-        rect={new Rect2D(new Size2D(width, height), new Vector2D(0, 0))}
+        rect={new Rect2D(new Size2D(aspectRatio * 100, 100), new Vector2D(0, 0))}
         margin={margin}
-        lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-        highestPitch={new Pitch(PitchLetter.B, 0, 5)}
+        lowestPitch={lowestPitch}
+        highestPitch={highestPitch}
         pressedPitches={[]}
         onKeyPress={onKeyPress}
         renderExtrasFn={renderLabels}
@@ -75,33 +79,61 @@ const FiveChordDiagram: React.FunctionComponent<{}> = props => {
     </div>
   );
 };
-const ChordDiagram: React.FunctionComponent<{ pitches: Array<Pitch>, scale: Scale, canListen?: boolean}> = props => {
+
+export const ChordDiagram: React.FunctionComponent<{ 
+  pitches: Array<Pitch>,
+  scale: Scale,
+  canListen?: boolean,
+  maxWidth?: number,
+  isArpeggio?: boolean,
+  showScaleDegreeNumbers?: boolean;
+}> = props => {
   const canListen = (props.canListen !== undefined) ? props.canListen : true;
+  const isArpeggio = (props.isArpeggio !== undefined) ? props.isArpeggio : false;
 
   return (
     <div>
-      {canListen ? <p><PitchesAudioPlayer pitches={props.pitches} playSequentially={false} /></p> : null}
+      {canListen ? <p><PitchesAudioPlayer pitches={props.pitches} playSequentially={isArpeggio} /></p> : null}
       {React.createElement(ChordDiagramInternal, props)}
     </div>
   );
 }
-const ChordDiagramInternal: React.FunctionComponent<{ pitches: Array<Pitch>, scale: Scale, canListen?: boolean, position?: Vector2D, lowestPitch?: Pitch }> = props => {
-  const width = 600;
-  const height = 200;
-  const margin = new Margin(0, 0, 0, 0);
-  const style = { width: "100%", maxWidth: "300px", height: "auto" };
+
+const ChordDiagramInternal: React.FunctionComponent<{
+  pitches: Array<Pitch>,
+  scale: Scale,
+  canListen?: boolean,
+  maxWidth?: number,
+  position?: Vector2D,
+  lowestPitch?: Pitch,
+  showScaleDegreeNumbers?: boolean;
+}> = props => {
   const { pitches, scale } = props;
-  const scalePitches = scale.getPitches();
-  const scaleDegreeLabels = pitches
-    .map(p => 1 + scalePitches.findIndex(sp => sp.midiNumberNoOctave == p.midiNumberNoOctave));
+
   const position = (props.position !== undefined) ? props.position : new Vector2D(0, 0);
   const lowestPitch = (props.lowestPitch !== undefined) ? props.lowestPitch : new Pitch(PitchLetter.C, 0, 4);
+  const showScaleDegreeNumbers = (props.showScaleDegreeNumbers !== undefined) ? props.showScaleDegreeNumbers : true;
+
+  const highestPitch = new Pitch(PitchLetter.B, 0, 5);
+
+  const maxWidth = (props.maxWidth !== undefined) ? props.maxWidth : 300;
+  const aspectRatio = getPianoKeyboardAspectRatio(/*octaveCount*/ 2);
+  const margin = new Margin(0, 0, 0, 0);
+  const style = { width: "100%", maxWidth: `${maxWidth}px`, height: "auto" };
 
   function renderLabels(metrics: PianoKeyboardMetrics): JSX.Element {
+    const scalePitches = scale.getPitches();
+    const scaleDegreeLabels = pitches
+      .map(p => 1 + scalePitches.findIndex(sp => sp.midiNumberNoOctave == p.midiNumberNoOctave));
+
     const getKeyScaleDegreeLabels = (pitch: Pitch) => {
       const pitchIndex = pitches.findIndex(p => p.midiNumber === pitch.midiNumber);
       return (pitchIndex >= 0)
-        ? [scaleDegreeLabels[pitchIndex].toString(), pitch.toOneAccidentalAmbiguousString(false)]
+        ? (
+          showScaleDegreeNumbers
+            ? [scaleDegreeLabels[pitchIndex].toString(), pitch.toOneAccidentalAmbiguousString(false)]
+            : [pitch.toOneAccidentalAmbiguousString(false)]
+        )
         : null;
     };
 
@@ -111,6 +143,7 @@ const ChordDiagramInternal: React.FunctionComponent<{ pitches: Array<Pitch>, sca
       </g>
     );
   }
+
   function onKeyPress(p: Pitch) {
     const pitchMidiNumbers = pitches.map(p => p.midiNumber);
 
@@ -121,10 +154,10 @@ const ChordDiagramInternal: React.FunctionComponent<{ pitches: Array<Pitch>, sca
 
   return (
     <PianoKeyboard
-      rect={new Rect2D(new Size2D(width, height), position)}
+      rect={new Rect2D(new Size2D(aspectRatio * 100, 100), position)}
       margin={margin}
       lowestPitch={lowestPitch}
-      highestPitch={new Pitch(PitchLetter.B, 0, 5)}
+      highestPitch={highestPitch}
       pressedPitches={[]}
       onKeyPress={onKeyPress}
       renderExtrasFn={renderLabels}
@@ -188,7 +221,7 @@ const ChordTransitionDiagram: React.FunctionComponent<{ chord1Pitches: Array<Pit
               orient="auto-start-reverse">
             <path d="M 0 2 L 10 5 L 0 8 z" fill="red" />
           </marker>
-        </defs>.
+        </defs>
 
         <ChordDiagramInternal pitches={props.chord1Pitches} scale={props.scale} canListen={false} lowestPitch={props.lowestPitch} />
         <ChordDiagramInternal pitches={props.chord2Pitches} scale={props.scale} canListen={false} position={chordDiagram2Position} lowestPitch={props.lowestPitch} />

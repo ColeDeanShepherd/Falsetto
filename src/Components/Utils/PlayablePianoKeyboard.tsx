@@ -8,6 +8,7 @@ import { PianoKeyboard, PianoKeyboardMetrics } from "./PianoKeyboard";
 import { MidiNoteEventListener } from "./MidiNoteEventListener";
 import React from "react";
 import { unwrapValueOrUndefined } from '../../lib/Core/Utils';
+import { Margin } from "../../lib/Core/Margin";
 
 export interface IPlayablePianoKeyboardProps {
   aspectRatio: number,
@@ -15,6 +16,7 @@ export interface IPlayablePianoKeyboardProps {
   lowestPitch: Pitch,
   highestPitch: Pitch,
   forcePressedPitches?: Array<Pitch>;
+  margin?: Margin;
   renderExtrasFn?: (metrics: PianoKeyboardMetrics) => JSX.Element;
   onKeyPress?: (keyPitch: Pitch, velocity: number) => void;
   onKeyRelease?: (keyPitch: Pitch) => void;
@@ -37,13 +39,14 @@ export class PlayablePianoKeyboard extends React.Component<IPlayablePianoKeyboar
   }
 
   public render(): JSX.Element {
-    const { aspectRatio, maxWidth, lowestPitch, highestPitch, renderExtrasFn } = this.props;
+    const { aspectRatio, maxWidth, lowestPitch, highestPitch, margin, renderExtrasFn } = this.props;
     const { pressedPitches } = this.state; 
 
     return (
       <div>
         <PianoKeyboard
           rect={new Rect2D(new Size2D(aspectRatio * 100, 100), new Vector2D(0, 0))}
+          margin={margin}
           lowestPitch={lowestPitch}
           highestPitch={highestPitch}
           pressedPitches={pressedPitches}

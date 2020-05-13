@@ -10,9 +10,19 @@ export class Rect2D {
       this.position.y + (this.size.height / 2)
     );
   }
+
+  public get left(): number {
+    return this.position.x;
+  }
+
   public get right(): number {
     return this.position.x + this.size.width;
   }
+
+  public get top(): number {
+    return this.position.y;
+  }
+  
   public get bottom(): number {
     return this.position.y + this.size.height;
   }

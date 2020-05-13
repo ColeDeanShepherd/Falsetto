@@ -48,8 +48,9 @@ export function findIntervals(pitches: Array<Pitch>): Array<Interval> {
 export function findChords(pitches: Array<Pitch>): Array<Chord> {
   if (pitches.length === 0) { return new Array<Chord>(); }
 
+  // TODO: initialize chord IDs
   const chords = generateChordNames(pitches)
-    .map(cn => new Chord(new ChordType(cn[1], new ChordScaleFormula([]), [cn[1]]), cn[0]));
+    .map(cn => new Chord(new ChordType("", cn[1], new ChordScaleFormula([]), [cn[1]]), cn[0]));
 
   return chords
     ? chords

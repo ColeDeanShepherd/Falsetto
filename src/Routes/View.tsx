@@ -41,8 +41,13 @@ import { ScaleExercisesPage } from "../Components/ScaleExercisesPage";
 import * as PianoScaleDegrees from "../Components/Quizzes/Scales/PianoScaleDegrees";
 import * as PianoDiatonicChords from "../Components/Quizzes/Chords/PianoDiatonicChords";
 import { Scale, parseScaleFromUriComponent } from '../lib/TheoryLib/Scale';
-import { createSlideGroups } from '../PianoTheory/ScaleMasteryLessonSlides';
+import { createSlideGroups as createScaleMasteryLessonSlideGroups } from '../PianoTheory/ScaleMasteryLessonSlides';
+import { createSlideGroups as createChordTypeMasteryLessonSlideGroups } from '../PianoTheory/ChordTypeMasteryLessonSlides';
 import { PageNotFoundView } from '../Components/PageNotFoundView';
+import { Chord, parseChordFromUriComponent } from "../lib/TheoryLib/Chord";
+import { ChordPage } from "../Components/ChordPage";
+import { ChordExercisesPage } from '../Components/ChordExercisesPage';
+import { ChordType, parseChordTypeFromUriComponent } from '../lib/TheoryLib/ChordType';
 
 export interface IScaleRouteProps {
   routeParams: {};
@@ -66,6 +71,58 @@ export class ScaleRoute extends React.Component<IScaleRouteProps, {}> {
     
     return scale
       ? renderRoute(scale)
+      : null;
+  }
+}
+
+export interface IChordTypeRouteProps {
+  routeParams: {};
+  renderRoute: (chord: ChordType) => JSX.Element;
+}
+
+export class ChordTypeRoute extends React.Component<IChordTypeRouteProps, {}> {
+  public constructor(props: IChordTypeRouteProps) {
+    super(props);
+  }
+
+  public render(): JSX.Element | null {
+    const { routeParams, renderRoute } = this.props;
+
+    const chordTypeUriComponent = routeParams["chordType"];
+    if (!chordTypeUriComponent) {
+      return null;
+    }
+
+    const chordType = parseChordTypeFromUriComponent(chordTypeUriComponent);
+    
+    return chordType
+      ? renderRoute(chordType)
+      : null;
+  }
+}
+
+export interface IChordRouteProps {
+  routeParams: {};
+  renderRoute: (chord: Chord) => JSX.Element;
+}
+
+export class ChordRoute extends React.Component<IChordRouteProps, {}> {
+  public constructor(props: IChordRouteProps) {
+    super(props);
+  }
+
+  public render(): JSX.Element | null {
+    const { routeParams, renderRoute } = this.props;
+
+    const chordId = routeParams["chordId"];
+    if (!chordId) {
+      return null;
+    }
+
+    const chord = parseChordFromUriComponent(chordId);
+    
+    return chord
+      ? renderRoute(chord)
       : null;
   }
 }
@@ -221,6 +278,13 @@ export class RoutesView extends React.Component<IRoutesViewProps, IRoutesViewSta
             </LimitedWidthContentContainer>
           </DocumentTitle>
         )} />,
+        <Route key="/chord-exercises" exact path="/chord-exercises" component={() => (
+          <DocumentTitle title={"Chord Exercises - Falsetto"}>
+            <LimitedWidthContentContainer>
+              <ChordExercisesPage />
+            </LimitedWidthContentContainer>
+          </DocumentTitle>
+        )} />,
         <Route key="/chord-viewer" exact path="/chord-viewer" component={() => (
           <DocumentTitle title={"Chord Viewer - Falsetto"}>
             <LimitedWidthContentContainer>
@@ -279,14 +343,15 @@ export class RoutesView extends React.Component<IRoutesViewProps, IRoutesViewSta
         )} />
       ].concat(
         flashCardSets.map(fcs => <Route key={fcs.route} exact path={fcs.route} component={this.createStudyFlashCardSetComponent(fcs)} />)
-      ).concat([
+      )
+      .concat([
         <Route
           key="/scale/:scaleId"
           exact path="/scale/:scaleId"
           component={(props: any) => (
             <ScaleRoute routeParams={props.match.params} renderRoute={scale => {
-              const slideGroups = createSlideGroups(scale);
-              return <PianoTheory slideGroups={slideGroups} />
+              const slideGroups = createScaleMasteryLessonSlideGroups(scale);
+              return <PianoTheory slideGroups={slideGroups} />;
             }} />
           )} />,
         
@@ -295,8 +360,8 @@ export class RoutesView extends React.Component<IRoutesViewProps, IRoutesViewSta
           exact path="/scale/:scaleId/lesson"
           component={(props: any) => (
             <ScaleRoute routeParams={props.match.params} renderRoute={scale => {
-              const slideGroups = createSlideGroups(scale);
-              return <PianoTheory slideGroups={slideGroups} />
+              const slideGroups = createScaleMasteryLessonSlideGroups(scale);
+              return <PianoTheory slideGroups={slideGroups} />;
             }} />
           )} />,
         
@@ -309,7 +374,8 @@ export class RoutesView extends React.Component<IRoutesViewProps, IRoutesViewSta
               return this.renderStudyFlashCardSetComponent(flashCardSet);
             }} />
           )} />
-      ]).concat([3, 4]
+      ])
+      .concat([3, 4]
         .map(numChordPitches => {
           const path = `/scale/:scaleId/diatonic-${numChordPitches}-note-chords-exercise`;
 
@@ -324,10 +390,35 @@ export class RoutesView extends React.Component<IRoutesViewProps, IRoutesViewSta
                 }} />
               )} />
           );
-        }))
-        .concat([
-          <Route key={'/page-not-found'} component={PageNotFoundView} />
-        ]);
+        })
+      )
+      .concat([
+        <Route
+          key="/chord/:chordType/lesson"
+          exact path="/chord/:chordType/lesson"
+          component={(props: any) => (
+            <LimitedWidthContentContainer>
+              <ChordTypeRoute routeParams={props.match.params} renderRoute={chordType => {
+                const slideGroups = createChordTypeMasteryLessonSlideGroups(chordType);
+                return <PianoTheory slideGroups={slideGroups} />;
+              }} />
+            </LimitedWidthContentContainer>
+          )} />,
+
+        <Route
+          key="/chord/:chordId"
+          exact path="/chord/:chordId"
+          component={(props: any) => (
+            <LimitedWidthContentContainer>
+              <ChordRoute routeParams={props.match.params} renderRoute={chord => {
+                return <ChordPage chord={chord} />;
+              }} />
+            </LimitedWidthContentContainer>
+          )} />
+      ])
+      .concat([
+        <Route key={'/page-not-found'} component={PageNotFoundView} />
+      ]);
     }
 
     return (
