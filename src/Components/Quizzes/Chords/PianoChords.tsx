@@ -6,10 +6,8 @@ import { Rect2D } from '../../../lib/Core/Rect2D';
 import { PianoKeyboard } from "../../Utils/PianoKeyboard";
 import { FlashCard, FlashCardSide, FlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
-import { AnswerDifficulty } from "../../../Study/AnswerDifficulty";
 import { Pitch, ambiguousKeyPitchStringsSymbols } from "../../../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
-import { Button, Typography } from "@material-ui/core";
 import { Chord } from "../../../lib/TheoryLib/Chord";
 import { ChordType, chordTypeLevels } from "../../../lib/TheoryLib/ChordType";
 import { CheckboxColumnsFlashCardMultiSelect, CheckboxColumn, CheckboxColumnCell } from '../../Utils/CheckboxColumnsFlashCardMultiSelect';
@@ -32,11 +30,14 @@ interface IConfigData {
   enabledChordTypes: string[];
 }
 
-export function forEachChord(callbackFn: (rootPitchString: string, chordType: ChordType, i: number) => void) {
+export function forEachChord(
+  chordTypes: Array<ChordType>,
+  callbackFn: (rootPitchString: string, chordType: ChordType, i: number) => void
+) {
   let i = 0;
 
   for (const rootPitchStr of ambiguousKeyPitchStringsSymbols) {
-    for (const chordType of ChordType.All) {
+    for (const chordType of chordTypes) {
       callbackFn(rootPitchStr, chordType, i);
       i++;
     }
@@ -44,11 +45,11 @@ export function forEachChord(callbackFn: (rootPitchString: string, chordType: Ch
 }
 
 export function configDataToEnabledFlashCardIds(
-  flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: IConfigData
+  flashCardSet: FlashCardSet, chordTypes: Array<ChordType>, flashCards: Array<FlashCard>, configData: IConfigData
 ): Array<FlashCardId> {
   const newEnabledFlashCardIds = new Array<FlashCardId>();
 
-  forEachChord((rootPitchStr, chordType, i) => {
+  forEachChord(chordTypes, (rootPitchStr, chordType, i) => {
     if (
       arrayContains(configData.enabledRootPitches, rootPitchStr) &&
       arrayContains(configData.enabledChordTypes, chordType.name)
@@ -113,14 +114,14 @@ export class PianoChordsFlashCardMultiSelect extends React.Component<IPianoChord
     };
 
     const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(
-      this.props.studySessionInfo.flashCardSet, this.props.studySessionInfo.flashCards,
+      this.props.studySessionInfo.flashCardSet, ChordType.All, this.props.studySessionInfo.flashCards,
       newConfigData
     );
     this.props.onChange(newEnabledFlashCardIds, newConfigData);
   }
 }
 
-function createFlashCardSet(): FlashCardSet {
+export function createFlashCardSet(chordTypes: Array<ChordType>): FlashCardSet {
   const renderFlashCardMultiSelect = (
     info: FlashCardStudySessionInfo,
     onChange: (newValue: Array<FlashCardId>, newConfigData: any) => void
@@ -133,40 +134,50 @@ function createFlashCardSet(): FlashCardSet {
     );
   };
 
-  const flashCardSet = new FlashCardSet(flashCardSetId, "Piano Chords", createFlashCards);
-  flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
+  const flashCardSet = new FlashCardSet(flashCardSetId, "Piano Chords", () => createFlashCards(chordTypes));
+  flashCardSet.configDataToEnabledFlashCardIds = (flashCardSet, flashCards, configData) =>
+    configDataToEnabledFlashCardIds(flashCardSet, chordTypes, flashCards, configData);
   flashCardSet.getInitialConfigData = (): IConfigData => ({
     enabledRootPitches: ambiguousKeyPitchStringsSymbols.slice(),
-    enabledChordTypes: ChordType.All
-      .filter((_, chordIndex) => chordIndex <= 8)
-      .map(chord => chord.name)
+    enabledChordTypes: (chordTypes === ChordType.All)
+      ? (
+        ChordType.All
+          .filter((_, chordIndex) => chordIndex <= 8)
+          .map(chord => chord.name)
+      )
+      : chordTypes.map(chord => chord.name)
   });
-  flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
+  flashCardSet.renderFlashCardMultiSelect = (chordTypes === ChordType.All)
+    ? renderFlashCardMultiSelect
+    : undefined;
   flashCardSet.renderAnswerSelect = renderAnswerSelect;
   flashCardSet.containerHeight = "150px";
-  flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (
-    chordTypeLevels
-      .map(ctl =>
-        new FlashCardLevel(
-          ctl.name,
-          flashCards
-            .filter(fc => arrayContains(ctl.chordTypes, (fc.backSide.data as Chord).type))
-            .map(fc => fc.id),
-          (curConfigData: IConfigData) => ({
-            enabledRootPitches: ambiguousKeyPitchStringsSymbols.slice(),
-            enabledChordTypes: ctl.chordTypes.map(ct => ct.name)
-          } as IConfigData)
+
+  if (chordTypes === ChordType.All) {
+    flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (
+      chordTypeLevels
+        .map(ctl =>
+          new FlashCardLevel(
+            ctl.name,
+            flashCards
+              .filter(fc => arrayContains(ctl.chordTypes, (fc.backSide.data as Chord).type))
+              .map(fc => fc.id),
+            (curConfigData: IConfigData) => ({
+              enabledRootPitches: ambiguousKeyPitchStringsSymbols.slice(),
+              enabledChordTypes: ctl.chordTypes.map(ct => ct.name)
+            } as IConfigData)
+          )
         )
-      )
-  );
+    );
+  }
 
   return flashCardSet;
 }
 
-export function createFlashCards(): FlashCard[] {
+export function createFlashCards(chordTypes: Array<ChordType>): FlashCard[] {
   return flattenArrays<FlashCard>(
     ambiguousKeyPitchStringsSymbols.map((rootPitchStr, i) =>
-      ChordType.All.map(chordType => {
+      chordTypes.map(chordType => {
         const halfStepsFromC = mod(i - 3, 12);
         const rootPitch = Pitch.createFromMidiNumber((new Pitch(PitchLetter.C, 0, 4)).midiNumber + halfStepsFromC);
         const pitches = new Chord(chordType, rootPitch).getPitches();
@@ -216,4 +227,4 @@ export function renderAnswerSelect(
     incorrectAnswers={info.incorrectAnswers} instantConfirm={false} wrapOctave={true} />;
 }
 
-export const flashCardSet = createFlashCardSet();
+export const flashCardSet = createFlashCardSet(ChordType.All);

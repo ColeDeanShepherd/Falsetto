@@ -903,7 +903,7 @@ export const pianoTheorySlideGroups = [
       </div>
     )),
     
-    new Slide("chords-review-1", () => (
+    new Slide("chords-introduction-review", () => (
       <div>
         <LimitedWidthContentContainer maxWidth={1000}>
           <p>Review material below, then move to the next slide to test your knowledge of chords with a quiz.</p>
@@ -922,7 +922,7 @@ export const pianoTheorySlideGroups = [
       </div>
     )),
     
-    new Slide("chords-intro-quiz", () => (
+    new Slide("chords-introduction-quiz", () => (
       <LimitedWidthContentContainer>
         <div style={{ marginTop: "1em" }}>
           {createStudyFlashCardSetComponent(

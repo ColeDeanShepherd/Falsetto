@@ -9,13 +9,13 @@ import { Pitch } from "../../../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
 import { Scale, getUriComponent } from "../../../lib/TheoryLib/Scale";
 
-import { FlashCard, FlashCardSide } from "../../../FlashCard";
+import { FlashCard, FlashCardSide, FlashCardSideRenderFn } from '../../../FlashCard';
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 
 import { getPianoKeyboardAspectRatio } from '../../Utils/PianoUtils';
 import { PianoKeyboard } from "../../Utils/PianoKeyboard";
 import { PianoKeysAnswerSelect } from "../../Utils/PianoKeysAnswerSelect";
-import { canonicalChordTypeToString, getPitchClasses } from '../../../lib/TheoryLib/CanonicalChord';
+import { canonicalChordTypeToString, getPitchClasses, CanonicalChord } from '../../../lib/TheoryLib/CanonicalChord';
 import { getChordExtensionTypeName } from "../../../lib/TheoryLib/ChordType";
 
 const pianoLowestPitch = new Pitch(PitchLetter.C, 0, 4);
@@ -38,7 +38,7 @@ export function createFlashCardSet(scale: Scale, numChordPitches: number): Flash
     `${scale.rootPitch.toString(/*includeOctaveNumber*/ false)} ${scale.type.name} Diatonic ${chordExtensionTypeName}s`,
     () => createFlashCards(flashCardSetId, scale, numChordPitches));
   flashCardSet.route = `scale/${getUriComponent(scale)}/diatonic-${numChordPitches}-note-chords-exercise`;
-  flashCardSet.renderAnswerSelect = renderAnswerSelect;
+  flashCardSet.renderAnswerSelect = renderChordNotesFlashCardAnswerSelect;
   flashCardSet.containerHeight = `${150}px`;
 
   return flashCardSet;
@@ -49,48 +49,55 @@ export function createFlashCards(flashCardSetId: string, scale: Scale, numChordP
 
   return diatonicCanonicalChords
     .map((canonicalChord, i) => {
-      const deserializedId = {
-        set: flashCardSetId,
-        chord: `${canonicalChord.rootPitchClass.toString()} ${canonicalChordTypeToString(canonicalChord.type)}`
-      };
-      const id = JSON.stringify(deserializedId);
-
       const scaleDegreeRomanNumerals = getRomanNumerals(1 + i);
-
-      const chordPitches = getPitchClasses(canonicalChord)
-        .map(pitchClass => Pitch.createFromPitchClass(
-          pitchClass,
-          /*octaveNumber*/ 4,
-          /*useSharps*/ true
-        ));
-
-      return new FlashCard(
-        id,
-
-        new FlashCardSide(
-          scaleDegreeRomanNumerals,
-          chordPitches
-        ),
-
-        new FlashCardSide(
-          size => {
-            return (
-              <PianoKeyboard
-                rect={new Rect2D(new Size2D(pianoAspectRatio * 100, 100), new Vector2D(0, 0))}
-                lowestPitch={pianoLowestPitch}
-                highestPitch={pianoHighestPitch}
-                pressedPitches={chordPitches}
-                style={pianoStyle}
-              />
-            );
-          },
-          canonicalChord
-        )
-      );
+      return createChordNotesFlashCard(flashCardSetId, canonicalChord, scaleDegreeRomanNumerals);
     });
 }
 
-export function renderAnswerSelect(
+export function createChordNotesFlashCard(
+  flashCardSetId: string,
+  canonicalChord: CanonicalChord,
+  frontSideRenderFn: FlashCardSideRenderFn
+): FlashCard {
+  const deserializedId = {
+    set: flashCardSetId,
+    chord: `${canonicalChord.rootPitchClass.toString()} ${canonicalChordTypeToString(canonicalChord.type)}`
+  };
+  const id = JSON.stringify(deserializedId);
+
+  const chordPitches = getPitchClasses(canonicalChord)
+    .map(pitchClass => Pitch.createFromPitchClass(
+      pitchClass,
+      /*octaveNumber*/ 4,
+      /*useSharps*/ true
+    ));
+
+  return new FlashCard(
+    id,
+
+    new FlashCardSide(
+      frontSideRenderFn,
+      chordPitches
+    ),
+
+    new FlashCardSide(
+      size => {
+        return (
+          <PianoKeyboard
+            rect={new Rect2D(new Size2D(pianoAspectRatio * 100, 100), new Vector2D(0, 0))}
+            lowestPitch={pianoLowestPitch}
+            highestPitch={pianoHighestPitch}
+            pressedPitches={chordPitches}
+            style={pianoStyle}
+          />
+        );
+      },
+      canonicalChord
+    )
+  );
+}
+
+export function renderChordNotesFlashCardAnswerSelect(
   info: FlashCardStudySessionInfo
 ) {
   const correctAnswer = info.currentFlashCard.frontSide.data as Array<Pitch>;

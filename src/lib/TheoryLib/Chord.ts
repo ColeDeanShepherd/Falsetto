@@ -1,6 +1,6 @@
-import { Pitch, parseFromUriComponent } from "./Pitch";
+import { Pitch, parseFromUriComponent, getUriComponent as getPitchUriComponent } from "./Pitch";
 import { getSimpleScaleDegree } from './Scale';
-import { ChordType, parseChordTypeFromUriComponent } from "./ChordType";
+import { ChordType, parseChordTypeFromUriComponent, getUriComponent as getChordTypeUriComponent } from "./ChordType";
 
 export function getSimpleChordNoteNumber(chordNoteNumber: number) {
   return getSimpleScaleDegree(chordNoteNumber);
@@ -19,6 +19,10 @@ export function parseChordFromUriComponent(uriComponent: string): Chord | undefi
   if (!rootPitch) { return undefined; }
 
   return new Chord(chordType, rootPitch);
+}
+
+export function getUriComponent(chord: Chord): string {
+  return `${getPitchUriComponent(chord.rootPitch)}-${getChordTypeUriComponent(chord.type)}`;
 }
 
 export class Chord {

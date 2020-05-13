@@ -1,30 +1,17 @@
 import * as React from "react";
 
 import * as FlashCardUtils from "../Components/Quizzes/Utils";
-import { FlashCard, FlashCardSide } from "../FlashCard";
-import { FlashCardSet, FlashCardStudySessionInfo } from "../FlashCardSet";
+import { FlashCard } from "../FlashCard";
+import { FlashCardSet } from "../FlashCardSet";
 import { renderUserDeterminedCorrectnessAnswerSelect, renderStringAnswerSelect } from '../Components/Quizzes/Utils';
 import { Scale, ScaleType } from '../lib/TheoryLib/Scale';
 import { Pitch } from "../lib/TheoryLib/Pitch";
 import { PitchLetter } from '../lib/TheoryLib/PitchLetter';
-import { getPitchClasses } from "../lib/TheoryLib/CanonicalChord";
 import { getOrdinalNumeral } from "../lib/Core/Utils";
-import { PianoKeyboard } from "../Components/Utils/PianoKeyboard";
-import { Rect2D } from "../lib/Core/Rect2D";
-import { Size2D } from "../lib/Core/Size2D";
-import { Vector2D } from "../lib/Core/Vector2D";
-import { getPianoKeyboardAspectRatio } from "../Components/Utils/PianoUtils";
-import { PianoKeysAnswerSelect } from "../Components/Utils/PianoKeysAnswerSelect";
+import { createChordNotesFlashCard } from "../Components/Quizzes/Chords/PianoDiatonicChords";
 
-const flashCardSetId = "ptChordsIntroQuiz";
+const flashCardSetId = "ptDiatonicChordsQuiz";
 const diatonicTriadTypeStrings = ["Major", "Minor", "Diminished"];
-
-const pianoLowestPitch = new Pitch(PitchLetter.C, 0, 4);
-const pianoHighestPitch = new Pitch(PitchLetter.B, 0, 5);
-
-const pianoAspectRatio = getPianoKeyboardAspectRatio(/*octaveCount*/ 2);
-const pianoMaxWidth = 300;
-const pianoStyle = { width: `${pianoMaxWidth}px`, maxWidth: "100%", height: "auto" };
 
 function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Diatonic Chords Quiz", createFlashCards);
@@ -54,37 +41,11 @@ export function createFlashCards(): FlashCard[] {
       .getDiatonicCanonicalChords(/*numChordPitches*/ 3)
       .map((canonicalChord, i) => {
         const scaleDegreeNumber = 1 + i;
-
-        const chordPitches = getPitchClasses(canonicalChord)
-          .map(pitchClass => Pitch.createFromPitchClass(
-            pitchClass,
-            /*octaveNumber*/ 4,
-            /*useSharps*/ true
-          ));
-
-        return (
-          new FlashCard(
-            `cMajorDiatonicTriad${scaleDegreeNumber}`,
-            new FlashCardSide(
-              `What notes are in the ${getOrdinalNumeral(scaleDegreeNumber)} diatonic triad of the C Major scale?`,
-              chordPitches
-            ),
-            new FlashCardSide(
-              size => {
-                return (
-                  <PianoKeyboard
-                    rect={new Rect2D(new Size2D(pianoAspectRatio * 100, 100), new Vector2D(0, 0))}
-                    lowestPitch={pianoLowestPitch}
-                    highestPitch={pianoHighestPitch}
-                    pressedPitches={chordPitches}
-                    style={pianoStyle}
-                  />
-                );
-              },
-              canonicalChord
-            ),
-            renderDiatonicTriadNotesAnswerSelect
-          )
+        
+        return createChordNotesFlashCard(
+          flashCardSetId,
+          canonicalChord,
+          `What notes are in the ${getOrdinalNumeral(scaleDegreeNumber)} diatonic triad of the C Major scale?`
         );
       })
   )
@@ -132,19 +93,6 @@ export function createFlashCards(): FlashCard[] {
       info => renderStringAnswerSelect(diatonicTriadTypeStrings, info)
     )
   ]);
-}
-
-export function renderDiatonicTriadNotesAnswerSelect(
-  info: FlashCardStudySessionInfo
-) {
-  const correctAnswer = info.currentFlashCard.frontSide.data as Array<Pitch>;
-
-  return <PianoKeysAnswerSelect
-    aspectRatio={pianoAspectRatio} maxWidth={pianoMaxWidth}
-    lowestPitch={pianoLowestPitch} highestPitch={pianoHighestPitch}
-    correctAnswer={correctAnswer} onAnswer={info.onAnswer}
-    lastCorrectAnswer={info.lastCorrectAnswer} incorrectAnswers={info.incorrectAnswers}
-    instantConfirm={false} wrapOctave={true} />;
 }
 
 export const flashCardSet = createFlashCardSet();

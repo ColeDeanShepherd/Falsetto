@@ -50,9 +50,12 @@ export class HomePage extends React.Component<{}, {}> {
             <div>
               <h2>4. Chords</h2>
               <ol>
-                <li><NavLinkView to="/piano-theory?slide=chords-introduction">Lesson</NavLinkView></li>
-                <li><NavLinkView to="/piano-theory?slide=chords-review">Review</NavLinkView></li>
-                <li><NavLinkView to="/piano-theory?slide=chords-quiz">Quiz</NavLinkView></li>
+                <li><NavLinkView to="/piano-theory?slide=chords-introduction">Introduction</NavLinkView></li>
+                <li><NavLinkView to="/piano-theory?slide=chords-introduction-review">Review</NavLinkView></li>
+                <li><NavLinkView to="/piano-theory?slide=chords-introduction-quiz">Quiz</NavLinkView></li>
+                <li><NavLinkView to="/piano-theory?slide=diatonic-chords">Diatonic Chords</NavLinkView></li>
+                <li><NavLinkView to="/piano-theory?slide=diatonic-chords-review">Review</NavLinkView></li>
+                <li><NavLinkView to="/piano-theory?slide=diatonic-chords-quiz">Quiz</NavLinkView></li>
               </ol>
 
               <p><NavLinkView to="/chord-exercises">Self-Paced Chord Mastery</NavLinkView></p>

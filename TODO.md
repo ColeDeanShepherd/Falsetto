@@ -10,10 +10,6 @@
       * Play scale in 2nds, 3rd, etc.
       * Diatonic chord inversions
   * Chords Section
-    * Quiz(zes)
-    * Extended chords
-    * Chord-scale equivalence
-    * Roman Numeral Notation? (or in prog lesson?)
     * Self-Paced Chord Mastery
       * Pick a type of chord
       * For all root notes
@@ -23,6 +19,10 @@
         * Know intervals
         * Know major scale based formula?
   * Chord Progressions Section
+    * Roman Numeral Notation? (or in prog lesson?)
+  * Advanced Chords Section
+    * Extended chords
+    * Chord-scale equivalence
   * Improve navigation (enable easy jumping between sections).
   * document title changes?
 * Debug & fix scale viewer & chord viewer
