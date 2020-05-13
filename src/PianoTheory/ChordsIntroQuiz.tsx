@@ -4,8 +4,6 @@ import * as FlashCardUtils from "../Components/Quizzes/Utils";
 import { FlashCard } from "../FlashCard";
 import { FlashCardSet } from "../FlashCardSet";
 import { renderUserDeterminedCorrectnessAnswerSelect } from '../Components/Quizzes/Utils';
-import { ScaleFormulaAnswerSelect } from "../Components/Utils/ScaleFormulaAnswerSelect";
-import { MajorScaleRelativeScaleFormulaAnswerSelect } from '../Components/Utils/MajorScaleRelativeScaleFormulaAnswerSelect';
 import { MajorScaleRelativeFormulaAnswerSelect } from "../Components/Utils/MajorScaleRelativeFormulaAnswerSelect";
 
 const flashCardSetId = "ptChordsIntroQuiz";

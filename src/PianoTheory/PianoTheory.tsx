@@ -30,6 +30,7 @@ import { renderPianoKeyboardNoteNames, PianoKeyboardMetrics, PianoKeyboard } fro
 import * as PianoNotes from "../Components/Quizzes/Notes/PianoNotes";
 import * as ScalesQuiz from "./ScalesQuiz";
 import * as ChordsIntroQuiz from "./ChordsIntroQuiz";
+import * as DiatonicChordsQuiz from "./DiatonicChordsQuiz";
 
 import { naturalPitches, accidentalPitches, allPitches } from "../Components/Quizzes/Notes/PianoNotes";
 import { PianoScaleFormulaDiagram } from "../Components/Utils/PianoScaleFormulaDiagram";
@@ -1067,9 +1068,18 @@ export const pianoTheorySlideGroups = [
     )),
     
     new Slide("diatonic-chords-quiz", () => (
-      <div>
-        <p>QUIZ</p>
-      </div>
+      <LimitedWidthContentContainer>
+        <div style={{ marginTop: "1em" }}>
+          {createStudyFlashCardSetComponent(
+            DiatonicChordsQuiz.flashCardSet,
+            /*isEmbedded*/ false,
+            /*hideMoreInfoUri*/ true,
+            /*title*/ undefined,
+            /*style*/ undefined,
+            /*enableSettings*/ undefined,
+            /*showRelatedExercises*/ false)}
+        </div>
+      </LimitedWidthContentContainer>
     )),
     
     /*new Slide("root-position", () => (
