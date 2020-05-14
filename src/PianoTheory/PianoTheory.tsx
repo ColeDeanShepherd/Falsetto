@@ -44,7 +44,7 @@ import { PianoScaleMajorRelativeFormulaDiagram } from "../Components/Utils/Piano
 import { NavLinkView } from "../NavLinkView";
 import { PlayablePianoKeyboard } from "../Components/Utils/PlayablePianoKeyboard";
 import { ChordView } from '../Components/Utils/ChordView';
-import { ChordDiagram } from "../Components/Lessons/EssentialMusicTheory/ChordProgressions";
+import { ChordDiagram, ChordProgressionPlayer } from "../Components/Lessons/EssentialMusicTheory/ChordProgressions";
 
 export const maxPianoWidth = 1000;
 export const maxOneOctavePianoWidth = 400;
@@ -1144,25 +1144,37 @@ export const pianoTheorySlideGroups = [
     )),*/
   ]),
 
-  /*new SlideGroup("Chord Progressions", [
+  new SlideGroup("Chord Progressions", [
     new Slide("chord-progressions-introduction", () => (
       <div>
         <h2>Section 5: Chord Progressions</h2>
+        <p><strong>Chord progressions</strong> are sequences of chords.</p>
+        <p>Below is an example of a chord progression consisting of the chords: D Minor, G Dominant 7, C Major</p>
+        <ChordProgressionPlayer
+          chordsPitches={[
+            [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.A, 0, 4)],
+            [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.B, 0, 4)],
+            [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]
+          ]}
+          chords={[
+            new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 4)),
+            new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)),
+            new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))
+          ]}
+          scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
+          chordScaleDegreeNumbers={[2, 5, 1]}
+          showRomanNumerals={false}
+          maxWidth={maxTwoOctavePianoWidth} />
       </div>
     )),
-    new Slide("needs-name-4", () => (
+    new Slide("needs-name-5", () => (
       <div>
-        <p>Chord progressions are sequences of chords.</p>
         <p>We often label diatonic chords with roman numerals.</p>
         <p>Chords built on the 1st scale degree are "I" chords.</p>
         <p>Chords built on the 2nd scale degree are "II" chords.</p>
         <p>And so on, until the 7th scale degree.</p>
         <p>In C Major, the I chord is C E G (C Major), the II chord is D F A (D Minor), the III chord is E G B (E Minor), and so on.</p>
         <p>With roman numerals, we can write out chord progressions independent of the scale the progression is in.</p>
-      </div>
-    )),
-    new Slide("needs-name-5", () => (
-      <div>
         <p>One of the most common chord progressions is V - I.</p>
         <p>This is one of the strongest progressions, especially if the V is a seventh chord, because of the voices of the chord.</p>
         <p>The voices of V all lead into I.</p>
@@ -1186,7 +1198,7 @@ export const pianoTheorySlideGroups = [
     )),
   ]),
   
-  new Slide("needs-name-3", () => (
+  /*new Slide("needs-name-3", () => (
     <div>
       <p>If a chord has 4 notes it can be in 3rd inversion, where the 7th is in the bass.</p>
       <p>The pattern continues:</p>
