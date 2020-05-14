@@ -11,9 +11,7 @@
       * Diatonic chord inversions
   * Chords Section
     * Self-Paced Chord Mastery
-      * Pick a type of chord
       * For all root notes
-        * Play chord
         * Inversions
         * Note name -> scale degree
         * Know intervals

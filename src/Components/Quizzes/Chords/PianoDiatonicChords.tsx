@@ -93,7 +93,9 @@ export function createChordNotesFlashCard(
         );
       },
       canonicalChord
-    )
+    ),
+
+    renderChordNotesFlashCardAnswerSelect
   );
 }
 
