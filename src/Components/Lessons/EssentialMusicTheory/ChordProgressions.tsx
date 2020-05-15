@@ -28,6 +28,7 @@ import * as ChordHarmonicFunctions from "../../Quizzes/Chords/ChordFamilies";
 import { NoteText } from "../../Utils/NoteText";
 import { getPianoKeyboardAspectRatio } from '../../Utils/PianoUtils';
 import { getRomanNumerals } from '../../../lib/Core/Utils';
+import { getChordRomanNumeralNotation } from "../../Tools/DiatonicChordPlayer";
 
 export const FiveChordDiagram: React.FunctionComponent<{}> = props => {
   const lowestPitch = new Pitch(PitchLetter.C, 0, 4);
@@ -116,8 +117,8 @@ function renderChordDiagramLabels(
     return (pitchIndex >= 0)
       ? (
         showScaleDegreeNumbers
-          ? [scaleDegreeLabels[pitchIndex].toString(), pitch.toOneAccidentalAmbiguousString(false)]
-          : [pitch.toOneAccidentalAmbiguousString(false)]
+          ? [scaleDegreeLabels[pitchIndex].toString(), pitch.toString(/*includeOctaveNumber*/ false, /*useSymbols*/ true)]
+          : [pitch.toString(/*includeOctaveNumber*/ false, /*useSymbols*/ true)]
       )
       : null;
   };
@@ -177,6 +178,9 @@ export interface IChordProgressionPlayerProps {
   chordsPitches: Array<Array<Pitch>>;
   scale: Scale;
   chordScaleDegreeNumbers: Array<number>;
+  lowestPitch?: Pitch;
+  highestPitch?: Pitch;
+  octaveCount?: number;
   showRomanNumerals?: boolean;
   maxWidth?: number;
 }
@@ -208,6 +212,18 @@ export class ChordProgressionPlayer extends React.Component<IChordProgressionPla
     const { chordsPitches, chords, scale, chordScaleDegreeNumbers } = this.props;
     const { currentChordIndex, isPlaying } = this.state;
 
+    const octaveCount = (this.props.octaveCount !== undefined)
+      ? this.props.octaveCount
+      : 2;
+    
+    const lowestPitch = (this.props.lowestPitch !== undefined)
+      ? this.props.lowestPitch
+      : new Pitch(PitchLetter.C, 0, 4);
+    
+    const highestPitch = (this.props.highestPitch !== undefined)
+      ? this.props.highestPitch
+      : new Pitch(PitchLetter.B, 0, 4 + (octaveCount - 1));
+
     const chordPitches = (currentChordIndex !== undefined)
       ? chordsPitches[currentChordIndex]
       : [];
@@ -217,11 +233,8 @@ export class ChordProgressionPlayer extends React.Component<IChordProgressionPla
       : true;
     
     const textStyle = { fontSize: "1.25em" };
-    
-    const lowestPitch = new Pitch(PitchLetter.C, 0, 4);
-    const highestPitch = new Pitch(PitchLetter.B, 0, 5);
     const maxWidth = (this.props.maxWidth !== undefined) ? this.props.maxWidth : 300;
-    const aspectRatio = getPianoKeyboardAspectRatio(/*octaveCount*/ 2);
+    const aspectRatio = getPianoKeyboardAspectRatio(/*octaveCount*/ octaveCount);
     const pianoStyle = { width: "100%", maxWidth: `${maxWidth}px`, height: "auto" };
 
     return (
@@ -243,7 +256,7 @@ export class ChordProgressionPlayer extends React.Component<IChordProgressionPla
 
         {(currentChordIndex !== undefined)
           ? <p style={textStyle}>
-            {(showRomanNumerals) ? <span>{getRomanNumerals(chordScaleDegreeNumbers[currentChordIndex])} - </span> : null}
+            {(showRomanNumerals) ? <span>{getChordRomanNumeralNotation(chords[currentChordIndex], chordScaleDegreeNumbers[currentChordIndex])} - </span> : null}
             {chords[currentChordIndex].rootPitch.toString(/*includeOctaveNumber*/ false)} {chords[currentChordIndex].type.name}
           </p>
           : <p style={textStyle}>Press the play button to hear the chord progression.</p>}

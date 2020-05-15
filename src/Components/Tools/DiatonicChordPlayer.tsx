@@ -9,6 +9,7 @@ import { PitchLetter } from '../../lib/TheoryLib/PitchLetter';
 import { ScaleType } from '../../lib/TheoryLib/Scale';
 import { ValidKeyPitchSelect } from '../Utils/ValidKeyPitchSelect';
 import { getRomanNumerals } from '../../lib/Core/Utils';
+import { ChordType } from "../../lib/TheoryLib/ChordType";
 
 export const defaultScales = [
   ScaleType.Ionian,
@@ -21,6 +22,19 @@ export const defaultScales = [
   ScaleType.MelodicMinor,
   ScaleType.HarmonicMinor
 ];
+
+export function getChordRomanNumeralNotation(chord: Chord, scaleDegree: number): JSX.Element {
+  const romanNumeral = chord.type.isMajorType
+    ? getRomanNumerals(scaleDegree)
+    : getRomanNumerals(scaleDegree).toLowerCase();
+
+  return (
+    <span>
+      {romanNumeral}
+      {(chord.type !== ChordType.Minor) ? <sup>{chord.type.symbols[0]}</sup> : null}
+    </span>
+  );
+}
 
 export interface IDiatonicChordPlayerProps {
   scales?: Array<ScaleType>;
@@ -117,10 +131,6 @@ export class DiatonicChordPlayer extends React.Component<IDiatonicChordPlayerPro
   }
 
   private renderCell(scaleRootPitch: Pitch, scaleDegree: number, chord: Chord): JSX.Element {
-    const romanNumeral = chord.type.isMajorType
-      ? getRomanNumerals(scaleDegree)
-      : getRomanNumerals(scaleDegree).toLowerCase();
-
     let pitches = chord.getPitches();
     if (this.state.playDrone) {
       pitches.push(new Pitch(
@@ -135,7 +145,7 @@ export class DiatonicChordPlayer extends React.Component<IDiatonicChordPlayerPro
         <PitchesAudioPlayer
           pitches={pitches}
           playSequentially={false}>
-          {romanNumeral}<sup>{chord.type.symbols[0]}</sup>
+          {getChordRomanNumeralNotation(chord, scaleDegree)}
         </PitchesAudioPlayer>
       </TableCell>
     );
