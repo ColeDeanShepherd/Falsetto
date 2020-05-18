@@ -6,7 +6,7 @@ import { arrayContains } from '../../../lib/Core/ArrayUtils';
 import { playPitches } from '../../../Audio/PianoAudio';
 
 import { PianoKeyboard, PianoKeyboardMetrics, renderPianoKeyboardKeyLabels } from "../../Utils/PianoKeyboard";
-import { Pitch } from '../../../lib/TheoryLib/Pitch';
+import { Pitch, getAccidentalString } from '../../../lib/TheoryLib/Pitch';
 import { PitchLetter } from '../../../lib/TheoryLib/PitchLetter';
 
 import { createStudyFlashCardSetComponent } from '../../../StudyFlashCards/View';
@@ -178,6 +178,7 @@ export interface IChordProgressionPlayerProps {
   chordsPitches: Array<Array<Pitch>>;
   scale: Scale;
   chordScaleDegreeNumbers: Array<number>;
+  chordScaleDegreeSignedAccidentals?: Array<number>;
   lowestPitch?: Pitch;
   highestPitch?: Pitch;
   octaveCount?: number;
@@ -237,6 +238,22 @@ export class ChordProgressionPlayer extends React.Component<IChordProgressionPla
     const aspectRatio = getPianoKeyboardAspectRatio(/*octaveCount*/ octaveCount);
     const pianoStyle = { width: "100%", maxWidth: `${maxWidth}px`, height: "auto" };
 
+    const renderText = (currentChordIndex: number) => {
+      //chordScaleDegreeSignedAccidentals
+      const signedAccidental = this.props.chordScaleDegreeSignedAccidentals
+        ? this.props.chordScaleDegreeSignedAccidentals[currentChordIndex]
+        : 0;
+      const signedAccidentalString = getAccidentalString(signedAccidental, /*useSymbols*/ true);
+
+      return (
+        <p style={textStyle}>
+          {(showRomanNumerals) ? (
+            <span>{signedAccidentalString}{getChordRomanNumeralNotation(chords[currentChordIndex], chordScaleDegreeNumbers[currentChordIndex])} - </span>) : null}
+          {chords[currentChordIndex].rootPitch.toString(/*includeOctaveNumber*/ false)} {chords[currentChordIndex].type.name}
+        </p>
+      );
+    }
+
     return (
       <div>
         <p>
@@ -255,10 +272,7 @@ export class ChordProgressionPlayer extends React.Component<IChordProgressionPla
         </p>
 
         {(currentChordIndex !== undefined)
-          ? <p style={textStyle}>
-            {(showRomanNumerals) ? <span>{getChordRomanNumeralNotation(chords[currentChordIndex], chordScaleDegreeNumbers[currentChordIndex])} - </span> : null}
-            {chords[currentChordIndex].rootPitch.toString(/*includeOctaveNumber*/ false)} {chords[currentChordIndex].type.name}
-          </p>
+          ? renderText(currentChordIndex)
           : <p style={textStyle}>Press the play button to hear the chord progression.</p>}
 
         <PianoKeyboard

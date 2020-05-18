@@ -65,6 +65,7 @@ export class HomePage extends React.Component<{}, {}> {
               <h2>5. Chord Progressions</h2>
               <ol>
                 <li><NavLinkView to="/piano-theory?slide=chord-progressions-introduction">Introduction</NavLinkView></li>
+                <li><NavLinkView to="/piano-theory?slide=chord-progressions-review">Review</NavLinkView></li>
                 <li><NavLinkView to="/piano-theory?slide=chord-progressions-quiz">Quiz</NavLinkView></li>
               </ol>
             </div>
