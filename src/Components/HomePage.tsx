@@ -60,30 +60,15 @@ export class HomePage extends React.Component<{}, {}> {
 
               <p><NavLinkView to="/chord-exercises">Self-Paced Chord Mastery</NavLinkView></p>
             </div>
-
-            {false
-              ? (
-                <div>
-                  <div>
-                    <h2>5. Chord Progressions</h2>
-                    <ol>
-                      <li>Introduction</li>
-                      <li>V - I Progression</li>
-                      <li>Chord Substitution</li>
-                      <li>Voice Leading</li>
-                      <li>Quiz</li>
-                    </ol>
-                  </div>
-                </div>
-              )
-              : (
-                <div>
-                  <div>
-                    <h2>5. Chord Progressions</h2>
-                    <p>Coming soon!</p>
-                  </div>
-                </div>
-              )}
+            
+            <div>
+              <h2>5. Chord Progressions</h2>
+              <ol>
+                <li><NavLinkView to="/piano-theory?slide=chord-progressions-introduction">Introduction</NavLinkView></li>
+                <li><NavLinkView to="/piano-theory?slide=chord-progressions-review">Review</NavLinkView></li>
+                <li><NavLinkView to="/piano-theory?slide=chord-progressions-quiz">Quiz</NavLinkView></li>
+              </ol>
+            </div>
           </div>
           
           <h2>Other Lessons, Tools, &amp; Exercises</h2>

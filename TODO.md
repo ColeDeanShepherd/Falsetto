@@ -17,9 +17,14 @@
         * Know intervals
         * Know major scale based formula?
   * Chord Progressions Section
-    * Roman Numeral Notation? (or in prog lesson?)
+    * Roman numeral notation
+      * scale deg #'s
+      * capitalization is type
+      * can add modifiers (like '7')
+    * V - I
+    * Chord Substitution
   * Advanced Chords Section
-    * Extended chords
+    * Extended chords, omissions
     * Chord-scale equivalence
   * Improve navigation (enable easy jumping between sections).
   * document title changes?
@@ -66,9 +71,11 @@
     * Intervals (ascending & descending)
     * Diatonic Intervals
     * Chords
+    * Diatonic chords
     * Scales
     * Scale Degrees
     * Chord "Degrees"
+    * Chord progressions
 ## Low Priority
 * Re-enable main menu
 * Piano Theory

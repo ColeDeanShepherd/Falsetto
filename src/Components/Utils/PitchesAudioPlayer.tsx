@@ -18,6 +18,7 @@ export class PitchesAudioPlayerExports {
     public stopPlayingFn: () => void
   ) {}
 }
+
 export interface IPitchesAudioPlayerProps {
   pitches: Array<Pitch>;
   playSequentially: boolean;
@@ -26,9 +27,11 @@ export interface IPitchesAudioPlayerProps {
   pitchesAudio?: IPitchesAudio
   onGetExports?: (exports: PitchesAudioPlayerExports) => void;
 }
+
 export interface IPitchesAudioPlayerState {
   playState: PitchesAudioPlayerPlayState;
 }
+
 export class PitchesAudioPlayer extends React.Component<IPitchesAudioPlayerProps, IPitchesAudioPlayerState> {
   public constructor(props: IPitchesAudioPlayerProps) {
     super(props);

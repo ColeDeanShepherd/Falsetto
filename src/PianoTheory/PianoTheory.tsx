@@ -31,6 +31,7 @@ import * as PianoNotes from "../Components/Quizzes/Notes/PianoNotes";
 import * as ScalesQuiz from "./ScalesQuiz";
 import * as ChordsIntroQuiz from "./ChordsIntroQuiz";
 import * as DiatonicChordsQuiz from "./DiatonicChordsQuiz";
+import * as ChordProgressionsQuiz from "./ChordProgressionsQuiz";
 
 import { naturalPitches, accidentalPitches, allPitches } from "../Components/Quizzes/Notes/PianoNotes";
 import { PianoScaleFormulaDiagram } from "../Components/Utils/PianoScaleFormulaDiagram";
@@ -44,7 +45,7 @@ import { PianoScaleMajorRelativeFormulaDiagram } from "../Components/Utils/Piano
 import { NavLinkView } from "../NavLinkView";
 import { PlayablePianoKeyboard } from "../Components/Utils/PlayablePianoKeyboard";
 import { ChordView } from '../Components/Utils/ChordView';
-import { ChordDiagram } from "../Components/Lessons/EssentialMusicTheory/ChordProgressions";
+import { ChordDiagram, ChordProgressionPlayer } from "../Components/Lessons/EssentialMusicTheory/ChordProgressions";
 
 export const maxPianoWidth = 1000;
 export const maxOneOctavePianoWidth = 400;
@@ -1144,62 +1145,302 @@ export const pianoTheorySlideGroups = [
     )),*/
   ]),
 
-  /*new SlideGroup("Chord Progressions", [
+  new SlideGroup("Chord Progressions", [
     new Slide("chord-progressions-introduction", () => (
       <div>
         <h2>Section 5: Chord Progressions</h2>
+        <p><strong>Chord progressions</strong> are sequences of chords.</p>
+        <p>Below is an example of a chord progression consisting of the chords: D Minor, G Dominant 7 (abbreviated as "G7"), C Major</p>
+        <ChordProgressionPlayer
+          chordsPitches={[
+            [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.A, 0, 4)],
+            [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.B, 0, 4)],
+            [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]
+          ]}
+          chords={[
+            new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 4)),
+            new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)),
+            new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))
+          ]}
+          scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
+          chordScaleDegreeNumbers={[2, 5, 1]}
+          showRomanNumerals={false}
+          maxWidth={maxTwoOctavePianoWidth} />
       </div>
     )),
-    new Slide("needs-name-4", () => (
+    new Slide("chord-progressions-diatonic", () => (
       <div>
-        <p>Chord progressions are sequences of chords.</p>
-        <p>We often label diatonic chords with roman numerals.</p>
-        <p>Chords built on the 1st scale degree are "I" chords.</p>
-        <p>Chords built on the 2nd scale degree are "II" chords.</p>
-        <p>And so on, until the 7th scale degree.</p>
-        <p>In C Major, the I chord is C E G (C Major), the II chord is D F A (D Minor), the III chord is E G B (E Minor), and so on.</p>
-        <p>With roman numerals, we can write out chord progressions independent of the scale the progression is in.</p>
+        <p>Chord progressions are generally built with <strong>diatonic chords</strong> (chords build solely with notes in a particular scale).</p>
+        <p>The chord progression we just saw, for example (<strong>D Minor</strong>, <strong>G7</strong>, <strong>C Major</strong>), consists solely of chords diatonic to the <strong>C Major scale</strong>.</p>
+        <p>In diatonic chord progressions, each chord has a root note associated with a <strong>scale note number</strong>. Using the chord progression above as an example:</p>
+        <p><strong>D Minor</strong> has a root note of <strong>D</strong>, which is the <strong>2nd</strong> note in the C Major scale.</p>
+        <p><strong>G7</strong> has a root note of <strong>G</strong>, which is the <strong>5th</strong> note in the C Major scale.</p>
+        <p><strong>C Major</strong> has a root note of <strong>C</strong>, which is the <strong>1st</strong> note in the C Major scale.</p>
+        <p>We can take advantage of this and represent diatonic chord progressions in a compact, scale-independent way with <strong>roman numeral notation</strong>.</p>
       </div>
     )),
-    new Slide("needs-name-5", () => (
+    new Slide("roman-numeral-notation", () => (
       <div>
-        <p>One of the most common chord progressions is V - I.</p>
-        <p>This is one of the strongest progressions, especially if the V is a seventh chord, because of the voices of the chord.</p>
-        <p>The voices of V all lead into I.</p>
-        <p>You can extend the V - I progression by adding the V of V - II - to make II - V - I.</p>
-        <p>You can keep extending this if you like to make: IV - VII - III - VI - II - V - I</p>
-        <p>This is the circle progression, one of the strongest progressions.</p>
+        <p>In <strong>roman numeral notation</strong>, the chord progression (<strong>D Minor</strong>, <strong>G7</strong>, <strong>C Major</strong>) in the <strong>C Major scale</strong> would be written as: <strong>ii - V7 - I</strong>:</p>
+        <p><strong>ii</strong> is the roman numeral for <strong>2</strong>, meaning it represents the diatonic chord with the <strong>2nd</strong> scale note (<strong>D</strong> in this example) as a root note.</p>
+        <p><strong>ii</strong> is also lower-case, which signifies that the chord is a <strong>minor</strong> chord.</p>
+        <p>The <strong>V</strong> in <strong>V7</strong> represents the diatonic chord with the <strong>5th</strong> scale note (<strong>G</strong> in this example) as a root note.</p>
+        <p><strong>V</strong> is upper-case to signify that the chord is based on a <strong>major</strong> chord (dominant 7th chords are major triads with an added note).</p>
+        <p>And the <strong>7</strong> in <strong>V7</strong> signifies that the chord is a <strong>dominant 7th chord</strong>.</p>
+        <p>Lastly, <strong>I</strong> signifies a major chord with the <strong>1st</strong> scale note (<strong>C</strong> in this example) as a root note.</p>
+        <p>So, writing "<strong>ii - V7 - I</strong>" in C Major is equivalent to writing "<strong>D Minor, G7, C Major</strong>."</p>
       </div>
     )),
-    new Slide("needs-name-6", () => (
+    new Slide("roman-numeral-notation-key-independent", () => (
       <div>
-        <p>You can use chord substitutions to spice up your progressions - similar chords.</p>
-        <p>Chords are similar if they share notes or make similar resolutions.</p>
-        <p>Also, voice leading is very important. Arrange the notes of your chords in such a way that the movement between the notes of the two chords is small.</p>
-        <p>Experiment with chord progressions!</p>
+        <p>Using roman numeral notation is not only shorter than writing out entire chord names, it also allows us to understand and write diatonic chord progressions <strong>independent of the underlying scale</strong>:</p>
+        <p>To play a <strong>ii - V7 - I</strong> chord progression in another scale &mdash; <strong>D Major</strong> for example &mdash; we just translate roman numerals into notes in the other scale:</p>
+        <p><strong>ii</strong> in the D Major scale is <strong>E Minor</strong>, <strong>V7</strong> in the D Major scale is <strong>A7</strong>, and <strong>I</strong> in the D Major scale is <strong>D Major</strong>.</p>
+        <p>Roman numeral chord progressions should have a similar feel regardless of which scale you play them in, as you'll hear in the diagram below:</p>
+        <ChordProgressionPlayer
+          chordsPitches={[
+            [new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.B, 0, 4)],
+            [new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.A, 0, 4), new Pitch(PitchLetter.C, 1, 5)],
+            [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 1, 4), new Pitch(PitchLetter.A, 0, 4), new Pitch(PitchLetter.D, 0, 5)]
+          ]}
+          chords={[
+            new Chord(ChordType.Minor, new Pitch(PitchLetter.E, 0, 4)),
+            new Chord(ChordType.Dom7, new Pitch(PitchLetter.A, 0, 4)),
+            new Chord(ChordType.Major, new Pitch(PitchLetter.D, 0, 4))
+          ]}
+          scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.D, 0, 4))}
+          chordScaleDegreeNumbers={[2, 5, 1]}
+          showRomanNumerals={true}
+          maxWidth={maxTwoOctavePianoWidth} />
       </div>
     )),
+    new Slide("descending-fifth-progression", () => (
+      <div>
+        <p>One of the strongest sounding, and most common, chord progressions is the <strong>descending fifth</strong>.</p>
+        <p>This can take many forms &mdash; some examples being: <strong>V7 - I</strong>, <strong>ii - V</strong>, <strong>iii - vi</strong>, and more.</p>
+        <p>What all these have in common is: <strong>the 2nd chord is a "fifth" below the first chord</strong>:</p>
+        <p>In the <strong>C Major scale</strong>, for example, <strong>V7 - I</strong> is <strong>G7 - C Major</strong>, and <strong>C</strong> is a fifth below <strong>G</strong> (they span five letters: C, D, E, F, G)</p>
+        <p>In the <strong>C Major scale</strong>, for example, <strong>ii - V</strong> is <strong>D Minor - G Major</strong>, and <strong>G</strong> is a fifth below <strong>D</strong> (they span five letters: G, A, B, C, D)</p>
+        <p>In the <strong>C Major scale</strong>, for example, <strong>iii - vi</strong> is <strong>E Minor - A Minor</strong>, and <strong>A</strong> is a fifth below <strong>E</strong> (they span five letters: A, B, C, D, E)</p>
+        <br />
+        <p>The <strong>V7 - I</strong> chord progression in particular is one of the strongest sounding chord progressions there is, and you often hear it at the end of pieces of classical music.</p>
+        <ChordProgressionPlayer
+          chordsPitches={[
+            [new Pitch(PitchLetter.G, 0, 3), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.D, 0, 5), new Pitch(PitchLetter.B, 0, 5)],
+            [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.E, 0, 5), new Pitch(PitchLetter.C, 0, 6)]
+          ]}
+          chords={[
+            new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)),
+            new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))
+          ]}
+          scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
+          chordScaleDegreeNumbers={[5, 1]}
+          lowestPitch={new Pitch(PitchLetter.C, 0, 3)}
+          highestPitch={new Pitch(PitchLetter.B, 0, 6)}
+          octaveCount={4}
+          showRomanNumerals={true}
+          maxWidth={maxTwoOctavePianoWidth} />
+      </div>
+    )),
+    new Slide("circle-progression", () => (
+      <div>
+        <LimitedWidthContentContainer>
+          <p>You can repeatedly chain together descending fifth progressions to create a <strong>circle progression</strong>, which progresses through all 7 diatonic chords of a scale:</p>
+          <p>Starting with <strong>I</strong> in a major scale and chaining together descending fifth progressions, we get: <strong>I - IV - vii° - iii - vi - ii - V - I</strong>:</p>
+        <ChordProgressionPlayer
+          chordsPitches={[
+            [new Pitch(PitchLetter.C, 0, 3), new Pitch(PitchLetter.G, 0, 3), new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4)],
+            [new Pitch(PitchLetter.F, 0, 2), new Pitch(PitchLetter.A, 0, 3), new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.F, 0, 4)],
+            [new Pitch(PitchLetter.B, 0, 2), new Pitch(PitchLetter.F, 0, 3), new Pitch(PitchLetter.B, 0, 3), new Pitch(PitchLetter.D, 0, 4)],
+            [new Pitch(PitchLetter.E, 0, 2), new Pitch(PitchLetter.G, 0, 3), new Pitch(PitchLetter.B, 0, 3), new Pitch(PitchLetter.E, 0, 4)],
+            [new Pitch(PitchLetter.A, 0, 2), new Pitch(PitchLetter.E, 0, 3), new Pitch(PitchLetter.A, 0, 3), new Pitch(PitchLetter.C, 0, 4)],
+            [new Pitch(PitchLetter.D, 0, 2), new Pitch(PitchLetter.F, 0, 3), new Pitch(PitchLetter.A, 0, 3), new Pitch(PitchLetter.D, 0, 4)],
+            [new Pitch(PitchLetter.G, 0, 2), new Pitch(PitchLetter.D, 0, 3), new Pitch(PitchLetter.G, 0, 3), new Pitch(PitchLetter.B, 0, 3)],
+            [new Pitch(PitchLetter.C, 0, 2), new Pitch(PitchLetter.E, 0, 3), new Pitch(PitchLetter.G, 0, 3), new Pitch(PitchLetter.C, 0, 4)],
+          ]}
+          chords={[
+            new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 3)),
+            new Chord(ChordType.Major, new Pitch(PitchLetter.F, 0, 2)),
+            new Chord(ChordType.Diminished, new Pitch(PitchLetter.B, 0, 2)),
+            new Chord(ChordType.Minor, new Pitch(PitchLetter.E, 0, 2)),
+            new Chord(ChordType.Minor, new Pitch(PitchLetter.A, 0, 2)),
+            new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 2)),
+            new Chord(ChordType.Major, new Pitch(PitchLetter.G, 0, 2)),
+            new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 2)),
+          ]}
+          scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
+          chordScaleDegreeNumbers={[1, 4, 7, 3, 6, 2, 5, 1]}
+          lowestPitch={new Pitch(PitchLetter.C, 0, 2)}
+          highestPitch={new Pitch(PitchLetter.B, 0, 5)}
+          octaveCount={4}
+          showRomanNumerals={true}
+          maxWidth={maxTwoOctavePianoWidth} />
+          <NoteText>Lower-case roman numerals with a <strong>°</strong> symbol means the chord is a <strong>diminished</strong> chord.</NoteText>
+        </LimitedWidthContentContainer>
+      </div>
+    )),
+    new Slide("voice-leading", () => (
+      <div>
+        <LimitedWidthContentContainer>
+          <p>It is important to use good <strong>voice leading</strong> when playing chord progressions.</p>
+          <p><strong>Voice leading</strong> is the arrangement of chord notes in a progression to create smooth transitions between chords.</p>
+          <p>The most important rule of voice leading is to use the smallest possible movements when transitioning from one chord from the next.</p>
+
+          <p>Here is an example of "bad" voice leading in a ii - V7 - I progression, which makes big jumps between each chord:</p>
+          <ChordProgressionPlayer
+            chordsPitches={[
+              [new Pitch(PitchLetter.D, 0, 5), new Pitch(PitchLetter.F, 0, 5), new Pitch(PitchLetter.A, 0, 5)],
+              [new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.B, 0, 4), new Pitch(PitchLetter.D, 0, 5), new Pitch(PitchLetter.F, 0, 5)],
+              [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]
+            ]}
+            chords={[
+              new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 4)),
+              new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)),
+              new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))
+            ]}
+            scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
+            chordScaleDegreeNumbers={[2, 5, 1]}
+            maxWidth={maxTwoOctavePianoWidth} />
+
+          <p>And here is an example of good voice leading:</p>
+          <ChordProgressionPlayer
+            chordsPitches={[
+              [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.A, 0, 4)],
+              [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.B, 0, 4)],
+              [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]
+            ]}
+            chords={[
+              new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 4)),
+              new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)),
+              new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))
+            ]}
+            scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
+            chordScaleDegreeNumbers={[2, 5, 1]}
+            maxWidth={maxTwoOctavePianoWidth} />
+        </LimitedWidthContentContainer>
+      </div>
+    )),
+    new Slide("chord-substitution", () => (
+      <div>
+        <LimitedWidthContentContainer>
+          <p>One common technique used to spice up chord progressions is <strong>chord substitution</strong>.</p>
+          <p><strong>Chord substitution</strong> is replacing one chord with another that sounds similar or has a similar "feel" in the progression.</p>
+          <p>One way to find chords that sound similar to another chord is looking for chords which share many of the same notes.</p>
+          <p>For example, in C Major, the <strong>ii</strong> chord (D minor - D F A) and the <strong>IV</strong> chord (F Major - F A C) share two notes in common (F and A), so they have a similar sound and work as substitutes for each other in chord progressions.</p>
+
+          <p>So, we can take a ii - V - I progression:</p>
+          <ChordProgressionPlayer
+            chordsPitches={[
+              [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.A, 0, 4)],
+              [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.B, 0, 4)],
+              [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]
+            ]}
+            chords={[
+              new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 4)),
+              new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)),
+              new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))
+            ]}
+            scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
+            chordScaleDegreeNumbers={[2, 5, 1]}
+            maxWidth={maxTwoOctavePianoWidth} />
+          
+          <p>And use chord substitution to create a new chord progression - IV - V - I:</p>
+          <ChordProgressionPlayer
+            chordsPitches={[
+              [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.A, 0, 4)],
+              [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.B, 0, 4)],
+              [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]
+            ]}
+            chords={[
+              new Chord(ChordType.Major, new Pitch(PitchLetter.F, 0, 4)),
+              new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)),
+              new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))
+            ]}
+            scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
+            chordScaleDegreeNumbers={[4, 5, 1]}
+            maxWidth={maxTwoOctavePianoWidth} />
+        </LimitedWidthContentContainer>
+      </div>
+    )),
+    /*new Slide("needs-name-700", () => (
+      <div>
+        <LimitedWidthContentContainer>
+          <p>Another way to do chord substitution is by looking for chords which perform a similar function (building or releasing tension) to another chord.</p>
+          <p>Example ii - V7 - I and II - bII7 - I</p>
+          <p>V7 vs bII7 voice resolution</p>
+
+          <p>So, we can take a ii - V - I progression:</p>
+          <ChordProgressionPlayer
+            chordsPitches={[
+              [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.A, 0, 4)],
+              [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.B, 0, 4)],
+              [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]
+            ]}
+            chords={[
+              new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 4)),
+              new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)),
+              new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))
+            ]}
+            scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
+            chordScaleDegreeNumbers={[2, 5, 1]}
+            maxWidth={maxTwoOctavePianoWidth} />
+          
+          <p>And use chord substitution to create a new chord progression - IV - V - I:</p>
+          <ChordProgressionPlayer
+            chordsPitches={[
+              [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.A, 0, 4)],
+              [new Pitch(PitchLetter.C, 1, 4), new Pitch(PitchLetter.E, 1, 4), new Pitch(PitchLetter.G, 1, 4), new Pitch(PitchLetter.B, 0, 4)],
+              [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]
+            ]}
+            chords={[
+              new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 4)),
+              new Chord(ChordType.Dom7, new Pitch(PitchLetter.C, 1, 4)),
+              new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))
+            ]}
+            scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
+            chordScaleDegreeNumbers={[2, 2, 1]}
+            chordScaleDegreeSignedAccidentals={[0, -1, 0]}
+            maxWidth={maxTwoOctavePianoWidth} />
+        </LimitedWidthContentContainer>
+      </div>
+    )),*/
+
+    new Slide("chord-progressions-review", () => (
+      <div>
+        <p>Review material below, then move to the next slide to test your knowledge of chord progressions with a quiz.</p>
+        <br />
+        <p><strong>Chord progressions</strong> are sequences of chords.</p>
+        <p><strong>Chord progressions</strong> are generally built with <strong>diatonic chords</strong>.</p>
+        <p><strong>Roman numeral notation</strong> is a concise, scale-independent way to represent chord progressions.</p>
+        <p>In roman numeral notation, the roman numeral represents the number of the scale note that the chord is built on.</p>
+        <p>In roman numeral notation, chords based on the major triad are upper-case (ex: IV, V7).</p>
+        <p>In roman numeral notation, chords based on the minor triad are lower-case. (ex: ii, vii°)</p>
+        <p>One of the strongest sounding, and most common, chord progressions is the <strong>descending fifth</strong>.</p>
+        <p>In the <strong>descending fifth</strong> chord progression, the 2nd chord is a fifth below the first chord.</p>
+        <p>One of the strongest descending fifth progressions is <strong>V7 - I</strong>.</p>
+        <p>The <strong>circle progression</strong> is a chain of descending fifth progressions.</p>
+        <p><strong>Voice leading</strong> is the arrangement of chord notes in a progression to create smooth transitions between chords.</p>
+        <p>The most important rule of voice leading is to use the smallest possible movements when transitioning from one chord to the next.</p>
+        <p><strong>Chord substitution</strong> is replacing chords in a progression with different chords that often sound similar or have a similar "feel" in the progression.</p>
+        <p>Chords that share many notes generally sound similar, and can be used as chord substitutes.</p>
+      </div>
+    )),
+
     new Slide("chord-progressions-quiz", () => (
-      <div>
-        <p>QUIZ</p>
-      </div>
+      <LimitedWidthContentContainer>
+        <div style={{ marginTop: "1em" }}>
+          {createStudyFlashCardSetComponent(
+            ChordProgressionsQuiz.flashCardSet,
+            /*isEmbedded*/ false,
+            /*hideMoreInfoUri*/ true,
+            /*title*/ undefined,
+            /*style*/ undefined,
+            /*enableSettings*/ undefined,
+            /*showRelatedExercises*/ false)}
+        </div>
+      </LimitedWidthContentContainer>
     )),
   ]),
-  
-  new Slide("needs-name-3", () => (
-    <div>
-      <p>If a chord has 4 notes it can be in 3rd inversion, where the 7th is in the bass.</p>
-      <p>The pattern continues:</p>
-      <p>4th inversion - 9th in the bass</p>
-      <p>5th inversion - 11th in the bass</p>
-      <p>6th inversion - 13th in the bass</p>
-      <p>Notice we're referring to "9th", "11th", and "13th", yet there are only 7 notes in the C Major scale.</p>
-      <p>9th is equivalent to the 2nd note in the scale</p>
-      <p>11th is equivalent to the 4th note in the scale</p>
-      <p>13th is equivalent to the 6th note in the scale.</p>
-      <p>There is no 15th, you're back to the root note!</p>
-    </div>
-  )),*/
   
   new SlideGroup("Coming Soon", [
     new Slide("coming-soon", () => <h3>More coming soon!</h3>)

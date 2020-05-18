@@ -1,11 +1,12 @@
 import * as React from "react";
+import { Button } from "@material-ui/core";
 
 import { arrayContains } from '../../../lib/Core/ArrayUtils';
 
-import { playPitches } from "../../../Audio/PianoAudio";
+import { playPitches } from '../../../Audio/PianoAudio';
 
 import { PianoKeyboard, PianoKeyboardMetrics, renderPianoKeyboardKeyLabels } from "../../Utils/PianoKeyboard";
-import { Pitch } from '../../../lib/TheoryLib/Pitch';
+import { Pitch, getAccidentalString } from '../../../lib/TheoryLib/Pitch';
 import { PitchLetter } from '../../../lib/TheoryLib/PitchLetter';
 
 import { createStudyFlashCardSetComponent } from '../../../StudyFlashCards/View';
@@ -26,6 +27,8 @@ import * as ChordProgressionsQuiz from "../../Quizzes/Chords/ChordProgressionsQu
 import * as ChordHarmonicFunctions from "../../Quizzes/Chords/ChordFamilies";
 import { NoteText } from "../../Utils/NoteText";
 import { getPianoKeyboardAspectRatio } from '../../Utils/PianoUtils';
+import { getRomanNumerals } from '../../../lib/Core/Utils';
+import { getChordRomanNumeralNotation } from "../../Tools/DiatonicChordPlayer";
 
 export const FiveChordDiagram: React.FunctionComponent<{}> = props => {
   const lowestPitch = new Pitch(PitchLetter.C, 0, 4);
@@ -99,6 +102,34 @@ export const ChordDiagram: React.FunctionComponent<{
   );
 }
 
+function renderChordDiagramLabels(
+  metrics: PianoKeyboardMetrics,
+  pitches: Array<Pitch>,
+  scale: Scale,
+  showScaleDegreeNumbers: boolean
+): JSX.Element {
+  const scalePitches = scale.getPitches();
+  const scaleDegreeLabels = pitches
+    .map(p => 1 + scalePitches.findIndex(sp => sp.midiNumberNoOctave == p.midiNumberNoOctave));
+
+  const getKeyScaleDegreeLabels = (pitch: Pitch) => {
+    const pitchIndex = pitches.findIndex(p => p.midiNumber === pitch.midiNumber);
+    return (pitchIndex >= 0)
+      ? (
+        showScaleDegreeNumbers
+          ? [scaleDegreeLabels[pitchIndex].toString(), pitch.toString(/*includeOctaveNumber*/ false, /*useSymbols*/ true)]
+          : [pitch.toString(/*includeOctaveNumber*/ false, /*useSymbols*/ true)]
+      )
+      : null;
+  };
+
+  return (
+    <g>
+      {renderPianoKeyboardKeyLabels(metrics, true, getKeyScaleDegreeLabels)}
+    </g>
+  );
+}
+
 const ChordDiagramInternal: React.FunctionComponent<{
   pitches: Array<Pitch>,
   scale: Scale,
@@ -121,29 +152,6 @@ const ChordDiagramInternal: React.FunctionComponent<{
   const margin = new Margin(0, 0, 0, 0);
   const style = { width: "100%", maxWidth: `${maxWidth}px`, height: "auto" };
 
-  function renderLabels(metrics: PianoKeyboardMetrics): JSX.Element {
-    const scalePitches = scale.getPitches();
-    const scaleDegreeLabels = pitches
-      .map(p => 1 + scalePitches.findIndex(sp => sp.midiNumberNoOctave == p.midiNumberNoOctave));
-
-    const getKeyScaleDegreeLabels = (pitch: Pitch) => {
-      const pitchIndex = pitches.findIndex(p => p.midiNumber === pitch.midiNumber);
-      return (pitchIndex >= 0)
-        ? (
-          showScaleDegreeNumbers
-            ? [scaleDegreeLabels[pitchIndex].toString(), pitch.toOneAccidentalAmbiguousString(false)]
-            : [pitch.toOneAccidentalAmbiguousString(false)]
-        )
-        : null;
-    };
-
-    return (
-      <g>
-        {renderPianoKeyboardKeyLabels(metrics, true, getKeyScaleDegreeLabels)}
-      </g>
-    );
-  }
-
   function onKeyPress(p: Pitch) {
     const pitchMidiNumbers = pitches.map(p => p.midiNumber);
 
@@ -160,12 +168,188 @@ const ChordDiagramInternal: React.FunctionComponent<{
       highestPitch={highestPitch}
       pressedPitches={[]}
       onKeyPress={onKeyPress}
-      renderExtrasFn={renderLabels}
+      renderExtrasFn={metrics => renderChordDiagramLabels(metrics,pitches, scale, showScaleDegreeNumbers)}
       style={style} />
   );
 };
 
-const ChordTransitionDiagram: React.FunctionComponent<{ chord1Pitches: Array<Pitch>, chord1Name: string, chord2Pitches: Array<Pitch>, chord2Name: string, scale: Scale, lowestPitch?: Pitch }> = props => {
+export interface IChordProgressionPlayerProps {
+  chords: Array<Chord>;
+  chordsPitches: Array<Array<Pitch>>;
+  scale: Scale;
+  chordScaleDegreeNumbers: Array<number>;
+  chordScaleDegreeSignedAccidentals?: Array<number>;
+  lowestPitch?: Pitch;
+  highestPitch?: Pitch;
+  octaveCount?: number;
+  showRomanNumerals?: boolean;
+  maxWidth?: number;
+}
+
+export interface IChordProgressionPlayerState {
+  currentChordIndex: number | undefined;
+  isPlaying: boolean;
+}
+
+export class ChordProgressionPlayer extends React.Component<IChordProgressionPlayerProps, IChordProgressionPlayerState> {
+  public constructor(props: IChordProgressionPlayerProps) {
+    super(props);
+
+    this.state = {
+      currentChordIndex: undefined,
+      isPlaying: false
+    };
+  }
+
+  public componentWillReceiveProps() {
+    this.stop();
+  }
+
+  public componentWillUnmount() {
+    this.stopAudio();
+  }
+
+  public render(): JSX.Element {
+    const { chordsPitches, chords, scale, chordScaleDegreeNumbers } = this.props;
+    const { currentChordIndex, isPlaying } = this.state;
+
+    const octaveCount = (this.props.octaveCount !== undefined)
+      ? this.props.octaveCount
+      : 2;
+    
+    const lowestPitch = (this.props.lowestPitch !== undefined)
+      ? this.props.lowestPitch
+      : new Pitch(PitchLetter.C, 0, 4);
+    
+    const highestPitch = (this.props.highestPitch !== undefined)
+      ? this.props.highestPitch
+      : new Pitch(PitchLetter.B, 0, 4 + (octaveCount - 1));
+
+    const chordPitches = (currentChordIndex !== undefined)
+      ? chordsPitches[currentChordIndex]
+      : [];
+      
+    const showRomanNumerals = (this.props.showRomanNumerals !== undefined)
+      ? this.props.showRomanNumerals
+      : true;
+    
+    const textStyle = { fontSize: "1.25em" };
+    const maxWidth = (this.props.maxWidth !== undefined) ? this.props.maxWidth : 300;
+    const aspectRatio = getPianoKeyboardAspectRatio(/*octaveCount*/ octaveCount);
+    const pianoStyle = { width: "100%", maxWidth: `${maxWidth}px`, height: "auto" };
+
+    const renderText = (currentChordIndex: number) => {
+      //chordScaleDegreeSignedAccidentals
+      const signedAccidental = this.props.chordScaleDegreeSignedAccidentals
+        ? this.props.chordScaleDegreeSignedAccidentals[currentChordIndex]
+        : 0;
+      const signedAccidentalString = getAccidentalString(signedAccidental, /*useSymbols*/ true);
+
+      return (
+        <p style={textStyle}>
+          {(showRomanNumerals) ? (
+            <span>{signedAccidentalString}{getChordRomanNumeralNotation(chords[currentChordIndex], chordScaleDegreeNumbers[currentChordIndex])} - </span>) : null}
+          {chords[currentChordIndex].rootPitch.toString(/*includeOctaveNumber*/ false)} {chords[currentChordIndex].type.name}
+        </p>
+      );
+    }
+
+    return (
+      <div>
+        <p>
+          {!isPlaying
+            ? (
+              <Button variant="contained" onClick={e => this.play()}>
+                <i className="material-icons">play_arrow</i>
+              </Button>
+            )
+            : (
+              <Button variant="contained" onClick={e => this.stop()}>
+                <i className="material-icons">stop</i>
+              </Button>
+            )
+          }
+        </p>
+
+        {(currentChordIndex !== undefined)
+          ? renderText(currentChordIndex)
+          : <p style={textStyle}>Press the play button to hear the chord progression.</p>}
+
+        <PianoKeyboard
+          rect={new Rect2D(new Size2D(aspectRatio * 100, 100), new Vector2D(0, 0))}
+          lowestPitch={lowestPitch}
+          highestPitch={highestPitch}
+          pressedPitches={chordPitches}
+          renderExtrasFn={metrics => renderChordDiagramLabels(metrics, chordPitches, scale, /*showScaleDegreeNumbers*/ true)}
+          style={pianoStyle} />
+      </div>
+    );
+  }
+
+  private readonly delayInMs: number = 1500;
+
+  private timeoutIds: Array<number> | undefined = undefined;
+  private cancelAudioFn: (() => void) | undefined = undefined;
+
+  // TODO: prevent playing if still loading
+
+  private play() {
+    const { delayInMs } = this;
+    const { chordsPitches } = this.props;
+
+    this.timeoutIds = new Array<number>(chordsPitches.length + 1);
+
+    for (let i = 0; i < chordsPitches.length; i++) {
+      this.timeoutIds[i] = window.setTimeout(() => {
+        // stop playing the previous chord
+        if (this.cancelAudioFn) {
+          this.cancelAudioFn();
+          this.cancelAudioFn = undefined;
+        }
+      
+        // play the new chord
+        this.cancelAudioFn = playPitches(chordsPitches[i])[1];
+        this.setState({ currentChordIndex: i, isPlaying: true });
+      }, delayInMs * i);
+    }
+
+    // set a timeout to clear the stop button
+    this.timeoutIds[chordsPitches.length] = window.setTimeout(() => {
+      this.stop();
+    }, delayInMs * (chordsPitches.length + 2));
+  }
+
+  private stop() {
+    this.stopAudio();
+    this.setState({ currentChordIndex: undefined, isPlaying: false });
+  }
+
+  private stopAudio() {
+    // stop currently playing audio
+    if (this.cancelAudioFn) {
+      this.cancelAudioFn();
+      this.cancelAudioFn = undefined;
+    }
+
+    // cancel audio scheduled in the future
+    if (this.timeoutIds) {
+      for (const timeoutId of this.timeoutIds) {
+        window.clearInterval(timeoutId);
+      }
+
+      this.timeoutIds = undefined;
+    }
+  }
+}
+
+const ChordTransitionDiagram: React.FunctionComponent<{
+  chord1Pitches: Array<Pitch>,
+  chord1Name: string,
+  chord2Pitches: Array<Pitch>,
+  chord2Name: string,
+  scale: Scale,
+  lowestPitch?: Pitch
+}> = props => {
   const width = 600;
   const height = 500;
   const chordDiagram2Position = new Vector2D(0, 300);
