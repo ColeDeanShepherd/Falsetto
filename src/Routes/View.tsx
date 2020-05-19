@@ -25,7 +25,7 @@ import { Tuner } from "../Components/Tools/Tuner";
 import { RhythmTapper } from "../Components/Tools/RhythmTapper";
 import { AboutPage } from "../Components/AboutPage";
 import { ContributePage } from "../Components/ContributePage";
-import { HomePage } from "../Components/HomePage";
+import { HomePage } from "../HomePage/HomePage";
 import { Glossary } from "../Glossary";
 import { ProfilePage } from "../Components/ProfilePage";
 import { Metronome } from '../Components/Tools/Metronome';

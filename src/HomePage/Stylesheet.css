@@ -1,0 +1,28 @@
+.home-topic-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.home-topic {
+  background-color: white;
+  box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12);
+  margin: 1em;
+}
+
+.home-topic .thumbnail {
+  width: 336px;
+  height: 208px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,.15);
+}
+
+.home-topic .text {
+  padding: 1em;
+}
+
+.home-topic .text p {
+  margin: 0;
+}
