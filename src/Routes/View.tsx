@@ -4,6 +4,11 @@ import DocumentTitle from "react-document-title";
 
 import { flashCardSets } from "../FlashCardGraph";
 
+import { getUriComponent as getPitchUriComponent } from "../lib/TheoryLib/Pitch";
+import { Scale, parseScaleFromUriComponent } from '../lib/TheoryLib/Scale';
+import { ChordType, parseChordTypeFromUriComponent, getUriComponent as getChordTypeUriComponent } from '../lib/TheoryLib/ChordType';
+import { Chord, parseChordFromUriComponent } from "../lib/TheoryLib/Chord";
+
 import { PianoTheory, pianoTheorySlideGroups } from "../PianoTheory/PianoTheory";
 import {
   SectionContainer
@@ -40,14 +45,49 @@ import { LimitedWidthContentContainer } from '../Components/Utils/LimitedWidthCo
 import { ScaleExercisesPage } from "../Components/ScaleExercisesPage";
 import * as PianoScaleDegrees from "../Components/Quizzes/Scales/PianoScaleDegrees";
 import * as PianoDiatonicChords from "../Components/Quizzes/Chords/PianoDiatonicChords";
-import { Scale, parseScaleFromUriComponent } from '../lib/TheoryLib/Scale';
 import { createSlideGroups as createScaleMasteryLessonSlideGroups } from '../PianoTheory/ScaleMasteryLessonSlides';
 import { createSlideGroups as createChordTypeMasteryLessonSlideGroups } from '../PianoTheory/ChordTypeMasteryLessonSlides';
 import { PageNotFoundView } from '../Components/PageNotFoundView';
-import { Chord, parseChordFromUriComponent } from "../lib/TheoryLib/Chord";
 import { ChordPage } from "../Components/ChordPage";
 import { ChordExercisesPage } from '../Components/ChordExercisesPage';
-import { ChordType, parseChordTypeFromUriComponent } from '../lib/TheoryLib/ChordType';
+
+export interface IRouteData {
+  key?: string;
+  path?: string;
+  isPathExact?: boolean;
+  title?: string;
+  renderFn: (props: any) => JSX.Element;
+}
+
+function renderRoute(routeData: IRouteData): JSX.Element {
+  const { path, title, renderFn } = routeData;
+
+  const key = (routeData.key !== undefined)
+    ? routeData.key
+    : path;
+
+  const attributes: any = ((routeData.isPathExact === true) || (routeData.isPathExact === undefined))
+    ? { exact: true }
+    : {};
+
+  return (
+    <Route key={key} {...attributes} path={path} component={(props: any) => (
+      (title !== undefined)
+        ? <DocumentTitle title={title}>{renderFn(props)}</DocumentTitle>
+        : renderFn(props)
+    )} />
+  );
+}
+
+function renderStudyFlashCardSetComponent(currentFlashCardSet: FlashCardSet): JSX.Element {
+  return (
+    <DocumentTitle title={currentFlashCardSet.name + " - Falsetto"}>
+      <LimitedWidthContentContainer>
+        {createStudyFlashCardSetComponent(currentFlashCardSet, /*isEmbedded:*/ false, /*hideMoreInfoUri:*/ false)}
+      </LimitedWidthContentContainer>
+    </DocumentTitle>
+  );
+}
 
 export interface IScaleRouteProps {
   routeParams: {};
@@ -127,6 +167,386 @@ export class ChordRoute extends React.Component<IChordRouteProps, {}> {
   }
 }
 
+const routes: Array<IRouteData> = ([
+  {
+    path: "/",
+    title: "Falsetto",
+    renderFn: () => (
+      <LimitedWidthContentContainer>
+        <HomePage />
+      </LimitedWidthContentContainer>
+    )
+  },
+  {
+    path: "/login",
+    title: "Login - Falsetto",
+    renderFn: () => (
+      <LimitedWidthContentContainer>
+        <LoginPage />
+      </LimitedWidthContentContainer>
+    )
+  },
+  {
+    path: "/logout",
+    title: "Logout - Falsetto",
+    renderFn: () => (
+      <LimitedWidthContentContainer>
+        <LogoutPage />
+      </LimitedWidthContentContainer>
+    )
+  },
+  {
+    path: "/profile",
+    title: "Profile - Falsetto",
+    renderFn: () => (
+      <LimitedWidthContentContainer>
+        <ProfilePage />
+      </LimitedWidthContentContainer>
+    )
+  },
+  {
+    path: "/reset-password",
+    title: "Reset Password - Falsetto",
+    renderFn: () => (
+      <LimitedWidthContentContainer>
+        <MessagePage title="Reset Password" message="An email has been sent to your email address with instructions to reset your password." />
+      </LimitedWidthContentContainer>
+    )
+  },
+  {
+    path: "/about",
+    title: "About - Falsetto",
+    renderFn: () => (
+      <LimitedWidthContentContainer>
+        <AboutPage />
+      </LimitedWidthContentContainer>
+    )
+  },
+  {
+    path: "/contribute",
+    title: "Contribute - Falsetto",
+    renderFn: () => (
+      <LimitedWidthContentContainer>
+        <ContributePage />
+      </LimitedWidthContentContainer>
+    )
+  },
+  {
+    path: "/knowledge-map",
+    title: "Knowledge Map - Falsetto",
+    renderFn: () => (
+      <LimitedWidthContentContainer>
+        <KnowledgeMapPage />
+      </LimitedWidthContentContainer>
+    )
+  },
+  {
+    path: "/piano-theory",
+    title: "Piano Theory - Falsetto",
+    renderFn: () => (
+      <PianoTheory slideGroups={pianoTheorySlideGroups} />
+    )
+  },
+  {
+    path: "/essential-music-theory",
+    title: "Essential Music Theory - Falsetto",
+    renderFn: () => (
+      <LimitedWidthContentContainer>
+        <SectionContainer section={IntroSection} />
+      </LimitedWidthContentContainer>
+    )
+  },
+  {
+    path: "/essential-music-theory/rhythm",
+    title: "Rhythm - Essential Music Theory - Falsetto",
+    renderFn: () => (
+      <LimitedWidthContentContainer>
+        <SectionContainer section={RhythmSection} />
+      </LimitedWidthContentContainer>
+    )
+  },
+  {
+    path: "/essential-music-theory/notes",
+    title: "Notes - Essential Music Theory - Falsetto",
+    renderFn: () => (
+      <LimitedWidthContentContainer>
+        <SectionContainer section={NotesSection} />
+      </LimitedWidthContentContainer>
+    )
+  },
+  {
+    path: "/essential-music-theory/intervals",
+    title: "Intervals - Essential Music Theory - Falsetto",
+    renderFn: () => (
+      <LimitedWidthContentContainer>
+        <SectionContainer section={IntervalsSection} />
+      </LimitedWidthContentContainer>
+    )
+  },
+  {
+    path: "/essential-music-theory/scales-and-modes",
+    title: "Scales And Modes - Essential Music Theory - Falsetto",
+    renderFn: () => (
+      <LimitedWidthContentContainer>
+        <SectionContainer section={ScalesAndModesSection} />
+      </LimitedWidthContentContainer>
+    )
+  },
+  {
+    path: "/essential-music-theory/chords",
+    title: "Chords - Essential Music Theory - Falsetto",
+    renderFn: () => (
+      <LimitedWidthContentContainer>
+        <SectionContainer section={ChordsSection} />
+      </LimitedWidthContentContainer>
+    )
+  },
+  {
+    path: "/essential-music-theory/chord-progressions",
+    title: "Chord Progressions - Essential Music Theory - Falsetto",
+    renderFn: () => (
+      <LimitedWidthContentContainer>
+        <SectionContainer section={ChordProgressionsSection} />
+      </LimitedWidthContentContainer>
+    )
+  },
+  {
+    path: "/essential-music-theory/next-steps",
+    title: "Next Steps - Essential Music Theory - Falsetto",
+    renderFn: () => (
+      <LimitedWidthContentContainer>
+        <SectionContainer section={NextStepsSection} />
+      </LimitedWidthContentContainer>
+    )
+  },
+  {
+    path: "/glossary",
+    title: "Glossary - Falsetto",
+    renderFn: () => (
+      <LimitedWidthContentContainer>
+        <Glossary />
+      </LimitedWidthContentContainer>
+    )
+  },
+  {
+    path: "/scale-exercises",
+    title: "Scale Exercises - Falsetto",
+    renderFn: () => (
+      <LimitedWidthContentContainer>
+        <ScaleExercisesPage />
+      </LimitedWidthContentContainer>
+    )
+  },
+  {
+    path: "/scale-viewer",
+    title: "Scale Viewer - Falsetto",
+    renderFn: () => (
+      <LimitedWidthContentContainer>
+        <ScaleViewer renderAllScaleShapes={false} />
+      </LimitedWidthContentContainer>
+    )
+  },
+  {
+    path: "/chord-exercises",
+    title: "Chord Exercises - Falsetto",
+    renderFn: () => (
+      <LimitedWidthContentContainer>
+        <ChordExercisesPage />
+      </LimitedWidthContentContainer>
+    )
+  },
+  {
+    path: "/chord-viewer",
+    title: "Chord Viewer - Falsetto",
+    renderFn: () => (
+      <LimitedWidthContentContainer>
+        <ChordViewer />
+      </LimitedWidthContentContainer>
+    )
+  },
+  {
+    path: "/metronome",
+    title: "Metronome - Falsetto",
+    renderFn: () => (
+      <LimitedWidthContentContainer>
+        <Metronome />
+      </LimitedWidthContentContainer>
+    )
+  },
+  {
+    path: "/diatonic-chord-player",
+    title: "Diatonic Chord Player - Falsetto",
+    renderFn: () => (
+      <LimitedWidthContentContainer>
+        <DiatonicChordPlayer />
+      </LimitedWidthContentContainer>
+    )
+  },
+    {
+      path: "/interval-chord-scale-finder",
+      title: "Interval/Chord/Scale Finder - Falsetto",
+      renderFn: () => (
+        <LimitedWidthContentContainer>
+          <IntervalChordScaleFinder />
+        </LimitedWidthContentContainer>
+      )
+    },
+  {
+    path: "/tuner",
+    title: "Tuner - Falsetto",
+    renderFn: () => (
+      <LimitedWidthContentContainer>
+        <Tuner />
+      </LimitedWidthContentContainer>
+    )
+  },
+  {
+    path: "/rhythm-tapper",
+    title: "Rhythm Tapper - Falsetto",
+    renderFn: () => (
+      <LimitedWidthContentContainer>
+        <RhythmTapper />
+      </LimitedWidthContentContainer>
+    )
+  },
+  {
+    path: "/learn-guitar-notes-in-10-steps",
+    title: "Learn the Guitar Notes in 10 Easy Steps - Falsetto",
+    renderFn: () => (
+      <LimitedWidthContentContainer>
+        <GuitarNotesLesson />
+      </LimitedWidthContentContainer>
+    )
+  },
+  {
+    path: "/learn-guitar-scales",
+    title: "Learn the Guitar Scales - Falsetto",
+    renderFn: () => (
+      <LimitedWidthContentContainer>
+        <GuitarScalesLesson />
+      </LimitedWidthContentContainer>
+    )
+  },
+] as Array<IRouteData>)
+  .concat(
+    flashCardSets.map(fcs => ({
+      path: fcs.route,
+      title: `${fcs.name} - Falsetto`,
+      renderFn: () => (
+        <LimitedWidthContentContainer>
+          {createStudyFlashCardSetComponent(fcs, /*isEmbedded:*/ false, /*hideMoreInfoUri:*/ false)}
+        </LimitedWidthContentContainer>
+      )
+    } as IRouteData))
+  )
+  .concat([
+    {
+      path: "/scale/:scaleId",
+      renderFn: (props: any) => (
+        <ScaleRoute routeParams={props.match.params} renderRoute={scale => {
+          const scaleName = `${getPitchUriComponent(scale.rootPitch, /*includeOctaveNumber*/ false)} ${scale.type.name}`;
+          const slideGroups = createScaleMasteryLessonSlideGroups(scale);
+
+          return (
+            <DocumentTitle title={`${scaleName} Scale - Falsetto`}>
+              <PianoTheory slideGroups={slideGroups} />
+            </DocumentTitle>
+          );
+        }} />
+      )
+    },
+    
+    {
+      path: "/scale/:scaleId/lesson",
+      renderFn: (props: any) => (
+        <ScaleRoute routeParams={props.match.params} renderRoute={scale => {
+          const scaleName = `${getPitchUriComponent(scale.rootPitch, /*includeOctaveNumber*/ false)} ${scale.type.name}`;
+          const slideGroups = createScaleMasteryLessonSlideGroups(scale);
+
+          return (
+            <DocumentTitle title={`${scaleName} Scale Mastery - Falsetto`}>
+              <PianoTheory slideGroups={slideGroups} />
+            </DocumentTitle>
+          );
+        }} />
+      )
+    },
+    
+    {
+      path: "/scale/:scaleId/degrees-exercise",
+      renderFn: (props: any) => (
+        <ScaleRoute routeParams={props.match.params} renderRoute={scale => {
+          const flashCardSet = PianoScaleDegrees.createFlashCardSet(scale);
+
+          return renderStudyFlashCardSetComponent(flashCardSet);
+        }} />
+      )
+    }
+  ])
+  .concat([3, 4]
+    .map(numChordPitches => {
+      const path = `/scale/:scaleId/diatonic-${numChordPitches}-note-chords-exercise`;
+
+      return ({
+        path: path,
+        renderFn: (props: any) => (
+          <ScaleRoute routeParams={props.match.params} renderRoute={scale => {
+            const flashCardSet = PianoDiatonicChords.createFlashCardSet(scale, numChordPitches);
+
+            return renderStudyFlashCardSetComponent(flashCardSet);
+          }} />
+        )
+      } as IRouteData);
+    })
+  )
+  .concat([
+    
+    {
+      path: "/chord/:chordId",
+      renderFn: (props: any) => (
+        <LimitedWidthContentContainer>
+          <ChordRoute routeParams={props.match.params} renderRoute={chord => {
+            const chordName = `${getPitchUriComponent(chord.rootPitch, /*includeOctaveNumber*/ false)} ${getChordTypeUriComponent(chord.type)}`;
+
+            return (
+              <DocumentTitle title={`${chordName} Chord - Falsetto`}>
+                <ChordPage chord={chord} />
+              </DocumentTitle>
+            );
+          }} />
+        </LimitedWidthContentContainer>
+      )
+    },
+
+    {
+      path: "/chord/:chordType/lesson",
+      renderFn: (props: any) => (
+        <LimitedWidthContentContainer>
+          <ChordTypeRoute routeParams={props.match.params} renderRoute={chordType => {
+            const slideGroups = createChordTypeMasteryLessonSlideGroups(chordType);
+            const chordTypeName = getChordTypeUriComponent(chordType);
+
+            return (
+              <DocumentTitle title={`${chordTypeName} Chord Mastery - Falsetto`}>
+                <PianoTheory slideGroups={slideGroups} />
+              </DocumentTitle>
+            );
+          }} />
+        </LimitedWidthContentContainer>
+      )
+    }
+  ])
+  .concat([
+    {
+      key: "/page-not-found",
+      isPathExact: false,
+      title: "Not Found - Falsetto",
+      renderFn: () => (
+        <PageNotFoundView />
+      )
+    }
+  ]);
+
 export interface IRoutesViewProps {}
 
 export interface IRoutesViewState {}
@@ -139,286 +559,8 @@ export class RoutesView extends React.Component<IRoutesViewProps, IRoutesViewSta
   
   public render(): JSX.Element | null {
     if (!this.cachedRenderedRoutes) {
-      this.cachedRenderedRoutes = [
-        <Route key="/" exact path="/" component={() => (
-          <DocumentTitle title="Falsetto">
-            <LimitedWidthContentContainer>
-              <HomePage />
-            </LimitedWidthContentContainer>
-          </DocumentTitle>
-        )} />,
-        <Route key="/login" exact path="/login" component={() => (
-          <DocumentTitle title="Login - Falsetto">
-            <LimitedWidthContentContainer>
-              <LoginPage />
-            </LimitedWidthContentContainer>
-          </DocumentTitle>
-        )} />,
-        <Route key="/logout" exact path="/logout" component={() => (
-          <DocumentTitle title="Logout - Falsetto">
-            <LimitedWidthContentContainer>
-              <LogoutPage />
-            </LimitedWidthContentContainer>
-          </DocumentTitle>
-        )} />,
-        <Route key="/profile" exact path="/profile" component={() => (
-          <DocumentTitle title="Profile - Falsetto">
-            <LimitedWidthContentContainer>
-              <ProfilePage />
-            </LimitedWidthContentContainer>
-          </DocumentTitle>
-        )} />,
-        <Route key="/reset-password" exact path="/reset-password" component={() => (
-          <DocumentTitle title="Reset Password - Falsetto">
-            <LimitedWidthContentContainer>
-              <MessagePage title="Reset Password" message="An email has been sent to your email address with instructions to reset your password." />
-            </LimitedWidthContentContainer>
-          </DocumentTitle>
-        )} />,
-        <Route key="/about" exact path="/about" component={() => (
-          <DocumentTitle title="About - Falsetto">
-            <LimitedWidthContentContainer>
-              <AboutPage />
-            </LimitedWidthContentContainer>
-          </DocumentTitle>
-        )} />,
-        <Route key="/contribute" exact path="/contribute" component={() => (
-          <DocumentTitle title="Contribute - Falsetto">
-            <LimitedWidthContentContainer>
-              <ContributePage />
-            </LimitedWidthContentContainer>
-          </DocumentTitle>
-        )} />,
-        <Route key="/knowledge-map" exact path="/knowledge-map" component={() => (
-          <DocumentTitle title="Knowledge Map - Falsetto">
-            <LimitedWidthContentContainer>
-              <KnowledgeMapPage />
-            </LimitedWidthContentContainer>
-          </DocumentTitle>
-        )} />,
-        <Route key="/piano-theory" exact path="/piano-theory" component={() => (
-          <DocumentTitle title="Piano Theory - Falsetto">
-            <PianoTheory slideGroups={pianoTheorySlideGroups} />
-          </DocumentTitle>
-        )} />,
-        <Route key="/essential-music-theory" exact path="/essential-music-theory" component={() => (
-          <DocumentTitle title="Essential Music Theory - Falsetto">
-            <LimitedWidthContentContainer>
-              <SectionContainer section={IntroSection} />
-            </LimitedWidthContentContainer>
-          </DocumentTitle>
-        )} />,
-        <Route key="/essential-music-theory/rhythm" exact path="/essential-music-theory/rhythm" component={() => (
-          <DocumentTitle title="Rhythm - Essential Music Theory - Falsetto">
-            <LimitedWidthContentContainer>
-              <SectionContainer section={RhythmSection} />
-            </LimitedWidthContentContainer>
-          </DocumentTitle>
-        )} />,
-        <Route key="/essential-music-theory/notes" exact path="/essential-music-theory/notes" component={() => (
-          <DocumentTitle title="Notes - Essential Music Theory - Falsetto">
-            <LimitedWidthContentContainer>
-              <SectionContainer section={NotesSection} />
-            </LimitedWidthContentContainer>
-          </DocumentTitle>
-        )} />,
-        <Route key="/essential-music-theory/intervals" exact path="/essential-music-theory/intervals" component={() => (
-          <DocumentTitle title="Intervals - Essential Music Theory - Falsetto">
-            <LimitedWidthContentContainer>
-              <SectionContainer section={IntervalsSection} />
-            </LimitedWidthContentContainer>
-          </DocumentTitle>
-        )} />,
-        <Route key="/essential-music-theory/scales-and-modes" exact path="/essential-music-theory/scales-and-modes" component={() => (
-          <DocumentTitle title="Scales And Modes - Essential Music Theory - Falsetto">
-            <LimitedWidthContentContainer>
-              <SectionContainer section={ScalesAndModesSection} />
-            </LimitedWidthContentContainer>
-          </DocumentTitle>
-        )} />,
-        <Route key="/essential-music-theory/chords" exact path="/essential-music-theory/chords" component={() => (
-          <DocumentTitle title="Chords - Essential Music Theory - Falsetto">
-            <LimitedWidthContentContainer>
-              <SectionContainer section={ChordsSection} />
-            </LimitedWidthContentContainer>
-          </DocumentTitle>
-        )} />,
-        <Route key="/essential-music-theory/chord-progressions" exact path="/essential-music-theory/chord-progressions" component={() => (
-          <DocumentTitle title="Chord Progressions - Essential Music Theory - Falsetto">
-            <LimitedWidthContentContainer>
-              <SectionContainer section={ChordProgressionsSection} />
-            </LimitedWidthContentContainer>
-          </DocumentTitle>
-        )} />,
-        <Route key="/essential-music-theory/next-steps" exact path="/essential-music-theory/next-steps" component={() => (
-          <DocumentTitle title="Next Steps - Essential Music Theory - Falsetto">
-            <LimitedWidthContentContainer>
-              <SectionContainer section={NextStepsSection} />
-            </LimitedWidthContentContainer>
-          </DocumentTitle>
-        )} />,
-        <Route key="/glossary" exact path="/glossary" component={() => (
-          <DocumentTitle title="Glossary - Falsetto">
-            <LimitedWidthContentContainer>
-              <Glossary />
-            </LimitedWidthContentContainer>
-          </DocumentTitle>
-        )} />,
-        <Route key="/scale-exercises" exact path="/scale-exercises" component={() => (
-          <DocumentTitle title={"Scale Exercises - Falsetto"}>
-            <LimitedWidthContentContainer>
-              <ScaleExercisesPage />
-            </LimitedWidthContentContainer>
-          </DocumentTitle>
-        )} />,
-        <Route key="/scale-viewer" exact path="/scale-viewer" component={() => (
-          <DocumentTitle title={"Scale Viewer - Falsetto"}>
-            <LimitedWidthContentContainer>
-              <ScaleViewer renderAllScaleShapes={false} />
-            </LimitedWidthContentContainer>
-          </DocumentTitle>
-        )} />,
-        <Route key="/chord-exercises" exact path="/chord-exercises" component={() => (
-          <DocumentTitle title={"Chord Exercises - Falsetto"}>
-            <LimitedWidthContentContainer>
-              <ChordExercisesPage />
-            </LimitedWidthContentContainer>
-          </DocumentTitle>
-        )} />,
-        <Route key="/chord-viewer" exact path="/chord-viewer" component={() => (
-          <DocumentTitle title={"Chord Viewer - Falsetto"}>
-            <LimitedWidthContentContainer>
-              <ChordViewer />
-            </LimitedWidthContentContainer>
-          </DocumentTitle>
-        )} />,
-        <Route key="/metronome" exact path="/metronome" component={() => (
-          <DocumentTitle title={"Metronome - Falsetto"}>
-            <LimitedWidthContentContainer>
-              <Metronome />
-            </LimitedWidthContentContainer>
-          </DocumentTitle>
-        )} />,
-        <Route key="/diatonic-chord-player" exact path="/diatonic-chord-player" component={() => (
-          <DocumentTitle title={"Diatonic Chord Player - Falsetto"}>
-            <LimitedWidthContentContainer>
-              <DiatonicChordPlayer />
-            </LimitedWidthContentContainer>
-          </DocumentTitle>
-          )} />,
-        <Route key="/interval-chord-scale-finder" exact path="/interval-chord-scale-finder" component={() => (
-          <DocumentTitle title={"Interval/Chord/Scale Finder - Falsetto"}>
-            <LimitedWidthContentContainer>
-              <IntervalChordScaleFinder />
-            </LimitedWidthContentContainer>
-          </DocumentTitle>
-        )} />,
-        <Route key="/tuner" exact path="/tuner" component={() => (
-          <DocumentTitle title={"Tuner - Falsetto"}>
-            <LimitedWidthContentContainer>
-              <Tuner />
-            </LimitedWidthContentContainer>
-          </DocumentTitle>
-        )} />,
-        <Route key="/rhythm-tapper" exact path="/rhythm-tapper" component={() => (
-          <DocumentTitle title={"Rhythm Tapper - Falsetto"}>
-            <LimitedWidthContentContainer>
-              <RhythmTapper />
-            </LimitedWidthContentContainer>
-          </DocumentTitle>
-        )} />,
-        <Route key="/learn-guitar-notes-in-10-steps" exact path="/learn-guitar-notes-in-10-steps" component={() => (
-          <DocumentTitle title={"Learn the Guitar Notes in 10 Easy Steps - Falsetto"}>
-            <LimitedWidthContentContainer>
-              <GuitarNotesLesson />
-            </LimitedWidthContentContainer>
-          </DocumentTitle>
-        )} />,
-        <Route key="/learn-guitar-scales" exact path="/learn-guitar-scales" component={() => (
-          <DocumentTitle title={"Learn the Guitar Scales - Falsetto"}>
-            <LimitedWidthContentContainer>
-              <GuitarScalesLesson />
-            </LimitedWidthContentContainer>
-          </DocumentTitle>
-        )} />
-      ].concat(
-        flashCardSets.map(fcs => <Route key={fcs.route} exact path={fcs.route} component={this.createStudyFlashCardSetComponent(fcs)} />)
-      )
-      .concat([
-        <Route
-          key="/scale/:scaleId"
-          exact path="/scale/:scaleId"
-          component={(props: any) => (
-            <ScaleRoute routeParams={props.match.params} renderRoute={scale => {
-              const slideGroups = createScaleMasteryLessonSlideGroups(scale);
-              return <PianoTheory slideGroups={slideGroups} />;
-            }} />
-          )} />,
-        
-        <Route
-          key="/scale/:scaleId/lesson"
-          exact path="/scale/:scaleId/lesson"
-          component={(props: any) => (
-            <ScaleRoute routeParams={props.match.params} renderRoute={scale => {
-              const slideGroups = createScaleMasteryLessonSlideGroups(scale);
-              return <PianoTheory slideGroups={slideGroups} />;
-            }} />
-          )} />,
-        
-        <Route
-          key="/scale/:scaleId/degrees-exercise"
-          exact path="/scale/:scaleId/degrees-exercise"
-          component={(props: any) => (
-            <ScaleRoute routeParams={props.match.params} renderRoute={scale => {
-              const flashCardSet = PianoScaleDegrees.createFlashCardSet(scale);
-              return this.renderStudyFlashCardSetComponent(flashCardSet);
-            }} />
-          )} />
-      ])
-      .concat([3, 4]
-        .map(numChordPitches => {
-          const path = `/scale/:scaleId/diatonic-${numChordPitches}-note-chords-exercise`;
-
-          return (
-            <Route
-              key={path}
-              exact path={path}
-              component={(props: any) => (
-                <ScaleRoute routeParams={props.match.params} renderRoute={scale => {
-                  const flashCardSet = PianoDiatonicChords.createFlashCardSet(scale, numChordPitches);
-                  return this.renderStudyFlashCardSetComponent(flashCardSet);
-                }} />
-              )} />
-          );
-        })
-      )
-      .concat([
-        <Route
-          key="/chord/:chordType/lesson"
-          exact path="/chord/:chordType/lesson"
-          component={(props: any) => (
-            <LimitedWidthContentContainer>
-              <ChordTypeRoute routeParams={props.match.params} renderRoute={chordType => {
-                const slideGroups = createChordTypeMasteryLessonSlideGroups(chordType);
-                return <PianoTheory slideGroups={slideGroups} />;
-              }} />
-            </LimitedWidthContentContainer>
-          )} />,
-
-        <Route
-          key="/chord/:chordId"
-          exact path="/chord/:chordId"
-          component={(props: any) => (
-            <LimitedWidthContentContainer>
-              <ChordRoute routeParams={props.match.params} renderRoute={chord => {
-                return <ChordPage chord={chord} />;
-              }} />
-            </LimitedWidthContentContainer>
-          )} />
-      ])
-      .concat([
-        <Route key={'/page-not-found'} component={PageNotFoundView} />
-      ]);
+      this.cachedRenderedRoutes = routes
+        .map(renderRoute);
     }
 
     return (
@@ -431,18 +573,4 @@ export class RoutesView extends React.Component<IRoutesViewProps, IRoutesViewSta
   }
   
   private cachedRenderedRoutes: Array<JSX.Element> | null = null;
-
-  private renderStudyFlashCardSetComponent(currentFlashCardSet: FlashCardSet): JSX.Element {
-    return (
-      <DocumentTitle title={currentFlashCardSet.name + " - Falsetto"}>
-        <LimitedWidthContentContainer>
-          {createStudyFlashCardSetComponent(currentFlashCardSet, /*isEmbedded:*/ false, /*hideMoreInfoUri:*/ false)}
-        </LimitedWidthContentContainer>
-      </DocumentTitle>
-    );
-  }
-  
-  private createStudyFlashCardSetComponent(currentFlashCardSet: FlashCardSet): () => JSX.Element {
-    return () => this.renderStudyFlashCardSetComponent(currentFlashCardSet);
-  }
 }
