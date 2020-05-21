@@ -28,6 +28,7 @@
     * Chord-scale equivalence
   * Improve navigation (enable easy jumping between sections).
   * document title changes?
+  * Move navigation buttons to bottom on mobile.
 * Debug & fix scale viewer & chord viewer
 * Fix level not being detected properly when disabling & re-enabling in piano notes exercise (orders don't match due to toggle).
 * Improve Home Page

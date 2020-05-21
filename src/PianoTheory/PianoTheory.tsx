@@ -372,7 +372,7 @@ export const pianoTheorySlideGroups = [
           <p>Welcome to Falsetto's "Piano Theory" course!</p>
           <p>This is an interactive course designed to teach you the essentials of piano and music theory in a hands-on manner.</p>
           <p>This course is designed to be viewed on tablets and computer monitors, not on mobile phones.</p>
-          <p>Press the ">" arrow button at the top of this page, or press the right arrow key on your computer keyboard, to move to the next slide.</p>
+          <p>Press the ">" arrow button at the right of this page, or press the right arrow key on your computer keyboard, to move to the next slide.</p>
         </div>
       </div>
     )),
@@ -1531,9 +1531,33 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
 
     return (
       <div style={{ height: "100%" }}>
-        <div style={{ display: "flex", flexDirection: "column", textAlign: "center", height: "100%" }}>
-          {this.renderSlideControls()}
-          {renderedSlide}
+        <div style={{ display: "flex", height: "100%", padding: "0 1em" }}>
+          <div>
+            <Button
+              variant="contained"
+              disabled={!this.canMoveToPreviousSlide()}
+              onClick={_ => this.moveToPreviousSlideInternal()}
+              style={{ textTransform: "none", height: "100%" }}
+            >
+              <i className="material-icons" style={{ fontSize: "4em" }}>keyboard_arrow_left</i>
+            </Button>
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", textAlign: "center", flexGrow: 1, height: "100%" }}>
+            {this.renderSlideLocation()}
+            {renderedSlide}
+          </div>
+
+          <div>
+            <Button
+              variant="contained"
+              disabled={!this.canMoveToNextSlide()}
+              onClick={_ => this.moveToNextSlideInternal()}
+              style={{ textTransform: "none", height: "100%", padding: "0 1em" }}
+            >
+              <i className="material-icons" style={{ fontSize: "4em" }}>keyboard_arrow_right</i>
+            </Button>
+          </div>
         </div>
       </div>
     );
@@ -1549,32 +1573,6 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
     } as IPianoTheoryState;
 
     return [state, slides];
-  }
-
-  private renderSlideControls(): JSX.Element {
-    return (
-      <div>
-        <Button
-          variant="contained"
-          disabled={!this.canMoveToPreviousSlide()}
-          onClick={_ => this.moveToPreviousSlideInternal()}
-          style={{ textTransform: "none" }}
-        >
-          &lt;
-        </Button>
-
-        {this.renderSlideLocation()}
-
-        <Button
-          variant="contained"
-          disabled={!this.canMoveToNextSlide()}
-          onClick={_ => this.moveToNextSlideInternal()}
-          style={{ textTransform: "none" }}
-        >
-          &gt;
-        </Button>
-      </div>
-    );
   }
 
   private renderSlideLocation(): JSX.Element {
