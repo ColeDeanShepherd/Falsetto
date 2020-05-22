@@ -10,7 +10,6 @@ import { Vector2D } from "../lib/Core/Vector2D";
 import { Pitch } from '../lib/TheoryLib/Pitch';
 import { PitchLetter } from "../lib/TheoryLib/PitchLetter";
 import { ScaleType, Scale } from "../lib/TheoryLib/Scale";
-import { ChordTypeGroup } from "../lib/TheoryLib/ChordTypeGroup";
 import { ChordType } from "../lib/TheoryLib/ChordType";
 import { Chord } from "../lib/TheoryLib/Chord";
 
@@ -24,6 +23,8 @@ import { WebMidiInitializedAction, MidiDeviceConnectedAction, MidiDeviceDisconne
   import { AppModel } from "../App/Model";
 
 import { createStudyFlashCardSetComponent } from "../StudyFlashCards/View";
+
+import { NavLinkView } from "../NavLinkView";
 
 import { renderPianoKeyboardNoteNames, PianoKeyboardMetrics, PianoKeyboard } from "../Components/Utils/PianoKeyboard";
 
@@ -42,10 +43,11 @@ import { MidiPianoRangeInput } from "../Components/Utils/MidiPianoRangeInput";
 import { LimitedWidthContentContainer } from "../Components/Utils/LimitedWidthContentContainer";
 import { NoteText } from '../Components/Utils/NoteText';
 import { PianoScaleMajorRelativeFormulaDiagram } from "../Components/Utils/PianoScaleMajorRelativeFormulaDiagram";
-import { NavLinkView } from "../NavLinkView";
 import { PlayablePianoKeyboard } from "../Components/Utils/PlayablePianoKeyboard";
 import { ChordView } from '../Components/Utils/ChordView';
 import { ChordDiagram, ChordProgressionPlayer } from "../Components/Lessons/EssentialMusicTheory/ChordProgressions";
+
+import "./Stylesheet.css"; // TODO: use a CSS preprocessor and split this into multiple files
 
 export const maxPianoWidth = 1000;
 export const maxOneOctavePianoWidth = 400;
@@ -1530,17 +1532,21 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
     const renderedSlide = slides[slideIndex].renderFn(this);
 
     return (
-      <div style={{ height: "100%" }}>
+      <div className="piano-theory" style={{ height: "100%" }}>
         <div style={{ display: "flex", height: "100%", padding: "0 1em" }}>
           <div>
-            <Button
-              variant="contained"
-              disabled={!this.canMoveToPreviousSlide()}
-              onClick={_ => this.moveToPreviousSlideInternal()}
-              style={{ textTransform: "none", height: "100%" }}
-            >
-              <i className="material-icons" style={{ fontSize: "4em" }}>keyboard_arrow_left</i>
-            </Button>
+            {this.canMoveToPreviousSlide()
+              ? (
+                <Button
+                  variant="contained"
+                  onClick={_ => this.moveToPreviousSlideInternal()}
+                  className="slide-nav"
+                >
+                  <i className="material-icons" style={{ fontSize: "4em" }}>keyboard_arrow_left</i>
+                </Button>
+              )
+              : null
+            }
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", textAlign: "center", flexGrow: 1, height: "100%" }}>
@@ -1549,14 +1555,17 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
           </div>
 
           <div>
-            <Button
-              variant="contained"
-              disabled={!this.canMoveToNextSlide()}
-              onClick={_ => this.moveToNextSlideInternal()}
-              style={{ textTransform: "none", height: "100%", padding: "0 1em" }}
-            >
-              <i className="material-icons" style={{ fontSize: "4em" }}>keyboard_arrow_right</i>
-            </Button>
+            {this.canMoveToNextSlide()
+              ? (
+                <Button
+                  variant="contained"
+                  onClick={_ => this.moveToNextSlideInternal()}
+                  className="slide-nav"
+                >
+                  <i className="material-icons" style={{ fontSize: "4em" }}>keyboard_arrow_right</i>
+                </Button>
+              )
+              : null}
           </div>
         </div>
       </div>
