@@ -1,6 +1,5 @@
 # To-Do
 ## High Priority
-* Remove old NavBar
 * Fix on mobile
 *** https://doc.rust-lang.org/stable/book/ch01-01-installation.html
 * Piano Theory

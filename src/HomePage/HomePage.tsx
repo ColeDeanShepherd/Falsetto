@@ -4,6 +4,7 @@ import { MainMenu } from '../Components/MainMenu';
 import { NavLinkView } from "../NavLinkView";
 
 import "./Stylesheet.css";
+import { Paper } from "@material-ui/core";
 
 export class HomePage extends React.Component<{}, {}> {
   public render(): JSX.Element {
@@ -15,7 +16,7 @@ export class HomePage extends React.Component<{}, {}> {
         </div>
 
         <div className="home-topic-container">
-          <div className="home-topic">
+          <Paper className="home-topic">
             <div className="thumbnail" style={{ backgroundImage: "url('/img/setup-thumbnail.jpg')" }}></div>
 
             <div className="text">
@@ -24,9 +25,9 @@ export class HomePage extends React.Component<{}, {}> {
               <p><NavLinkView to="/piano-theory?slide=setup">Setup</NavLinkView></p>
               <p><NavLinkView to="/piano-theory?slide=piano-basics">Piano Introduction</NavLinkView></p>
             </div>
-          </div>
+          </Paper>
 
-          <div className="home-topic">
+          <Paper className="home-topic">
             <div className="thumbnail" style={{ backgroundImage: "url('/img/notes-thumbnail.png')" }}></div>
 
             <div className="text">
@@ -36,9 +37,9 @@ export class HomePage extends React.Component<{}, {}> {
               <p><NavLinkView to="/piano-theory?slide=all-notes">Review</NavLinkView></p>
               <p><NavLinkView to="/piano-theory?slide=notes-quiz">Quiz</NavLinkView></p>
             </div>
-          </div>
+          </Paper>
 
-          <div className="home-topic">
+          <Paper className="home-topic">
             <div className="thumbnail" style={{ backgroundImage: "url('/img/scale-thumbnail.png')", backgroundSize: "contain" }}></div>
 
             <div className="text">
@@ -51,9 +52,9 @@ export class HomePage extends React.Component<{}, {}> {
               <br />
               <p><NavLinkView to="/scale-exercises">Self-Paced Scale Mastery</NavLinkView></p>
             </div>
-          </div>
+          </Paper>
           
-          <div className="home-topic">
+          <Paper className="home-topic">
             <div className="thumbnail" style={{ backgroundImage: "url('/img/chord-thumbnail.png')", backgroundSize: "contain" }}></div>
 
             <div className="text">
@@ -67,9 +68,9 @@ export class HomePage extends React.Component<{}, {}> {
               <br />
               <p><NavLinkView to="/chord-exercises">Self-Paced Chord Mastery</NavLinkView></p>
             </div>
-          </div>
+          </Paper>
           
-          <div className="home-topic">
+          <Paper className="home-topic">
             <div className="thumbnail" style={{ backgroundImage: "url('/img/chord-progression-thumbnail.png')", backgroundSize: "contain" }}></div>
 
             <div className="text">
@@ -78,11 +79,13 @@ export class HomePage extends React.Component<{}, {}> {
               <p><NavLinkView to="/piano-theory?slide=chord-progressions-review">Review</NavLinkView></p>
               <p><NavLinkView to="/piano-theory?slide=chord-progressions-quiz">Quiz</NavLinkView></p>
             </div>
-          </div>
+          </Paper>
         </div>
         
-        <h2>Other Lessons, Tools, &amp; Exercises</h2>
-        <MainMenu collapseCategories={true} />
+        <Paper style={{ padding: "0 1em 1em 1em", overflow: "hidden" }}>
+          <h2>Other Lessons, Tools, &amp; Exercises</h2>
+          <MainMenu collapseCategories={false} />
+        </Paper>
       </div>
     );
   }

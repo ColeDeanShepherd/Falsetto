@@ -2,7 +2,6 @@ import * as React from "react";
 import { Router } from "react-router-dom";
 import { History } from "history";
 
-import { NavBarView } from '../NavBar/View';
 import { DependencyInjector } from '../DependencyInjector';
 import { IAction } from '../IAction';
 import { ActionBus, ActionHandler } from '../ActionBus';
