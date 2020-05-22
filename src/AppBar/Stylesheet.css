@@ -1,0 +1,16 @@
+.app-bar {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  z-index: 9999;
+}
+
+.app-bar > .button {
+  opacity: 0.25;
+  padding: 1rem;
+  transition: opacity 0.5s;
+}
+
+.app-bar > .button:hover {
+  opacity: 1;
+}

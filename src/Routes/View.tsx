@@ -57,6 +57,7 @@ export interface IRouteData {
   isPathExact?: boolean;
   title?: string;
   renderFn: (props: any) => JSX.Element;
+  hideMainMenu?: boolean;
 }
 
 function renderRoute(routeData: IRouteData): JSX.Element {
@@ -243,6 +244,7 @@ const routes: Array<IRouteData> = ([
   {
     path: "/piano-theory",
     title: "Piano Theory - Falsetto",
+    hideMainMenu: true,
     renderFn: () => (
       <PianoTheory slideGroups={pianoTheorySlideGroups} />
     )
@@ -442,6 +444,7 @@ const routes: Array<IRouteData> = ([
   .concat([
     {
       path: "/scale/:scaleId",
+      hideMainMenu: true,
       renderFn: (props: any) => (
         <ScaleRoute routeParams={props.match.params} renderRoute={scale => {
           const scaleName = `${getPitchUriComponent(scale.rootPitch, /*includeOctaveNumber*/ false)} ${scale.type.name}`;
@@ -458,6 +461,7 @@ const routes: Array<IRouteData> = ([
     
     {
       path: "/scale/:scaleId/lesson",
+      hideMainMenu: true,
       renderFn: (props: any) => (
         <ScaleRoute routeParams={props.match.params} renderRoute={scale => {
           const scaleName = `${getPitchUriComponent(scale.rootPitch, /*includeOctaveNumber*/ false)} ${scale.type.name}`;
@@ -520,6 +524,7 @@ const routes: Array<IRouteData> = ([
 
     {
       path: "/chord/:chordType/lesson",
+      hideMainMenu: true,
       renderFn: (props: any) => (
         <LimitedWidthContentContainer>
           <ChordTypeRoute routeParams={props.match.params} renderRoute={chordType => {

@@ -10,19 +10,21 @@ import { MainContainerView } from '../MainContainerView';
 import { Auth0UpdateAction } from '../Auth0Injector/Actions';
 
 import "./Stylesheet.css"; // TODO: use a CSS preprocessor and split this into multiple files
+import { AppBarView } from "../AppBar/View";
 
 export class AppView extends React.Component<{}, {}> {
   public constructor(props: {}) {
     super(props);
 
-    this.boundHandleAction = this.handleAction.bind(this);
     this.history = DependencyInjector.instance.getRequiredService<History<any>>("History");
+
+    this.boundHandleAction = this.handleAction.bind(this);
   }
-  
-  private boundHandleAction: ActionHandler;
+
   public componentDidMount() {
     ActionBus.instance.subscribe(this.boundHandleAction);
   }
+
   public componentWillUnmount() {
     ActionBus.instance.unsubscribe(this.boundHandleAction);
   }
@@ -31,7 +33,7 @@ export class AppView extends React.Component<{}, {}> {
     return (
       <Router history={this.history}>
         <div className="app">
-          <NavBarView />
+          <AppBarView />
           <MainContainerView />
         </div>
       </Router>
@@ -40,6 +42,8 @@ export class AppView extends React.Component<{}, {}> {
 
   private history: History<any>;
   
+  private boundHandleAction: ActionHandler;
+
   private handleAction(action: IAction) {
     switch (action.getId()) {
       case Auth0UpdateAction.Id:

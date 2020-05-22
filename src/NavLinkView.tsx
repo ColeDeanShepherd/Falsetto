@@ -5,13 +5,14 @@ import { NavigateAction } from './App/Actions';
 export interface INavLinkViewProps {
   to: string;
   openNewTab?: boolean;
+  className?: string;
   style?: any;
 }
 export class NavLinkView extends React.Component<INavLinkViewProps, {}> {
   public render(): JSX.Element | null {
-    const { to, style, children } = this.props;
+    const { to, className, style, children } = this.props;
 
-    return <a href={to} onClick={event => this.onClick(event)} style={style}>{children}</a>;
+    return <a href={to} onClick={event => this.onClick(event)} className={className} style={style}>{children}</a>;
   }
 
   private onClick(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
