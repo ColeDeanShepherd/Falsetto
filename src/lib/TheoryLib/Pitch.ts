@@ -202,7 +202,7 @@ export function getUriComponent(pitch: Pitch, includeOctaveNumber: boolean = fal
 
 export function parseFromUriComponent(uriComponent: string, octaveNumber: number): Pitch | undefined {
   const pitchLetter = parsePitchLetter(uriComponent);
-  if (!pitchLetter) { return undefined; }
+  if (pitchLetter === undefined) { return undefined; }
 
   const signedAccidentalStr = uriComponent.substring(1);
   const signedAccidental = parseEnglishSignedAccidental(signedAccidentalStr);
@@ -257,7 +257,7 @@ export class Pitch {
 
   public static parseNoOctave(str: string, octaveNumber: number): Pitch | undefined {
     const pitchLetter = parsePitchLetter(str);
-    if (!pitchLetter) { return undefined; }
+    if (pitchLetter === undefined) { return undefined; }
 
     const signedAccidentalStr = str.substring(1, 2);
     const signedAccidental = parseSignedAccidental(signedAccidentalStr);

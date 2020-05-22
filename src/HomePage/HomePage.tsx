@@ -1,5 +1,4 @@
 import * as React from "react";
-import { CardContent, Card } from "@material-ui/core";
 
 import { MainMenu } from '../Components/MainMenu';
 import { NavLinkView } from "../NavLinkView";
@@ -9,9 +8,10 @@ import "./Stylesheet.css";
 export class HomePage extends React.Component<{}, {}> {
   public render(): JSX.Element {
     return (
-      <div style={{ marginBottom: "2em" }}>
-        <div style={{ textAlign: "center", maxWidth: "800px", margin: "0 auto" }}>
-          <h1 style={{ fontWeight: "normal" }}>Learn music theory and train your ear online with interactive lessons &amp; exercises for free!</h1>
+      <div className="home-page">
+        <div className="headline">
+          <h1>Falsetto</h1>
+          <h2 className="elevator-pitch">Learn music theory and train your ear online with interactive lessons &amp; exercises for free!</h2>
         </div>
 
         <div className="home-topic-container">

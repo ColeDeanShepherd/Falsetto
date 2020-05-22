@@ -1,5 +1,8 @@
 # To-Do
 ## High Priority
+* Remove old NavBar
+* Fix on mobile
+*** https://doc.rust-lang.org/stable/book/ch01-01-installation.html
 * Piano Theory
   * Notes Section
     * Press all of a given note on keyboard before continuing.
@@ -28,6 +31,7 @@
     * Chord-scale equivalence
   * Improve navigation (enable easy jumping between sections).
   * document title changes?
+  * Move navigation buttons to bottom on mobile.
 * Debug & fix scale viewer & chord viewer
 * Fix level not being detected properly when disabling & re-enabling in piano notes exercise (orders don't match due to toggle).
 * Improve Home Page

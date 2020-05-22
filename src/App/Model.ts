@@ -20,17 +20,16 @@ export class AppModel implements IDisposable {
 
   public constructor() {
     precondition(!AppModel.instance);
+    
     AppModel.instance = this;
 
     this.analytics = DependencyInjector.instance.getRequiredService<IAnalytics>("IAnalytics");
     this.history = DependencyInjector.instance.getRequiredService<History<any>>("History");
 
     this.boundHandleAction = this.handleAction.bind(this);
-
     ActionBus.instance.subscribe(this.boundHandleAction);
     
     this.midiModel = new AppMidiModel();
-
     this.pianoAudio = new PianoAudio();
   }
 
