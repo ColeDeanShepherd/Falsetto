@@ -35,7 +35,7 @@ function renderAnswerSelect(
   return <PianoKeysAnswerSelect
     aspectRatio={pianoKeyboardAspectRatio} maxWidth={pianoMaxWidth} lowestPitch={lowestPitch} highestPitch={highestPitch}
     correctAnswer={correctAnswer}
-    onAnswer={info.onAnswer} maxNumPitches={1} lastCorrectAnswer={info.lastCorrectAnswer}
+    onAnswer={info.onAnswer} lastCorrectAnswer={info.lastCorrectAnswer}
     incorrectAnswers={info.incorrectAnswers} instantConfirm={true} wrapOctave={true} />;
 }
 

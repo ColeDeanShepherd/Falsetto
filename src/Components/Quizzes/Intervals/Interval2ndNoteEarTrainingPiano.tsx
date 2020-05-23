@@ -200,7 +200,7 @@ export function renderAnswerSelect(
   return <PianoKeysAnswerSelect
     key={key} aspectRatio={aspectRatio} maxWidth={400} lowestPitch={new Pitch(PitchLetter.C, 0, 4)} highestPitch={new Pitch(PitchLetter.B, 0, 5)}
     correctAnswer={correctAnswer}
-    onAnswer={info.onAnswer} maxNumPitches={1} lastCorrectAnswer={info.lastCorrectAnswer}
+    onAnswer={info.onAnswer} lastCorrectAnswer={info.lastCorrectAnswer}
     incorrectAnswers={info.incorrectAnswers} instantConfirm={true} />;
 }
 

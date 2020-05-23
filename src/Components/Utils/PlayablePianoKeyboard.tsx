@@ -1,4 +1,4 @@
-import { immutableAddIfNotFoundInArray, immutableRemoveIfFoundInArray } from '../../lib/Core/ArrayUtils';
+import { immutableAddIfNotFoundInArray, immutableRemoveIfFoundInArray, immutableToggleArrayElementCustomEquals } from '../../lib/Core/ArrayUtils';
 import { Rect2D } from "../../lib/Core/Rect2D";
 import { Size2D } from "../../lib/Core/Size2D";
 import { Vector2D } from "../../lib/Core/Vector2D";
@@ -10,6 +10,11 @@ import React from "react";
 import { unwrapValueOrUndefined } from '../../lib/Core/Utils';
 import { Margin } from "../../lib/Core/Margin";
 
+export interface IPlayablePianoKeyboardExports {
+  getPressedPitches: () => Array<Pitch>;
+  clearPressedPitches: () => void;
+}
+
 export interface IPlayablePianoKeyboardProps {
   aspectRatio: number,
   maxWidth: number,
@@ -17,10 +22,12 @@ export interface IPlayablePianoKeyboardProps {
   highestPitch: Pitch,
   forcePressedPitches?: Array<Pitch>;
   margin?: Margin;
-  renderExtrasFn?: (metrics: PianoKeyboardMetrics) => JSX.Element;
-  onKeyPress?: (keyPitch: Pitch, velocity: number) => void;
-  onKeyRelease?: (keyPitch: Pitch) => void;
+  onKeyPress?: (keyPitch: Pitch, velocity: number, wasClick: boolean) => void;
+  onKeyRelease?: (keyPitch: Pitch, wasClick: boolean) => void;
   wrapOctave?: boolean;
+  toggleKeys?: boolean;
+  onGetExports?: (exports: IPlayablePianoKeyboardExports) => void;
+  renderExtrasFn?: (metrics: PianoKeyboardMetrics) => JSX.Element;
 }
 
 export interface IPlayablePianoKeyboardState {
@@ -34,10 +41,17 @@ export class PlayablePianoKeyboard extends React.Component<IPlayablePianoKeyboar
     this.state = {
       userPressedPitches: []
     };
+    
+    if (props.onGetExports) {
+      props.onGetExports({
+        getPressedPitches: this.getPressedPitches.bind(this),
+        clearPressedPitches: this.clearPressedPitches.bind(this)
+      } as IPlayablePianoKeyboardExports);
+    }
   }
 
   public render(): JSX.Element {
-    const { aspectRatio, maxWidth, lowestPitch, highestPitch, margin, renderExtrasFn } = this.props;
+    const { aspectRatio, maxWidth, lowestPitch, highestPitch, margin, toggleKeys, renderExtrasFn } = this.props;
 
     const pressedPitches = this.getPressedPitches();
 
@@ -49,13 +63,14 @@ export class PlayablePianoKeyboard extends React.Component<IPlayablePianoKeyboar
           lowestPitch={lowestPitch}
           highestPitch={highestPitch}
           pressedPitches={pressedPitches}
-          onKeyPress={p => this.onKeyPress(p)}
-          onKeyRelease={p => this.onKeyRelease(p)}
+          onKeyPress={p => this.onKeyPress(p, /*wasClick*/ true)}
+          onKeyRelease={p => this.onKeyRelease(p, true)}
           renderExtrasFn={renderExtrasFn}
+          allowDragPresses={!toggleKeys}
           style={{ width: "100%", maxWidth: `${maxWidth}px`, height: "auto" }} />
         <MidiNoteEventListener
-          onNoteOn={(pitch, velocity) => this.onKeyPress(pitch)}
-          onNoteOff={pitch => this.onKeyRelease(pitch)}
+          onNoteOn={(pitch, velocity) => this.onKeyPress(pitch, /*wasClick*/ false)}
+          onNoteOff={pitch => this.onKeyRelease(pitch, /*wasClick*/ false)}
           isComputerKeyboardPlayable={true} />
       </div>
     );
@@ -82,12 +97,10 @@ export class PlayablePianoKeyboard extends React.Component<IPlayablePianoKeyboar
     return pitches;
   }
 
-  private onKeyPress(pitch: Pitch) {
-    const { lowestPitch, highestPitch, onKeyPress } = this.props;
+  private onKeyPress(pitch: Pitch, wasClick: boolean) {
+    const { lowestPitch, highestPitch, toggleKeys, onKeyPress } = this.props;
 
     const velocity = 1;
-
-    AppModel.instance.pianoAudio.pressKey(pitch, velocity);
 
     const wrapOctave = (this.props.wrapOctave !== undefined)
       ? this.props.wrapOctave
@@ -98,18 +111,49 @@ export class PlayablePianoKeyboard extends React.Component<IPlayablePianoKeyboar
       : pitch;
 
     if (Pitch.isInRange(wrappedPitch, lowestPitch, highestPitch)) {
-      this.setState((prevState, props) => {
-        return { userPressedPitches: immutableAddIfNotFoundInArray(prevState.userPressedPitches, wrappedPitch, (p, i) => p.equals(wrappedPitch)) };
-      });
-    }
+      let isConsideredKeyPress: boolean;
 
-    if (onKeyPress) {
-      onKeyPress(pitch, velocity);
+      this.setState((prevState, props) => {
+        //#region Get new selected pitches
+  
+        let newUserPressedPitches: Pitch[];
+  
+        // If click event, toggle key.
+        if (toggleKeys && wasClick) {
+          newUserPressedPitches = immutableToggleArrayElementCustomEquals(
+            prevState.userPressedPitches,
+            wrappedPitch,
+            p => p.equals(pitch)
+          );
+        }
+        // If MIDI event, press key.
+        else {
+          newUserPressedPitches = immutableAddIfNotFoundInArray(
+            prevState.userPressedPitches,
+            wrappedPitch,
+            p => p.equals(pitch)
+          );
+        }
+  
+        //#endregion
+        
+        isConsideredKeyPress = !prevState.userPressedPitches.find(p => p.equals(pitch));
+
+        return { userPressedPitches: newUserPressedPitches };
+      }, () => {
+        if (isConsideredKeyPress) {
+          AppModel.instance.pianoAudio.pressKey(pitch, velocity);
+
+          if (onKeyPress) {
+            onKeyPress(pitch, velocity, wasClick);
+          }
+        }
+      });
     }
   }
 
-  private onKeyRelease(pitch: Pitch) {
-    const { lowestPitch, highestPitch, forcePressedPitches, onKeyRelease } = this.props;
+  private onKeyRelease(pitch: Pitch, wasClick: boolean) {
+    const { lowestPitch, highestPitch, forcePressedPitches, toggleKeys, onKeyRelease } = this.props;
 
     AppModel.instance.pianoAudio.releaseKey(pitch);
 
@@ -122,15 +166,21 @@ export class PlayablePianoKeyboard extends React.Component<IPlayablePianoKeyboar
       : pitch;
     
     const isWrappedPitchForcePressed = forcePressedPitches && forcePressedPitches.some(p => p.equals(wrappedPitch));
-    if (!isWrappedPitchForcePressed) {
+    if (!isWrappedPitchForcePressed && (!wasClick || !toggleKeys)) {
       this.setState((prevState, props) => {
         return { userPressedPitches: immutableRemoveIfFoundInArray(prevState.userPressedPitches, (p, i) => p.equals(wrappedPitch)) };
       });
     }
 
     if (onKeyRelease) {
-      onKeyRelease(pitch);
+      onKeyRelease(pitch, wasClick);
     }
+  }
+
+  private clearPressedPitches() {
+    this.setState({
+      userPressedPitches: []
+    });
   }
 }
  

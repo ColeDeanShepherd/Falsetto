@@ -486,7 +486,7 @@ export const pianoTheorySlideGroups = [
     new Slide("note-d", (slideshow) => (
       <div>
         <p>When moving one white key to the right, we also move forward by one letter in the English alphabet, so this key is called <strong>D</strong>.</p>
-        <p>Press a <strong>D</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
+        <p>Play a <strong>D</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
         <PianoNoteDiagram
           key="pianoNoteDiagram" // prevent the component from unmounting when changing slides
           pitch={new Pitch(PitchLetter.D, 0, 4)}
@@ -503,7 +503,7 @@ export const pianoTheorySlideGroups = [
     new Slide("note-e", (slideshow) => (
       <div>
         <p>This key is called <strong>E</strong>.</p>
-        <p>Press an <strong>E</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
+        <p>Play an <strong>E</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
         <PianoNoteDiagram
           key="pianoNoteDiagram" // prevent the component from unmounting when changing slides
           pitch={new Pitch(PitchLetter.E, 0, 4)}
@@ -520,7 +520,7 @@ export const pianoTheorySlideGroups = [
     new Slide("note-f", (slideshow) => (
       <div>
         <p>This key is called <strong>F</strong>.</p>
-        <p>Press an <strong>F</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
+        <p>Play an <strong>F</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
         <PianoNoteDiagram
           key="pianoNoteDiagram" // prevent the component from unmounting when changing slides
           pitch={new Pitch(PitchLetter.F, 0, 4)}
@@ -537,7 +537,7 @@ export const pianoTheorySlideGroups = [
     new Slide("note-g", (slideshow) => (
       <div>
         <p>This key is called <strong>G</strong>.</p>
-        <p>Press a <strong>G</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
+        <p>Play a <strong>G</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
         <PianoNoteDiagram
           key="pianoNoteDiagram" // prevent the component from unmounting when changing slides
           pitch={new Pitch(PitchLetter.G, 0, 4)}
@@ -554,7 +554,7 @@ export const pianoTheorySlideGroups = [
     new Slide("note-a", (slideshow) => (
       <div>
         <p>After "G" there is no "H" key &mdash; instead we jump backwards through the English alphabet to <strong>A</strong>.</p>
-        <p>Press an <strong>A</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
+        <p>Play an <strong>A</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
         <PianoNoteDiagram
           key="pianoNoteDiagram" // prevent the component from unmounting when changing slides
           pitch={new Pitch(PitchLetter.A, 0, 4)}
@@ -571,7 +571,7 @@ export const pianoTheorySlideGroups = [
     new Slide("note-b", (slideshow) => (
       <div>
         <p>The last white key is called <strong>B</strong>.</p>
-        <p>Press a <strong>B</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
+        <p>Play a <strong>B</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
         <PianoNoteDiagram
           key="pianoNoteDiagram" // prevent the component from unmounting when changing slides
           pitch={new Pitch(PitchLetter.B, 0, 4)}
@@ -617,7 +617,7 @@ export const pianoTheorySlideGroups = [
         <p>Now let's learn the names of the 5 black piano keys in this section of the piano.</p>
         <p>The key highlighted below, like all black keys, has multiple names. One name for it is <strong>C♯</strong> (pronounced "C sharp").</p>
         <p>The '♯' ("sharp") symbol means the pitch is raised by one key, so C♯ means "the key to the right of C".</p>
-        <p>Press a <strong>C♯</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
+        <p>Play a <strong>C♯</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
         <PianoNoteDiagram
           key="pianoNoteDiagram" // prevent the component from unmounting when changing slides
           pitch={new Pitch(PitchLetter.C, 1, 4)}
@@ -637,7 +637,7 @@ export const pianoTheorySlideGroups = [
       <div>
         <p>Another name for the same key is <strong>D♭</strong> (pronounced "D flat").</p>
         <p>The '♭' ("flat") symbol means the pitch is lowered by one key, so D♭ means "the key to the left of D".</p>
-        <p>Press a <strong>D♭</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
+        <p>Play a <strong>D♭</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
         <PianoNoteDiagram
           key="pianoNoteDiagram" // prevent the component from unmounting when changing slides
           pitch={new Pitch(PitchLetter.C, 1, 4)}
@@ -656,7 +656,7 @@ export const pianoTheorySlideGroups = [
     new Slide("note-d-sharp-e-flat", (slideshow) => (
       <div>
         <p>This key is called <strong>D♯</strong>, or <strong>E♭</strong>.</p>
-        <p>Press a <strong>D♯/E♭</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
+        <p>Play a <strong>D♯/E♭</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
         <PianoNoteDiagram
           key="pianoNoteDiagram" // prevent the component from unmounting when changing slides
           pitch={new Pitch(PitchLetter.D, 1, 4)}
@@ -673,7 +673,7 @@ export const pianoTheorySlideGroups = [
     new Slide("note-f-sharp-g-flat", (slideshow) => (
       <div>
         <p>This key is called <strong>F♯</strong>, or <strong>G♭</strong>.</p>
-        <p>Press a <strong>F♯/G♭</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
+        <p>Play a <strong>F♯/G♭</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
         <PianoNoteDiagram
           key="pianoNoteDiagram" // prevent the component from unmounting when changing slides
           pitch={new Pitch(PitchLetter.F, 1, 4)}
@@ -690,7 +690,7 @@ export const pianoTheorySlideGroups = [
     new Slide("note-g-sharp-a-flat", (slideshow) => (
       <div>
         <p>This key is called <strong>G♯</strong>, or <strong>A♭</strong>.</p>
-        <p>Press a <strong>G♯/A♭</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
+        <p>Play a <strong>G♯/A♭</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
         <PianoNoteDiagram
           key="pianoNoteDiagram" // prevent the component from unmounting when changing slides
           pitch={new Pitch(PitchLetter.G, 1, 4)}
@@ -707,7 +707,7 @@ export const pianoTheorySlideGroups = [
     new Slide("note-a-sharp-b-flat", (slideshow) => (
       <div>
         <p>The last black key is called <strong>A♯</strong>, or <strong>B♭</strong>.</p>
-        <p>Press a <strong>A♯/B♭</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
+        <p>Play a <strong>A♯/B♭</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
         <PianoNoteDiagram
           key="pianoNoteDiagram" // prevent the component from unmounting when changing slides
           pitch={new Pitch(PitchLetter.B, -1, 4)}

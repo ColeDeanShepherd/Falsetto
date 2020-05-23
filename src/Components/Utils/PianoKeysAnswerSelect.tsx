@@ -1,18 +1,15 @@
 import * as React from "react";
 import { Button } from "@material-ui/core";
 
-import { uniq, immutableRemoveIfFoundInArray, immutableAddIfNotFoundInArray, toggleArrayElement, immutableToggleArrayElementCustomEquals, areArraysEqual, areArraysEqualComparer } from '../../lib/Core/ArrayUtils';
-import { Size2D } from "../../lib/Core/Size2D";
-import { Vector2D } from "../../lib/Core/Vector2D";
-import { Rect2D } from "../../lib/Core/Rect2D";
+import { uniq, areArraysEqualComparer } from '../../lib/Core/ArrayUtils';
 
-import { Pitch, tryWrapPitchOctave } from "../../lib/TheoryLib/Pitch";
+import { Pitch } from "../../lib/TheoryLib/Pitch";
 
 import { AnswerDifficulty } from "../../Study/AnswerDifficulty";
 
-import { PianoKeyboard } from "./PianoKeyboard";
-import { MidiNoteEventListener } from "./MidiNoteEventListener";
 import { areSetsEqual } from '../../lib/Core/SetUtils';
+import { PlayablePianoKeyboard, IPlayablePianoKeyboardExports } from './PlayablePianoKeyboard';
+import { onKeyPress } from './PianoScaleDronePlayer';
 
 export interface IPianoKeysAnswerSelectProps {
   aspectRatio: number;
@@ -20,7 +17,6 @@ export interface IPianoKeysAnswerSelectProps {
   lowestPitch: Pitch;
   highestPitch: Pitch;
   correctAnswer: Array<Pitch>;
-  maxNumPitches?: number;
   onAnswer: (answerDifficulty: AnswerDifficulty, answer: any) => void;
   lastCorrectAnswer: any;
   incorrectAnswers: Array<any>;
@@ -28,65 +24,51 @@ export interface IPianoKeysAnswerSelectProps {
   wrapOctave?: boolean;
 }
 
-export interface IPianoKeysAnswerSelectState {
-  selectedPitches: Array<Pitch>;
-}
+export interface IPianoKeysAnswerSelectState {}
 
 export class PianoKeysAnswerSelect extends React.Component<IPianoKeysAnswerSelectProps, IPianoKeysAnswerSelectState> {
-  public constructor(props: IPianoKeysAnswerSelectProps) {
-    super(props);
-    
-    this.state = this.getStateFromProps(props);
-  }
+  // #region React Functions
 
   public componentWillReceiveProps(nextProps: IPianoKeysAnswerSelectProps) {
     if (!areArraysEqualComparer(nextProps.correctAnswer, this.props.correctAnswer, (a, b) => a.equals(b))) {
-      this.setState(this.getStateFromProps(nextProps));
+      // TODO: clear keys?
     }
   }
 
   public render(): JSX.Element {
     // TODO: use lastCorrectAnswer
 
-    const { aspectRatio, maxWidth, lowestPitch, highestPitch, instantConfirm } = this.props;
-    const { selectedPitches } = this.state;
+    const { aspectRatio, maxWidth, lowestPitch, highestPitch, instantConfirm, wrapOctave } = this.props;
 
     return (
       <div>
-        <PianoKeyboard
-          rect={new Rect2D(new Size2D(aspectRatio * 100, 100), new Vector2D(0, 0))}
+        <PlayablePianoKeyboard
+          aspectRatio={aspectRatio}
+          maxWidth={maxWidth}
           lowestPitch={lowestPitch}
           highestPitch={highestPitch}
-          pressedPitches={selectedPitches}
-          onKeyPress={pitch => this.onKeyPress(pitch, /*wasClick*/ true)}
-          onKeyRelease={pitch => this.onKeyRelease(pitch, /*wasClick*/ true)}
-          allowDragPresses={false}
-          style={{ width: "100%", maxWidth: `${maxWidth}px`, height: "auto" }}
+          onKeyPress={(pitch, velocity, wasClick) => this.onKeyPress(pitch, wasClick)}
+          onKeyRelease={(pitch, wasClick) => this.onKeyRelease(pitch, wasClick)}
+          toggleKeys={!instantConfirm}
+          wrapOctave={wrapOctave}
+          onGetExports={exports => this.keyboardExports = exports}
         />
 
         {!instantConfirm ? this.renderConfirmAnswerButton() : null}
-
-        <MidiNoteEventListener
-          onNoteOn={(pitch, velocity) => this.onKeyPress(pitch, /*wasClick*/ false)}
-          onNoteOff={pitch => this.onKeyRelease(pitch, /*wasClick*/ false)} />
       </div>
     );
   }
-
-  private getStateFromProps(props: IPianoKeysAnswerSelectProps): IPianoKeysAnswerSelectState {
-    return {
-      selectedPitches: []
-    };
-  }
-
+  
   private renderConfirmAnswerButton(): JSX.Element {
-    const { selectedPitches } = this.state;
+    const pressedPitches = this.keyboardExports
+      ? this.keyboardExports.getPressedPitches()
+      : [];
 
     return (
       <div style={{padding: "1em 0"}}>
         <Button
-          onClick={event => this.confirmAnswer()}
-          disabled={selectedPitches.length === 0}
+          onClick={event => this.confirmAnswer(pressedPitches)}
+          disabled={pressedPitches.length === 0}
           variant="contained"
         >
           Confirm Answer
@@ -95,87 +77,64 @@ export class PianoKeysAnswerSelect extends React.Component<IPianoKeysAnswerSelec
     );
   }
 
+  // #endregion
+
+  private keyboardExports: IPlayablePianoKeyboardExports | undefined = undefined;
+
   private onKeyPress(pitch: Pitch, wasClick: boolean) {
-    const { maxNumPitches, instantConfirm } = this.props;
-    const { selectedPitches } = this.state;
+    if (!this.keyboardExports) { return; }
 
-    // Process & validate the pitch.
-    const newPitch = this.processAndValidatePitch(pitch);
-    if (!newPitch) { return; }
+    const { instantConfirm } = this.props;
+    const selectedPitches = this.keyboardExports.getPressedPitches();
 
-    pitch = newPitch;
-
-    //#region Get new selected pitches
-
-    let newSelectedPitches: Pitch[];
-
-    // If click event, toggle key.
-    if (wasClick) {
-      newSelectedPitches = immutableToggleArrayElementCustomEquals(
-        selectedPitches,
-        pitch,
-        p => p.equals(pitch)
-      );
-    }
-    // If MIDI event, press key.
-    else {
-      newSelectedPitches = immutableAddIfNotFoundInArray(
-        selectedPitches,
-        pitch,
-        p => p.equals(pitch)
-      );
-    }
-
-    //#endregion
-
-    // Remove the oldest selected pitch if there are too many selected pitches now.
-    if (maxNumPitches && (newSelectedPitches.length > maxNumPitches)) {
-      newSelectedPitches = newSelectedPitches.slice(1);
-    }
-    
     // Update the state, and confirm the answer if instant confirm is on, or if we're pressing the right MIDI keys.
-    this.setState({ selectedPitches: newSelectedPitches }, () => {
-      if (instantConfirm || (!wasClick && this.getIsCorrect())) {
-        this.confirmAnswer();
+    if (instantConfirm || (!wasClick && this.getIsCorrect(selectedPitches))) {
+      if (this.keyboardExports) {
+        const selectedPitches = !instantConfirm
+          ? this.keyboardExports.getPressedPitches()
+          : [pitch];
+        this.confirmAnswer(selectedPitches);
       }
-    });
+    }
+
+    this.forceUpdate();
   }
   
   private onKeyRelease(pitch: Pitch, wasClick: boolean) {
-    const { instantConfirm } = this.props;
-    const { selectedPitches } = this.state;
+    if (!this.keyboardExports) { return; }
 
-    // If the key wasn't released through a MIDI event, early-out.
-    if (wasClick && !instantConfirm) { return; }
+    const selectedPitches = this.keyboardExports.getPressedPitches();
 
-    // Process & validate the pitch.
-    const newPitch = this.processAndValidatePitch(pitch);
-    if (!newPitch) { return; }
+    if (!wasClick && this.getIsCorrect(selectedPitches)) {
+      if (this.keyboardExports) {
+        const selectedPitches = this.keyboardExports.getPressedPitches();
+        this.confirmAnswer(selectedPitches);
+      }
+    }
 
-    pitch = newPitch;
-
-    // Remove the pitch from the selection.
-    let newSelectedPitches = immutableRemoveIfFoundInArray(
-      selectedPitches,
-      p => p.equals(pitch)
-    );
-    
-    // Update the state.
-    this.setState({ selectedPitches: newSelectedPitches });
+    this.forceUpdate();
   }
 
-  private confirmAnswer() {
-    const answerDifficulty = this.getIsCorrect() ? AnswerDifficulty.Easy : AnswerDifficulty.Incorrect;
+  private confirmAnswer(selectedPitches: Array<Pitch>) {
+    const { instantConfirm } = this.props;
+
+    const isCorrect = this.getIsCorrect(selectedPitches);
+    const answerDifficulty = isCorrect ? AnswerDifficulty.Easy : AnswerDifficulty.Incorrect;
     const selectedPitchMidiNumbersNoOctave = uniq(
-      this.state.selectedPitches
+      selectedPitches
         .map(pitch => pitch.midiNumberNoOctave)
     );
+
+    if (isCorrect && !instantConfirm && this.keyboardExports) {
+      this.keyboardExports.clearPressedPitches();
+    }
+
     this.props.onAnswer(answerDifficulty, selectedPitchMidiNumbersNoOctave);
   }
 
-  private getIsCorrect(): boolean {
+  private getIsCorrect(selectedPitches: Array<Pitch>): boolean {
     const selectedPitchMidiNumbersNoOctave = new Set<number>(
-      this.state.selectedPitches
+      selectedPitches
         .map(pitch => pitch.midiNumberNoOctave)
     );
     const correctAnswerMidiNumbersNoOctave = new Set<number>(
@@ -185,20 +144,5 @@ export class PianoKeysAnswerSelect extends React.Component<IPianoKeysAnswerSelec
 
     const isCorrect = areSetsEqual(selectedPitchMidiNumbersNoOctave, correctAnswerMidiNumbersNoOctave);
     return isCorrect;
-  }
-
-  private processAndValidatePitch(pitch: Pitch): Pitch | undefined {
-    const { lowestPitch, highestPitch, wrapOctave } = this.props;
-
-    if (wrapOctave) {
-      const wrappedPitch = tryWrapPitchOctave(pitch, lowestPitch, highestPitch);
-      if (!wrappedPitch) { return undefined; }
-
-      return wrappedPitch;
-    } else if ((pitch.midiNumber < lowestPitch.midiNumber) || (pitch.midiNumber > highestPitch.midiNumber)) {
-      return undefined;
-    } else {
-      return pitch;
-    }
   }
 }
