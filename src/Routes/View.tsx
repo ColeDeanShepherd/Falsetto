@@ -241,8 +241,8 @@ const routes: Array<IRouteData> = ([
     )
   },
   {
-    path: "/piano-theory",
-    title: "Piano Theory - Falsetto",
+    path: "/music-theory-for-piano",
+    title: "Music Theory for Piano - Falsetto",
     renderFn: () => (
       <PianoTheory slideGroups={pianoTheorySlideGroups} />
     )

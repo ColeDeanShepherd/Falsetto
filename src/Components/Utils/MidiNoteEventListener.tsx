@@ -8,10 +8,12 @@ import { AppModel } from "../../App/Model";
 import { IAction } from "../../IAction";
 import { ActionHandler, ActionBus } from "../../ActionBus";
 import { MidiDeviceConnectedAction, MidiDeviceDisconnectedAction, MidiInputDeviceChangedAction } from "../../AppMidi/Actions";
+import { keyToPitch } from "../Tools/IntervalChordScaleFinder";
 
 export interface IMidiNoteEventListenerProps {
-  onNoteOn: (pitch: Pitch, velocity: number) => void,
-  onNoteOff: (pitch: Pitch) => void
+  onNoteOn: (pitch: Pitch, velocity: number) => void;
+  onNoteOff: (pitch: Pitch) => void;
+  isComputerKeyboardPlayable?: boolean;
 }
 
 export class MidiNoteEventListener extends React.Component<IMidiNoteEventListenerProps, {}> {
@@ -21,21 +23,103 @@ export class MidiNoteEventListener extends React.Component<IMidiNoteEventListene
     this.boundHandleAction = this.handleAction.bind(this);
   }
 
-  private boundHandleAction: ActionHandler;
+  // #region React Functions
   
   public componentDidMount() {
-    this.reinitializeMidi();
     ActionBus.instance.subscribe(this.boundHandleAction);
+
+    this.reinitializeMidi();
+    this.registerKeyEventHandlers();
   }
 
   public componentWillUnmount() {
-    ActionBus.instance.unsubscribe(this.boundHandleAction);
     AppModel.instance.pianoAudio.releaseAllKeys();
+
+    this.unregisterKeyEventHandlers();
     this.uninitializeMidi();
+    
+    ActionBus.instance.unsubscribe(this.boundHandleAction);
   }
 
   public render() { return null; }
+
+  // #endregion
   
+  // #region Event Handlers
+
+  private boundOnKeyDown: ((event: KeyboardEvent) => void) | undefined;
+  private boundOnKeyUp: ((event: KeyboardEvent) => void) | undefined;
+  
+  private registerKeyEventHandlers() {
+    this.boundOnKeyDown = this.onKeyDown.bind(this);
+    window.addEventListener("keydown", this.boundOnKeyDown);
+    
+    this.boundOnKeyUp = this.onKeyUp.bind(this);
+    window.addEventListener("keyup", this.boundOnKeyUp);
+  }
+
+  private unregisterKeyEventHandlers() {
+    if (this.boundOnKeyDown) {
+      window.removeEventListener("keydown", this.boundOnKeyDown);
+      this.boundOnKeyDown = undefined;
+    }
+
+    if (this.boundOnKeyUp) {
+      window.removeEventListener("keyup", this.boundOnKeyUp);
+      this.boundOnKeyUp = undefined;
+    }
+  }
+
+  private onKeyDown(event: KeyboardEvent) {
+    const { onNoteOn } = this.props;
+
+    const isComputerKeyboardPlayable = this.getIsComputerKeyboardPlayable();
+
+    if (
+      isComputerKeyboardPlayable &&
+      onNoteOn &&
+      (event.type === "keydown") &&
+      !event.repeat
+    ) {
+      const pitch = keyToPitch(event.key);
+
+      if (pitch !== null) {
+        onNoteOn(pitch, /*velocity*/ 1);
+      }
+    }
+  }
+
+  private onKeyUp(event: KeyboardEvent) {
+    const { onNoteOff } = this.props;
+
+    const isComputerKeyboardPlayable = this.getIsComputerKeyboardPlayable();
+    
+    if (
+      isComputerKeyboardPlayable &&
+      onNoteOff &&
+      (event.type === "keyup")
+    ) {
+      // Try to convert the key to a pitch & stop playing it.
+      const pitch = keyToPitch(event.key);
+
+      if (pitch !== null) {
+        onNoteOff(pitch);
+      }
+    }
+  }
+
+  // #endregion
+
+  private getIsComputerKeyboardPlayable(): boolean {
+    const isComputerKeyboardPlayable = (this.props.isComputerKeyboardPlayable !== undefined)
+      ? this.props.isComputerKeyboardPlayable
+      : false;
+
+    return isComputerKeyboardPlayable;
+  }
+
+  private boundHandleAction: ActionHandler;
+
   private handleAction(action: IAction) {
     switch (action.getId()) {
       case MidiDeviceConnectedAction.Id:
@@ -45,6 +129,8 @@ export class MidiNoteEventListener extends React.Component<IMidiNoteEventListene
     }
   }
   
+  // #region MIDI
+
   private onNoteOn: ((event: InputEventNoteon) => void) | undefined = undefined;
   private onNoteOff: ((event: InputEventNoteoff) => void) | undefined = undefined;
   private disconnectFromMidiInput: (() => void) | undefined = undefined;
@@ -95,4 +181,6 @@ export class MidiNoteEventListener extends React.Component<IMidiNoteEventListene
       this.disconnectFromMidiInput = undefined;
     }
   }
+
+  // #endregion
 }

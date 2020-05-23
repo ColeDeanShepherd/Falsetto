@@ -80,6 +80,7 @@ export function findScales(pitches: Array<Pitch>): Array<[ScaleType, Pitch]> {
 
 export function keyToPitch(keyString: string): Pitch | null {
   switch (keyString) {
+    // bottom rows
     case "z":
       return new Pitch(PitchLetter.C, 0, 4);
     case "s":
@@ -112,6 +113,10 @@ export function keyToPitch(keyString: string): Pitch | null {
       return new Pitch(PitchLetter.D, 0, 5);
     case ";":
       return new Pitch(PitchLetter.E, -1, 5);
+    case "/":
+      return new Pitch(PitchLetter.E, 0, 5);
+
+    // top rows
     case "q":
       return new Pitch(PitchLetter.C, 0, 5);
     case "2":
@@ -136,6 +141,23 @@ export function keyToPitch(keyString: string): Pitch | null {
       return new Pitch(PitchLetter.B, -1, 5);
     case "u":
       return new Pitch(PitchLetter.B, 0, 5);
+    case "i":
+      return new Pitch(PitchLetter.C, 0, 6);
+    case "9":
+      return new Pitch(PitchLetter.C, 1, 6);
+    case "o":
+      return new Pitch(PitchLetter.D, 0, 6);
+    case "0":
+      return new Pitch(PitchLetter.D, 1, 6);
+    case "p":
+      return new Pitch(PitchLetter.E, 0, 6);
+    case "[":
+      return new Pitch(PitchLetter.F, 0, 6);
+    case "=":
+      return new Pitch(PitchLetter.F, 1, 6);
+    case "]":
+      return new Pitch(PitchLetter.G, 0, 6);
+    
     default:
       return null;
   }

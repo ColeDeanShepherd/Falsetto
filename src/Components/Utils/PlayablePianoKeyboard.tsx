@@ -56,7 +56,8 @@ export class PlayablePianoKeyboard extends React.Component<IPlayablePianoKeyboar
           style={{ width: "100%", maxWidth: `${maxWidth}px`, height: "auto" }} />
         <MidiNoteEventListener
           onNoteOn={(pitch, velocity) => this.onKeyPress(pitch)}
-          onNoteOff={pitch => this.onKeyRelease(pitch)} />
+          onNoteOff={pitch => this.onKeyRelease(pitch)}
+          isComputerKeyboardPlayable={true} />
       </div>
     );
   }

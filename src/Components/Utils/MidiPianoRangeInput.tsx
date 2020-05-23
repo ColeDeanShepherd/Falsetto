@@ -40,7 +40,7 @@ export class MidiPianoRangeInput extends React.Component<{}, {}> {
       return (
         <div>
           <p>Press the leftmost and rightmost keys on your MIDI piano keyboard to detect the number of keys it has.</p>
-          <p>{numPitchesInRange} Detected Keys:</p>
+          <p>{numPitchesInRange} Keys Detected:</p>
 
           <div>
             <PianoKeyboard

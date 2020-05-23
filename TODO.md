@@ -2,7 +2,7 @@
 ## High Priority
 * Fix on mobile
 *** https://doc.rust-lang.org/stable/book/ch01-01-installation.html
-* Piano Theory
+* Music Theory for Piano
   * Notes Section
     * Press all of a given note on keyboard before continuing.
   * Self-Paced Scale Mastery
@@ -29,6 +29,7 @@
     * Extended chords, omissions
     * Chord-scale equivalence
   * Improve navigation (enable easy jumping between sections).
+  * Improve URLs (use slashes instead of ?)
   * document title changes?
   * Move navigation buttons to bottom on mobile.
 * Debug & fix scale viewer & chord viewer
@@ -81,7 +82,7 @@
     * Chord progressions
 ## Low Priority
 * Re-enable main menu
-* Piano Theory
+* Music Theory for Piano
   * Piano scale drone player release stop playing?
   * Pressing the correct note doesn't play the sound...
   * Piano notes exercises all have the same progress... Do I want that?
