@@ -63,10 +63,24 @@ export class PlayablePianoKeyboard extends React.Component<IPlayablePianoKeyboar
   }
 
   private getStateFromProps(props: IPlayablePianoKeyboardProps) : IPlayablePianoKeyboardState {
+    // keep all previously pressed pitches pressed
+    const newPressedPitchMidiNumbers = this.state
+      ? new Set<number>(this.state.pressedPitches.map(p => p.midiNumber))
+      : new Set<number>();
+    
+    // add new force-pressed pitches
+    if (props.forcePressedPitches) {
+      for (const pitch of props.forcePressedPitches) {
+        newPressedPitchMidiNumbers.add(pitch.midiNumber);
+      }
+    }
+
+    // convert pitch midi numbers to pitches
+    const newPressedPitches = [...newPressedPitchMidiNumbers]
+      .map(n => Pitch.createFromMidiNumber(n, /*useSharps*/ true));
+
     return {
-      pressedPitches: props.forcePressedPitches
-        ? props.forcePressedPitches.slice()
-        : []
+      pressedPitches: newPressedPitches
     };
   }
 

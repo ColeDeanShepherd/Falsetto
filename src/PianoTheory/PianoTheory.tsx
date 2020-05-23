@@ -458,8 +458,7 @@ export const pianoTheorySlideGroups = [
 
     new Slide("piano-notes-repeat", () => (
       <div>
-        <h2>Section 2: Notes</h2>
-        <p>Every piano key has one or more names, which we must learn in order to navigate the instrument and communicate with other musicians.</p>
+        <p>Every note has one or more names, which we must learn in order to navigate the instrument and communicate with other musicians.</p>
         <p>Luckily, we don't need to learn 88 different names because piano keys are laid out in a repeating pattern, and every occurrence of this pattern uses the same names.</p>
         <p>The pattern is: two black keys surrounded by three white keys, then three black keys surrounded by four white keys.</p>
         <PianoKeyPatternDiagram />
@@ -468,11 +467,10 @@ export const pianoTheorySlideGroups = [
 
     new Slide("note-c", (slideshow) => (
       <div>
-        <p>Every piano key has one or more names, which we must learn in order to navigate the instrument and communicate with other musicians.</p>
-        <p>We will start with the 7 white keys a small section of the piano keyboard.</p>
-        <p>The highlighted key below, to the left of the group of 2 black keys, is called <strong>C</strong>.</p>
-        <p>Press a <strong>C</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
+        <p>We will start by learning the names of the notes produced by the 7 white keys in the repeating pattern.</p>
+        <p>The highlighted key below, to the left of the group of 2 black keys, produces a note called <strong>C</strong>.</p>
         <PianoNoteDiagram
+          key="pianoNoteDiagram"
           pitch={new Pitch(PitchLetter.C, 0, 4)}
           onKeyPress={pitch => {
             if ((pitch.letter === PitchLetter.C) && (pitch.signedAccidental === 0)) {
@@ -481,6 +479,7 @@ export const pianoTheorySlideGroups = [
           }}
           labelWhiteKeys={true}
           labelBlackKeys={false} />
+        <p>Play a <strong>C</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
       </div>
     )),
     
@@ -489,6 +488,7 @@ export const pianoTheorySlideGroups = [
         <p>When moving one white key to the right, we also move forward by one letter in the English alphabet, so this key is called <strong>D</strong>.</p>
         <p>Press a <strong>D</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
         <PianoNoteDiagram
+          key="pianoNoteDiagram"
           pitch={new Pitch(PitchLetter.D, 0, 4)}
           onKeyPress={pitch => {
             if ((pitch.letter === PitchLetter.D) && (pitch.signedAccidental === 0)) {
@@ -505,6 +505,7 @@ export const pianoTheorySlideGroups = [
         <p>This key is called <strong>E</strong>.</p>
         <p>Press an <strong>E</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
         <PianoNoteDiagram
+          key="pianoNoteDiagram"
           pitch={new Pitch(PitchLetter.E, 0, 4)}
           onKeyPress={pitch => {
             if ((pitch.letter === PitchLetter.E) && (pitch.signedAccidental === 0)) {
@@ -521,6 +522,7 @@ export const pianoTheorySlideGroups = [
         <p>This key is called <strong>F</strong>.</p>
         <p>Press an <strong>F</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
         <PianoNoteDiagram
+          key="pianoNoteDiagram"
           pitch={new Pitch(PitchLetter.F, 0, 4)}
           onKeyPress={pitch => {
             if ((pitch.letter === PitchLetter.F) && (pitch.signedAccidental === 0)) {
@@ -537,6 +539,7 @@ export const pianoTheorySlideGroups = [
         <p>This key is called <strong>G</strong>.</p>
         <p>Press a <strong>G</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
         <PianoNoteDiagram
+          key="pianoNoteDiagram"
           pitch={new Pitch(PitchLetter.G, 0, 4)}
           onKeyPress={pitch => {
             if ((pitch.letter === PitchLetter.G) && (pitch.signedAccidental === 0)) {
@@ -553,6 +556,7 @@ export const pianoTheorySlideGroups = [
         <p>After "G" there is no "H" key &mdash; instead we jump backwards through the English alphabet to <strong>A</strong>.</p>
         <p>Press an <strong>A</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
         <PianoNoteDiagram
+          key="pianoNoteDiagram"
           pitch={new Pitch(PitchLetter.A, 0, 4)}
           onKeyPress={pitch => {
             if ((pitch.letter === PitchLetter.A) && (pitch.signedAccidental === 0)) {
@@ -569,6 +573,7 @@ export const pianoTheorySlideGroups = [
         <p>The last white key is called <strong>B</strong>.</p>
         <p>Press a <strong>B</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
         <PianoNoteDiagram
+          key="pianoNoteDiagram"
           pitch={new Pitch(PitchLetter.B, 0, 4)}
           onKeyPress={pitch => {
             if ((pitch.letter === PitchLetter.B) && (pitch.signedAccidental === 0)) {
@@ -584,6 +589,7 @@ export const pianoTheorySlideGroups = [
       <div>
         <p>Study this slide, then move to the next slide to test your knowledge of white key names with a quiz.</p>
         <PianoNotesDiagram
+          key="pianoNoteDiagram"
           lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
           highestPitch={new Pitch(PitchLetter.B, 0, 4)}
           maxWidth={maxOneOctavePianoWidth}
@@ -613,6 +619,7 @@ export const pianoTheorySlideGroups = [
         <p>The '♯' ("sharp") symbol means the pitch is raised by one key, so C♯ means "the key to the right of C".</p>
         <p>Press a <strong>C♯</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
         <PianoNoteDiagram
+          key="pianoNoteDiagram"
           pitch={new Pitch(PitchLetter.C, 1, 4)}
           onKeyPress={pitch => {
             if (pitch.midiNumberNoOctave === (new Pitch(PitchLetter.C, 1, 4)).midiNumberNoOctave) {
@@ -632,6 +639,7 @@ export const pianoTheorySlideGroups = [
         <p>The '♭' ("flat") symbol means the pitch is lowered by one key, so D♭ means "the key to the left of D".</p>
         <p>Press a <strong>D♭</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
         <PianoNoteDiagram
+          key="pianoNoteDiagram"
           pitch={new Pitch(PitchLetter.C, 1, 4)}
           onKeyPress={pitch => {
             if (pitch.midiNumberNoOctave === (new Pitch(PitchLetter.C, 1, 4)).midiNumberNoOctave) {
@@ -650,6 +658,7 @@ export const pianoTheorySlideGroups = [
         <p>This key is called <strong>D♯</strong>, or <strong>E♭</strong>.</p>
         <p>Press a <strong>D♯/E♭</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
         <PianoNoteDiagram
+          key="pianoNoteDiagram"
           pitch={new Pitch(PitchLetter.D, 1, 4)}
           onKeyPress={pitch => {
             if (pitch.midiNumberNoOctave === (new Pitch(PitchLetter.D, 1, 4)).midiNumberNoOctave) {
@@ -665,14 +674,16 @@ export const pianoTheorySlideGroups = [
       <div>
         <p>This key is called <strong>F♯</strong>, or <strong>G♭</strong>.</p>
         <p>Press a <strong>F♯/G♭</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
-        <PianoNoteDiagram pitch={new Pitch(PitchLetter.F, 1, 4)}
-          onKeyPress={pitch => {
-            if (pitch.midiNumberNoOctave === (new Pitch(PitchLetter.F, 1, 4)).midiNumberNoOctave) {
-              slideshow.tryToMoveToNextSlide();
-            }
-          }}
-        labelWhiteKeys={false}
-        labelBlackKeys={true} />
+        <PianoNoteDiagram
+          key="pianoNoteDiagram"
+          pitch={new Pitch(PitchLetter.F, 1, 4)}
+            onKeyPress={pitch => {
+              if (pitch.midiNumberNoOctave === (new Pitch(PitchLetter.F, 1, 4)).midiNumberNoOctave) {
+                slideshow.tryToMoveToNextSlide();
+              }
+            }}
+          labelWhiteKeys={false}
+          labelBlackKeys={true} />
       </div>
     )),
 
@@ -681,6 +692,7 @@ export const pianoTheorySlideGroups = [
         <p>This key is called <strong>G♯</strong>, or <strong>A♭</strong>.</p>
         <p>Press a <strong>G♯/A♭</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
         <PianoNoteDiagram
+          key="pianoNoteDiagram"
           pitch={new Pitch(PitchLetter.G, 1, 4)}
           onKeyPress={pitch => {
             if (pitch.midiNumberNoOctave === (new Pitch(PitchLetter.G, 1, 4)).midiNumberNoOctave) {
@@ -697,6 +709,7 @@ export const pianoTheorySlideGroups = [
         <p>The last black key is called <strong>A♯</strong>, or <strong>B♭</strong>.</p>
         <p>Press a <strong>A♯/B♭</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
         <PianoNoteDiagram
+          key="pianoNoteDiagram"
           pitch={new Pitch(PitchLetter.B, -1, 4)}
           onKeyPress={pitch => {
             if (pitch.midiNumberNoOctave === (new Pitch(PitchLetter.B, -1, 4)).midiNumberNoOctave) {
@@ -712,6 +725,7 @@ export const pianoTheorySlideGroups = [
       <div>
         <p>Study this slide, then move to the next slide to test your knowledge of black key names with a quiz.</p>
         <PianoNotesDiagram
+          key="pianoNoteDiagram"
           lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
           highestPitch={new Pitch(PitchLetter.B, 0, 4)}
           maxWidth={maxOneOctavePianoWidth}
@@ -736,16 +750,15 @@ export const pianoTheorySlideGroups = [
     
     new Slide("all-notes", () => (
       <div>
-        <p>You have now learned the names of all 12 keys in this small section of the piano!</p>
+        <p>You have now learned the names of all the notes in the repeating pattern of piano keys!</p>
         <p>
           <PianoNotesDiagram
             lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
             highestPitch={new Pitch(PitchLetter.B, 0, 4)}
             maxWidth={maxOneOctavePianoWidth / 2}
-            labelWhiteKeys={false} />
+            labelWhiteKeys={true} />
         </p>
-        <p>But what about the rest of the piano? Let's zoom out...</p>
-        <p>Here we see that the names of the other keys are simply repetitions of the pattern you've learned. So you have actually learned the names of all 88 piano keys!</p>
+        <p>And here are all the note names on an 88 key piano keyboard:</p>
         <PianoNotesDiagram
           lowestPitch={fullPianoLowestPitch}
           highestPitch={fullPianoHighestPitch}
@@ -755,7 +768,7 @@ export const pianoTheorySlideGroups = [
     
     new Slide("notes-summary", () => (
       <div>
-        <p>Study this slide, then move to the next slide to comprehensively test your knowledge of piano key names with a quiz.</p>
+        <p>Study this note names, then move to the next slide to test your knowledge with a quiz.</p>
         <PianoNotesDiagram
           lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
           highestPitch={new Pitch(PitchLetter.B, 0, 4)}
