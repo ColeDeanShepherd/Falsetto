@@ -68,6 +68,13 @@ export class PlayablePianoKeyboard extends React.Component<IPlayablePianoKeyboar
       ? new Set<number>(this.state.pressedPitches.map(p => p.midiNumber))
       : new Set<number>();
     
+    // release all of the old force-pressed pitches
+    if (this.props.forcePressedPitches) {
+      for (const pitch of this.props.forcePressedPitches) {
+        newPressedPitchMidiNumbers.delete(pitch.midiNumber);
+      }
+    }
+
     // add new force-pressed pitches
     if (props.forcePressedPitches) {
       for (const pitch of props.forcePressedPitches) {
