@@ -24,23 +24,22 @@ export interface IPlayablePianoKeyboardProps {
 }
 
 export interface IPlayablePianoKeyboardState {
-  pressedPitches: Array<Pitch>
+  userPressedPitches: Array<Pitch>
 }
 
 export class PlayablePianoKeyboard extends React.Component<IPlayablePianoKeyboardProps, IPlayablePianoKeyboardState> {
   public constructor(props: IPlayablePianoKeyboardProps) {
     super(props);
 
-    this.state = this.getStateFromProps(props);
-  }
-
-  public componentWillReceiveProps(nextProps: IPlayablePianoKeyboardProps) {
-    this.setState(this.getStateFromProps(nextProps));
+    this.state = {
+      userPressedPitches: []
+    };
   }
 
   public render(): JSX.Element {
     const { aspectRatio, maxWidth, lowestPitch, highestPitch, margin, renderExtrasFn } = this.props;
-    const { pressedPitches } = this.state; 
+
+    const pressedPitches = this.getPressedPitches();
 
     return (
       <div>
@@ -62,33 +61,25 @@ export class PlayablePianoKeyboard extends React.Component<IPlayablePianoKeyboar
     );
   }
 
-  private getStateFromProps(props: IPlayablePianoKeyboardProps) : IPlayablePianoKeyboardState {
-    // keep all previously pressed pitches pressed
-    const newPressedPitchMidiNumbers = this.state
-      ? new Set<number>(this.state.pressedPitches.map(p => p.midiNumber))
-      : new Set<number>();
+  private getPressedPitches(): Array<Pitch> {
+    const { forcePressedPitches } = this.props;
+    const { userPressedPitches } = this.state;
+
+    const pitchMidiNumbers = new Set<number>(
+      userPressedPitches
+        .map(p => p.midiNumber)
+    );
     
-    // release all of the old force-pressed pitches
-    if (this.props.forcePressedPitches) {
-      for (const pitch of this.props.forcePressedPitches) {
-        newPressedPitchMidiNumbers.delete(pitch.midiNumber);
+    if (forcePressedPitches) {
+      for (const pitch of forcePressedPitches) {
+        pitchMidiNumbers.add(pitch.midiNumber);
       }
     }
 
-    // add new force-pressed pitches
-    if (props.forcePressedPitches) {
-      for (const pitch of props.forcePressedPitches) {
-        newPressedPitchMidiNumbers.add(pitch.midiNumber);
-      }
-    }
-
-    // convert pitch midi numbers to pitches
-    const newPressedPitches = [...newPressedPitchMidiNumbers]
+    const pitches = [...pitchMidiNumbers]
       .map(n => Pitch.createFromMidiNumber(n, /*useSharps*/ true));
 
-    return {
-      pressedPitches: newPressedPitches
-    };
+    return pitches;
   }
 
   private onKeyPress(pitch: Pitch) {
@@ -108,7 +99,7 @@ export class PlayablePianoKeyboard extends React.Component<IPlayablePianoKeyboar
 
     if (Pitch.isInRange(wrappedPitch, lowestPitch, highestPitch)) {
       this.setState((prevState, props) => {
-        return { pressedPitches: immutableAddIfNotFoundInArray(prevState.pressedPitches, wrappedPitch, (p, i) => p.equals(wrappedPitch)) };
+        return { userPressedPitches: immutableAddIfNotFoundInArray(prevState.userPressedPitches, wrappedPitch, (p, i) => p.equals(wrappedPitch)) };
       });
     }
 
@@ -133,7 +124,7 @@ export class PlayablePianoKeyboard extends React.Component<IPlayablePianoKeyboar
     const isWrappedPitchForcePressed = forcePressedPitches && forcePressedPitches.some(p => p.equals(wrappedPitch));
     if (!isWrappedPitchForcePressed) {
       this.setState((prevState, props) => {
-        return { pressedPitches: immutableRemoveIfFoundInArray(prevState.pressedPitches, (p, i) => p.equals(wrappedPitch)) };
+        return { userPressedPitches: immutableRemoveIfFoundInArray(prevState.userPressedPitches, (p, i) => p.equals(wrappedPitch)) };
       });
     }
 
