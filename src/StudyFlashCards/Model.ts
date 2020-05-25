@@ -9,7 +9,7 @@ import { Size2D } from "../lib/Core/Size2D";
 import { DependencyInjector } from "../DependencyInjector";
 import { IAnalytics } from "../Analytics";
 import { FlashCardSetStats } from "../Study/FlashCardSetStats";
-import { FlashCardStats } from "../Study/FlashCardStats";
+import { FlashCardStats } from '../Study/FlashCardStats';
 import { arrayCountPassing, arrayContains, sum, removeElement, uniq, areArraysEqual } from "../lib/Core/ArrayUtils";
 import { assert } from "../lib/Core/Dbc";
 
@@ -41,6 +41,7 @@ export async function getFlashCardSetStatsFromDatabase(
 }
 
 export const MIN_PCT_CORRECT_FLASH_CARD_LEVEL = 0.85;
+
 export function getCurrentFlashCardLevel(
   flashCardSet: FlashCardSet, flashCardLevels: Array<FlashCardLevel>, flashCardSetStats: FlashCardSetStats
 ): [number, FlashCardLevel] {
@@ -55,6 +56,7 @@ export function getCurrentFlashCardLevel(
   const lastLevelIndex = flashCardLevels.length - 1;
   return [lastLevelIndex, flashCardLevels[lastLevelIndex]];
 }
+
 export function getPercentToNextLevel(currentFlashCardLevel: FlashCardLevel, flashCardSetStats: FlashCardSetStats): number {
   const percentCorrects = flashCardSetStats.flashCardStats
     .filter(qs => arrayContains(currentFlashCardLevel.flashCardIds, qs.flashCardId))
@@ -65,7 +67,7 @@ export function getPercentToNextLevel(currentFlashCardLevel: FlashCardLevel, fla
 // TODO: make study algorithm stateless? (leitner algorithm is stateful)
 export class StudyFlashCardsModel {
   private userManager: IUserManager;
-  private database: IDatabase;
+  //private database: IDatabase;
   private analytics: IAnalytics;
 
   public flashCardSet: FlashCardSet;
@@ -99,7 +101,7 @@ export class StudyFlashCardsModel {
 
   public constructor(flashCardSet: FlashCardSet) {
     this.userManager = DependencyInjector.instance.getRequiredService<IUserManager>("IUserManager");
-    this.database = DependencyInjector.instance.getRequiredService<IDatabase>("IDatabase");
+    //this.database = DependencyInjector.instance.getRequiredService<IDatabase>("IDatabase");
     this.analytics = DependencyInjector.instance.getRequiredService<IAnalytics>("IAnalytics");
 
     this.flashCardSet = flashCardSet;
@@ -134,10 +136,11 @@ export class StudyFlashCardsModel {
   }
 
   public async initAsync(): Promise<void> {
-    const flashCardSetStats = await getFlashCardSetStatsFromDatabase(
-      this.database, this.userManager,
-      this.flashCardSet, this.flashCards
-    );
+    const flashCardSetStats = new FlashCardSetStats(
+      this.flashCardSet.id,
+      this.flashCards
+        .map(fc => new FlashCardStats(fc.id, 0, 0))
+    )
 
     this.studyAlgorithm.reset(
       this.flashCards.map(fc => fc.id), this.flashCards, flashCardSetStats
@@ -266,16 +269,16 @@ export class StudyFlashCardsModel {
     flashCardId: FlashCardId,
     answer: any,
     answerDifficulty: AnswerDifficulty): Promise<void> {
-    if (!this.haveGottenCurrentFlashCardWrong) {
-      const user = this.userManager.getCurrentUser();
-      const userId = user ? user.id : "";
-      const answeredAt = new Date();
+    // if (!this.haveGottenCurrentFlashCardWrong) {
+    //   const user = this.userManager.getCurrentUser();
+    //   const userId = user ? user.id : "";
+    //   const answeredAt = new Date();
 
-      await this.database.addAnswers([new FlashCardAnswer(
-        this.currentFlashCardId, userId,
-        answerDifficultyToPercentCorrect(answerDifficulty), answeredAt
-      )]);
-    }
+    //   await this.database.addAnswers([new FlashCardAnswer(
+    //     this.currentFlashCardId, userId,
+    //     answerDifficultyToPercentCorrect(answerDifficulty), answeredAt
+    //   )]);
+    // }
   }
 
   private async analyticsHandleUserAnswerAction(

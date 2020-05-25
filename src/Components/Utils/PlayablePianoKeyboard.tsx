@@ -107,10 +107,10 @@ export class PlayablePianoKeyboard extends React.Component<IPlayablePianoKeyboar
       : false;
     
     const wrappedPitch = wrapOctave
-      ? unwrapValueOrUndefined(tryWrapPitchOctave(pitch, lowestPitch, highestPitch))
+      ? tryWrapPitchOctave(pitch, lowestPitch, highestPitch)
       : pitch;
 
-    if (Pitch.isInRange(wrappedPitch, lowestPitch, highestPitch)) {
+    if (wrappedPitch && Pitch.isInRange(wrappedPitch, lowestPitch, highestPitch)) {
       let isConsideredKeyPress: boolean;
 
       this.setState((prevState, props) => {
@@ -162,13 +162,17 @@ export class PlayablePianoKeyboard extends React.Component<IPlayablePianoKeyboar
       : false;
 
     const wrappedPitch = wrapOctave
-      ? unwrapValueOrUndefined(tryWrapPitchOctave(pitch, lowestPitch, highestPitch))
+      ? tryWrapPitchOctave(pitch, lowestPitch, highestPitch)
       : pitch;
     
-    const isWrappedPitchForcePressed = forcePressedPitches && forcePressedPitches.some(p => p.equals(wrappedPitch));
-    if (!isWrappedPitchForcePressed && (!wasClick || !toggleKeys)) {
+    if (wrappedPitch && (!wasClick || !toggleKeys)) {
       this.setState((prevState, props) => {
-        return { userPressedPitches: immutableRemoveIfFoundInArray(prevState.userPressedPitches, (p, i) => p.equals(wrappedPitch)) };
+        return {
+          userPressedPitches: immutableRemoveIfFoundInArray(
+            prevState.userPressedPitches,
+            (p, i) => p.equals(unwrapValueOrUndefined(wrappedPitch))
+          )
+        };
       });
     }
 

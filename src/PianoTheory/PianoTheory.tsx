@@ -36,9 +36,9 @@ import * as ChordProgressionsQuiz from "./ChordProgressionsQuiz";
 
 import { naturalPitches, accidentalPitches, allPitches } from "../Components/Quizzes/Notes/PianoNotes";
 import { PianoScaleFormulaDiagram } from "../Components/Utils/PianoScaleFormulaDiagram";
-import { PianoScaleDronePlayer } from '../Components/Utils/PianoScaleDronePlayer';
+import { PianoScaleDronePlayer, onKeyPress } from '../Components/Utils/PianoScaleDronePlayer';
 import { MidiInputDeviceSelect } from "../Components/Utils/MidiInputDeviceSelect";
-import { fullPianoLowestPitch, fullPianoHighestPitch, fullPianoAspectRatio, getPianoKeyboardAspectRatio } from '../Components/Utils/PianoUtils';
+import { fullPianoLowestPitch, fullPianoHighestPitch, fullPianoAspectRatio, getPianoKeyboardAspectRatio, getPianoKeyboardAspectRatioFromPitches, fullPianoNumWhiteKeys } from '../Components/Utils/PianoUtils';
 import { MidiPianoRangeInput } from "../Components/Utils/MidiPianoRangeInput";
 import { LimitedWidthContentContainer } from "../Components/Utils/LimitedWidthContentContainer";
 import { NoteText } from '../Components/Utils/NoteText';
@@ -105,6 +105,38 @@ export const TwoOctavePiano: React.FunctionComponent<{}> = props => (
     highestPitch={new Pitch(PitchLetter.B, 0, 4)} />
 );
 
+const PianoKeyTwoBlackKeysPatternDiagram: React.FunctionComponent<{}> = props => {
+  const lowestPitch = new Pitch(PitchLetter.C, 0, 4);
+  const highestPitch = new Pitch(PitchLetter.E, 0, 4);
+  const maxWidth = maxPianoWidth * (3 / fullPianoNumWhiteKeys);
+  const aspectRatio = getPianoKeyboardAspectRatioFromPitches(lowestPitch, highestPitch);
+
+  // TODO: wrap octave
+  return (
+    <PlayablePianoKeyboard
+      aspectRatio={aspectRatio}
+      maxWidth={maxWidth}
+      lowestPitch={lowestPitch}
+      highestPitch={highestPitch} />
+  );
+};
+
+const PianoKeyThreeBlackKeysPatternDiagram: React.FunctionComponent<{}> = props => {
+  const lowestPitch = new Pitch(PitchLetter.F, 0, 4);
+  const highestPitch = new Pitch(PitchLetter.B, 0, 4);
+  const maxWidth = maxPianoWidth * (4 / fullPianoNumWhiteKeys);
+  const aspectRatio = getPianoKeyboardAspectRatioFromPitches(lowestPitch, highestPitch);
+
+  // TODO: wrap octave
+  return (
+    <PlayablePianoKeyboard
+      aspectRatio={aspectRatio}
+      maxWidth={maxWidth}
+      lowestPitch={lowestPitch}
+      highestPitch={highestPitch} />
+  );
+};
+
 const PianoKeyPatternDiagram: React.FunctionComponent<{}> = props => {
   const margin = new Margin(0, 0, 0, 20);
   
@@ -168,6 +200,7 @@ const PianoKeyPatternDiagram: React.FunctionComponent<{}> = props => {
 };
 
 export interface IPianoNoteDiagramProps {
+  key?: React.Key;
   pitch: Pitch,
   labelWhiteKeys: boolean,
   labelBlackKeys: boolean,
@@ -176,75 +209,81 @@ export interface IPianoNoteDiagramProps {
   onKeyPress?: (keyPitch: Pitch) => void
 }
 
-export class PianoNoteDiagram extends React.Component<IPianoNoteDiagramProps, {}> {
-  public render(): JSX.Element {
-    const { pitch, labelWhiteKeys, labelBlackKeys, showLetterPredicate, useSharps }  = this.props;
-    const aspectRatio = getPianoKeyboardAspectRatio(/*octaveCount*/ 1);
-    const lowestPitch = new Pitch(PitchLetter.C, 0, 4);
-    const highestPitch = new Pitch(PitchLetter.B, 0, 4);
+function renderPianoNoteDiagram(props: IPianoNoteDiagramProps) {
+  const { key, pitch, labelWhiteKeys, labelBlackKeys, showLetterPredicate, useSharps, onKeyPress }  = props;
 
+  const lowestPitch = new Pitch(PitchLetter.C, 0, 4);
+  const highestPitch = new Pitch(PitchLetter.B, 0, 4);
+
+  return (
+    <PianoNotesDiagram
+      key={key}
+      lowestPitch={lowestPitch}
+      highestPitch={highestPitch}
+      maxWidth={maxOneOctavePianoWidth}
+      labelWhiteKeys={labelWhiteKeys}
+      labelBlackKeys={labelBlackKeys}
+      highlightedPitch={pitch}
+      showLetterPredicate={showLetterPredicate}
+      useSharps={useSharps}
+      onKeyPress={onKeyPress} />
+  );
+};
+
+export interface IPianoNotesDiagramProps {
+  lowestPitch: Pitch;
+  highestPitch: Pitch;
+  maxWidth: number;
+  labelWhiteKeys: boolean;
+  labelBlackKeys: boolean;
+  highlightedPitch?: Pitch;
+  showLetterPredicate?: (pitch: Pitch) => boolean;
+  useSharps?: boolean;
+  onKeyPress?: (keyPitch: Pitch) => void;
+}
+
+export class PianoNotesDiagram extends React.Component<IPianoNotesDiagramProps, {}> {
+  public render(): JSX.Element {
+    const { lowestPitch, highestPitch, maxWidth, highlightedPitch, showLetterPredicate, useSharps }  = this.props;
+
+    const labelWhiteKeys = (this.props.labelWhiteKeys !== undefined) ? this.props.labelWhiteKeys : true;
+    const labelBlackKeys = (this.props.labelBlackKeys !== undefined) ? this.props.labelBlackKeys : true;
+    const octaveCount = Math.ceil((this.props.highestPitch.midiNumber - this.props.lowestPitch.midiNumber) / 12);
+    const aspectRatio = getPianoKeyboardAspectRatio(octaveCount);
+  
     return (
-      <div>
-        <PlayablePianoKeyboard
-          aspectRatio={aspectRatio}
-          maxWidth={maxOneOctavePianoWidth}
-          lowestPitch={lowestPitch}
-          highestPitch={highestPitch}
-          onKeyPress={p => this.onKeyPress(p)}
-          onKeyRelease={p => this.onKeyRelease(p)}
-          forcePressedPitches={[pitch]}
-          renderExtrasFn={metrics => renderPianoKeyboardNoteNames(
-            metrics,
-            /*useSharps*/ useSharps,
-            /*showLetterPredicate*/ showLetterPredicate
-              ? showLetterPredicate
-              : p => ((labelWhiteKeys && p.isWhiteKey) || (labelBlackKeys && p.isBlackKey)) && (p.midiNumber <= pitch.midiNumber)
-          )}
-          wrapOctave={true} />
-      </div>
+      <PlayablePianoKeyboard
+        aspectRatio={aspectRatio}
+        maxWidth={maxWidth}
+        lowestPitch={lowestPitch}
+        highestPitch={highestPitch}
+        onKeyPress={p => this.onKeyPress(p)}
+        onKeyRelease={p => this.onKeyRelease(p)}
+        forcePressedPitches={highlightedPitch ? [highlightedPitch] : undefined}
+        renderExtrasFn={metrics => renderPianoKeyboardNoteNames(
+          metrics,
+          /*useSharps*/ useSharps,
+          /*showLetterPredicate*/ showLetterPredicate
+            ? showLetterPredicate
+            : p => (
+              highlightedPitch
+                ? ((labelWhiteKeys && p.isWhiteKey) || (labelBlackKeys && p.isBlackKey)) && (p.midiNumber <= highlightedPitch.midiNumber)
+                : (p.isWhiteKey ? labelWhiteKeys : labelBlackKeys)
+            )
+        )}
+        wrapOctave={true} />
     );
   }
 
   private onKeyPress(pitch: Pitch) {
     const { onKeyPress } = this.props;
 
-    AppModel.instance.pianoAudio.pressKey(pitch, 1);
-
     if (onKeyPress) {
       onKeyPress(pitch);
     }
   }
 
-  private onKeyRelease(pitch: Pitch) {
-    AppModel.instance.pianoAudio.releaseKey(pitch);
-  }
-};
-
-export const PianoNotesDiagram: React.FunctionComponent<{
-  lowestPitch: Pitch,
-  highestPitch: Pitch,
-  maxWidth: number,
-  labelWhiteKeys?: boolean,
-  labelBlackKeys?: boolean
-}> = props => {
-  const labelWhiteKeys = (props.labelWhiteKeys !== undefined) ? props.labelWhiteKeys : true;
-  const labelBlackKeys = (props.labelBlackKeys !== undefined) ? props.labelBlackKeys : true;
-  const octaveCount = Math.ceil((props.highestPitch.midiNumber - props.lowestPitch.midiNumber) / 12);
-  const aspectRatio = getPianoKeyboardAspectRatio(octaveCount);
-
-  return (
-    <PlayablePianoKeyboard
-      aspectRatio={aspectRatio}
-      maxWidth={props.maxWidth}
-      lowestPitch={props.lowestPitch}
-      highestPitch={props.highestPitch}
-      renderExtrasFn={metrics => renderPianoKeyboardNoteNames(
-        metrics,
-        /*useSharps*/ undefined,
-        /*showLetterPredicate*/ p => p.isWhiteKey ? labelWhiteKeys : labelBlackKeys
-      )}
-      wrapOctave={true} />
-  );
+  private onKeyRelease(pitch: Pitch) {}
 }
 
 const ThirdsDiagram: React.FunctionComponent<{}> = props => {
@@ -460,7 +499,12 @@ export const pianoTheorySlideGroups = [
       <div>
         <p>Every note has one or more names, which we must learn in order to navigate the instrument and communicate with other musicians.</p>
         <p>Luckily, we don't need to learn 88 different names because piano keys are laid out in a repeating pattern, and every occurrence of this pattern uses the same names.</p>
-        <p>The pattern is: two black keys surrounded by three white keys, then three black keys surrounded by four white keys.</p>
+        <p>The pattern is:</p>
+        <p>two black keys surrounded by three white keys:</p>
+        <PianoKeyTwoBlackKeysPatternDiagram />
+        <p>followed by three black keys surrounded by four white keys:</p>
+        <PianoKeyThreeBlackKeysPatternDiagram />
+        <p>Here are occurrences of the pattern on an 88-key keyboard highlighted in different colors:</p>
         <PianoKeyPatternDiagram />
       </div>
     )),
@@ -469,16 +513,17 @@ export const pianoTheorySlideGroups = [
       <div>
         <p>We will start by learning the names of the notes produced by the 7 white keys in the repeating pattern.</p>
         <p>The highlighted key below, to the left of the group of 2 black keys, produces a note called <strong>C</strong>.</p>
-        <PianoNoteDiagram
-          key="pianoNoteDiagram" // prevent the component from unmounting when changing slides
-          pitch={new Pitch(PitchLetter.C, 0, 4)}
-          onKeyPress={pitch => {
+        {renderPianoNoteDiagram({
+          key: "pianoNoteDiagram", // prevent the component from unmounting when changing slides
+          pitch: new Pitch(PitchLetter.C, 0, 4),
+          onKeyPress: pitch => {
             if ((pitch.letter === PitchLetter.C) && (pitch.signedAccidental === 0)) {
               slideshow.tryToMoveToNextSlide();
             }
-          }}
-          labelWhiteKeys={true}
-          labelBlackKeys={false} />
+          },
+          labelWhiteKeys: true,
+          labelBlackKeys: false
+        })}
         <p>Play a <strong>C</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
       </div>
     )),
@@ -486,113 +531,120 @@ export const pianoTheorySlideGroups = [
     new Slide("note-d", (slideshow) => (
       <div>
         <p>When moving one white key to the right, we also move forward by one letter in the English alphabet, so this key is called <strong>D</strong>.</p>
-        <p>Play a <strong>D</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
-        <PianoNoteDiagram
-          key="pianoNoteDiagram" // prevent the component from unmounting when changing slides
-          pitch={new Pitch(PitchLetter.D, 0, 4)}
-          onKeyPress={pitch => {
+        {renderPianoNoteDiagram({
+          key: "pianoNoteDiagram", // prevent the component from unmounting when changing slides
+          pitch: new Pitch(PitchLetter.D, 0, 4),
+          onKeyPress: pitch => {
             if ((pitch.letter === PitchLetter.D) && (pitch.signedAccidental === 0)) {
               slideshow.tryToMoveToNextSlide();
             }
-          }}
-          labelWhiteKeys={true}
-          labelBlackKeys={false} />
+          },
+          labelWhiteKeys: true,
+          labelBlackKeys: false
+        })}
+        <p>Play a <strong>D</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
       </div>
     )),
     
     new Slide("note-e", (slideshow) => (
       <div>
         <p>This key is called <strong>E</strong>.</p>
-        <p>Play an <strong>E</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
-        <PianoNoteDiagram
-          key="pianoNoteDiagram" // prevent the component from unmounting when changing slides
-          pitch={new Pitch(PitchLetter.E, 0, 4)}
-          onKeyPress={pitch => {
+        {renderPianoNoteDiagram({
+          key: "pianoNoteDiagram", // prevent the component from unmounting when changing slides
+          pitch: new Pitch(PitchLetter.E, 0, 4),
+          onKeyPress: pitch => {
             if ((pitch.letter === PitchLetter.E) && (pitch.signedAccidental === 0)) {
               slideshow.tryToMoveToNextSlide();
             }
-          }}
-          labelWhiteKeys={true}
-          labelBlackKeys={false} />
+          },
+          labelWhiteKeys: true,
+          labelBlackKeys: false
+        })}
+        <p>Play an <strong>E</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
       </div>
     )),
     
     new Slide("note-f", (slideshow) => (
       <div>
         <p>This key is called <strong>F</strong>.</p>
-        <p>Play an <strong>F</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
-        <PianoNoteDiagram
-          key="pianoNoteDiagram" // prevent the component from unmounting when changing slides
-          pitch={new Pitch(PitchLetter.F, 0, 4)}
-          onKeyPress={pitch => {
+        {renderPianoNoteDiagram({
+          key: "pianoNoteDiagram", // prevent the component from unmounting when changing slides
+          pitch: new Pitch(PitchLetter.F, 0, 4),
+          onKeyPress: pitch => {
             if ((pitch.letter === PitchLetter.F) && (pitch.signedAccidental === 0)) {
               slideshow.tryToMoveToNextSlide();
             }
-          }}
-          labelWhiteKeys={true}
-          labelBlackKeys={false} />
+          },
+          labelWhiteKeys: true,
+          labelBlackKeys: false
+        })}
+        <p>Play an <strong>F</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
       </div>
     )),
     
     new Slide("note-g", (slideshow) => (
       <div>
         <p>This key is called <strong>G</strong>.</p>
-        <p>Play a <strong>G</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
-        <PianoNoteDiagram
-          key="pianoNoteDiagram" // prevent the component from unmounting when changing slides
-          pitch={new Pitch(PitchLetter.G, 0, 4)}
-          onKeyPress={pitch => {
+        {renderPianoNoteDiagram({
+          key: "pianoNoteDiagram", // prevent the component from unmounting when changing slides
+          pitch: new Pitch(PitchLetter.G, 0, 4),
+          onKeyPress: pitch => {
             if ((pitch.letter === PitchLetter.G) && (pitch.signedAccidental === 0)) {
               slideshow.tryToMoveToNextSlide();
             }
-          }}
-          labelWhiteKeys={true}
-          labelBlackKeys={false} />
+          },
+          labelWhiteKeys: true,
+          labelBlackKeys: false
+        })}
+        <p>Play a <strong>G</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
       </div>
     )),
     
     new Slide("note-a", (slideshow) => (
       <div>
         <p>After "G" there is no "H" key &mdash; instead we jump backwards through the English alphabet to <strong>A</strong>.</p>
-        <p>Play an <strong>A</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
-        <PianoNoteDiagram
-          key="pianoNoteDiagram" // prevent the component from unmounting when changing slides
-          pitch={new Pitch(PitchLetter.A, 0, 4)}
-          onKeyPress={pitch => {
+        {renderPianoNoteDiagram({
+          key: "pianoNoteDiagram", // prevent the component from unmounting when changing slides
+          pitch: new Pitch(PitchLetter.A, 0, 4),
+          onKeyPress: pitch => {
             if ((pitch.letter === PitchLetter.A) && (pitch.signedAccidental === 0)) {
               slideshow.tryToMoveToNextSlide();
             }
-          }}
-          labelWhiteKeys={true}
-          labelBlackKeys={false} />
+          },
+          labelWhiteKeys: true,
+          labelBlackKeys: false
+        })}
+        <p>Play an <strong>A</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
       </div>
     )),
     
     new Slide("note-b", (slideshow) => (
       <div>
         <p>The last white key is called <strong>B</strong>.</p>
-        <p>Play a <strong>B</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
-        <PianoNoteDiagram
-          key="pianoNoteDiagram" // prevent the component from unmounting when changing slides
-          pitch={new Pitch(PitchLetter.B, 0, 4)}
-          onKeyPress={pitch => {
+        {renderPianoNoteDiagram({
+          key: "pianoNoteDiagram", // prevent the component from unmounting when changing slides
+          pitch: new Pitch(PitchLetter.B, 0, 4),
+          onKeyPress: pitch => {
             if ((pitch.letter === PitchLetter.B) && (pitch.signedAccidental === 0)) {
               slideshow.tryToMoveToNextSlide();
             }
-          }}
-          labelWhiteKeys={true}
-          labelBlackKeys={false} />
+          },
+          labelWhiteKeys: true,
+          labelBlackKeys: false
+        })}
+        <p>Play a <strong>B</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
       </div>
     )),
     
     new Slide("white-notes-summary", () => (
       <div>
-        <p>Study this slide, then move to the next slide to test your knowledge of white key names with a quiz.</p>
+        <p>Study this slide, then move to the next slide to practice your knowledge of white key names with an interactive exercise.</p>
         <PianoNotesDiagram
           key="pianoNoteDiagram" // prevent the component from unmounting when changing slides
           lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
           highestPitch={new Pitch(PitchLetter.B, 0, 4)}
           maxWidth={maxOneOctavePianoWidth}
+          labelWhiteKeys={true}
           labelBlackKeys={false} />
       </div>
     )),
@@ -616,120 +668,127 @@ export const pianoTheorySlideGroups = [
       <div>
         <p>Now let's learn the names of the 5 black piano keys in this section of the piano.</p>
         <p>The key highlighted below, like all black keys, has multiple names. One name for it is <strong>C♯</strong> (pronounced "C sharp").</p>
-        <p>The '♯' ("sharp") symbol means the pitch is raised by one key, so C♯ means "the key to the right of C".</p>
-        <p>Play a <strong>C♯</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
-        <PianoNoteDiagram
-          key="pianoNoteDiagram" // prevent the component from unmounting when changing slides
-          pitch={new Pitch(PitchLetter.C, 1, 4)}
-          onKeyPress={pitch => {
+        <p>The '♯' ("sharp") symbol means the note is raised by one key, so C♯ means "the key to the right of C".</p>
+        {renderPianoNoteDiagram({
+          key: "pianoNoteDiagram", // prevent the component from unmounting when changing slides
+          pitch: new Pitch(PitchLetter.C, 1, 4),
+          onKeyPress: pitch => {
             if (pitch.midiNumberNoOctave === (new Pitch(PitchLetter.C, 1, 4)).midiNumberNoOctave) {
               slideshow.tryToMoveToNextSlide();
             }
-          }}
-          labelWhiteKeys={true}
-          labelBlackKeys={true}
-          useSharps={true}
-          showLetterPredicate={p => (p.midiNumber <= (new Pitch(PitchLetter.C, 1, 4)).midiNumber)} />
+          },
+          labelWhiteKeys: true,
+          labelBlackKeys: true,
+          useSharps: true,
+          showLetterPredicate: p => (p.midiNumber <= (new Pitch(PitchLetter.C, 1, 4)).midiNumber)
+        })}
+        <p>Play a <strong>C♯</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
       </div>
     )),
     
     new Slide("note-d-flat", (slideshow) => (
       <div>
         <p>Another name for the same key is <strong>D♭</strong> (pronounced "D flat").</p>
-        <p>The '♭' ("flat") symbol means the pitch is lowered by one key, so D♭ means "the key to the left of D".</p>
-        <p>Play a <strong>D♭</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
-        <PianoNoteDiagram
-          key="pianoNoteDiagram" // prevent the component from unmounting when changing slides
-          pitch={new Pitch(PitchLetter.C, 1, 4)}
-          onKeyPress={pitch => {
-            if (pitch.midiNumberNoOctave === (new Pitch(PitchLetter.C, 1, 4)).midiNumberNoOctave) {
+        <p>The '♭' ("flat") symbol means the note is lowered by one key, so D♭ means "the key to the left of D".</p>
+        {renderPianoNoteDiagram({
+          key: "pianoNoteDiagram", // prevent the component from unmounting when changing slides
+          pitch: new Pitch(PitchLetter.D, -1, 4),
+          onKeyPress: pitch => {
+            if (pitch.midiNumberNoOctave === (new Pitch(PitchLetter.D, -1, 4)).midiNumberNoOctave) {
               slideshow.tryToMoveToNextSlide();
             }
-          }}
-          labelWhiteKeys={true}
-          labelBlackKeys={true}
-          useSharps={false}
-          showLetterPredicate={p => p.isEnharmonic(new Pitch(PitchLetter.D, 0, 4)) || p.isEnharmonic(new Pitch(PitchLetter.D, -1, 4))} />
+          },
+          labelWhiteKeys: true,
+          labelBlackKeys: true,
+          useSharps: false,
+          showLetterPredicate: p => p.isEnharmonic(new Pitch(PitchLetter.D, 0, 4)) || p.isEnharmonic(new Pitch(PitchLetter.D, -1, 4))
+        })}
+        <p>Play a <strong>D♭</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
       </div>
     )),
     
     new Slide("note-d-sharp-e-flat", (slideshow) => (
       <div>
         <p>This key is called <strong>D♯</strong>, or <strong>E♭</strong>.</p>
-        <p>Play a <strong>D♯/E♭</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
-        <PianoNoteDiagram
-          key="pianoNoteDiagram" // prevent the component from unmounting when changing slides
-          pitch={new Pitch(PitchLetter.D, 1, 4)}
-          onKeyPress={pitch => {
+        {renderPianoNoteDiagram({
+          key: "pianoNoteDiagram", // prevent the component from unmounting when changing slides
+          pitch: new Pitch(PitchLetter.D, 1, 4),
+          onKeyPress: pitch => {
             if (pitch.midiNumberNoOctave === (new Pitch(PitchLetter.D, 1, 4)).midiNumberNoOctave) {
               slideshow.tryToMoveToNextSlide();
             }
-          }}
-          labelWhiteKeys={false}
-          labelBlackKeys={true} />
+          },
+          labelWhiteKeys: false,
+          labelBlackKeys: true
+        })}
+        <p>Play a <strong>D♯/E♭</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
       </div>
     )),
 
     new Slide("note-f-sharp-g-flat", (slideshow) => (
       <div>
         <p>This key is called <strong>F♯</strong>, or <strong>G♭</strong>.</p>
+        {renderPianoNoteDiagram({
+          key: "pianoNoteDiagram", // prevent the component from unmounting when changing slides
+          pitch: new Pitch(PitchLetter.F, 1, 4),
+          onKeyPress: pitch => {
+            if (pitch.midiNumberNoOctave === (new Pitch(PitchLetter.F, 1, 4)).midiNumberNoOctave) {
+              slideshow.tryToMoveToNextSlide();
+            }
+          },
+          labelWhiteKeys: false,
+          labelBlackKeys: true
+        })}
         <p>Play a <strong>F♯/G♭</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
-        <PianoNoteDiagram
-          key="pianoNoteDiagram" // prevent the component from unmounting when changing slides
-          pitch={new Pitch(PitchLetter.F, 1, 4)}
-            onKeyPress={pitch => {
-              if (pitch.midiNumberNoOctave === (new Pitch(PitchLetter.F, 1, 4)).midiNumberNoOctave) {
-                slideshow.tryToMoveToNextSlide();
-              }
-            }}
-          labelWhiteKeys={false}
-          labelBlackKeys={true} />
       </div>
     )),
 
     new Slide("note-g-sharp-a-flat", (slideshow) => (
       <div>
         <p>This key is called <strong>G♯</strong>, or <strong>A♭</strong>.</p>
-        <p>Play a <strong>G♯/A♭</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
-        <PianoNoteDiagram
-          key="pianoNoteDiagram" // prevent the component from unmounting when changing slides
-          pitch={new Pitch(PitchLetter.G, 1, 4)}
-          onKeyPress={pitch => {
+        {renderPianoNoteDiagram({
+          key: "pianoNoteDiagram", // prevent the component from unmounting when changing slides
+          pitch: new Pitch(PitchLetter.G, 1, 4),
+          onKeyPress: pitch => {
             if (pitch.midiNumberNoOctave === (new Pitch(PitchLetter.G, 1, 4)).midiNumberNoOctave) {
               slideshow.tryToMoveToNextSlide();
             }
-          }}
-          labelWhiteKeys={false}
-          labelBlackKeys={true} />
+          },
+          labelWhiteKeys: false,
+          labelBlackKeys: true
+        })}
+        <p>Play a <strong>G♯/A♭</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
       </div>
     )),
 
     new Slide("note-a-sharp-b-flat", (slideshow) => (
       <div>
         <p>The last black key is called <strong>A♯</strong>, or <strong>B♭</strong>.</p>
-        <p>Play a <strong>A♯/B♭</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
-        <PianoNoteDiagram
-          key="pianoNoteDiagram" // prevent the component from unmounting when changing slides
-          pitch={new Pitch(PitchLetter.B, -1, 4)}
-          onKeyPress={pitch => {
+        {renderPianoNoteDiagram({
+          key: "pianoNoteDiagram", // prevent the component from unmounting when changing slides
+          pitch: new Pitch(PitchLetter.B, -1, 4),
+          onKeyPress: pitch => {
             if (pitch.midiNumberNoOctave === (new Pitch(PitchLetter.B, -1, 4)).midiNumberNoOctave) {
               slideshow.tryToMoveToNextSlide();
             }
-          }}
-          labelWhiteKeys={false}
-          labelBlackKeys={true} />
+          },
+          labelWhiteKeys: false,
+          labelBlackKeys: true
+        })}
+        <p>Play a <strong>A♯/B♭</strong> on your MIDI keyboard (or on-screen) to continue to the next slide.</p>
       </div>
     )),
     
     new Slide("black-notes-summary", () => (
       <div>
-        <p>Study this slide, then move to the next slide to test your knowledge of black key names with a quiz.</p>
+        <p>Study this slide, then move to the next slide to practice your knowledge of black key names with an interactive exercise.</p>
         <PianoNotesDiagram
           key="pianoNoteDiagram" // prevent the component from unmounting when changing slides
           lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
           highestPitch={new Pitch(PitchLetter.B, 0, 4)}
           maxWidth={maxOneOctavePianoWidth}
-          labelWhiteKeys={false} />
+          labelWhiteKeys={false}
+          labelBlackKeys={true} />
       </div>
     )),
     
@@ -756,23 +815,28 @@ export const pianoTheorySlideGroups = [
             lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
             highestPitch={new Pitch(PitchLetter.B, 0, 4)}
             maxWidth={maxOneOctavePianoWidth / 2}
-            labelWhiteKeys={true} />
+            labelWhiteKeys={true}
+            labelBlackKeys={true} />
         </p>
         <p>And here are all the note names on an 88 key piano keyboard:</p>
         <PianoNotesDiagram
           lowestPitch={fullPianoLowestPitch}
           highestPitch={fullPianoHighestPitch}
-          maxWidth={maxPianoWidth} />
+          maxWidth={maxPianoWidth}
+          labelWhiteKeys={true}
+          labelBlackKeys={true} />
       </div>
     )),
     
     new Slide("notes-summary", () => (
       <div>
-        <p>Study this note names, then move to the next slide to test your knowledge with a quiz.</p>
+        <p>Study these note names, then move to the next slide to practice your knowledge with an interactive exercise.</p>
         <PianoNotesDiagram
           lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
           highestPitch={new Pitch(PitchLetter.B, 0, 4)}
-          maxWidth={maxOneOctavePianoWidth} />
+          maxWidth={maxOneOctavePianoWidth}
+          labelWhiteKeys={true}
+          labelBlackKeys={true} />
       </div>
     )),
 

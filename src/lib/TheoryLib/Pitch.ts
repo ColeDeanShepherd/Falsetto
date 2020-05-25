@@ -368,6 +368,10 @@ export class Pitch {
     );
   }
 
+  public copy(): Pitch {
+    return new Pitch(this.letter, this.signedAccidental, this.octaveNumber);
+  }
+
   public isEnharmonic(pitch: Pitch): boolean {
     return this.midiNumber === pitch.midiNumber;
   }
