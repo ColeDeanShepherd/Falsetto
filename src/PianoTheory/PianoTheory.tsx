@@ -650,18 +650,16 @@ export const pianoTheorySlideGroups = [
     )),
     
     new Slide("white-notes-quiz", () => (
-      <LimitedWidthContentContainer>
-        <div style={{ marginTop: "1em" }}>
-          {createStudyFlashCardSetComponent(
-            PianoNotes.createFlashCardSet(naturalPitches),
-            /*isEmbedded*/ false,
-            /*hideMoreInfoUri*/ true,
-            /*title*/ "White Piano Key Names Exercise",
-            /*style*/ undefined,
-            /*enableSettings*/ undefined,
-            /*showRelatedExercises*/ false)}
+      <div style={{ marginTop: "1em" }}>
+        {createStudyFlashCardSetComponent(
+          PianoNotes.createFlashCardSet(naturalPitches),
+          /*isEmbedded*/ false,
+          /*hideMoreInfoUri*/ true,
+          /*title*/ "White Piano Key Names Exercise",
+          /*style*/ undefined,
+          /*enableSettings*/ undefined,
+          /*showRelatedExercises*/ false)}
         </div>
-      </LimitedWidthContentContainer>
     )),
     
     new Slide("note-c-sharp", (slideshow) => (
@@ -793,18 +791,16 @@ export const pianoTheorySlideGroups = [
     )),
     
     new Slide("black-notes-quiz", () => (
-      <LimitedWidthContentContainer>
-        <div style={{ marginTop: "1em" }}>
-          {createStudyFlashCardSetComponent(
-            PianoNotes.createFlashCardSet(accidentalPitches),
-            /*isEmbedded*/ false,
-            /*hideMoreInfoUri*/ true,
-            /*title*/ "Black Piano Key Names Exercise",
-            /*style*/ undefined,
-            /*enableSettings*/ undefined,
-            /*showRelatedExercises*/ false)}
-        </div>
-      </LimitedWidthContentContainer>
+      <div style={{ marginTop: "1em" }}>
+        {createStudyFlashCardSetComponent(
+          PianoNotes.createFlashCardSet(accidentalPitches),
+          /*isEmbedded*/ false,
+          /*hideMoreInfoUri*/ true,
+          /*title*/ "Black Piano Key Names Exercise",
+          /*style*/ undefined,
+          /*enableSettings*/ undefined,
+          /*showRelatedExercises*/ false)}
+      </div>
     )),
     
     new Slide("all-notes", () => (
@@ -841,18 +837,16 @@ export const pianoTheorySlideGroups = [
     )),
 
     new Slide("notes-quiz", () => (
-      <LimitedWidthContentContainer>
-        <div style={{ marginTop: "1em" }}>
-          {createStudyFlashCardSetComponent(
-            PianoNotes.createFlashCardSet(allPitches),
-            /*isEmbedded*/ false,
-            /*hideMoreInfoUri*/ true,
-            /*title*/ "Piano Notes Exercise",
-            /*style*/ undefined,
-            /*enableSettings*/ undefined,
-            /*showRelatedExercises*/ false)}
-        </div>
-      </LimitedWidthContentContainer>
+      <div style={{ marginTop: "1em" }}>
+        {createStudyFlashCardSetComponent(
+          PianoNotes.createFlashCardSet(allPitches),
+          /*isEmbedded*/ false,
+          /*hideMoreInfoUri*/ true,
+          /*title*/ "Piano Notes Exercise",
+          /*style*/ undefined,
+          /*enableSettings*/ undefined,
+          /*showRelatedExercises*/ false)}
+      </div>
     )),
   ]),
 
@@ -940,18 +934,16 @@ export const pianoTheorySlideGroups = [
       </div>
     )),
     new Slide("scales-quiz", () => (
-      <LimitedWidthContentContainer>
-        <div style={{ marginTop: "1em" }}>
-          {createStudyFlashCardSetComponent(
-            ScalesQuiz.flashCardSet,
-            /*isEmbedded*/ false,
-            /*hideMoreInfoUri*/ true,
-            /*title*/ undefined,
-            /*style*/ undefined,
-            /*enableSettings*/ undefined,
-            /*showRelatedExercises*/ false)}
-        </div>
-      </LimitedWidthContentContainer>
+      <div style={{ marginTop: "1em" }}>
+        {createStudyFlashCardSetComponent(
+          ScalesQuiz.flashCardSet,
+          /*isEmbedded*/ false,
+          /*hideMoreInfoUri*/ true,
+          /*title*/ undefined,
+          /*style*/ undefined,
+          /*enableSettings*/ undefined,
+          /*showRelatedExercises*/ false)}
+      </div>
     )),
   ]),
 
@@ -983,128 +975,110 @@ export const pianoTheorySlideGroups = [
     
     new Slide("tertial-chords", () => (
       <div>
-        <LimitedWidthContentContainer maxWidth={1000}>
-          <p>In practice, most chords are built with <strong>thirds</strong>.</p>
-          <p>A <strong>third</strong> in this context is an <strong>interval</strong> (a distance between two notes) that spans three letters.</p>
-          <p>A chord is built with thirds if, when you list the notes of the chord starting with the root note and proceeding in left-to-right order on the piano keyboard, each pair of adjacent notes is a third apart.</p>
-          <p>For example, the <strong>C Major chord</strong> we've seen is built with thirds: C &amp; E are a third apart (they span 3 letters &mdash; C, D, E), and E &amp; G are a third apart (they span 3 letters &mdash; E, F, G)</p>
-          <ThirdsDiagram />
-        </LimitedWidthContentContainer>
+        <p>In practice, most chords are built with <strong>thirds</strong>.</p>
+        <p>A <strong>third</strong> in this context is an <strong>interval</strong> (a distance between two notes) that spans three letters.</p>
+        <p>A chord is built with thirds if, when you list the notes of the chord starting with the root note and proceeding in left-to-right order on the piano keyboard, each pair of adjacent notes is a third apart.</p>
+        <p>For example, the <strong>C Major chord</strong> we've seen is built with thirds: C &amp; E are a third apart (they span 3 letters &mdash; C, D, E), and E &amp; G are a third apart (they span 3 letters &mdash; E, F, G)</p>
+        <ThirdsDiagram />
       </div>
     )),
 
     new Slide("chord-major-relative-formula", () => (
       <div>
-        <LimitedWidthContentContainer>
-          <p>Like scales, chords have major-scale-relative formulas.</p>
-          <p>For example, the major-scale-relative formula for all <strong>Major chords</strong> is <strong>1 3 5</strong>, meaning major chords consist of the 1st, 3rd, and 5th notes of the major scale associated with the root note of the chord.</p>
-          <p>So, C Major chords consist the 1st, 3rd, and 5th notes of the C Major scale: C, E, G.</p>
-          
-          <p style={{fontSize: "1.25em", fontWeight: "bold", textDecoration: "underline", textAlign: "center"}}>C Major</p>
-          <ChordView
-            chord={new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))}
-            showChordInfoText={false}
-            showChordFormulaOnPiano={true} />
-        </LimitedWidthContentContainer>
+        <p>Like scales, chords have major-scale-relative formulas.</p>
+        <p>For example, the major-scale-relative formula for all <strong>Major chords</strong> is <strong>1 3 5</strong>, meaning major chords consist of the 1st, 3rd, and 5th notes of the major scale associated with the root note of the chord.</p>
+        <p>So, C Major chords consist the 1st, 3rd, and 5th notes of the C Major scale: C, E, G.</p>
+        
+        <p style={{fontSize: "1.25em", fontWeight: "bold", textDecoration: "underline", textAlign: "center"}}>C Major</p>
+        <ChordView
+          chord={new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))}
+          showChordInfoText={false}
+          showChordFormulaOnPiano={true} />
       </div>
     )),
     
     new Slide("minor-chord-formula", () => (
       <div>
-        <LimitedWidthContentContainer>
-          <p>Another important type of chord is the <strong>Minor chord</strong>.</p>
+        <p>Another important type of chord is the <strong>Minor chord</strong>.</p>
 
-          <p>All <strong>Minor chords</strong> have the major-scale-relative formula: <strong>1 3♭ 5</strong></p>
-          <p><p>So, C Minor chords, for example, consist the 1st, flattened 3rd, and 5th notes of the C Major scale: C, E♭, G.</p></p>
-          <p style={{fontSize: "1.25em", fontWeight: "bold", textDecoration: "underline", textAlign: "center"}}>C Minor</p>
-          <ChordView
-            chord={new Chord(ChordType.Minor, new Pitch(PitchLetter.C, 0, 4))}
-            showChordInfoText={false}
-            showChordFormulaOnPiano={true} />
-        </LimitedWidthContentContainer>
+        <p>All <strong>Minor chords</strong> have the major-scale-relative formula: <strong>1 3♭ 5</strong></p>
+        <p><p>So, C Minor chords, for example, consist the 1st, flattened 3rd, and 5th notes of the C Major scale: C, E♭, G.</p></p>
+        <p style={{fontSize: "1.25em", fontWeight: "bold", textDecoration: "underline", textAlign: "center"}}>C Minor</p>
+        <ChordView
+          chord={new Chord(ChordType.Minor, new Pitch(PitchLetter.C, 0, 4))}
+          showChordInfoText={false}
+          showChordFormulaOnPiano={true} />
       </div>
     )),
 
     new Slide("diminished-chord-formula", () => (
       <div>
-        <LimitedWidthContentContainer>
-          <p>Another important type of chord is the <strong>Diminished chord</strong>.</p>
+        <p>Another important type of chord is the <strong>Diminished chord</strong>.</p>
 
-          <p>All <strong>Diminished chords</strong> have the major-scale-relative formula: <strong>1 3♭ 5♭</strong></p>
-          <p style={{fontSize: "1.25em", fontWeight: "bold", textDecoration: "underline", textAlign: "center"}}>C Diminished</p>
-          <ChordView
-            chord={new Chord(ChordType.Diminished, new Pitch(PitchLetter.C, 0, 4))}
-            showChordInfoText={false}
-            showChordFormulaOnPiano={true} />
-
-        </LimitedWidthContentContainer>
+        <p>All <strong>Diminished chords</strong> have the major-scale-relative formula: <strong>1 3♭ 5♭</strong></p>
+        <p style={{fontSize: "1.25em", fontWeight: "bold", textDecoration: "underline", textAlign: "center"}}>C Diminished</p>
+        <ChordView
+          chord={new Chord(ChordType.Diminished, new Pitch(PitchLetter.C, 0, 4))}
+          showChordInfoText={false}
+          showChordFormulaOnPiano={true} />
       </div>
     )),
     
     new Slide("dominant-7-chord-formula", () => (
       <div>
-        <LimitedWidthContentContainer>
-          <p>One last important type of chord is the <strong>Dominant 7th chord</strong> (also simply called the <strong>7th chord</strong>).</p>
+        <p>One last important type of chord is the <strong>Dominant 7th chord</strong> (also simply called the <strong>7th chord</strong>).</p>
 
-          <p>All <strong>Dominant 7th chords</strong> have the major-scale-relative formula: <strong>1 3 5 7♭</strong></p>
-          <p style={{fontSize: "1.25em", fontWeight: "bold", textDecoration: "underline", textAlign: "center"}}>C Dominant 7</p>
-          <ChordView
-            chord={new Chord(ChordType.Dom7, new Pitch(PitchLetter.C, 0, 4))}
-            showChordInfoText={false}
-            showChordFormulaOnPiano={true} />
-
-        </LimitedWidthContentContainer>
+        <p>All <strong>Dominant 7th chords</strong> have the major-scale-relative formula: <strong>1 3 5 7♭</strong></p>
+        <p style={{fontSize: "1.25em", fontWeight: "bold", textDecoration: "underline", textAlign: "center"}}>C Dominant 7</p>
+        <ChordView
+          chord={new Chord(ChordType.Dom7, new Pitch(PitchLetter.C, 0, 4))}
+          showChordInfoText={false}
+          showChordFormulaOnPiano={true} />
       </div>
     )),
     
     new Slide("chords-introduction-review", () => (
       <div>
-        <LimitedWidthContentContainer maxWidth={1000}>
-          <p>Review material below, then move to the next slide to test your knowledge of chords with a quiz.</p>
-          <br />
-          <p>Chords are sets of <strong>two or more notes played simultaneously</strong>.</p>
-          <p>You are free to repeat chord notes as many times as you like, and play chord notes in any order, when playing a chord.</p>
-          <p>In practice, most chords are built with <strong>thirds</strong>.</p>
-          <p>An <strong>interval</strong> is the distance between two notes.</p>
-          <p>A <strong>third</strong> is an interval that spans three letters.</p>
-          <p>When we say that a chord is built in thirds, we only care that chord notes are thirds apart when <strong>starting from the root note</strong> and <strong>listing the remaining notes in left-to-right order</strong> on the piano keyboard.</p>
-          <p>The major-scale-relative formula for <strong>major chords</strong> is: <strong>1 3 5</strong></p>
-          <p>The major-scale-relative formula for <strong>minor chords</strong> is: <strong>1 3♭ 5</strong></p>
-          <p>The major-scale-relative formula for <strong>diminished chords</strong> is: <strong>1 3♭ 5♭</strong></p>
-          <p>The major-scale-relative formula for <strong>dominant 7th</strong> chords is: <strong>1 3 5 7♭</strong></p>
-        </LimitedWidthContentContainer>
+        <p>Review material below, then move to the next slide to test your knowledge of chords with a quiz.</p>
+        <br />
+        <p>Chords are sets of <strong>two or more notes played simultaneously</strong>.</p>
+        <p>You are free to repeat chord notes as many times as you like, and play chord notes in any order, when playing a chord.</p>
+        <p>In practice, most chords are built with <strong>thirds</strong>.</p>
+        <p>An <strong>interval</strong> is the distance between two notes.</p>
+        <p>A <strong>third</strong> is an interval that spans three letters.</p>
+        <p>When we say that a chord is built in thirds, we only care that chord notes are thirds apart when <strong>starting from the root note</strong> and <strong>listing the remaining notes in left-to-right order</strong> on the piano keyboard.</p>
+        <p>The major-scale-relative formula for <strong>major chords</strong> is: <strong>1 3 5</strong></p>
+        <p>The major-scale-relative formula for <strong>minor chords</strong> is: <strong>1 3♭ 5</strong></p>
+        <p>The major-scale-relative formula for <strong>diminished chords</strong> is: <strong>1 3♭ 5♭</strong></p>
+        <p>The major-scale-relative formula for <strong>dominant 7th</strong> chords is: <strong>1 3 5 7♭</strong></p>
       </div>
     )),
     
     new Slide("chords-introduction-quiz", () => (
-      <LimitedWidthContentContainer>
-        <div style={{ marginTop: "1em" }}>
-          {createStudyFlashCardSetComponent(
-            ChordsIntroQuiz.flashCardSet,
-            /*isEmbedded*/ false,
-            /*hideMoreInfoUri*/ true,
-            /*title*/ undefined,
-            /*style*/ undefined,
-            /*enableSettings*/ undefined,
-            /*showRelatedExercises*/ false)}
-        </div>
-      </LimitedWidthContentContainer>
+      <div style={{ marginTop: "1em" }}>
+        {createStudyFlashCardSetComponent(
+          ChordsIntroQuiz.flashCardSet,
+          /*isEmbedded*/ false,
+          /*hideMoreInfoUri*/ true,
+          /*title*/ undefined,
+          /*style*/ undefined,
+          /*enableSettings*/ undefined,
+          /*showRelatedExercises*/ false)}
+      </div>
     )),
 
     new Slide("diatonic-chords", () => (
       <div>
-        <LimitedWidthContentContainer maxWidth={1000}>
-          <p>Generally, in a section of music, musicians will restrict themselves to the chords consisting solely of notes from a particular scale &mdash; <strong>diatonic chords</strong>.</p>
-          <p>For example, let's take the C Major scale, which consists of the notes: C, D, E, F, G, A, B. Any combination of two or more of these notes is a <strong>diatonic chord</strong> of the C Major scale.</p>
-          <p>One example of a diatonic triad in the C Major scale is <strong>G Major</strong>, which has a root note of <strong>G</strong> (the 5th note in the C Major scale) and consists of the notes <strong>G, B, D</strong>, all of which are in the C Major scale:</p>
-          <p>
-            <ChordView
-              chord={new Chord(ChordType.Major, new Pitch(PitchLetter.G, 0, 4))}
-              showChordInfoText={false}
-              scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
-              showScaleDegreesOnPiano={true} />
-          </p>
-        </LimitedWidthContentContainer>
+        <p>Generally, in a section of music, musicians will restrict themselves to the chords consisting solely of notes from a particular scale &mdash; <strong>diatonic chords</strong>.</p>
+        <p>For example, let's take the C Major scale, which consists of the notes: C, D, E, F, G, A, B. Any combination of two or more of these notes is a <strong>diatonic chord</strong> of the C Major scale.</p>
+        <p>One example of a diatonic triad in the C Major scale is <strong>G Major</strong>, which has a root note of <strong>G</strong> (the 5th note in the C Major scale) and consists of the notes <strong>G, B, D</strong>, all of which are in the C Major scale:</p>
+        <p>
+          <ChordView
+            chord={new Chord(ChordType.Major, new Pitch(PitchLetter.G, 0, 4))}
+            showChordInfoText={false}
+            scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
+            showScaleDegreesOnPiano={true} />
+        </p>
       </div>
     )),
 
@@ -1222,18 +1196,16 @@ export const pianoTheorySlideGroups = [
     )),
     
     new Slide("diatonic-chords-quiz", () => (
-      <LimitedWidthContentContainer>
-        <div style={{ marginTop: "1em" }}>
-          {createStudyFlashCardSetComponent(
-            DiatonicChordsQuiz.flashCardSet,
-            /*isEmbedded*/ false,
-            /*hideMoreInfoUri*/ true,
-            /*title*/ undefined,
-            /*style*/ undefined,
-            /*enableSettings*/ undefined,
-            /*showRelatedExercises*/ false)}
-        </div>
-      </LimitedWidthContentContainer>
+      <div style={{ marginTop: "1em" }}>
+        {createStudyFlashCardSetComponent(
+          DiatonicChordsQuiz.flashCardSet,
+          /*isEmbedded*/ false,
+          /*hideMoreInfoUri*/ true,
+          /*title*/ undefined,
+          /*style*/ undefined,
+          /*enableSettings*/ undefined,
+          /*showRelatedExercises*/ false)}
+      </div>
     )),
     
     /*new Slide("root-position", () => (
@@ -1397,164 +1369,156 @@ export const pianoTheorySlideGroups = [
     )),
     new Slide("circle-progression", () => (
       <div>
-        <LimitedWidthContentContainer>
-          <p>You can repeatedly chain together descending fifth progressions to create a <strong>circle progression</strong>, which progresses through all 7 diatonic chords of a scale:</p>
-          <p>Starting with <strong>I</strong> in a major scale and chaining together descending fifth progressions, we get: <strong>I - IV - vii° - iii - vi - ii - V - I</strong>:</p>
-        <ChordProgressionPlayer
-          chordsPitches={[
-            [new Pitch(PitchLetter.C, 0, 3), new Pitch(PitchLetter.G, 0, 3), new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4)],
-            [new Pitch(PitchLetter.F, 0, 2), new Pitch(PitchLetter.A, 0, 3), new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.F, 0, 4)],
-            [new Pitch(PitchLetter.B, 0, 2), new Pitch(PitchLetter.F, 0, 3), new Pitch(PitchLetter.B, 0, 3), new Pitch(PitchLetter.D, 0, 4)],
-            [new Pitch(PitchLetter.E, 0, 2), new Pitch(PitchLetter.G, 0, 3), new Pitch(PitchLetter.B, 0, 3), new Pitch(PitchLetter.E, 0, 4)],
-            [new Pitch(PitchLetter.A, 0, 2), new Pitch(PitchLetter.E, 0, 3), new Pitch(PitchLetter.A, 0, 3), new Pitch(PitchLetter.C, 0, 4)],
-            [new Pitch(PitchLetter.D, 0, 2), new Pitch(PitchLetter.F, 0, 3), new Pitch(PitchLetter.A, 0, 3), new Pitch(PitchLetter.D, 0, 4)],
-            [new Pitch(PitchLetter.G, 0, 2), new Pitch(PitchLetter.D, 0, 3), new Pitch(PitchLetter.G, 0, 3), new Pitch(PitchLetter.B, 0, 3)],
-            [new Pitch(PitchLetter.C, 0, 2), new Pitch(PitchLetter.E, 0, 3), new Pitch(PitchLetter.G, 0, 3), new Pitch(PitchLetter.C, 0, 4)],
-          ]}
-          chords={[
-            new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 3)),
-            new Chord(ChordType.Major, new Pitch(PitchLetter.F, 0, 2)),
-            new Chord(ChordType.Diminished, new Pitch(PitchLetter.B, 0, 2)),
-            new Chord(ChordType.Minor, new Pitch(PitchLetter.E, 0, 2)),
-            new Chord(ChordType.Minor, new Pitch(PitchLetter.A, 0, 2)),
-            new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 2)),
-            new Chord(ChordType.Major, new Pitch(PitchLetter.G, 0, 2)),
-            new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 2)),
-          ]}
-          scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
-          chordScaleDegreeNumbers={[1, 4, 7, 3, 6, 2, 5, 1]}
-          lowestPitch={new Pitch(PitchLetter.C, 0, 2)}
-          highestPitch={new Pitch(PitchLetter.B, 0, 5)}
-          octaveCount={4}
-          showRomanNumerals={true}
-          maxWidth={maxTwoOctavePianoWidth} />
-          <NoteText>Lower-case roman numerals with a <strong>°</strong> symbol means the chord is a <strong>diminished</strong> chord.</NoteText>
-        </LimitedWidthContentContainer>
+        <p>You can repeatedly chain together descending fifth progressions to create a <strong>circle progression</strong>, which progresses through all 7 diatonic chords of a scale:</p>
+        <p>Starting with <strong>I</strong> in a major scale and chaining together descending fifth progressions, we get: <strong>I - IV - vii° - iii - vi - ii - V - I</strong>:</p>
+      <ChordProgressionPlayer
+        chordsPitches={[
+          [new Pitch(PitchLetter.C, 0, 3), new Pitch(PitchLetter.G, 0, 3), new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4)],
+          [new Pitch(PitchLetter.F, 0, 2), new Pitch(PitchLetter.A, 0, 3), new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.F, 0, 4)],
+          [new Pitch(PitchLetter.B, 0, 2), new Pitch(PitchLetter.F, 0, 3), new Pitch(PitchLetter.B, 0, 3), new Pitch(PitchLetter.D, 0, 4)],
+          [new Pitch(PitchLetter.E, 0, 2), new Pitch(PitchLetter.G, 0, 3), new Pitch(PitchLetter.B, 0, 3), new Pitch(PitchLetter.E, 0, 4)],
+          [new Pitch(PitchLetter.A, 0, 2), new Pitch(PitchLetter.E, 0, 3), new Pitch(PitchLetter.A, 0, 3), new Pitch(PitchLetter.C, 0, 4)],
+          [new Pitch(PitchLetter.D, 0, 2), new Pitch(PitchLetter.F, 0, 3), new Pitch(PitchLetter.A, 0, 3), new Pitch(PitchLetter.D, 0, 4)],
+          [new Pitch(PitchLetter.G, 0, 2), new Pitch(PitchLetter.D, 0, 3), new Pitch(PitchLetter.G, 0, 3), new Pitch(PitchLetter.B, 0, 3)],
+          [new Pitch(PitchLetter.C, 0, 2), new Pitch(PitchLetter.E, 0, 3), new Pitch(PitchLetter.G, 0, 3), new Pitch(PitchLetter.C, 0, 4)],
+        ]}
+        chords={[
+          new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 3)),
+          new Chord(ChordType.Major, new Pitch(PitchLetter.F, 0, 2)),
+          new Chord(ChordType.Diminished, new Pitch(PitchLetter.B, 0, 2)),
+          new Chord(ChordType.Minor, new Pitch(PitchLetter.E, 0, 2)),
+          new Chord(ChordType.Minor, new Pitch(PitchLetter.A, 0, 2)),
+          new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 2)),
+          new Chord(ChordType.Major, new Pitch(PitchLetter.G, 0, 2)),
+          new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 2)),
+        ]}
+        scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
+        chordScaleDegreeNumbers={[1, 4, 7, 3, 6, 2, 5, 1]}
+        lowestPitch={new Pitch(PitchLetter.C, 0, 2)}
+        highestPitch={new Pitch(PitchLetter.B, 0, 5)}
+        octaveCount={4}
+        showRomanNumerals={true}
+        maxWidth={maxTwoOctavePianoWidth} />
+        <NoteText>Lower-case roman numerals with a <strong>°</strong> symbol means the chord is a <strong>diminished</strong> chord.</NoteText>
       </div>
     )),
     new Slide("voice-leading", () => (
       <div>
-        <LimitedWidthContentContainer>
-          <p>It is important to use good <strong>voice leading</strong> when playing chord progressions.</p>
-          <p><strong>Voice leading</strong> is the arrangement of chord notes in a progression to create smooth transitions between chords.</p>
-          <p>The most important rule of voice leading is to use the smallest possible movements when transitioning from one chord from the next.</p>
+        <p>It is important to use good <strong>voice leading</strong> when playing chord progressions.</p>
+        <p><strong>Voice leading</strong> is the arrangement of chord notes in a progression to create smooth transitions between chords.</p>
+        <p>The most important rule of voice leading is to use the smallest possible movements when transitioning from one chord from the next.</p>
 
-          <p>Here is an example of "bad" voice leading in a ii - V7 - I progression, which makes big jumps between each chord:</p>
-          <ChordProgressionPlayer
-            chordsPitches={[
-              [new Pitch(PitchLetter.D, 0, 5), new Pitch(PitchLetter.F, 0, 5), new Pitch(PitchLetter.A, 0, 5)],
-              [new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.B, 0, 4), new Pitch(PitchLetter.D, 0, 5), new Pitch(PitchLetter.F, 0, 5)],
-              [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]
-            ]}
-            chords={[
-              new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 4)),
-              new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)),
-              new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))
-            ]}
-            scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
-            chordScaleDegreeNumbers={[2, 5, 1]}
-            maxWidth={maxTwoOctavePianoWidth} />
+        <p>Here is an example of "bad" voice leading in a ii - V7 - I progression, which makes big jumps between each chord:</p>
+        <ChordProgressionPlayer
+          chordsPitches={[
+            [new Pitch(PitchLetter.D, 0, 5), new Pitch(PitchLetter.F, 0, 5), new Pitch(PitchLetter.A, 0, 5)],
+            [new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.B, 0, 4), new Pitch(PitchLetter.D, 0, 5), new Pitch(PitchLetter.F, 0, 5)],
+            [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]
+          ]}
+          chords={[
+            new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 4)),
+            new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)),
+            new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))
+          ]}
+          scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
+          chordScaleDegreeNumbers={[2, 5, 1]}
+          maxWidth={maxTwoOctavePianoWidth} />
 
-          <p>And here is an example of good voice leading:</p>
-          <ChordProgressionPlayer
-            chordsPitches={[
-              [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.A, 0, 4)],
-              [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.B, 0, 4)],
-              [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]
-            ]}
-            chords={[
-              new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 4)),
-              new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)),
-              new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))
-            ]}
-            scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
-            chordScaleDegreeNumbers={[2, 5, 1]}
-            maxWidth={maxTwoOctavePianoWidth} />
-        </LimitedWidthContentContainer>
+        <p>And here is an example of good voice leading:</p>
+        <ChordProgressionPlayer
+          chordsPitches={[
+            [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.A, 0, 4)],
+            [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.B, 0, 4)],
+            [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]
+          ]}
+          chords={[
+            new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 4)),
+            new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)),
+            new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))
+          ]}
+          scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
+          chordScaleDegreeNumbers={[2, 5, 1]}
+          maxWidth={maxTwoOctavePianoWidth} />
       </div>
     )),
     new Slide("chord-substitution", () => (
       <div>
-        <LimitedWidthContentContainer>
-          <p>One common technique used to spice up chord progressions is <strong>chord substitution</strong>.</p>
-          <p><strong>Chord substitution</strong> is replacing one chord with another that sounds similar or has a similar "feel" in the progression.</p>
-          <p>One way to find chords that sound similar to another chord is looking for chords which share many of the same notes.</p>
-          <p>For example, in C Major, the <strong>ii</strong> chord (D minor - D F A) and the <strong>IV</strong> chord (F Major - F A C) share two notes in common (F and A), so they have a similar sound and work as substitutes for each other in chord progressions.</p>
+        <p>One common technique used to spice up chord progressions is <strong>chord substitution</strong>.</p>
+        <p><strong>Chord substitution</strong> is replacing one chord with another that sounds similar or has a similar "feel" in the progression.</p>
+        <p>One way to find chords that sound similar to another chord is looking for chords which share many of the same notes.</p>
+        <p>For example, in C Major, the <strong>ii</strong> chord (D minor - D F A) and the <strong>IV</strong> chord (F Major - F A C) share two notes in common (F and A), so they have a similar sound and work as substitutes for each other in chord progressions.</p>
 
-          <p>So, we can take a ii - V - I progression:</p>
-          <ChordProgressionPlayer
-            chordsPitches={[
-              [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.A, 0, 4)],
-              [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.B, 0, 4)],
-              [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]
-            ]}
-            chords={[
-              new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 4)),
-              new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)),
-              new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))
-            ]}
-            scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
-            chordScaleDegreeNumbers={[2, 5, 1]}
-            maxWidth={maxTwoOctavePianoWidth} />
-          
-          <p>And use chord substitution to create a new chord progression - IV - V - I:</p>
-          <ChordProgressionPlayer
-            chordsPitches={[
-              [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.A, 0, 4)],
-              [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.B, 0, 4)],
-              [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]
-            ]}
-            chords={[
-              new Chord(ChordType.Major, new Pitch(PitchLetter.F, 0, 4)),
-              new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)),
-              new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))
-            ]}
-            scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
-            chordScaleDegreeNumbers={[4, 5, 1]}
-            maxWidth={maxTwoOctavePianoWidth} />
-        </LimitedWidthContentContainer>
+        <p>So, we can take a ii - V - I progression:</p>
+        <ChordProgressionPlayer
+          chordsPitches={[
+            [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.A, 0, 4)],
+            [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.B, 0, 4)],
+            [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]
+          ]}
+          chords={[
+            new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 4)),
+            new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)),
+            new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))
+          ]}
+          scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
+          chordScaleDegreeNumbers={[2, 5, 1]}
+          maxWidth={maxTwoOctavePianoWidth} />
+        
+        <p>And use chord substitution to create a new chord progression - IV - V - I:</p>
+        <ChordProgressionPlayer
+          chordsPitches={[
+            [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.A, 0, 4)],
+            [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.B, 0, 4)],
+            [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]
+          ]}
+          chords={[
+            new Chord(ChordType.Major, new Pitch(PitchLetter.F, 0, 4)),
+            new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)),
+            new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))
+          ]}
+          scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
+          chordScaleDegreeNumbers={[4, 5, 1]}
+          maxWidth={maxTwoOctavePianoWidth} />
       </div>
     )),
     /*new Slide("needs-name-700", () => (
       <div>
-        <LimitedWidthContentContainer>
-          <p>Another way to do chord substitution is by looking for chords which perform a similar function (building or releasing tension) to another chord.</p>
-          <p>Example ii - V7 - I and II - bII7 - I</p>
-          <p>V7 vs bII7 voice resolution</p>
+        <p>Another way to do chord substitution is by looking for chords which perform a similar function (building or releasing tension) to another chord.</p>
+        <p>Example ii - V7 - I and II - bII7 - I</p>
+        <p>V7 vs bII7 voice resolution</p>
 
-          <p>So, we can take a ii - V - I progression:</p>
-          <ChordProgressionPlayer
-            chordsPitches={[
-              [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.A, 0, 4)],
-              [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.B, 0, 4)],
-              [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]
-            ]}
-            chords={[
-              new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 4)),
-              new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)),
-              new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))
-            ]}
-            scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
-            chordScaleDegreeNumbers={[2, 5, 1]}
-            maxWidth={maxTwoOctavePianoWidth} />
-          
-          <p>And use chord substitution to create a new chord progression - IV - V - I:</p>
-          <ChordProgressionPlayer
-            chordsPitches={[
-              [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.A, 0, 4)],
-              [new Pitch(PitchLetter.C, 1, 4), new Pitch(PitchLetter.E, 1, 4), new Pitch(PitchLetter.G, 1, 4), new Pitch(PitchLetter.B, 0, 4)],
-              [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]
-            ]}
-            chords={[
-              new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 4)),
-              new Chord(ChordType.Dom7, new Pitch(PitchLetter.C, 1, 4)),
-              new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))
-            ]}
-            scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
-            chordScaleDegreeNumbers={[2, 2, 1]}
-            chordScaleDegreeSignedAccidentals={[0, -1, 0]}
-            maxWidth={maxTwoOctavePianoWidth} />
-        </LimitedWidthContentContainer>
+        <p>So, we can take a ii - V - I progression:</p>
+        <ChordProgressionPlayer
+          chordsPitches={[
+            [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.A, 0, 4)],
+            [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.B, 0, 4)],
+            [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]
+          ]}
+          chords={[
+            new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 4)),
+            new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)),
+            new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))
+          ]}
+          scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
+          chordScaleDegreeNumbers={[2, 5, 1]}
+          maxWidth={maxTwoOctavePianoWidth} />
+        
+        <p>And use chord substitution to create a new chord progression - IV - V - I:</p>
+        <ChordProgressionPlayer
+          chordsPitches={[
+            [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.A, 0, 4)],
+            [new Pitch(PitchLetter.C, 1, 4), new Pitch(PitchLetter.E, 1, 4), new Pitch(PitchLetter.G, 1, 4), new Pitch(PitchLetter.B, 0, 4)],
+            [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]
+          ]}
+          chords={[
+            new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 4)),
+            new Chord(ChordType.Dom7, new Pitch(PitchLetter.C, 1, 4)),
+            new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))
+          ]}
+          scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
+          chordScaleDegreeNumbers={[2, 2, 1]}
+          chordScaleDegreeSignedAccidentals={[0, -1, 0]}
+          maxWidth={maxTwoOctavePianoWidth} />
       </div>
     )),*/
 
@@ -1580,18 +1544,16 @@ export const pianoTheorySlideGroups = [
     )),
 
     new Slide("chord-progressions-quiz", () => (
-      <LimitedWidthContentContainer>
-        <div style={{ marginTop: "1em" }}>
-          {createStudyFlashCardSetComponent(
-            ChordProgressionsQuiz.flashCardSet,
-            /*isEmbedded*/ false,
-            /*hideMoreInfoUri*/ true,
-            /*title*/ undefined,
-            /*style*/ undefined,
-            /*enableSettings*/ undefined,
-            /*showRelatedExercises*/ false)}
-        </div>
-      </LimitedWidthContentContainer>
+      <div style={{ marginTop: "1em" }}>
+        {createStudyFlashCardSetComponent(
+          ChordProgressionsQuiz.flashCardSet,
+          /*isEmbedded*/ false,
+          /*hideMoreInfoUri*/ true,
+          /*title*/ undefined,
+          /*style*/ undefined,
+          /*enableSettings*/ undefined,
+          /*showRelatedExercises*/ false)}
+      </div>
     )),
   ]),
   
@@ -1686,37 +1648,32 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
       <div className="music-theory-for-piano" style={{ height: "100%" }}>
         <div style={{ display: "flex", height: "100%", padding: "0 1em" }}>
           <div>
-            {this.canMoveToPreviousSlide()
-              ? (
-                <Button
-                  variant="contained"
-                  onClick={_ => this.moveToPreviousSlideInternal()}
-                  className="slide-nav"
-                >
-                  <i className="material-icons" style={{ fontSize: "4em" }}>keyboard_arrow_left</i>
-                </Button>
-              )
-              : null
-            }
+            <Button
+              variant="contained"
+              onClick={_ => this.moveToPreviousSlideInternal()}
+              className="slide-nav"
+              style={{ visibility: this.canMoveToPreviousSlide() ? "visible" : "hidden" }}
+            >
+              <i className="material-icons" style={{ fontSize: "4em" }}>keyboard_arrow_left</i>
+            </Button>
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", textAlign: "center", flexGrow: 1, height: "100%" }}>
             {this.renderSlideLocation()}
-            {renderedSlide}
+            <LimitedWidthContentContainer>
+              {renderedSlide}
+            </LimitedWidthContentContainer>
           </div>
 
           <div>
-            {this.canMoveToNextSlide()
-              ? (
-                <Button
-                  variant="contained"
-                  onClick={_ => this.moveToNextSlideInternal()}
-                  className="slide-nav"
-                >
-                  <i className="material-icons" style={{ fontSize: "4em" }}>keyboard_arrow_right</i>
-                </Button>
-              )
-              : null}
+            <Button
+              variant="contained"
+              onClick={_ => this.moveToNextSlideInternal()}
+              className="slide-nav"
+              style={{ visibility: this.canMoveToNextSlide() ? "visible" : "hidden" }}
+            >
+              <i className="material-icons" style={{ fontSize: "4em" }}>keyboard_arrow_right</i>
+            </Button>
           </div>
         </div>
       </div>
@@ -1749,7 +1706,7 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
     const slideNumberInGroup = 1 + indexOfSlideInGroup;
 
     return (
-      <span style={{ textDecoration: "underline", padding: "0 1em" }}>{slideGroup.name} - Slide {slideNumberInGroup} / {slideGroup.slides.length}</span>
+      <p style={{ textDecoration: "underline", textAlign: "center" }}>{slideGroup.name} - Slide {slideNumberInGroup} / {slideGroup.slides.length}</p>
     );
   }
   
