@@ -412,7 +412,7 @@ export class SetupSlideView extends React.Component<{}, {}> {
     const isMidiKeyboardSetup = AppModel.instance.midiModel.isMidiInputDeviceSetup;
 
     return (
-      <div style={{ display: "flex", flexDirection: "column", flexGrow: 1 }}>
+      <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
         <div>
           <p>We recommend connecting a MIDI piano keyboard to follow along with the course.</p>
           <p>At the time of writing, <a href="https://www.google.com/chrome/" target="_blank">Chrome</a> &amp; <a href="https://www.microsoft.com/en-us/edge" target="_blank">Edge</a> are the only desktop web browsers supporting MIDI input devices (<a href="https://caniuse.com/#feat=midi" target="_blank">click here for an up-to-date list of browsers supporting MIDI input devices</a>).</p>
@@ -1659,8 +1659,8 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", textAlign: "center", flexGrow: 1, height: "100%" }}>
-            {this.renderSlideLocation()}
-            <LimitedWidthContentContainer>
+            {false ? this.renderSlideLocation() : null}
+            <LimitedWidthContentContainer style={{ flexGrow: 1 }}>
               {renderedSlide}
             </LimitedWidthContentContainer>
           </div>
