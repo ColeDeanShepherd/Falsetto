@@ -17,6 +17,7 @@ export class NavLinkView extends React.Component<INavLinkViewProps, {}> {
 
   private onClick(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
     const { to } = this.props;
+    
     const openNewTab = (this.props.openNewTab !== undefined)
       ? this.props.openNewTab
       : false;

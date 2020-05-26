@@ -1,5 +1,5 @@
 import { UserProfile } from './UserProfile';
-import { Auth0InjectorView } from './Auth0Injector/Auth0InjectorView';
+//import { Auth0InjectorView } from './Auth0Injector/Auth0InjectorView';
 
 export interface IUserManager {
   getCurrentUser(): UserProfile | null;

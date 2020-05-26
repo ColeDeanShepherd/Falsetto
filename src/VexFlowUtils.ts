@@ -1,5 +1,5 @@
-import { Rational } from "./lib/Core/Rational";
 import { precondition } from './lib/Core/Dbc';
+import { Rational } from "./lib/Core/Rational";
 
 export function noteDurationToVexFlowStr(noteDuration: Rational): string {
   precondition(noteDuration.numerator === 1);

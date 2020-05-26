@@ -499,10 +499,10 @@ export const pianoTheorySlideGroups = [
       <div>
         <p>Every note has one or more names, which we must learn in order to navigate the instrument and communicate with other musicians.</p>
         <p>Luckily, we don't need to learn 88 different names because piano keys are laid out in a repeating pattern, and every occurrence of this pattern uses the same names.</p>
-        <p>The pattern is:</p>
-        <p>two black keys surrounded by three white keys:</p>
+        <p>The pattern has two parts:</p>
+        <p>1. two black keys surrounded by three white keys:</p>
         <PianoKeyTwoBlackKeysPatternDiagram />
-        <p>followed by three black keys surrounded by four white keys:</p>
+        <p>2. followed by three black keys surrounded by four white keys:</p>
         <PianoKeyThreeBlackKeysPatternDiagram />
         <p>Here are occurrences of the pattern on an 88-key keyboard highlighted in different colors:</p>
         <PianoKeyPatternDiagram />
@@ -854,10 +854,9 @@ export const pianoTheorySlideGroups = [
     new Slide("scales-introduction", () => (
       <div>
         <h2>Section 3: Scales</h2>
-        <p>As you've learned, there are 12 different piano key names.</p>
-        <p>Though musicians are free to use any of the 12 keys at any time, it is common to restrict the choice of keys to the keys in a particular <strong>scale</strong>.</p>
+        <p>As you've learned, there are 12 uniquely named piano keys. Though musicians are free to use any of the 12 keys at any time, it is common to restrict the choice of keys to the keys in a particular <strong>scale</strong>.</p>
         <p><strong>Scales</strong> are sets of notes with a designated "root note" that generally "sounds like home" in the scale.</p>
-        <p>Below is an interactive diagram of the <strong>C Major</strong> scale, which has a root note of <strong>C</strong> (indicated by the <strong>C</strong> scale's name) and comprises of the 7 notes: <strong>C, D, E, F, G, A, B</strong>.</p>
+        <p>Below is an interactive diagram of the <strong>C Major</strong> scale, which has a root note of <strong>C</strong> (indicated in the scale's name) and comprises of the 7 notes: <strong>C, D, E, F, G, A, B</strong>.</p>
         <p>Try pressing the piano keys below to get a feel for how the scale sounds. Pressing keys will play both the pressed note and the lowest root note (C) in the diagram, which helps convey the "feeling" of the scale.</p>
         <p>
           <PianoScaleDronePlayer

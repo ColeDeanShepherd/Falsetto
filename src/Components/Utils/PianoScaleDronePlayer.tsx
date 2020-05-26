@@ -101,7 +101,8 @@ export class PianoScaleDronePlayer extends React.Component<IPianoScaleDronePlaye
           style={style} />
         <MidiNoteEventListener
           onNoteOn={(pitch, velocity) => this.onKeyPress(pitch, velocity)}
-          onNoteOff={pitch => this.onKeyRelease(pitch)} />
+          onNoteOff={pitch => this.onKeyRelease(pitch)}
+          isComputerKeyboardPlayable={true} />
       </div>
     );
   }
@@ -154,6 +155,8 @@ export class PianoScaleDronePlayer extends React.Component<IPianoScaleDronePlaye
     }
   }
 
+  // TODO: stop playing when released
+  // TODO: add computer keyboard support
   private onKeyRelease(pitch: Pitch) {
     const { scale } = this.props;
 
