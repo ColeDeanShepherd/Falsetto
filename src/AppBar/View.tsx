@@ -62,8 +62,8 @@ export class AppBarView extends React.Component<IAppBarViewProps, IAppBarViewSta
         {isMenuVisible
           ? (
             <div className="menu-container">
-              <Paper style={{ padding: "0 1em 1em 1em" }}>
-                <MainMenu collapseCategories={false} />
+              <Paper style={{ padding: "1em" }}>
+                <MainMenu collapseCategories={true} />
               </Paper>
             </div>
           )
