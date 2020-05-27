@@ -1,15 +1,11 @@
 import * as React from "react";
 
-import { Vector2D } from '../../../lib/Core/Vector2D';
-import { Size2D } from "../../../lib/Core/Size2D";
-import { Rect2D } from '../../../lib/Core/Rect2D';
 import { PianoKeyboard } from "../../Utils/PianoKeyboard";
 import { FlashCard, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardLevel, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { Pitch, getPitchRange } from "../../../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
 import { PianoKeysAnswerSelect } from '../../Utils/PianoKeysAnswerSelect';
-import { getPianoKeyboardAspectRatio } from '../../Utils/PianoUtils';
 
 const flashCardSetId = "pianoNotes1Octave";
 
@@ -22,10 +18,7 @@ export const naturalPitches = allPitches
 export const accidentalPitches = allPitches
   .filter(p => !p.isNatural);
 
-const pianoKeyboardAspectRatio = getPianoKeyboardAspectRatio(/*octaveCount*/ 1);
-const pianoKeyboardRect = new Rect2D(new Size2D(pianoKeyboardAspectRatio * 100, 100), new Vector2D(0, 0));
 const pianoMaxWidth = 200;
-const pianoStyle = { width: "100%", maxWidth: `${pianoMaxWidth}px`, height: "auto" };
 
 function renderAnswerSelect(
   info: FlashCardStudySessionInfo
@@ -33,7 +26,7 @@ function renderAnswerSelect(
   const correctAnswer = [info.currentFlashCard.frontSide.data as Pitch];
   
   return <PianoKeysAnswerSelect
-    aspectRatio={pianoKeyboardAspectRatio} maxWidth={pianoMaxWidth} lowestPitch={lowestPitch} highestPitch={highestPitch}
+    maxWidth={pianoMaxWidth} lowestPitch={lowestPitch} highestPitch={highestPitch}
     correctAnswer={correctAnswer}
     onAnswer={info.onAnswer} lastCorrectAnswer={info.lastCorrectAnswer}
     incorrectAnswers={info.incorrectAnswers} instantConfirm={true} wrapOctave={true} />;
@@ -88,11 +81,10 @@ function createFlashCards(pitches?: Array<Pitch>): FlashCard[] {
         new FlashCardSide(
           () => (
             <PianoKeyboard
-              rect={pianoKeyboardRect}
+              maxWidth={pianoMaxWidth}
               lowestPitch={lowestPitch}
               highestPitch={highestPitch}
               pressedPitches={[pitch]}
-              style={pianoStyle}
             />
           )
         )

@@ -1,9 +1,6 @@
 import * as React from "react";
 
 import * as Utils from "../../lib/Core/Utils";
-import { Vector2D } from '../../lib/Core/Vector2D';
-import { Size2D } from "../../lib/Core/Size2D";
-import { Rect2D } from '../../lib/Core/Rect2D';
 import { PitchLetter } from "../../lib/TheoryLib/PitchLetter";
 import { Pitch } from "../../lib/TheoryLib/Pitch";
 import { Card, CardContent, Typography, Button } from "@material-ui/core";
@@ -197,9 +194,6 @@ export class IntervalChordScaleFinder extends React.Component<IIntervalChordScal
   }
 
   public render(): JSX.Element {
-    const pianoStyle = { width: "100%", maxWidth: "400px", height: "auto" };
-    const pianoSize = new Size2D(400, 100);
-
     const uniquePressedPitches = uniqWithSelector(this.state.pressedPitches, p => p.midiNumberNoOctave);
     uniquePressedPitches.sort((a, b) => (a.midiNumber < b.midiNumber) ? -1 : 1);
     const intervalsChordsScales = findIntervalsChordsScales(uniquePressedPitches);
@@ -244,12 +238,11 @@ export class IntervalChordScaleFinder extends React.Component<IIntervalChordScal
             <div style={{ textAlign: "center" }}>
               <p>
                 <PianoKeyboard
-                  rect={new Rect2D(pianoSize, new Vector2D(0, 0))}
+                  maxWidth={400}
                   lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
                   highestPitch={new Pitch(PitchLetter.B, 0, 5)}
                   onKeyPress={onPianoKeyPress}
                   renderLayeredExtrasFn={metrics => this.renderExtras(metrics)}
-                  style={pianoStyle}
                 />
               </p>
 

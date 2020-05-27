@@ -10,12 +10,8 @@ import { PitchLetter } from '../../../lib/TheoryLib/PitchLetter';
 import _32ndNote from "../../../img/sheet-music/32nd-note.svg";
 import _32ndRest from "../../../img/sheet-music/32nd-rest.svg";
 
-import { Rect2D } from '../../../lib/Core/Rect2D';
 import { Vector2D } from '../../../lib/Core/Vector2D';
-import { Size2D } from '../../../lib/Core/Size2D';
 import { range } from '../../../lib/Core/MathUtils';
-
-export const pianoKeyboardStyle = { width: "100%", maxWidth: "400px", height: "auto" };
 export const defaultRootPitch = new Pitch(PitchLetter.C, 0, 4);
 
 export const MainTitle: React.FunctionComponent<{}> = props => <h1>{props.children}</h1>;
@@ -25,13 +21,12 @@ export const SubSectionTitle: React.FunctionComponent<{}> = props => <h3>{props.
 export const OctavesPlayer: React.FunctionComponent<{}> = props => {
   return (
     <PianoKeyboard
-      rect={new Rect2D(new Size2D(300, 150), new Vector2D(0, 0))}
+      maxWidth={400}
       lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
       highestPitch={new Pitch(PitchLetter.B, 0, 4)}
       pressedPitches={[]}
       onKeyPress={p => playPitchesSequentially(range(0, 3).map(i => new Pitch(p.letter, p.signedAccidental, p.octaveNumber - 2 + i)), 500, true)}
-      renderExtrasFn={renderPianoKeyboardNoteNames}
-      style={pianoKeyboardStyle} />
+      renderExtrasFn={renderPianoKeyboardNoteNames} />
   );
 };
 
@@ -45,11 +40,11 @@ export function renderPianoKeyLabel(
   textOffset: Vector2D = new Vector2D(0, 0)): JSX.Element {
   const keyRect = metrics.getKeyRect(pitch);
 
-  const fontSizePx = metrics.height / 8;
-  const unsignedYOffset = metrics.height / 4;
+  const fontSizePx = metrics.svgSize.height / 8;
+  const unsignedYOffset = metrics.svgSize.height / 4;
   const textPos = new Vector2D(
     textOffset.x + keyRect.center.x,
-    textOffset.y + (isAboveKeyboard ? -unsignedYOffset : (metrics.height + fontSizePx + unsignedYOffset)));
+    textOffset.y + (isAboveKeyboard ? -unsignedYOffset : (metrics.svgSize.height + fontSizePx + unsignedYOffset)));
   const textStyle: any = {
     textAnchor: "middle",
     fontSize: `${fontSizePx}px`
@@ -59,10 +54,10 @@ export function renderPianoKeyLabel(
     isAboveKeyboard ? (textPos.y + 5) : (textPos.y - fontSizePx)
   );
 
-  const keyLineUnsignedYOffset = metrics.height / 15;
+  const keyLineUnsignedYOffset = metrics.svgSize.height / 15;
   const keyLinePos = new Vector2D(
     keyRect.center.x,
-    isAboveKeyboard ? keyLineUnsignedYOffset : (metrics.height - keyLineUnsignedYOffset)
+    isAboveKeyboard ? keyLineUnsignedYOffset : (metrics.svgSize.height - keyLineUnsignedYOffset)
   );
 
   return (
@@ -81,11 +76,11 @@ export function renderIntervalLabel(metrics: PianoKeyboardMetrics, leftPitch: Pi
   const leftKeyRect = metrics.getKeyRect(leftPitch);
   const rightKeyRect = metrics.getKeyRect(rightPitch);
 
-  const fontSizePx = metrics.height / 8;
-  const unsignedYOffset = metrics.height / 4;
+  const fontSizePx = metrics.svgSize.height / 8;
+  const unsignedYOffset = metrics.svgSize.height / 4;
   const textPos = new Vector2D(
     (leftKeyRect.center.x + rightKeyRect.center.x) / 2,
-    isAboveKeyboard ? -unsignedYOffset : (metrics.height + fontSizePx + unsignedYOffset));
+    isAboveKeyboard ? -unsignedYOffset : (metrics.svgSize.height + fontSizePx + unsignedYOffset));
   const textStyle: any = {
     textAnchor: "middle",
     fontSize: `${fontSizePx}px`
@@ -95,8 +90,8 @@ export function renderIntervalLabel(metrics: PianoKeyboardMetrics, leftPitch: Pi
     isAboveKeyboard ? (textPos.y + 5) : (textPos.y - fontSizePx)
   );
 
-  const keyLineUnsignedYOffset = metrics.height / 15;
-  const linePosY = isAboveKeyboard ? keyLineUnsignedYOffset : (metrics.height - keyLineUnsignedYOffset);
+  const keyLineUnsignedYOffset = metrics.svgSize.height / 15;
+  const linePosY = isAboveKeyboard ? keyLineUnsignedYOffset : (metrics.svgSize.height - keyLineUnsignedYOffset);
   const leftKeyLinePos = new Vector2D(leftKeyRect.center.x, linePosY);
   const rightKeyLinePos = new Vector2D(rightKeyRect.center.x, linePosY);
 

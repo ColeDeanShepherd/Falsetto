@@ -3,14 +3,10 @@ import * as React from "react";
 import { Scale } from '../../lib/TheoryLib/Scale';
 import { Pitch, tryWrapPitchOctave } from '../../lib/TheoryLib/Pitch';
 import { playPitches } from '../../Audio/PianoAudio';
-import { Rect2D } from '../../lib/Core/Rect2D';
-import { Size2D } from '../../lib/Core/Size2D';
-import { Vector2D } from '../../lib/Core/Vector2D';
 import { PitchLetter } from '../../lib/TheoryLib/PitchLetter';
 import { renderPianoKeyboardNoteNames, PianoKeyboard, PianoKeyboardMetrics } from './PianoKeyboard';
 import { doesKeyUseSharps } from '../../lib/TheoryLib/Key';
 import { arrayContains, immutableAddIfNotFoundInArray, immutableRemoveIfFoundInArray, addIfNotFoundInArray, removeIfFoundInArray } from '../../lib/Core/ArrayUtils';
-import { getPianoKeyboardAspectRatio } from './PianoUtils';
 import { MidiNoteEventListener } from "./MidiNoteEventListener";
 import { unwrapValueOrUndefined } from "../../lib/Core/Utils";
 import { Margin } from "../../lib/Core/Margin";
@@ -79,13 +75,11 @@ export class PianoScaleDronePlayer extends React.Component<IPianoScaleDronePlaye
       : true;
     
     const pitches = scale.getPitches();
-    const aspectRatio = getPianoKeyboardAspectRatio(octaveCount);
-    const style = { width: "100%", maxWidth: `${maxWidth}px`, height: "auto" };
   
     return (
       <div>
         <PianoKeyboard
-          rect={new Rect2D(new Size2D(aspectRatio * 100, 100), new Vector2D(0, 0))}
+          maxWidth={maxWidth}
           lowestPitch={lowestPitch}
           highestPitch={this.highestPitch}
           pressedPitches={this.state.pressedPitches}
@@ -97,8 +91,7 @@ export class PianoScaleDronePlayer extends React.Component<IPianoScaleDronePlaye
           )}
           onKeyPress={pitch => this.onKeyPress(pitch, /*velocity*/ 1)}
           onKeyRelease={pitch => this.onKeyRelease(pitch)}
-          margin={margin}
-          style={style} />
+          margin={margin} />
         <MidiNoteEventListener
           onNoteOn={(pitch, velocity) => this.onKeyPress(pitch, velocity)}
           onNoteOff={pitch => this.onKeyRelease(pitch)}

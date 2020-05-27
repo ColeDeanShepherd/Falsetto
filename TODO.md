@@ -48,10 +48,6 @@
 * Monetize
 ## Medium Priority
 * Improve chord finder (E G B D F is Emin7b9)
-* Fix piano aspect ratios.
-  * EMT Notes section, intervals
-  * Chord Viewer
-  * Chord Progressions
 * Turn exercises into "active" exercises
   * Piano Intervals
   * Piano Scales

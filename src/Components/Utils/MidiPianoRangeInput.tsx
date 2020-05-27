@@ -1,10 +1,6 @@
 import * as React from "react";
 import { Button } from "@material-ui/core";
 
-import { Rect2D } from "../../lib/Core/Rect2D";
-import { Size2D } from "../../lib/Core/Size2D";
-import { Vector2D } from "../../lib/Core/Vector2D";
-
 import { PianoKeyboard } from "../../Components/Utils/PianoKeyboard";
 import { fullPianoLowestPitch, fullPianoHighestPitch } from "../../Components/Utils/PianoUtils";
 import { AppModel } from "../../App/Model";
@@ -13,7 +9,6 @@ import { MidiInputDevicePitchRangeChangedAction, WebMidiInitializedAction, MidiD
 import { IAction } from "../../IAction";
 import { MidiNoteEventListener } from "./MidiNoteEventListener";
 import { Pitch, expandPitchRangeToIncludePitch, getPitchRange, getNumPitchesInRange } from '../../lib/TheoryLib/Pitch';
-import { fullPianoAspectRatio } from './PianoUtils';
 
 export class MidiPianoRangeInput extends React.Component<{}, {}> {
   public constructor(props: {}) {
@@ -44,11 +39,9 @@ export class MidiPianoRangeInput extends React.Component<{}, {}> {
 
           <div>
             <PianoKeyboard
-              rect={new Rect2D(new Size2D(fullPianoAspectRatio * 100, 100), new Vector2D(0, 0))}
               lowestPitch={lowestPitch}
               highestPitch={highestPitch}
-              pressedPitches={pressedPitches}
-              style={{ width: "100%", height: "auto" }} />
+              pressedPitches={pressedPitches} />
           </div>
             
           <p>

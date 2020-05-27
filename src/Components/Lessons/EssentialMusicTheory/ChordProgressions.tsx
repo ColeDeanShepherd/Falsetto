@@ -11,9 +11,7 @@ import { PitchLetter } from '../../../lib/TheoryLib/PitchLetter';
 
 import { createStudyFlashCardSetComponent } from '../../../StudyFlashCards/View';
 
-import { Rect2D } from '../../../lib/Core/Rect2D';
 import { Vector2D } from '../../../lib/Core/Vector2D';
-import { Size2D } from '../../../lib/Core/Size2D';
 import { Margin } from '../../../lib/Core/Margin';
 import { ScaleType, Scale } from '../../../lib/TheoryLib/Scale';
 import { Chord } from "../../../lib/TheoryLib/Chord";
@@ -26,17 +24,13 @@ import { NavLinkView } from "../../../NavLinkView";
 import * as ChordProgressionsQuiz from "../../Quizzes/Chords/ChordProgressionsQuiz";
 import * as ChordHarmonicFunctions from "../../Quizzes/Chords/ChordFamilies";
 import { NoteText } from "../../Utils/NoteText";
-import { getPianoKeyboardAspectRatio } from '../../Utils/PianoUtils';
-import { getRomanNumerals } from '../../../lib/Core/Utils';
 import { getChordRomanNumeralNotation } from "../../Tools/DiatonicChordPlayer";
 
 export const FiveChordDiagram: React.FunctionComponent<{}> = props => {
   const lowestPitch = new Pitch(PitchLetter.C, 0, 4);
   const highestPitch = new Pitch(PitchLetter.B, 0, 5);
   const maxWidth = 300;
-  const aspectRatio = getPianoKeyboardAspectRatio(/*octaveCount*/ 2);
   const margin = new Margin(0, 80, 0, 80);
-  const style = { width: "100%", maxWidth: `${maxWidth}px`, height: "auto" };
   const chord = new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4));
   const pitches = chord.getPitches();
   const scaleDegreeLabels = ["5", "7", "2", "4"];
@@ -71,14 +65,13 @@ export const FiveChordDiagram: React.FunctionComponent<{}> = props => {
     <div>
       <p><PitchesAudioPlayer pitches={pitches} playSequentially={false} /></p>
       <PianoKeyboard
-        rect={new Rect2D(new Size2D(aspectRatio * 100, 100), new Vector2D(0, 0))}
+        maxWidth={maxWidth}
         margin={margin}
         lowestPitch={lowestPitch}
         highestPitch={highestPitch}
         pressedPitches={[]}
         onKeyPress={onKeyPress}
-        renderExtrasFn={renderLabels}
-        style={style} />
+        renderExtrasFn={renderLabels} />
     </div>
   );
 };
@@ -148,9 +141,7 @@ const ChordDiagramInternal: React.FunctionComponent<{
   const highestPitch = new Pitch(PitchLetter.B, 0, 5);
 
   const maxWidth = (props.maxWidth !== undefined) ? props.maxWidth : 300;
-  const aspectRatio = getPianoKeyboardAspectRatio(/*octaveCount*/ 2);
   const margin = new Margin(0, 0, 0, 0);
-  const style = { width: "100%", maxWidth: `${maxWidth}px`, height: "auto" };
 
   function onKeyPress(p: Pitch) {
     const pitchMidiNumbers = pitches.map(p => p.midiNumber);
@@ -162,14 +153,14 @@ const ChordDiagramInternal: React.FunctionComponent<{
 
   return (
     <PianoKeyboard
-      rect={new Rect2D(new Size2D(aspectRatio * 100, 100), position)}
+      maxWidth={maxWidth}
+      position={position}
       margin={margin}
       lowestPitch={lowestPitch}
       highestPitch={highestPitch}
       pressedPitches={[]}
       onKeyPress={onKeyPress}
-      renderExtrasFn={metrics => renderChordDiagramLabels(metrics,pitches, scale, showScaleDegreeNumbers)}
-      style={style} />
+      renderExtrasFn={metrics => renderChordDiagramLabels(metrics, pitches, scale, showScaleDegreeNumbers)} />
   );
 };
 
@@ -235,8 +226,6 @@ export class ChordProgressionPlayer extends React.Component<IChordProgressionPla
     
     const textStyle = { fontSize: "1.25em" };
     const maxWidth = (this.props.maxWidth !== undefined) ? this.props.maxWidth : 300;
-    const aspectRatio = getPianoKeyboardAspectRatio(/*octaveCount*/ octaveCount);
-    const pianoStyle = { width: "100%", maxWidth: `${maxWidth}px`, height: "auto" };
 
     const renderText = (currentChordIndex: number) => {
       //chordScaleDegreeSignedAccidentals
@@ -276,12 +265,11 @@ export class ChordProgressionPlayer extends React.Component<IChordProgressionPla
           : <p style={textStyle}>Press the play button to hear the chord progression.</p>}
 
         <PianoKeyboard
-          rect={new Rect2D(new Size2D(aspectRatio * 100, 100), new Vector2D(0, 0))}
+          maxWidth={maxWidth}
           lowestPitch={lowestPitch}
           highestPitch={highestPitch}
           pressedPitches={chordPitches}
-          renderExtrasFn={metrics => renderChordDiagramLabels(metrics, chordPitches, scale, /*showScaleDegreeNumbers*/ true)}
-          style={pianoStyle} />
+          renderExtrasFn={metrics => renderChordDiagramLabels(metrics, chordPitches, scale, /*showScaleDegreeNumbers*/ true)} />
       </div>
     );
   }
@@ -365,7 +353,7 @@ const ChordTransitionDiagram: React.FunctionComponent<{
 
       const p1Pos = new Vector2D(
         pianoMetrics.getKeyRect(p1).center.x,
-        pianoMetrics.height - arrowPianoPadding
+        pianoMetrics.svgSize.height - arrowPianoPadding
       );
       const arrowTipPos = new Vector2D(
         pianoMetrics.getKeyRect(p2).center.x,

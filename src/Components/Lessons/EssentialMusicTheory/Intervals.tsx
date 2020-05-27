@@ -26,19 +26,14 @@ import * as Interval2ndNoteEarTrainingPiano from "../../Quizzes/Intervals/Interv
 import _32ndNote from "../../../img/sheet-music/32nd-note.svg";
 import _32ndRest from "../../../img/sheet-music/32nd-rest.svg";
 
-import { Rect2D } from '../../../lib/Core/Rect2D';
 import { Vector2D } from '../../../lib/Core/Vector2D';
-import { Size2D } from '../../../lib/Core/Size2D';
 import { Margin } from '../../../lib/Core/Margin';
 import { SectionProps, Term, SectionTitle, SubSectionTitle } from './EssentialMusicTheory';
 import { NavLinkView } from '../../../NavLinkView';
 import { NoteText } from "../../Utils/NoteText";
 
 const HalfStepsDiagram: React.FunctionComponent<{}> = props => {
-  const width = 300;
-  const height = 200;
   const margin = new Margin(0, 50, 0, 0);
-  const style = { width: "100%", maxWidth: "300px", height: "auto" };
   
   function renderHalfStepLabels(metrics: PianoKeyboardMetrics): JSX.Element {
     function renderHalfStepLabel(leftPitch: Pitch): JSX.Element {
@@ -83,14 +78,13 @@ const HalfStepsDiagram: React.FunctionComponent<{}> = props => {
 
   return (
     <PianoKeyboard
-      rect={new Rect2D(new Size2D(width, height), new Vector2D(0, 0))}
+      maxWidth={300}
       margin={margin}
       lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
       highestPitch={new Pitch(PitchLetter.B, 0, 4)}
       pressedPitches={[]}
       onKeyPress={p => playPitches([p])}
-      renderExtrasFn={renderHalfStepLabels}
-      style={style} />
+      renderExtrasFn={renderHalfStepLabels} />
   );
 };
 

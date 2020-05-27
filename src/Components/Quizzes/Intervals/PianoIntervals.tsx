@@ -1,10 +1,6 @@
 import * as React from "react";
 import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody } from "@material-ui/core";
 
-import * as Utils from "../../../lib/Core/Utils";
-import { Vector2D } from '../../../lib/Core/Vector2D';
-import { Size2D } from "../../../lib/Core/Size2D";
-import { Rect2D } from '../../../lib/Core/Rect2D';
 import * as FlashCardUtils from "../Utils";
 import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
@@ -14,6 +10,7 @@ import { PianoKeyboard } from "../../Utils/PianoKeyboard";
 import { createIntervalLevels } from '../../../lib/TheoryLib/Interval';
 import { arrayContains, toggleArrayElement } from '../../../lib/Core/ArrayUtils';
 
+const containerHeight = 120;
 const minPitch = new Pitch(PitchLetter.C, 0, 4);
 const maxPitch = new Pitch(PitchLetter.B, 0, 5);
 
@@ -178,9 +175,6 @@ export function renderAnswerSelect(
 }
 
 export function createFlashCards(): Array<FlashCard> {
-  const pianoStyle = {
-    width: "100%", maxWidth: "400px"
-  };
   const flashCards = new Array<FlashCard>();
 
   forEachInterval((pitches, intervalString) => {
@@ -197,11 +191,10 @@ export function createFlashCards(): Array<FlashCard> {
           return (
             <div>
               <PianoKeyboard
-                rect={new Rect2D(new Size2D(400, 100), new Vector2D(0, 0))}
+                maxHeight={containerHeight}
                 lowestPitch={minPitch}
                 highestPitch={maxPitch}
                 pressedPitches={pitches}
-                style={pianoStyle}
               />
             </div>
           );
@@ -240,7 +233,7 @@ function createFlashCardSet(): FlashCardSet {
   });
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = renderAnswerSelect;
-  flashCardSet.containerHeight = "100px";
+  flashCardSet.containerHeight = `${containerHeight}px`;
   flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (
     createIntervalLevels(false, false)
       .map(level => new FlashCardLevel(

@@ -1,9 +1,6 @@
 import * as React from "react";
 import { Button } from "@material-ui/core";
 
-import { Vector2D } from "../../lib/Core/Vector2D";
-import { Size2D } from "../../lib/Core/Size2D";
-import { Rect2D } from "../../lib/Core/Rect2D";
 import { PianoKeyboard } from "../Utils/PianoKeyboard";
 import { AnswerDifficulty } from "../../Study/AnswerDifficulty";
 import { Pitch } from "../../lib/TheoryLib/Pitch";
@@ -32,7 +29,7 @@ export class GuitarNotesAnswerSelect extends React.Component<IGuitarNotesAnswerS
     return (
       <div>
         <PianoKeyboard
-          rect={new Rect2D(new Size2D(400, 100), new Vector2D(0, 0))}
+          maxWidth={400}
           lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
           highestPitch={new Pitch(PitchLetter.B, 0, 5)}
           pressedPitches={this.state.selectedPitches}

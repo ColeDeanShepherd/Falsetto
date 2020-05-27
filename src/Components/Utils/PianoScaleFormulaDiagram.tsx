@@ -20,7 +20,7 @@ export class PianoScaleFormulaDiagram extends React.Component<IPianoScaleFormula
   public render(): JSX.Element {
     const { scale, octaveCount, maxWidth } = this.props;
 
-    const margin = new Margin(0, 30, 0, 0);
+    const margin = new Margin(0, maxWidth / 10, 0, 0);
     const pitches = scale.getPitches();
     const pitchMidiNumberNoOctaves = pitches.map(p => p.midiNumberNoOctave);
     
@@ -51,10 +51,10 @@ export class PianoScaleFormulaDiagram extends React.Component<IPianoScaleFormula
         (scaleStepIndex === 0)
           ? (leftKeyRect.position.x + (leftKeyRect.size.width / 2))
           : ((leftKeyRect.position.x + rightKeyRect.right) / 2),
-        -(1.5 * metrics.blackKeyWidth)
+        -(1.5 * metrics.blackKeySize.width)
       );
       const textStyle: any = {
-        fontSize: `${9}px`,
+        fontSize: `${maxWidth / 25}px`,
         textAnchor: "middle"
       };
       const halfStepConnectionPos = new Vector2D(textPos.x, textPos.y + 5);
@@ -64,7 +64,7 @@ export class PianoScaleFormulaDiagram extends React.Component<IPianoScaleFormula
       const halfSteps = rightPitch.midiNumber - leftPitch.midiNumber;
       const formulaPart = (scaleStepIndex === 0) ? 'R' : ((halfSteps === 1) ? 'H' : 'W');
 
-      const strokeWidth = metrics.blackKeyWidth / 5;
+      const strokeWidth = metrics.blackKeySize.width / 7;
 
       return (
         <g>

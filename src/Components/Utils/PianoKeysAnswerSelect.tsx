@@ -9,11 +9,10 @@ import { AnswerDifficulty } from "../../Study/AnswerDifficulty";
 
 import { areSetsEqual } from '../../lib/Core/SetUtils';
 import { PlayablePianoKeyboard, IPlayablePianoKeyboardExports } from './PlayablePianoKeyboard';
-import { onKeyPress } from './PianoScaleDronePlayer';
 
 export interface IPianoKeysAnswerSelectProps {
-  aspectRatio: number;
-  maxWidth: number;
+  maxWidth?: number;
+  maxHeight?: number;
   lowestPitch: Pitch;
   highestPitch: Pitch;
   correctAnswer: Array<Pitch>;
@@ -38,13 +37,13 @@ export class PianoKeysAnswerSelect extends React.Component<IPianoKeysAnswerSelec
   public render(): JSX.Element {
     // TODO: use lastCorrectAnswer
 
-    const { aspectRatio, maxWidth, lowestPitch, highestPitch, instantConfirm, wrapOctave } = this.props;
+    const { maxWidth, maxHeight, lowestPitch, highestPitch, instantConfirm, wrapOctave } = this.props;
 
     return (
       <div>
         <PlayablePianoKeyboard
-          aspectRatio={aspectRatio}
           maxWidth={maxWidth}
+          maxHeight={maxHeight}
           lowestPitch={lowestPitch}
           highestPitch={highestPitch}
           onKeyPress={(pitch, velocity, wasClick) => this.onKeyPress(pitch, wasClick)}

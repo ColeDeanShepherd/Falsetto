@@ -1,9 +1,7 @@
 import * as React from "react";
 import { Card, CardContent, Typography } from "@material-ui/core";
 
-import { Vector2D } from '../../lib/Core/Vector2D';
 import { Size2D } from "../../lib/Core/Size2D";
-import { Rect2D } from '../../lib/Core/Rect2D';
 import { PitchLetter } from "../../lib/TheoryLib/PitchLetter";
 import { ScaleType, ScaleTypeGroup, Scale } from "../../lib/TheoryLib/Scale";
 import { Pitch } from "../../lib/TheoryLib/Pitch";
@@ -16,12 +14,10 @@ import { ScaleAudioPlayer } from '../Utils/ScaleAudioPlayer';
 import { GuitarScaleViewer } from '../Utils/GuitarScaleViewer';
 import { arrayContains } from '../../lib/Core/ArrayUtils';
 import { ScaleSelect } from "../Utils/ScaleSelect";
-import { getPianoKeyboardAspectRatio } from '../Utils/PianoUtils';
 import { GuitarPitchesAudio } from '../../Audio/GuitarAudio';
 
 const pianoKeyboardLowestPitch = new Pitch(PitchLetter.C, 0, 4);
 const pianoKeyboardHighestPitch = new Pitch(PitchLetter.B, 0, 5);
-const pianoKeyboardAspectRatio = getPianoKeyboardAspectRatio(/*octaveCount*/ 2)
 
 export interface IScaleViewerProps {
   title?: string;
@@ -61,8 +57,6 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
     const intervalStrings = intervals
       .map((interval, i) => (i === 0) ? "R" : interval.toString());
     const intervalsString = intervalStrings.join(", ");
-
-    const pianoGuitarStyle = { width: "100%", maxWidth: "400px", height: "auto" };
 
     const guitarSize = new Size2D(400, 140);
     
@@ -133,12 +127,11 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
               <div>
                 {showPianoKeyboard ? (
                   <PianoKeyboard
-                    rect={new Rect2D(new Size2D(pianoKeyboardAspectRatio * 100, 100), new Vector2D(0, 0))}
+                    maxWidth={400}
                     lowestPitch={pianoKeyboardLowestPitch}
                     highestPitch={pianoKeyboardHighestPitch}
                     onKeyPress={onKeyPress}
                     renderExtrasFn={metrics => PianoScaleDronePlayer.renderExtrasFn(metrics, pitches, this.state.scale.rootPitch)}
-                    style={pianoGuitarStyle}
                   />
                 ) : null}
               </div>

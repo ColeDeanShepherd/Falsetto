@@ -1,9 +1,6 @@
 import * as React from "react";
 
 import * as Utils from "../../../lib/Core/Utils";
-import { Vector2D } from '../../../lib/Core/Vector2D';
-import { Size2D } from "../../../lib/Core/Size2D";
-import { Rect2D } from '../../../lib/Core/Rect2D';
 import { FlashCard, FlashCardSide, FlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
 import { Pitch } from "../../../lib/TheoryLib/Pitch";
@@ -18,13 +15,15 @@ import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
 import { PianoKeysAnswerSelect } from "../../Utils/PianoKeysAnswerSelect";
 import { createIntervalLevels } from '../../../lib/TheoryLib/Interval';
 import { arrayContains, toggleArrayElement } from '../../../lib/Core/ArrayUtils';
-import { getPianoKeyboardAspectRatio } from '../../Utils/PianoUtils';
 
 const flashCardSetId = "pianoNextNoteEarTraining";
 
 const minPitch = new Pitch(PitchLetter.C, 0, 4);
 const maxPitch = new Pitch(PitchLetter.B, 0, 5);
 const includeHarmonicIntervals = false;
+
+const containerHeight = 180;
+const pianoMaxHeight = 140;
 
 export const rootNotes = [
   new Pitch(PitchLetter.C, 0, 4),
@@ -89,17 +88,14 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
   }
 
   public render(): JSX.Element {
-    const pianoStyle = { width: "100%", maxWidth: "400px" };
-
     return (
       <div>
         <div>
           <PianoKeyboard
-            rect={new Rect2D(new Size2D(400, 100), new Vector2D(0, 0))}
+            maxHeight={pianoMaxHeight}
             lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
             highestPitch={new Pitch(PitchLetter.B, 0, 5)}
             pressedPitches={[this.props.pitch1]}
-            style={pianoStyle}
           />
         </div>
         <Button
@@ -195,10 +191,12 @@ export function renderAnswerSelect(
 ) {
   const key = info.flashCards.indexOf(info.currentFlashCard);
   const correctAnswer = [(info.currentFlashCard.backSide.data as IFlashCardBackSideData).pitch];
-  const aspectRatio = getPianoKeyboardAspectRatio(/*octaveCount*/ 2);
   
   return <PianoKeysAnswerSelect
-    key={key} aspectRatio={aspectRatio} maxWidth={400} lowestPitch={new Pitch(PitchLetter.C, 0, 4)} highestPitch={new Pitch(PitchLetter.B, 0, 5)}
+    key={key}
+    maxHeight={pianoMaxHeight}
+    lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
+    highestPitch={new Pitch(PitchLetter.B, 0, 5)}
     correctAnswer={correctAnswer}
     onAnswer={info.onAnswer} lastCorrectAnswer={info.lastCorrectAnswer}
     incorrectAnswers={info.incorrectAnswers} instantConfirm={true} />;
@@ -269,7 +267,7 @@ function createFlashCardSet(): FlashCardSet {
         return firstPitch.midiNumber === secondPitch.midiNumber;
       });
   };
-  flashCardSet.containerHeight = "180px";
+  flashCardSet.containerHeight = `${containerHeight}px`;
   flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (
     createIntervalLevels(false, false)
       .map(level => new FlashCardLevel(

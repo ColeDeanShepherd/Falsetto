@@ -1,7 +1,4 @@
 import { immutableAddIfNotFoundInArray, immutableRemoveIfFoundInArray, immutableToggleArrayElementCustomEquals } from '../../lib/Core/ArrayUtils';
-import { Rect2D } from "../../lib/Core/Rect2D";
-import { Size2D } from "../../lib/Core/Size2D";
-import { Vector2D } from "../../lib/Core/Vector2D";
 import { Pitch, tryWrapPitchOctave } from '../../lib/TheoryLib/Pitch';
 import { AppModel } from "../../App/Model";
 import { PianoKeyboard, PianoKeyboardMetrics } from "./PianoKeyboard";
@@ -16,8 +13,8 @@ export interface IPlayablePianoKeyboardExports {
 }
 
 export interface IPlayablePianoKeyboardProps {
-  aspectRatio: number,
-  maxWidth: number,
+  maxWidth?: number;
+  maxHeight?: number;
   lowestPitch: Pitch,
   highestPitch: Pitch,
   forcePressedPitches?: Array<Pitch>;
@@ -51,14 +48,15 @@ export class PlayablePianoKeyboard extends React.Component<IPlayablePianoKeyboar
   }
 
   public render(): JSX.Element {
-    const { aspectRatio, maxWidth, lowestPitch, highestPitch, margin, toggleKeys, renderExtrasFn } = this.props;
+    const { maxWidth, maxHeight, lowestPitch, highestPitch, margin, toggleKeys, renderExtrasFn } = this.props;
 
     const pressedPitches = this.getPressedPitches();
 
     return (
       <div>
         <PianoKeyboard
-          rect={new Rect2D(new Size2D(aspectRatio * 100, 100), new Vector2D(0, 0))}
+          maxWidth={maxWidth}
+          maxHeight={maxHeight}
           margin={margin}
           lowestPitch={lowestPitch}
           highestPitch={highestPitch}
@@ -66,8 +64,7 @@ export class PlayablePianoKeyboard extends React.Component<IPlayablePianoKeyboar
           onKeyPress={p => this.onKeyPress(p, /*wasClick*/ true)}
           onKeyRelease={p => this.onKeyRelease(p, true)}
           renderExtrasFn={renderExtrasFn}
-          allowDragPresses={!toggleKeys}
-          style={{ width: "100%", maxWidth: `${maxWidth}px`, height: "auto" }} />
+          allowDragPresses={!toggleKeys} />
         <MidiNoteEventListener
           onNoteOn={(pitch, velocity) => this.onKeyPress(pitch, /*wasClick*/ false)}
           onNoteOff={pitch => this.onKeyRelease(pitch, /*wasClick*/ false)}

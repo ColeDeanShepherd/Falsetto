@@ -1,8 +1,5 @@
 import * as React from "react";
 
-import { Vector2D } from '../../../lib/Core/Vector2D';
-import { Size2D } from "../../../lib/Core/Size2D";
-import { Rect2D } from '../../../lib/Core/Rect2D';
 import { PianoKeyboard } from "../../Utils/PianoKeyboard";
 import { FlashCard, FlashCardSide, FlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
@@ -13,7 +10,6 @@ import { ChordType, chordTypeLevels } from "../../../lib/TheoryLib/ChordType";
 import { CheckboxColumnsFlashCardMultiSelect, CheckboxColumn, CheckboxColumnCell } from '../../Utils/CheckboxColumnsFlashCardMultiSelect';
 import { arrayContains, flattenArrays } from '../../../lib/Core/ArrayUtils';
 import { mod } from '../../../lib/Core/MathUtils';
-import { getPianoKeyboardAspectRatio } from '../../Utils/PianoUtils';
 import { PianoKeysAnswerSelect } from "../../Utils/PianoKeysAnswerSelect";
 
 const flashCardSetId = "pianoChords";
@@ -21,9 +17,7 @@ const flashCardSetId = "pianoChords";
 const pianoLowestPitch = new Pitch(PitchLetter.C, 0, 4);
 const pianoHighestPitch = new Pitch(PitchLetter.B, 0, 5);
 
-const pianoAspectRatio = getPianoKeyboardAspectRatio(/*octaveCount*/ 2);
 const pianoMaxWidth = 300;
-const pianoStyle = { width: `${pianoMaxWidth}px`, maxWidth: "100%", height: "auto" };
 
 interface IConfigData {
   enabledRootPitches: string[];
@@ -199,11 +193,10 @@ export function createFlashCards(chordTypes: Array<ChordType>): FlashCard[] {
             size => {
               return (
                 <PianoKeyboard
-                  rect={new Rect2D(new Size2D(pianoAspectRatio * 100, 100), new Vector2D(0, 0))}
+                  maxWidth={pianoMaxWidth}
                   lowestPitch={pianoLowestPitch}
                   highestPitch={pianoHighestPitch}
                   pressedPitches={pitches}
-                  style={pianoStyle}
                 />
               );
             },
@@ -221,7 +214,7 @@ export function renderAnswerSelect(
   const correctAnswer = info.currentFlashCard.frontSide.data as Array<Pitch>;
 
   return <PianoKeysAnswerSelect
-    aspectRatio={pianoAspectRatio} maxWidth={pianoMaxWidth} lowestPitch={pianoLowestPitch} highestPitch={pianoHighestPitch}
+    maxWidth={pianoMaxWidth} lowestPitch={pianoLowestPitch} highestPitch={pianoHighestPitch}
     correctAnswer={correctAnswer}
     onAnswer={info.onAnswer} lastCorrectAnswer={info.lastCorrectAnswer}
     incorrectAnswers={info.incorrectAnswers} instantConfirm={false} wrapOctave={true} />;

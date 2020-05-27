@@ -1,8 +1,5 @@
 import * as React from "react";
 
-import { Vector2D } from '../../lib/Core/Vector2D';
-import { Size2D } from "../../lib/Core/Size2D";
-import { Rect2D } from '../../lib/Core/Rect2D';
 import { PitchLetter } from "../../lib/TheoryLib/PitchLetter";
 import { Pitch } from "../../lib/TheoryLib/Pitch";
 import { Button } from "@material-ui/core";
@@ -10,14 +7,11 @@ import { Chord } from "../../lib/TheoryLib/Chord";
 import { PianoKeyboard, PianoKeyboardMetrics, renderPianoKeyboardNoteNames, renderPianoKeyboardKeyLabels } from "../Utils/PianoKeyboard";
 import { playPitches } from '../../Audio/PianoAudio';
 import { arrayContains } from '../../lib/Core/ArrayUtils';
-import { getPianoKeyboardAspectRatio } from '../Utils/PianoUtils';
 import { Scale } from "../../lib/TheoryLib/Scale";
 import { unwrapValueOrUndefined } from '../../lib/Core/Utils';
 
 const pianoLowestPitch = new Pitch(PitchLetter.C, 0, 4);
 const pianoHighestPitch = new Pitch(PitchLetter.B, 0, 5);
-const pianoOctaveCount = 2;
-const pianoAspectRatio = getPianoKeyboardAspectRatio(pianoOctaveCount);
 
 function getPitchesInRange(lowestPitch: Pitch, highestPitch: Pitch, pitchesNoOctaveNumber: Array<Pitch>): Array<Pitch> {
   const pitchMidiNumberNoOctaves = pitchesNoOctaveNumber.map(p => p.midiNumberNoOctave);
@@ -92,7 +86,6 @@ export class ChordView extends React.Component<IChordViewProps, {}> {
     };
 
     const maxWidth = (this.props.maxWidth !== undefined) ? this.props.maxWidth : 400;
-    const pianoStyle = { width: "100%", maxWidth: `${maxWidth}px`, height: "auto" };
     
     const showChordInfoText = (this.props.showChordInfoText !== undefined)
       ? this.props.showChordInfoText
@@ -117,12 +110,11 @@ export class ChordView extends React.Component<IChordViewProps, {}> {
       return (
         <div>
           <PianoKeyboard
-            rect={new Rect2D(new Size2D(pianoAspectRatio * 100, 100), new Vector2D(0, 0))}
+            maxWidth={maxWidth}
             lowestPitch={pianoLowestPitch}
             highestPitch={pianoHighestPitch}
             onKeyPress={onKeyPress}
             renderExtrasFn={metrics => this.renderPianoExtrasFn(metrics, pitches)}
-            style={pianoStyle}
           />
         </div>
       );

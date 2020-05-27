@@ -86,7 +86,7 @@ export class GuitarNoteAnswerSelect extends React.Component<IGuitarNoteAnswerSel
   }
 
   public render(): JSX.Element {
-    const style= { width: "100%", maxWidth: "400px" };
+    const style = { width: "100%", maxWidth: "400px" };
 
     return (
       <div>

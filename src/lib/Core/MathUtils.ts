@@ -118,3 +118,17 @@ export function shrinkRectToFit(containerSize: Size2D, rectSize: Size2D): Size2D
   // If we get here, the rect doesn't need to be resized.
   return rectSize;
 }
+
+export function maxScaleFactorToFit(maxWidth: number | undefined, maxHeight: number | undefined, rectSize: Size2D): number {
+  let maxScaleFactor = Infinity;
+
+  if ((maxWidth !== undefined) && (rectSize.width !== 0)) {
+    maxScaleFactor = maxWidth / rectSize.width;
+  }
+  
+  if ((maxHeight !== undefined) && (rectSize.height !== 0)) {
+    maxScaleFactor = Math.min(maxHeight / rectSize.height, maxScaleFactor);
+  }
+
+  return maxScaleFactor;
+}

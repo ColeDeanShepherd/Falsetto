@@ -36,9 +36,9 @@ import * as ChordProgressionsQuiz from "./ChordProgressionsQuiz";
 
 import { naturalPitches, accidentalPitches, allPitches } from "../Components/Quizzes/Notes/PianoNotes";
 import { PianoScaleFormulaDiagram } from "../Components/Utils/PianoScaleFormulaDiagram";
-import { PianoScaleDronePlayer, onKeyPress } from '../Components/Utils/PianoScaleDronePlayer';
+import { PianoScaleDronePlayer } from '../Components/Utils/PianoScaleDronePlayer';
 import { MidiInputDeviceSelect } from "../Components/Utils/MidiInputDeviceSelect";
-import { fullPianoLowestPitch, fullPianoHighestPitch, fullPianoAspectRatio, getPianoKeyboardAspectRatio, getPianoKeyboardAspectRatioFromPitches, fullPianoNumWhiteKeys } from '../Components/Utils/PianoUtils';
+import { fullPianoLowestPitch, fullPianoHighestPitch, fullPianoNumWhiteKeys } from '../Components/Utils/PianoUtils';
 import { MidiPianoRangeInput } from "../Components/Utils/MidiPianoRangeInput";
 import { LimitedWidthContentContainer } from "../Components/Utils/LimitedWidthContentContainer";
 import { NoteText } from '../Components/Utils/NoteText';
@@ -83,38 +83,39 @@ const RedXView: React.FunctionComponent<{}> = props => (
 
 export const FullPiano: React.FunctionComponent<{}> = props => (
   <PlayablePianoKeyboard
-    aspectRatio={fullPianoAspectRatio}
     maxWidth={maxPianoWidth}
     lowestPitch={fullPianoLowestPitch}
     highestPitch={fullPianoHighestPitch} />
 );
 
+export const oneOctavePianoLowestPitch = new Pitch(PitchLetter.C, 0, 4);
+export const oneOctavePianoHighestPitch = new Pitch(PitchLetter.B, 0, 4);
+
 export const OneOctavePiano: React.FunctionComponent<{}> = props => (
   <PlayablePianoKeyboard
-    aspectRatio={getPianoKeyboardAspectRatio(/*octaveCount*/ 1)}
     maxWidth={maxOneOctavePianoWidth}
-    lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-    highestPitch={new Pitch(PitchLetter.B, 0, 4)} />
+    lowestPitch={oneOctavePianoLowestPitch}
+    highestPitch={oneOctavePianoHighestPitch} />
 );
+
+export const twoOctavePianoLowestPitch = new Pitch(PitchLetter.C, 0, 3);
+export const twoOctavePianoHighestPitch = new Pitch(PitchLetter.B, 0, 4);
 
 export const TwoOctavePiano: React.FunctionComponent<{}> = props => (
   <PlayablePianoKeyboard
-    aspectRatio={getPianoKeyboardAspectRatio(/*octaveCount*/ 2)}
     maxWidth={maxTwoOctavePianoWidth}
-    lowestPitch={new Pitch(PitchLetter.C, 0, 3)}
-    highestPitch={new Pitch(PitchLetter.B, 0, 4)} />
+    lowestPitch={twoOctavePianoLowestPitch}
+    highestPitch={twoOctavePianoHighestPitch} />
 );
 
 const PianoKeyTwoBlackKeysPatternDiagram: React.FunctionComponent<{}> = props => {
   const lowestPitch = new Pitch(PitchLetter.C, 0, 4);
   const highestPitch = new Pitch(PitchLetter.E, 0, 4);
   const maxWidth = maxPianoWidth * (3 / fullPianoNumWhiteKeys);
-  const aspectRatio = getPianoKeyboardAspectRatioFromPitches(lowestPitch, highestPitch);
 
   // TODO: wrap octave
   return (
     <PlayablePianoKeyboard
-      aspectRatio={aspectRatio}
       maxWidth={maxWidth}
       lowestPitch={lowestPitch}
       highestPitch={highestPitch} />
@@ -125,12 +126,10 @@ const PianoKeyThreeBlackKeysPatternDiagram: React.FunctionComponent<{}> = props 
   const lowestPitch = new Pitch(PitchLetter.F, 0, 4);
   const highestPitch = new Pitch(PitchLetter.B, 0, 4);
   const maxWidth = maxPianoWidth * (4 / fullPianoNumWhiteKeys);
-  const aspectRatio = getPianoKeyboardAspectRatioFromPitches(lowestPitch, highestPitch);
 
   // TODO: wrap octave
   return (
     <PlayablePianoKeyboard
-      aspectRatio={aspectRatio}
       maxWidth={maxWidth}
       lowestPitch={lowestPitch}
       highestPitch={highestPitch} />
@@ -190,7 +189,6 @@ const PianoKeyPatternDiagram: React.FunctionComponent<{}> = props => {
 
   return (
     <PlayablePianoKeyboard
-      aspectRatio={fullPianoAspectRatio}
       maxWidth={maxPianoWidth}
       margin={margin}
       lowestPitch={fullPianoLowestPitch}
@@ -248,12 +246,9 @@ export class PianoNotesDiagram extends React.Component<IPianoNotesDiagramProps, 
 
     const labelWhiteKeys = (this.props.labelWhiteKeys !== undefined) ? this.props.labelWhiteKeys : true;
     const labelBlackKeys = (this.props.labelBlackKeys !== undefined) ? this.props.labelBlackKeys : true;
-    const octaveCount = Math.ceil((this.props.highestPitch.midiNumber - this.props.lowestPitch.midiNumber) / 12);
-    const aspectRatio = getPianoKeyboardAspectRatio(octaveCount);
   
     return (
       <PlayablePianoKeyboard
-        aspectRatio={aspectRatio}
         maxWidth={maxWidth}
         lowestPitch={lowestPitch}
         highestPitch={highestPitch}
@@ -287,10 +282,8 @@ export class PianoNotesDiagram extends React.Component<IPianoNotesDiagramProps, 
 }
 
 const ThirdsDiagram: React.FunctionComponent<{}> = props => {
-  const aspectRatio = getPianoKeyboardAspectRatio(/*octaveCount*/ 2);
   const maxWidth = maxTwoOctavePianoWidth;
-  const margin = new Margin(0, 0, 0, 20);
-  const style = { width: "100%", maxWidth: `${maxWidth}px`, height: "auto" };
+  const margin = new Margin(0, 0, 0, maxWidth / 10);
 
   const pitches = [
     new Pitch(PitchLetter.C, 0, 4),
@@ -303,22 +296,22 @@ const ThirdsDiagram: React.FunctionComponent<{}> = props => {
       const leftKeyRect = metrics.getKeyRect(leftPitch);
       const rightKeyRect = metrics.getKeyRect(rightPitch);
 
-      const textOffsetY = metrics.height / 8;
-      const fontSize = metrics.height / 15;
+      const textOffsetY = metrics.svgSize.height / 8;
+      const fontSize = metrics.svgSize.height / 12;
       const textPos = new Vector2D(
         (leftKeyRect.left + rightKeyRect.right) / 2,
-        metrics.height + textOffsetY
+        metrics.svgSize.height + textOffsetY
       );
       const textStyle: any = {
         textAnchor: "middle",
         fontSize: fontSize
       };
 
-      const lineOffsetY = textOffsetY - (2.5 * fontSize);
-      const lineShrinkX = metrics.height / 50;
+      const lineOffsetY = textOffsetY - (1.9 * fontSize);
+      const lineShrinkX = metrics.svgSize.height / 50;
       const leftKeyLinePos = new Vector2D(leftKeyRect.center.x + lineShrinkX, leftKeyRect.bottom - lineOffsetY);
       const rightKeyLinePos = new Vector2D(rightKeyRect.center.x - lineShrinkX, leftKeyRect.bottom - lineOffsetY);
-      const strokeWidth = metrics.height / 80;
+      const strokeWidth = metrics.svgSize.height / 80;
 
       return (
         <g>
@@ -358,7 +351,6 @@ const ThirdsDiagram: React.FunctionComponent<{}> = props => {
 
   return (
     <PlayablePianoKeyboard
-      aspectRatio={aspectRatio}
       maxWidth={maxWidth}
       margin={margin}
       lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
@@ -878,7 +870,12 @@ export const pianoTheorySlideGroups = [
           <strong>"H"</strong> means the next note is a <strong>half step</strong> (1 key) higher than of the previous note.
         </p>
         <p>Below is an interactive diagram of the C Major scale and the major scale formula.</p>
-        <p><PianoScaleFormulaDiagram scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))} octaveCount={2} maxWidth={maxTwoOctavePianoWidth} /></p>
+        <p>
+          <PianoScaleFormulaDiagram
+            scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))}
+            octaveCount={2}
+            maxWidth={maxTwoOctavePianoWidth} />
+        </p>
         <div style={{ display: "inline-block" }}><NoteText>Though scale formulas define the notes of a scale in a particular order starting with the root note, you are free to play the notes in any order you like.</NoteText></div>
       </div>
     )),
