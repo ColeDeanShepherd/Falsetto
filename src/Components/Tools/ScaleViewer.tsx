@@ -65,6 +65,7 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
       
       if (this.stopPlayingKeysAudioFn) {
         this.stopPlayingKeysAudioFn();
+        this.stopPlayingKeysAudioFn = undefined;
       }
 
       if (playSimultaneously) {
@@ -74,7 +75,7 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
           this.stopPlayingKeysAudioFn = playPitches([pitch])[1];
         }
       } else {
-        this.stopPlayingKeysAudioFn = PianoScaleDronePlayer.onKeyPress(this.state.scale, pitch)
+        PianoScaleDronePlayer.onKeyPress(this.state.scale, pitch)
       }
     };
     

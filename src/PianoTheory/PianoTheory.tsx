@@ -113,12 +113,12 @@ const PianoKeyTwoBlackKeysPatternDiagram: React.FunctionComponent<{}> = props =>
   const highestPitch = new Pitch(PitchLetter.E, 0, 4);
   const maxWidth = maxPianoWidth * (3 / fullPianoNumWhiteKeys);
 
-  // TODO: wrap octave
   return (
     <PlayablePianoKeyboard
       maxWidth={maxWidth}
       lowestPitch={lowestPitch}
-      highestPitch={highestPitch} />
+      highestPitch={highestPitch}
+      wrapOctave={true} />
   );
 };
 
@@ -127,12 +127,12 @@ const PianoKeyThreeBlackKeysPatternDiagram: React.FunctionComponent<{}> = props 
   const highestPitch = new Pitch(PitchLetter.B, 0, 4);
   const maxWidth = maxPianoWidth * (4 / fullPianoNumWhiteKeys);
 
-  // TODO: wrap octave
   return (
     <PlayablePianoKeyboard
       maxWidth={maxWidth}
       lowestPitch={lowestPitch}
-      highestPitch={highestPitch} />
+      highestPitch={highestPitch}
+      wrapOctave={true} />
   );
 };
 

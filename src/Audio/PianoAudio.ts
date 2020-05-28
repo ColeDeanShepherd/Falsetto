@@ -125,13 +125,18 @@ export function playPitchesSequentially(pitches: Array<Pitch>, delayInMs: number
   return loadAndPlaySoundsSequentially(soundFilePaths, delayInMs, cutOffSounds);
 }
 
-// TODO: preload
 export class PianoAudio {
   public async preloadSounds(): Promise<Array<Howl>> {
     const soundFilePaths = pianoAudioFilePathsByMidiNumber
       .map(t => t[1]);
 
     return await loadSoundsAsync(soundFilePaths);
+  }
+
+  public pressKeys(keyPresses: Array<[Pitch, number]>) {
+    for (const keyPress of keyPresses) {
+      this.pressKey(keyPress[0], keyPress[1]);
+    }
   }
 
   // TODO: use velocity

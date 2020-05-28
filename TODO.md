@@ -1,12 +1,14 @@
 # To-Do
+## Other
+* https://doc.rust-lang.org/stable/book/ch01-01-installation.html
+## Pomodoro
 ## High Priority
-* Fix on mobile
-*** https://doc.rust-lang.org/stable/book/ch01-01-installation.html
 * Music Theory for Piano
-  * Notes Section
-    * Press all of a given note on keyboard before continuing.
+  * Scales section
+    * Review content
+    * MIDI piano integration
   * Self-Paced Scale Mastery
-    * Fix MIDI piano integration
+    * MIDI piano integration
     * Fingering
     * Multiple mastery steps:
       * Play scale in 2nds, 3rd, etc.
@@ -19,24 +21,20 @@
         * Know intervals
         * Know major scale based formula?
   * Chord Progressions Section
-    * Roman numeral notation
-      * scale deg #'s
-      * capitalization is type
-      * can add modifiers (like '7')
-    * V - I
-    * Chord Substitution
-  * Advanced Chords Section
+    * Review content
+    * MIDI piano integration
+  * ??? Advanced Chords Section ???
     * Extended chords, omissions
     * Chord-scale equivalence
   * Improve navigation (enable easy jumping between sections).
   * Improve URLs (use slashes instead of ?)
   * document title changes?
   * Move navigation buttons to bottom on mobile.
+  * Improve layout
 * Debug & fix scale viewer & chord viewer
 * Fix level not being detected properly when disabling & re-enabling in piano notes exercise (orders don't match due to toggle).
 * Improve Home Page
 * Improve Quizzes
-  * One-time quizzes?
   * Better positioning of "Show Question/Answer" for user-determined answers?
   * Save quiz completion?
 * Account system
@@ -47,6 +45,7 @@
   * Save data
 * Monetize
 ## Medium Priority
+* Fix on mobile
 * Improve chord finder (E G B D F is Emin7b9)
 * Turn exercises into "active" exercises
   * Piano Intervals
