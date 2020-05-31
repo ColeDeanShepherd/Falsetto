@@ -40,7 +40,9 @@ export class PianoScaleFormulaDiagram extends React.Component<IPianoScaleFormula
       return <g>{pitches.map((_, i) => renderScaleStepLabel(metrics, i))}</g>;
     }
 
-    function renderScaleStepLabel(metrics: PianoKeyboardMetrics, scaleStepIndex: number): JSX.Element {
+    function renderScaleStepLabel(metrics: PianoKeyboardMetrics, scaleStepIndex: number): JSX.Element | null {
+      if (scaleStepIndex === 0) { return null; }
+
       const leftPitch = pitches[(scaleStepIndex === 0) ? 0 : scaleStepIndex - 1];
       const rightPitch = pitches[(scaleStepIndex === 0) ? 0 : scaleStepIndex];
 
@@ -62,7 +64,7 @@ export class PianoScaleFormulaDiagram extends React.Component<IPianoScaleFormula
       const rightKeyLinePos = new Vector2D(rightKeyRect.center.x, 10);
 
       const halfSteps = rightPitch.midiNumber - leftPitch.midiNumber;
-      const formulaPart = (scaleStepIndex === 0) ? 'R' : ((halfSteps === 1) ? 'H' : 'W');
+      const formulaPart = (halfSteps === 1) ? 'H' : 'W';
 
       const strokeWidth = metrics.blackKeySize.width / 7;
 

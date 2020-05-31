@@ -23,8 +23,10 @@ export interface IPlayablePianoKeyboardProps {
   onKeyRelease?: (keyPitch: Pitch, wasClick: boolean) => void;
   wrapOctave?: boolean;
   toggleKeys?: boolean;
+  allowDragPresses?: boolean;
   onGetExports?: (exports: IPlayablePianoKeyboardExports) => void;
   renderExtrasFn?: (metrics: PianoKeyboardMetrics) => JSX.Element;
+  renderLayeredExtrasFn?: (metrics: PianoKeyboardMetrics) => { whiteKeyLayerExtras: JSX.Element, blackKeyLayerExtras: JSX.Element };
 }
 
 export interface IPlayablePianoKeyboardState {
@@ -48,8 +50,11 @@ export class PlayablePianoKeyboard extends React.Component<IPlayablePianoKeyboar
   }
 
   public render(): JSX.Element {
-    const { maxWidth, maxHeight, lowestPitch, highestPitch, margin, toggleKeys, renderExtrasFn } = this.props;
+    const { maxWidth, maxHeight, lowestPitch, highestPitch, margin, toggleKeys, renderExtrasFn, renderLayeredExtrasFn } = this.props;
 
+    const allowDragPresses = (this.props.allowDragPresses !== undefined)
+      ? this.props.allowDragPresses
+      : true;
     const pressedPitches = this.getPressedPitches();
 
     return (
@@ -64,7 +69,8 @@ export class PlayablePianoKeyboard extends React.Component<IPlayablePianoKeyboar
           onKeyPress={p => this.onKeyPress(p, /*wasClick*/ true)}
           onKeyRelease={p => this.onKeyRelease(p, true)}
           renderExtrasFn={renderExtrasFn}
-          allowDragPresses={!toggleKeys} />
+          renderLayeredExtrasFn={renderLayeredExtrasFn}
+          allowDragPresses={allowDragPresses && !toggleKeys} />
         <MidiNoteEventListener
           onNoteOn={(pitch, velocity) => this.onKeyPress(pitch, /*wasClick*/ false)}
           onNoteOff={pitch => this.onKeyRelease(pitch, /*wasClick*/ false)}

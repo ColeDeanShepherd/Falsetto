@@ -433,7 +433,7 @@ const routes: Array<IRouteData> = ([
       path: fcs.route,
       title: `${fcs.name} - Falsetto`,
       renderFn: () => (
-        <LimitedWidthContentContainer>
+        <LimitedWidthContentContainer style={{ height: "100%" }}>
           {createStudyFlashCardSetComponent(fcs, /*isEmbedded:*/ false, /*hideMoreInfoUri:*/ false)}
         </LimitedWidthContentContainer>
       )

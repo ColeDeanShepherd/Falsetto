@@ -54,8 +54,7 @@ export function createSlideGroups(chordType: ChordType): Array<SlideGroup> {
               /*hideMoreInfoUri*/ true,
               /*title*/ undefined,
               /*style*/ undefined,
-              /*enableSettings*/ undefined,
-              /*showRelatedExercises*/ false)}
+              /*enableSettings*/ undefined)}
           </div>
         </LimitedWidthContentContainer>
       ))

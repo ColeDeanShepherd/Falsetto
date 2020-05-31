@@ -202,7 +202,6 @@ export const MainMenu : React.FunctionComponent<{ collapseCategories: boolean }>
       <div className="row">
         <div className="column">
           {pianoTheoryCategory}
-          {essentialTheoryCategory}
           {guitarLessonsCategory}
         </div>
         <div className="column">
@@ -228,7 +227,6 @@ export const MainMenu : React.FunctionComponent<{ collapseCategories: boolean }>
       <div className="row">
         <div className="column">
           {pianoTheoryCategory}
-          {essentialTheoryCategory}
           {guitarLessonsCategory}
           {toolsCategory}
         </div>

@@ -1,20 +1,66 @@
 import * as React from "react";
 
 import * as FlashCardUtils from "../Components/Quizzes/Utils";
-import { FlashCard } from "../FlashCard";
+import { FlashCard, FlashCardSide } from "../FlashCard";
 import { FlashCardSet } from "../FlashCardSet";
 import { renderUserDeterminedCorrectnessAnswerSelect } from '../Components/Quizzes/Utils';
 import { ScaleFormulaAnswerSelect } from "../Components/Utils/ScaleFormulaAnswerSelect";
 import { MajorScaleRelativeScaleFormulaAnswerSelect } from '../Components/Utils/MajorScaleRelativeScaleFormulaAnswerSelect';
+import { PianoKeyboard } from "../Components/Utils/PianoKeyboard";
+import { Pitch, getPitchRange } from '../lib/TheoryLib/Pitch';
+import { PitchLetter } from "../lib/TheoryLib/PitchLetter";
+import { Scale, ScaleType } from "../lib/TheoryLib/Scale";
+import { PianoKeysAnswerSelect } from "../Components/Utils/PianoKeysAnswerSelect";
+import { PianoScaleNotesAnswerSelect } from '../Components/Utils/PianoScaleNotesAnswerSelect';
 
 const flashCardSetId = "ptScalesQuiz";
 
+const pianoLowestPitch = new Pitch(PitchLetter.C, 0, 4);
+const pianoHighestPitch = new Pitch(PitchLetter.B, 0, 5);
+const pianoMaxWidth = 240;
+
 function createFlashCardSet(): FlashCardSet {
-  const flashCardSet = new FlashCardSet(flashCardSetId, "Scales Quiz", createFlashCards);
+  const flashCardSet = new FlashCardSet(flashCardSetId, "Scales Exercise", createFlashCards);
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.containerHeight = "160px";
 
   return flashCardSet;
+}
+
+function createPressAllScaleNotesFlashCard(id: string, scale: Scale): FlashCard {
+  const scaleName = `${scale.rootPitch.toString(/*includeOctaveNumber*/ false)} ${scale.type.name}`;
+  
+  return new FlashCard(
+    JSON.stringify({ set: flashCardSetId, id: id }),
+    new FlashCardSide(`Press at least one of each note in the ${scaleName} scale.`),
+    new FlashCardSide(
+      () => {
+        const scalePitchMidiNumbersNoOctave = new Set<number>(
+          scale.getPitches()
+            .map(p => p.midiNumberNoOctave)
+        );
+        const possibleCorrectPitches = getPitchRange(pianoLowestPitch, pianoHighestPitch)
+          .filter(p => scalePitchMidiNumbersNoOctave.has(p.midiNumberNoOctave));
+
+        return (
+          <PianoKeyboard
+            maxWidth={pianoMaxWidth}
+            lowestPitch={pianoLowestPitch}
+            highestPitch={pianoHighestPitch}
+            pressedPitches={possibleCorrectPitches}
+          />
+        );
+      }
+    ),
+    info => {
+      return <PianoScaleNotesAnswerSelect
+        maxWidth={pianoMaxWidth}
+        lowestPitch={pianoLowestPitch}
+        highestPitch={pianoHighestPitch}
+        info={info}
+        scale={scale} />;
+    }
+  );
 }
 
 export function createFlashCards(): FlashCard[] {
@@ -29,12 +75,6 @@ export function createFlashCards(): FlashCard[] {
       JSON.stringify({ set: flashCardSetId, id: "rootNoteDef" }),
       "What is the root note of a scale?",
       "the note that generally \"sounds like home\" in the scale",
-      renderUserDeterminedCorrectnessAnswerSelect
-    ),
-    FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "formulaRDef" }),
-      "What does \"R\" mean in scale formulas?",
-      "root note",
       renderUserDeterminedCorrectnessAnswerSelect
     ),
     FlashCard.fromRenderFns(
@@ -70,8 +110,8 @@ export function createFlashCards(): FlashCard[] {
     FlashCard.fromRenderFns(
       JSON.stringify({ set: flashCardSetId, id: "majorScaleFormula" }),
       "What is the formula for major scales?",
-      "R W W H W W W",
-      info => <ScaleFormulaAnswerSelect info={info} correctAnswer={["R", "W", "W", "H", "W", "W", "W"]} />
+      "W W H W W W",
+      info => <ScaleFormulaAnswerSelect info={info} correctAnswer={["W", "W", "H", "W", "W", "W"]} />
     ),
     FlashCard.fromRenderFns(
       JSON.stringify({ set: flashCardSetId, id: "natMinorScaleFormula" }),
@@ -79,6 +119,8 @@ export function createFlashCards(): FlashCard[] {
       "1 2 3♭ 4 5 6♭ 7♭",
       info => <MajorScaleRelativeScaleFormulaAnswerSelect info={info} correctAnswer={[0, 0, -1, 0, 0, -1, -1]} />
     ),
+    createPressAllScaleNotesFlashCard("dMajorNotes", new Scale(ScaleType.Ionian, new Pitch(PitchLetter.D, 0, 4))),
+    createPressAllScaleNotesFlashCard("eMinorNotes", new Scale(ScaleType.Aeolian, new Pitch(PitchLetter.E, 0, 4)))
   ];
 }
 

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Button, Typography } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 
 import { AnswerDifficulty } from "../../Study/AnswerDifficulty";
 import { FlashCardStudySessionInfo } from "../../FlashCardSet";
@@ -30,17 +30,11 @@ export class ScaleFormulaAnswerSelect extends React.Component<IScaleFormulaAnswe
 
     return (
       <div>
-        <p>{formulaString}</p>
+        <p>
+          {formulaString}
+        </p>
 
         <p>
-          <Button
-            onClick={event => this.onRootNoteClick()}
-            variant="contained"
-            style={{ textTransform: "none" }}
-          >
-            R
-          </Button>
-
           <Button
             onClick={event => this.onHalfStepClick()}
             variant="contained"
@@ -77,10 +71,6 @@ export class ScaleFormulaAnswerSelect extends React.Component<IScaleFormulaAnswe
         </p>
       </div>
     );
-  }
-
-  private onRootNoteClick() {
-    this.setState({ value: this.state.value.concat(["R"]) });
   }
   
   private onHalfStepClick() {

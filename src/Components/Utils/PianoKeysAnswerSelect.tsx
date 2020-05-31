@@ -21,6 +21,7 @@ export interface IPianoKeysAnswerSelectProps {
   incorrectAnswers: Array<any>;
   instantConfirm: boolean;
   wrapOctave?: boolean;
+  instantConfirmMidiToggleKeys?: boolean;
 }
 
 export interface IPianoKeysAnswerSelectState {}

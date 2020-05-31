@@ -178,6 +178,11 @@ export class PianoAudio {
     this.pressedPitches = [];
   }
 
+  public isKeyPressed(pitch: Pitch): boolean {
+    const cancellationFnKey = this.getPitchCancellationFnKey(pitch);
+    return this.pitchCancellationFns[cancellationFnKey] !== undefined;
+  }
+
   private pressedPitches: Array<Pitch> = [];
   private pitchCancellationFns: StringDictionary<() => void> = {};
 

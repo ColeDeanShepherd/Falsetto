@@ -34,6 +34,10 @@ sup {
   font-size: 75%;
 }
 
+.no-wrap {
+  white-space: nowrap;
+}
+
 .no-select {
   user-select: none;
 }

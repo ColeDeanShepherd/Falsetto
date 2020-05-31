@@ -29,6 +29,7 @@ export function forEachScale(callbackFn: (scaleType: ScaleType, rootPitchStr: st
     }
   }
 }
+
 export function configDataToEnabledFlashCardIds(
   flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: IConfigData
   ): Array<FlashCardId> {
@@ -45,6 +46,7 @@ export function configDataToEnabledFlashCardIds(
 
   return newEnabledFlashCardIds;
 }
+
 export interface IPianoScalesFlashCardMultiSelectProps {
   studySessionInfo: FlashCardStudySessionInfo;
   onChange?: (newValue: Array<FlashCardId>, newConfigData: any) => void;
@@ -147,6 +149,7 @@ function createFlashCardSet(): FlashCardSet {
 
   return flashCardSet;
 }
+
 export function createFlashCards(): FlashCard[] {
   const flashCards = new Array<FlashCard>();
 
@@ -164,17 +167,14 @@ export function createFlashCards(): FlashCard[] {
     const flashCard = new FlashCard(
       id,
       new FlashCardSide(
-        size => {
-
-          return (
-            <PianoKeyboard
-              maxWidth={240}
-              lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-              highestPitch={new Pitch(PitchLetter.B, 0, 5)}
-              pressedPitches={pitches}
-            />
-          );
-        },
+        size => (
+          <PianoKeyboard
+            maxWidth={240}
+            lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
+            highestPitch={new Pitch(PitchLetter.B, 0, 5)}
+            pressedPitches={pitches}
+          />
+        ),
         pitches
       ),
       new FlashCardSide(
@@ -188,6 +188,7 @@ export function createFlashCards(): FlashCard[] {
 
   return flashCards;
 }
+
 export function renderAnswerSelect(
   info: FlashCardStudySessionInfo
 ) {

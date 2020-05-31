@@ -424,6 +424,13 @@ export class Scale {
   public get id(): string {
     return `${this.rootPitch.toString(/*includeOctaveNumber*/ false)}-${this.type.id}`;
   }
+  
+  public equals(scale: Scale): boolean {
+    return (
+      (this.type === scale.type) &&
+      (this.rootPitch.equals(scale.rootPitch))
+    );
+  }
 
   public getPitch(scaleDegree: number): Pitch {
     return this.type.getPitch(this.rootPitch, scaleDegree);

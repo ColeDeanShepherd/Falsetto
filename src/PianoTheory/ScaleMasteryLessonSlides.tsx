@@ -53,8 +53,7 @@ export function createSlideGroups(scale: Scale): Array<SlideGroup> {
               /*hideMoreInfoUri*/ true,
               /*title*/ undefined,
               /*style*/ undefined,
-              /*enableSettings*/ undefined,
-              /*showRelatedExercises*/ false)}
+              /*enableSettings*/ undefined)}
           </div>
         </LimitedWidthContentContainer>
       )),
@@ -104,8 +103,7 @@ export function createSlideGroups(scale: Scale): Array<SlideGroup> {
                           /*hideMoreInfoUri*/ true,
                           /*title*/ undefined,
                           /*style*/ undefined,
-                          /*enableSettings*/ undefined,
-                          /*showRelatedExercises*/ false)}
+                          /*enableSettings*/ undefined)}
                       </div>
                     </LimitedWidthContentContainer>
                   ))

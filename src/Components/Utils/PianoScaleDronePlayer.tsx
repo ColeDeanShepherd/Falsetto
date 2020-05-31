@@ -26,6 +26,11 @@ export function onKeyPress(scale: Scale, keyPitch: Pitch) {
 }
 
 function onKeyPressInternal(scale: Scale, keyPitch: Pitch) {
+  // If the key is already pressed, don't press it again.
+  if (AppModel.instance.pianoAudio.isKeyPressed(keyPitch)) {
+    return;
+  }
+
   // always release the root note so it plays again
   AppModel.instance.pianoAudio.releaseKey(scale.rootPitch);
 

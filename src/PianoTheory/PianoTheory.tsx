@@ -458,6 +458,8 @@ export class SetupSlideView extends React.Component<{}, {}> {
   }
 }
 
+const exerciseContainerStyle: any = { height: "100%" };
+
 // TODO: dynamic width/height
 export const pianoTheorySlideGroups = [
   new SlideGroup("Introduction & Setup", [
@@ -490,13 +492,27 @@ export const pianoTheorySlideGroups = [
     new Slide("piano-notes-repeat", () => (
       <div>
         <p>Every note has one or more names, which we must learn in order to navigate the instrument and communicate with other musicians.</p>
-        <p>Luckily, we don't need to learn 88 different names because piano keys are laid out in a repeating pattern, and every occurrence of this pattern uses the same names.</p>
-        <p>The pattern has two parts:</p>
-        <p>1. two black keys surrounded by three white keys:</p>
-        <PianoKeyTwoBlackKeysPatternDiagram />
-        <p>2. followed by three black keys surrounded by four white keys:</p>
-        <PianoKeyThreeBlackKeysPatternDiagram />
-        <p>Here are occurrences of the pattern on an 88-key keyboard highlighted in different colors:</p>
+        <p>Luckily, we don't need to learn 88 different names because the names repeat as you move up and down the piano keyboard.</p>
+        <p>Note names repeat because we percieve notes with the same name as very similar, just played higher or lower.</p>
+
+        <br />
+
+        <p>Piano keys are arranged in a repeating 12-note pattern, where each occurrence of the pattern has the same note names. The pattern has two parts:</p>
+
+        <div style={{ display: "flex", width: "100%", justifyContent: "space-evenly" }}>
+          <div>
+            <p><strong>Part 1:</strong> two black keys surrounded by three white keys:</p>
+            <PianoKeyTwoBlackKeysPatternDiagram />
+          </div>
+          <div>
+            <p><strong>Part 2:</strong> followed by three black keys surrounded by four white keys:</p>
+            <PianoKeyThreeBlackKeysPatternDiagram />
+          </div>
+        </div>
+
+        <br />
+
+        <p>Below are occurrences of the pattern on an 88-key piano keyboard highlighted in different colors. Try pressing keys in different sections of the keyboard, and notice how the same keys (relative to the repeating pattern) in different sections of the keyboard sound similar.</p>
         <PianoKeyPatternDiagram />
       </div>
     )),
@@ -642,15 +658,14 @@ export const pianoTheorySlideGroups = [
     )),
     
     new Slide("white-notes-quiz", () => (
-      <div style={{ marginTop: "1em" }}>
+      <div style={exerciseContainerStyle}>
         {createStudyFlashCardSetComponent(
           PianoNotes.createFlashCardSet(naturalPitches),
           /*isEmbedded*/ false,
           /*hideMoreInfoUri*/ true,
           /*title*/ "White Piano Key Names Exercise",
           /*style*/ undefined,
-          /*enableSettings*/ undefined,
-          /*showRelatedExercises*/ false)}
+          /*enableSettings*/ undefined)}
         </div>
     )),
     
@@ -783,15 +798,14 @@ export const pianoTheorySlideGroups = [
     )),
     
     new Slide("black-notes-quiz", () => (
-      <div style={{ marginTop: "1em" }}>
+      <div style={exerciseContainerStyle}>
         {createStudyFlashCardSetComponent(
           PianoNotes.createFlashCardSet(accidentalPitches),
           /*isEmbedded*/ false,
           /*hideMoreInfoUri*/ true,
           /*title*/ "Black Piano Key Names Exercise",
           /*style*/ undefined,
-          /*enableSettings*/ undefined,
-          /*showRelatedExercises*/ false)}
+          /*enableSettings*/ undefined)}
       </div>
     )),
     
@@ -829,15 +843,14 @@ export const pianoTheorySlideGroups = [
     )),
 
     new Slide("notes-quiz", () => (
-      <div style={{ marginTop: "1em" }}>
+      <div style={exerciseContainerStyle}>
         {createStudyFlashCardSetComponent(
           PianoNotes.createFlashCardSet(allPitches),
           /*isEmbedded*/ false,
           /*hideMoreInfoUri*/ true,
           /*title*/ "Piano Notes Exercise",
           /*style*/ undefined,
-          /*enableSettings*/ undefined,
-          /*showRelatedExercises*/ false)}
+          /*enableSettings*/ undefined)}
       </div>
     )),
   ]),
@@ -846,99 +859,91 @@ export const pianoTheorySlideGroups = [
     new Slide("scales-introduction", () => (
       <div>
         <h2>Section 3: Scales</h2>
-        <p>As you've learned, there are 12 uniquely named piano keys. Though musicians are free to use any of the 12 keys at any time, it is common to restrict the choice of keys to the keys in a particular <strong>scale</strong>.</p>
-        <p><strong>Scales</strong> are sets of notes with a designated "root note" that generally "sounds like home" in the scale.</p>
-        <p>Below is an interactive diagram of the <strong>C Major</strong> scale, which has a root note of <strong>C</strong> (indicated in the scale's name) and comprises of the 7 notes: <strong>C, D, E, F, G, A, B</strong>.</p>
-        <p>Try pressing the piano keys below to get a feel for how the scale sounds. Pressing keys will play both the pressed note and the lowest root note (C) in the diagram, which helps convey the "feeling" of the scale.</p>
+        <p>As you've learned, there are 12 different notes. Though musicians are free to use any of the 12 notes at any time, it is common to restrict the choice of keys to those in a particular <strong>scale</strong> &mdash; a set of notes.</p>
+        <p>The <strong>C major scale</strong>, for example, consists of the 7 notes: <strong>C, D, E, F, G, A, B</strong>.</p>
+        <p>Try pressing the piano keys below to get a feel for how the scale sounds. Pressing keys will play both the pressed note and the lowest C in the diagram, which helps convey the "feeling" of the scale.</p>
+        <p>Also try starting and ending with <strong>C</strong> to hear how it sounds stable and "like home."</p>
         <p>
           <PianoScaleDronePlayer
             scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))}
             octaveCount={2}
-            maxWidth={maxOneOctavePianoWidth} />
+            maxWidth={maxTwoOctavePianoWidth} />
         </p>
       </div>
     )),
     new Slide("major-scale", () => (
       <div>
-        <p>Major scales, like the <strong>C Major</strong> scale we saw on the last slide, are very common in music.</p>
-        <p>All major scales are built with the same formula: "<strong>R W W H W W W</strong>", where:</p>
+        <p>Major scales, like the <strong>C major</strong> scale we saw on the last slide, are very common in music.</p>
+        <p>All major scales are built with the same formula: "<strong>W W H W W W</strong>", where:</p>
         <p>
-          <strong>"R"</strong> means the <strong>root note</strong> (<strong>C</strong> in the case of the <strong>C Major</strong> scale)
-          <br />
           <strong>"W"</strong> means the next note is a <strong>whole step</strong> (2 keys) higher than the previous note.
           <br />
           <strong>"H"</strong> means the next note is a <strong>half step</strong> (1 key) higher than of the previous note.
         </p>
-        <p>Below is an interactive diagram of the C Major scale and the major scale formula.</p>
+        <p>So, to figure out the notes in any major scale, you simply pick a note and follow the major scale formula.</p>
+
+        <p>Below is an interactive diagram of the C major scale and the major scale formula.</p>
         <p>
           <PianoScaleFormulaDiagram
             scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))}
             octaveCount={2}
             maxWidth={maxTwoOctavePianoWidth} />
         </p>
-        <div style={{ display: "inline-block" }}><NoteText>Though scale formulas define the notes of a scale in a particular order starting with the root note, you are free to play the notes in any order you like.</NoteText></div>
-      </div>
-    )),
-    new Slide("another-major-scale", () => (
-      <div>
-        <p>To figure out the notes in any other major scale, you simply pick a root note and follow the major scale formula.</p>
-        <p>For example, picking a root note of <strong>E</strong> and following the formula gives you the <strong>E Major</strong> scale below:</p>
-        <p><PianoScaleFormulaDiagram scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.E, 0, 4))} octaveCount={2} maxWidth={maxTwoOctavePianoWidth} /></p>
+        <div style={{ display: "inline-block" }}><NoteText>Though scale formulas define the notes of a scale in a particular order, you are free to play the notes in any order you like.</NoteText></div>
       </div>
     )),
     new Slide("natural-minor-scale", () => (
       <div>
-        <p><strong>Natural Minor</strong> scales (sometimes simply called <strong>Minor</strong> scales) are another common type of scale, and they are built with the formula: "<strong>R W H W W H W</strong>".</p>
-        <p>We can use this formula to find the notes in any natural minor scale, for example the <strong>C Natural Minor</strong> scale, which comprises of the 7 notes: <strong>C, D, E♭, F, G, A♭, B♭</strong></p>
-        <p>Below is an interactive diagram of the <strong>C Natural Minor</strong> scale, along with the natural minor scale formula.</p>
-        <p>Press the piano keys below to get a feel for how the scale sounds.</p>
-        <p><PianoScaleFormulaDiagram scale={new Scale(ScaleType.Aeolian, new Pitch(PitchLetter.C, 0, 4))} octaveCount={2} maxWidth={maxTwoOctavePianoWidth} /></p>
-      </div>
-    )),
-    new Slide("natural-minor-scale-2", () => (
-      <div>
-        <p>Another common way to write scale formulas is <strong>relative to the major scale</strong>.</p>
-        <p>Recall the notes of the following scales:</p>
-        <p><strong>C Major</strong>: C, D, E, F, G, A, B</p>
-        <p><strong>C Minor</strong>: C, D, E♭, F, G, A♭, B♭</p>
-        <p>Note that the <strong>C Minor</strong> scale is almost the same as the <strong>C Major</strong> scale, but the <strong>3rd</strong>, <strong>6th</strong>, and <strong>7th</strong> notes are flattened.</p>
-        <p>We can use this knowledge to write formulas for the major &amp; minor scales like this:</p>
-        <p><strong>C Major</strong>: 1, 2, 3, 4, 5, 6, 7</p>
-        <p><strong>C Minor</strong>: 1, 2, 3♭, 4, 5, 6♭, 7♭</p>
-        <p>This is useful to quickly find scales similar to major scales you have already memorized.</p>
-        <p>Below is an interactive diagram of the <strong>C Natural Minor</strong> scale, along with its major-scale-relative formula.</p>
-        <p>
-          <PianoScaleMajorRelativeFormulaDiagram
-            scale={new Scale(ScaleType.Aeolian, new Pitch(PitchLetter.C, 0, 4))}
-            octaveCount={2}
-            maxWidth={maxTwoOctavePianoWidth} />
-        </p>
+        <p>Another way to write scale formulas is <strong>relative to the major scale</strong>.</p>
+        <p>Let's assign a number to each note in the major scale &mdash; <strong>1</strong> for the 1st note (ex: <strong>C</strong> in <strong>C major</strong>), <strong>2</strong> for the 2nd note (in ascending order &ndash; ex: <strong>D</strong> in <strong>C major</strong>), and so on.</p>
+        <p>Now the major scale can be written as: <strong className="no-wrap">1, 2, 3, 4, 5, 6, 7</strong>.</p>
+        <p>We can then raise or lower the notes with sharps or flats to write formulas for other scales relative to the major scale.</p>
+        
+        <br />
+        <NoteText>The 1st note of a scale is sometimes referred to as the <strong>1st degree</strong> of the scale, and <strong>generally sounds stable and "like home"</strong>. The 2nd note is sometimes referred to as the <strong>2nd degree</strong> scale, the 3rd note as the <strong>3rd degree</strong> and so on.</NoteText>
+        <br />
+
+        <p>For example, another common type of scale is the <strong>natural minor scale</strong> (sometimes simply called the <strong>minor</strong> scale), which has a major-scale-relative formula of: <strong className="no-wrap">1, 2, 3♭, 4, 5, 6♭, 7♭</strong>.</p>
+        <p>We can use this formula to figure out the notes of the <strong>C minor scale</strong>, for example, by taking the notes of the <strong>C major scale</strong> (<span className="no-wrap">C, D, E, F, G, A, B</span>) and flattening degrees 3, 6, &amp; 7, giving us: <strong className="no-wrap">C, D, E♭, F, G, A♭, B♭</strong>.</p>
+        
+        <br />
+
+        <p>Below is an interactive diagram of the <strong>C minor</strong> scale, along its major-scale-relative fomula. Press the piano keys below to get a feel for how the scale sounds!</p>
+        <p><PianoScaleMajorRelativeFormulaDiagram
+          scale={new Scale(ScaleType.Aeolian, new Pitch(PitchLetter.C, 0, 4))}
+          octaveCount={2}
+          maxWidth={maxTwoOctavePianoWidth} /></p>
       </div>
     )),
     new Slide("scales-summary", () => (
       <div>
         <p>There are many other scales you can learn about in your own time here: <NavLinkView to="/scale-exercises" openNewTab={true}>Self-Paced Scale Mastery</NavLinkView>.</p>
-        <p>For now, take some time to review material below, then move to the next slide to test your knowledge of scales with a quiz.</p>
+        
         <br />
-        <p>Scales are <strong>sets of notes with a designated "root note"</strong> that generally "sounds like home" in the scale.</p>
-        <p>The formula for all major scales is <strong>R W W H W W W</strong>.</p>
-        <p>In scale formulas, <strong>"R" means "root note"</strong>.</p>
+
+        <p>For now, take some time to review material below, then move to the next slide to practice your knowledge of scales with an interactive exercise.</p>
+        
+        <br />
+        
+        <p>Scales are <strong>sets of notes</strong>.</p>
+        <p>The formula for all major scales is <strong>W W H W W W</strong>.</p>
         <p>In scale formulas, <strong>"H" means the next note is a "half step" (1 key) to the right of the previous note</strong>.</p>
         <p>In scale formulas, <strong>"W" means the next note is a "whole step" (2 keys) to the right of the previous note</strong>.</p>
-        <p>Though scale formulas define the notes of a scale in a particular order starting with the root note, <strong>you are free to play the notes in any order you like</strong>.</p>
-        <p>The major-scale-relative formula for all natural minor scales (also simply called "minor scales") is <strong>1, 2, 3♭, 4, 5, 6♭, 7♭</strong>.</p>
+        <p>Though scale formulas define the notes of a scale in a particular order, <strong>you are free to play the notes in any order you like</strong>.</p>
+        <p>A <strong>scale degree</strong> is the number of a note in a scale, in ascending order, starting from 1.</p>
+        <p>The 1st degree of a scale <strong>generally sounds stable and "like home."</strong></p>
+        <p>The major-scale-relative formula for all <strong>natural minor scales</strong> (also simply called <strong>minor scales</strong>) is <strong>1, 2, 3♭, 4, 5, 6♭, 7♭</strong>.</p>
       </div>
     )),
     new Slide("scales-quiz", () => (
-      <div style={{ marginTop: "1em" }}>
+      <div style={exerciseContainerStyle}>
         {createStudyFlashCardSetComponent(
           ScalesQuiz.flashCardSet,
           /*isEmbedded*/ false,
           /*hideMoreInfoUri*/ true,
           /*title*/ undefined,
           /*style*/ undefined,
-          /*enableSettings*/ undefined,
-          /*showRelatedExercises*/ false)}
+          /*enableSettings*/ undefined)}
       </div>
     )),
   ]),
@@ -1051,15 +1056,14 @@ export const pianoTheorySlideGroups = [
     )),
     
     new Slide("chords-introduction-quiz", () => (
-      <div style={{ marginTop: "1em" }}>
+      <div style={exerciseContainerStyle}>
         {createStudyFlashCardSetComponent(
           ChordsIntroQuiz.flashCardSet,
           /*isEmbedded*/ false,
           /*hideMoreInfoUri*/ true,
           /*title*/ undefined,
           /*style*/ undefined,
-          /*enableSettings*/ undefined,
-          /*showRelatedExercises*/ false)}
+          /*enableSettings*/ undefined)}
       </div>
     )),
 
@@ -1192,15 +1196,14 @@ export const pianoTheorySlideGroups = [
     )),
     
     new Slide("diatonic-chords-quiz", () => (
-      <div style={{ marginTop: "1em" }}>
+      <div style={exerciseContainerStyle}>
         {createStudyFlashCardSetComponent(
           DiatonicChordsQuiz.flashCardSet,
           /*isEmbedded*/ false,
           /*hideMoreInfoUri*/ true,
           /*title*/ undefined,
           /*style*/ undefined,
-          /*enableSettings*/ undefined,
-          /*showRelatedExercises*/ false)}
+          /*enableSettings*/ undefined)}
       </div>
     )),
     
@@ -1540,15 +1543,14 @@ export const pianoTheorySlideGroups = [
     )),
 
     new Slide("chord-progressions-quiz", () => (
-      <div style={{ marginTop: "1em" }}>
+      <div style={exerciseContainerStyle}>
         {createStudyFlashCardSetComponent(
           ChordProgressionsQuiz.flashCardSet,
           /*isEmbedded*/ false,
           /*hideMoreInfoUri*/ true,
           /*title*/ undefined,
           /*style*/ undefined,
-          /*enableSettings*/ undefined,
-          /*showRelatedExercises*/ false)}
+          /*enableSettings*/ undefined)}
       </div>
     )),
   ]),

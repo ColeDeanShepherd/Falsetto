@@ -3,11 +3,20 @@
 * https://doc.rust-lang.org/stable/book/ch01-01-installation.html
 ## Pomodoro
 ## High Priority
+* Make sure everything in essential music theory is also in new course
+* Scoped stylesheets
+* Improve study flash card UI
 * Music Theory for Piano
   * Scales section
-    * Review content
-    * MIDI piano integration
+    * Small frequent quizzes
+      * Press all the notes of the C Major scale
+        * Ask for root note separately?
+      * What is the major scale formula?
+      * Use the formula to find all the keys of another major scale
+      * What is the major-relative natural minor scale formula?
+      * Press all the keys of a minor scale
   * Self-Paced Scale Mastery
+    * Improve scale type select
     * MIDI piano integration
     * Fingering
     * Multiple mastery steps:
