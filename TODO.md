@@ -7,14 +7,6 @@
 * Scoped stylesheets
 * Improve study flash card UI
 * Music Theory for Piano
-  * Scales section
-    * Small frequent quizzes
-      * Press all the notes of the C Major scale
-        * Ask for root note separately?
-      * What is the major scale formula?
-      * Use the formula to find all the keys of another major scale
-      * What is the major-relative natural minor scale formula?
-      * Press all the keys of a minor scale
   * Self-Paced Scale Mastery
     * Improve scale type select
     * MIDI piano integration

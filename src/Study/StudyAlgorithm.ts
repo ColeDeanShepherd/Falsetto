@@ -14,6 +14,7 @@ export abstract class StudyAlgorithm {
   public get currentFlashCardId(): FlashCardId | undefined {
     return this._currentFlashCardId;
   }
+
   public get flashCardSetStats(): FlashCardSetStats {
     return this._flashCardSetStats;
   }
@@ -29,6 +30,7 @@ export abstract class StudyAlgorithm {
     this._currentFlashCardId = undefined;
     this._flashCardSetStats = stats;
   }
+
   public onAnswer(answerDifficulty: AnswerDifficulty): void {
     precondition(this._currentFlashCardId !== undefined);
 
@@ -44,6 +46,7 @@ export abstract class StudyAlgorithm {
       flashCardStats.numIncorrectGuesses++;
     }
   }
+
   public getNextFlashCardId(studySessionInfo?: FlashCardStudySessionInfo): FlashCardId {
     const enabledFlashCardIds = (this.customNextFlashCardIdFilter && studySessionInfo)
       ? this.customNextFlashCardIdFilter(studySessionInfo)
@@ -66,6 +69,7 @@ export class RandomStudyAlgorithm extends StudyAlgorithm {
   public onAnswer(answerDifficulty: AnswerDifficulty) {
     super.onAnswer(answerDifficulty);
   }
+
   public getNextFlashCardIdInternal(enabledFlashCardIds: FlashCardId[]): FlashCardId {
     if (enabledFlashCardIds.length === 1) {
       const flashCardId = enabledFlashCardIds[0];
@@ -84,6 +88,33 @@ export class RandomStudyAlgorithm extends StudyAlgorithm {
   }
 }
 
+export class QuizStudyAlgorithm extends StudyAlgorithm {
+  public isDone: boolean = false;
+
+  public onAnswer(answerDifficulty: AnswerDifficulty) {
+    super.onAnswer(answerDifficulty);
+  }
+
+  public getNextFlashCardIdInternal(enabledFlashCardIds: FlashCardId[]): FlashCardId {
+    if (this._currentFlashCardId === undefined) {
+      this._currentFlashCardId = enabledFlashCardIds[0];
+      return this._currentFlashCardId;
+    }
+
+    const currentFlashCardIndex = enabledFlashCardIds.indexOf(this._currentFlashCardId);
+    
+    const nextFlashCardIndex = Math.min(currentFlashCardIndex + 1, enabledFlashCardIds.length - 1);
+    const nextFlashCardId = enabledFlashCardIds[nextFlashCardIndex];
+
+    if (nextFlashCardIndex == currentFlashCardIndex) {
+      this.isDone = true;
+    }
+
+    this._currentFlashCardId = nextFlashCardId;
+    return this._currentFlashCardId;
+  }
+}
+
 export class LeitnerStudyAlgorithm extends StudyAlgorithm {
   public constructor(numTiers: number) {
     invariant(Number.isInteger(numTiers) && (numTiers > 0));
@@ -94,6 +125,7 @@ export class LeitnerStudyAlgorithm extends StudyAlgorithm {
       this.tieredFlashCardIds[i] = new Array<FlashCardId>();
     }
   }
+
   public reset(
     flashCardIds: Array<FlashCardId>,
     flashCards: Array<FlashCard>,

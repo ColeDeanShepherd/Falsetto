@@ -22,7 +22,7 @@ import { WebMidiInitializedAction, MidiDeviceConnectedAction, MidiDeviceDisconne
   MidiInputDeviceChangedAction, MidiInputDevicePitchRangeChangedAction } from "../AppMidi/Actions";
   import { AppModel } from "../App/Model";
 
-import { createStudyFlashCardSetComponent } from "../StudyFlashCards/View";
+import { createStudyFlashCardSetComponent, StudyFlashCardsView } from "../StudyFlashCards/View";
 
 import { NavLinkView } from "../NavLinkView";
 
@@ -52,6 +52,7 @@ import { range } from '../lib/Core/MathUtils';
 import { Size2D } from '../lib/Core/Size2D';
 import { FlashCard } from "../FlashCard";
 import { majorScaleFormulaFlashCard, minorScaleFormulaFlashCard, createPressAllScaleNotesFlashCard } from './ScalesQuiz';
+import { FlashCardSet } from "../FlashCardSet";
 
 export const maxPianoWidth = 1000;
 export const maxOneOctavePianoWidth = 400;
@@ -462,22 +463,23 @@ export class SetupSlideView extends React.Component<{}, {}> {
 
 const exerciseContainerStyle: any = { height: "100%" };
 
-function createMiniQuizSlide(slideUrl: string, flashCards: Array<FlashCard>) {
-  //const flashCardSet = new FlashCardSet(flashCardSetId, "Piano Notes", () => createFlashCards(pitches));
-  //flashCardSet.containerHeight = `${200}px`;
-  //flashCardSet.moreInfoUri = "/essential-music-theory/notes";
-  //flashCardSet.renderAnswerSelect = renderAnswerSelect;
+function createMiniQuizSlide(
+  slideUrl: string,
+  flashCards: Array<FlashCard>
+) {
+  const flashCardSetId = `ptMiniQuiz.${slideUrl}`;
+  const flashCardSet = new FlashCardSet(flashCardSetId, /*name*/ "Piano Notes", () => flashCards);
 
   return (
     new Slide(slideUrl, () => (
       <div style={exerciseContainerStyle}>
-        {createStudyFlashCardSetComponent(
-          PianoNotes.createFlashCardSet(allPitches),
-          /*isEmbedded*/ false,
-          /*hideMoreInfoUri*/ true,
-          /*title*/ "Piano Notes Exercise",
-          /*style*/ undefined,
-          /*enableSettings*/ undefined)}
+        <StudyFlashCardsView
+          key={flashCardSet.route}
+          flashCardSet={flashCardSet}
+          title=""
+          quizMode={true}
+          hideMoreInfoUri={false}
+        />
       </div>
     ))
   );
@@ -894,10 +896,10 @@ export const pianoTheorySlideGroups = [
         </p>
       </div>
     )),
-    // createMiniQuizSlide(
-    //   "c-major-scale-notes-quiz",
-    //   [createPressAllScaleNotesFlashCard("cMajorScaleNotes", new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4)))]
-    // ),
+    createMiniQuizSlide(
+      "c-major-scale-notes-quiz",
+      [createPressAllScaleNotesFlashCard("cMajorScaleNotes", new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4)))]
+    ),
     new Slide("major-scale", () => (
       <div>
         <p>Major scales, like the <strong>C major</strong> scale we saw on the last slide, are very common in music.</p>
@@ -919,7 +921,7 @@ export const pianoTheorySlideGroups = [
         <div style={{ display: "inline-block" }}><NoteText>Though scale formulas define the notes of a scale in a particular order, you are free to play the notes in any order you like.</NoteText></div>
       </div>
     )),
-    //createMiniQuizSlide("major-scale-formula-quiz", [majorScaleFormulaFlashCard]),
+    createMiniQuizSlide("major-scale-formula-quiz", [majorScaleFormulaFlashCard]),
     new Slide("natural-minor-scale", () => (
       <div>
         <p>Another way to write scale formulas is <strong>relative to the major scale</strong>.</p>
@@ -943,7 +945,7 @@ export const pianoTheorySlideGroups = [
           maxWidth={maxTwoOctavePianoWidth} /></p>
       </div>
     )),
-    //createMiniQuizSlide("minor-scale-formula-quiz", [minorScaleFormulaFlashCard]),
+    createMiniQuizSlide("minor-scale-formula-quiz", [minorScaleFormulaFlashCard]),
     new Slide("scales-summary", () => (
       <div>
         <p>There are many other scales you can learn about in your own time here: <NavLinkView to="/scale-exercises" openNewTab={true}>Self-Paced Scale Mastery</NavLinkView>.</p>

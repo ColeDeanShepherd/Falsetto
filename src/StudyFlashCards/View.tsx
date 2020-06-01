@@ -14,6 +14,7 @@ import { StudyFlashCardsModel, getPercentToNextLevel } from './Model';
 import { unwrapValueOrUndefined } from '../lib/Core/Utils';
 import { LevelProgressBarView } from "../Components/Utils/LevelProgressBarView";
 import { WatermarkView } from "../Components/Utils/WatermarkView";
+import { QuizStudyAlgorithm } from '../Study/StudyAlgorithm';
 
 export function createStudyFlashCardSetComponent(
   flashCardSet: FlashCardSet, isEmbedded: boolean, hideMoreInfoUri: boolean,
@@ -39,12 +40,14 @@ export function createStudyFlashCardSetComponent(
 export interface IStudyFlashCardsViewProps {
   title: string;
   hideMoreInfoUri: boolean;
+  quizMode?: boolean;
   flashCardSet: FlashCardSet;
   enableSettings?: boolean;
   isEmbedded?: boolean; // TODO: remove
   style?: any;
   showRelatedExercises?: boolean;
 }
+
 export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewProps, {}> {
   private model: StudyFlashCardsModel;
 
@@ -53,7 +56,10 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
 
     const { flashCardSet } = this.props;
 
-    this.model = new StudyFlashCardsModel(flashCardSet);
+    const studyAlgorithm = this.getIsQuizMode()
+      ? new QuizStudyAlgorithm()
+      : undefined;
+    this.model = new StudyFlashCardsModel(flashCardSet, studyAlgorithm);
 
     this.onModelUpdate = () => this.forceUpdate();
     this.model.subscribeToUpdates(this.onModelUpdate);
@@ -135,6 +141,11 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
 
       const isFrontSideVisible = (!isShowingBackSide || model.haveGottenCurrentFlashCardWrong);
       const isBackSideVisible = (isShowingBackSide || model.haveGottenCurrentFlashCardWrong);
+
+      const isQuizMode = this.getIsQuizMode();
+
+      const isDoneWithQuiz = isQuizMode
+        && (model.studyAlgorithm as QuizStudyAlgorithm).isDone;
 
       const renderHeader = () => (
         <div>
@@ -262,12 +273,17 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
               </Button>
             )
             : null}
-          <Button
-            onClick={event => this.moveToNextFlashCard(null)}
-            variant="contained"
-          >
-            {(!renderAnswerSelect || model.haveGottenCurrentFlashCardWrong) ? "Next" : "Skip"}
-          </Button>
+
+          {(flashCards.length > 1)
+            ? (
+              <Button
+                onClick={event => this.moveToNextFlashCard(null)}
+                variant="contained"
+              >
+                {(!renderAnswerSelect || model.haveGottenCurrentFlashCardWrong) ? "Next" : "Skip"}
+              </Button>
+            )
+            : null}
         </div>
       );
 
@@ -296,13 +312,36 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
         </div>
       );
 
-      cardContents = (
-        <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
-          {renderHeader()}
-          {renderAnswerableFlashCard()}
-          {renderFlashCardControls()}
-        </div>
+      const renderQuizResults = () => (
+        <p>
+          <i
+            className="material-icons"
+            style={{
+              color: "green",
+              display: model.startShowingCorrectAnswerIcon ? "inline-block" : "none",
+              fontSize: "1.3em",
+              verticalAlign: "bottom"
+            }}>
+            check_circle
+          </i>
+
+          <span> Correct!</span>
+        </p>
       );
+
+      cardContents = !isDoneWithQuiz
+        ? (
+          <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+            {!isQuizMode ? renderHeader() : null}
+            {renderAnswerableFlashCard()}
+            {renderFlashCardControls()}
+          </div>
+        )
+        : (
+          <div style={{ display: "flex", flexDirection: "column", textAlign: "center", fontSize: "1.5em", height: "100%", justifyContent: "center" }}>
+            {renderQuizResults()}
+          </div>
+        );
     } else {
       cardContents = <p>Loading...</p>;
     }
@@ -420,4 +459,10 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
   }
 
   // #endregion UI Events
+
+  public getIsQuizMode(): boolean {
+    return (this.props.quizMode !== undefined)
+      ? this.props.quizMode
+      : false;
+  }
 }

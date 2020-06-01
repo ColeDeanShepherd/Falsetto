@@ -1,6 +1,6 @@
 import * as Utils from "../lib/Core/Utils";
 import { FlashCard, FlashCardId } from "../FlashCard";
-import { StudyAlgorithm, LeitnerStudyAlgorithm } from "../Study/StudyAlgorithm";
+import { StudyAlgorithm, LeitnerStudyAlgorithm, QuizStudyAlgorithm } from '../Study/StudyAlgorithm';
 import { AnswerDifficulty, answerDifficultyToPercentCorrect, isAnswerDifficultyCorrect } from "../Study/AnswerDifficulty";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../FlashCardSet";
 import { IDatabase, FlashCardAnswer } from "../Database";
@@ -78,7 +78,7 @@ export class StudyFlashCardsModel {
   public currentFlashCardId: FlashCardId;
   public incorrectAnswersToCurrentFlashCard: Array<any>;
   public isShowingBackSide: boolean;
-  public studyAlgorithm: StudyAlgorithm = new LeitnerStudyAlgorithm(5);
+  public studyAlgorithm: StudyAlgorithm;
 
   // correct/incorrect icon state
   public correctAnswerIconKeySuffix: number;
@@ -99,7 +99,7 @@ export class StudyFlashCardsModel {
     return this.currentFlashCardId.length > 0;
   }
 
-  public constructor(flashCardSet: FlashCardSet) {
+  public constructor(flashCardSet: FlashCardSet, studyAlgorithm?: StudyAlgorithm) {
     this.userManager = DependencyInjector.instance.getRequiredService<IUserManager>("IUserManager");
     //this.database = DependencyInjector.instance.getRequiredService<IDatabase>("IDatabase");
     this.analytics = DependencyInjector.instance.getRequiredService<IAnalytics>("IAnalytics");
@@ -124,6 +124,9 @@ export class StudyFlashCardsModel {
     this.incorrectAnswerIconKeySuffix = 0;
     this.startShowingIncorrectAnswerIcon = false;
     
+    this.studyAlgorithm = (studyAlgorithm !== undefined)
+      ? studyAlgorithm
+      : new LeitnerStudyAlgorithm(5);
     this.studyAlgorithm.customNextFlashCardIdFilter = this.flashCardSet.customNextFlashCardIdFilter;
 
     this.flashCardLevels = this.flashCardSet.createFlashCardLevels
@@ -189,20 +192,25 @@ export class StudyFlashCardsModel {
   public flipFlashCard() {
     this.handleFlipFlashCardAction();
   }
+
   public skipFlashCard() {
     this.handleSkipFlashCardAction(this.lastCorrectAnswer);
   }
+
   public changeLevel(levelIndex: number) {
     this.handleChangeLevelAction(levelIndex);
   }
+
   public toggleShowConfiguration() {
     this.handleToggleConfigurationAction();
   }
+
   public changeEnabledFlashCards(newValue: Array<FlashCardId>, newConfigData: any) {
     this.handleChangeEnabledFlashCardsAction(newValue, newConfigData);
   }
 
   private get hasFlashCardLevels(): boolean { return this.flashCardLevels && (this.flashCardLevels.length > 0); }
+
   private getInitialConfigData(): any {
     const setInitialConfigData = this.flashCardSet.getInitialConfigData
       ? this.flashCardSet.getInitialConfigData()
@@ -211,6 +219,7 @@ export class StudyFlashCardsModel {
       ? this.flashCardLevels[0].createConfigData(setInitialConfigData) // TODO: don"t pass this argument?
       : setInitialConfigData;
   }
+
   private getInitialEnabledFlashCardIds(): Array<FlashCardId> {
     if (this.hasFlashCardLevels) {
       const [_, level] = getCurrentFlashCardLevel(this.flashCardSet, this.flashCardLevels, this.studyAlgorithm.flashCardSetStats);
@@ -339,6 +348,7 @@ export class StudyFlashCardsModel {
 
     this.publishUpdate();
   }
+
   private handleSkipFlashCardAction(lastCorrectAnswer: any) {
     this.currentFlashCardId = this.studyAlgorithm.getNextFlashCardId(
       this.getStudySessionInfo(new Size2D(0, 0))
@@ -381,11 +391,12 @@ export class StudyFlashCardsModel {
   }
 
   // #endregion Action Handlers
-
   
   private moveToNextFlashCardInternal(lastCorrectAnswer: any) {
     this.handleSkipFlashCardAction(lastCorrectAnswer);
   }
+
+  // #region Level
 
   public getCurrentLevelIndex(): number | undefined {
     if (this.flashCardLevels.length === 0) {
@@ -398,6 +409,7 @@ export class StudyFlashCardsModel {
       ? result
       : undefined;
   }
+
   public getPrevLevelIndex(): number | undefined {
     const currentLevelIndex = this.getCurrentLevelIndex();
     if ((currentLevelIndex === undefined) || (currentLevelIndex === 0)) {
@@ -406,6 +418,7 @@ export class StudyFlashCardsModel {
 
     return currentLevelIndex - 1;
   }
+
   public getNextLevelIndex(): number | undefined {
     const currentLevelIndex = this.getCurrentLevelIndex();
     if ((currentLevelIndex === undefined) || (currentLevelIndex >= (this.flashCardLevels.length - 1))) {
@@ -413,25 +426,6 @@ export class StudyFlashCardsModel {
     }
 
     return currentLevelIndex + 1;
-  }
-
-  public getStudySessionInfo(
-    containerSize: Size2D,
-  ): FlashCardStudySessionInfo {
-    const currentFlashCard = Utils.unwrapValueOrUndefined(
-      this.flashCards.find(fc => fc.id === this.currentFlashCardId)
-    );
-    const onUserAnswer = (answerDifficulty: AnswerDifficulty, answer: any) =>
-      this.handleUserAnswerAction(this.currentFlashCardId, answer, answerDifficulty);
-    const skipFlashCard = () =>
-      this.handleSkipFlashCardAction(this.lastCorrectAnswer);
-
-    return new FlashCardStudySessionInfo(
-      containerSize, this.flashCardSet, this.flashCards,
-      this.enabledFlashCardIds, this.configData, this.currentFlashCardId,
-      currentFlashCard, onUserAnswer, skipFlashCard, this.lastCorrectAnswer,
-      this.incorrectAnswers, this.studyAlgorithm
-    );
   }
 
   // TODO: move to view?
@@ -461,5 +455,26 @@ export class StudyFlashCardsModel {
     const newConfigData = level.createConfigData(this.configData);
 
     this.handleChangeEnabledFlashCardsAction(newEnabledFlashCardIds, newConfigData);
+  }
+
+  // #endregion
+
+  public getStudySessionInfo(
+    containerSize: Size2D,
+  ): FlashCardStudySessionInfo {
+    const currentFlashCard = Utils.unwrapValueOrUndefined(
+      this.flashCards.find(fc => fc.id === this.currentFlashCardId)
+    );
+    const onUserAnswer = (answerDifficulty: AnswerDifficulty, answer: any) =>
+      this.handleUserAnswerAction(this.currentFlashCardId, answer, answerDifficulty);
+    const skipFlashCard = () =>
+      this.handleSkipFlashCardAction(this.lastCorrectAnswer);
+
+    return new FlashCardStudySessionInfo(
+      containerSize, this.flashCardSet, this.flashCards,
+      this.enabledFlashCardIds, this.configData, this.currentFlashCardId,
+      currentFlashCard, onUserAnswer, skipFlashCard, this.lastCorrectAnswer,
+      this.incorrectAnswers, this.studyAlgorithm
+    );
   }
 }
