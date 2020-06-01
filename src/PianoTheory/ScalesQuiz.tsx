@@ -27,7 +27,7 @@ function createFlashCardSet(): FlashCardSet {
   return flashCardSet;
 }
 
-function createPressAllScaleNotesFlashCard(id: string, scale: Scale): FlashCard {
+export function createPressAllScaleNotesFlashCard(id: string, scale: Scale): FlashCard {
   const scaleName = `${scale.rootPitch.toString(/*includeOctaveNumber*/ false)} ${scale.type.name}`;
   
   return new FlashCard(
@@ -62,6 +62,20 @@ function createPressAllScaleNotesFlashCard(id: string, scale: Scale): FlashCard 
     }
   );
 }
+
+export const majorScaleFormulaFlashCard = FlashCard.fromRenderFns(
+  JSON.stringify({ set: flashCardSetId, id: "majorScaleFormula" }),
+  "What is the formula for major scales?",
+  "W W H W W W",
+  info => <ScaleFormulaAnswerSelect info={info} correctAnswer={["W", "W", "H", "W", "W", "W"]} />
+);
+
+export const minorScaleFormulaFlashCard = FlashCard.fromRenderFns(
+  JSON.stringify({ set: flashCardSetId, id: "natMinorScaleFormula" }),
+  "What is the major-scale-relative formula for natural minor scales?",
+  "1 2 3♭ 4 5 6♭ 7♭",
+  info => <MajorScaleRelativeScaleFormulaAnswerSelect info={info} correctAnswer={[0, 0, -1, 0, 0, -1, -1]} />
+);
 
 export function createFlashCards(): FlashCard[] {
   return [
@@ -107,18 +121,8 @@ export function createFlashCards(): FlashCard[] {
       "no",
       renderUserDeterminedCorrectnessAnswerSelect
     ),
-    FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "majorScaleFormula" }),
-      "What is the formula for major scales?",
-      "W W H W W W",
-      info => <ScaleFormulaAnswerSelect info={info} correctAnswer={["W", "W", "H", "W", "W", "W"]} />
-    ),
-    FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "natMinorScaleFormula" }),
-      "What is the major-scale-relative formula for natural minor scales?",
-      "1 2 3♭ 4 5 6♭ 7♭",
-      info => <MajorScaleRelativeScaleFormulaAnswerSelect info={info} correctAnswer={[0, 0, -1, 0, 0, -1, -1]} />
-    ),
+    majorScaleFormulaFlashCard,
+    minorScaleFormulaFlashCard,
     createPressAllScaleNotesFlashCard("dMajorNotes", new Scale(ScaleType.Ionian, new Pitch(PitchLetter.D, 0, 4))),
     createPressAllScaleNotesFlashCard("eMinorNotes", new Scale(ScaleType.Aeolian, new Pitch(PitchLetter.E, 0, 4)))
   ];
