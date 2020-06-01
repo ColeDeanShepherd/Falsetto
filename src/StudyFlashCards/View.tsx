@@ -12,6 +12,8 @@ import { Size2D } from '../lib/Core/Size2D';
 import { NavLinkView } from '../NavLinkView';
 import { StudyFlashCardsModel, getPercentToNextLevel } from './Model';
 import { unwrapValueOrUndefined } from '../lib/Core/Utils';
+import { LevelProgressBarView } from "../Components/Utils/LevelProgressBarView";
+import { WatermarkView } from "../Components/Utils/WatermarkView";
 
 export function createStudyFlashCardSetComponent(
   flashCardSet: FlashCardSet, isEmbedded: boolean, hideMoreInfoUri: boolean,
@@ -28,54 +30,6 @@ export function createStudyFlashCardSetComponent(
       style={style}
     />
   );
-}
-
-export interface ILevelProgressBarViewProps {
-  percentToNextLevel: number;
-}
-export class LevelProgressBarView extends React.Component<ILevelProgressBarViewProps, {}> {
-  public render(): JSX.Element {
-    const { percentToNextLevel } = this.props;
-
-    return (
-      <div
-        style={{
-          width: "100%",
-          height: "0.25em",
-          backgroundColor: "lightgray",
-          border: "1px solid grey"
-        }}>
-        <div
-          style={{
-            width: `${Math.round(100 * percentToNextLevel)}%`,
-            height: "100%",
-            backgroundColor: "#0A0"
-          }}
-        />
-      </div>
-    );
-  }
-}
-
-export interface IWatermarkViewProps {
-  isEmbedded: boolean;
-}
-export class WatermarkView extends React.Component<IWatermarkViewProps, {}> {
-  public render(): JSX.Element {
-    const { isEmbedded } = this.props;
-
-    const watermarkStyle: any = {
-      display: isEmbedded ? "block" : "none",
-      position: "absolute",
-      bottom: 0,
-      right: 0,
-      margin: "0.25em",
-      fontWeight: "bold",
-      opacity: 0.25
-    };
-
-    return <p style={watermarkStyle} className="watermark">https://falsetto.app</p>;
-  }
 }
 
 // TODO: make flash card studying work without a view (use model & actions)
@@ -182,156 +136,171 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
       const isFrontSideVisible = (!isShowingBackSide || model.haveGottenCurrentFlashCardWrong);
       const isBackSideVisible = (isShowingBackSide || model.haveGottenCurrentFlashCardWrong);
 
-      cardContents = (
-        <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
-          <div>
-            <div style={{display: "flex"}}>
-              <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
-                {this.props.title}
-              </Typography>
-              
-              {enableSettings ? (
-                <Button variant="contained" onClick={event => this.toggleConfiguration()} style={{width: "48px", height: "41px"}}>
-                  <i
-                    className="cursor-pointer material-icons"
-                    style={{ verticalAlign: "sub", display: "inline-block" }}
-                  >
-                    settings
-                  </i>
-                </Button>
-              ) : null}
-            </div>
-    
-            {model.showConfiguration ? (
-              <Paper style={{padding: "1em", margin: "1em 0"}}>
-                <Typography component="h6" variant="h6" gutterBottom={true}>Settings</Typography>
-                {this.renderFlashCardMultiSelect(containerSize, flashCards)}
-              </Paper>
-            ) : null}
-    
-            {(!this.props.isEmbedded && moreInfoUri) ? <p style={{ margin: "0.5em 0" }}><a href={moreInfoUri} className="moreInfoLink" target="_blank">To learn more, click here.</a></p> : null}
-    
-            {renderAnswerSelect
-              ? (
-                <p style={{marginBottom: "0", marginTop: "0", lineHeight: "1.5"}}>
-                  <span style={{paddingRight: "1em"}}>{studyAlgorithm.flashCardSetStats.numCorrectGuesses} / {studyAlgorithm.flashCardSetStats.numCorrectGuesses + studyAlgorithm.flashCardSetStats.numIncorrectGuesses} correct ({(100 * percentCorrect).toFixed(2)}%)</span>
-                  <span key={`ca.${model.correctAnswerIconKeySuffix}`}>
-                    <i
-                      className="material-icons fade-out"
-                      style={{
-                        color: "green",
-                        verticalAlign: "bottom",
-                        display: model.startShowingCorrectAnswerIcon ? "inline-block" : "none"
-                      }}>
-                      check_circle
-                    </i>
-                  </span>
-                  <span key={`ia.${model.incorrectAnswerIconKeySuffix}`}>
-                    <i
-                      className="material-icons fade-out"
-                      style={{
-                        color: "red",
-                        verticalAlign: "bottom",
-                        display: model.startShowingIncorrectAnswerIcon ? "inline-block" : "none"
-                      }}>
-                      cancel
-                    </i>
-                  </span>
-                </p>
-              )
-              : null
-            }
+      const renderHeader = () => (
+        <div>
+          <div style={{display: "flex"}}>
+            <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
+              {this.props.title}
+            </Typography>
             
-            {(percentToNextLevel !== undefined)
-              ? (
-                <p
-                  style={{
-                    display: "flex",
-                    lineHeight: "1.5",
-                    margin: "0.5em 0"
-                  }}>
-                  <div style={{ flex: 1 }}>
-                    {(prevLevelIndex !== undefined) ? (
-                      <Button
-                        onClick={event => model.moveToPrevLevel()}
-                        variant="contained"
-                        style={{ textTransform: "none" }}
-                      >
-                        Level {model.getLevelDisplayName(prevLevelIndex)}
-                      </Button>
-                    ) : null}
-                  </div>
-                  <div style={{ flex: 1, textAlign: "center" }}>
-                    <span style={{ paddingRight: "1em" }}>
-                      {(currentLevelIndex !== undefined) ? (
-                        <span>Level {model.getLevelDisplayName(currentLevelIndex)} &mdash; </span>
-                      ) : null}
-                      {(percentToNextLevel !== undefined) ? <span>{Math.round(100 * percentToNextLevel)}%</span> : null}
-                    </span>
-                  </div>
-                  <div style={{ flex: 1, textAlign: "right" }}>
-                    {(nextLevelIndex !== undefined) ? (
-                      <Button
-                        onClick={event => model.moveToNextLevel()}
-                        variant="contained"
-                        style={{ textTransform: "none" }}
-                      >
-                        Level {model.getLevelDisplayName(nextLevelIndex)}
-                      </Button>
-                    ) : null}
-                  </div>
-                </p>
-              )
-              : null
-            }
-    
-            {(percentToNextLevel !== undefined)
-              ? <LevelProgressBarView percentToNextLevel={percentToNextLevel} />
-              : null
-            }
+            {enableSettings ? (
+              <Button variant="contained" onClick={event => this.toggleConfiguration()} style={{width: "48px", height: "41px"}}>
+                <i
+                  className="cursor-pointer material-icons"
+                  style={{ verticalAlign: "sub", display: "inline-block" }}
+                >
+                  settings
+                </i>
+              </Button>
+            ) : null}
           </div>
   
-          <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", flexGrow: 1 }}>
-            {isFrontSideVisible ? (
-              <div
-                key={`${currentFlashCardKey}.front`}
-                style={flashCardContainerStyle}>
-                {renderedFlashCardFrontSide}
-              </div>
-            ) : null}
-            {isBackSideVisible ? (
-              <div
-                key={`${currentFlashCardKey}.back`}
-                style={flashCardContainerStyle}
-              >
-                <p style={{ textDecoration: "underline" }}>Correct Answer</p>
-                {renderedFlashCardBackSide}
-              </div>
-            ) : null}
-            
-            {(renderAnswerSelect && isAnswerSelectVisible)
-              ? <div style={{ textAlign: "center" }}>{renderAnswerSelect(model.getStudySessionInfo(containerSize))}</div>
-              : null}
-          </div>
+          {model.showConfiguration ? (
+            <Paper style={{padding: "1em", margin: "1em 0"}}>
+              <Typography component="h6" variant="h6" gutterBottom={true}>Settings</Typography>
+              {this.renderFlashCardMultiSelect(containerSize, flashCards)}
+            </Paper>
+          ) : null}
+  
+          {(!this.props.isEmbedded && moreInfoUri)
+            ? <p style={{ margin: "0.5em 0" }}><a href={moreInfoUri} className="moreInfoLink" target="_blank">To learn more, click here.</a></p>
+            : null}
+          {renderCorrectIncorrectIcon()}
+          {renderLevelProgressAndControls()}
+        </div>
+      );
 
-          <div style={{ textAlign: "center" }}>
-            {!model.haveGottenCurrentFlashCardWrong
-              ? (
-                <Button
-                  onClick={event => this.flipFlashCard()}
-                  variant="contained"
-                >
-                  Show {isShowingBackSide ? "Question" : "Answer"}
-                </Button>
-              )
-              : null}
-            <Button
-              onClick={event => this.moveToNextFlashCard(null)}
-              variant="contained"
+      const renderCorrectIncorrectIcon = () => (
+        renderAnswerSelect
+          ? (
+            <p style={{marginBottom: "0", marginTop: "0", lineHeight: "1.5"}}>
+              <span style={{paddingRight: "1em"}}>{studyAlgorithm.flashCardSetStats.numCorrectGuesses} / {studyAlgorithm.flashCardSetStats.numCorrectGuesses + studyAlgorithm.flashCardSetStats.numIncorrectGuesses} correct ({(100 * percentCorrect).toFixed(2)}%)</span>
+              <span key={`ca.${model.correctAnswerIconKeySuffix}`}>
+                <i
+                  className="material-icons fade-out"
+                  style={{
+                    color: "green",
+                    verticalAlign: "bottom",
+                    display: model.startShowingCorrectAnswerIcon ? "inline-block" : "none"
+                  }}>
+                  check_circle
+                </i>
+              </span>
+              <span key={`ia.${model.incorrectAnswerIconKeySuffix}`}>
+                <i
+                  className="material-icons fade-out"
+                  style={{
+                    color: "red",
+                    verticalAlign: "bottom",
+                    display: model.startShowingIncorrectAnswerIcon ? "inline-block" : "none"
+                  }}>
+                  cancel
+                </i>
+              </span>
+            </p>
+          )
+          : null
+      );
+
+      const renderLevelProgressAndControls = () => ([
+        (percentToNextLevel !== undefined)
+          ? (
+            <p
+              style={{
+                display: "flex",
+                lineHeight: "1.5",
+                margin: "0.5em 0"
+              }}>
+              <div style={{ flex: 1 }}>
+                {(prevLevelIndex !== undefined) ? (
+                  <Button
+                    onClick={event => model.moveToPrevLevel()}
+                    variant="contained"
+                    style={{ textTransform: "none" }}
+                  >
+                    Level {model.getLevelDisplayName(prevLevelIndex)}
+                  </Button>
+                ) : null}
+              </div>
+              <div style={{ flex: 1, textAlign: "center" }}>
+                <span style={{ paddingRight: "1em" }}>
+                  {(currentLevelIndex !== undefined) ? (
+                    <span>Level {model.getLevelDisplayName(currentLevelIndex)} &mdash; </span>
+                  ) : null}
+                  {(percentToNextLevel !== undefined) ? <span>{Math.round(100 * percentToNextLevel)}%</span> : null}
+                </span>
+              </div>
+              <div style={{ flex: 1, textAlign: "right" }}>
+                {(nextLevelIndex !== undefined) ? (
+                  <Button
+                    onClick={event => model.moveToNextLevel()}
+                    variant="contained"
+                    style={{ textTransform: "none" }}
+                  >
+                    Level {model.getLevelDisplayName(nextLevelIndex)}
+                  </Button>
+                ) : null}
+              </div>
+            </p>
+          )
+          : null,
+        
+        (percentToNextLevel !== undefined)
+          ? <LevelProgressBarView percentToNextLevel={percentToNextLevel} />
+          : null
+      ]);
+
+      const renderFlashCardControls = () => (
+        <div style={{ textAlign: "center" }}>
+          {!model.haveGottenCurrentFlashCardWrong
+            ? (
+              <Button
+                onClick={event => this.flipFlashCard()}
+                variant="contained"
+              >
+                Show {isShowingBackSide ? "Question" : "Answer"}
+              </Button>
+            )
+            : null}
+          <Button
+            onClick={event => this.moveToNextFlashCard(null)}
+            variant="contained"
+          >
+            {(!renderAnswerSelect || model.haveGottenCurrentFlashCardWrong) ? "Next" : "Skip"}
+          </Button>
+        </div>
+      );
+
+      const renderAnswerableFlashCard = () => (
+        <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", flexGrow: 1 }}>
+          {isFrontSideVisible ? (
+            <div
+              key={`${currentFlashCardKey}.front`}
+              style={flashCardContainerStyle}>
+              {renderedFlashCardFrontSide}
+            </div>
+          ) : null}
+          {isBackSideVisible ? (
+            <div
+              key={`${currentFlashCardKey}.back`}
+              style={flashCardContainerStyle}
             >
-              {(!renderAnswerSelect || model.haveGottenCurrentFlashCardWrong) ? "Next" : "Skip"}
-            </Button>
-          </div>
+              <p style={{ textDecoration: "underline" }}>Correct Answer</p>
+              {renderedFlashCardBackSide}
+            </div>
+          ) : null}
+          
+          {(renderAnswerSelect && isAnswerSelectVisible)
+            ? <div style={{ textAlign: "center" }}>{renderAnswerSelect(model.getStudySessionInfo(containerSize))}</div>
+            : null}
+        </div>
+      );
+
+      cardContents = (
+        <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+          {renderHeader()}
+          {renderAnswerableFlashCard()}
+          {renderFlashCardControls()}
         </div>
       );
     } else {
@@ -341,6 +310,25 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
     const showRelatedExercises = (this.props.showRelatedExercises !== undefined)
       ? this.props.showRelatedExercises
       : false;
+    
+    const renderRelatedExercises = () => (
+      <Card style={cardStyle}>
+        <CardContent style={{position: "relative"}}>
+          <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
+            Related Exercises
+          </Typography>
+
+          <ul>
+            {flashCardSet.relatedSets
+              .map(relatedSet => (
+                <li key={relatedSet.id}>
+                  <NavLinkView to={relatedSet.route}>{relatedSet.name}</NavLinkView>
+                </li>
+              ))}
+          </ul>
+        </CardContent>
+      </Card>
+    );
 
     return (
       <div style={{ textAlign: "left", height: "100%" }}>
@@ -353,22 +341,7 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
         </Card>
 
         {(!this.props.isEmbedded && showRelatedExercises && (flashCardSet.relatedSets.length > 0)) ? (
-          <Card style={cardStyle}>
-            <CardContent style={{position: "relative"}}>
-              <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
-                Related Exercises
-              </Typography>
-
-              <ul>
-                {flashCardSet.relatedSets
-                  .map(relatedSet => (
-                    <li key={relatedSet.id}>
-                      <NavLinkView to={relatedSet.route}>{relatedSet.name}</NavLinkView>
-                    </li>
-                  ))}
-              </ul>
-            </CardContent>
-          </Card>
+          renderRelatedExercises()
         ) : null}
       </div>
     );
