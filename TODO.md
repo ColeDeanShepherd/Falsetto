@@ -1,6 +1,5 @@
 # To-Do
 ## Other
-* https://doc.rust-lang.org/stable/book/ch01-01-installation.html
 ## Pomodoro
 ## High Priority
 * Make sure everything in essential music theory is also in new course
@@ -15,6 +14,7 @@
       * Play scale in 2nds, 3rd, etc.
       * Diatonic chord inversions
   * Chords Section
+    * More interactivity/quizzes
     * Self-Paced Chord Mastery
       * For all root notes
         * Inversions

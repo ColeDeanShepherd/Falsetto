@@ -4,11 +4,12 @@ import { PitchLetter } from "../../lib/TheoryLib/PitchLetter";
 import { Pitch } from "../../lib/TheoryLib/Pitch";
 import { Button } from "@material-ui/core";
 import { Chord } from "../../lib/TheoryLib/Chord";
-import { PianoKeyboard, PianoKeyboardMetrics, renderPianoKeyboardNoteNames, renderPianoKeyboardKeyLabels } from "../Utils/PianoKeyboard";
+import { PianoKeyboardMetrics, renderPianoKeyboardKeyLabels } from "../Utils/PianoKeyboard";
 import { playPitches } from '../../Audio/PianoAudio';
 import { arrayContains } from '../../lib/Core/ArrayUtils';
 import { Scale } from "../../lib/TheoryLib/Scale";
 import { unwrapValueOrUndefined } from '../../lib/Core/Utils';
+import { PlayablePianoKeyboard } from './PlayablePianoKeyboard';
 
 const pianoLowestPitch = new Pitch(PitchLetter.C, 0, 4);
 const pianoHighestPitch = new Pitch(PitchLetter.B, 0, 5);
@@ -76,14 +77,6 @@ export class ChordView extends React.Component<IChordViewProps, {}> {
 
       return <p>Intervals: {intervalsString}</p>;
     };
-    
-    const onKeyPress = (pitch: Pitch) => {
-      const pitchMidiNumberNoOctaves = pitches.map(p => p.midiNumberNoOctave);
-
-      if (arrayContains(pitchMidiNumberNoOctaves, pitch.midiNumberNoOctave)) {
-        playPitches([pitch]);
-      }
-    };
 
     const maxWidth = (this.props.maxWidth !== undefined) ? this.props.maxWidth : 400;
     
@@ -109,11 +102,12 @@ export class ChordView extends React.Component<IChordViewProps, {}> {
     const renderPianoKeyboard = () => {
       return (
         <div>
-          <PianoKeyboard
+          <PlayablePianoKeyboard
             maxWidth={maxWidth}
             lowestPitch={pianoLowestPitch}
             highestPitch={pianoHighestPitch}
-            onKeyPress={onKeyPress}
+            wrapOctave={true}
+            canPressKeyFn={p => new Set<number>(pitches.map(p => p.midiNumberNoOctave)).has(p.midiNumberNoOctave)}
             renderExtrasFn={metrics => this.renderPianoExtrasFn(metrics, pitches)}
           />
         </div>
@@ -131,7 +125,7 @@ export class ChordView extends React.Component<IChordViewProps, {}> {
                 onClick={event => this.onListenClick()}
                 variant="contained"
               >
-                Listen
+                <span><i className="material-icons" style={{ verticalAlign: "middle" }}>play_arrow</i></span>
               </Button>
             </p>
           </div>

@@ -55,7 +55,7 @@ export class PitchesAudioPlayer extends React.Component<IPitchesAudioPlayerProps
       case PitchesAudioPlayerPlayState.PLAYABLE:
         return (
           <Button variant="contained" onClick={e => this.loadAndPlay()} style={buttonStyle}>
-            <span>{this.props.children ? this.props.children : <i className="material-icons">play_arrow</i>}</span>
+            <span>{this.props.children ? this.props.children : <i className="material-icons" style={{ verticalAlign: "middle" }}>play_arrow</i>}</span>
           </Button>
         );
       case PitchesAudioPlayerPlayState.LOADING:

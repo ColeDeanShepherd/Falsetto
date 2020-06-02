@@ -358,6 +358,8 @@ const ThirdsDiagram: React.FunctionComponent<{}> = props => {
       margin={margin}
       lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
       highestPitch={new Pitch(PitchLetter.B, 0, 5)}
+      canPressKeyFn={p => new Set<number>(pitches.map(p => p.midiNumberNoOctave)).has(p.midiNumberNoOctave)}
+      wrapOctave={true}
       renderExtrasFn={renderExtrasFn} />
   );
 };

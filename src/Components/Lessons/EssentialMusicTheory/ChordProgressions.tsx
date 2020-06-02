@@ -25,6 +25,7 @@ import * as ChordProgressionsQuiz from "../../Quizzes/Chords/ChordProgressionsQu
 import * as ChordHarmonicFunctions from "../../Quizzes/Chords/ChordFamilies";
 import { NoteText } from "../../Utils/NoteText";
 import { getChordRomanNumeralNotation } from "../../Tools/DiatonicChordPlayer";
+import { PlayablePianoKeyboard } from '../../Utils/PlayablePianoKeyboard';
 
 export const FiveChordDiagram: React.FunctionComponent<{}> = props => {
   const lowestPitch = new Pitch(PitchLetter.C, 0, 4);
@@ -143,23 +144,15 @@ const ChordDiagramInternal: React.FunctionComponent<{
   const maxWidth = (props.maxWidth !== undefined) ? props.maxWidth : 300;
   const margin = new Margin(0, 0, 0, 0);
 
-  function onKeyPress(p: Pitch) {
-    const pitchMidiNumbers = pitches.map(p => p.midiNumber);
-
-    if (arrayContains(pitchMidiNumbers, p.midiNumber)) {
-      playPitches([p]);
-    }
-  }
-
   return (
-    <PianoKeyboard
+    <PlayablePianoKeyboard
       maxWidth={maxWidth}
       position={position}
       margin={margin}
       lowestPitch={lowestPitch}
       highestPitch={highestPitch}
-      pressedPitches={[]}
-      onKeyPress={onKeyPress}
+      canPressKeyFn={p => new Set<number>(pitches.map(p => p.midiNumber)).has(p.midiNumber)}
+      wrapOctave={true}
       renderExtrasFn={metrics => renderChordDiagramLabels(metrics, pitches, scale, showScaleDegreeNumbers)} />
   );
 };
