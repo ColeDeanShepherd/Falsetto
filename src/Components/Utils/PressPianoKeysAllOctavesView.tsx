@@ -4,7 +4,7 @@ import CheckCircle from '@material-ui/icons/CheckCircle';
 
 import { Pitch, areMidiNumbersSamePitchClass } from '../../lib/TheoryLib/Pitch';
 
-import { PlayablePianoKeyboard } from "../../Components/Utils/PlayablePianoKeyboard";
+import { PlayablePianoKeyboard } from "./PlayablePianoKeyboard";
 import { fullPianoLowestPitch, fullPianoHighestPitch } from './PianoUtils';
 import { AppModel } from "../../App/Model";
 import { ActionBus, ActionHandler } from "../../ActionBus";
@@ -14,18 +14,18 @@ import { PianoKeyboardMetrics } from './PianoKeyboard';
 import { getScaleTranslateTransformString } from '../../lib/Core/SvgUtils';
 import { Vector2D } from '../../lib/Core/Vector2D';
 
-export interface IPressPianoKeyAllOctavesViewProps {
-  pitch: Pitch;
+export interface IPressPianoKeysAllOctavesViewProps {
+  pitches: Array<Pitch>;
   maxWidth: number;
   onAllCorrectKeysPressed: () => void;
 }
 
-export interface IPressPianoKeyAllOctavesViewState {
+export interface IPressPianoKeysAllOctavesViewState {
   correctPressedPitches: Array<Pitch>;
 }
 
-export class PressPianoKeyAllOctavesView extends React.Component<IPressPianoKeyAllOctavesViewProps, IPressPianoKeyAllOctavesViewState> {
-  public constructor(props: IPressPianoKeyAllOctavesViewProps) {
+export class PressPianoKeysAllOctavesView extends React.Component<IPressPianoKeysAllOctavesViewProps, IPressPianoKeysAllOctavesViewState> {
+  public constructor(props: IPressPianoKeysAllOctavesViewProps) {
     super(props);
 
     this.boundHandleAction = this.handleAction.bind(this);
@@ -52,7 +52,7 @@ export class PressPianoKeyAllOctavesView extends React.Component<IPressPianoKeyA
     const lowestEnabledPitch = (pitchRange !== undefined) ? pitchRange[0] : undefined;
     const highestEnabledPitch = (pitchRange !== undefined) ? pitchRange[1] : undefined;
 
-    const { pitch, maxWidth }  = this.props;
+    const { maxWidth }  = this.props;
   
     return (
       <PlayablePianoKeyboard
@@ -95,6 +95,7 @@ export class PressPianoKeyAllOctavesView extends React.Component<IPressPianoKeyA
           nativeColor="green"
           component="g"
           transform={getScaleTranslateTransformString(iconScale, iconPosition)}
+          className="pass-through-click"
         />
       );
     }
@@ -120,9 +121,12 @@ export class PressPianoKeyAllOctavesView extends React.Component<IPressPianoKeyA
   private onKeyPress(pitch: Pitch) {
     const { onAllCorrectKeysPressed } = this.props;
 
-    const correctPitch = this.props.pitch;
+    const correctPitchMidiNumberNoOctaves = new Set<number>(
+      this.props.pitches
+        .map(p => p.midiNumberNoOctave)
+    );
 
-    if (pitch.midiNumberNoOctave === correctPitch.midiNumberNoOctave) {
+    if (correctPitchMidiNumberNoOctaves.has(pitch.midiNumberNoOctave)) {
       this.setState(
         {
           correctPressedPitches: this.state.correctPressedPitches.concat([pitch])
@@ -138,10 +142,13 @@ export class PressPianoKeyAllOctavesView extends React.Component<IPressPianoKeyA
 
   private wereAllCorrectPitchesPressed(): boolean {
     const { midiModel } = AppModel.instance;
-    const { pitch } = this.props;
+    const { pitches } = this.props;
     const { correctPressedPitches } = this.state;
     
-    const correctPitchMidiNumber = pitch.midiNumber;
+    const correctPitchMidiNumberNoOctaves = new Set<number>(
+      this.props.pitches
+        .map(p => p.midiNumberNoOctave)
+    );
 
     const correctPressedPitchMidiNumbers = new Set<number>(
       correctPressedPitches
@@ -156,8 +163,10 @@ export class PressPianoKeyAllOctavesView extends React.Component<IPressPianoKeyA
     const highestEnabledPitchMidiNumber = highestEnabledPitch.midiNumber;
 
     for (let midiNumber = lowestEnabledPitchMidiNumber; midiNumber <= highestEnabledPitchMidiNumber; midiNumber++) {
+      const midiNumberNoOctave = Pitch.createFromMidiNumber(midiNumber).midiNumberNoOctave;
+
       if (
-        areMidiNumbersSamePitchClass(midiNumber, correctPitchMidiNumber) &&
+        correctPitchMidiNumberNoOctaves.has(midiNumberNoOctave) &&
         !correctPressedPitchMidiNumbers.has(midiNumber)
       ) {
         return false;

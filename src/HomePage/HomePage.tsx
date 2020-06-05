@@ -34,7 +34,7 @@ export class HomePage extends React.Component<{}, {}> {
               <p><NavLinkView to="/music-theory-for-piano?slide=notes-introduction">Introduction</NavLinkView></p>
               <p><NavLinkView to="/music-theory-for-piano?slide=note-c">White Keys</NavLinkView></p>
               <p><NavLinkView to="/music-theory-for-piano?slide=note-c-sharp">Black Keys</NavLinkView></p>
-              <p><NavLinkView to="/music-theory-for-piano?slide=all-notes">Review</NavLinkView></p>
+              <p><NavLinkView to="/music-theory-for-piano?slide=notes-summary">Review</NavLinkView></p>
               <p><NavLinkView to="/music-theory-for-piano?slide=notes-quiz">Quiz</NavLinkView></p>
             </div>
           </Paper>

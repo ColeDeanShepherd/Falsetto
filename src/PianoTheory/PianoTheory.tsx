@@ -53,7 +53,7 @@ import { Size2D } from '../lib/Core/Size2D';
 import { FlashCard } from "../FlashCard";
 import { majorScaleFormulaFlashCard, minorScaleFormulaFlashCard, createPressAllScaleNotesFlashCard } from './ScalesQuiz';
 import { FlashCardSet } from "../FlashCardSet";
-import { PressPianoKeyAllOctavesView } from "../Components/Utils/PressPianoKeyAllOctavesView";
+import { PressPianoKeysAllOctavesView } from "../Components/Utils/PressPianoKeysAllOctavesView";
 
 export const maxPianoWidth = 1000;
 export const maxOneOctavePianoWidth = 400;
@@ -563,8 +563,8 @@ export const pianoTheorySlideGroups = [
     new Slide("note-c-exercise", (slideshow) => (
       <div>
         <p>Press all the <strong>C</strong>'s on your MIDI keyboard (or on-screen) to continue.</p>
-        <PressPianoKeyAllOctavesView
-          pitch={new Pitch(PitchLetter.C, 0, 4)}
+        <PressPianoKeysAllOctavesView
+          pitches={[new Pitch(PitchLetter.C, 0, 4)]}
           maxWidth={maxPianoWidth}
           onAllCorrectKeysPressed={() => slideshow.tryToMoveToNextSlide()}
           />
@@ -586,8 +586,8 @@ export const pianoTheorySlideGroups = [
     new Slide("note-d-exercise", (slideshow) => (
       <div>
         <p>Press all the <strong>D</strong>'s on your MIDI keyboard (or on-screen) to continue.</p>
-        <PressPianoKeyAllOctavesView
-          pitch={new Pitch(PitchLetter.D, 0, 4)}
+        <PressPianoKeysAllOctavesView
+          pitches={[new Pitch(PitchLetter.D, 0, 4)]}
           maxWidth={maxPianoWidth}
           onAllCorrectKeysPressed={() => slideshow.tryToMoveToNextSlide()}
           />
@@ -609,8 +609,8 @@ export const pianoTheorySlideGroups = [
     new Slide("note-e-exercise", (slideshow) => (
       <div>
         <p>Press all the <strong>E</strong>'s on your MIDI keyboard (or on-screen) to continue.</p>
-        <PressPianoKeyAllOctavesView
-          pitch={new Pitch(PitchLetter.E, 0, 4)}
+        <PressPianoKeysAllOctavesView
+          pitches={[new Pitch(PitchLetter.E, 0, 4)]}
           maxWidth={maxPianoWidth}
           onAllCorrectKeysPressed={() => slideshow.tryToMoveToNextSlide()}
           />
@@ -632,8 +632,8 @@ export const pianoTheorySlideGroups = [
     new Slide("note-f-exercise", (slideshow) => (
       <div>
         <p>Press all the <strong>F</strong>'s on your MIDI keyboard (or on-screen) to continue.</p>
-        <PressPianoKeyAllOctavesView
-          pitch={new Pitch(PitchLetter.F, 0, 4)}
+        <PressPianoKeysAllOctavesView
+          pitches={[new Pitch(PitchLetter.F, 0, 4)]}
           maxWidth={maxPianoWidth}
           onAllCorrectKeysPressed={() => slideshow.tryToMoveToNextSlide()}
           />
@@ -655,8 +655,8 @@ export const pianoTheorySlideGroups = [
     new Slide("note-g-exercise", (slideshow) => (
       <div>
         <p>Press all the <strong>G</strong>'s on your MIDI keyboard (or on-screen) to continue.</p>
-        <PressPianoKeyAllOctavesView
-          pitch={new Pitch(PitchLetter.G, 0, 4)}
+        <PressPianoKeysAllOctavesView
+          pitches={[new Pitch(PitchLetter.G, 0, 4)]}
           maxWidth={maxPianoWidth}
           onAllCorrectKeysPressed={() => slideshow.tryToMoveToNextSlide()}
           />
@@ -678,8 +678,8 @@ export const pianoTheorySlideGroups = [
     new Slide("note-a-exercise", (slideshow) => (
       <div>
         <p>Press all the <strong>A</strong>'s on your MIDI keyboard (or on-screen) to continue.</p>
-        <PressPianoKeyAllOctavesView
-          pitch={new Pitch(PitchLetter.A, 0, 4)}
+        <PressPianoKeysAllOctavesView
+          pitches={[new Pitch(PitchLetter.A, 0, 4)]}
           maxWidth={maxPianoWidth}
           onAllCorrectKeysPressed={() => slideshow.tryToMoveToNextSlide()}
           />
@@ -701,8 +701,8 @@ export const pianoTheorySlideGroups = [
     new Slide("note-b-exercise", (slideshow) => (
       <div>
         <p>Press all the <strong>B</strong>'s on your MIDI keyboard (or on-screen) to continue.</p>
-        <PressPianoKeyAllOctavesView
-          pitch={new Pitch(PitchLetter.B, 0, 4)}
+        <PressPianoKeysAllOctavesView
+          pitches={[new Pitch(PitchLetter.B, 0, 4)]}
           maxWidth={maxPianoWidth}
           onAllCorrectKeysPressed={() => slideshow.tryToMoveToNextSlide()}
           />
@@ -753,8 +753,8 @@ export const pianoTheorySlideGroups = [
     new Slide("note-c-sharp-exercise", (slideshow) => (
       <div>
         <p>Press all the <strong>C♯</strong>'s on your MIDI keyboard (or on-screen) to continue.</p>
-        <PressPianoKeyAllOctavesView
-          pitch={new Pitch(PitchLetter.C, 1, 4)}
+        <PressPianoKeysAllOctavesView
+          pitches={[new Pitch(PitchLetter.C, 1, 4)]}
           maxWidth={maxPianoWidth}
           onAllCorrectKeysPressed={() => slideshow.tryToMoveToNextSlide()}
           />
@@ -779,8 +779,8 @@ export const pianoTheorySlideGroups = [
     new Slide("note-d-flat-exercise", (slideshow) => (
       <div>
         <p>Press all the <strong>D♭</strong>'s on your MIDI keyboard (or on-screen) to continue.</p>
-        <PressPianoKeyAllOctavesView
-          pitch={new Pitch(PitchLetter.D, -1, 4)}
+        <PressPianoKeysAllOctavesView
+          pitches={[new Pitch(PitchLetter.D, -1, 4)]}
           maxWidth={maxPianoWidth}
           onAllCorrectKeysPressed={() => slideshow.tryToMoveToNextSlide()}
           />
@@ -802,8 +802,8 @@ export const pianoTheorySlideGroups = [
     new Slide("note-d-sharp-e-flat-exercise", (slideshow) => (
       <div>
         <p>Press all the <strong>D♯/E♭</strong>'s on your MIDI keyboard (or on-screen) to continue.</p>
-        <PressPianoKeyAllOctavesView
-          pitch={new Pitch(PitchLetter.D, 1, 4)}
+        <PressPianoKeysAllOctavesView
+          pitches={[new Pitch(PitchLetter.D, 1, 4)]}
           maxWidth={maxPianoWidth}
           onAllCorrectKeysPressed={() => slideshow.tryToMoveToNextSlide()}
           />
@@ -825,8 +825,8 @@ export const pianoTheorySlideGroups = [
     new Slide("note-f-sharp-g-flat-exercise", (slideshow) => (
       <div>
         <p>Press all the <strong>F♯/G♭</strong>'s on your MIDI keyboard (or on-screen) to continue.</p>
-        <PressPianoKeyAllOctavesView
-          pitch={new Pitch(PitchLetter.F, 1, 4)}
+        <PressPianoKeysAllOctavesView
+          pitches={[new Pitch(PitchLetter.F, 1, 4)]}
           maxWidth={maxPianoWidth}
           onAllCorrectKeysPressed={() => slideshow.tryToMoveToNextSlide()}
           />
@@ -848,8 +848,8 @@ export const pianoTheorySlideGroups = [
     new Slide("note-g-sharp-a-flat-exercise", (slideshow) => (
       <div>
         <p>Press all the <strong>G♯/A♭</strong>'s on your MIDI keyboard (or on-screen) to continue.</p>
-        <PressPianoKeyAllOctavesView
-          pitch={new Pitch(PitchLetter.G, 1, 4)}
+        <PressPianoKeysAllOctavesView
+          pitches={[new Pitch(PitchLetter.G, 1, 4)]}
           maxWidth={maxPianoWidth}
           onAllCorrectKeysPressed={() => slideshow.tryToMoveToNextSlide()}
           />
@@ -871,8 +871,8 @@ export const pianoTheorySlideGroups = [
     new Slide("note-a-sharp-b-flat-exercise", (slideshow) => (
       <div>
         <p>Press all the <strong>A♯/B♭</strong>'s on your MIDI keyboard (or on-screen) to continue.</p>
-        <PressPianoKeyAllOctavesView
-          pitch={new Pitch(PitchLetter.A, 1, 4)}
+        <PressPianoKeysAllOctavesView
+          pitches={[new Pitch(PitchLetter.A, 1, 4)]}
           maxWidth={maxPianoWidth}
           onAllCorrectKeysPressed={() => slideshow.tryToMoveToNextSlide()}
           />
@@ -904,7 +904,7 @@ export const pianoTheorySlideGroups = [
       </div>
     )),
     
-    new Slide("all-notes", () => (
+    new Slide("notes-summary", () => (
       <div>
         <p>You have now learned the names of all the notes in the repeating pattern of piano keys!</p>
         <p>
@@ -922,18 +922,7 @@ export const pianoTheorySlideGroups = [
           maxWidth={maxPianoWidth}
           labelWhiteKeys={true}
           labelBlackKeys={true} />
-      </div>
-    )),
-    
-    new Slide("notes-summary", () => (
-      <div>
-        <p>Study these note names, then move to the next slide to practice your knowledge with an interactive exercise.</p>
-        <PianoNotesDiagram
-          lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-          highestPitch={new Pitch(PitchLetter.B, 0, 4)}
-          maxWidth={maxOneOctavePianoWidth}
-          labelWhiteKeys={true}
-          labelBlackKeys={true} />
+          <p>Study these note names, then move to the next slide to practice your knowledge with an interactive exercise.</p>
       </div>
     )),
 
@@ -966,10 +955,27 @@ export const pianoTheorySlideGroups = [
         </p>
       </div>
     )),
-    createMiniQuizSlide(
-      "c-major-scale-notes-quiz",
-      [createPressAllScaleNotesFlashCard("cMajorScaleNotes", new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4)))]
-    ),
+
+    new Slide("c-major-scale-notes-quiz", (slideshow) => {
+      const pitches = new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4)).getPitches();
+
+      return (
+        <div>
+          <p>Press all the keys in the <strong>C major scale</strong> on your MIDI keyboard (or on-screen) to continue.</p>
+          <PressPianoKeysAllOctavesView
+            pitches={pitches}
+            maxWidth={maxPianoWidth}
+            onAllCorrectKeysPressed={() => slideshow.tryToMoveToNextSlide()}
+            />
+        </div>
+      );
+    }),
+
+    // createMiniQuizSlide(
+    //   "c-major-scale-notes-quiz",
+    //   [createPressAllScaleNotesFlashCard("cMajorScaleNotes", new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4)))]
+    // ),
+
     new Slide("major-scale", () => (
       <div>
         <p>Major scales, like the <strong>C major</strong> scale we saw on the last slide, are very common in music.</p>
@@ -1015,7 +1021,24 @@ export const pianoTheorySlideGroups = [
           maxWidth={maxTwoOctavePianoWidth} /></p>
       </div>
     )),
+
     createMiniQuizSlide("minor-scale-formula-quiz", [minorScaleFormulaFlashCard]),
+    
+    new Slide("c-minor-scale-notes-quiz", (slideshow) => {
+      const pitches = new Scale(ScaleType.Aeolian, new Pitch(PitchLetter.C, 0, 4)).getPitches();
+
+      return (
+        <div>
+          <p>Press all the keys in the <strong>C minor scale</strong> on your MIDI keyboard (or on-screen) to continue.</p>
+          <PressPianoKeysAllOctavesView
+            pitches={pitches}
+            maxWidth={maxPianoWidth}
+            onAllCorrectKeysPressed={() => slideshow.tryToMoveToNextSlide()}
+            />
+        </div>
+      );
+    }),
+
     new Slide("scales-summary", () => (
       <div>
         <p>There are many other scales you can learn about in your own time here: <NavLinkView to="/scale-exercises" openNewTab={true}>Self-Paced Scale Mastery</NavLinkView>.</p>
