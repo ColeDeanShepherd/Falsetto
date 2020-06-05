@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { getRectRoundedBottomPathDefString } from "../../lib/Core/SvgUtils";
-import { Pitch, getPitchRange } from "../../lib/TheoryLib/Pitch";
+import { Pitch, getPitchRange } from '../../lib/TheoryLib/Pitch';
 import { Rect2D } from '../../lib/Core/Rect2D';
 import { Margin } from '../../lib/Core/Margin';
 import { Size2D } from '../../lib/Core/Size2D';
@@ -190,6 +190,7 @@ export function renderPianoKeyboardKeyLabels(metrics: PianoKeyboardMetrics, useS
   
   return <g className="pass-through-click">{texts}</g>;
 }
+
 export function renderPressedPianoKeys(metrics: PianoKeyboardMetrics, pressedPitches: Array<Pitch>): JSX.Element {
   return (
     <g className="pass-through-click">
@@ -231,15 +232,18 @@ export interface IPianoKeyboardProps {
   position?: Vector2D;
   lowestPitch: Pitch;
   highestPitch: Pitch;
+  lowestEnabledPitch?: Pitch;
+  highestEnabledPitch?: Pitch;
   allowDragPresses?: boolean;
   pressedPitches?: Array<Pitch>;
   onKeyPress?: (keyPitch: Pitch) => void;
   onKeyRelease?: (keyPitch: Pitch) => void;
-  renderExtrasFn?: (metrics: PianoKeyboardMetrics) => JSX.Element;
+  renderExtrasFn?: (metrics: PianoKeyboardMetrics) => JSX.Element; // TODO: remove
   renderLayeredExtrasFn?: (metrics: PianoKeyboardMetrics) => { whiteKeyLayerExtras: JSX.Element, blackKeyLayerExtras: JSX.Element };
   margin?: Margin;
   style?: any;
 }
+
 export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
   public render(): JSX.Element {
     const position = (this.props.position !== undefined)
@@ -266,44 +270,72 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
       const midiNumber = metrics.lowestPitch.midiNumber + i;
       const pitch = Pitch.createFromMidiNumber(midiNumber);
       
-      const onPointerOver = (event: React.PointerEvent<SVGPathElement>) => {
-        if (isBitSet(event.buttons, 0)) {
-          if (this.props.onKeyPress) {
-            this.props.onKeyPress(pitch);
-            event.preventDefault();
-          }
-        }
-      };
-      
-      const onPointerOut = (event: React.PointerEvent<SVGPathElement>) => {
-        if (this.props.onKeyRelease) {
-          this.props.onKeyRelease(pitch);
-          event.preventDefault();
-        }
-      };
+      const isKeyEnabled = this.isKeyEnabled(pitch);
 
-      if (pitch.isWhiteKey) {
-        const position = new Vector2D(metrics.keyLeftXs[i], 0);
-        const size = new Size2D(metrics.whiteKeySize.width, metrics.whiteKeySize.height);
-        whiteKeys.push(
-          <path
-            key={i}
-            d={getRectRoundedBottomPathDefString(position, size, whiteKeyRadius)}
-            fill="white" stroke="black" strokeWidth={whiteKeyStrokeWidth} className="cursor-pointer"
-            touch-action="none"
-            onPointerDown={event => {
+      const onPointerDown = isKeyEnabled
+        ? (
+          (event: React.PointerEvent<SVGPathElement>): void => {
+            if (this.props.onKeyPress) {
+              this.props.onKeyPress(pitch);
+              event.preventDefault();
+            }
+          }
+        )
+        : undefined;
+      
+      const onPointerUp = isKeyEnabled
+        ? (
+          (event: React.PointerEvent<SVGPathElement>): void => {
+            if (this.props.onKeyRelease) {
+              this.props.onKeyRelease(pitch);
+              event.preventDefault();
+            }
+          }
+        )
+        : undefined;
+
+      const onPointerOver = (isKeyEnabled && allowDragPresses)
+        ? (
+          (event: React.PointerEvent<SVGPathElement>) => {
+            if (isBitSet(event.buttons, 0)) {
               if (this.props.onKeyPress) {
                 this.props.onKeyPress(pitch);
                 event.preventDefault();
               }
-            }}
-            onPointerUp={event => {
-              if (this.props.onKeyRelease) {
-                this.props.onKeyRelease(pitch);
-                event.preventDefault();
-              }
-            }}
-            onPointerOver={allowDragPresses ? onPointerOver : undefined}
+            }
+          }
+        )
+        : undefined;
+      
+      const onPointerOut = isKeyEnabled
+        ? (
+          (event: React.PointerEvent<SVGPathElement>) => {
+            if (this.props.onKeyRelease) {
+              this.props.onKeyRelease(pitch);
+              event.preventDefault();
+            }
+          }
+        )
+        : undefined;
+
+      const className = isKeyEnabled ? "cursor-pointer" : "";
+
+      if (pitch.isWhiteKey) {
+        const position = new Vector2D(metrics.keyLeftXs[i], 0);
+        const size = new Size2D(metrics.whiteKeySize.width, metrics.whiteKeySize.height);
+        const fill = isKeyEnabled ? "white" : "gray";
+
+        whiteKeys.push(
+          <path
+            key={i}
+            d={getRectRoundedBottomPathDefString(position, size, whiteKeyRadius)}
+            fill={fill}
+            stroke="black" strokeWidth={whiteKeyStrokeWidth}
+            className={className}
+            touch-action="none"
+            onPointerDown={onPointerDown}
+            onPointerUp={onPointerUp}
+            onPointerOver={onPointerOver}
             onPointerOut={onPointerOut}
           />
         );
@@ -314,21 +346,11 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
           <path
             key={i}
             d={getRectRoundedBottomPathDefString(position, size, blackKeyRadius)}
-            fill="black" strokeWidth="0" className="cursor-pointer"
+            fill="black" strokeWidth="0" className={className}
             touch-action="none"
-            onPointerDown={event => {
-              if (this.props.onKeyPress) {
-                this.props.onKeyPress(pitch);
-                event.preventDefault();
-              }
-            }}
-            onPointerUp={event => {
-              if (this.props.onKeyRelease) {
-                this.props.onKeyRelease(pitch);
-                event.preventDefault();
-              }
-            }}
-            onPointerOver={allowDragPresses ? onPointerOver : undefined}
+            onPointerDown={onPointerDown}
+            onPointerUp={onPointerUp}
+            onPointerOver={onPointerOver}
             onPointerOut={onPointerOut}
           />
         );
@@ -395,5 +417,11 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
       maxWidth, maxHeight,
       lowestPitch, highestPitch
     );
+  }
+
+  private isKeyEnabled(pitch: Pitch): boolean {
+    const { lowestEnabledPitch, highestEnabledPitch } = this.props;
+
+    return Pitch.isInRange(pitch, lowestEnabledPitch, highestEnabledPitch);
   }
 }

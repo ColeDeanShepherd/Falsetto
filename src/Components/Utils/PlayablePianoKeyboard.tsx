@@ -18,6 +18,8 @@ export interface IPlayablePianoKeyboardProps {
   maxHeight?: number;
   lowestPitch: Pitch,
   highestPitch: Pitch,
+  lowestEnabledPitch?: Pitch;
+  highestEnabledPitch?: Pitch;
   forcePressedPitches?: Array<Pitch>;
   position?: Vector2D;
   margin?: Margin;
@@ -53,7 +55,8 @@ export class PlayablePianoKeyboard extends React.Component<IPlayablePianoKeyboar
   }
 
   public render(): JSX.Element {
-    const { maxWidth, maxHeight, lowestPitch, highestPitch, position, margin, toggleKeys, renderExtrasFn, renderLayeredExtrasFn } = this.props;
+    const { maxWidth, maxHeight, lowestPitch, highestPitch, lowestEnabledPitch, highestEnabledPitch,
+      position, margin, toggleKeys, renderExtrasFn, renderLayeredExtrasFn } = this.props;
 
     const allowDragPresses = (this.props.allowDragPresses !== undefined)
       ? this.props.allowDragPresses
@@ -69,12 +72,15 @@ export class PlayablePianoKeyboard extends React.Component<IPlayablePianoKeyboar
           margin={margin}
           lowestPitch={lowestPitch}
           highestPitch={highestPitch}
+          lowestEnabledPitch={lowestEnabledPitch}
+          highestEnabledPitch={highestEnabledPitch}
           pressedPitches={pressedPitches}
           onKeyPress={p => this.onKeyPress(p, /*wasClick*/ true)}
           onKeyRelease={p => this.onKeyRelease(p, true)}
           renderExtrasFn={renderExtrasFn}
           renderLayeredExtrasFn={renderLayeredExtrasFn}
           allowDragPresses={allowDragPresses && !toggleKeys} />
+          
         <MidiNoteEventListener
           onNoteOn={(pitch, velocity) => this.onKeyPress(pitch, /*wasClick*/ false)}
           onNoteOff={pitch => this.onKeyRelease(pitch, /*wasClick*/ false)}
@@ -118,6 +124,8 @@ export class PlayablePianoKeyboard extends React.Component<IPlayablePianoKeyboar
       : pitch;
 
     if (wrappedPitch && Pitch.isInRange(wrappedPitch, lowestPitch, highestPitch)) {
+      if (!this.isKeyEnabled(wrappedPitch)) { return; }
+
       if (!this.canPressKey(wrappedPitch)) {
         return;
       }
@@ -175,8 +183,10 @@ export class PlayablePianoKeyboard extends React.Component<IPlayablePianoKeyboar
     const wrappedPitch = wrapOctave
       ? tryWrapPitchOctave(pitch, lowestPitch, highestPitch)
       : pitch;
-    
+      
     if (wrappedPitch) {
+      if (!this.isKeyEnabled(wrappedPitch)) { return; }
+
       if (!this.canPressKey(wrappedPitch)) {
         return;
       }
@@ -208,6 +218,12 @@ export class PlayablePianoKeyboard extends React.Component<IPlayablePianoKeyboar
     return (this.props.canPressKeyFn !== undefined)
       ? this.props.canPressKeyFn(pitch)
       : true;
+  }
+  
+  private isKeyEnabled(pitch: Pitch): boolean {
+    const { lowestEnabledPitch, highestEnabledPitch } = this.props;
+
+    return Pitch.isInRange(pitch, lowestEnabledPitch, highestEnabledPitch);
   }
 }
  

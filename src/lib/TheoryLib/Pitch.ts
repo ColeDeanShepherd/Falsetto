@@ -211,6 +211,18 @@ export function parseFromUriComponent(uriComponent: string, octaveNumber: number
   return new Pitch(pitchLetter, signedAccidental, octaveNumber);
 }
 
+export function isPitchLessThan(a: Pitch, b: Pitch): boolean {
+  return a.midiNumber < b.midiNumber;
+}
+
+export function isPitchGreaterThan(a: Pitch, b: Pitch): boolean {
+  return a.midiNumber > b.midiNumber;
+}
+
+export function areMidiNumbersSamePitchClass(a: number, b: number): boolean {
+  return (Math.abs(a - b)) % 12 === 0
+}
+
 export class Pitch {
   public static createFromPitchClass(pitchClass: number, octaveNumber: number, useSharps: boolean = true): Pitch {
     switch (pitchClass) {
@@ -273,13 +285,27 @@ export class Pitch {
     );
   }
 
-  public static isInRange(pitch: Pitch, minPitch: Pitch, maxPitch: Pitch): boolean {
-    const minPitchMidiNumber = minPitch.midiNumber;
-    const maxPitchMidiNumber = maxPitch.midiNumber;
-    precondition(minPitchMidiNumber <= maxPitchMidiNumber);
+  public static isInRange(pitch: Pitch, minPitch?: Pitch, maxPitch?: Pitch): boolean {
+    const minPitchMidiNumber = minPitch ? minPitch.midiNumber : undefined;
+    const maxPitchMidiNumber = maxPitch ? maxPitch.midiNumber : undefined;
+
+    precondition(
+      (minPitchMidiNumber === undefined) ||
+      (maxPitchMidiNumber === undefined) ||
+      (minPitchMidiNumber <= maxPitchMidiNumber)
+    );
 
     const pitchMidiNumber = pitch.midiNumber;
-    return (pitchMidiNumber >= minPitchMidiNumber) && (pitchMidiNumber <= maxPitchMidiNumber);
+
+    if (minPitchMidiNumber && (pitchMidiNumber < minPitchMidiNumber)) {
+      return false;
+    }
+
+    if (maxPitchMidiNumber && (pitchMidiNumber > maxPitchMidiNumber)) {
+      return false;
+    }
+
+    return true;
   }
 
   public static addHalfSteps(pitch: Pitch, numHalfSteps: number): Pitch {
@@ -309,6 +335,10 @@ export class Pitch {
     pitch: Pitch, octaves: number
   ): Pitch {
     return new Pitch(pitch.letter, pitch.signedAccidental, pitch.octaveNumber + octaves);
+  }
+
+  public static min(a: Pitch, b: Pitch): Pitch {
+    return (a.midiNumber <= b.midiNumber) ? a : b;
   }
 
   public static max(a: Pitch, b: Pitch): Pitch {

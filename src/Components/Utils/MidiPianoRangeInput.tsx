@@ -8,7 +8,7 @@ import { ActionBus, ActionHandler } from "../../ActionBus";
 import { MidiInputDevicePitchRangeChangedAction, WebMidiInitializedAction, MidiDeviceConnectedAction, MidiDeviceDisconnectedAction, MidiInputDeviceChangedAction } from '../../AppMidi/Actions';
 import { IAction } from "../../IAction";
 import { MidiNoteEventListener } from "./MidiNoteEventListener";
-import { Pitch, expandPitchRangeToIncludePitch, getPitchRange, getNumPitchesInRange } from '../../lib/TheoryLib/Pitch';
+import { Pitch, expandPitchRangeToIncludePitch, getNumPitchesInRange } from '../../lib/TheoryLib/Pitch';
 
 export class MidiPianoRangeInput extends React.Component<{}, {}> {
   public constructor(props: {}) {
@@ -23,9 +23,9 @@ export class MidiPianoRangeInput extends React.Component<{}, {}> {
     const midiInput = midiModel.getMidiInput();
 
     if (midiInput) {
-      const lowestPitch = fullPianoLowestPitch;
-      const highestPitch = fullPianoHighestPitch;
-      const pressedPitches = this.getPianoKeyboardDarkenedPitches(lowestPitch, highestPitch);
+      const pitchRange = midiModel.getMidiInputPitchRange();
+      const lowestEnabledPitch = (pitchRange !== undefined) ? pitchRange[0] : undefined;
+      const highestEnabledPitch = (pitchRange !== undefined) ? pitchRange[1] : undefined;
       
       const midiInputPitchRange = midiModel.getMidiInputPitchRange();
       const numPitchesInRange = midiInputPitchRange
@@ -39,9 +39,10 @@ export class MidiPianoRangeInput extends React.Component<{}, {}> {
 
           <div>
             <PianoKeyboard
-              lowestPitch={lowestPitch}
-              highestPitch={highestPitch}
-              pressedPitches={pressedPitches} />
+              lowestPitch={fullPianoLowestPitch}
+              highestPitch={fullPianoHighestPitch}
+              lowestEnabledPitch={lowestEnabledPitch}
+              highestEnabledPitch={highestEnabledPitch} />
           </div>
             
           <p>
@@ -111,21 +112,5 @@ export class MidiPianoRangeInput extends React.Component<{}, {}> {
   private onKeyRelease(pitch: Pitch) {
     const { pianoAudio } = AppModel.instance;
     pianoAudio.releaseKey(pitch);
-  }
-
-  private getPianoKeyboardDarkenedPitches(lowestKeyboardPitch: Pitch, highestKeyboardPitch: Pitch): Array<Pitch> {
-    const { midiModel } = AppModel.instance;
-
-    const pitchRange = midiModel.getMidiInputPitchRange();
-
-    // If the pitch range is undefined, return all of the pitches.
-    if (!pitchRange) {
-      return getPitchRange(lowestKeyboardPitch, highestKeyboardPitch);
-    }
-    // If the pitch range is defined, return all of the pitches outside of the range.
-    else {
-      return getPitchRange(lowestKeyboardPitch, Pitch.addHalfSteps(pitchRange[0], -1))
-        .concat(getPitchRange(Pitch.addHalfSteps(pitchRange[1], 1), highestKeyboardPitch))
-    }
   }
 }

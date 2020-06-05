@@ -2,6 +2,14 @@ import * as React from "react";
 import { Vector2D } from './Vector2D';
 import { Size2D } from './Size2D';
 
+export function getScaleTranslateTransformString(scale: number, position: Vector2D): string {
+  return `translate(${position.x}, ${position.y}) scale(${scale})`;
+}
+
+export function getTranslateTransformString(position: Vector2D): string {
+  return `translate(${position.x}, ${position.y})`;
+}
+
 export function renderMultiLineSvgText(
   lines: Array<string>, position: Vector2D, lineHeightEms: number, isVerticallyAligned: boolean, textProps: any, tspanProps: any
 ): JSX.Element {

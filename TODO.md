@@ -2,6 +2,11 @@
 ## Other
 ## Pomodoro
 ## High Priority
+* GO THROUGH THE COURSE, IMAGINING I'M TEACHING A STUDENT AND HAVING THEM INTERACT
+* Either always show the keyboard, or have a "student playing" slide after most teaching slides
+
+
+
 * Make sure everything in essential music theory is also in new course
 * Scoped stylesheets
 * Improve study flash card UI
