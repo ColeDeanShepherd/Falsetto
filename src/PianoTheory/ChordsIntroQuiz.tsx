@@ -3,10 +3,17 @@ import * as React from "react";
 import * as FlashCardUtils from "../Components/Quizzes/Utils";
 import { FlashCard } from "../FlashCard";
 import { FlashCardSet } from "../FlashCardSet";
-import { renderUserDeterminedCorrectnessAnswerSelect } from '../Components/Quizzes/Utils';
+import { renderUserDeterminedCorrectnessAnswerSelect, renderStringAnswerSelect } from '../Components/Quizzes/Utils';
 import { MajorScaleRelativeFormulaAnswerSelect } from "../Components/Utils/MajorScaleRelativeFormulaAnswerSelect";
 
 const flashCardSetId = "ptChordsIntroQuiz";
+
+export const fifthIntervalFlashCard = FlashCard.fromRenderFns(
+  JSON.stringify({ set: flashCardSetId, id: "fifthInterval" }),
+  "What is the interval from A to G?",
+  "fifth",
+  info => renderStringAnswerSelect(["first", "second", "third", "fourth", "fifth", "sixth", "seventh"], info)
+);
 
 function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Chords Introduction Quiz", createFlashCards);

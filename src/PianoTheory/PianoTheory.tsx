@@ -7,7 +7,7 @@ import { flattenArrays } from '../lib/Core/ArrayUtils';
 import { Margin } from "../lib/Core/Margin";
 import { Vector2D } from "../lib/Core/Vector2D";
 
-import { Pitch } from '../lib/TheoryLib/Pitch';
+import { Pitch, getPitchRange } from '../lib/TheoryLib/Pitch';
 import { PitchLetter } from '../lib/TheoryLib/PitchLetter';
 import { ScaleType, Scale } from "../lib/TheoryLib/Scale";
 import { ChordType } from "../lib/TheoryLib/ChordType";
@@ -54,6 +54,7 @@ import { FlashCard } from "../FlashCard";
 import { majorScaleFormulaFlashCard, minorScaleFormulaFlashCard, createPressAllScaleNotesFlashCard } from './ScalesQuiz';
 import { FlashCardSet } from "../FlashCardSet";
 import { PressPianoKeysAllOctavesView } from "../Components/Utils/PressPianoKeysAllOctavesView";
+import { fifthIntervalFlashCard } from "./ChordsIntroQuiz";
 
 export const maxPianoWidth = 1000;
 export const maxOneOctavePianoWidth = 400;
@@ -998,6 +999,7 @@ export const pianoTheorySlideGroups = [
       </div>
     )),
     createMiniQuizSlide("major-scale-formula-quiz", [majorScaleFormulaFlashCard]),
+
     new Slide("natural-minor-scale", () => (
       <div>
         <p>Another way to write scale formulas is <strong>relative to the major scale</strong>.</p>
@@ -1098,6 +1100,21 @@ export const pianoTheorySlideGroups = [
       </div>
     )),
     
+    new Slide("c-major-chord-notes-quiz", (slideshow) => {
+      const pitches = new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4)).getPitches();
+
+      return (
+        <div>
+          <p>Press all the keys in the <strong>C major chord</strong> on your MIDI keyboard (or on-screen) to continue.</p>
+          <PressPianoKeysAllOctavesView
+            pitches={pitches}
+            maxWidth={maxPianoWidth}
+            onAllCorrectKeysPressed={() => slideshow.tryToMoveToNextSlide()}
+            />
+        </div>
+      );
+    }),
+    
     new Slide("tertial-chords", () => (
       <div>
         <p>In practice, most chords are built with <strong>thirds</strong>.</p>
@@ -1107,6 +1124,8 @@ export const pianoTheorySlideGroups = [
         <ThirdsDiagram />
       </div>
     )),
+    
+    createMiniQuizSlide("interval-quiz", [fifthIntervalFlashCard]),
 
     new Slide("chord-major-relative-formula", () => (
       <div>
@@ -1135,6 +1154,21 @@ export const pianoTheorySlideGroups = [
           showChordFormulaOnPiano={true} />
       </div>
     )),
+    
+    new Slide("c-minor-chord-notes-quiz", (slideshow) => {
+      const pitches = new Chord(ChordType.Minor, new Pitch(PitchLetter.C, 0, 4)).getPitches();
+
+      return (
+        <div>
+          <p>Press all the keys in the <strong>C minor chord</strong> on your MIDI keyboard (or on-screen) to continue.</p>
+          <PressPianoKeysAllOctavesView
+            pitches={pitches}
+            maxWidth={maxPianoWidth}
+            onAllCorrectKeysPressed={() => slideshow.tryToMoveToNextSlide()}
+            />
+        </div>
+      );
+    }),
 
     new Slide("diminished-chord-formula", () => (
       <div>
@@ -1149,6 +1183,21 @@ export const pianoTheorySlideGroups = [
       </div>
     )),
     
+    new Slide("c-diminished-chord-notes-quiz", (slideshow) => {
+      const pitches = new Chord(ChordType.Diminished, new Pitch(PitchLetter.C, 0, 4)).getPitches();
+
+      return (
+        <div>
+          <p>Press all the keys in the <strong>C diminished chord</strong> on your MIDI keyboard (or on-screen) to continue.</p>
+          <PressPianoKeysAllOctavesView
+            pitches={pitches}
+            maxWidth={maxPianoWidth}
+            onAllCorrectKeysPressed={() => slideshow.tryToMoveToNextSlide()}
+            />
+        </div>
+      );
+    }),
+    
     new Slide("dominant-7-chord-formula", () => (
       <div>
         <p>One last important type of chord is the <strong>Dominant 7th chord</strong> (also simply called the <strong>7th chord</strong>).</p>
@@ -1161,6 +1210,21 @@ export const pianoTheorySlideGroups = [
           showChordFormulaOnPiano={true} />
       </div>
     )),
+    
+    new Slide("c-dominant-7-chord-notes-quiz", (slideshow) => {
+      const pitches = new Chord(ChordType.Dom7, new Pitch(PitchLetter.C, 0, 4)).getPitches();
+
+      return (
+        <div>
+          <p>Press all the keys in the <strong>C dominant 7th chord</strong> on your MIDI keyboard (or on-screen) to continue.</p>
+          <PressPianoKeysAllOctavesView
+            pitches={pitches}
+            maxWidth={maxPianoWidth}
+            onAllCorrectKeysPressed={() => slideshow.tryToMoveToNextSlide()}
+            />
+        </div>
+      );
+    }),
     
     new Slide("chords-introduction-review", () => (
       <div>
@@ -1219,6 +1283,7 @@ export const pianoTheorySlideGroups = [
           showScaleDegreesOnPiano={true} />
       </div>
     )),
+
     new Slide("c-major-diatonic-triad-2", () => (
       <div>
         <p>The 2nd diatonic triad in the C Major scale built with thirds is <strong>D Minor</strong>, which has a root note of <strong>D</strong> and consists of the notes <strong>D, F, A</strong>:</p>
@@ -1229,6 +1294,21 @@ export const pianoTheorySlideGroups = [
           showScaleDegreesOnPiano={true} />
       </div>
     )),
+    new Slide("d-minor-chord-notes-quiz", (slideshow) => {
+      const pitches = new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 4)).getPitches();
+
+      return (
+        <div>
+          <p>Press all the keys in the <strong>D minor chord</strong> on your MIDI keyboard (or on-screen) to continue.</p>
+          <PressPianoKeysAllOctavesView
+            pitches={pitches}
+            maxWidth={maxPianoWidth}
+            onAllCorrectKeysPressed={() => slideshow.tryToMoveToNextSlide()}
+            />
+        </div>
+      );
+    }),
+    
     new Slide("c-major-diatonic-triad-3", () => (
       <div>
         <p>The 3rd diatonic triad in the C Major scale built with thirds is <strong>E Minor</strong>, which has a root note of <strong>E</strong> and consists of the notes <strong>E, G, B</strong>:</p>
@@ -1239,6 +1319,21 @@ export const pianoTheorySlideGroups = [
           showScaleDegreesOnPiano={true} />
       </div>
     )),
+    new Slide("e-minor-chord-notes-quiz", (slideshow) => {
+      const pitches = new Chord(ChordType.Minor, new Pitch(PitchLetter.E, 0, 4)).getPitches();
+
+      return (
+        <div>
+          <p>Press all the keys in the <strong>E minor chord</strong> on your MIDI keyboard (or on-screen) to continue.</p>
+          <PressPianoKeysAllOctavesView
+            pitches={pitches}
+            maxWidth={maxPianoWidth}
+            onAllCorrectKeysPressed={() => slideshow.tryToMoveToNextSlide()}
+            />
+        </div>
+      );
+    }),
+
     new Slide("c-major-diatonic-triad-4", () => (
       <div>
         <p>The 4th diatonic triad in the C Major scale built with thirds is <strong>F Major</strong>, which has a root note of <strong>F</strong> and consists of the notes <strong>F, A, C</strong>:</p>
@@ -1249,6 +1344,21 @@ export const pianoTheorySlideGroups = [
           showScaleDegreesOnPiano={true} />
       </div>
     )),
+    new Slide("f-major-chord-notes-quiz", (slideshow) => {
+      const pitches = new Chord(ChordType.Major, new Pitch(PitchLetter.F, 0, 4)).getPitches();
+
+      return (
+        <div>
+          <p>Press all the keys in the <strong>F major chord</strong> on your MIDI keyboard (or on-screen) to continue.</p>
+          <PressPianoKeysAllOctavesView
+            pitches={pitches}
+            maxWidth={maxPianoWidth}
+            onAllCorrectKeysPressed={() => slideshow.tryToMoveToNextSlide()}
+            />
+        </div>
+      );
+    }),
+
     new Slide("c-major-diatonic-triad-5", () => (
       <div>
         <p>The 5th diatonic triad in the C Major scale built with thirds is <strong>G Major</strong>, which has a root note of <strong>G</strong> and consists of the notes <strong>G, B, D</strong>:</p>
@@ -1259,6 +1369,21 @@ export const pianoTheorySlideGroups = [
           showScaleDegreesOnPiano={true} />
       </div>
     )),
+    new Slide("g-major-chord-notes-quiz", (slideshow) => {
+      const pitches = new Chord(ChordType.Major, new Pitch(PitchLetter.G, 0, 4)).getPitches();
+
+      return (
+        <div>
+          <p>Press all the keys in the <strong>G major chord</strong> on your MIDI keyboard (or on-screen) to continue.</p>
+          <PressPianoKeysAllOctavesView
+            pitches={pitches}
+            maxWidth={maxPianoWidth}
+            onAllCorrectKeysPressed={() => slideshow.tryToMoveToNextSlide()}
+            />
+        </div>
+      );
+    }),
+
     new Slide("c-major-diatonic-triad-6", () => (
       <div>
         <p>The 6th diatonic triad in the C Major scale built with thirds is <strong>A Minor</strong>, which has a root note of <strong>A</strong> and consists of the notes <strong>A, C, E</strong>:</p>
@@ -1269,6 +1394,21 @@ export const pianoTheorySlideGroups = [
           showScaleDegreesOnPiano={true} />
       </div>
     )),
+    new Slide("a-minor-chord-notes-quiz", (slideshow) => {
+      const pitches = new Chord(ChordType.Minor, new Pitch(PitchLetter.A, 0, 4)).getPitches();
+
+      return (
+        <div>
+          <p>Press all the keys in the <strong>A minor chord</strong> on your MIDI keyboard (or on-screen) to continue.</p>
+          <PressPianoKeysAllOctavesView
+            pitches={pitches}
+            maxWidth={maxPianoWidth}
+            onAllCorrectKeysPressed={() => slideshow.tryToMoveToNextSlide()}
+            />
+        </div>
+      );
+    }),
+
     new Slide("c-major-diatonic-triad-7", () => (
       <div>
         <p>The 7th, and last, diatonic triad in the C Major scale built with thirds is <strong>B Diminished</strong>, which has a root note of <strong>B</strong> and consists of the notes <strong>B, D, F</strong>:</p>
@@ -1279,6 +1419,20 @@ export const pianoTheorySlideGroups = [
           showScaleDegreesOnPiano={true} />
       </div>
     )),
+    new Slide("b-diminished-chord-notes-quiz", (slideshow) => {
+      const pitches = new Chord(ChordType.Diminished, new Pitch(PitchLetter.B, 0, 4)).getPitches();
+
+      return (
+        <div>
+          <p>Press all the keys in the <strong>B diminished chord</strong> on your MIDI keyboard (or on-screen) to continue.</p>
+          <PressPianoKeysAllOctavesView
+            pitches={pitches}
+            maxWidth={maxPianoWidth}
+            onAllCorrectKeysPressed={() => slideshow.tryToMoveToNextSlide()}
+            />
+        </div>
+      );
+    }),
 
     new Slide("major-diatonic-triad-types", () => (
       <div>
