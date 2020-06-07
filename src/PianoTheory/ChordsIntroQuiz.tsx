@@ -10,7 +10,7 @@ const flashCardSetId = "ptChordsIntroQuiz";
 
 export const fifthIntervalFlashCard = FlashCard.fromRenderFns(
   JSON.stringify({ set: flashCardSetId, id: "fifthInterval" }),
-  "What is the interval from A to G?",
+  "What is the interval from A to E?",
   "fifth",
   info => renderStringAnswerSelect(["first", "second", "third", "fourth", "fifth", "sixth", "seventh"], info)
 );
