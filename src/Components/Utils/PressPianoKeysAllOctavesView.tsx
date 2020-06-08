@@ -2,7 +2,7 @@ import * as React from "react";
 
 import CheckCircle from '@material-ui/icons/CheckCircle';
 
-import { Pitch, areMidiNumbersSamePitchClass } from '../../lib/TheoryLib/Pitch';
+import { Pitch } from '../../lib/TheoryLib/Pitch';
 
 import { PlayablePianoKeyboard } from "./PlayablePianoKeyboard";
 import { fullPianoLowestPitch, fullPianoHighestPitch } from './PianoUtils';
@@ -22,6 +22,7 @@ export interface IPressPianoKeysAllOctavesViewProps {
 
 export interface IPressPianoKeysAllOctavesViewState {
   correctPressedPitches: Array<Pitch>;
+  areAllCorrectPitchesPressed: boolean;
 }
 
 export class PressPianoKeysAllOctavesView extends React.Component<IPressPianoKeysAllOctavesViewProps, IPressPianoKeysAllOctavesViewState> {
@@ -33,7 +34,8 @@ export class PressPianoKeysAllOctavesView extends React.Component<IPressPianoKey
     this.boundRenderExtrasFn = this.renderExtrasFn.bind(this);
 
     this.state = {
-      correctPressedPitches: []
+      correctPressedPitches: [],
+      areAllCorrectPitchesPressed: false
     };
   }
 
@@ -47,6 +49,7 @@ export class PressPianoKeysAllOctavesView extends React.Component<IPressPianoKey
 
   public render(): JSX.Element {
     const { midiModel } = AppModel.instance;
+    const { areAllCorrectPitchesPressed } = this.state;
     
     const pitchRange = midiModel.getMidiInputPitchRange();
     const lowestEnabledPitch = (pitchRange !== undefined) ? pitchRange[0] : undefined;
@@ -55,14 +58,34 @@ export class PressPianoKeysAllOctavesView extends React.Component<IPressPianoKey
     const { maxWidth }  = this.props;
   
     return (
-      <PlayablePianoKeyboard
-        maxWidth={maxWidth}
-        lowestPitch={fullPianoLowestPitch}
-        highestPitch={fullPianoHighestPitch}
-        lowestEnabledPitch={lowestEnabledPitch}
-        highestEnabledPitch={highestEnabledPitch}
-        onKeyPress={this.boundOnKeyPress}
-        renderExtrasFn={this.boundRenderExtrasFn} />
+      <div>
+        <PlayablePianoKeyboard
+          maxWidth={maxWidth}
+          lowestPitch={fullPianoLowestPitch}
+          highestPitch={fullPianoHighestPitch}
+          lowestEnabledPitch={lowestEnabledPitch}
+          highestEnabledPitch={highestEnabledPitch}
+          onKeyPress={this.boundOnKeyPress}
+          renderExtrasFn={this.boundRenderExtrasFn} />
+        {areAllCorrectPitchesPressed
+          ? (
+            <p>
+              <i
+                className="material-icons"
+                style={{
+                  color: "green",
+                  display: "inline-block",
+                  fontSize: "1.3em",
+                  verticalAlign: "bottom"
+                }}>
+                check_circle
+              </i>
+
+              <span> Correct!</span>
+            </p>
+          )
+          : null}
+      </div>
     );
   }
 
@@ -133,7 +156,9 @@ export class PressPianoKeysAllOctavesView extends React.Component<IPressPianoKey
         },
         () => {
           if (this.wereAllCorrectPitchesPressed()) {
-            onAllCorrectKeysPressed();
+            this.setState({ areAllCorrectPitchesPressed: true }, () => {
+              onAllCorrectKeysPressed();
+            });
           }
         }
       );
