@@ -143,6 +143,7 @@ export class PressPianoKeysAllOctavesView extends React.Component<IPressPianoKey
 
   private onKeyPress(pitch: Pitch) {
     const { onAllCorrectKeysPressed } = this.props;
+    const { correctPressedPitches } = this.state;
 
     const correctPitchMidiNumberNoOctaves = new Set<number>(
       this.props.pitches
@@ -150,25 +151,26 @@ export class PressPianoKeysAllOctavesView extends React.Component<IPressPianoKey
     );
 
     if (correctPitchMidiNumberNoOctaves.has(pitch.midiNumberNoOctave)) {
+      const newCorrectPressedPitches = correctPressedPitches.concat([pitch]);
+      const areAllCorrectPitchesPressed = this.wereAllCorrectPitchesPressed(newCorrectPressedPitches);
+
       this.setState(
         {
-          correctPressedPitches: this.state.correctPressedPitches.concat([pitch])
+          correctPressedPitches: newCorrectPressedPitches,
+          areAllCorrectPitchesPressed: areAllCorrectPitchesPressed
         },
         () => {
-          if (this.wereAllCorrectPitchesPressed()) {
-            this.setState({ areAllCorrectPitchesPressed: true }, () => {
-              onAllCorrectKeysPressed();
-            });
+          if (areAllCorrectPitchesPressed) {
+            onAllCorrectKeysPressed();
           }
         }
       );
     }
   }
 
-  private wereAllCorrectPitchesPressed(): boolean {
+  private wereAllCorrectPitchesPressed(correctPressedPitches: Array<Pitch>): boolean {
     const { midiModel } = AppModel.instance;
     const { pitches } = this.props;
-    const { correctPressedPitches } = this.state;
     
     const correctPitchMidiNumberNoOctaves = new Set<number>(
       this.props.pitches

@@ -499,10 +499,16 @@ interface IPressPianoKeysAllOctavesSlideProps {
 class PressPianoKeysAllOctavesSlide extends React.Component<IPressPianoKeysAllOctavesSlideProps, {}> {
   public static readonly DelayAfterCorrectMs = 1000;
 
+  public constructor(props: IPressPianoKeysAllOctavesSlideProps) {
+    super(props);
+    
+    this.slideIndex = this.props.slideshow.getSlideIndex();
+  }
+
   public componentWillUnmount() {
-    if (this.delayAfterCorrectIntervalId !== undefined) {
-      window.clearInterval(this.delayAfterCorrectIntervalId);
-      this.delayAfterCorrectIntervalId = undefined;
+    if (this.delayAfterCorrectTimeoutId !== undefined) {
+      window.clearTimeout(this.delayAfterCorrectTimeoutId);
+      this.delayAfterCorrectTimeoutId = undefined;
     }
   }
 
@@ -518,13 +524,16 @@ class PressPianoKeysAllOctavesSlide extends React.Component<IPressPianoKeysAllOc
     );
   }
 
-  private delayAfterCorrectIntervalId: number | undefined;
+  private slideIndex: number;
+  private delayAfterCorrectTimeoutId: number | undefined;
 
   private onAllCorrectKeysPressed() {
     const { slideshow } = this.props;
 
-    this.delayAfterCorrectIntervalId = window.setInterval(() => {
-      slideshow.tryToMoveToNextSlide();
+    this.delayAfterCorrectTimeoutId = window.setTimeout(() => {
+      if (slideshow.getSlideIndex() === this.slideIndex) { // TODO: remove when bug is figured out
+        slideshow.tryToMoveToNextSlide();
+      }
     }, PressPianoKeysAllOctavesSlide.DelayAfterCorrectMs);
   }
 }
@@ -1897,6 +1906,10 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
     if (!this.canMoveToPreviousSlide()) { return; }
 
     this.moveToPreviousSlideInternal();
+  }
+
+  public getSlideIndex(): number {
+    return this.state.slideIndex;
   }
 
   // #region React Functions
