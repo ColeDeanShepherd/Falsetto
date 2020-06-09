@@ -1123,11 +1123,7 @@ export const pianoTheorySlideGroups = [
 
     new Slide("scales-summary", () => (
       <div>
-        <p>There are many other scales you can learn about in your own time here: <NavLinkView to="/scale-exercises" openNewTab={true}>Self-Paced Scale Mastery</NavLinkView>.</p>
-        
-        <br />
-
-        <p>For now, take some time to review material below, then move to the next slide to practice your knowledge of scales with an interactive exercise.</p>
+        <p>Take some time to review material below, then move to the next slide to practice your knowledge of scales with an interactive exercise.</p>
         
         <br />
         
@@ -1143,6 +1139,7 @@ export const pianoTheorySlideGroups = [
         <p>The <strong>C natural minor scale</strong> (a.k.a. the <strong>C minor scale</strong>) consists of the notes <strong className="no-wrap">C, D, E♭, F, G, A♭, B♭</strong>.</p>
       </div>
     )),
+
     new Slide("scales-quiz", () => (
       <div style={exerciseContainerStyle}>
         {createStudyFlashCardSetComponent(
@@ -1152,6 +1149,14 @@ export const pianoTheorySlideGroups = [
           /*title*/ undefined,
           /*style*/ undefined,
           /*enableSettings*/ undefined)}
+      </div>
+    )),
+
+    new Slide("scales-next-steps", () => (
+      <div>
+        <h2>Next Steps</h2>
+        <p>You have now learned about scales, and memorized a couple of them, but there are many other scales to familiarize yourself with. You can learn about these other scales in your own time here: <NavLinkView to="/scale-exercises" openNewTab={true}>Self-Paced Scale Mastery</NavLinkView>.</p>
+        <p>We will now continue on to cover <strong>chords</strong>.</p>
       </div>
     )),
   ]),
@@ -1554,6 +1559,14 @@ export const pianoTheorySlideGroups = [
           /*title*/ undefined,
           /*style*/ undefined,
           /*enableSettings*/ undefined)}
+      </div>
+    )),
+    
+    new Slide("chords-next-steps", () => (
+      <div>
+        <h2>Next Steps</h2>
+        <p>There are many chords you can learn about in your own time here: <NavLinkView to="/chord-exercises" openNewTab={true}>Self-Paced Chord Mastery</NavLinkView>.</p>
+        <p>We will now continue on to cover <strong>chord progressions</strong>.</p>
       </div>
     )),
     

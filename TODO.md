@@ -2,13 +2,18 @@
 ## Other
 ## Pomodoro
 ## High Priority
-* GO THROUGH THE COURSE, IMAGINING I'M TEACHING A STUDENT AND HAVING THEM INTERACT
-* Either always show the keyboard, or have a "student playing" slide after most teaching slides
 
-
+* improve slide URLs
+* "Quiz" -> "Exercise"
+* scale & chord capitalization
+* improve chords 2nd quiz (maybe split?)
+* Add degree #'s to self paced chord mastery
+* Improve dropdown menus
+* Add account system
+* improve self-paced pages
+* conclusion and next steps
 
 * Make sure everything in essential music theory is also in new course
-* Scoped stylesheets
 * Improve study flash card UI
 * Music Theory for Piano
   * Self-Paced Scale Mastery
@@ -19,7 +24,6 @@
       * Play scale in 2nds, 3rd, etc.
       * Diatonic chord inversions
   * Chords Section
-    * More interactivity/quizzes
     * Self-Paced Chord Mastery
       * For all root notes
         * Inversions
@@ -50,6 +54,7 @@
   * Save data
 * Monetize
 ## Medium Priority
+* Scoped stylesheets
 * Fix on mobile
 * Improve chord finder (E G B D F is Emin7b9)
 * Turn exercises into "active" exercises

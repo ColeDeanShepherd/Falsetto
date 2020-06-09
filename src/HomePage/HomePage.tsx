@@ -60,11 +60,11 @@ export class HomePage extends React.Component<{}, {}> {
             <div className="text">
               <h2>4. Chords</h2>
               <p><NavLinkView to="/music-theory-for-piano?slide=chords-introduction">Introduction</NavLinkView></p>
-              <p><NavLinkView to="/music-theory-for-piano?slide=chords-introduction-review">Review</NavLinkView></p>
-              <p><NavLinkView to="/music-theory-for-piano?slide=chords-introduction-quiz">Quiz</NavLinkView></p>
+              <p><NavLinkView to="/music-theory-for-piano?slide=chords-introduction-review">Chords Review</NavLinkView></p>
+              <p><NavLinkView to="/music-theory-for-piano?slide=chords-introduction-quiz">Chords Quiz</NavLinkView></p>
               <p><NavLinkView to="/music-theory-for-piano?slide=diatonic-chords">Diatonic Chords</NavLinkView></p>
-              <p><NavLinkView to="/music-theory-for-piano?slide=diatonic-chords-review">Review</NavLinkView></p>
-              <p><NavLinkView to="/music-theory-for-piano?slide=diatonic-chords-quiz">Quiz</NavLinkView></p>
+              <p><NavLinkView to="/music-theory-for-piano?slide=diatonic-chords-review">Diatonic Chords Review</NavLinkView></p>
+              <p><NavLinkView to="/music-theory-for-piano?slide=diatonic-chords-quiz">Diatonic Chords Quiz</NavLinkView></p>
               <br />
               <p><NavLinkView to="/chord-exercises">Self-Paced Chord Mastery</NavLinkView></p>
             </div>

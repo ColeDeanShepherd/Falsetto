@@ -521,18 +521,16 @@ const routes: Array<IRouteData> = ([
     {
       path: "/chord/:chordType/lesson",
       renderFn: (props: any) => (
-        <LimitedWidthContentContainer>
-          <ChordTypeRoute routeParams={props.match.params} renderRoute={chordType => {
-            const slideGroups = createChordTypeMasteryLessonSlideGroups(chordType);
-            const chordTypeName = getChordTypeUriComponent(chordType);
+        <ChordTypeRoute routeParams={props.match.params} renderRoute={chordType => {
+          const slideGroups = createChordTypeMasteryLessonSlideGroups(chordType);
+          const chordTypeName = getChordTypeUriComponent(chordType);
 
-            return (
-              <DocumentTitle title={`${chordTypeName} Chord Mastery - Falsetto`}>
-                <PianoTheory slideGroups={slideGroups} />
-              </DocumentTitle>
-            );
-          }} />
-        </LimitedWidthContentContainer>
+          return (
+            <DocumentTitle title={`${chordTypeName} Chord Mastery - Falsetto`}>
+              <PianoTheory slideGroups={slideGroups} />
+            </DocumentTitle>
+          );
+        }} />
       )
     }
   ])
