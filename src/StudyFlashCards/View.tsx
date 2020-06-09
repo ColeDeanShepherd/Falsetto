@@ -307,20 +307,24 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
               key={`${currentFlashCardKey}.back`}
               style={flashCardContainerStyle}
             >
-              <p>
-                <i
-                  className="material-icons"
-                  style={{
-                    color: "red",
-                    display: "inline-block",
-                    fontSize: "1.3em",
-                    verticalAlign: "bottom"
-                  }}>
-                  cancel
-                </i>
+              {model.haveGottenCurrentFlashCardWrong
+                ? (
+                  <p>
+                    <i
+                      className="material-icons"
+                      style={{
+                        color: "red",
+                        display: "inline-block",
+                        fontSize: "1.3em",
+                        verticalAlign: "bottom"
+                      }}>
+                      cancel
+                    </i>
 
-                <span> Incorrect</span>
-              </p>
+                    <span> Incorrect</span>
+                  </p>
+                )
+                : null}
               <p style={{ textDecoration: "underline" }}>Correct Answer</p>
               {renderedFlashCardBackSide}
             </div>

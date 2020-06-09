@@ -1092,21 +1092,16 @@ export const pianoTheorySlideGroups = [
         <p>Let's assign a number to each note in the major scale &mdash; <strong>1</strong> for the 1st note (ex: <strong>C</strong> in <strong>C major</strong>), <strong>2</strong> for the 2nd note (in ascending order &ndash; ex: <strong>D</strong> in <strong>C major</strong>), and so on.</p>
         <p>Now the major scale can be written as: <strong className="no-wrap">1, 2, 3, 4, 5, 6, 7</strong>.</p>
         <p>We can then raise or lower the notes with sharps or flats to write formulas for other scales relative to the major scale.</p>
-        
-        <br />
-        <NoteText>The 1st note of a scale is sometimes referred to as the <strong>1st degree</strong> of the scale, and <strong>generally sounds stable and "like home"</strong>. The 2nd note is sometimes referred to as the <strong>2nd degree</strong> scale, the 3rd note as the <strong>3rd degree</strong> and so on.</NoteText>
-        <br />
-
         <p>For example, another common type of scale is the <strong>natural minor scale</strong> (sometimes simply called the <strong>minor</strong> scale), which has a major-scale-relative formula of: <strong className="no-wrap">1, 2, 3♭, 4, 5, 6♭, 7♭</strong>.</p>
         <p>We can use this formula to figure out the notes of the <strong>C minor scale</strong>, for example, by taking the notes of the <strong>C major scale</strong> (<span className="no-wrap">C, D, E, F, G, A, B</span>) and flattening degrees 3, 6, &amp; 7, giving us: <strong className="no-wrap">C, D, E♭, F, G, A♭, B♭</strong>.</p>
-        
         <br />
-
         <p>Below is an interactive diagram of the <strong>C minor</strong> scale, along its major-scale-relative fomula. Press the piano keys below to get a feel for how the scale sounds!</p>
         <p><PianoScaleMajorRelativeFormulaDiagram
           scale={new Scale(ScaleType.Aeolian, new Pitch(PitchLetter.C, 0, 4))}
           octaveCount={2}
           maxWidth={maxTwoOctavePianoWidth} /></p>
+        
+        <NoteText>The 1st note of a scale is sometimes referred to as the <strong>1st degree</strong> of the scale, and <strong>generally sounds stable and "like home"</strong>. The 2nd note is sometimes referred to as the <strong>2nd degree</strong> scale, the 3rd note as the <strong>3rd degree</strong> and so on.</NoteText>
       </div>
     )),
 
@@ -1144,6 +1139,8 @@ export const pianoTheorySlideGroups = [
         <p>A <strong>scale degree</strong> is the number of a note in a scale, in ascending order, starting from 1.</p>
         <p>The 1st degree of a scale <strong>generally sounds stable and "like home."</strong></p>
         <p>The major-scale-relative formula for all <strong>natural minor scales</strong> (also simply called <strong>minor scales</strong>) is <strong>1, 2, 3♭, 4, 5, 6♭, 7♭</strong>.</p>
+        <p>The <strong>C major scale</strong> consists of the notes <strong className="no-wrap">C, D, E, F, G, A, B</strong>.</p>
+        <p>The <strong>C natural minor scale</strong> (a.k.a. the <strong>C minor scale</strong>) consists of the notes <strong className="no-wrap">C, D, E♭, F, G, A♭, B♭</strong>.</p>
       </div>
     )),
     new Slide("scales-quiz", () => (

@@ -27,8 +27,8 @@ function createFlashCardSet(): FlashCardSet {
   return flashCardSet;
 }
 
-export function createPressAllScaleNotesFlashCard(id: string, scale: Scale): FlashCard {
-  const scaleName = `${scale.rootPitch.toString(/*includeOctaveNumber*/ false)} ${scale.type.name}`;
+export function createPressAllScaleNotesFlashCard(id: string, scale: Scale, scaleTypeName: string): FlashCard {
+  const scaleName = `${scale.rootPitch.toString(/*includeOctaveNumber*/ false)} ${scaleTypeName}`;
   
   return new FlashCard(
     JSON.stringify({ set: flashCardSetId, id: id }),
@@ -123,8 +123,8 @@ export function createFlashCards(): FlashCard[] {
     ),
     majorScaleFormulaFlashCard,
     minorScaleFormulaFlashCard,
-    createPressAllScaleNotesFlashCard("dMajorNotes", new Scale(ScaleType.Ionian, new Pitch(PitchLetter.D, 0, 4))),
-    createPressAllScaleNotesFlashCard("eMinorNotes", new Scale(ScaleType.Aeolian, new Pitch(PitchLetter.E, 0, 4)))
+    createPressAllScaleNotesFlashCard("cMajorNotes", new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4)), "Major"),
+    createPressAllScaleNotesFlashCard("cMinorNotes", new Scale(ScaleType.Aeolian, new Pitch(PitchLetter.C, 0, 4)), "Natural Minor")
   ];
 }
 
