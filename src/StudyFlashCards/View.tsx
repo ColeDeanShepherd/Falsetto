@@ -46,6 +46,7 @@ export interface IStudyFlashCardsViewProps {
   isEmbedded?: boolean; // TODO: remove
   style?: any;
   showRelatedExercises?: boolean;
+  onQuizFinished?: () => void;
 }
 
 export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewProps, {}> {
@@ -61,7 +62,13 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
       : undefined;
     this.model = new StudyFlashCardsModel(flashCardSet, studyAlgorithm);
 
-    this.onModelUpdate = () => this.forceUpdate();
+    this.onModelUpdate = () => {
+      if (this.props.onQuizFinished && this.getIsDoneWithQuiz()) {
+        this.props.onQuizFinished();
+      }
+
+      this.forceUpdate();
+    };
     this.model.subscribeToUpdates(this.onModelUpdate);
 
     this.model.initAsync(); // purposely not awaiting
@@ -144,8 +151,7 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
 
       const isQuizMode = this.getIsQuizMode();
 
-      const isDoneWithQuiz = isQuizMode
-        && (model.studyAlgorithm as QuizStudyAlgorithm).isDone;
+      const isDoneWithQuiz = this.getIsDoneWithQuiz();
 
       const renderHeader = () => (
         <div>
@@ -301,6 +307,20 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
               key={`${currentFlashCardKey}.back`}
               style={flashCardContainerStyle}
             >
+              <p>
+                <i
+                  className="material-icons"
+                  style={{
+                    color: "red",
+                    display: "inline-block",
+                    fontSize: "1.3em",
+                    verticalAlign: "bottom"
+                  }}>
+                  cancel
+                </i>
+
+                <span> Incorrect</span>
+              </p>
               <p style={{ textDecoration: "underline" }}>Correct Answer</p>
               {renderedFlashCardBackSide}
             </div>
@@ -318,7 +338,7 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
             className="material-icons"
             style={{
               color: "green",
-              display: model.startShowingCorrectAnswerIcon ? "inline-block" : "none",
+              display: "inline-block",
               fontSize: "1.3em",
               verticalAlign: "bottom"
             }}>
@@ -464,5 +484,12 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
     return (this.props.quizMode !== undefined)
       ? this.props.quizMode
       : false;
+  }
+
+  public getIsDoneWithQuiz(): boolean {
+    const isQuizMode = this.getIsQuizMode();
+
+    return isQuizMode
+      && (this.model.studyAlgorithm as QuizStudyAlgorithm).isDone;
   }
 }

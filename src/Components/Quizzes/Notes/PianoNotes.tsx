@@ -75,7 +75,7 @@ function createFlashCards(pitches?: Array<Pitch>): FlashCard[] {
       return new FlashCard(
         id,
         new FlashCardSide(
-          pitchString,
+          `Press ${pitchString}`,
           pitch
         ),
         new FlashCardSide(

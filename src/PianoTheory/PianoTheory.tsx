@@ -167,7 +167,7 @@ const PianoKeyPatternDiagram: React.FunctionComponent<{}> = props => {
         x={leftKeyRect.left} y={leftKeyRect.top}
         width={highlightSize.width} height={highlightSize.height}
         fill={color}
-        fillOpacity={0.3}
+        fillOpacity={0.2}
         className="pass-through-click">
       </rect>
     );
@@ -415,7 +415,7 @@ export class SetupSlideView extends React.Component<{}, {}> {
     return (
       <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
         <div>
-          <p>We recommend connecting a MIDI piano keyboard to follow along with the course.</p>
+          <p>We recommend connecting a MIDI piano keyboard to follow along with this course.</p>
           <p>At the time of writing, <a href="https://www.google.com/chrome/" target="_blank">Chrome</a> &amp; <a href="https://www.microsoft.com/en-us/edge" target="_blank">Edge</a> are the only desktop web browsers supporting MIDI input devices (<a href="https://caniuse.com/#feat=midi" target="_blank">click here for an up-to-date list of browsers supporting MIDI input devices</a>).</p>
           <p>If you have a MIDI piano keyboard, follow the steps below to set it up.</p>
         </div>
@@ -477,18 +477,71 @@ function createMiniQuizSlide(
   const flashCardSet = new FlashCardSet(flashCardSetId, /*name*/ "Piano Notes", () => flashCards);
 
   return (
-    new Slide(slideUrl, () => (
+    new Slide(slideUrl, slideshow => (
+      <MiniQuizSlide
+        slideUrl={slideUrl}
+        flashCards={flashCards}
+        slideshow={slideshow} />
+    ))
+  );
+}
+
+interface IMiniQuizSlideProps {
+  slideUrl: string;
+  flashCards: Array<FlashCard>;
+  slideshow: PianoTheory;
+}
+
+class MiniQuizSlide extends React.Component<IMiniQuizSlideProps, {}> {
+  public static readonly DelayAfterCorrectMs = 1000;
+
+  public constructor(props: IMiniQuizSlideProps) {
+    super(props);
+    
+    this.slideIndex = this.props.slideshow.getSlideIndex();
+    this.boundOnQuizFinished = this.onQuizFinished.bind(this);
+  }
+
+  public componentWillUnmount() {
+    if (this.delayAfterCorrectTimeoutId !== undefined) {
+      window.clearTimeout(this.delayAfterCorrectTimeoutId);
+      this.delayAfterCorrectTimeoutId = undefined;
+    }
+  }
+
+  public render(): JSX.Element {
+    const { slideUrl, flashCards } = this.props;
+
+    const flashCardSetId = `ptMiniQuiz.${slideUrl}`;
+    const flashCardSet = new FlashCardSet(flashCardSetId, /*name*/ "Piano Notes", () => flashCards);
+
+    return (
       <div style={exerciseContainerStyle}>
         <StudyFlashCardsView
           key={flashCardSet.route}
           flashCardSet={flashCardSet}
           title=""
           quizMode={true}
+          onQuizFinished={this.boundOnQuizFinished}
           hideMoreInfoUri={false}
         />
       </div>
-    ))
-  );
+    );
+  }
+
+  private slideIndex: number;
+  private boundOnQuizFinished: () => void;
+  private delayAfterCorrectTimeoutId: number | undefined;
+
+  private onQuizFinished() {
+    const { slideshow } = this.props;
+
+    this.delayAfterCorrectTimeoutId = window.setTimeout(() => {
+      if (slideshow.getSlideIndex() === this.slideIndex) { // TODO: remove when bug is figured out
+        slideshow.tryToMoveToNextSlide();
+      }
+    }, MiniQuizSlide.DelayAfterCorrectMs);
+  }
 }
 
 interface IPressPianoKeysAllOctavesSlideProps {
@@ -569,7 +622,7 @@ export const pianoTheorySlideGroups = [
 
     new Slide("piano-notes-repeat", () => (
       <div>
-        <p>Every note has one or more names, which we must learn in order to navigate the instrument and communicate with other musicians.</p>
+        <p>Every note has a name, which we must learn in order to navigate the instrument and communicate with other musicians.</p>
         <p>Luckily, we don't need to learn 88 different names because the names repeat as you move up and down the piano keyboard.</p>
         <p>Note names repeat because we percieve notes with the same name as very similar, just played higher or lower.</p>
 
@@ -583,7 +636,7 @@ export const pianoTheorySlideGroups = [
             <PianoKeyTwoBlackKeysPatternDiagram />
           </div>
           <div>
-            <p><strong>Part 2:</strong> followed by three black keys surrounded by four white keys:</p>
+            <p><strong>Part 2:</strong> three black keys surrounded by four white keys:</p>
             <PianoKeyThreeBlackKeysPatternDiagram />
           </div>
         </div>
@@ -777,7 +830,7 @@ export const pianoTheorySlideGroups = [
     
     new Slide("note-c-sharp", (slideshow) => (
       <div>
-        <p>Now let's learn the names of the 5 black piano keys in this section of the piano.</p>
+        <p>Now let's learn the names of the 5 black piano keys in the repeating pattern.</p>
         <p>The key highlighted below, like all black keys, has multiple names. One name for it is <strong>C♯</strong> (pronounced "C sharp").</p>
         <p>The '♯' ("sharp") symbol means the note is raised by one key, so C♯ means "the key to the right of C".</p>
         {renderPianoNoteDiagram({
@@ -941,7 +994,7 @@ export const pianoTheorySlideGroups = [
     
     new Slide("notes-summary", () => (
       <div>
-        <p>You have now learned the names of all the notes in the repeating pattern of piano keys!</p>
+        <p>You have now learned the names of all 12 notes in the repeating pattern of piano keys!</p>
         <p>
           <PianoNotesDiagram
             lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
@@ -1019,7 +1072,7 @@ export const pianoTheorySlideGroups = [
           <br />
           <strong>"H"</strong> means the next note is a <strong>half step</strong> (1 key) higher than of the previous note.
         </p>
-        <p>So, to figure out the notes in any major scale, you simply pick a note and follow the major scale formula.</p>
+        <p>To figure out the notes in any major scale, you simply pick a note and follow the major scale formula.</p>
 
         <p>Below is an interactive diagram of the C major scale and the major scale formula.</p>
         <p>

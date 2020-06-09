@@ -41,7 +41,6 @@
 * Fix level not being detected properly when disabling & re-enabling in piano notes exercise (orders don't match due to toggle).
 * Improve Home Page
 * Improve Quizzes
-  * Better positioning of "Show Question/Answer" for user-determined answers?
   * Save quiz completion?
 * Account system
   * Creation
