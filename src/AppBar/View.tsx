@@ -10,6 +10,7 @@ import { NavLinkView } from '../NavLinkView';
 import { Settings } from '../SettingsView';
 
 import "./Stylesheet.css";
+import { AppModel } from '../App/Model';
 
 export interface IAppBarViewProps {}
 
@@ -41,6 +42,8 @@ export class AppBarView extends React.Component<IAppBarViewProps, IAppBarViewSta
   }
 
   public render(): JSX.Element | null {
+    const appModel = AppModel.instance;
+
     const { isMenuVisible, isSettingsVisible } = this.state;
 
     // Account Stuff
@@ -54,7 +57,7 @@ export class AppBarView extends React.Component<IAppBarViewProps, IAppBarViewSta
     return (
       <div className="app-bar">
         <NavLinkView to="/" className="button">
-          <img src="/logo-black.svg" style={{height: "24px", verticalAlign: "sub"}} />
+          <img src={!appModel.isDarkModeEnabled ? "/logo-black.svg" : "/logo-white.svg"} style={{height: "24px", verticalAlign: "sub"}} />
         </NavLinkView>
         <i onClick={event => this.toggleMenu()} className="material-icons button cursor-pointer no-select">menu</i>
         <i onClick={event => this.toggleSettings()} className="material-icons button cursor-pointer no-select">settings</i>

@@ -10,6 +10,7 @@ import { Auth0UpdateAction } from '../Auth0Injector/Actions';
 
 import "./Stylesheet.css"; // TODO: use a CSS preprocessor and split this into multiple files
 import { AppBarView } from "../AppBar/View";
+import { AppModel } from './Model';
 
 export class AppView extends React.Component<{}, {}> {
   public constructor(props: {}) {
@@ -29,9 +30,11 @@ export class AppView extends React.Component<{}, {}> {
   }
   
   public render(): JSX.Element | null {
+    const model = AppModel.instance;
+
     return (
       <Router history={this.history}>
-        <div className="app">
+        <div className={"app" + (model.isDarkModeEnabled ? " dark-mode" : "")}>
           <AppBarView />
           <MainContainerView />
         </div>

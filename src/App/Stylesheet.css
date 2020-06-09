@@ -1,6 +1,7 @@
 /* All screen sizes */
 .app {
   height: 100vh;
+  background-color: #f2f3fa;
 }
 
 .nav-bar {
@@ -75,6 +76,21 @@
 
 .patreon-button:hover {
   opacity: 0.8;
+}
+
+/* Dark Mode */
+.app.dark-mode {
+  color: white;
+  background-color: #1e1e1e;
+}
+
+.dark-mode .MuiPaper-root-1 {
+  background-color: #252526;
+}
+
+.dark-mode a,
+.dark-mode a:visited {
+  color: #3094db;
 }
 
 /* Mobile */

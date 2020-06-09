@@ -17,6 +17,7 @@ export class AppModel implements IDisposable {
   
   public midiModel: AppMidiModel;
   public pianoAudio: PianoAudio;
+  public isDarkModeEnabled: boolean = true;
 
   public constructor() {
     precondition(!AppModel.instance);
