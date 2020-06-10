@@ -242,6 +242,22 @@ export function renderUserDeterminedCorrectnessAnswerSelect(
   );
 }
 
+export function renderNextButtonAnswerSelect(
+  info: FlashCardStudySessionInfo
+): JSX.Element {
+  return (
+    <div>
+      <Button
+        variant="contained"
+        onClick={e => info.onAnswer(AnswerDifficulty.Easy, null)}
+        style={{ textTransform: "none" }}
+      >
+        Next
+      </Button>
+    </div>
+  );
+}
+
 export function renderDistinctFlashCardSideAnswerSelectInternal(
   key: string,
   answers: Array<FlashCardSideRenderFn>,

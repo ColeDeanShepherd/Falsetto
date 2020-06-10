@@ -55,6 +55,8 @@ import { majorScaleFormulaFlashCard, minorScaleFormulaFlashCard, createPressAllS
 import { FlashCardSet } from "../FlashCardSet";
 import { PressPianoKeysAllOctavesView } from "../Components/Utils/PressPianoKeysAllOctavesView";
 import { fifthIntervalFlashCard } from "./ChordsIntroQuiz";
+import { renderNextButtonAnswerSelect, renderUserDeterminedCorrectnessAnswerSelect, renderStringAnswerSelect } from '../Components/Quizzes/Utils';
+import { ChordProgressionAnswerSelectView } from '../Components/Utils/ChordProgressionAnswerSelectView';
 
 export const maxPianoWidth = 1000;
 export const maxOneOctavePianoWidth = 400;
@@ -1647,20 +1649,39 @@ export const pianoTheorySlideGroups = [
           maxWidth={maxTwoOctavePianoWidth} />
       </div>
     )),
-    new Slide("chord-progressions-diatonic", () => (
+    new Slide("roman-numeral-notation", () => (
       <div>
         <p>Chord progressions are generally built with <strong>diatonic chords</strong> (chords build solely with notes in a particular scale).</p>
         <p>The chord progression we just saw, for example (<strong>D Minor</strong>, <strong>G7</strong>, <strong>C Major</strong>), consists solely of chords diatonic to the <strong>C Major scale</strong>.</p>
-        <p>In diatonic chord progressions, each chord has a root note associated with a <strong>scale note number</strong>. Using the chord progression above as an example:</p>
-        <p><strong>D Minor</strong> has a root note of <strong>D</strong>, which is the <strong>2nd</strong> note in the C Major scale.</p>
-        <p><strong>G7</strong> has a root note of <strong>G</strong>, which is the <strong>5th</strong> note in the C Major scale.</p>
-        <p><strong>C Major</strong> has a root note of <strong>C</strong>, which is the <strong>1st</strong> note in the C Major scale.</p>
-        <p>We can take advantage of this and represent diatonic chord progressions in a compact, scale-independent way with <strong>roman numeral notation</strong>.</p>
-      </div>
-    )),
-    new Slide("roman-numeral-notation", () => (
-      <div>
-        <p>In <strong>roman numeral notation</strong>, the chord progression (<strong>D Minor</strong>, <strong>G7</strong>, <strong>C Major</strong>) in the <strong>C Major scale</strong> would be written as: <strong>ii - V7 - I</strong>:</p>
+        <p>As we've learned, diatonic chords have root notes associated with scale degree. We can take advantage of this and represent diatonic chord progressions in a compact, scale-independent way with <strong>roman numeral notation</strong>.</p>
+        <br />
+        <p><strong>Roman numeral notation</strong> uses upper-case &amp; lower-case roman numerals (an alternative way of writing numbers), with added symbols, to represent diatonic chords built on scale degrees.</p>
+        <p>If you are unfamiliar with roman numerals, here are the roman numerals from 1 to 7:</p>
+        <table style={{ margin: "0 auto", fontWeight: "bold" }}>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>2</td>
+              <td>3</td>
+              <td>4</td>
+              <td>5</td>
+              <td>6</td>
+              <td>7</td>
+            </tr>
+            <tr>
+              <td>I</td>
+              <td>II</td>
+              <td>III</td>
+              <td>IV</td>
+              <td>V</td>
+              <td>VI</td>
+              <td>VII</td>
+            </tr>
+          </tbody>
+        </table>
+        <br />
+
+        <p>In <strong>roman numeral notation</strong>, the chord progression (<strong>D Minor</strong>, <strong>G7</strong>, <strong>C Major</strong>) in the <strong>C Major scale</strong> would be written with roman numerals, as: <strong>ii - V7 - I</strong>:</p>
         <p><strong>ii</strong> is the roman numeral for <strong>2</strong>, meaning it represents the diatonic chord with the <strong>2nd</strong> scale note (<strong>D</strong> in this example) as a root note.</p>
         <p><strong>ii</strong> is also lower-case, which signifies that the chord is a <strong>minor</strong> chord.</p>
         <p>The <strong>V</strong> in <strong>V7</strong> represents the diatonic chord with the <strong>5th</strong> scale note (<strong>G</strong> in this example) as a root note.</p>
@@ -1670,6 +1691,34 @@ export const pianoTheorySlideGroups = [
         <p>So, writing "<strong>ii - V7 - I</strong>" in C Major is equivalent to writing "<strong>D Minor, G7, C Major</strong>."</p>
       </div>
     )),
+    
+    createMiniQuizSlide("roman-numeral-notation-quiz", [
+      FlashCard.fromRenderFns(
+        JSON.stringify({ set: "roman-numeral-notation-quiz", id: "numeral-meaning" }),
+        "What does the roman numeral (ex: \"V\" in \"V7\") represent, ignoring upper-case/lower-case?",
+        "the scale degree the chord is built on",
+        renderNextButtonAnswerSelect
+      ),
+      FlashCard.fromRenderFns(
+        JSON.stringify({ set: "roman-numeral-notation-quiz", id: "upper-case-meaning" }),
+        "What type of chord does an upper-case roman numeral represent?",
+        "major",
+        renderNextButtonAnswerSelect
+      ),
+      FlashCard.fromRenderFns(
+        JSON.stringify({ set: "roman-numeral-notation-quiz", id: "lower-case-meaning" }),
+        "What type of chord does a lower-case roman numeral represent?",
+        "minor",
+        renderNextButtonAnswerSelect
+      ),
+      FlashCard.fromRenderFns(
+        JSON.stringify({ set: "roman-numeral-notation-quiz", id: "7-symbol-meaning" }),
+        "What does the \"7\" in \"V7\" mean?",
+        "the chord is a dominant 7th chord",
+        renderNextButtonAnswerSelect
+      ),
+    ]),
+
     new Slide("roman-numeral-notation-key-independent", () => (
       <div>
         <p>Using roman numeral notation is not only shorter than writing out entire chord names, it also allows us to understand and write diatonic chord progressions <strong>independent of the underlying scale</strong>:</p>
@@ -1693,6 +1742,7 @@ export const pianoTheorySlideGroups = [
           maxWidth={maxTwoOctavePianoWidth} />
       </div>
     )),
+
     new Slide("descending-fifth-progression", () => (
       <div>
         <p>One of the strongest sounding, and most common, chord progressions is the <strong>descending fifth</strong>.</p>
@@ -1721,6 +1771,16 @@ export const pianoTheorySlideGroups = [
           maxWidth={maxTwoOctavePianoWidth} />
       </div>
     )),
+    
+    createMiniQuizSlide("descending-fifth-progression-quiz", [
+      FlashCard.fromRenderFns(
+        JSON.stringify({ set: "descending-fifth-progression-quiz", id: "chord-after-4" }),
+        "What chord comes after IV in a descending fifth progression?",
+        "vii°",
+        info => renderStringAnswerSelect(["I", "ii", "iii", "IV", "V", "vi", "vii°"], info)
+      ),
+    ]),
+
     new Slide("circle-progression", () => (
       <div>
         <p>You can repeatedly chain together descending fifth progressions to create a <strong>circle progression</strong>, which progresses through all 7 diatonic chords of a scale:</p>
@@ -1756,6 +1816,16 @@ export const pianoTheorySlideGroups = [
         <NoteText>Lower-case roman numerals with a <strong>°</strong> symbol means the chord is a <strong>diminished</strong> chord.</NoteText>
       </div>
     )),
+
+    createMiniQuizSlide("circle-progression-quiz", [
+      FlashCard.fromRenderFns(
+        JSON.stringify({ set: "circle-progression-quiz", id: "circle progression" }),
+        "What chords are in the circle progression, starting and ending with I?",
+        "I - IV - vii° - iii - vi - ii - V - I",
+        info => <ChordProgressionAnswerSelectView info={info} correctAnswer={"I - IV - vii° - iii - vi - ii - V - I"} />
+      ),
+    ]),
+
     new Slide("voice-leading", () => (
       <div>
         <p>It is important to use good <strong>voice leading</strong> when playing chord progressions.</p>

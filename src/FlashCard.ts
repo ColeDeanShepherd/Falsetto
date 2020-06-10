@@ -1,6 +1,6 @@
 import { Size2D } from './lib/Core/Size2D';
 import { RenderAnswerSelectFunc } from './FlashCardSet';
-import { renderUserDeterminedCorrectnessAnswerSelect } from "./Components/Quizzes/Utils";
+import { renderUserDeterminedCorrectnessAnswerSelect, renderNextButtonAnswerSelect } from "./Components/Quizzes/Utils";
 
 export type FlashCardId = string;
 
@@ -27,7 +27,8 @@ export class FlashCard {
   ) {}
 
   public get doesUserDetermineCorrectness(): boolean {
-    return this.renderAnswerSelectFn === renderUserDeterminedCorrectnessAnswerSelect;
+    return (this.renderAnswerSelectFn === renderUserDeterminedCorrectnessAnswerSelect) ||
+      (this.renderAnswerSelectFn === renderNextButtonAnswerSelect);
   }
 }
 

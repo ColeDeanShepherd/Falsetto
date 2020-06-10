@@ -2,6 +2,7 @@
 ## Other
 ## Pomodoro
 ## High Priority
+* Chord progressions content improvements
 
 * improve slide URLs
 * "Quiz" -> "Exercise"
