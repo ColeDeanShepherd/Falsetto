@@ -1236,7 +1236,7 @@ export const pianoTheorySlideGroups = [
   new SlideGroup("Chords", [
     new Slide("chords-introduction", () => (
       <div>
-        <h2>Section 4: Chords</h2>
+        <h2>Section 4.1: Introduction to Chords</h2>
         <p><strong>Chords</strong> are sets of two or more notes played simultaneously.</p>
         <p>For example, here is a <strong>C Major</strong> chord, which consists of the three notes <strong>C, E, G</strong>, and has a root note of <strong>C</strong>.</p>
         <ChordView
@@ -1412,6 +1412,7 @@ export const pianoTheorySlideGroups = [
 
     new Slide("diatonic-chords", () => (
       <div>
+        <h2>Section 4.2: Diatonic Chords</h2>
         <p>Generally, in a section of music, musicians will restrict themselves to the chords consisting solely of notes from a particular scale &mdash; <strong>diatonic chords</strong>.</p>
         <p>For example, let's take the C Major scale, which consists of the notes: C, D, E, F, G, A, B. Any combination of two or more of these notes is a <strong>diatonic chord</strong> of the C Major scale.</p>
         <p>One example of a diatonic triad in the C Major scale is <strong>G Major</strong>, which has a root note of <strong>G</strong> (the 5th note in the C Major scale) and consists of the notes <strong>G, B, D</strong>, all of which are in the C Major scale:</p>

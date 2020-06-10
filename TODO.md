@@ -6,7 +6,6 @@
 * improve slide URLs
 * "Quiz" -> "Exercise"
 * scale & chord capitalization
-* improve chords 2nd quiz (maybe split?)
 * Add degree #'s to self paced chord mastery
 * Improve dropdown menus
 * Add account system
