@@ -85,7 +85,7 @@ export function createSlideGroups(scale: Scale): Array<SlideGroup> {
                   return (
                     new Slide(`${numChordPitches}-note-diatonic-chord-${scaleDegreeRomanNumerals}`, () => (
                       <div>
-                        <p>The {scaleDegreeRomanNumerals} {chordExtensionTypeName} of {scaleName} is <strong>{chordName}</strong>, which consists of the notes <strong>{chordPitchesString}</strong> (scale degrees <strong>{chordScaleDegreesString}</strong>).</p>
+                        <p>The <strong>{scaleDegreeRomanNumerals}</strong> {chordExtensionTypeName} of {scaleName} is <strong>{chordName}</strong>, which consists of the notes <strong>{chordPitchesString}</strong> (scale degrees <strong>{chordScaleDegreesString}</strong>).</p>
                         <ChordView
                           chord={chord}
                           showChordInfoText={false} />

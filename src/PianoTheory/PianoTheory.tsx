@@ -11,7 +11,7 @@ import { Pitch, getPitchRange } from '../lib/TheoryLib/Pitch';
 import { PitchLetter } from '../lib/TheoryLib/PitchLetter';
 import { ScaleType, Scale } from "../lib/TheoryLib/Scale";
 import { ChordType } from "../lib/TheoryLib/ChordType";
-import { Chord } from "../lib/TheoryLib/Chord";
+import { Chord, getUriComponent } from "../lib/TheoryLib/Chord";
 
 import { DependencyInjector } from "../DependencyInjector";
 
@@ -589,6 +589,78 @@ class PressPianoKeysAllOctavesSlide extends React.Component<IPressPianoKeysAllOc
       }
     }, PressPianoKeysAllOctavesSlide.DelayAfterCorrectMs);
   }
+}
+
+function renderOrdinalNumeral(x: number): JSX.Element {
+  switch (x) {
+    case 1: return <span>1<sup>st</sup></span>;
+    case 2: return <span>2<sup>nd</sup></span>;
+    case 3: return <span>3<sup>rd</sup></span>;
+    case 4: return <span>4<sup>th</sup></span>;
+    case 5: return <span>5<sup>th</sup></span>;
+    case 6: return <span>6<sup>th</sup></span>;
+    case 7: return <span>7<sup>th</sup></span>;
+    case 8: return <span>8<sup>th</sup></span>;
+    case 9: return <span>9<sup>th</sup></span>;
+    default: throw new Error();
+  }
+}
+
+function renderDiatonicTriadSlideContents(scaleDegreeNumber: number): JSX.Element {
+  const scale = new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4));
+  const chord = scale.getDiatonicChord(scaleDegreeNumber, /*numChordPitches*/ 3);
+
+  const chordTypeName = chord.type.name;
+  const chordPitchStrings = chord.getPitches()
+    .map(p => p.toString(/*includeOctaveNumber*/ false, /*useSymbols*/ true));
+  const chordPitchesString = chordPitchStrings.join(", ");
+  const chordName = `${chordPitchStrings[0]} ${chordTypeName}`;
+
+  const renderedScaleDegree = renderOrdinalNumeral(scaleDegreeNumber);
+
+  return (
+    <div>
+        <p>The diatonic triad built on the {renderedScaleDegree} degree of the major scale is the <strong>{chordTypeName}</strong> chord.</p>
+        <p>In the C major scale (C, D, E, F, G, A, B), the diatonic triad built with thirds on the {renderedScaleDegree} scale degree is <strong>{chordName}</strong>, which has a root note of <strong>{chordPitchStrings[0]}</strong> and consists of the notes <strong>{chordPitchesString}</strong>:</p>
+        <ChordView
+          chord={chord}
+          showChordInfoText={false}
+          scale={scale}
+          showScaleDegreesOnPiano={true} />
+      </div>
+  );
+}
+
+function createDiatonicTriadSlide(scaleDegreeNumber: number): Slide {
+  return new Slide(
+    `c-major-diatonic-triad-${scaleDegreeNumber}`,
+    () => renderDiatonicTriadSlideContents(scaleDegreeNumber)
+  );
+}
+
+function createDiatonicTriadNotesQuizSlide(scaleDegreeNumber: number): Slide {
+  const scale = new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4));
+  const chord = scale.getDiatonicChord(scaleDegreeNumber, /*numChordPitches*/ 3);
+
+  const chordPitches = chord.getPitches();
+
+  const chordTypeName = chord.type.name;
+  const chordRootPitchString = chord.rootPitch.toString(/*includeOctaveNumber*/ false, /*useSymbols*/ true);
+  const chordName = `${chordRootPitchString} ${chordTypeName}`;
+
+  const chordUriComponent = getUriComponent(chord);
+
+  return new Slide(
+    `${chordUriComponent}-chord-notes-quiz`,
+    (slideshow) => (
+      <div>
+        <p>Press all the keys in the <strong>{chordName}</strong> on your MIDI keyboard (or on-screen) to continue.</p>
+        <PressPianoKeysAllOctavesSlide
+          slideshow={slideshow}
+          pitches={chordPitches}
+        />
+      </div>
+  ));
 }
 
 // TODO: dynamic width/height
@@ -1356,27 +1428,13 @@ export const pianoTheorySlideGroups = [
     new Slide("c-major-diatonic-triad-1", () => (
       <div>
         <p>Earlier, we said that most chords are built with thirds, and diatonic chords are no exception.</p>
-        <p>Let's take a look at all the 3-note diatonic chords (chords with 3 distinct notes are also called <strong>triads</strong>) built with thirds in the C Major scale.</p>
-        <p>The C Major scale consists of 7 notes (C, D, E, F, G, A, B) and has 7 diatonic triads built with thirds &mdash; one triad for each note in the scale.</p>
-        <p>The 1st diatonic triad in the C Major scale built with thirds is <strong>C Major</strong>, which has a root note of <strong>C</strong> and consists of the notes <strong>C, E, G</strong>:</p>
-        <ChordView
-          chord={new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))}
-          showChordInfoText={false}
-          scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
-          showScaleDegreesOnPiano={true} />
+        <p>Let's take a look at all the 3-note diatonic chords (chords with 3 distinct notes are also called <strong>triads</strong>) built with thirds in the major scale.</p>
+        <p>Each of the 7 degrees of the major scale has a particular type of diatonic triad built on top of it.</p>
+        {renderDiatonicTriadSlideContents(/*scaleDegreeNumber*/ 1)}
       </div>
     )),
 
-    new Slide("c-major-diatonic-triad-2", () => (
-      <div>
-        <p>The 2nd diatonic triad in the C Major scale built with thirds is <strong>D Minor</strong>, which has a root note of <strong>D</strong> and consists of the notes <strong>D, F, A</strong>:</p>
-        <ChordView
-          chord={new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 4))}
-          showChordInfoText={false}
-          scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
-          showScaleDegreesOnPiano={true} />
-      </div>
-    )),
+    createDiatonicTriadSlide(/*scaleDegreeNumber*/ 2),
     new Slide("d-minor-chord-notes-quiz", (slideshow) => {
       const pitches = new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 4)).getPitches();
 
@@ -1391,16 +1449,7 @@ export const pianoTheorySlideGroups = [
       );
     }),
     
-    new Slide("c-major-diatonic-triad-3", () => (
-      <div>
-        <p>The 3rd diatonic triad in the C Major scale built with thirds is <strong>E Minor</strong>, which has a root note of <strong>E</strong> and consists of the notes <strong>E, G, B</strong>:</p>
-        <ChordView
-          chord={new Chord(ChordType.Minor, new Pitch(PitchLetter.E, 0, 4))}
-          showChordInfoText={false}
-          scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
-          showScaleDegreesOnPiano={true} />
-      </div>
-    )),
+    createDiatonicTriadSlide(/*scaleDegreeNumber*/ 3),
     new Slide("e-minor-chord-notes-quiz", (slideshow) => {
       const pitches = new Chord(ChordType.Minor, new Pitch(PitchLetter.E, 0, 4)).getPitches();
 
@@ -1415,16 +1464,7 @@ export const pianoTheorySlideGroups = [
       );
     }),
 
-    new Slide("c-major-diatonic-triad-4", () => (
-      <div>
-        <p>The 4th diatonic triad in the C Major scale built with thirds is <strong>F Major</strong>, which has a root note of <strong>F</strong> and consists of the notes <strong>F, A, C</strong>:</p>
-        <ChordView
-          chord={new Chord(ChordType.Major, new Pitch(PitchLetter.F, 0, 4))}
-          showChordInfoText={false}
-          scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
-          showScaleDegreesOnPiano={true} />
-      </div>
-    )),
+    createDiatonicTriadSlide(/*scaleDegreeNumber*/ 4),
     new Slide("f-major-chord-notes-quiz", (slideshow) => {
       const pitches = new Chord(ChordType.Major, new Pitch(PitchLetter.F, 0, 4)).getPitches();
 
@@ -1439,16 +1479,7 @@ export const pianoTheorySlideGroups = [
       );
     }),
 
-    new Slide("c-major-diatonic-triad-5", () => (
-      <div>
-        <p>The 5th diatonic triad in the C Major scale built with thirds is <strong>G Major</strong>, which has a root note of <strong>G</strong> and consists of the notes <strong>G, B, D</strong>:</p>
-        <ChordView
-          chord={new Chord(ChordType.Major, new Pitch(PitchLetter.G, 0, 4))}
-          showChordInfoText={false}
-          scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
-          showScaleDegreesOnPiano={true} />
-      </div>
-    )),
+    createDiatonicTriadSlide(/*scaleDegreeNumber*/ 5),
     new Slide("g-major-chord-notes-quiz", (slideshow) => {
       const pitches = new Chord(ChordType.Major, new Pitch(PitchLetter.G, 0, 4)).getPitches();
 
@@ -1463,16 +1494,7 @@ export const pianoTheorySlideGroups = [
       );
     }),
 
-    new Slide("c-major-diatonic-triad-6", () => (
-      <div>
-        <p>The 6th diatonic triad in the C Major scale built with thirds is <strong>A Minor</strong>, which has a root note of <strong>A</strong> and consists of the notes <strong>A, C, E</strong>:</p>
-        <ChordView
-          chord={new Chord(ChordType.Minor, new Pitch(PitchLetter.A, 0, 4))}
-          showChordInfoText={false}
-          scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
-          showScaleDegreesOnPiano={true} />
-      </div>
-    )),
+    createDiatonicTriadSlide(/*scaleDegreeNumber*/ 6),
     new Slide("a-minor-chord-notes-quiz", (slideshow) => {
       const pitches = new Chord(ChordType.Minor, new Pitch(PitchLetter.A, 0, 4)).getPitches();
 
@@ -1487,16 +1509,7 @@ export const pianoTheorySlideGroups = [
       );
     }),
 
-    new Slide("c-major-diatonic-triad-7", () => (
-      <div>
-        <p>The 7th, and last, diatonic triad in the C Major scale built with thirds is <strong>B Diminished</strong>, which has a root note of <strong>B</strong> and consists of the notes <strong>B, D, F</strong>:</p>
-        <ChordView
-          chord={new Chord(ChordType.Diminished, new Pitch(PitchLetter.B, 0, 4))}
-          showChordInfoText={false}
-          scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
-          showScaleDegreesOnPiano={true} />
-      </div>
-    )),
+    createDiatonicTriadSlide(/*scaleDegreeNumber*/ 7),
     new Slide("b-diminished-chord-notes-quiz", (slideshow) => {
       const pitches = new Chord(ChordType.Diminished, new Pitch(PitchLetter.B, 0, 4)).getPitches();
 
@@ -1510,19 +1523,6 @@ export const pianoTheorySlideGroups = [
         </div>
       );
     }),
-
-    new Slide("major-diatonic-triad-types", () => (
-      <div>
-        <p>All major scales have the same types of triads built with thirds associated with each note in the scale, so you can easily figure out these triads for any major scale:</p>
-        <p>1st scale note &mdash; Major Triad</p>
-        <p>2nd scale note &mdash; Minor Triad</p>
-        <p>3rd scale note &mdash; Minor Triad</p>
-        <p>4th scale note &mdash; Major Triad</p>
-        <p>5th scale note &mdash; Major Triad</p>
-        <p>6th scale note &mdash; Minor Triad</p>
-        <p>7th scale note &mdash; Diminished Triad</p>
-      </div>
-    )),
     
     new Slide("diatonic-chords-review", () => (
       <div>
@@ -1531,22 +1531,13 @@ export const pianoTheorySlideGroups = [
         <p><strong>Diatonic chords</strong> are chords consisting solely of notes from a particular scale.</p>
         <p><strong>Triads</strong> are chords with 3 distinct notes.</p>
         <br />
-        <p>The 1st diatonic triad in the C Major scale built with thirds is <strong>C Major</strong>, which has a root note of <strong>C</strong> and consists of the notes <strong>C, E, G</strong>.</p>
-        <p>The 2nd diatonic triad in the C Major scale built with thirds is <strong>D Minor</strong>, which has a root note of <strong>D</strong> and consists of the notes <strong>D, F, A</strong>.</p>
-        <p>The 3rd diatonic triad in the C Major scale built with thirds is <strong>E Minor</strong>, which has a root note of <strong>E</strong> and consists of the notes <strong>E, G, B</strong>.</p>
-        <p>The 4th diatonic triad in the C Major scale built with thirds is <strong>F Major</strong>, which has a root note of <strong>F</strong> and consists of the notes <strong>F, A, C</strong>.</p>
-        <p>The 5th diatonic triad in the C Major scale built with thirds is <strong>G Major</strong>, which has a root note of <strong>G</strong> and consists of the notes <strong>G, B, D</strong>.</p>
-        <p>The 6th diatonic triad in the C Major scale built with thirds is <strong>A Minor</strong>, which has a root note of <strong>A</strong> and consists of the notes <strong>A, C, E</strong>.</p>
-        <p>The 7th, and last, diatonic triad in the C Major scale built with thirds is <strong>B Diminished</strong>, which has a root note of <strong>B</strong> and consists of the notes <strong>B, D, F</strong>.</p>
-        <br />
-        <p>All major scales have the same types of triads built with thirds associated with each note in the scale:</p>
-        <p>1st scale note &mdash; Major Triad</p>
-        <p>2nd scale note &mdash; Minor Triad</p>
-        <p>3rd scale note &mdash; Minor Triad</p>
-        <p>4th scale note &mdash; Major Triad</p>
-        <p>5th scale note &mdash; Major Triad</p>
-        <p>6th scale note &mdash; Minor Triad</p>
-        <p>7th scale note &mdash; Diminished Triad</p>
+        <p>The diatonic triad build on the 1st degree of any major scale is the <strong>major</strong> chord. The 1st diatonic triad in the C Major scale built with thirds is <strong>C major</strong>, which has a root note of <strong>C</strong> and consists of the notes <strong>C, E, G</strong>.</p>
+        <p>The diatonic triad build on the 2nd degree of any major scale is the <strong>minor</strong> chord. The 2nd diatonic triad in the C Major scale built with thirds is <strong>D minor</strong>, which has a root note of <strong>D</strong> and consists of the notes <strong>D, F, A</strong>.</p>
+        <p>The diatonic triad build on the 3rd degree of any major scale is the <strong>minor</strong> chord. The 3rd diatonic triad in the C Major scale built with thirds is <strong>E minor</strong>, which has a root note of <strong>E</strong> and consists of the notes <strong>E, G, B</strong>.</p>
+        <p>The diatonic triad build on the 4th degree of any major scale is the <strong>major</strong> chord. The 4th diatonic triad in the C Major scale built with thirds is <strong>F major</strong>, which has a root note of <strong>F</strong> and consists of the notes <strong>F, A, C</strong>.</p>
+        <p>The diatonic triad build on the 5th degree of any major scale is the <strong>major</strong> chord. The 5th diatonic triad in the C Major scale built with thirds is <strong>G major</strong>, which has a root note of <strong>G</strong> and consists of the notes <strong>G, B, D</strong>.</p>
+        <p>The diatonic triad build on the 6th degree of any major scale is the <strong>minor</strong> chord. The 6th diatonic triad in the C Major scale built with thirds is <strong>A minor</strong>, which has a root note of <strong>A</strong> and consists of the notes <strong>A, C, E</strong>.</p>
+        <p>The diatonic triad build on the 7th degree of any major scale is the <strong>diminished</strong> chord. The 7th, and last, diatonic triad in the C Major scale built with thirds is <strong>B diminished</strong>, which has a root note of <strong>B</strong> and consists of the notes <strong>B, D, F</strong>.</p>
       </div>
     )),
     
