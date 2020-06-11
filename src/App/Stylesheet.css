@@ -1,38 +1,27 @@
 /* All screen sizes */
 .app {
   height: 100vh;
+  color: #1d1d1f;
+  background-color: #fafbfd;
+  font-family: Frutiger, "Frutiger Linotype", Univers, Calibri, "Gill Sans", "Gill Sans MT", "Myriad Pro", Myriad, "DejaVu Sans Condensed", "Liberation Sans", "Nimbus Sans L", Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 1.065rem;
 }
 
-.nav-bar {
-  position: relative;
-  color: white;
-  background-color: #3f51b5;
-  box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12);
-  padding: 0 1em;
-  z-index: 900;
-}
-.nav-bar > * {
-  display: inline-block;
-  padding: 0 0.5rem;
-  height: 100%;
-  vertical-align: top;
-  line-height: 42px;
-}
-.nav-bar > *:hover,
-.nav-bar > *:active {
-  background-color: #2B3DA1;
+h1 {
+  color: #303446;
 }
 
-.top-nav a {
-  padding-right: 1.5em;
+h2 {
+  color: #021d42;
 }
 
-.nav-bar a,
-.nav-bar a:visited,
-.top-nav a,
-.menu a:visited {
-  color: white;
+a,
+a:visited {
+  color: #258aff;
   text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
 }
 
 .menu-container {
@@ -47,9 +36,6 @@
 
 .menu a,
 .menu a:visited {
-  display: block;
-  color: #0366d6;
-  text-decoration: none;
   display: block;
   margin-bottom: 0.5em;
 }

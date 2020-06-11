@@ -57,10 +57,12 @@ import { PressPianoKeysAllOctavesView } from "../Components/Utils/PressPianoKeys
 import { fifthIntervalFlashCard } from "./ChordsIntroQuiz";
 import { renderNextButtonAnswerSelect, renderUserDeterminedCorrectnessAnswerSelect, renderStringAnswerSelect } from '../Components/Quizzes/Utils';
 import { ChordProgressionAnswerSelectView } from '../Components/Utils/ChordProgressionAnswerSelectView';
+import { Card } from "../ui/Card/Card";
 
 export const maxPianoWidth = 1000;
 export const maxOneOctavePianoWidth = 400;
 export const maxTwoOctavePianoWidth = 500;
+const studyFlashCardsViewRenderCard = false;
 
 // #region Helper Components
 
@@ -526,6 +528,7 @@ class MiniQuizSlide extends React.Component<IMiniQuizSlideProps, {}> {
           quizMode={true}
           onQuizFinished={this.boundOnQuizFinished}
           hideMoreInfoUri={false}
+          renderCard={studyFlashCardsViewRenderCard}
         />
       </div>
     );
@@ -898,7 +901,8 @@ export const pianoTheorySlideGroups = [
           /*hideMoreInfoUri*/ true,
           /*title*/ "White Piano Key Names Exercise",
           /*style*/ undefined,
-          /*enableSettings*/ undefined)}
+          /*enableSettings*/ undefined,
+          /*renderCard*/ studyFlashCardsViewRenderCard)}
         </div>
     )),
     
@@ -1062,7 +1066,8 @@ export const pianoTheorySlideGroups = [
           /*hideMoreInfoUri*/ true,
           /*title*/ "Black Piano Key Names Exercise",
           /*style*/ undefined,
-          /*enableSettings*/ undefined)}
+          /*enableSettings*/ undefined,
+          /*renderCard*/ studyFlashCardsViewRenderCard)}
       </div>
     )),
     
@@ -1096,7 +1101,8 @@ export const pianoTheorySlideGroups = [
           /*hideMoreInfoUri*/ true,
           /*title*/ "Piano Notes Exercise",
           /*style*/ undefined,
-          /*enableSettings*/ undefined)}
+          /*enableSettings*/ undefined,
+          /*renderCard*/ studyFlashCardsViewRenderCard)}
       </div>
     )),
   ]),
@@ -1222,7 +1228,8 @@ export const pianoTheorySlideGroups = [
           /*hideMoreInfoUri*/ true,
           /*title*/ undefined,
           /*style*/ undefined,
-          /*enableSettings*/ undefined)}
+          /*enableSettings*/ undefined,
+          /*renderCard*/ studyFlashCardsViewRenderCard)}
       </div>
     )),
 
@@ -1408,7 +1415,8 @@ export const pianoTheorySlideGroups = [
           /*hideMoreInfoUri*/ true,
           /*title*/ undefined,
           /*style*/ undefined,
-          /*enableSettings*/ undefined)}
+          /*enableSettings*/ undefined,
+          /*renderCard*/ studyFlashCardsViewRenderCard)}
       </div>
     )),
 
@@ -1552,7 +1560,8 @@ export const pianoTheorySlideGroups = [
           /*hideMoreInfoUri*/ true,
           /*title*/ undefined,
           /*style*/ undefined,
-          /*enableSettings*/ undefined)}
+          /*enableSettings*/ undefined,
+          /*renderCard*/ studyFlashCardsViewRenderCard)}
       </div>
     )),
     
@@ -1975,7 +1984,8 @@ export const pianoTheorySlideGroups = [
           /*hideMoreInfoUri*/ true,
           /*title*/ undefined,
           /*style*/ undefined,
-          /*enableSettings*/ undefined)}
+          /*enableSettings*/ undefined,
+          /*renderCard*/ studyFlashCardsViewRenderCard)}
       </div>
     )),
   ]),
@@ -2088,7 +2098,9 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
           <div style={{ display: "flex", flexDirection: "column", textAlign: "center", flexGrow: 1, height: "100%" }}>
             {false ? this.renderSlideLocation() : null}
             <LimitedWidthContentContainer style={{ flexGrow: 1 }}>
-              {renderedSlide}
+              <Card style={{ height: "100%" }}>
+                {renderedSlide}
+              </Card>
             </LimitedWidthContentContainer>
           </div>
 

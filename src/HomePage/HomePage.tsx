@@ -1,10 +1,11 @@
 import * as React from "react";
 
+import { Card } from "../ui/Card/Card";
+
 import { MainMenu } from '../Components/MainMenu';
 import { NavLinkView } from "../NavLinkView";
 
 import "./Stylesheet.css";
-import { Paper } from "@material-ui/core";
 
 export class HomePage extends React.Component<{}, {}> {
   public render(): JSX.Element {
@@ -16,7 +17,7 @@ export class HomePage extends React.Component<{}, {}> {
         </div>
 
         <div className="home-topic-container">
-          <Paper className="home-topic">
+          <Card className="home-topic">
             <div className="thumbnail" style={{ backgroundImage: "url('/img/setup-thumbnail.jpg')" }}></div>
 
             <div className="text">
@@ -24,9 +25,9 @@ export class HomePage extends React.Component<{}, {}> {
               <p><NavLinkView to="/music-theory-for-piano?slide=introduction">Introduction</NavLinkView></p>
               <p><NavLinkView to="/music-theory-for-piano?slide=setup">Setup</NavLinkView></p>
             </div>
-          </Paper>
+          </Card>
 
-          <Paper className="home-topic">
+          <Card className="home-topic">
             <div className="thumbnail" style={{ backgroundImage: "url('/img/notes-thumbnail.png')" }}></div>
 
             <div className="text">
@@ -37,9 +38,9 @@ export class HomePage extends React.Component<{}, {}> {
               <p><NavLinkView to="/music-theory-for-piano?slide=notes-summary">Review</NavLinkView></p>
               <p><NavLinkView to="/music-theory-for-piano?slide=notes-quiz">Quiz</NavLinkView></p>
             </div>
-          </Paper>
+          </Card>
 
-          <Paper className="home-topic">
+          <Card className="home-topic">
             <div className="thumbnail" style={{ backgroundImage: "url('/img/scale-thumbnail.png')", backgroundSize: "contain" }}></div>
 
             <div className="text">
@@ -52,9 +53,9 @@ export class HomePage extends React.Component<{}, {}> {
               <br />
               <p><NavLinkView to="/scale-exercises">Self-Paced Scale Mastery</NavLinkView></p>
             </div>
-          </Paper>
+          </Card>
           
-          <Paper className="home-topic">
+          <Card className="home-topic">
             <div className="thumbnail" style={{ backgroundImage: "url('/img/chord-thumbnail.png')", backgroundSize: "contain" }}></div>
 
             <div className="text">
@@ -68,9 +69,9 @@ export class HomePage extends React.Component<{}, {}> {
               <br />
               <p><NavLinkView to="/chord-exercises">Self-Paced Chord Mastery</NavLinkView></p>
             </div>
-          </Paper>
+          </Card>
           
-          <Paper className="home-topic">
+          <Card className="home-topic">
             <div className="thumbnail" style={{ backgroundImage: "url('/img/chord-progression-thumbnail.png')", backgroundSize: "contain" }}></div>
 
             <div className="text">
@@ -79,13 +80,13 @@ export class HomePage extends React.Component<{}, {}> {
               <p><NavLinkView to="/music-theory-for-piano?slide=chord-progressions-review">Review</NavLinkView></p>
               <p><NavLinkView to="/music-theory-for-piano?slide=chord-progressions-quiz">Quiz</NavLinkView></p>
             </div>
-          </Paper>
+          </Card>
         </div>
         
-        <Paper style={{ padding: "0 1em 1em 1em", overflow: "hidden" }}>
+        <Card style={{ padding: "0 1em 1em 1em", overflow: "hidden" }}>
           <h2>Other Lessons, Tools, &amp; Exercises</h2>
           <MainMenu collapseCategories={false} />
-        </Paper>
+        </Card>
       </div>
     );
   }

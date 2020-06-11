@@ -18,7 +18,7 @@ import { QuizStudyAlgorithm } from '../Study/StudyAlgorithm';
 
 export function createStudyFlashCardSetComponent(
   flashCardSet: FlashCardSet, isEmbedded: boolean, hideMoreInfoUri: boolean,
-  title?: string, style?: any, enableSettings?: boolean
+  title?: string, style?: any, enableSettings?: boolean, renderCard?: boolean
 ): JSX.Element {
   return (
     <StudyFlashCardsView
@@ -29,6 +29,7 @@ export function createStudyFlashCardSetComponent(
       enableSettings={enableSettings}
       isEmbedded={isEmbedded} // TODO: remove
       style={style}
+      renderCard={renderCard}
     />
   );
 }
@@ -40,6 +41,7 @@ export function createStudyFlashCardSetComponent(
 export interface IStudyFlashCardsViewProps {
   title: string;
   hideMoreInfoUri: boolean;
+  renderCard?: boolean;
   quizMode?: boolean;
   flashCardSet: FlashCardSet;
   enableSettings?: boolean;
@@ -393,15 +395,23 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
       </Card>
     );
 
+    const renderCard = (this.props.renderCard !== undefined)
+      ? this.props.renderCard
+      : true;
+
     return (
       <div style={{ textAlign: "left", height: "100%" }}>
-        <Card style={cardStyle}>
-          <CardContent style={{ position: "relative", height: "100%", boxSizing: "border-box" }}>
-            {cardContents}
-          </CardContent>
-          
-          <WatermarkView isEmbedded={isEmbedded ? isEmbedded : false} />
-        </Card>
+        {renderCard
+          ? (
+            <Card style={cardStyle}>
+              <CardContent style={{ position: "relative", height: "100%", boxSizing: "border-box" }}>
+                {cardContents}
+              </CardContent>
+              
+              <WatermarkView isEmbedded={isEmbedded ? isEmbedded : false} />
+            </Card>
+          )
+          : cardContents}
 
         {(!this.props.isEmbedded && showRelatedExercises && (flashCardSet.relatedSets.length > 0)) ? (
           renderRelatedExercises()
