@@ -674,7 +674,7 @@ export const pianoTheorySlideGroups = [
     new Slide("introduction", () => (
       <div>
         <div>
-          <h1>Music Theory on Piano</h1>
+          <h1>Understanding the Piano Keyboard</h1>
           <h2>Section 1: Introduction &amp; Setup</h2>
           <p>This is an interactive course designed to teach you the essentials of piano and music theory in a hands-on manner.</p>
           <p>This course is designed to be viewed on tablets and computer monitors, not on mobile phones.</p>
@@ -2082,7 +2082,7 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
     const renderedSlide = slides[slideIndex].renderFn(this);
 
     return (
-      <div className="music-theory-for-piano" style={{ height: "100%" }}>
+      <div className="slideshow" style={{ height: "100%" }}>
         <div style={{ display: "flex", height: "100%", padding: "0 1em" }}>
           <div>
             <Button
@@ -2137,7 +2137,7 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
 
     const slideGroupInfo = getSlideGroup(slideGroups, slideIndex);
     if (!slideGroupInfo) {
-      return <span style={{ padding: "0 1em" }}>Music Theory for Piano - Falsetto</span>;
+      return <span style={{ padding: "0 1em" }}>Understanding the Piano Keyboard - Falsetto</span>;
     }
 
     const slideGroup = slideGroupInfo[0];

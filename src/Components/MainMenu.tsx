@@ -83,12 +83,12 @@ const MenuCategory: React.FunctionComponent<{ title: string, collapseCategories:
 
 export const MainMenu : React.FunctionComponent<{ collapseCategories: boolean }> = props => {
   const pianoTheoryCategory = (
-    <MenuCategory title="Music Theory on Piano" collapseCategories={props.collapseCategories}>
-      {<NavLinkView to="/music-theory-for-piano?slide=introduction">{"Introduction"}</NavLinkView>}
-      {<NavLinkView to="/music-theory-for-piano?slide=notes-introduction">{"Notes"}</NavLinkView>}
-      {<NavLinkView to="/music-theory-for-piano?slide=scales-introduction">{"Scales"}</NavLinkView>}
-      {<NavLinkView to="/music-theory-for-piano?slide=chords-introduction">{"Chords"}</NavLinkView>}
-      {<NavLinkView to="/music-theory-for-piano?slide=chord-progressions-introduction">{"Chord Progressions"}</NavLinkView>}
+    <MenuCategory title="Understanding the Piano Keyboard" collapseCategories={props.collapseCategories}>
+      {<NavLinkView to="/understanding-the-piano-keyboard?slide=introduction">{"Introduction"}</NavLinkView>}
+      {<NavLinkView to="/understanding-the-piano-keyboard?slide=notes-introduction">{"Notes"}</NavLinkView>}
+      {<NavLinkView to="/understanding-the-piano-keyboard?slide=scales-introduction">{"Scales"}</NavLinkView>}
+      {<NavLinkView to="/understanding-the-piano-keyboard?slide=chords-introduction">{"Chords"}</NavLinkView>}
+      {<NavLinkView to="/understanding-the-piano-keyboard?slide=chord-progressions-introduction">{"Chord Progressions"}</NavLinkView>}
     </MenuCategory>
   );
 
