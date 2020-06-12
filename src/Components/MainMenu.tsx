@@ -199,23 +199,23 @@ export const MainMenu : React.FunctionComponent<{ collapseCategories: boolean }>
   return !props.collapseCategories
   ? (
     <div className="menu">
-      <div className="row">
-        <div className="column">
+      <div className="row no-gutters">
+        <div className="col-sm">
           {pianoTheoryCategory}
           {guitarLessonsCategory}
         </div>
-        <div className="column">
+        <div className="col-sm">
           {toolsCategory}
           {noteExercisesCategory}
         </div>
-        <div className="column">
+        <div className="col-sm">
           {intervalExercisesCategory}
         </div>
-        <div className="column">
+        <div className="col-sm">
           {scaleExercisesCategory}
           {keyExercisesCategory}
         </div>
-        <div className="column">
+        <div className="col-sm">
           {chordExercisesCategory}
           {otherCategory}
         </div>
@@ -224,18 +224,18 @@ export const MainMenu : React.FunctionComponent<{ collapseCategories: boolean }>
   )
   : (
     <div className="menu">
-      <div className="row">
-        <div className="column">
+      <div className="row no-gutters">
+        <div className="col-sm">
           {pianoTheoryCategory}
           {guitarLessonsCategory}
           {toolsCategory}
         </div>
-        <div className="column">
+        <div className="col-sm">
           {noteExercisesCategory}
           {intervalExercisesCategory}
           {scaleExercisesCategory}
         </div>
-        <div className="column">
+        <div className="col-sm">
           {keyExercisesCategory}
           {chordExercisesCategory}
           {otherCategory}

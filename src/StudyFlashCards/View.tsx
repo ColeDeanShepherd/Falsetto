@@ -404,7 +404,7 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
         {renderCard
           ? (
             <Card style={cardStyle}>
-              <CardContent style={{ position: "relative", height: "100%", boxSizing: "border-box" }}>
+              <CardContent style={{ position: "relative", height: "100%" }}>
                 {cardContents}
               </CardContent>
               

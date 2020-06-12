@@ -1,37 +1,11 @@
 /* All screen sizes */
 .app {
   height: 100vh;
-  color: #1d1d1f;
   background-color: #fafbfd;
-  font-family: Frutiger, "Frutiger Linotype", Univers, Calibri, "Gill Sans", "Gill Sans MT", "Myriad Pro", Myriad, "DejaVu Sans Condensed", "Liberation Sans", "Nimbus Sans L", Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 1.065rem;
 }
 
-h1 {
-  color: #303446;
-}
-
-h2 {
-  color: #021d42;
-}
-
-a,
-a:visited {
-  color: #258aff;
-  text-decoration: none;
-}
-a:hover {
-  text-decoration: underline;
-}
-
-.menu-container {
-  overflow-y: auto;
-  box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12);
-  position: relative;
-  z-index: 800;
-}
-.menu {
-  display: flex;
+.watermark {
+  user-select: none;
 }
 
 .menu a,
@@ -50,7 +24,6 @@ a:hover {
 }
 .main {
   height: 100%;
-  box-sizing: border-box;
   padding: 1em 0;
 }
 
@@ -73,11 +46,7 @@ a:hover {
     padding: 0;
   }
 
-  .menu {
-    flex-wrap: wrap;
-  }
-
   .menu-category {
-    margin: 0 0.5em;
+    margin: 0 0.5em 0 0;
   }
 }

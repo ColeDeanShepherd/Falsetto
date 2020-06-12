@@ -1,26 +1,5 @@
-body {
-  margin: 0;
-  padding: 0;
-  line-height: 1.4;
-}
-
 .cursor-pointer {
   cursor: pointer;
-}
-
-hr {
-  border-top: none;
-  border-right: none;
-  border-bottom: 1px solid rgba(224, 224, 224, 1);
-  border-left: none;
-}
-
-ul li {
-  padding-bottom: 0.25em;
-}
-
-sup {
-  font-size: 75%;
 }
 
 .no-wrap {
@@ -30,9 +9,6 @@ sup {
 .no-select {
   user-select: none;
 }
-.watermark {
-  user-select: none;
-}
 
 .pass-through-click {
   pointer-events: none;
@@ -40,10 +16,6 @@ sup {
 
 .bottom-shadow {
   box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 2px 1px -1px rgba(0,0,0,0.12);
-}
-
-.row {
-  width: 100%;
 }
 
 /* Mobile */
@@ -58,13 +30,6 @@ sup {
   .hide-on-desktop {
     display: none !important;
   }
-
-  .row {
-    display: flex;
-  }
-  .column {
-    flex-basis: 100%;
-  }
 }
 
 /* Animations */
@@ -73,6 +38,7 @@ sup {
   animation-duration: 2s;
   opacity: 0;
 }
+
 @keyframes fade-out {
   from {
     opacity: 1;
@@ -87,6 +53,7 @@ sup {
   animation: background-green-to-initial;
   animation-duration: 3s;
 }
+
 @keyframes background-green-to-initial {
   from {
     background-color: #669942;
