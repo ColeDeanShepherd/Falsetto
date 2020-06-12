@@ -50,7 +50,6 @@ a:hover {
 }
 .main {
   height: 100%;
-  box-sizing: border-box;
   padding: 1em 0;
 }
 
