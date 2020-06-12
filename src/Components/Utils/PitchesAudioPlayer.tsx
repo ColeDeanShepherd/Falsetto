@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Button, CircularProgress } from "@material-ui/core";
+import { CircularProgress } from "@material-ui/core";
 
 import { areArraysEqualComparer } from "../../lib/Core/ArrayUtils";
 import * as Audio from "../../Audio/Audio";
@@ -7,6 +7,7 @@ import { Pitch } from '../../lib/TheoryLib/Pitch';
 import { unwrapMaybe } from '../../lib/Core/Utils';
 import { IPitchesAudio } from '../../Audio/IPitchesAudio';
 import { PianoPitchesAudio } from '../../Audio/PianoAudio';
+import { Button } from "../../ui/Button/Button";
 
 export enum PitchesAudioPlayerPlayState {
   PLAYABLE,
@@ -54,13 +55,13 @@ export class PitchesAudioPlayer extends React.Component<IPitchesAudioPlayerProps
     switch (this.state.playState) {
       case PitchesAudioPlayerPlayState.PLAYABLE:
         return (
-          <Button variant="contained" onClick={e => this.loadAndPlay()} style={buttonStyle}>
+          <Button onClick={e => this.loadAndPlay()} style={buttonStyle}>
             <span>{this.props.children ? this.props.children : <i className="material-icons" style={{ verticalAlign: "middle" }}>play_arrow</i>}</span>
           </Button>
         );
       case PitchesAudioPlayerPlayState.LOADING:
         return (
-          <Button variant="contained" style={buttonStyle}>
+          <Button style={buttonStyle}>
             <CircularProgress size={20} disableShrink={true} />
           </Button>
         );

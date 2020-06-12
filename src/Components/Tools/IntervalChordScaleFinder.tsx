@@ -3,7 +3,7 @@ import * as React from "react";
 import * as Utils from "../../lib/Core/Utils";
 import { PitchLetter } from "../../lib/TheoryLib/PitchLetter";
 import { Pitch } from "../../lib/TheoryLib/Pitch";
-import { Typography, Button } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import { PianoKeyboard, renderPianoKeyboardNoteNames, PianoKeyboardMetrics, renderPressedPianoKeys } from "../Utils/PianoKeyboard";
 import { Interval } from '../../lib/TheoryLib/Interval';
 import { Chord } from '../../lib/TheoryLib/Chord';
@@ -15,6 +15,7 @@ import { playPitches } from '../../Audio/PianoAudio';
 import { StringDictionary } from '../../lib/Core/StringDictionary';
 import { areArraysEqual, uniqWithSelector, immutableAddIfNotFoundInArray, immutableRemoveIfFoundInArray } from '../../lib/Core/ArrayUtils';
 import { Card } from "../../ui/Card/Card";
+import { Button } from "../../ui/Button/Button";
 
 // TODO: refactor Chord, Scale
 // TODO: add support for multiple chord names
@@ -249,7 +250,6 @@ export class IntervalChordScaleFinder extends React.Component<IIntervalChordScal
             <p>
               <Button
                 onClick={event => this.reset()}
-                variant="contained"
                 style={{ textTransform: "none" }}
               >
                 Reset

@@ -1,11 +1,11 @@
 import * as React from "react";
-import { Button } from "@material-ui/core";
 
 import { PianoKeyboard } from "../Utils/PianoKeyboard";
 import { AnswerDifficulty } from "../../Study/AnswerDifficulty";
 import { Pitch } from "../../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../../lib/TheoryLib/PitchLetter";
 import { toggleArrayElementCustomEquals, uniq } from '../../lib/Core/ArrayUtils';
+import { Button } from "../../ui/Button/Button";
 
 export interface IGuitarNotesAnswerSelectProps {
   correctAnswer: Array<Pitch>;
@@ -40,7 +40,6 @@ export class GuitarNotesAnswerSelect extends React.Component<IGuitarNotesAnswerS
           <Button
             onClick={event => this.confirmAnswer()}
             disabled={this.state.selectedPitches.length === 0}
-            variant="contained"
           >
             Confirm Answer
           </Button>

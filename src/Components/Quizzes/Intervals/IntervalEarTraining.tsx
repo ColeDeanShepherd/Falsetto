@@ -14,10 +14,10 @@ import {
   configDataToEnabledFlashCardIds,
   forEachInterval
 } from "../../Utils/IntervalEarTrainingFlashCardMultiSelect";
-import { Button } from "@material-ui/core";
 import { createIntervalLevels } from '../../../lib/TheoryLib/Interval';
 import { randomElement } from '../../../lib/Core/Random';
 import { arrayContains } from '../../../lib/Core/ArrayUtils';
+import { Button } from "../../../ui/Button/Button";
 
 const flashCardSetId = "intervalEarTraining";
 
@@ -54,7 +54,6 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
       <div>
         <Button
           onClick={event => this.playAudio()}
-          variant="contained"
         >
           Play Sound
         </Button>

@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Button } from "@material-ui/core";
 
 import { PianoKeyboard } from "../../Components/Utils/PianoKeyboard";
 import { fullPianoLowestPitch, fullPianoHighestPitch } from "../../Components/Utils/PianoUtils";
@@ -9,6 +8,7 @@ import { MidiInputDevicePitchRangeChangedAction, WebMidiInitializedAction, MidiD
 import { IAction } from "../../IAction";
 import { MidiNoteEventListener } from "./MidiNoteEventListener";
 import { Pitch, expandPitchRangeToIncludePitch, getNumPitchesInRange } from '../../lib/TheoryLib/Pitch';
+import { Button } from "../../ui/Button/Button";
 
 export class MidiPianoRangeInput extends React.Component<{}, {}> {
   public constructor(props: {}) {
@@ -47,7 +47,6 @@ export class MidiPianoRangeInput extends React.Component<{}, {}> {
             
           <p>
             <Button
-              variant="contained"
               onClick={_ => this.reset()}
               style={{ textTransform: "none" }}
             >

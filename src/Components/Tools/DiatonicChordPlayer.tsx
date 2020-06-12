@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Typography, Table, TableHead, TableBody, TableRow, TableCell, Button, Checkbox } from '@material-ui/core';
+import { Typography, Table, TableHead, TableBody, TableRow, TableCell, Checkbox } from '@material-ui/core';
 
 import * as Utils from "../../lib/Core/Utils";
 import { Chord } from '../../lib/TheoryLib/Chord';

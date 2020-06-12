@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as Vex from "vexflow";
-import { Button, Typography, Select, CircularProgress } from "@material-ui/core";
+import { Typography, Select, CircularProgress } from "@material-ui/core";
 
 import * as Utils from "../../lib/Core/Utils";
 import { TimeSignature } from "../../lib/TheoryLib/TimeSignature";
@@ -15,6 +15,7 @@ import { Size2D } from '../../lib/Core/Size2D';
 import { range, isPowerOf2, highestPowerOf2 } from '../../lib/Core/MathUtils';
 import { repeatGenerator } from '../../lib/Core/ArrayUtils';
 import { Card } from "../../ui/Card/Card";
+import { Button } from "../../ui/Button/Button";
 
 const clickAudioPath = "/audio/metronome_click.wav";
 const woodBlockAudioPath = "/audio/wood_block.wav";
@@ -99,9 +100,6 @@ export class NoteValuePlayer extends React.Component<INoteValuePlayerProps, INot
             <Button
               onClick={event => this.play()}
               disabled={this.state.isLoadingSounds}
-              disableRipple={true}
-              disableFocusRipple={true}
-              variant="contained"
             >
               {!this.state.isLoadingSounds ? <i className="material-icons">play_arrow</i> : <CircularProgress size={20} disableShrink={true} />}
             </Button>
@@ -109,9 +107,6 @@ export class NoteValuePlayer extends React.Component<INoteValuePlayerProps, INot
           : (
             <Button
               onClick={event => this.stop()}
-              disableRipple={true}
-              disableFocusRipple={true}
-              variant="contained"
             >
               <i className="material-icons">pause</i>
             </Button>

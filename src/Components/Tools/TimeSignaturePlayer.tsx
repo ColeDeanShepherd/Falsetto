@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as Vex from "vexflow";
-import { Button, Typography, Select, CircularProgress } from "@material-ui/core";
+import { Typography, Select, CircularProgress } from "@material-ui/core";
 
 import { TimeSignature } from "../../lib/TheoryLib/TimeSignature";
 import * as Audio from "../../Audio/Audio";
@@ -12,6 +12,7 @@ import { SizeAwareContainer } from '../Utils/SizeAwareContainer';
 import { Size2D } from '../../lib/Core/Size2D';
 import { repeatGenerator } from '../../lib/Core/ArrayUtils';
 import { Card } from "../../ui/Card/Card";
+import { Button } from "../../ui/Button/Button";
 
 const clickAudioPath = "/audio/metronome_click.wav";
 
@@ -172,9 +173,6 @@ export class TimeSignaturePlayer extends React.Component<ITimeSignaturePlayerPro
             <Button
               onClick={event => this.play()}
               disabled={this.state.isLoadingSounds}
-              disableRipple={true}
-              disableFocusRipple={true}
-              variant="contained"
             >
               {!this.state.isLoadingSounds ? <i className="material-icons">play_arrow</i> : <CircularProgress size={20} disableShrink={true} />}
             </Button>
@@ -182,9 +180,6 @@ export class TimeSignaturePlayer extends React.Component<ITimeSignaturePlayerPro
           : (
             <Button
               onClick={event => this.stop()}
-              disableRipple={true}
-              disableFocusRipple={true}
-              variant="contained"
             >
               <i className="material-icons">pause</i>
             </Button>

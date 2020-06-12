@@ -1,6 +1,6 @@
 import * as React from "react";
 import {
-  Checkbox, Table, TableHead, TableBody, TableRow, TableCell, Button
+  Checkbox, Table, TableHead, TableBody, TableRow, TableCell
 } from "@material-ui/core";
 
 import { FlashCard, FlashCardId } from "../../FlashCard";

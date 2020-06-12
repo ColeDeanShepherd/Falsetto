@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { Pitch } from "../../lib/TheoryLib/Pitch";
-import { Button, Typography } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import { Chord } from "../../lib/TheoryLib/Chord";
 import { ChordTypeGroup } from "../../lib/TheoryLib/ChordTypeGroup";
 import { ChordType } from "../../lib/TheoryLib/ChordType";

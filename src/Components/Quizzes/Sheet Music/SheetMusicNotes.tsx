@@ -2,7 +2,6 @@ import * as React from "react";
 import { Typography, Checkbox } from "@material-ui/core";
 import * as Vex from "vexflow";
 
-import * as Utils from "../../../lib/Core/Utils";
 import * as FlashCardUtils from "../Utils";
 import { VexFlowComponent } from "../../Utils/VexFlowComponent";
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";

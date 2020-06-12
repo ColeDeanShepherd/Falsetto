@@ -1,6 +1,6 @@
 import * as React from "react";
 import {
-  Button, Typography, Paper
+  Typography, Paper
 } from "@material-ui/core";
 
 import { areArraysEqual } from "../lib/Core/ArrayUtils";
@@ -16,6 +16,7 @@ import { LevelProgressBarView } from "../Components/Utils/LevelProgressBarView";
 import { WatermarkView } from "../Components/Utils/WatermarkView";
 import { QuizStudyAlgorithm } from '../Study/StudyAlgorithm';
 import { Card } from "../ui/Card/Card";
+import { Button } from "../ui/Button/Button";
 
 export function createStudyFlashCardSetComponent(
   flashCardSet: FlashCardSet, isEmbedded: boolean, hideMoreInfoUri: boolean,
@@ -164,7 +165,7 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
             </Typography>
             
             {enableSettings ? (
-              <Button variant="contained" onClick={event => this.toggleConfiguration()} style={{width: "48px", height: "41px"}}>
+              <Button onClick={event => this.toggleConfiguration()} style={{width: "48px", height: "41px"}}>
                 <i
                   className="cursor-pointer material-icons"
                   style={{ verticalAlign: "sub", display: "inline-block" }}
@@ -235,7 +236,6 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
                 {(prevLevelIndex !== undefined) ? (
                   <Button
                     onClick={event => model.moveToPrevLevel()}
-                    variant="contained"
                     style={{ textTransform: "none" }}
                   >
                     Level {model.getLevelDisplayName(prevLevelIndex)}
@@ -254,7 +254,6 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
                 {(nextLevelIndex !== undefined) ? (
                   <Button
                     onClick={event => model.moveToNextLevel()}
-                    variant="contained"
                     style={{ textTransform: "none" }}
                   >
                     Level {model.getLevelDisplayName(nextLevelIndex)}
@@ -276,7 +275,6 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
             ? (
               <Button
                 onClick={event => this.flipFlashCard()}
-                variant="contained"
               >
                 Show {isShowingBackSide ? "Question" : "Answer"}
               </Button>
@@ -287,7 +285,6 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
             ? (
               <Button
                 onClick={event => this.moveToNextFlashCard(null)}
-                variant="contained"
               >
                 {(!renderAnswerSelect || model.haveGottenCurrentFlashCardWrong) ? "Next" : "Skip"}
               </Button>
@@ -434,7 +431,7 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
             }
 
             return (
-              <Button key={levelIndex} variant="contained" onClick={event => this.changeLevel(levelIndex)} style={style}>
+              <Button key={levelIndex} onClick={event => this.changeLevel(levelIndex)} style={style}>
                 {model.getLevelDisplayName(levelIndex)}
               </Button>
             );

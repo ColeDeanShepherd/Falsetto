@@ -1,7 +1,6 @@
 import { History, UnregisterCallback } from "history";
 import * as React from "react";
 import * as QueryString from "query-string";
-import { Button } from "@material-ui/core";
 
 import { flattenArrays } from '../lib/Core/ArrayUtils';
 import { Margin } from "../lib/Core/Margin";
@@ -58,6 +57,7 @@ import { fifthIntervalFlashCard } from "./ChordsIntroQuiz";
 import { renderNextButtonAnswerSelect, renderUserDeterminedCorrectnessAnswerSelect, renderStringAnswerSelect } from '../Components/Quizzes/Utils';
 import { ChordProgressionAnswerSelectView } from '../Components/Utils/ChordProgressionAnswerSelectView';
 import { Card } from "../ui/Card/Card";
+import { Button } from "../ui/Button/Button";
 
 export const maxPianoWidth = 1000;
 export const maxOneOctavePianoWidth = 400;
@@ -2122,7 +2122,6 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
         <div style={{ display: "flex", height: "100%", padding: "0 1em" }}>
           <div>
             <Button
-              variant="contained"
               onClick={_ => this.moveToPreviousSlideInternal()}
               className="slide-nav"
               style={{ visibility: this.canMoveToPreviousSlide() ? "visible" : "hidden", padding: 0 }}
@@ -2142,7 +2141,6 @@ export class PianoTheory extends React.Component<IPianoTheoryProps, IPianoTheory
 
           <div>
             <Button
-              variant="contained"
               onClick={_ => this.moveToNextSlideInternal()}
               className="slide-nav"
               style={{ visibility: this.canMoveToNextSlide() ? "visible" : "hidden", padding: 0 }}

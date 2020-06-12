@@ -1,7 +1,8 @@
 import * as React from "react";
-import { Checkbox, Button } from "@material-ui/core";
+import { Checkbox } from "@material-ui/core";
 import { setBitIndicesToInt } from '../../lib/Core/Utils';
 import { toggleArrayElement } from '../../lib/Core/ArrayUtils';
+import { Button } from "../../ui/Button/Button";
 
 export interface IAnswerCheckboxesProps {
   answers: string[];

@@ -1,8 +1,9 @@
 import * as React from "react";
-import { Button, Typography } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 
 import { ScaleType } from "../../lib/TheoryLib/Scale";
 import { AnswerDifficulty } from "../../Study/AnswerDifficulty";
+import { Button } from "../../ui/Button/Button";
 
 export interface IScaleAnswerSelectProps {
   ambiguousPitchStringsSymbols: Array<string>;
@@ -46,7 +47,6 @@ export class ScaleAnswerSelect extends React.Component<IScaleAnswerSelectProps, 
                   <Button
                     key={rootPitchStr}
                     onClick={event => this.onRootPitchClick(rootPitchStr)}
-                    variant="contained"
                     style={style}
                   >
                     {rootPitchStr}
@@ -68,7 +68,6 @@ export class ScaleAnswerSelect extends React.Component<IScaleAnswerSelectProps, 
                   <Button
                     key={rootPitchStr}
                     onClick={event => this.onRootPitchClick(rootPitchStr)}
-                    variant="contained"
                     style={style}
                   >
                     {rootPitchStr}
@@ -94,7 +93,6 @@ export class ScaleAnswerSelect extends React.Component<IScaleAnswerSelectProps, 
               <Button
                 key={scale.name}
                 onClick={event => this.onScaleTypeClick(scale.name)}
-                variant="contained"
                 style={style}
               >
                 {scale.name}
@@ -107,7 +105,6 @@ export class ScaleAnswerSelect extends React.Component<IScaleAnswerSelectProps, 
           <Button
             onClick={event => this.confirmAnswer()}
             disabled={!this.state.selectedRootPitch || !this.state.selectedScaleType}
-            variant="contained"
           >
             Confirm Answer
           </Button>

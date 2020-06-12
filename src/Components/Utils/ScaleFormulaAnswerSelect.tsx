@@ -1,9 +1,9 @@
 import * as React from "react";
-import { Button } from "@material-ui/core";
 
 import { AnswerDifficulty } from "../../Study/AnswerDifficulty";
 import { FlashCardStudySessionInfo } from "../../FlashCardSet";
 import { areArraysEqual } from '../../lib/Core/ArrayUtils';
+import { Button } from "../../ui/Button/Button";
 
 export interface IScaleFormulaAnswerSelectProps {
   info: FlashCardStudySessionInfo
@@ -37,7 +37,6 @@ export class ScaleFormulaAnswerSelect extends React.Component<IScaleFormulaAnswe
         <p>
           <Button
             onClick={event => this.onHalfStepClick()}
-            variant="contained"
             style={{ textTransform: "none" }}
           >
             H
@@ -45,7 +44,6 @@ export class ScaleFormulaAnswerSelect extends React.Component<IScaleFormulaAnswe
           
           <Button
             onClick={event => this.onWholeStepClick()}
-            variant="contained"
             style={{ textTransform: "none" }}
           >
             W
@@ -53,7 +51,6 @@ export class ScaleFormulaAnswerSelect extends React.Component<IScaleFormulaAnswe
           
           <Button
             onClick={event => this.onBackspaceClick()}
-            variant="contained"
             style={{ textTransform: "none" }}
           >
             <i className="material-icons">backspace</i>
@@ -63,7 +60,6 @@ export class ScaleFormulaAnswerSelect extends React.Component<IScaleFormulaAnswe
         <p>
           <Button
             onClick={event => this.confirmAnswer()}
-            variant="contained"
             style={{ textTransform: "none" }}
           >
             Confirm

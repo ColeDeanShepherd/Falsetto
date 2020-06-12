@@ -1,11 +1,10 @@
 import * as React from "react";
 
-import * as Utils from "../../lib/Core/Utils";
 import { getValidKeyPitches } from '../../lib/TheoryLib/Key';
 import { Pitch } from '../../lib/TheoryLib/Pitch';
 import { pitchLetters } from '../../lib/TheoryLib/PitchLetter';
-import { Button } from '@material-ui/core';
 import { toggleArrayElementCustomEquals } from '../../lib/Core/ArrayUtils';
+import { Button } from "../../ui/Button/Button";
 
 const basePitches = getValidKeyPitches(/*preferredOctaveNumber*/ 0);
 const validSharpKeyPitches = pitchLetters
@@ -51,7 +50,6 @@ export class ValidKeyPitchSelect extends React.Component<IValidKeyPitchSelectPro
           if (!pitch) {
             style.visibility = "hidden";
             return <Button
-              variant="contained"
               style={style}
             />;
           }
@@ -64,7 +62,6 @@ export class ValidKeyPitchSelect extends React.Component<IValidKeyPitchSelectPro
           return (
             <Button
               onClick={event => this.onPitchClick(pitch)}
-              variant="contained"
               style={style}>
               {pitch.toString(false)}
             </Button>

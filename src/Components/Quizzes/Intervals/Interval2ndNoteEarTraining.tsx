@@ -14,9 +14,9 @@ import {
   configDataToEnabledFlashCardIds,
   forEachInterval
 } from "../../Utils/IntervalEarTrainingFlashCardMultiSelect";
-import { Button } from "@material-ui/core";
 import { createIntervalLevels } from '../../../lib/TheoryLib/Interval';
 import { arrayContains } from '../../../lib/Core/ArrayUtils';
+import { Button } from "../../../ui/Button/Button";
 
 const flashCardSetId = "nextNoteEarTraining";
 
@@ -35,7 +35,6 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
         <div>{this.props.pitch1.toOneAccidentalAmbiguousString(false, true) + ", _"}</div>
         <Button
           onClick={event => this.playAudio()}
-          variant="contained"
         >
           Play Sound
         </Button>

@@ -1,8 +1,9 @@
 import * as React from "react";
-import { Button, Typography } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 
 import { ChordTypeGroup } from "../../lib/TheoryLib/ChordTypeGroup";
 import { ChordType } from "../../lib/TheoryLib/ChordType";
+import { Button } from "../../ui/Button/Button";
 
 export interface IChordTypeSelectViewProps {
   chordTypeGroups?: Array<ChordTypeGroup>;
@@ -29,7 +30,6 @@ export class ChordTypeSelectView extends React.Component<IChordTypeSelectViewPro
                   <Button
                     key={chordTypeGroup.name}
                     onClick={event => this.onChordTypeGroupClick(chordTypeGroup)}
-                    variant="contained"
                     style={baseButtonStyle}
                   >
                     {chordTypeGroup.name}
@@ -56,7 +56,6 @@ export class ChordTypeSelectView extends React.Component<IChordTypeSelectViewPro
               <Button
                 key={ct.name}
                 onClick={event => this.onChordTypeClick(ct)}
-                variant="contained"
                 style={style}
               >
                 {ct.name}

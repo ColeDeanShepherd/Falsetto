@@ -13,13 +13,14 @@ import {
   configDataToEnabledFlashCardIds,
   forEachInterval
 } from "../../Utils/IntervalEarTrainingFlashCardMultiSelect";
-import { Button, Typography, Checkbox } from "@material-ui/core";
+import { Typography, Checkbox } from "@material-ui/core";
 import { Tuner } from '../../Tools/Tuner';
 import { DetectedPitch } from '../../PitchDetection';
 import { AnswerDifficulty } from '../../../Study/AnswerDifficulty';
 import { PitchesAudioPlayer } from '../../Utils/PitchesAudioPlayer';
 import { createIntervalLevels } from '../../../lib/TheoryLib/Interval';
 import { arrayContains } from '../../../lib/Core/ArrayUtils';
+import { Button } from "../../../ui/Button/Button";
 
 const flashCardSetId = "intervalSinging";
 
@@ -50,7 +51,6 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
         <div>{this.props.pitch1.toOneAccidentalAmbiguousString(false, true) + " " + this.props.direction + " " + this.props.interval}</div>
         <Button
           onClick={event => this.playAudio()}
-          variant="contained"
           style={buttonStyle}
         >
           Play First Pitch
@@ -85,7 +85,6 @@ export class FlashCardBackSide extends React.Component<IFlashCardBackSideProps, 
         <div>{this.props.pitch.toOneAccidentalAmbiguousString(false, true)}</div>
         <Button
           onClick={event => this.playAudio()}
-          variant="contained"
         >
           Play Second Pitch
         </Button>
@@ -142,7 +141,6 @@ export class FlashCardAnswerSelect
           <Button
             onClick={event => this.confirmAnswer()}
             disabled={!this.state.detectedPitch}
-            variant="contained"
           >
             Confirm Answer
           </Button>
@@ -158,14 +156,12 @@ export class FlashCardAnswerSelect
         <div>
           <Button
             onClick={event => this.onUserProvidedCorrectness(AnswerDifficulty.Easy)}
-            variant="contained"
             style={buttonStyle}
           >
             I Was Correct
           </Button>
           <Button
             onClick={event => this.onUserProvidedCorrectness(AnswerDifficulty.Incorrect)}
-            variant="contained"
             style={buttonStyle}
           >
             I Was Incorrect

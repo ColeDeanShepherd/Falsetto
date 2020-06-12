@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Button } from "@material-ui/core";
 
 import {
   GuitarFretboard
@@ -16,6 +15,7 @@ import { AnswerDifficulty } from '../../../Study/AnswerDifficulty';
 import { IConfigData, forEachNote, StringedInstrumentNotesFlashCardMultiSelect } from "../../Utils/StringedInstrumentNotes";
 import { range } from '../../../lib/Core/MathUtils';
 import { flattenArrays } from '../../../lib/Core/ArrayUtils';
+import { Button } from "../../../ui/Button/Button";
 
 const flashCardSetId = "guitarPerfectPitchTrainer";
 const guitarTuning = standard6StringGuitarTuning;
@@ -48,7 +48,6 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
       <div>
         <Button
           onClick={event => this.playAudio()}
-          variant="contained"
         >
           Play Sound
         </Button>
@@ -102,7 +101,6 @@ export class GuitarNoteAnswerSelect extends React.Component<IGuitarNoteAnswerSel
         <Button
           onClick={event => this.confirmAnswer()}
           disabled={!this.state.selectedNote}
-          variant="contained"
         >
           Confirm Answer
         </Button>

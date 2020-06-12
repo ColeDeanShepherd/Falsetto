@@ -1,10 +1,11 @@
 import * as React from "react";
-import { Button, Typography } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 
 import { AnswerDifficulty } from "../../Study/AnswerDifficulty";
 import { ambiguousKeyPitchStringsSymbols } from "../../lib/TheoryLib/Pitch";
 import { ChordType } from "../../lib/TheoryLib/ChordType";
 import { arrayContains } from '../../lib/Core/ArrayUtils';
+import { Button } from "../../ui/Button/Button";
 
 export interface IPianoChordsButtonAnswerSelectProps {
   correctAnswer: string;
@@ -52,7 +53,6 @@ export class PianoChordsButtonAnswerSelect extends React.Component<IPianoChordsB
                   <Button
                     key={rootPitchStr}
                     onClick={event => this.onRootPitchClick(rootPitchStr)}
-                    variant="contained"
                     style={style}
                   >
                     {rootPitchStr}
@@ -75,7 +75,6 @@ export class PianoChordsButtonAnswerSelect extends React.Component<IPianoChordsB
                   <Button
                     key={rootPitchStr}
                     onClick={event => this.onRootPitchClick(rootPitchStr)}
-                    variant="contained"
                     style={style}
                   >
                     {rootPitchStr}
@@ -103,7 +102,6 @@ export class PianoChordsButtonAnswerSelect extends React.Component<IPianoChordsB
                 <Button
                   key={chord.name}
                   onClick={event => this.onChordTypeClick(chord.name)}
-                  variant="contained"
                   style={style}
                 >
                   {chord.name}
@@ -116,7 +114,6 @@ export class PianoChordsButtonAnswerSelect extends React.Component<IPianoChordsB
           <Button
             onClick={event => this.confirmAnswer()}
             disabled={!this.state.selectedRootPitch || !this.state.selectedChordType}
-            variant="contained"
           >
             Confirm Answer
           </Button>

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid, Button } from "@material-ui/core";
+import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid } from "@material-ui/core";
 
 import * as FlashCardUtils from "../Utils";
 import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
@@ -12,6 +12,7 @@ import { playPitches } from "../../../Audio/PianoAudio";
 import { range } from '../../../lib/Core/MathUtils';
 import { randomElement } from '../../../lib/Core/Random';
 import { arrayContains, toggleArrayElement } from '../../../lib/Core/ArrayUtils';
+import { Button } from "../../../ui/Button/Button";
 
 const flashCardSetId = "chordEarTraining";
 
@@ -43,7 +44,6 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
       <div>
         <Button
           onClick={event => this.playAudio()}
-          variant="contained"
         >
           Play Sound
         </Button>

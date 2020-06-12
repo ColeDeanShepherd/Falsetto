@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Button } from "@material-ui/core";
 
 import { FlashCard, FlashCardSideRenderFn, FlashCardId } from "../../FlashCard";
 import { callFlashCardSideRenderFn } from "../../Components/FlashCard";
@@ -7,6 +6,7 @@ import { AnswerDifficulty } from "../../Study/AnswerDifficulty";
 import { FlashCardStudySessionInfo } from '../../FlashCardSet';
 import { Size2D } from '../../lib/Core/Size2D';
 import { arrayContains, uniq } from '../../lib/Core/ArrayUtils';
+import { Button } from "../../ui/Button/Button";
 
 export function renderNoteAnswerSelect(
   info: FlashCardStudySessionInfo
@@ -70,8 +70,7 @@ export class StringAnswerSelect extends React.Component<StringAnswerSelectProps,
           return (
             <Button
               key={a}
-              variant="contained"
-              color={!arrayContains(this.state.incorrectAnswers, a) ? "default" : "secondary"}
+              color={!arrayContains(this.state.incorrectAnswers, a) ? "primary" : "secondary"}
               onClick={_ => this.onAnswerClick(a)}
               className={((a === this.props.lastCorrectAnswer) && !isIncorrectAnswer) ? "background-green-to-initial" : ""}
               style={{ textTransform: "none" }}
@@ -107,8 +106,7 @@ export const AnswerButton: React.FunctionComponent<{
   
   return (
     <Button
-      variant="contained"
-      color={!isIncorrectAnswer ? "default" : "secondary"}
+      color={!isIncorrectAnswer ? "primary" : "secondary"}
       onClick={props.onClick}
       className={((props.answer === props.lastCorrectAnswer) && !isIncorrectAnswer) ? "background-green-to-initial" : ""}
       style={{ textTransform: "none" }}
@@ -140,8 +138,7 @@ export class FlashCardSideAnswerSelect extends React.Component<FlashCardSideAnsw
           return (
             <Button
               key={i}
-              variant="contained"
-              color={!isIncorrectAnswer ? "default" : "secondary"}
+              color={!isIncorrectAnswer ? "primary" : "secondary"}
               onClick={_ => this.onAnswerClick(fcs)}
               className={((fcs === this.props.lastCorrectAnswer) && !isIncorrectAnswer) ? "background-green-to-initial" : ""}
               style={{ textTransform: "none" }}
@@ -224,7 +221,6 @@ export function renderUserDeterminedCorrectnessAnswerSelect(
   return (
     <div>
       <Button
-        variant="contained"
         onClick={e => info.onAnswer(AnswerDifficulty.Incorrect, null)}
         style={{ textTransform: "none" }}
       >
@@ -232,7 +228,6 @@ export function renderUserDeterminedCorrectnessAnswerSelect(
       </Button>
 
       <Button
-        variant="contained"
         onClick={e => info.onAnswer(AnswerDifficulty.Easy, null)}
         style={{ textTransform: "none" }}
       >
@@ -248,7 +243,6 @@ export function renderNextButtonAnswerSelect(
   return (
     <div>
       <Button
-        variant="contained"
         onClick={e => info.onAnswer(AnswerDifficulty.Easy, null)}
         style={{ textTransform: "none" }}
       >

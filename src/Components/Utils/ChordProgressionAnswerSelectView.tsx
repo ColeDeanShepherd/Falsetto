@@ -1,9 +1,9 @@
 import * as React from "react";
-import { Button } from "@material-ui/core";
 
 import { AnswerDifficulty } from "../../Study/AnswerDifficulty";
 import { FlashCardStudySessionInfo } from "../../FlashCardSet";
 import { areArraysEqual } from '../../lib/Core/ArrayUtils';
+import { Button } from "../../ui/Button/Button";
 
 const romanNumeralChords = ["I", "ii", "iii", "IV", "V", "vi", "vii°"];
 
@@ -41,7 +41,6 @@ export class ChordProgressionAnswerSelectView extends React.Component<IChordProg
             <Button
               key={chord}
               onClick={event => this.onChordClick(chord)}
-              variant="contained"
               style={{ textTransform: "none" }}
             >
               {chord}
@@ -50,7 +49,6 @@ export class ChordProgressionAnswerSelectView extends React.Component<IChordProg
           
           <Button
             onClick={event => this.onBackspaceClick()}
-            variant="contained"
             style={{ textTransform: "none" }}
           >
             <i className="material-icons">backspace</i>
@@ -60,7 +58,6 @@ export class ChordProgressionAnswerSelectView extends React.Component<IChordProg
         <p>
           <Button
             onClick={event => this.confirmAnswer()}
-            variant="contained"
             style={{ textTransform: "none" }}
           >
             Confirm
