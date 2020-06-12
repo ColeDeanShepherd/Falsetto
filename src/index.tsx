@@ -1,22 +1,30 @@
 import "core-js";
+import "whatwg-fetch";
+import "pepjs";
+
+import { Auth0Provider } from "./react-auth0-wrapper";
+import { Auth0InjectorView } from './Auth0Injector/Auth0InjectorView';
 
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { AppView } from "./App/View";
-import "./index.css";
+
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
-import { polyfillWebAudio } from "./Audio/Audio";
+
+import "normalize.css";
+import "./index.css";
+
 import registerServiceWorker from "./registerServiceWorker";
-import { Auth0Provider } from "./react-auth0-wrapper";
-import { authDomain, authClientId, authAudience, isDevelopment } from './Config';
-import "whatwg-fetch";
-import { AppModel } from './App/Model';
-import { checkFlashCardSetIds, checkFlashCardIds } from './FlashCardGraph';
+
 import { getErrorDescription } from './Error';
+import { authDomain, authClientId, authAudience, isDevelopment } from './Config';
 import { DependencyInjector } from './DependencyInjector';
 import { IAnalytics } from './Analytics';
-import { Auth0InjectorView } from './Auth0Injector/Auth0InjectorView';
-import "pepjs";
+import { polyfillWebAudio } from "./Audio/Audio";
+
+import { checkFlashCardSetIds, checkFlashCardIds } from './FlashCardGraph';
+
+import { AppModel } from './App/Model';
+import { AppView } from "./App/View";
 
 const analytics = DependencyInjector.instance.getRequiredService<IAnalytics>("IAnalytics");
 
