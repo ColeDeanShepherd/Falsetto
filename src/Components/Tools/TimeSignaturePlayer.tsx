@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as Vex from "vexflow";
-import { Typography, Select, CircularProgress } from "@material-ui/core";
+import { Select, CircularProgress } from "@material-ui/core";
 
 import { TimeSignature } from "../../lib/TheoryLib/TimeSignature";
 import * as Audio from "../../Audio/Audio";
@@ -136,9 +136,9 @@ export class TimeSignaturePlayer extends React.Component<ITimeSignaturePlayerPro
     return (
       <Card>
         <div style={{display: "flex"}}>
-          <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
+          <h2 className="h5 margin-bottom" style={{flexGrow: 1}}>
             Time Signature Player
-          </Typography>
+          </h2>
         </div>
 
         <p style={{ margin: 0 }}>BPM: {this.rhythmPlayer.beatsPerMinute}</p>

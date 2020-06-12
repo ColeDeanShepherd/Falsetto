@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Typography } from "@material-ui/core";
 import { Card } from "./ui/Card/Card";
 
 export class GlossaryEntry {
@@ -80,9 +79,9 @@ export class Glossary extends React.Component<{}, {}> {
   public render(): JSX.Element {
     return (
       <Card>
-        <Typography gutterBottom={true} variant="h5" component="h2">
+        <h2 className="h5 margin-bottom">
           Glossary
-        </Typography>
+        </h2>
 
         {glossaryData.map(d => <p><strong>{d.term}</strong> - {d.renderDefinitionFn()}</p>)}
       </Card>

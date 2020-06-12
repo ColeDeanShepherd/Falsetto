@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Typography, CircularProgress } from "@material-ui/core";
+import { CircularProgress } from "@material-ui/core";
 
 import * as Audio from "../../Audio/Audio";
 import { unwrapMaybe } from '../../lib/Core/Utils';
@@ -106,9 +106,9 @@ export class Metronome extends React.Component<IMetronomeProps, IMetronomeState>
       <Card style={{ maxWidth: "420px", margin: "0 auto", textAlign: "center" }}>
         {!this.props.hideTitle
           ? (
-            <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
+            <h2 className="h5 margin-bottom" style={{flexGrow: 1}}>
               Metronome
-            </Typography>
+            </h2>
           ) : null}
 
         {!this.state.isTappingTempo ? this.renderMetronomeControls() : this.renderTempoTappingControls()}
@@ -116,7 +116,7 @@ export class Metronome extends React.Component<IMetronomeProps, IMetronomeState>
     );
   }
   private renderTempoText(bpm: number | null): JSX.Element {
-    return <Typography variant="h3">{bpm ? Math.round(bpm) : "?"} <span style={{ fontSize: "0.35em" }}>BPM</span></Typography>;
+    return <span className="h3">{bpm ? Math.round(bpm) : "?"} <span style={{ fontSize: "0.35em" }}>BPM</span></span>;
   }
   private renderMetronomeControls(): JSX.Element {
     return (

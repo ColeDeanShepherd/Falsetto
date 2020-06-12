@@ -2,7 +2,6 @@ import * as React from "react";
 import * as Vex from "vexflow";
 
 import { IRhythmNote, RhythmPlayer } from "../../RhythmPlayer";
-import { Typography } from "@material-ui/core";
 import { VexFlowComponent } from "../Utils/VexFlowComponent";
 import { Rational } from "../../lib/Core/Rational";
 import { noteDurationToVexFlowStr } from '../../VexFlowUtils';
@@ -77,9 +76,9 @@ export class RhythmTapper extends React.Component<IRhythmTapperProps, IRhythmTap
     return (
       <Card>
         <div style={{display: "flex"}}>
-          <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
+          <h2 className="h5 margin-bottom" style={{flexGrow: 1}}>
             Rhythm Tapper
-          </Typography>
+          </h2>
         </div>
 
         <VexFlowComponent

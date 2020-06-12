@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Typography, Table, TableHead, TableBody, TableRow, TableCell, Checkbox } from '@material-ui/core';
+import { Table, TableHead, TableBody, TableRow, TableCell, Checkbox } from '@material-ui/core';
 
 import * as Utils from "../../lib/Core/Utils";
 import { Chord } from '../../lib/TheoryLib/Chord';
@@ -83,15 +83,15 @@ export class DiatonicChordPlayer extends React.Component<IDiatonicChordPlayerPro
     return (
       <Card>
         <div style={{display: "flex"}}>
-          <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
+          <h2 className="h5 margin-bottom" style={{flexGrow: 1}}>
             Diatonic Chord Player
-          </Typography>
+          </h2>
         </div>
 
         <div style={{textAlign: "center"}}>
-          <Typography gutterBottom={true} variant="h6" component="h4">
+          <h4 className="h6 margin-bottom">
             Root Pitch
-          </Typography>
+          </h4>
           <div style={{padding: "1em 0"}}>
             <ValidKeyPitchSelect
               preferredOctaveNumber={4}

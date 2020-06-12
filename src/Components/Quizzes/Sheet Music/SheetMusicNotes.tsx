@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Typography, Checkbox } from "@material-ui/core";
+import { Checkbox } from "@material-ui/core";
 import * as Vex from "vexflow";
 
 import * as FlashCardUtils from "../Utils";
@@ -242,7 +242,7 @@ export class SheetMusicNotesFlashCardMultiSelect extends React.Component<ISheetM
     return (
       <div>
         <div>
-          <Typography>Treble Clef</Typography>
+          <span>Treble Clef</span>
           <Checkbox
             checked={configData.isTrebleClefEnabled}
             onChange={onIsTrebleClefEnabledChange}
@@ -250,7 +250,7 @@ export class SheetMusicNotesFlashCardMultiSelect extends React.Component<ISheetM
           />
         </div>
         <div>
-          <Typography>Bass Clef</Typography>
+          <span>Bass Clef</span>
           <Checkbox
             checked={configData.isBassClefEnabled}
             onChange={onIsBassClefEnabledChange}
@@ -258,7 +258,7 @@ export class SheetMusicNotesFlashCardMultiSelect extends React.Component<ISheetM
           />
         </div>
         <div>
-          <Typography>Accidentals</Typography>
+          <span>Accidentals</span>
           <Checkbox
             checked={configData.areAccidentalsEnabled}
             onChange={onAreAccidentalsEnabledChange}

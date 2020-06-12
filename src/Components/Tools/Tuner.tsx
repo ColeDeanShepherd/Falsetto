@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Typography } from "@material-ui/core";
 
 import { DetectedPitch, IPitchDetector, DatalantPitchDetector } from '../PitchDetection';
 import { Size2D } from '../../lib/Core/Size2D';
@@ -157,9 +156,9 @@ export class Tuner extends React.Component<ITunerProps, ITunerState> {
       <Card style={{ maxWidth: "420px", margin: "0 auto", textAlign: "center" }}>
         {isStandalone ? (
           <div style={{display: "flex"}}>
-            <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
+            <h2 className="h5 margin-bottom" style={{flexGrow: 1}}>
               Tuner
-            </Typography>
+            </h2>
           </div>
         ) : null}
 

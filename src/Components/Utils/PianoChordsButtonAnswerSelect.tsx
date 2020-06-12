@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Typography } from "@material-ui/core";
 
 import { AnswerDifficulty } from "../../Study/AnswerDifficulty";
 import { ambiguousKeyPitchStringsSymbols } from "../../lib/TheoryLib/Pitch";
@@ -34,9 +33,9 @@ export class PianoChordsButtonAnswerSelect extends React.Component<IPianoChordsB
     // TODO: use lastCorrectAnswer
     return (
       <div>
-        <Typography gutterBottom={true} variant="h6" component="h4">
+        <h4 className="h6 margin-bottom">
           Root Pitch
-        </Typography>
+        </h4>
         <div style={{padding: "1em 0"}}>
           <div>
             {ambiguousKeyPitchStringsSymbols.slice(0, 6)
@@ -84,9 +83,9 @@ export class PianoChordsButtonAnswerSelect extends React.Component<IPianoChordsB
           </div>
         </div>
         
-        <Typography gutterBottom={true} variant="h6" component="h4">
+        <h4 className="h6 margin-bottom">
           Chord
-        </Typography>
+        </h4>
         <div style={{padding: "1em 0"}}>
           {ChordType.All
             .filter(ct => arrayContains(this.props.enabledChordTypeNames, ct.name))

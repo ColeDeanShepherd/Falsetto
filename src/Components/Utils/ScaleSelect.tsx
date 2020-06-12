@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Typography } from "@material-ui/core";
 
 import { ScaleType, ScaleTypeGroup, Scale } from "../../lib/TheoryLib/Scale";
 import { Pitch } from "../../lib/TheoryLib/Pitch";
@@ -19,9 +18,9 @@ export class ScaleSelect extends React.Component<IScaleSelectProps, {}> {
 
     return (
       <div style={{textAlign: "center"}}>
-        <Typography gutterBottom={true} variant="h6" component="h4">
+        <h4 className="h6 margin-bottom">
           Root Pitch
-        </Typography>
+        </h4>
         <div style={{padding: "1em 0"}}>
           <ValidKeyPitchSelect
             preferredOctaveNumber={4}

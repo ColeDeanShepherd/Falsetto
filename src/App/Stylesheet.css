@@ -3,6 +3,21 @@ h1, h2, h3 {
   font-weight: 600;
 }
 
+h1.margin-bottom,
+h2.margin-bottom,
+h3.margin-bottom,
+h4.margin-bottom,
+h5.margin-bottom,
+h6.margin-bottom,
+.h1.margin-bottom,
+.h2.margin-bottom,
+.h3.margin-bottom,
+.h4.margin-bottom,
+.h5.margin-bottom,
+.h6.margin-bottom {
+  margin-bottom: 1rem;
+}
+
 button:focus {
   outline: none;
 }

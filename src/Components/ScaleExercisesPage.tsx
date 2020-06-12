@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Typography } from "@material-ui/core";
 import { NavLinkView } from "../NavLinkView";
 
 import * as ScaleDegreeNames from "./Quizzes/Scales/ScaleDegreeNames";
@@ -45,9 +44,9 @@ export class ScaleExercisesPage extends React.Component<IScaleExercisesProps, IS
 
     return (
       <Card>
-        <Typography gutterBottom={true} variant="h5" component="h2">
+        <h2 className="h5 margin-bottom">
           Scale Exercises
-        </Typography>
+        </h2>
 
         <h3>Per-Scale Exercises</h3>
 

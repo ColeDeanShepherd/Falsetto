@@ -1,6 +1,6 @@
 import * as React from "react";
 import {
-  Typography, Paper
+  Paper
 } from "@material-ui/core";
 
 import { areArraysEqual } from "../lib/Core/ArrayUtils";
@@ -160,9 +160,9 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
       const renderHeader = () => (
         <div>
           <div style={{display: "flex"}}>
-            <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
+            <h2 className="h3" style={{flexGrow: 1}}>
               {this.props.title}
-            </Typography>
+            </h2>
             
             {enableSettings ? (
               <Button onClick={event => this.toggleConfiguration()} style={{width: "48px", height: "41px"}}>
@@ -178,7 +178,7 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
   
           {model.showConfiguration ? (
             <Paper style={{padding: "1em", margin: "1em 0"}}>
-              <Typography component="h6" variant="h6" gutterBottom={true}>Settings</Typography>
+              <h6 className="margin-bottom">Settings</h6>
               {this.renderFlashCardMultiSelect(containerSize, flashCards)}
             </Paper>
           ) : null}
@@ -376,9 +376,9 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
     
     const renderRelatedExercises = () => (
       <Card style={cardStyle}>
-        <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
+        <h2 className="h4 margin-bottom" style={{flexGrow: 1}}>
           Related Exercises
-        </Typography>
+        </h2>
 
         <ul>
           {flashCardSet.relatedSets

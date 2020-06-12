@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Typography } from "@material-ui/core";
 
 import { Size2D } from "../../lib/Core/Size2D";
 import { PitchLetter } from "../../lib/TheoryLib/PitchLetter";
@@ -96,9 +95,9 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
     return (
       <Card>
         <div style={{display: "flex"}}>
-          <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
+          <h2 className="h5 margin-bottom" style={{flexGrow: 1}}>
             {title}
-          </Typography>
+          </h2>
         </div>
       
         <div style={{textAlign: "center"}}>

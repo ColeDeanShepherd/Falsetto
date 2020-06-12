@@ -13,7 +13,7 @@ import {
   configDataToEnabledFlashCardIds,
   forEachInterval
 } from "../../Utils/IntervalEarTrainingFlashCardMultiSelect";
-import { Typography, Checkbox } from "@material-ui/core";
+import { Checkbox } from "@material-ui/core";
 import { Tuner } from '../../Tools/Tuner';
 import { DetectedPitch } from '../../PitchDetection';
 import { AnswerDifficulty } from '../../../Study/AnswerDifficulty';
@@ -247,7 +247,7 @@ function createFlashCardSet(): FlashCardSet {
     return (
       <div>
         <div>
-          <Typography>Use Microphone If Available</Typography>
+          <span>Use Microphone If Available</span>
           <Checkbox
             checked={preferUseMic}
             onChange={(event, checked) => {

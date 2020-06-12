@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Typography } from "@material-ui/core";
 
 import { FlashCardAnswer, IDatabase } from '../Database';
 import { FlashCardSet, FlashCardLevel } from '../FlashCardSet';
@@ -84,9 +83,9 @@ export class ProfilePage extends React.Component<{}, IProfilePageState> {
 
     return (
       <Card>
-        <Typography gutterBottom={true} variant="h5" component="h2" style={{ textAlign: "center" }}>
+        <h2 className="h5 margin-bottom" style={{ textAlign: "center" }}>
           {user.fullName}'s Profile
-        </Typography>
+        </h2>
         <p style={{ textAlign: "center" }}>{user.emailAddress}</p>
         <ul style={{ textAlign: "center", listStyleType: "none", padding: 0, margin: 0 }}>
           <li style={{ display: "inline" }}><a href="#" onClick={event => { this.initiatePasswordReset(); event.stopPropagation(); event.preventDefault(); }}>Reset Password</a></li>

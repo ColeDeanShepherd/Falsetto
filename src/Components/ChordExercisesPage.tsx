@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Typography } from "@material-ui/core";
 import { NavLinkView } from "../NavLinkView";
 
 import * as ChordNotes from "./Quizzes/Chords/ChordNotes";
@@ -43,9 +42,9 @@ export class ChordExercisesPage extends React.Component<IChordExercisesProps, IC
 
     return (
       <Card>
-        <Typography gutterBottom={true} variant="h5" component="h2">
+        <h2 className="h5 margin-bottom">
           Chord Exercises
-        </Typography>
+        </h2>
 
         <h3>Per-Chord Exercises</h3>
 

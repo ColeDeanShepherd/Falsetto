@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as Vex from "vexflow";
-import { Typography, Select, CircularProgress } from "@material-ui/core";
+import { Select, CircularProgress } from "@material-ui/core";
 
 import * as Utils from "../../lib/Core/Utils";
 import { TimeSignature } from "../../lib/TheoryLib/TimeSignature";
@@ -61,9 +61,9 @@ export class NoteValuePlayer extends React.Component<INoteValuePlayerProps, INot
     return (
       <Card>
         <div style={{display: "flex"}}>
-          <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
+          <h2 className="h5 margin-bottom" style={{flexGrow: 1}}>
             Note Value Player
-          </Typography>
+          </h2>
         </div>
 
         <p style={{ margin: 0 }}>BPM: {this.rhythmPlayer.beatsPerMinute}</p>

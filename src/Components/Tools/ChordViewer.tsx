@@ -2,7 +2,6 @@ import * as React from "react";
 
 import { PitchLetter } from "../../lib/TheoryLib/PitchLetter";
 import { Pitch } from "../../lib/TheoryLib/Pitch";
-import { Typography } from "@material-ui/core";
 import { Chord } from "../../lib/TheoryLib/Chord";
 import { ChordTypeGroup } from "../../lib/TheoryLib/ChordTypeGroup";
 import { ChordType } from "../../lib/TheoryLib/ChordType";
@@ -65,9 +64,9 @@ export class ChordViewer extends React.Component<IChordViewerProps, IChordViewer
     const containerContents = (
       <div>
         {showTitle ? (
-          <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
+          <h2 className="h5 margin-bottom" style={{flexGrow: 1}}>
             {title}
-          </Typography>
+          </h2>
         ) : null}
         
         <div style={{textAlign: "center"}}>

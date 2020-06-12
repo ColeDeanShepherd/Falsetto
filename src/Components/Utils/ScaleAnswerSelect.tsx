@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Typography } from "@material-ui/core";
 
 import { ScaleType } from "../../lib/TheoryLib/Scale";
 import { AnswerDifficulty } from "../../Study/AnswerDifficulty";
@@ -29,9 +28,9 @@ export class ScaleAnswerSelect extends React.Component<IScaleAnswerSelectProps, 
   public render(): JSX.Element {
     return (
       <div>
-        <Typography gutterBottom={true} variant="h6" component="h4">
+        <h4 className="h6 margin-bottom">
           Root Pitch
-        </Typography>
+        </h4>
         <div style={{padding: "1em 0"}}>
           <div>
             {this.props.ambiguousPitchStringsSymbols.slice(0, 6)
@@ -77,9 +76,9 @@ export class ScaleAnswerSelect extends React.Component<IScaleAnswerSelectProps, 
           </div>
         </div>
         
-        <Typography gutterBottom={true} variant="h6" component="h4">
+        <h4 className="h6 margin-bottom">
           Scale
-        </Typography>
+        </h4>
         <div style={{padding: "1em 0"}}>
           {this.props.scales.map(scale => {
             const style: any = { textTransform: "none" };
