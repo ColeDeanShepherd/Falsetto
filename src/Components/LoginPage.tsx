@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Redirect } from 'react-router';
-import { CardContent, Card } from "@material-ui/core";
+import { Card } from "../ui/Card/Card";
 
 export class LoginPage extends React.Component<{}, {}> {
   public render(): JSX.Element {
@@ -10,8 +10,6 @@ export class LoginPage extends React.Component<{}, {}> {
       ? <Redirect to={{ pathname: '/' }} />
       : (
       <Card>
-        <CardContent>
-        </CardContent>
       </Card>
     );
   }

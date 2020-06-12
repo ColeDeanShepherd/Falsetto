@@ -1,8 +1,9 @@
 import * as React from "react";
-import { Card, CardContent, Typography, Button, CircularProgress } from "@material-ui/core";
+import { Typography, Button, CircularProgress } from "@material-ui/core";
 
 import * as Audio from "../../Audio/Audio";
 import { unwrapMaybe } from '../../lib/Core/Utils';
+import { Card } from "../../ui/Card/Card";
 
 const clickAudioPath = "/audio/metronome_click.wav";
 
@@ -102,16 +103,14 @@ export class Metronome extends React.Component<IMetronomeProps, IMetronomeState>
   public render(): JSX.Element {
     return (
       <Card style={{ maxWidth: "420px", margin: "0 auto", textAlign: "center" }}>
-        <CardContent>
-          {!this.props.hideTitle
-            ? (
-              <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
-                Metronome
-              </Typography>
-            ) : null}
+        {!this.props.hideTitle
+          ? (
+            <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
+              Metronome
+            </Typography>
+          ) : null}
 
-          {!this.state.isTappingTempo ? this.renderMetronomeControls() : this.renderTempoTappingControls()}
-        </CardContent>
+        {!this.state.isTappingTempo ? this.renderMetronomeControls() : this.renderTempoTappingControls()}
       </Card>
     );
   }

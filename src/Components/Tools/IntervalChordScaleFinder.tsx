@@ -3,7 +3,7 @@ import * as React from "react";
 import * as Utils from "../../lib/Core/Utils";
 import { PitchLetter } from "../../lib/TheoryLib/PitchLetter";
 import { Pitch } from "../../lib/TheoryLib/Pitch";
-import { Card, CardContent, Typography, Button } from "@material-ui/core";
+import { Typography, Button } from "@material-ui/core";
 import { PianoKeyboard, renderPianoKeyboardNoteNames, PianoKeyboardMetrics, renderPressedPianoKeys } from "../Utils/PianoKeyboard";
 import { Interval } from '../../lib/TheoryLib/Interval';
 import { Chord } from '../../lib/TheoryLib/Chord';
@@ -14,6 +14,7 @@ import { ChordScaleFormula } from '../../lib/TheoryLib/ChordScaleFormula';
 import { playPitches } from '../../Audio/PianoAudio';
 import { StringDictionary } from '../../lib/Core/StringDictionary';
 import { areArraysEqual, uniqWithSelector, immutableAddIfNotFoundInArray, immutableRemoveIfFoundInArray } from '../../lib/Core/ArrayUtils';
+import { Card } from "../../ui/Card/Card";
 
 // TODO: refactor Chord, Scale
 // TODO: add support for multiple chord names
@@ -206,58 +207,56 @@ export class IntervalChordScaleFinder extends React.Component<IIntervalChordScal
     
     return (
       <Card>
-        <CardContent>
-          <div style={{display: "flex"}}>
-            <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
-              Interval/Chord/Scale Finder
-            </Typography>
-          </div>
-        
+        <div style={{display: "flex"}}>
+          <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
+            Interval/Chord/Scale Finder
+          </Typography>
+        </div>
+      
+        <div>
           <div>
-            <div>
-              <p><span style={{ fontWeight: "bold" }}>Notes: </span>{pressedPitchesStr}</p>
-              <p>
-                <span style={{ fontWeight: "bold" }}>Interval: </span>
-                {this.getIntervalsString(intervalsChordsScales.intervals)}
-              </p>
-              <p>
-                <span style={{ fontWeight: "bold" }}>Chords: </span>
-                {(intervalsChordsScales.chords.length > 0)
-                  //? intervalsChordsScales.chords.map(c => c.rootPitch.toOneAccidentalAmbiguousString(false) + " " + c.chordType.name).join(', ')
-                  ? intervalsChordsScales.chords.map(c => c.getSymbol(true)).join(', ')
-                  : null}
-              </p>
-              <p>
-                <span style={{ fontWeight: "bold" }}>Scales: </span>
-                {(intervalsChordsScales.scales.length > 0)
-                  ? intervalsChordsScales.scales.map(s => s[1].toOneAccidentalAmbiguousString(false) + " " + s[0].name).join(', ')
-                  : null}
-              </p>
-            </div>
-
-            <div style={{ textAlign: "center" }}>
-              <p>
-                <PianoKeyboard
-                  maxWidth={400}
-                  lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-                  highestPitch={new Pitch(PitchLetter.B, 0, 5)}
-                  onKeyPress={onPianoKeyPress}
-                  renderLayeredExtrasFn={metrics => this.renderExtras(metrics)}
-                />
-              </p>
-
-              <p>
-                <Button
-                  onClick={event => this.reset()}
-                  variant="contained"
-                  style={{ textTransform: "none" }}
-                >
-                  Reset
-                </Button>
-              </p>
-            </div>
+            <p><span style={{ fontWeight: "bold" }}>Notes: </span>{pressedPitchesStr}</p>
+            <p>
+              <span style={{ fontWeight: "bold" }}>Interval: </span>
+              {this.getIntervalsString(intervalsChordsScales.intervals)}
+            </p>
+            <p>
+              <span style={{ fontWeight: "bold" }}>Chords: </span>
+              {(intervalsChordsScales.chords.length > 0)
+                //? intervalsChordsScales.chords.map(c => c.rootPitch.toOneAccidentalAmbiguousString(false) + " " + c.chordType.name).join(', ')
+                ? intervalsChordsScales.chords.map(c => c.getSymbol(true)).join(', ')
+                : null}
+            </p>
+            <p>
+              <span style={{ fontWeight: "bold" }}>Scales: </span>
+              {(intervalsChordsScales.scales.length > 0)
+                ? intervalsChordsScales.scales.map(s => s[1].toOneAccidentalAmbiguousString(false) + " " + s[0].name).join(', ')
+                : null}
+            </p>
           </div>
-        </CardContent>
+
+          <div style={{ textAlign: "center" }}>
+            <p>
+              <PianoKeyboard
+                maxWidth={400}
+                lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
+                highestPitch={new Pitch(PitchLetter.B, 0, 5)}
+                onKeyPress={onPianoKeyPress}
+                renderLayeredExtrasFn={metrics => this.renderExtras(metrics)}
+              />
+            </p>
+
+            <p>
+              <Button
+                onClick={event => this.reset()}
+                variant="contained"
+                style={{ textTransform: "none" }}
+              >
+                Reset
+              </Button>
+            </p>
+          </div>
+        </div>
       </Card>
     );
   }

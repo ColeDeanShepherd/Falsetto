@@ -1,7 +1,6 @@
 import * as React from "react";
-import { CardContent, Card, Typography } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 
-import * as Utils from "../lib/Core/Utils";
 import { FlashCardAnswer, IDatabase } from '../Database';
 import { FlashCardSet, FlashCardLevel } from '../FlashCardSet';
 import { flashCardSets, groupedFlashCardSets } from '../FlashCardGraph';
@@ -16,6 +15,7 @@ import { ActionBus } from '../ActionBus';
 import { NavigateAction } from '../App/Actions';
 import { getFlashCardSetStatsFromAnswers, getPercentToNextLevel, getCurrentFlashCardLevel } from '../StudyFlashCards/Model';
 import { mean } from '../lib/Core/ArrayUtils';
+import { Card } from "../ui/Card/Card";
 
 class FlashCardSetWithAnswers {
   public constructor(
@@ -84,18 +84,16 @@ export class ProfilePage extends React.Component<{}, IProfilePageState> {
 
     return (
       <Card>
-        <CardContent>
-          <Typography gutterBottom={true} variant="h5" component="h2" style={{ textAlign: "center" }}>
-            {user.fullName}'s Profile
-          </Typography>
-          <p style={{ textAlign: "center" }}>{user.emailAddress}</p>
-          <ul style={{ textAlign: "center", listStyleType: "none", padding: 0, margin: 0 }}>
-            <li style={{ display: "inline" }}><a href="#" onClick={event => { this.initiatePasswordReset(); event.stopPropagation(); event.preventDefault(); }}>Reset Password</a></li>
-            <li style={{ display: "inline" }}> | </li>
-            <li style={{ display: "inline" }}><a href="#" onClick={event => { this.userManager.logout(); event.stopPropagation(); event.preventDefault(); }}>Log Out</a></li>
-          </ul>
-          {this.renderProgress()}
-        </CardContent>
+        <Typography gutterBottom={true} variant="h5" component="h2" style={{ textAlign: "center" }}>
+          {user.fullName}'s Profile
+        </Typography>
+        <p style={{ textAlign: "center" }}>{user.emailAddress}</p>
+        <ul style={{ textAlign: "center", listStyleType: "none", padding: 0, margin: 0 }}>
+          <li style={{ display: "inline" }}><a href="#" onClick={event => { this.initiatePasswordReset(); event.stopPropagation(); event.preventDefault(); }}>Reset Password</a></li>
+          <li style={{ display: "inline" }}> | </li>
+          <li style={{ display: "inline" }}><a href="#" onClick={event => { this.userManager.logout(); event.stopPropagation(); event.preventDefault(); }}>Log Out</a></li>
+        </ul>
+        {this.renderProgress()}
       </Card>
     );
   }

@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as Vex from "vexflow";
-import { Button, Card, CardContent, Typography, Select, CircularProgress } from "@material-ui/core";
+import { Button, Typography, Select, CircularProgress } from "@material-ui/core";
 
 import * as Utils from "../../lib/Core/Utils";
 import { TimeSignature } from "../../lib/TheoryLib/TimeSignature";
@@ -14,6 +14,7 @@ import { SizeAwareContainer } from '../Utils/SizeAwareContainer';
 import { Size2D } from '../../lib/Core/Size2D';
 import { range, isPowerOf2, highestPowerOf2 } from '../../lib/Core/MathUtils';
 import { repeatGenerator } from '../../lib/Core/ArrayUtils';
+import { Card } from "../../ui/Card/Card";
 
 const clickAudioPath = "/audio/metronome_click.wav";
 const woodBlockAudioPath = "/audio/wood_block.wav";
@@ -58,66 +59,64 @@ export class NoteValuePlayer extends React.Component<INoteValuePlayerProps, INot
 
     return (
       <Card>
-        <CardContent>
-          <div style={{display: "flex"}}>
-            <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
-              Note Value Player
-            </Typography>
-          </div>
+        <div style={{display: "flex"}}>
+          <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
+            Note Value Player
+          </Typography>
+        </div>
 
-          <p style={{ margin: 0 }}>BPM: {this.rhythmPlayer.beatsPerMinute}</p>
+        <p style={{ margin: 0 }}>BPM: {this.rhythmPlayer.beatsPerMinute}</p>
 
-          {this.props.showNotesPerBeatSelect
-            ? (
-              <div>
-                <span>Notes Per Beat: </span>
-                <Select
-                  native
-                  value={this.state.notesPerBeat}
-                  onChange={event => this.onNoteValueChange(event.target.value)}
-                >
-                  {range(1, maxNotesPerBeat).map(n => <option key={n} value={n}>{n}</option>)}
-                </Select>
-              </div>
-            )
-            : null
-          }
-
-          <div>
-            Name: {this.getTupletName(this.state.notesPerBeat)}
-          </div>
-
-          <SizeAwareContainer height={140} onResize={s => this.onCanvasResize(s)}>
-            <VexFlowComponent
-              size={this.state.canvasSize}
-              vexFlowRender={vexFlowRender}
-            />
-          </SizeAwareContainer>
-          
-          {!this.rhythmPlayer.isPlaying
-            ? (
-              <Button
-                onClick={event => this.play()}
-                disabled={this.state.isLoadingSounds}
-                disableRipple={true}
-                disableFocusRipple={true}
-                variant="contained"
+        {this.props.showNotesPerBeatSelect
+          ? (
+            <div>
+              <span>Notes Per Beat: </span>
+              <Select
+                native
+                value={this.state.notesPerBeat}
+                onChange={event => this.onNoteValueChange(event.target.value)}
               >
-                {!this.state.isLoadingSounds ? <i className="material-icons">play_arrow</i> : <CircularProgress size={20} disableShrink={true} />}
-              </Button>
-            )
-            : (
-              <Button
-                onClick={event => this.stop()}
-                disableRipple={true}
-                disableFocusRipple={true}
-                variant="contained"
-              >
-                <i className="material-icons">pause</i>
-              </Button>
+                {range(1, maxNotesPerBeat).map(n => <option key={n} value={n}>{n}</option>)}
+              </Select>
+            </div>
+          )
+          : null
+        }
+
+        <div>
+          Name: {this.getTupletName(this.state.notesPerBeat)}
+        </div>
+
+        <SizeAwareContainer height={140} onResize={s => this.onCanvasResize(s)}>
+          <VexFlowComponent
+            size={this.state.canvasSize}
+            vexFlowRender={vexFlowRender}
+          />
+        </SizeAwareContainer>
+        
+        {!this.rhythmPlayer.isPlaying
+          ? (
+            <Button
+              onClick={event => this.play()}
+              disabled={this.state.isLoadingSounds}
+              disableRipple={true}
+              disableFocusRipple={true}
+              variant="contained"
+            >
+              {!this.state.isLoadingSounds ? <i className="material-icons">play_arrow</i> : <CircularProgress size={20} disableShrink={true} />}
+            </Button>
+          )
+          : (
+            <Button
+              onClick={event => this.stop()}
+              disableRipple={true}
+              disableFocusRipple={true}
+              variant="contained"
+            >
+              <i className="material-icons">pause</i>
+            </Button>
             )
           }
-        </CardContent>
       </Card>
     );
   }

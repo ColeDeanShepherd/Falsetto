@@ -1,6 +1,6 @@
 import * as React from "react";
 import {
-  Button, Card, CardContent, Typography, Paper
+  Button, Typography, Paper
 } from "@material-ui/core";
 
 import { areArraysEqual } from "../lib/Core/ArrayUtils";
@@ -15,6 +15,7 @@ import { unwrapValueOrUndefined } from '../lib/Core/Utils';
 import { LevelProgressBarView } from "../Components/Utils/LevelProgressBarView";
 import { WatermarkView } from "../Components/Utils/WatermarkView";
 import { QuizStudyAlgorithm } from '../Study/StudyAlgorithm';
+import { Card } from "../ui/Card/Card";
 
 export function createStudyFlashCardSetComponent(
   flashCardSet: FlashCardSet, isEmbedded: boolean, hideMoreInfoUri: boolean,
@@ -103,8 +104,8 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
     };
 
     const cardStyle: any = Object.assign(this.props.isEmbedded
-      ? { minHeight: "100vh", boxShadow: "none" }
-      : { height: "100%", marginBottom: "1em" }, this.props.style);
+      ? { minHeight: "100vh", boxShadow: "none", position: "relative", height: "100%" }
+      : { height: "100%", marginBottom: "1em", position: "relative" }, this.props.style);
 
     let cardContents: JSX.Element;
 
@@ -378,20 +379,18 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
     
     const renderRelatedExercises = () => (
       <Card style={cardStyle}>
-        <CardContent style={{position: "relative"}}>
-          <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
-            Related Exercises
-          </Typography>
+        <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
+          Related Exercises
+        </Typography>
 
-          <ul>
-            {flashCardSet.relatedSets
-              .map(relatedSet => (
-                <li key={relatedSet.id}>
-                  <NavLinkView to={relatedSet.route}>{relatedSet.name}</NavLinkView>
-                </li>
-              ))}
-          </ul>
-        </CardContent>
+        <ul>
+          {flashCardSet.relatedSets
+            .map(relatedSet => (
+              <li key={relatedSet.id}>
+                <NavLinkView to={relatedSet.route}>{relatedSet.name}</NavLinkView>
+              </li>
+            ))}
+        </ul>
       </Card>
     );
 
@@ -404,9 +403,7 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
         {renderCard
           ? (
             <Card style={cardStyle}>
-              <CardContent style={{ position: "relative", height: "100%" }}>
-                {cardContents}
-              </CardContent>
+              {cardContents}
               
               <WatermarkView isEmbedded={isEmbedded ? isEmbedded : false} />
             </Card>

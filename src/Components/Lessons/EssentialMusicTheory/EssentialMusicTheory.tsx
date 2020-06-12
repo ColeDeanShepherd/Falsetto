@@ -1,5 +1,4 @@
 import * as React from "react";
-import { CardContent, Card } from "@material-ui/core";
 
 import { playPitchesSequentially } from "../../../Audio/PianoAudio";
 
@@ -12,6 +11,7 @@ import _32ndRest from "../../../img/sheet-music/32nd-rest.svg";
 
 import { Vector2D } from '../../../lib/Core/Vector2D';
 import { range } from '../../../lib/Core/MathUtils';
+import { Card } from "../../../ui/Card/Card";
 export const defaultRootPitch = new Pitch(PitchLetter.C, 0, 4);
 
 export const MainTitle: React.FunctionComponent<{}> = props => <h1>{props.children}</h1>;
@@ -124,9 +124,7 @@ export class SectionContainer extends React.Component<ISectionProps, {}> {
   public render(): JSX.Element {
     return (
       <Card>
-        <CardContent>
-          {React.createElement(this.props.section, { isEmbedded: this.isEmbedded, hideMoreInfoUri: this.hideMoreInfoUri })}
-        </CardContent>
+        {React.createElement(this.props.section, { isEmbedded: this.isEmbedded, hideMoreInfoUri: this.hideMoreInfoUri })}
       </Card>
     );
   }
