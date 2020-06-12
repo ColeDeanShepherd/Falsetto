@@ -22,8 +22,8 @@ export class HomePage extends React.Component<{}, {}> {
 
             <div className="text">
               <h2>1. Introduction &amp; Setup</h2>
-              <p><NavLinkView to="/music-theory-for-piano?slide=introduction">Introduction</NavLinkView></p>
-              <p><NavLinkView to="/music-theory-for-piano?slide=setup">Setup</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=introduction">Introduction</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=setup">Setup</NavLinkView></p>
             </div>
           </Card>
 
@@ -32,11 +32,11 @@ export class HomePage extends React.Component<{}, {}> {
 
             <div className="text">
               <h2>2. Notes</h2>
-              <p><NavLinkView to="/music-theory-for-piano?slide=notes-introduction">Introduction</NavLinkView></p>
-              <p><NavLinkView to="/music-theory-for-piano?slide=note-c">White Keys</NavLinkView></p>
-              <p><NavLinkView to="/music-theory-for-piano?slide=note-c-sharp">Black Keys</NavLinkView></p>
-              <p><NavLinkView to="/music-theory-for-piano?slide=notes-summary">Review</NavLinkView></p>
-              <p><NavLinkView to="/music-theory-for-piano?slide=notes-quiz">Quiz</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=notes-introduction">Introduction</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=note-c">White Keys</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=note-c-sharp">Black Keys</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=notes-summary">Review</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=notes-quiz">Quiz</NavLinkView></p>
             </div>
           </Card>
 
@@ -45,11 +45,11 @@ export class HomePage extends React.Component<{}, {}> {
 
             <div className="text">
               <h2>3. Scales</h2>
-              <p><NavLinkView to="/music-theory-for-piano?slide=scales-introduction">Introduction</NavLinkView></p>
-              <p><NavLinkView to="/music-theory-for-piano?slide=major-scale">Major Scale</NavLinkView></p>
-              <p><NavLinkView to="/music-theory-for-piano?slide=natural-minor-scale">Natural Minor Scale</NavLinkView></p>
-              <p><NavLinkView to="/music-theory-for-piano?slide=scales-summary">Review</NavLinkView></p>
-              <p><NavLinkView to="/music-theory-for-piano?slide=scales-quiz">Quiz</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=scales-introduction">Introduction</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=major-scale">Major Scale</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=natural-minor-scale">Natural Minor Scale</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=scales-summary">Review</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=scales-quiz">Quiz</NavLinkView></p>
               <br />
               <p><NavLinkView to="/scale-exercises">Self-Paced Scale Mastery</NavLinkView></p>
             </div>
@@ -60,12 +60,12 @@ export class HomePage extends React.Component<{}, {}> {
 
             <div className="text">
               <h2>4. Chords</h2>
-              <p><NavLinkView to="/music-theory-for-piano?slide=chords-introduction">Introduction</NavLinkView></p>
-              <p><NavLinkView to="/music-theory-for-piano?slide=chords-introduction-review">Chords Review</NavLinkView></p>
-              <p><NavLinkView to="/music-theory-for-piano?slide=chords-introduction-quiz">Chords Quiz</NavLinkView></p>
-              <p><NavLinkView to="/music-theory-for-piano?slide=diatonic-chords">Diatonic Chords</NavLinkView></p>
-              <p><NavLinkView to="/music-theory-for-piano?slide=diatonic-chords-review">Diatonic Chords Review</NavLinkView></p>
-              <p><NavLinkView to="/music-theory-for-piano?slide=diatonic-chords-quiz">Diatonic Chords Quiz</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=chords-introduction">Introduction</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=chords-introduction-review">Chords Review</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=chords-introduction-quiz">Chords Quiz</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=diatonic-chords">Diatonic Chords</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=diatonic-chords-review">Diatonic Chords Review</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=diatonic-chords-quiz">Diatonic Chords Quiz</NavLinkView></p>
               <br />
               <p><NavLinkView to="/chord-exercises">Self-Paced Chord Mastery</NavLinkView></p>
             </div>
@@ -76,9 +76,9 @@ export class HomePage extends React.Component<{}, {}> {
 
             <div className="text">
               <h2>5. Chord Progressions</h2>
-              <p><NavLinkView to="/music-theory-for-piano?slide=chord-progressions-introduction">Introduction</NavLinkView></p>
-              <p><NavLinkView to="/music-theory-for-piano?slide=chord-progressions-review">Review</NavLinkView></p>
-              <p><NavLinkView to="/music-theory-for-piano?slide=chord-progressions-quiz">Quiz</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=chord-progressions-introduction">Introduction</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=chord-progressions-review">Review</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=chord-progressions-quiz">Quiz</NavLinkView></p>
             </div>
           </Card>
         </div>

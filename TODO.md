@@ -14,8 +14,7 @@
 * conclusion and next steps
 
 * Make sure everything in essential music theory is also in new course
-* Improve study flash card UI
-* Music Theory for Piano
+* Understanding the Piano Keyboard
   * Self-Paced Scale Mastery
     * Improve scale type select
     * MIDI piano integration
@@ -87,7 +86,7 @@
     * Chord progressions
 ## Low Priority
 * Re-enable main menu
-* Music Theory for Piano
+* Understanding the Piano Keyboard
   * Piano scale drone player release stop playing?
   * Pressing the correct note doesn't play the sound...
   * Piano notes exercises all have the same progress... Do I want that?
