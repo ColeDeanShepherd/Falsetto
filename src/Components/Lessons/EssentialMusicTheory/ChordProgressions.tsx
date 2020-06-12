@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Button } from "@material-ui/core";
 
 import { arrayContains } from '../../../lib/Core/ArrayUtils';
 
@@ -26,6 +25,7 @@ import * as ChordHarmonicFunctions from "../../Quizzes/Chords/ChordFamilies";
 import { NoteText } from "../../Utils/NoteText";
 import { getChordRomanNumeralNotation } from "../../Tools/DiatonicChordPlayer";
 import { PlayablePianoKeyboard } from '../../Utils/PlayablePianoKeyboard';
+import { Button } from "../../../ui/Button/Button";
 
 export const FiveChordDiagram: React.FunctionComponent<{}> = props => {
   const lowestPitch = new Pitch(PitchLetter.C, 0, 4);
@@ -241,12 +241,12 @@ export class ChordProgressionPlayer extends React.Component<IChordProgressionPla
         <p>
           {!isPlaying
             ? (
-              <Button variant="contained" onClick={e => this.play()}>
+              <Button onClick={e => this.play()}>
                 <i className="material-icons">play_arrow</i>
               </Button>
             )
             : (
-              <Button variant="contained" onClick={e => this.stop()}>
+              <Button onClick={e => this.stop()}>
                 <i className="material-icons">stop</i>
               </Button>
             )

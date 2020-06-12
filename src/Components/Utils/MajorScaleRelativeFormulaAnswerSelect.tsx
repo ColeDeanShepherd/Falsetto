@@ -1,10 +1,10 @@
 import * as React from "react";
-import { Button } from "@material-ui/core";
 
 import { AnswerDifficulty } from "../../Study/AnswerDifficulty";
 import { FlashCardStudySessionInfo } from "../../FlashCardSet";
 import { areArraysEqual, immutableArraySetElement, repeatElement } from '../../lib/Core/ArrayUtils';
 import { SignedAccidental, getAccidentalString } from '../../lib/TheoryLib/Pitch';
+import { Button } from "../../ui/Button/Button";
 
 export interface IMajorScaleRelativeFormulaAnswerSelectProps {
   scaleDegreeNumbers: Array<number>;
@@ -40,7 +40,6 @@ export class MajorScaleRelativeFormulaAnswerSelect extends React.Component<
           <div>
             <Button
               onClick={event => this.sharpenScaleDegree(scaleDegreeIndex)}
-              variant="contained"
               style={{ textTransform: "none" }}
             >
               ♯
@@ -52,7 +51,6 @@ export class MajorScaleRelativeFormulaAnswerSelect extends React.Component<
           <div>
             <Button
               onClick={event => this.flattenScaleDegree(scaleDegreeIndex)}
-              variant="contained"
               style={{ textTransform: "none" }}
             >
               ♭
@@ -69,7 +67,6 @@ export class MajorScaleRelativeFormulaAnswerSelect extends React.Component<
         <p>
           <Button
             onClick={event => this.confirmAnswer()}
-            variant="contained"
             style={{ textTransform: "none" }}
           >
             Confirm

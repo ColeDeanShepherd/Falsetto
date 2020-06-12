@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Card, CardContent, Typography } from "@material-ui/core";
 
 import { DetectedPitch, IPitchDetector, DatalantPitchDetector } from '../PitchDetection';
 import { Size2D } from '../../lib/Core/Size2D';
@@ -8,6 +7,7 @@ import { getErrorDescription } from '../../Error';
 import { IAnalytics } from '../../Analytics';
 import { DependencyInjector } from '../../DependencyInjector';
 import { unwrapMaybe } from '../../lib/Core/Utils';
+import { Card } from "../../ui/Card/Card";
 
 export interface ITunerCentsIndicatorProps {
   detuneCents: number;
@@ -154,17 +154,15 @@ export class Tuner extends React.Component<ITunerProps, ITunerState> {
 
     return isStandalone ? (
       <Card style={{ maxWidth: "420px", margin: "0 auto", textAlign: "center" }}>
-        <CardContent>
-          {isStandalone ? (
-            <div style={{display: "flex"}}>
-              <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
-                Tuner
-              </Typography>
-            </div>
-          ) : null}
+        {isStandalone ? (
+          <div style={{display: "flex"}}>
+            <h2 className="h5 margin-bottom" style={{flexGrow: 1}}>
+              Tuner
+            </h2>
+          </div>
+        ) : null}
 
-          {contents}
-        </CardContent>
+        {contents}
       </Card>
     ) : contents;
   }

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { CardContent, Card, Typography } from "@material-ui/core";
+import { Card } from "./ui/Card/Card";
 
 export class GlossaryEntry {
     public constructor(
@@ -79,13 +79,11 @@ export class Glossary extends React.Component<{}, {}> {
   public render(): JSX.Element {
     return (
       <Card>
-        <CardContent>
-          <Typography gutterBottom={true} variant="h5" component="h2">
-            Glossary
-          </Typography>
+        <h2 className="h5 margin-bottom">
+          Glossary
+        </h2>
 
-          {glossaryData.map(d => <p><strong>{d.term}</strong> - {d.renderDefinitionFn()}</p>)}
-        </CardContent>
+        {glossaryData.map(d => <p><strong>{d.term}</strong> - {d.renderDefinitionFn()}</p>)}
       </Card>
     );
   }

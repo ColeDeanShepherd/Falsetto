@@ -2,7 +2,6 @@ import * as React from "react";
 import * as Vex from "vexflow";
 
 import { IRhythmNote, RhythmPlayer } from "../../RhythmPlayer";
-import { Button, Card, CardContent, Typography } from "@material-ui/core";
 import { VexFlowComponent } from "../Utils/VexFlowComponent";
 import { Rational } from "../../lib/Core/Rational";
 import { noteDurationToVexFlowStr } from '../../VexFlowUtils';
@@ -11,6 +10,8 @@ import { Size2D } from '../../lib/Core/Size2D';
 import { randomElement, randomBoolean } from '../../lib/Core/Random';
 import { ILogger } from '../../Logger';
 import { DependencyInjector } from '../../DependencyInjector';
+import { Card } from "../../ui/Card/Card";
+import { Button } from "../../ui/Button/Button";
 
 const canvasSize = new Size2D(800, 100);
 
@@ -74,41 +75,34 @@ export class RhythmTapper extends React.Component<IRhythmTapperProps, IRhythmTap
 
     return (
       <Card>
-        <CardContent>
-          <div style={{display: "flex"}}>
-            <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
-              Rhythm Tapper
-            </Typography>
-          </div>
+        <div style={{display: "flex"}}>
+          <h2 className="h5 margin-bottom" style={{flexGrow: 1}}>
+            Rhythm Tapper
+          </h2>
+        </div>
 
-          <VexFlowComponent
-            size={canvasSize}
-            vexFlowRender={vexFlowRender}
-          />
+        <VexFlowComponent
+          size={canvasSize}
+          vexFlowRender={vexFlowRender}
+        />
 
-          <Button
-            onClick={event => this.startTappingRhythm()}
-            disableRipple={true}
-            disableFocusRipple={true}
-            variant="contained"
-          >
-            Start
-          </Button>
-          
-          <Button
-            onClick={event => this.tap()}
-            variant="contained"
-          >
-            Tap
-          </Button>
+        <Button
+          onClick={event => this.startTappingRhythm()}
+        >
+          Start
+        </Button>
+        
+        <Button
+          onClick={event => this.tap()}
+        >
+          Tap
+        </Button>
 
-          <Button
-            onClick={event => this.skipRhythm()}
-            variant="contained"
-          >
-            Skip
-          </Button>
-        </CardContent>
+        <Button
+          onClick={event => this.skipRhythm()}
+        >
+          Skip
+        </Button>
       </Card>
     );
   }

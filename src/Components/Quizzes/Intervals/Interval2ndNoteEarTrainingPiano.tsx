@@ -9,12 +9,13 @@ import {
   intervals,
   forEachInterval
 } from "../../Utils/IntervalEarTrainingFlashCardMultiSelect";
-import { Button, TableRow, TableCell, Checkbox, Table, TableHead, TableBody, Grid } from "@material-ui/core";
+import { TableRow, TableCell, Checkbox, Table, TableHead, TableBody, Grid } from "@material-ui/core";
 import { PianoKeyboard } from "../../Utils/PianoKeyboard";
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
 import { PianoKeysAnswerSelect } from "../../Utils/PianoKeysAnswerSelect";
 import { createIntervalLevels } from '../../../lib/TheoryLib/Interval';
 import { arrayContains, toggleArrayElement } from '../../../lib/Core/ArrayUtils';
+import { Button } from "../../../ui/Button/Button";
 
 const flashCardSetId = "pianoNextNoteEarTraining";
 
@@ -100,7 +101,6 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
         </div>
         <Button
           onClick={event => this.playAudio()}
-          variant="contained"
         >
           Play Sound
         </Button>

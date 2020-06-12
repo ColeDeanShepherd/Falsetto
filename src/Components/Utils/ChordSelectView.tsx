@@ -1,7 +1,6 @@
 import * as React from "react";
 
 import { Pitch } from "../../lib/TheoryLib/Pitch";
-import { Button, Typography } from "@material-ui/core";
 import { Chord } from "../../lib/TheoryLib/Chord";
 import { ChordTypeGroup } from "../../lib/TheoryLib/ChordTypeGroup";
 import { ChordType } from "../../lib/TheoryLib/ChordType";
@@ -23,9 +22,9 @@ export class ChordSelectView extends React.Component<IChordSelectViewProps, {}> 
 
     return (
       <div>
-        <Typography gutterBottom={true} variant="h6" component="h4">
+        <h4 className="h6 margin-bottom">
           Root Pitch
-        </Typography>
+        </h4>
         <div style={{padding: "1em 0"}}>
           <ValidKeyPitchSelect
             preferredOctaveNumber={4}

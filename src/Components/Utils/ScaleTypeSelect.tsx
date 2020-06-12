@@ -1,7 +1,7 @@
 import * as React from "react";
-import { Button, Typography } from "@material-ui/core";
 
 import { ScaleType, ScaleTypeGroup } from "../../lib/TheoryLib/Scale";
+import { Button } from "../../ui/Button/Button";
 
 export interface IScaleTypeSelectProps {
   scaleTypeGroups?: Array<ScaleTypeGroup>;
@@ -23,16 +23,15 @@ export class ScaleTypeSelect extends React.Component<IScaleTypeSelectProps, {}> 
 
     return (
       <div style={{textAlign: "center"}}>
-        <Typography gutterBottom={true} variant="h6" component="h4">
+        <h4 className="h6 margin-bottom">
           Category
-        </Typography>
+        </h4>
         <div style={{padding: "1em 0"}}>
           {scaleTypeGroups.map(scaleTypeGroup => {
             return (
               <Button
                 key={scaleTypeGroup.name}
                 onClick={event => this.onScaleTypeGroupClick(scaleTypeGroup)}
-                variant="contained"
                 style={baseButtonStyle}
               >
                 {scaleTypeGroup.name}
@@ -41,9 +40,9 @@ export class ScaleTypeSelect extends React.Component<IScaleTypeSelectProps, {}> 
           })}
         </div>
 
-        <Typography gutterBottom={true} variant="h6" component="h4">
+        <h4 className="h6 margin-bottom">
           Type
-        </Typography>
+        </h4>
 
         <div style={{padding: "1em 0"}}>
           {scaleTypeGroup.scaleTypes.map(st => {
@@ -57,7 +56,6 @@ export class ScaleTypeSelect extends React.Component<IScaleTypeSelectProps, {}> 
               <Button
                 key={st.name}
                 onClick={event => this.onScaleTypeClick(st)}
-                variant="contained"
                 style={buttonStyle}
               >
                 {st.name}

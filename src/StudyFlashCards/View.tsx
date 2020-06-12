@@ -1,7 +1,4 @@
 import * as React from "react";
-import {
-  Button, Card, CardContent, Typography, Paper
-} from "@material-ui/core";
 
 import { areArraysEqual } from "../lib/Core/ArrayUtils";
 import { FlashCard, FlashCardId } from "../FlashCard";
@@ -15,6 +12,8 @@ import { unwrapValueOrUndefined } from '../lib/Core/Utils';
 import { LevelProgressBarView } from "../Components/Utils/LevelProgressBarView";
 import { WatermarkView } from "../Components/Utils/WatermarkView";
 import { QuizStudyAlgorithm } from '../Study/StudyAlgorithm';
+import { Card } from "../ui/Card/Card";
+import { Button } from "../ui/Button/Button";
 
 export function createStudyFlashCardSetComponent(
   flashCardSet: FlashCardSet, isEmbedded: boolean, hideMoreInfoUri: boolean,
@@ -103,8 +102,8 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
     };
 
     const cardStyle: any = Object.assign(this.props.isEmbedded
-      ? { minHeight: "100vh", boxShadow: "none" }
-      : { height: "100%", marginBottom: "1em" }, this.props.style);
+      ? { minHeight: "100vh", boxShadow: "none", position: "relative", height: "100%" }
+      : { height: "100%", marginBottom: "1em", position: "relative", overflowY: "auto" }, this.props.style);
 
     let cardContents: JSX.Element;
 
@@ -158,12 +157,12 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
       const renderHeader = () => (
         <div>
           <div style={{display: "flex"}}>
-            <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
+            <h2 className="h3" style={{flexGrow: 1}}>
               {this.props.title}
-            </Typography>
+            </h2>
             
             {enableSettings ? (
-              <Button variant="contained" onClick={event => this.toggleConfiguration()} style={{width: "48px", height: "41px"}}>
+              <Button onClick={event => this.toggleConfiguration()} style={{width: "48px", height: "41px"}}>
                 <i
                   className="cursor-pointer material-icons"
                   style={{ verticalAlign: "sub", display: "inline-block" }}
@@ -175,10 +174,10 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
           </div>
   
           {model.showConfiguration ? (
-            <Paper style={{padding: "1em", margin: "1em 0"}}>
-              <Typography component="h6" variant="h6" gutterBottom={true}>Settings</Typography>
+            <Card style={{ margin: "1em 0" }}>
+              <h6 className="margin-bottom">Settings</h6>
               {this.renderFlashCardMultiSelect(containerSize, flashCards)}
-            </Paper>
+            </Card>
           ) : null}
   
           {(!this.props.isEmbedded && moreInfoUri)
@@ -234,7 +233,6 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
                 {(prevLevelIndex !== undefined) ? (
                   <Button
                     onClick={event => model.moveToPrevLevel()}
-                    variant="contained"
                     style={{ textTransform: "none" }}
                   >
                     Level {model.getLevelDisplayName(prevLevelIndex)}
@@ -253,7 +251,6 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
                 {(nextLevelIndex !== undefined) ? (
                   <Button
                     onClick={event => model.moveToNextLevel()}
-                    variant="contained"
                     style={{ textTransform: "none" }}
                   >
                     Level {model.getLevelDisplayName(nextLevelIndex)}
@@ -275,7 +272,6 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
             ? (
               <Button
                 onClick={event => this.flipFlashCard()}
-                variant="contained"
               >
                 Show {isShowingBackSide ? "Question" : "Answer"}
               </Button>
@@ -286,7 +282,6 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
             ? (
               <Button
                 onClick={event => this.moveToNextFlashCard(null)}
-                variant="contained"
               >
                 {(!renderAnswerSelect || model.haveGottenCurrentFlashCardWrong) ? "Next" : "Skip"}
               </Button>
@@ -378,20 +373,18 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
     
     const renderRelatedExercises = () => (
       <Card style={cardStyle}>
-        <CardContent style={{position: "relative"}}>
-          <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
-            Related Exercises
-          </Typography>
+        <h2 className="h4 margin-bottom" style={{flexGrow: 1}}>
+          Related Exercises
+        </h2>
 
-          <ul>
-            {flashCardSet.relatedSets
-              .map(relatedSet => (
-                <li key={relatedSet.id}>
-                  <NavLinkView to={relatedSet.route}>{relatedSet.name}</NavLinkView>
-                </li>
-              ))}
-          </ul>
-        </CardContent>
+        <ul>
+          {flashCardSet.relatedSets
+            .map(relatedSet => (
+              <li key={relatedSet.id}>
+                <NavLinkView to={relatedSet.route}>{relatedSet.name}</NavLinkView>
+              </li>
+            ))}
+        </ul>
       </Card>
     );
 
@@ -404,10 +397,7 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
         {renderCard
           ? (
             <Card style={cardStyle}>
-              <CardContent style={{ position: "relative", height: "100%" }}>
-                {cardContents}
-              </CardContent>
-              
+              {cardContents}
               <WatermarkView isEmbedded={isEmbedded ? isEmbedded : false} />
             </Card>
           )
@@ -437,7 +427,7 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
             }
 
             return (
-              <Button key={levelIndex} variant="contained" onClick={event => this.changeLevel(levelIndex)} style={style}>
+              <Button key={levelIndex} onClick={event => this.changeLevel(levelIndex)} style={style}>
                 {model.getLevelDisplayName(levelIndex)}
               </Button>
             );

@@ -5,7 +5,6 @@ import * as React from "react";
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import * as IntervalNamesToHalfSteps from "./Quizzes/Intervals/IntervalNamesToHalfSteps";
@@ -67,10 +66,10 @@ const MenuCategory: React.FunctionComponent<{ title: string, collapseCategories:
         aria-controls="panel1a-content"
         id="panel1a-header"
         >
-        <Typography>{props.title}</Typography>
+        <span>{props.title}</span>
       </ExpansionPanelSummary>
       <ExpansionPanelDetails>
-        <Typography>{props.children}</Typography>
+        <span>{props.children}</span>
       </ExpansionPanelDetails>
     </ExpansionPanel>
   )

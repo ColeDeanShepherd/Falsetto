@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as Vex from "vexflow";
-import { Button, Card, CardContent, Typography, Select, CircularProgress } from "@material-ui/core";
+import { Select, CircularProgress } from "@material-ui/core";
 
 import { TimeSignature } from "../../lib/TheoryLib/TimeSignature";
 import * as Audio from "../../Audio/Audio";
@@ -11,6 +11,8 @@ import { RhythmPlayer, IRhythmNote } from '../../RhythmPlayer';
 import { SizeAwareContainer } from '../Utils/SizeAwareContainer';
 import { Size2D } from '../../lib/Core/Size2D';
 import { repeatGenerator } from '../../lib/Core/ArrayUtils';
+import { Card } from "../../ui/Card/Card";
+import { Button } from "../../ui/Button/Button";
 
 const clickAudioPath = "/audio/metronome_click.wav";
 
@@ -133,64 +135,56 @@ export class TimeSignaturePlayer extends React.Component<ITimeSignaturePlayerPro
 
     return (
       <Card>
-        <CardContent>
-          <div style={{display: "flex"}}>
-            <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
-              Time Signature Player
-            </Typography>
-          </div>
+        <div style={{display: "flex"}}>
+          <h2 className="h5 margin-bottom" style={{flexGrow: 1}}>
+            Time Signature Player
+          </h2>
+        </div>
 
-          <p style={{ margin: 0 }}>BPM: {this.rhythmPlayer.beatsPerMinute}</p>
+        <p style={{ margin: 0 }}>BPM: {this.rhythmPlayer.beatsPerMinute}</p>
 
-          {this.props.showTimeSignatureSelect
-            ? (
-              <Select
-                native
-                value={this.rhythmPlayer.timeSignature.toString()}
-                onChange={event => this.onTimeSignatureChange(event.target.value)}
-              >
-                <option value="4/4">4/4</option>
-                <option value="3/4">3/4</option>
-                <option value="2/4">2/4</option>
-                <option value="6/8">6/8</option>
-                <option value="9/8">9/8</option>
-                <option value="12/8">12/8</option>
-              </Select>
-            )
-            : null
-          }
+        {this.props.showTimeSignatureSelect
+          ? (
+            <Select
+              native
+              value={this.rhythmPlayer.timeSignature.toString()}
+              onChange={event => this.onTimeSignatureChange(event.target.value)}
+            >
+              <option value="4/4">4/4</option>
+              <option value="3/4">3/4</option>
+              <option value="2/4">2/4</option>
+              <option value="6/8">6/8</option>
+              <option value="9/8">9/8</option>
+              <option value="12/8">12/8</option>
+            </Select>
+          )
+          : null
+        }
 
-          <SizeAwareContainer height={100} onResize={s => this.onCanvasResize(s)}>
-            <VexFlowComponent
-              size={this.state.canvasSize}
-              vexFlowRender={vexFlowRender}
-            />
-          </SizeAwareContainer>
-          
-          {!this.rhythmPlayer.isPlaying
-            ? (
-              <Button
-                onClick={event => this.play()}
-                disabled={this.state.isLoadingSounds}
-                disableRipple={true}
-                disableFocusRipple={true}
-                variant="contained"
-              >
-                {!this.state.isLoadingSounds ? <i className="material-icons">play_arrow</i> : <CircularProgress size={20} disableShrink={true} />}
-              </Button>
-            )
-            : (
-              <Button
-                onClick={event => this.stop()}
-                disableRipple={true}
-                disableFocusRipple={true}
-                variant="contained"
-              >
-                <i className="material-icons">pause</i>
-              </Button>
-            )
-          }
-        </CardContent>
+        <SizeAwareContainer height={100} onResize={s => this.onCanvasResize(s)}>
+          <VexFlowComponent
+            size={this.state.canvasSize}
+            vexFlowRender={vexFlowRender}
+          />
+        </SizeAwareContainer>
+        
+        {!this.rhythmPlayer.isPlaying
+          ? (
+            <Button
+              onClick={event => this.play()}
+              disabled={this.state.isLoadingSounds}
+            >
+              {!this.state.isLoadingSounds ? <i className="material-icons">play_arrow</i> : <CircularProgress size={20} disableShrink={true} />}
+            </Button>
+          )
+          : (
+            <Button
+              onClick={event => this.stop()}
+            >
+              <i className="material-icons">pause</i>
+            </Button>
+          )
+        }
       </Card>
     );
   }

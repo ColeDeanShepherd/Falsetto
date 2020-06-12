@@ -2,7 +2,6 @@ import * as React from "react";
 
 import { PitchLetter } from "../../lib/TheoryLib/PitchLetter";
 import { Pitch } from "../../lib/TheoryLib/Pitch";
-import { Button } from "@material-ui/core";
 import { Chord } from "../../lib/TheoryLib/Chord";
 import { PianoKeyboardMetrics, renderPianoKeyboardKeyLabels } from "../Utils/PianoKeyboard";
 import { playPitches } from '../../Audio/PianoAudio';
@@ -10,6 +9,7 @@ import { arrayContains } from '../../lib/Core/ArrayUtils';
 import { Scale } from "../../lib/TheoryLib/Scale";
 import { unwrapValueOrUndefined } from '../../lib/Core/Utils';
 import { PlayablePianoKeyboard } from './PlayablePianoKeyboard';
+import { Button } from "../../ui/Button/Button";
 
 const pianoLowestPitch = new Pitch(PitchLetter.C, 0, 4);
 const pianoHighestPitch = new Pitch(PitchLetter.B, 0, 5);
@@ -123,7 +123,6 @@ export class ChordView extends React.Component<IChordViewProps, {}> {
             <p>
               <Button
                 onClick={event => this.onListenClick()}
-                variant="contained"
               >
                 <span><i className="material-icons" style={{ verticalAlign: "middle" }}>play_arrow</i></span>
               </Button>

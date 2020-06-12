@@ -1,8 +1,10 @@
 import * as React from "react";
-import { Card, CardContent, Typography, Button, CircularProgress } from "@material-ui/core";
+import { CircularProgress } from "@material-ui/core";
 
 import * as Audio from "../../Audio/Audio";
 import { unwrapMaybe } from '../../lib/Core/Utils';
+import { Card } from "../../ui/Card/Card";
+import { Button } from "../../ui/Button/Button";
 
 const clickAudioPath = "/audio/metronome_click.wav";
 
@@ -102,21 +104,19 @@ export class Metronome extends React.Component<IMetronomeProps, IMetronomeState>
   public render(): JSX.Element {
     return (
       <Card style={{ maxWidth: "420px", margin: "0 auto", textAlign: "center" }}>
-        <CardContent>
-          {!this.props.hideTitle
-            ? (
-              <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
-                Metronome
-              </Typography>
-            ) : null}
+        {!this.props.hideTitle
+          ? (
+            <h2 className="h5 margin-bottom" style={{flexGrow: 1}}>
+              Metronome
+            </h2>
+          ) : null}
 
-          {!this.state.isTappingTempo ? this.renderMetronomeControls() : this.renderTempoTappingControls()}
-        </CardContent>
+        {!this.state.isTappingTempo ? this.renderMetronomeControls() : this.renderTempoTappingControls()}
       </Card>
     );
   }
   private renderTempoText(bpm: number | null): JSX.Element {
-    return <Typography variant="h3">{bpm ? Math.round(bpm) : "?"} <span style={{ fontSize: "0.35em" }}>BPM</span></Typography>;
+    return <span className="h3">{bpm ? Math.round(bpm) : "?"} <span style={{ fontSize: "0.35em" }}>BPM</span></span>;
   }
   private renderMetronomeControls(): JSX.Element {
     return (
@@ -125,13 +125,13 @@ export class Metronome extends React.Component<IMetronomeProps, IMetronomeState>
         <input type="range" min={this.MIN_BPM} max={this.MAX_BPM} value={this.state.bpm} onChange={e => this.onBpmChange(parseInt(e.target.value, 10))} style={this.SLIDER_STYLE} />
         <div>
           {!this.state.isPlaying ? (
-            <Button variant="contained" onClick={e => this.play()} disabled={this.state.isLoadingSounds}>
+            <Button onClick={e => this.play()} disabled={this.state.isLoadingSounds}>
               {!this.state.isLoadingSounds ? <i className="material-icons">play_arrow</i> : <CircularProgress size={20} disableShrink={true} />}
             </Button>
           ) : (
-            <Button variant="contained" onClick={e => this.pause()}><i className="material-icons">pause</i></Button>
+            <Button onClick={e => this.pause()}><i className="material-icons">pause</i></Button>
           )}
-          <Button variant="contained" onClick={e => this.startTappingTempo()} disabled={this.state.isPlaying}>Tap Tempo</Button>
+          <Button onClick={e => this.startTappingTempo()} disabled={this.state.isPlaying}>Tap Tempo</Button>
         </div>
       </div>
     );
@@ -140,10 +140,10 @@ export class Metronome extends React.Component<IMetronomeProps, IMetronomeState>
     return (
       <div>
         {this.renderTempoText(this.tempoTapper.tappedBpm)}
-        <div><Button variant="contained" onPointerDown={e => this.tapTempo()} touch-action="none">Tap</Button></div>
+        <div><Button onPointerDown={e => this.tapTempo()} touch-action="none">Tap</Button></div>
         <div>
-          <Button variant="contained" onClick={e => this.confirmTappedTempo()}>OK</Button>
-          <Button variant="contained" onClick={e => this.cancelTappingTempo()}>Cancel</Button>
+          <Button onClick={e => this.confirmTappedTempo()}>OK</Button>
+          <Button onClick={e => this.cancelTappingTempo()}>Cancel</Button>
         </div>
       </div>
     );

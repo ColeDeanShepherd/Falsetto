@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid, Button } from "@material-ui/core";
+import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid } from "@material-ui/core";
 
 import { arrayContains, toggleArrayElement } from "../../../lib/Core/ArrayUtils";
 import { range } from "../../../lib/Core/MathUtils";
@@ -12,6 +12,7 @@ import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
 import { playPitchesSequentially } from "../../../Audio/PianoAudio";
 import { ScaleType, scaleTypeLevels } from "../../../lib/TheoryLib/Scale";
 import { ChordScaleFormula, ChordScaleFormulaPart } from '../../../lib/TheoryLib/ChordScaleFormula';
+import { Button } from "../../../ui/Button/Button";
 
 const flashCardSetId = "scaleEarTraining";
 
@@ -54,7 +55,6 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
       <div>
         <Button
           onClick={event => this.playAudio()}
-          variant="contained"
         >
           Play Sound
         </Button>

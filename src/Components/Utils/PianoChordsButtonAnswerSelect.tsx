@@ -1,10 +1,10 @@
 import * as React from "react";
-import { Button, Typography } from "@material-ui/core";
 
 import { AnswerDifficulty } from "../../Study/AnswerDifficulty";
 import { ambiguousKeyPitchStringsSymbols } from "../../lib/TheoryLib/Pitch";
 import { ChordType } from "../../lib/TheoryLib/ChordType";
 import { arrayContains } from '../../lib/Core/ArrayUtils';
+import { Button } from "../../ui/Button/Button";
 
 export interface IPianoChordsButtonAnswerSelectProps {
   correctAnswer: string;
@@ -33,9 +33,9 @@ export class PianoChordsButtonAnswerSelect extends React.Component<IPianoChordsB
     // TODO: use lastCorrectAnswer
     return (
       <div>
-        <Typography gutterBottom={true} variant="h6" component="h4">
+        <h4 className="h6 margin-bottom">
           Root Pitch
-        </Typography>
+        </h4>
         <div style={{padding: "1em 0"}}>
           <div>
             {ambiguousKeyPitchStringsSymbols.slice(0, 6)
@@ -52,7 +52,6 @@ export class PianoChordsButtonAnswerSelect extends React.Component<IPianoChordsB
                   <Button
                     key={rootPitchStr}
                     onClick={event => this.onRootPitchClick(rootPitchStr)}
-                    variant="contained"
                     style={style}
                   >
                     {rootPitchStr}
@@ -75,7 +74,6 @@ export class PianoChordsButtonAnswerSelect extends React.Component<IPianoChordsB
                   <Button
                     key={rootPitchStr}
                     onClick={event => this.onRootPitchClick(rootPitchStr)}
-                    variant="contained"
                     style={style}
                   >
                     {rootPitchStr}
@@ -85,9 +83,9 @@ export class PianoChordsButtonAnswerSelect extends React.Component<IPianoChordsB
           </div>
         </div>
         
-        <Typography gutterBottom={true} variant="h6" component="h4">
+        <h4 className="h6 margin-bottom">
           Chord
-        </Typography>
+        </h4>
         <div style={{padding: "1em 0"}}>
           {ChordType.All
             .filter(ct => arrayContains(this.props.enabledChordTypeNames, ct.name))
@@ -103,7 +101,6 @@ export class PianoChordsButtonAnswerSelect extends React.Component<IPianoChordsB
                 <Button
                   key={chord.name}
                   onClick={event => this.onChordTypeClick(chord.name)}
-                  variant="contained"
                   style={style}
                 >
                   {chord.name}
@@ -116,7 +113,6 @@ export class PianoChordsButtonAnswerSelect extends React.Component<IPianoChordsB
           <Button
             onClick={event => this.confirmAnswer()}
             disabled={!this.state.selectedRootPitch || !this.state.selectedChordType}
-            variant="contained"
           >
             Confirm Answer
           </Button>

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { CardContent, Typography, Card, Table, TableHead, TableBody, TableRow, TableCell, Button, Checkbox } from '@material-ui/core';
+import { Table, TableHead, TableBody, TableRow, TableCell, Checkbox } from '@material-ui/core';
 
 import * as Utils from "../../lib/Core/Utils";
 import { Chord } from '../../lib/TheoryLib/Chord';
@@ -10,6 +10,7 @@ import { ScaleType } from '../../lib/TheoryLib/Scale';
 import { ValidKeyPitchSelect } from '../Utils/ValidKeyPitchSelect';
 import { getRomanNumerals } from '../../lib/Core/Utils';
 import { ChordType } from "../../lib/TheoryLib/ChordType";
+import { Card } from "../../ui/Card/Card";
 
 export const defaultScales = [
   ScaleType.Ionian,
@@ -81,51 +82,49 @@ export class DiatonicChordPlayer extends React.Component<IDiatonicChordPlayerPro
 
     return (
       <Card>
-        <CardContent>
-          <div style={{display: "flex"}}>
-            <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
-              Diatonic Chord Player
-            </Typography>
-          </div>
+        <div style={{display: "flex"}}>
+          <h2 className="h5 margin-bottom" style={{flexGrow: 1}}>
+            Diatonic Chord Player
+          </h2>
+        </div>
 
-          <div style={{textAlign: "center"}}>
-            <Typography gutterBottom={true} variant="h6" component="h4">
-              Root Pitch
-            </Typography>
-            <div style={{padding: "1em 0"}}>
-              <ValidKeyPitchSelect
-                preferredOctaveNumber={4}
-                value={[this.state.rootPitch]}
-                onChange={rootPitches => this.onRootPitchClick(rootPitches[0])}
-              />
-            </div>
+        <div style={{textAlign: "center"}}>
+          <h4 className="h6 margin-bottom">
+            Root Pitch
+          </h4>
+          <div style={{padding: "1em 0"}}>
+            <ValidKeyPitchSelect
+              preferredOctaveNumber={4}
+              value={[this.state.rootPitch]}
+              onChange={rootPitches => this.onRootPitchClick(rootPitches[0])}
+            />
           </div>
-          
-          <p style={{textAlign: "center"}}>
-            <Checkbox checked={this.state.playDrone} onChange={event => this.togglePlayDrone()} />
-            <span>Play Scale Root in Bass</span>
-          </p>
-
-          <Table key={this.state.rootPitch.midiNumber}>
-            <TableHead>
-              <TableRow>
-                <TableCell>Scale</TableCell>
-                <TableCell>1</TableCell>
-                <TableCell>2</TableCell>
-                <TableCell>3</TableCell>
-                <TableCell>4</TableCell>
-                <TableCell>5</TableCell>
-                <TableCell>6</TableCell>
-                <TableCell>7</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows}
-            </TableBody>
-          </Table>
+        </div>
         
-          <div style={{textAlign: "center"}}></div>
-        </CardContent>
+        <p style={{textAlign: "center"}}>
+          <Checkbox checked={this.state.playDrone} onChange={event => this.togglePlayDrone()} />
+          <span>Play Scale Root in Bass</span>
+        </p>
+
+        <Table key={this.state.rootPitch.midiNumber}>
+          <TableHead>
+            <TableRow>
+              <TableCell>Scale</TableCell>
+              <TableCell>1</TableCell>
+              <TableCell>2</TableCell>
+              <TableCell>3</TableCell>
+              <TableCell>4</TableCell>
+              <TableCell>5</TableCell>
+              <TableCell>6</TableCell>
+              <TableCell>7</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows}
+          </TableBody>
+        </Table>
+      
+        <div style={{textAlign: "center"}}></div>
       </Card>
     );
   }

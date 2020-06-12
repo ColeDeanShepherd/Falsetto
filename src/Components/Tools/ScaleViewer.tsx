@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Card, CardContent, Typography } from "@material-ui/core";
 
 import { Size2D } from "../../lib/Core/Size2D";
 import { PitchLetter } from "../../lib/TheoryLib/PitchLetter";
@@ -15,6 +14,7 @@ import { GuitarScaleViewer } from '../Utils/GuitarScaleViewer';
 import { arrayContains } from '../../lib/Core/ArrayUtils';
 import { ScaleSelect } from "../Utils/ScaleSelect";
 import { GuitarPitchesAudio } from '../../Audio/GuitarAudio';
+import { Card } from "../../ui/Card/Card";
 
 const pianoKeyboardLowestPitch = new Pitch(PitchLetter.C, 0, 4);
 const pianoKeyboardHighestPitch = new Pitch(PitchLetter.B, 0, 5);
@@ -94,61 +94,59 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
 
     return (
       <Card>
-        <CardContent>
-          <div style={{display: "flex"}}>
-            <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
-              {title}
-            </Typography>
+        <div style={{display: "flex"}}>
+          <h2 className="h5 margin-bottom" style={{flexGrow: 1}}>
+            {title}
+          </h2>
+        </div>
+      
+        <div style={{textAlign: "center"}}>
+          <ScaleSelect
+            scaleTypeGroups={this.scaleTypeGroups}
+            value={[this.state.scaleTypeGroup, this.state.scale]}
+            onChange={newValue => this.onScaleChange(newValue)} />
+          
+          <div style={{fontSize: "1.5em"}}>
+            <p>{this.state.scale.rootPitch.toString(false)} {this.state.scale.type.name}</p>
+            <p>{pitchesString}</p>
+            <p>{this.state.scale.type.formula.toString()}</p>
+            <p>{intervalsString}</p>
           </div>
-        
-          <div style={{textAlign: "center"}}>
-            <ScaleSelect
-              scaleTypeGroups={this.scaleTypeGroups}
-              value={[this.state.scaleTypeGroup, this.state.scale]}
-              onChange={newValue => this.onScaleChange(newValue)} />
-            
-            <div style={{fontSize: "1.5em"}}>
-              <p>{this.state.scale.rootPitch.toString(false)} {this.state.scale.type.name}</p>
-              <p>{pitchesString}</p>
-              <p>{this.state.scale.type.formula.toString()}</p>
-              <p>{intervalsString}</p>
+
+          <div>
+            <p>
+              <ScaleAudioPlayer
+                scale={this.state.scale}
+                pitchCount={numPitchesToPlay}
+                pitchesAudio={showPianoKeyboard ? PianoPitchesAudio : GuitarPitchesAudio}
+                onGetExports={e => this.stopPlayingScaleAudioFn = e.stopPlayingFn} />
+            </p>
+          </div>
+
+          <div>
+            <div>
+              {showPianoKeyboard ? (
+                <PianoKeyboard
+                  maxWidth={400}
+                  lowestPitch={pianoKeyboardLowestPitch}
+                  highestPitch={pianoKeyboardHighestPitch}
+                  onKeyPress={onKeyPress}
+                  renderExtrasFn={metrics => PianoScaleDronePlayer.renderExtrasFn(metrics, pitches, this.state.scale.rootPitch)}
+                />
+              ) : null}
             </div>
 
-            <div>
-              <p>
-                <ScaleAudioPlayer
+            <div style={{marginTop: "1em"}}>
+              {showGuitarFretboard ? (
+                <GuitarScaleViewer
                   scale={this.state.scale}
-                  pitchCount={numPitchesToPlay}
-                  pitchesAudio={showPianoKeyboard ? PianoPitchesAudio : GuitarPitchesAudio}
-                  onGetExports={e => this.stopPlayingScaleAudioFn = e.stopPlayingFn} />
-              </p>
-            </div>
-
-            <div>
-              <div>
-                {showPianoKeyboard ? (
-                  <PianoKeyboard
-                    maxWidth={400}
-                    lowestPitch={pianoKeyboardLowestPitch}
-                    highestPitch={pianoKeyboardHighestPitch}
-                    onKeyPress={onKeyPress}
-                    renderExtrasFn={metrics => PianoScaleDronePlayer.renderExtrasFn(metrics, pitches, this.state.scale.rootPitch)}
-                  />
-                ) : null}
-              </div>
-
-              <div style={{marginTop: "1em"}}>
-                {showGuitarFretboard ? (
-                  <GuitarScaleViewer
-                    scale={this.state.scale}
-                    size={guitarSize}
-                    tuning={guitarTuning}
-                    renderAllScaleShapes={this.props.renderAllScaleShapes} />
-                ) : null}
-              </div>
+                  size={guitarSize}
+                  tuning={guitarTuning}
+                  renderAllScaleShapes={this.props.renderAllScaleShapes} />
+              ) : null}
             </div>
           </div>
-        </CardContent>
+        </div>
       </Card>
     );
   }

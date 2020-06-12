@@ -2,12 +2,12 @@ import * as React from "react";
 
 import { PitchLetter } from "../../lib/TheoryLib/PitchLetter";
 import { Pitch } from "../../lib/TheoryLib/Pitch";
-import { Card, CardContent, Typography } from "@material-ui/core";
 import { Chord } from "../../lib/TheoryLib/Chord";
 import { ChordTypeGroup } from "../../lib/TheoryLib/ChordTypeGroup";
 import { ChordType } from "../../lib/TheoryLib/ChordType";
 import { ChordSelectView } from "../Utils/ChordSelectView";
 import { ChordView } from "../Utils/ChordView";
+import { Card } from "../../ui/Card/Card";
 
 export interface IChordViewerProps {
   title?: string;
@@ -64,9 +64,9 @@ export class ChordViewer extends React.Component<IChordViewerProps, IChordViewer
     const containerContents = (
       <div>
         {showTitle ? (
-          <Typography gutterBottom={true} variant="h5" component="h2" style={{flexGrow: 1}}>
+          <h2 className="h5 margin-bottom" style={{flexGrow: 1}}>
             {title}
-          </Typography>
+          </h2>
         ) : null}
         
         <div style={{textAlign: "center"}}>
@@ -89,9 +89,7 @@ export class ChordViewer extends React.Component<IChordViewerProps, IChordViewer
     return renderOnCard
       ? (
         <Card>
-          <CardContent>
-            {containerContents}
-          </CardContent>
+          {containerContents}
         </Card>
       )
       : containerContents;

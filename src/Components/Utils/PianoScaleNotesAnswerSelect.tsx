@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Button } from "@material-ui/core";
 
 import { uniq, areArraysEqualComparer } from '../../lib/Core/ArrayUtils';
 
@@ -12,6 +11,7 @@ import { PlayablePianoKeyboard, IPlayablePianoKeyboardExports } from './Playable
 import { FlashCardStudySessionInfo } from "../../FlashCardSet";
 import { Scale } from "../../lib/TheoryLib/Scale";
 import { PianoKeyboardMetrics } from './PianoKeyboard';
+import { Button } from "../../ui/Button/Button";
 
 export interface IPianoScaleNotesAnswerSelectProps {
   info: FlashCardStudySessionInfo,
@@ -75,7 +75,6 @@ export class PianoScaleNotesAnswerSelect extends React.Component<IPianoScaleNote
         <Button
           onClick={event => this.confirmAnswer(pressedPitches)}
           disabled={pressedPitches.length === 0}
-          variant="contained"
         >
           Confirm Answer
         </Button>

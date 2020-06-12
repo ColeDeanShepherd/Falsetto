@@ -1,5 +1,4 @@
 import * as React from "react";
-import { CardContent, Card, Typography } from "@material-ui/core";
 import { NavLinkView } from "../NavLinkView";
 
 import * as ScaleDegreeNames from "./Quizzes/Scales/ScaleDegreeNames";
@@ -14,6 +13,7 @@ import { ScaleTypeSelect } from "./Utils/ScaleTypeSelect";
 import { getValidKeyPitches } from '../lib/TheoryLib/Key';
 import { isDevelopment } from '../Config';
 import { flattenArrays } from '../lib/Core/ArrayUtils';
+import { Card } from "../ui/Card/Card";
 
 export interface IScaleExercisesProps {}
 
@@ -44,39 +44,37 @@ export class ScaleExercisesPage extends React.Component<IScaleExercisesProps, IS
 
     return (
       <Card>
-        <CardContent>
-          <Typography gutterBottom={true} variant="h5" component="h2">
-            Scale Exercises
-          </Typography>
+        <h2 className="h5 margin-bottom">
+          Scale Exercises
+        </h2>
 
-          <h3>Per-Scale Exercises</h3>
+        <h3>Per-Scale Exercises</h3>
 
-          <div style={{textAlign: "center"}}>
-            <ScaleTypeSelect
-              scaleTypeGroups={ScaleType.Groups}
-              value={[scaleTypeGroup, scaleType]}
-              onChange={newValue => this.onScaleTypeChange(newValue)} />
-              
-            <p style={{fontSize: "1.5em"}}>{scaleType.name} Scale Lessons</p>
-          </div>
+        <div style={{textAlign: "center"}}>
+          <ScaleTypeSelect
+            scaleTypeGroups={ScaleType.Groups}
+            value={[scaleTypeGroup, scaleType]}
+            onChange={newValue => this.onScaleTypeChange(newValue)} />
+            
+          <p style={{fontSize: "1.5em"}}>{scaleType.name} Scale Lessons</p>
+        </div>
 
-          <div>
-            {scales.map(scale => (
-              <div>
-                <NavLinkView to={`/scale/${getUriComponent(scale)}/lesson`}>{scale.rootPitch.toString(/*includeOctaveNumber*/ false)} {scale.type.name} Lesson</NavLinkView>
-              </div>
-            ))}
-          </div>
-          
-          <h3>Non-Scale-Specific Exercises</h3>
-          <div><NavLinkView to={ScaleDegreeNames.flashCardSet.route}>{ScaleDegreeNames.flashCardSet.name}</NavLinkView></div>
-          <div><NavLinkView to={ScaleNotes.flashCardSet.route}>{ScaleNotes.flashCardSet.name}</NavLinkView></div>
-          <div><NavLinkView to={PianoScales.flashCardSet.route}>{PianoScales.flashCardSet.name}</NavLinkView></div>
-          <div><NavLinkView to={GuitarScales.flashCardSet.route}>{GuitarScales.flashCardSet.name}</NavLinkView></div>
-          <div><NavLinkView to={ScaleDegreeModes.flashCardSet.route}>{ScaleDegreeModes.flashCardSet.name}</NavLinkView></div>
-          <div><NavLinkView to={ScaleChords.flashCardSet.route}>{ScaleChords.flashCardSet.name}</NavLinkView></div>
-          <div><NavLinkView to={ScaleEarTraining.flashCardSet.route}>{ScaleEarTraining.flashCardSet.name}</NavLinkView></div>
-        </CardContent>
+        <div>
+          {scales.map(scale => (
+            <div>
+              <NavLinkView to={`/scale/${getUriComponent(scale)}/lesson`}>{scale.rootPitch.toString(/*includeOctaveNumber*/ false)} {scale.type.name} Lesson</NavLinkView>
+            </div>
+          ))}
+        </div>
+        
+        <h3>Non-Scale-Specific Exercises</h3>
+        <div><NavLinkView to={ScaleDegreeNames.flashCardSet.route}>{ScaleDegreeNames.flashCardSet.name}</NavLinkView></div>
+        <div><NavLinkView to={ScaleNotes.flashCardSet.route}>{ScaleNotes.flashCardSet.name}</NavLinkView></div>
+        <div><NavLinkView to={PianoScales.flashCardSet.route}>{PianoScales.flashCardSet.name}</NavLinkView></div>
+        <div><NavLinkView to={GuitarScales.flashCardSet.route}>{GuitarScales.flashCardSet.name}</NavLinkView></div>
+        <div><NavLinkView to={ScaleDegreeModes.flashCardSet.route}>{ScaleDegreeModes.flashCardSet.name}</NavLinkView></div>
+        <div><NavLinkView to={ScaleChords.flashCardSet.route}>{ScaleChords.flashCardSet.name}</NavLinkView></div>
+        <div><NavLinkView to={ScaleEarTraining.flashCardSet.route}>{ScaleEarTraining.flashCardSet.name}</NavLinkView></div>
       </Card>
     );
   }
