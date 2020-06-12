@@ -13,9 +13,10 @@ export class HomePage extends React.Component<{}, {}> {
       <div className="home-page">
         <div className="headline">
           <h1>Falsetto</h1>
-          <h2 className="elevator-pitch">Learn music theory and train your ear online with interactive lessons &amp; exercises for free!</h2>
+          <h2 className="elevator-pitch">Master your instrument, learn music theory, and train your ear with interactive lessons &amp; exercises!</h2>
         </div>
 
+        <h2 style={{ textAlign: "center" }}>Understanding the Piano Keyboard</h2>
         <div className="home-topic-container">
           <Card className="home-topic">
             <div className="thumbnail" style={{ backgroundImage: "url('/img/setup-thumbnail.jpg')" }}></div>
@@ -83,8 +84,8 @@ export class HomePage extends React.Component<{}, {}> {
           </Card>
         </div>
         
-        <Card style={{ padding: "0 1em 1em 1em", overflow: "hidden" }}>
-          <h2>Other Lessons, Tools, &amp; Exercises</h2>
+        <Card className="other-stuff">
+          <h2 style={{ marginBottom: 0 }}>Other Lessons, Tools, &amp; Exercises</h2>
           <MainMenu collapseCategories={false} />
         </Card>
       </div>
