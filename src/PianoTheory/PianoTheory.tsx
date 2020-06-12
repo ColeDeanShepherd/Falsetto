@@ -1394,7 +1394,7 @@ export const pianoTheorySlideGroups = [
     
     new Slide("chords-introduction-review", () => (
       <div>
-        <p>Review material below, then move to the next slide to test your knowledge of chords with a quiz.</p>
+        <p>Review material below, then move to the next slide to practice your knowledge of chords with an interactive exercise.</p>
         <br />
         <p>Chords are sets of <strong>two or more notes played simultaneously</strong>.</p>
         <p>You are free to repeat chord notes as many times as you like, and play chord notes in any order, when playing a chord.</p>
@@ -1539,7 +1539,7 @@ export const pianoTheorySlideGroups = [
     
     new Slide("diatonic-chords-review", () => (
       <div>
-        <p>Review material below, then move to the next slide to test your knowledge of diatonic chords with a quiz.</p>
+        <p>Review material below, then move to the next slide to practice your knowledge of diatonic chords with an interactive exercise.</p>
         <br />
         <p><strong>Diatonic chords</strong> are chords consisting solely of notes from a particular scale.</p>
         <p><strong>Triads</strong> are chords with 3 distinct notes.</p>
@@ -1832,7 +1832,7 @@ export const pianoTheorySlideGroups = [
 
     createMiniQuizSlide("circle-progression-quiz", [
       FlashCard.fromRenderFns(
-        JSON.stringify({ set: "circle-progression-quiz", id: "circle progression" }),
+        JSON.stringify({ set: "circle-progression-quiz", id: "circleProgression" }),
         "What chords are in the circle progression, starting and ending with I?",
         "I - IV - vii° - iii - vi - ii - V - I",
         info => <ChordProgressionAnswerSelectView info={info} correctAnswer={"I - IV - vii° - iii - vi - ii - V - I"} />
@@ -1843,7 +1843,7 @@ export const pianoTheorySlideGroups = [
       <div>
         <p>It is important to use good <strong>voice leading</strong> when playing chord progressions.</p>
         <p><strong>Voice leading</strong> is the arrangement of chord notes in a progression to create smooth transitions between chords.</p>
-        <p>The most important rule of voice leading is to use the smallest possible movements when transitioning from one chord from the next.</p>
+        <p>The most important rule of voice leading is <strong>to use the smallest possible movements when transitioning from one chord from the next</strong>.</p>
 
         <p>Here is an example of "bad" voice leading in a ii - V7 - I progression, which makes big jumps between each chord:</p>
         <p>
@@ -1882,6 +1882,16 @@ export const pianoTheorySlideGroups = [
         </p>
       </div>
     )),
+    
+    createMiniQuizSlide("voice-leading-quiz", [
+      FlashCard.fromRenderFns(
+        JSON.stringify({ set: "voice-leading-quiz", id: "voiceLeadingMostImportantRule" }),
+        "What is the most important rule of voice leading?",
+        "use the smallest possible movements when transitioning from one chord from the next",
+        renderUserDeterminedCorrectnessAnswerSelect
+      ),
+    ]),
+
     new Slide("chord-substitution", () => (
       <div>
         <p>One common technique used to spice up chord progressions is <strong>chord substitution</strong>.</p>
@@ -1924,6 +1934,22 @@ export const pianoTheorySlideGroups = [
           maxWidth={maxTwoOctavePianoWidth} />
       </div>
     )),
+    
+    createMiniQuizSlide("chord-substitution-quiz", [
+      FlashCard.fromRenderFns(
+        JSON.stringify({ set: "chord-substitution-quiz", id: "chordSubstitutionDef" }),
+        "What is chord substitution?",
+        "replacing one chord with another that sounds similar or has a similar \"feel\" in the progression",
+        renderUserDeterminedCorrectnessAnswerSelect
+      ),
+      FlashCard.fromRenderFns(
+        JSON.stringify({ set: "chord-substitution-quiz", id: "chordsSharingNotesSimilar" }),
+        "One way to find chords that sound similar to another chord is looking for chords which _.",
+        "share many of the same notes",
+        renderUserDeterminedCorrectnessAnswerSelect
+      ),
+    ]),
+
     /*new Slide("needs-name-700", () => (
       <div>
         <p>Another way to do chord substitution is by looking for chords which perform a similar function (building or releasing tension) to another chord.</p>
@@ -1967,7 +1993,7 @@ export const pianoTheorySlideGroups = [
 
     new Slide("chord-progressions-review", () => (
       <div>
-        <p>Review material below, then move to the next slide to test your knowledge of chord progressions with a quiz.</p>
+        <p>Review material below, then move to the next slide to practice your knowledge of chord progressions with an interactive.</p>
         <br />
         <p><strong>Chord progressions</strong> are sequences of chords.</p>
         <p><strong>Chord progressions</strong> are generally built with <strong>diatonic chords</strong>.</p>

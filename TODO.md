@@ -4,6 +4,7 @@
 ## High Priority
 * Chord progressions content improvements
 
+* Fix user-determined answers in mini quizzes
 * improve slide URLs
 * "Quiz" -> "Exercise"
 * scale & chord capitalization

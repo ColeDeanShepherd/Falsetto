@@ -85,7 +85,7 @@ export class HomePage extends React.Component<{}, {}> {
         </div>
         
         <Card className="other-stuff">
-          <h2>Other Lessons, Tools, &amp; Exercises</h2>
+          <h2>Other Lessons, Tools, and Exercises</h2>
           <MainMenu collapseCategories={false} />
         </Card>
       </div>

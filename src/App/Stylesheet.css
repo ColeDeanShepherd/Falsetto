@@ -1,4 +1,8 @@
 /* All screen sizes */
+h1, h2, h3 {
+  font-weight: 600;
+}
+
 .app {
   height: 100vh;
   background-color: #fafbfd;
