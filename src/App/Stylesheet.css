@@ -3,6 +3,10 @@ h1, h2, h3 {
   font-weight: 600;
 }
 
+button:focus {
+  outline: none;
+}
+
 .app {
   height: 100vh;
   background-color: #fafbfd;
