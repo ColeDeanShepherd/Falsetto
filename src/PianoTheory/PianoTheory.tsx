@@ -690,7 +690,7 @@ export const pianoTheorySlideGroups = [
       <div>
         <h2>Section 2: Notes</h2>
         <p>This is a standard-size piano, which has a total of 88 white &amp; black keys:</p>
-        <FullPiano />
+        <p><FullPiano /></p>
         <p>When pressed, each key produces a particular <strong>note</strong> &ndash; the "highness" or "lowness" of a sound.</p>
         <p>Keys further to the left produce lower notes, and keys further to the right produce higher notes.</p>
         <p>Try pressing the keys of your MIDI piano keyboard (or your computer keyboard, or click the piano above) to hear the notes that the keys produce.</p>
@@ -1083,13 +1083,15 @@ export const pianoTheorySlideGroups = [
             labelBlackKeys={true} />
         </p>
         <p>And here are all the note names on an 88 key piano keyboard:</p>
-        <PianoNotesDiagram
-          lowestPitch={fullPianoLowestPitch}
-          highestPitch={fullPianoHighestPitch}
-          maxWidth={maxPianoWidth}
-          labelWhiteKeys={true}
-          labelBlackKeys={true} />
-          <p>Study these note names, then move to the next slide to practice your knowledge with an interactive exercise.</p>
+        <p>
+          <PianoNotesDiagram
+            lowestPitch={fullPianoLowestPitch}
+            highestPitch={fullPianoHighestPitch}
+            maxWidth={maxPianoWidth}
+            labelWhiteKeys={true}
+            labelBlackKeys={true} />
+        </p>
+        <p>Study these note names, then move to the next slide to practice your knowledge with an interactive exercise.</p>
       </div>
     )),
 
@@ -1794,34 +1796,36 @@ export const pianoTheorySlideGroups = [
       <div>
         <p>You can repeatedly chain together descending fifth progressions to create a <strong>circle progression</strong>, which progresses through all 7 diatonic chords of a scale:</p>
         <p>Starting with <strong>I</strong> in a major scale and chaining together descending fifth progressions, we get: <strong>I - IV - vii° - iii - vi - ii - V - I</strong>:</p>
-      <ChordProgressionPlayer
-        chordsPitches={[
-          [new Pitch(PitchLetter.C, 0, 3), new Pitch(PitchLetter.G, 0, 3), new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4)],
-          [new Pitch(PitchLetter.F, 0, 2), new Pitch(PitchLetter.A, 0, 3), new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.F, 0, 4)],
-          [new Pitch(PitchLetter.B, 0, 2), new Pitch(PitchLetter.F, 0, 3), new Pitch(PitchLetter.B, 0, 3), new Pitch(PitchLetter.D, 0, 4)],
-          [new Pitch(PitchLetter.E, 0, 2), new Pitch(PitchLetter.G, 0, 3), new Pitch(PitchLetter.B, 0, 3), new Pitch(PitchLetter.E, 0, 4)],
-          [new Pitch(PitchLetter.A, 0, 2), new Pitch(PitchLetter.E, 0, 3), new Pitch(PitchLetter.A, 0, 3), new Pitch(PitchLetter.C, 0, 4)],
-          [new Pitch(PitchLetter.D, 0, 2), new Pitch(PitchLetter.F, 0, 3), new Pitch(PitchLetter.A, 0, 3), new Pitch(PitchLetter.D, 0, 4)],
-          [new Pitch(PitchLetter.G, 0, 2), new Pitch(PitchLetter.D, 0, 3), new Pitch(PitchLetter.G, 0, 3), new Pitch(PitchLetter.B, 0, 3)],
-          [new Pitch(PitchLetter.C, 0, 2), new Pitch(PitchLetter.E, 0, 3), new Pitch(PitchLetter.G, 0, 3), new Pitch(PitchLetter.C, 0, 4)],
-        ]}
-        chords={[
-          new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 3)),
-          new Chord(ChordType.Major, new Pitch(PitchLetter.F, 0, 2)),
-          new Chord(ChordType.Diminished, new Pitch(PitchLetter.B, 0, 2)),
-          new Chord(ChordType.Minor, new Pitch(PitchLetter.E, 0, 2)),
-          new Chord(ChordType.Minor, new Pitch(PitchLetter.A, 0, 2)),
-          new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 2)),
-          new Chord(ChordType.Major, new Pitch(PitchLetter.G, 0, 2)),
-          new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 2)),
-        ]}
-        scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
-        chordScaleDegreeNumbers={[1, 4, 7, 3, 6, 2, 5, 1]}
-        lowestPitch={new Pitch(PitchLetter.C, 0, 2)}
-        highestPitch={new Pitch(PitchLetter.B, 0, 5)}
-        octaveCount={4}
-        showRomanNumerals={true}
-        maxWidth={maxTwoOctavePianoWidth} />
+        <p>
+          <ChordProgressionPlayer
+            chordsPitches={[
+              [new Pitch(PitchLetter.C, 0, 3), new Pitch(PitchLetter.G, 0, 3), new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4)],
+              [new Pitch(PitchLetter.F, 0, 2), new Pitch(PitchLetter.A, 0, 3), new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.F, 0, 4)],
+              [new Pitch(PitchLetter.B, 0, 2), new Pitch(PitchLetter.F, 0, 3), new Pitch(PitchLetter.B, 0, 3), new Pitch(PitchLetter.D, 0, 4)],
+              [new Pitch(PitchLetter.E, 0, 2), new Pitch(PitchLetter.G, 0, 3), new Pitch(PitchLetter.B, 0, 3), new Pitch(PitchLetter.E, 0, 4)],
+              [new Pitch(PitchLetter.A, 0, 2), new Pitch(PitchLetter.E, 0, 3), new Pitch(PitchLetter.A, 0, 3), new Pitch(PitchLetter.C, 0, 4)],
+              [new Pitch(PitchLetter.D, 0, 2), new Pitch(PitchLetter.F, 0, 3), new Pitch(PitchLetter.A, 0, 3), new Pitch(PitchLetter.D, 0, 4)],
+              [new Pitch(PitchLetter.G, 0, 2), new Pitch(PitchLetter.D, 0, 3), new Pitch(PitchLetter.G, 0, 3), new Pitch(PitchLetter.B, 0, 3)],
+              [new Pitch(PitchLetter.C, 0, 2), new Pitch(PitchLetter.E, 0, 3), new Pitch(PitchLetter.G, 0, 3), new Pitch(PitchLetter.C, 0, 4)],
+            ]}
+            chords={[
+              new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 3)),
+              new Chord(ChordType.Major, new Pitch(PitchLetter.F, 0, 2)),
+              new Chord(ChordType.Diminished, new Pitch(PitchLetter.B, 0, 2)),
+              new Chord(ChordType.Minor, new Pitch(PitchLetter.E, 0, 2)),
+              new Chord(ChordType.Minor, new Pitch(PitchLetter.A, 0, 2)),
+              new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 2)),
+              new Chord(ChordType.Major, new Pitch(PitchLetter.G, 0, 2)),
+              new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 2)),
+            ]}
+            scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
+            chordScaleDegreeNumbers={[1, 4, 7, 3, 6, 2, 5, 1]}
+            lowestPitch={new Pitch(PitchLetter.C, 0, 2)}
+            highestPitch={new Pitch(PitchLetter.B, 0, 5)}
+            octaveCount={4}
+            showRomanNumerals={true}
+            maxWidth={maxTwoOctavePianoWidth} />
+        </p>
         <NoteText>Lower-case roman numerals with a <strong>°</strong> symbol means the chord is a <strong>diminished</strong> chord.</NoteText>
       </div>
     )),
@@ -1842,36 +1846,40 @@ export const pianoTheorySlideGroups = [
         <p>The most important rule of voice leading is to use the smallest possible movements when transitioning from one chord from the next.</p>
 
         <p>Here is an example of "bad" voice leading in a ii - V7 - I progression, which makes big jumps between each chord:</p>
-        <ChordProgressionPlayer
-          chordsPitches={[
-            [new Pitch(PitchLetter.D, 0, 5), new Pitch(PitchLetter.F, 0, 5), new Pitch(PitchLetter.A, 0, 5)],
-            [new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.B, 0, 4), new Pitch(PitchLetter.D, 0, 5), new Pitch(PitchLetter.F, 0, 5)],
-            [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]
-          ]}
-          chords={[
-            new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 4)),
-            new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)),
-            new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))
-          ]}
-          scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
-          chordScaleDegreeNumbers={[2, 5, 1]}
-          maxWidth={maxTwoOctavePianoWidth} />
+        <p>
+          <ChordProgressionPlayer
+            chordsPitches={[
+              [new Pitch(PitchLetter.D, 0, 5), new Pitch(PitchLetter.F, 0, 5), new Pitch(PitchLetter.A, 0, 5)],
+              [new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.B, 0, 4), new Pitch(PitchLetter.D, 0, 5), new Pitch(PitchLetter.F, 0, 5)],
+              [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]
+            ]}
+            chords={[
+              new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 4)),
+              new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)),
+              new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))
+            ]}
+            scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
+            chordScaleDegreeNumbers={[2, 5, 1]}
+            maxWidth={maxTwoOctavePianoWidth} />
+        </p>
 
         <p>And here is an example of good voice leading:</p>
-        <ChordProgressionPlayer
-          chordsPitches={[
-            [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.A, 0, 4)],
-            [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.B, 0, 4)],
-            [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]
-          ]}
-          chords={[
-            new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 4)),
-            new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)),
-            new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))
-          ]}
-          scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
-          chordScaleDegreeNumbers={[2, 5, 1]}
-          maxWidth={maxTwoOctavePianoWidth} />
+        <p>
+          <ChordProgressionPlayer
+            chordsPitches={[
+              [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.A, 0, 4)],
+              [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.B, 0, 4)],
+              [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]
+            ]}
+            chords={[
+              new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 4)),
+              new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)),
+              new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))
+            ]}
+            scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
+            chordScaleDegreeNumbers={[2, 5, 1]}
+            maxWidth={maxTwoOctavePianoWidth} />
+        </p>
       </div>
     )),
     new Slide("chord-substitution", () => (
@@ -1882,20 +1890,22 @@ export const pianoTheorySlideGroups = [
         <p>For example, in C Major, the <strong>ii</strong> chord (D minor - D F A) and the <strong>IV</strong> chord (F Major - F A C) share two notes in common (F and A), so they have a similar sound and work as substitutes for each other in chord progressions.</p>
 
         <p>So, we can take a ii - V - I progression:</p>
-        <ChordProgressionPlayer
-          chordsPitches={[
-            [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.A, 0, 4)],
-            [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.B, 0, 4)],
-            [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]
-          ]}
-          chords={[
-            new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 4)),
-            new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)),
-            new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))
-          ]}
-          scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
-          chordScaleDegreeNumbers={[2, 5, 1]}
-          maxWidth={maxTwoOctavePianoWidth} />
+        <p>
+          <ChordProgressionPlayer
+            chordsPitches={[
+              [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.A, 0, 4)],
+              [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.B, 0, 4)],
+              [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]
+            ]}
+            chords={[
+              new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 4)),
+              new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)),
+              new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))
+            ]}
+            scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
+            chordScaleDegreeNumbers={[2, 5, 1]}
+            maxWidth={maxTwoOctavePianoWidth} />
+        </p>
         
         <p>And use chord substitution to create a new chord progression - IV - V - I:</p>
         <ChordProgressionPlayer

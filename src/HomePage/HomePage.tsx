@@ -16,13 +16,13 @@ export class HomePage extends React.Component<{}, {}> {
           <h2 className="elevator-pitch">Master your instrument, learn music theory, and train your ear with interactive lessons &amp; exercises!</h2>
         </div>
 
-        <h2 style={{ textAlign: "center" }}>Understanding the Piano Keyboard</h2>
+        <h3 style={{ textAlign: "center" }}>Understanding the Piano Keyboard</h3>
         <div className="home-topic-container">
           <Card className="home-topic">
             <div className="thumbnail" style={{ backgroundImage: "url('/img/setup-thumbnail.jpg')" }}></div>
 
             <div className="text">
-              <h2>1. Introduction &amp; Setup</h2>
+              <h3>1. Introduction &amp; Setup</h3>
               <p><NavLinkView to="/understanding-the-piano-keyboard?slide=introduction">Introduction</NavLinkView></p>
               <p><NavLinkView to="/understanding-the-piano-keyboard?slide=setup">Setup</NavLinkView></p>
             </div>
@@ -32,7 +32,7 @@ export class HomePage extends React.Component<{}, {}> {
             <div className="thumbnail" style={{ backgroundImage: "url('/img/notes-thumbnail.png')" }}></div>
 
             <div className="text">
-              <h2>2. Notes</h2>
+              <h3>2. Notes</h3>
               <p><NavLinkView to="/understanding-the-piano-keyboard?slide=notes-introduction">Introduction</NavLinkView></p>
               <p><NavLinkView to="/understanding-the-piano-keyboard?slide=note-c">White Keys</NavLinkView></p>
               <p><NavLinkView to="/understanding-the-piano-keyboard?slide=note-c-sharp">Black Keys</NavLinkView></p>
@@ -45,7 +45,7 @@ export class HomePage extends React.Component<{}, {}> {
             <div className="thumbnail" style={{ backgroundImage: "url('/img/scale-thumbnail.png')", backgroundSize: "contain" }}></div>
 
             <div className="text">
-              <h2>3. Scales</h2>
+              <h3>3. Scales</h3>
               <p><NavLinkView to="/understanding-the-piano-keyboard?slide=scales-introduction">Introduction</NavLinkView></p>
               <p><NavLinkView to="/understanding-the-piano-keyboard?slide=major-scale">Major Scale</NavLinkView></p>
               <p><NavLinkView to="/understanding-the-piano-keyboard?slide=natural-minor-scale">Natural Minor Scale</NavLinkView></p>
@@ -60,7 +60,7 @@ export class HomePage extends React.Component<{}, {}> {
             <div className="thumbnail" style={{ backgroundImage: "url('/img/chord-thumbnail.png')", backgroundSize: "contain" }}></div>
 
             <div className="text">
-              <h2>4. Chords</h2>
+              <h3>4. Chords</h3>
               <p><NavLinkView to="/understanding-the-piano-keyboard?slide=chords-introduction">Introduction</NavLinkView></p>
               <p><NavLinkView to="/understanding-the-piano-keyboard?slide=chords-introduction-review">Chords Review</NavLinkView></p>
               <p><NavLinkView to="/understanding-the-piano-keyboard?slide=chords-introduction-quiz">Chords Quiz</NavLinkView></p>
@@ -76,7 +76,7 @@ export class HomePage extends React.Component<{}, {}> {
             <div className="thumbnail" style={{ backgroundImage: "url('/img/chord-progression-thumbnail.png')", backgroundSize: "contain" }}></div>
 
             <div className="text">
-              <h2>5. Chord Progressions</h2>
+              <h3>5. Chord Progressions</h3>
               <p><NavLinkView to="/understanding-the-piano-keyboard?slide=chord-progressions-introduction">Introduction</NavLinkView></p>
               <p><NavLinkView to="/understanding-the-piano-keyboard?slide=chord-progressions-review">Review</NavLinkView></p>
               <p><NavLinkView to="/understanding-the-piano-keyboard?slide=chord-progressions-quiz">Quiz</NavLinkView></p>
@@ -85,7 +85,7 @@ export class HomePage extends React.Component<{}, {}> {
         </div>
         
         <Card className="other-stuff">
-          <h2 style={{ marginBottom: 0 }}>Other Lessons, Tools, &amp; Exercises</h2>
+          <h2>Other Lessons, Tools, &amp; Exercises</h2>
           <MainMenu collapseCategories={false} />
         </Card>
       </div>

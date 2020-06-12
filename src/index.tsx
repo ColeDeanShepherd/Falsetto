@@ -2,7 +2,7 @@ import "core-js";
 import "whatwg-fetch";
 import "pepjs";
 
-import "bootstrap/dist/css/bootstrap-reboot.min.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./index.css";
 
 import { Auth0Provider } from "./react-auth0-wrapper";
