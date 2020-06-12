@@ -4,12 +4,12 @@ import { IAction } from '../IAction';
 import { NavigateAction } from '../App/Actions';
 //import { DependencyInjector } from '../DependencyInjector';
 //import { IUserManager } from "../UserManager";
-import { Paper } from '@material-ui/core';
 import { MainMenu } from '../Components/MainMenu';
 import { NavLinkView } from '../NavLinkView';
 import { Settings } from '../SettingsView';
 
 import "./Stylesheet.css";
+import { Card } from "../ui/Card/Card";
 
 export interface IAppBarViewProps {}
 
@@ -62,9 +62,9 @@ export class AppBarView extends React.Component<IAppBarViewProps, IAppBarViewSta
         {isMenuVisible
           ? (
             <div className="menu-container">
-              <Paper style={{ padding: "1em" }}>
+              <Card>
                 <MainMenu collapseCategories={true} />
-              </Paper>
+              </Card>
             </div>
           )
           : null}
@@ -72,9 +72,9 @@ export class AppBarView extends React.Component<IAppBarViewProps, IAppBarViewSta
         {isSettingsVisible
           ? (
             <div className="menu-container">
-              <Paper style={{ padding: "0 1em 1em 1em" }}>
+              <Card style={{ padding: "0 1em 1em 1em" }}>
                 <Settings />
-              </Paper>
+              </Card>
             </div>
           ) : null}
       </div>

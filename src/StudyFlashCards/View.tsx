@@ -1,7 +1,4 @@
 import * as React from "react";
-import {
-  Paper
-} from "@material-ui/core";
 
 import { areArraysEqual } from "../lib/Core/ArrayUtils";
 import { FlashCard, FlashCardId } from "../FlashCard";
@@ -106,7 +103,7 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
 
     const cardStyle: any = Object.assign(this.props.isEmbedded
       ? { minHeight: "100vh", boxShadow: "none", position: "relative", height: "100%" }
-      : { height: "100%", marginBottom: "1em", position: "relative" }, this.props.style);
+      : { height: "100%", marginBottom: "1em", position: "relative", overflowY: "auto" }, this.props.style);
 
     let cardContents: JSX.Element;
 
@@ -177,10 +174,10 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
           </div>
   
           {model.showConfiguration ? (
-            <Paper style={{padding: "1em", margin: "1em 0"}}>
+            <Card style={{ margin: "1em 0" }}>
               <h6 className="margin-bottom">Settings</h6>
               {this.renderFlashCardMultiSelect(containerSize, flashCards)}
-            </Paper>
+            </Card>
           ) : null}
   
           {(!this.props.isEmbedded && moreInfoUri)
@@ -401,7 +398,6 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
           ? (
             <Card style={cardStyle}>
               {cardContents}
-              
               <WatermarkView isEmbedded={isEmbedded ? isEmbedded : false} />
             </Card>
           )
