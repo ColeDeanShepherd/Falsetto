@@ -1,27 +1,11 @@
 /* All screen sizes */
 .app {
   height: 100vh;
-  color: #1d1d1f;
   background-color: #fafbfd;
-  font-family: Frutiger, "Frutiger Linotype", Univers, Calibri, "Gill Sans", "Gill Sans MT", "Myriad Pro", Myriad, "DejaVu Sans Condensed", "Liberation Sans", "Nimbus Sans L", Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 1.065rem;
 }
 
-h1 {
-  color: #303446;
-}
-
-h2 {
-  color: #021d42;
-}
-
-a,
-a:visited {
-  color: #258aff;
-  text-decoration: none;
-}
-a:hover {
-  text-decoration: underline;
+.watermark {
+  user-select: none;
 }
 
 .menu-container {
