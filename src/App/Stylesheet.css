@@ -31,6 +31,37 @@ button:focus {
   user-select: none;
 }
 
+.menu-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.3);
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 9000;
+}
+
+.menu-close-button {
+  opacity: 0.25;
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  z-index: 99999;
+  transition: opacity 0.5s !important;
+}
+
+.menu-close-button:hover {
+  opacity: 1;
+  cursor: pointer;
+}
+
+.menu-card {
+  position: relative;
+}
+
 .menu a,
 .menu a:visited {
   display: block;

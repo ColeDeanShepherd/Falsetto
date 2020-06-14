@@ -1,4 +1,6 @@
 import * as React from "react";
+import Close from '@material-ui/icons/Close';
+
 import { ActionBus, ActionHandler } from '../ActionBus';
 import { IAction } from '../IAction';
 import { NavigateAction } from '../App/Actions';
@@ -43,6 +45,8 @@ export class AppBarView extends React.Component<IAppBarViewProps, IAppBarViewSta
   public render(): JSX.Element | null {
     const { isMenuVisible, isSettingsVisible } = this.state;
 
+    const isMenuContainerVisible = isMenuVisible || isSettingsVisible;
+
     // Account Stuff
     //const userProfile = this.userManager.getCurrentUser();
     //const isAuthenticated = userProfile !== null;
@@ -52,31 +56,42 @@ export class AppBarView extends React.Component<IAppBarViewProps, IAppBarViewSta
     //{isAuthenticated ? <a href="/logout" onClick={event => { this.userManager.logout(); event.preventDefault(); event.stopPropagation(); }} style={{ fontWeight: "normal" }}>Log Out</a> : null}
     
     return (
-      <div className="app-bar">
-        <NavLinkView to="/" className="button">
-          <img src="/logo-black.svg" style={{height: "24px", verticalAlign: "sub"}} />
-        </NavLinkView>
-        <i onClick={event => this.toggleMenu()} className="material-icons button cursor-pointer no-select">menu</i>
-        <i onClick={event => this.toggleSettings()} className="material-icons button cursor-pointer no-select">settings</i>
-
-        {isMenuVisible
+      <div>
+        <div className="app-bar">
+          <NavLinkView to="/" className="button">
+            <img src="/logo-black.svg" style={{height: "24px", verticalAlign: "sub"}} />
+          </NavLinkView>
+          <i onClick={event => this.toggleMenu()} className="material-icons button cursor-pointer no-select">menu</i>
+          <i onClick={event => this.toggleSettings()} className="material-icons button cursor-pointer no-select">settings</i>
+        </div>
+        {isMenuContainerVisible
           ? (
             <div className="menu-container">
-              <Card>
-                <MainMenu collapseCategories={true} />
-              </Card>
+              {isMenuVisible
+                  ? (
+                    <Card className="menu-card">
+                      <Close
+                        onClick={event => this.toggleMenu()}
+                        className="menu-close-button"
+                      />
+                      <MainMenu collapseCategories={false} />
+                    </Card>
+                  )
+                  : null}
+
+              {isSettingsVisible
+                ? (
+                  <Card className="menu-card" style={{ padding: "0 1em 1em 1em" }}>
+                      <Close
+                        onClick={event => this.toggleSettings()}
+                        className="menu-close-button"
+                      />
+                    <Settings />
+                  </Card>
+                ) : null}
             </div>
           )
           : null}
-
-        {isSettingsVisible
-          ? (
-            <div className="menu-container">
-              <Card style={{ padding: "0 1em 1em 1em" }}>
-                <Settings />
-              </Card>
-            </div>
-          ) : null}
       </div>
     );
   }
