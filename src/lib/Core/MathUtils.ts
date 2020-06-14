@@ -51,6 +51,22 @@ export function range(minValue: number, maxValue: number): Array<number> {
   return result;
 }
 
+export function wrapInteger(value: number, minValue: number, maxValue: number): number {
+  precondition(maxValue >= minValue);
+
+  const numValuesInRange = (maxValue - minValue) + 1;
+
+  while (value < minValue) {
+    value += numValuesInRange;
+  }
+
+  while (value > maxValue) {
+    value -= numValuesInRange;
+  }
+
+  return value;
+}
+
 // TODO: add tests
 export function wrapReal(value: number, minValue: number, maxValue: number): number {
   precondition(maxValue >= minValue);
