@@ -1,5 +1,5 @@
 import * as React from "react";
-import { BecomeAPatronButton } from '../ui/Utils/BecomeAPatronButton';
+import { BecomeAPatronButton } from './Utils/BecomeAPatronButton';
 
 export interface IFooterViewProps {}
 export class FooterView extends React.Component<IFooterViewProps, {}> {

@@ -10,7 +10,8 @@ import { createStudyFlashCardSetComponent } from "../StudyFlashCards/View";
 
 import { LimitedWidthContentContainer } from "../../ui/Utils/LimitedWidthContentContainer";
 import { PianoScaleMajorRelativeFormulaDiagram } from "../../ui/Utils/PianoScaleMajorRelativeFormulaDiagram";
-import { SlideGroup, Slide, maxTwoOctavePianoWidth } from "./PianoTheory";
+import { maxTwoOctavePianoWidth } from "./PianoTheory";
+import { SlideGroup, Slide } from "../Slideshow/Slideshow";
 import * as PianoScaleDegrees from "../../ui/Quizzes/Scales/PianoScaleDegrees";
 import * as PianoDiatonicChords from "../../ui/Quizzes/Chords/PianoDiatonicChords";
 import { NoteText } from "../../ui/Utils/NoteText";

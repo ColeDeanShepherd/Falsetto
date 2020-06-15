@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { SlideGroup, Slide } from "./PianoTheory";
+import { SlideGroup, Slide } from "../Slideshow/Slideshow";
 import { ChordType, getUriComponent as getChordTypeUriComponent } from '../../lib/TheoryLib/ChordType';
 import { ChordView } from '../../ui/Utils/ChordView';
 import { getValidKeyPitches } from '../../lib/TheoryLib/Key';

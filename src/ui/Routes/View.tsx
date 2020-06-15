@@ -9,7 +9,8 @@ import { Scale, parseScaleFromUriComponent } from '../../lib/TheoryLib/Scale';
 import { ChordType, parseChordTypeFromUriComponent, getUriComponent as getChordTypeUriComponent } from '../../lib/TheoryLib/ChordType';
 import { Chord, parseChordFromUriComponent } from "../../lib/TheoryLib/Chord";
 
-import { PianoTheory, pianoTheorySlideGroups } from "../PianoTheory/PianoTheory";
+import { Slideshow } from "../Slideshow/Slideshow";
+import { pianoTheorySlideGroups } from "../PianoTheory/PianoTheory";
 import {
   SectionContainer
 } from "../../ui/Lessons/EssentialMusicTheory/EssentialMusicTheory";
@@ -244,7 +245,7 @@ const routes: Array<IRouteData> = ([
     path: "/understanding-the-piano-keyboard",
     title: "Understanding the Piano Keyboard - Falsetto",
     renderFn: () => (
-      <PianoTheory slideGroups={pianoTheorySlideGroups} />
+      <Slideshow slideGroups={pianoTheorySlideGroups} />
     )
   },
   {
@@ -449,7 +450,7 @@ const routes: Array<IRouteData> = ([
 
           return (
             <DocumentTitle title={`${scaleName} Scale - Falsetto`}>
-              <PianoTheory slideGroups={slideGroups} />
+              <Slideshow slideGroups={slideGroups} />
             </DocumentTitle>
           );
         }} />
@@ -465,7 +466,7 @@ const routes: Array<IRouteData> = ([
 
           return (
             <DocumentTitle title={`${scaleName} Scale Mastery - Falsetto`}>
-              <PianoTheory slideGroups={slideGroups} />
+              <Slideshow slideGroups={slideGroups} />
             </DocumentTitle>
           );
         }} />
@@ -527,7 +528,7 @@ const routes: Array<IRouteData> = ([
 
           return (
             <DocumentTitle title={`${chordTypeName} Chord Mastery - Falsetto`}>
-              <PianoTheory slideGroups={slideGroups} />
+              <Slideshow slideGroups={slideGroups} />
             </DocumentTitle>
           );
         }} />
