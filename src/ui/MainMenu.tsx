@@ -81,7 +81,7 @@ const MenuCategory: React.FunctionComponent<{ title: string, collapseCategories:
   );
 
 export const MainMenu : React.FunctionComponent<{ collapseCategories: boolean }> = props => {
-  const pianoTheoryCategory = (
+  const understandingThePianoKeyboardCategory = (
     <MenuCategory title="Understanding the Piano Keyboard" collapseCategories={props.collapseCategories}>
       {<NavLinkView to="/understanding-the-piano-keyboard?slide=introduction">{"Introduction"}</NavLinkView>}
       {<NavLinkView to="/understanding-the-piano-keyboard?slide=notes-introduction">{"Notes"}</NavLinkView>}
@@ -200,7 +200,7 @@ export const MainMenu : React.FunctionComponent<{ collapseCategories: boolean }>
     <div className="menu">
       <div className="row no-gutters">
         <div className="col-sm">
-          {pianoTheoryCategory}
+          {understandingThePianoKeyboardCategory}
           {guitarLessonsCategory}
         </div>
         <div className="col-sm">
@@ -225,7 +225,7 @@ export const MainMenu : React.FunctionComponent<{ collapseCategories: boolean }>
     <div className="menu">
       <div className="row no-gutters">
         <div className="col-sm">
-          {pianoTheoryCategory}
+          {understandingThePianoKeyboardCategory}
           {guitarLessonsCategory}
           {toolsCategory}
         </div>

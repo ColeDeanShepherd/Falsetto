@@ -18,37 +18,38 @@ import { WebMidiInitializedAction, MidiDeviceConnectedAction, MidiDeviceDisconne
 
 import { createStudyFlashCardSetComponent, StudyFlashCardsView } from "../StudyFlashCards/View";
 
-import { NavLinkView } from "../../ui/NavLinkView";
+import { NavLinkView } from "../NavLinkView";
 
-import { renderPianoKeyboardNoteNames, PianoKeyboardMetrics, PianoKeyboard } from "../../ui/Utils/PianoKeyboard";
+import { renderPianoKeyboardNoteNames, PianoKeyboardMetrics, PianoKeyboard } from "../Utils/PianoKeyboard";
 
-import * as PianoNotes from "../../ui/Quizzes/Notes/PianoNotes";
+import * as PianoNotes from "../Quizzes/Notes/PianoNotes";
 import * as ScalesQuiz from "./ScalesQuiz";
 import * as ChordsIntroQuiz from "./ChordsIntroQuiz";
 import * as DiatonicChordsQuiz from "./DiatonicChordsQuiz";
 import * as ChordProgressionsQuiz from "./ChordProgressionsQuiz";
 
-import { naturalPitches, accidentalPitches, allPitches } from "../../ui/Quizzes/Notes/PianoNotes";
-import { PianoScaleFormulaDiagram } from "../../ui/Utils/PianoScaleFormulaDiagram";
-import { PianoScaleDronePlayer } from '../../ui/Utils/PianoScaleDronePlayer';
-import { MidiInputDeviceSelect } from "../../ui/Utils/MidiInputDeviceSelect";
-import { fullPianoLowestPitch, fullPianoHighestPitch, fullPianoNumWhiteKeys } from '../../ui/Utils/PianoUtils';
-import { MidiPianoRangeInput } from "../../ui/Utils/MidiPianoRangeInput";
-import { PianoScaleMajorRelativeFormulaDiagram } from "../../ui/Utils/PianoScaleMajorRelativeFormulaDiagram";
-import { PlayablePianoKeyboard } from "../../ui/Utils/PlayablePianoKeyboard";
-import { ChordView } from '../../ui/Utils/ChordView';
-import { ChordDiagram, ChordProgressionPlayer } from "../../ui/Lessons/EssentialMusicTheory/ChordProgressions";
+import { naturalPitches, accidentalPitches, allPitches } from "../Quizzes/Notes/PianoNotes";
+import { PianoScaleFormulaDiagram } from "../Utils/PianoScaleFormulaDiagram";
+import { PianoScaleDronePlayer } from '../Utils/PianoScaleDronePlayer';
+import { MidiInputDeviceSelect } from "../Utils/MidiInputDeviceSelect";
+import { fullPianoLowestPitch, fullPianoHighestPitch, fullPianoNumWhiteKeys } from '../Utils/PianoUtils';
+import { MidiPianoRangeInput } from "../Utils/MidiPianoRangeInput";
+import { PianoScaleMajorRelativeFormulaDiagram } from "../Utils/PianoScaleMajorRelativeFormulaDiagram";
+import { PlayablePianoKeyboard } from "../Utils/PlayablePianoKeyboard";
+import { ChordView } from '../Utils/ChordView';
+import { ChordDiagram, ChordProgressionPlayer } from "../Lessons/EssentialMusicTheory/ChordProgressions";
 
 import { range } from '../../lib/Core/MathUtils';
 import { Size2D } from '../../lib/Core/Size2D';
 import { FlashCard } from "../../FlashCard";
-import { majorScaleFormulaFlashCard, minorScaleFormulaFlashCard, createPressAllScaleNotesFlashCard } from './ScalesQuiz';
+import { majorScaleFormulaFlashCard, minorScaleFormulaFlashCard } from './ScalesQuiz';
 import { FlashCardSet } from "../../FlashCardSet";
-import { PressPianoKeysAllOctavesView } from "../../ui/Utils/PressPianoKeysAllOctavesView";
+import { PressPianoKeysAllOctavesView } from "../Utils/PressPianoKeysAllOctavesView";
 import { fifthIntervalFlashCard } from "./ChordsIntroQuiz";
-import { renderNextButtonAnswerSelect, renderUserDeterminedCorrectnessAnswerSelect, renderStringAnswerSelect } from '../../ui/Quizzes/Utils';
-import { ChordProgressionAnswerSelectView } from '../../ui/Utils/ChordProgressionAnswerSelectView';
+import { renderNextButtonAnswerSelect, renderUserDeterminedCorrectnessAnswerSelect, renderStringAnswerSelect } from '../Quizzes/Utils';
+import { ChordProgressionAnswerSelectView } from '../Utils/ChordProgressionAnswerSelectView';
 import { Slide, Slideshow, SlideGroup } from "../Slideshow/Slideshow";
+import { NoteText } from "../Utils/NoteText";
 
 export const maxPianoWidth = 1000;
 export const maxOneOctavePianoWidth = 400;

@@ -10,7 +10,7 @@ import { ChordType, parseChordTypeFromUriComponent, getUriComponent as getChordT
 import { Chord, parseChordFromUriComponent } from "../../lib/TheoryLib/Chord";
 
 import { Slideshow } from "../Slideshow/Slideshow";
-import { pianoTheorySlideGroups } from "../PianoTheory/PianoTheory";
+import { pianoTheorySlideGroups } from "../UnderstandingThePianoKeyboard/UnderstandingThePianoKeyboard";
 import {
   SectionContainer
 } from "../../ui/Lessons/EssentialMusicTheory/EssentialMusicTheory";
@@ -46,8 +46,8 @@ import { LimitedWidthContentContainer } from '../../ui/Utils/LimitedWidthContent
 import { ScaleExercisesPage } from "../../ui/ScaleExercisesPage";
 import * as PianoScaleDegrees from "../../ui/Quizzes/Scales/PianoScaleDegrees";
 import * as PianoDiatonicChords from "../../ui/Quizzes/Chords/PianoDiatonicChords";
-import { createSlideGroups as createScaleMasteryLessonSlideGroups } from '../PianoTheory/ScaleMasteryLessonSlides';
-import { createSlideGroups as createChordTypeMasteryLessonSlideGroups } from '../PianoTheory/ChordTypeMasteryLessonSlides';
+import { createSlideGroups as createScaleMasteryLessonSlideGroups } from '../UnderstandingThePianoKeyboard/ScaleMasteryLessonSlides';
+import { createSlideGroups as createChordTypeMasteryLessonSlideGroups } from '../UnderstandingThePianoKeyboard/ChordTypeMasteryLessonSlides';
 import { PageNotFoundView } from '../../ui/PageNotFoundView';
 import { ChordPage } from "../../ui/ChordPage";
 import { ChordExercisesPage } from '../ChordExercisesPage';

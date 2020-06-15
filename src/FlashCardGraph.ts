@@ -38,8 +38,8 @@ import * as SheetMusicChordRecognition from "./ui/Quizzes/Sheet Music/SheetMusic
 import * as ChordEarTraining from "./ui/Quizzes/Chords/ChordEarTraining";
 import * as ScaleEarTraining from "./ui/Quizzes/Scales/ScaleEarTraining";
 
-import * as IntroQuiz from "./ui/PianoTheory/IntroQuiz";
-import * as ScalesQuiz from "./ui/PianoTheory/ScalesQuiz";
+import * as IntroQuiz from "./ui/UnderstandingThePianoKeyboard/IntroQuiz";
+import * as ScalesQuiz from "./ui/UnderstandingThePianoKeyboard/ScalesQuiz";
 
 import * as PianoScaleDegrees from "./ui/Quizzes/Scales/PianoScaleDegrees";
 import * as PianoDiatonicChords from "./ui/Quizzes/Chords/PianoDiatonicChords";
