@@ -52,7 +52,7 @@ import * as ScaleChords from "./Quizzes/Chords/ScaleChords";
 import * as ScaleEarTraining from "./Quizzes/Scales/ScaleEarTraining";
 
 import { RhythmTapper } from "./Tools/RhythmTapper";
-import { NavLinkView } from "../NavLinkView";
+import { NavLinkView } from "../ui/NavLinkView";
 
 const NavSectionTitle: React.FunctionComponent<{ style?: any }> = props => <p style={Object.assign({ fontSize: "1.2em", fontWeight: "bold", textDecoration: "underline" }, props.style)}>{props.children}</p>;
 const NavSectionSubTitle: React.FunctionComponent<{ style?: any }> = props => <p style={Object.assign({ textDecoration: "underline" }, props.style)}>{props.children}</p>;

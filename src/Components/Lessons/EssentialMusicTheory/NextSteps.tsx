@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { SectionProps, SectionTitle, SubSectionTitle } from './EssentialMusicTheory';
-import { NavLinkView } from '../../../NavLinkView';
+import { NavLinkView } from '../../../ui/NavLinkView';
 
 export const NextStepsSection: React.FunctionComponent<SectionProps> = props => (
   <div>

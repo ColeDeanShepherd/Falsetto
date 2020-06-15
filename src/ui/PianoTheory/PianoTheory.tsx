@@ -2,62 +2,62 @@ import { History, UnregisterCallback } from "history";
 import * as React from "react";
 import * as QueryString from "query-string";
 
-import { flattenArrays } from '../lib/Core/ArrayUtils';
-import { Margin } from "../lib/Core/Margin";
-import { Vector2D } from "../lib/Core/Vector2D";
+import { flattenArrays } from '../../lib/Core/ArrayUtils';
+import { Margin } from "../../lib/Core/Margin";
+import { Vector2D } from "../../lib/Core/Vector2D";
 
-import { Pitch, getPitchRange } from '../lib/TheoryLib/Pitch';
-import { PitchLetter } from '../lib/TheoryLib/PitchLetter';
-import { ScaleType, Scale } from "../lib/TheoryLib/Scale";
-import { ChordType } from "../lib/TheoryLib/ChordType";
-import { Chord, getUriComponent } from "../lib/TheoryLib/Chord";
+import { Pitch, getPitchRange } from '../../lib/TheoryLib/Pitch';
+import { PitchLetter } from '../../lib/TheoryLib/PitchLetter';
+import { ScaleType, Scale } from "../../lib/TheoryLib/Scale";
+import { ChordType } from "../../lib/TheoryLib/ChordType";
+import { Chord, getUriComponent } from "../../lib/TheoryLib/Chord";
 
-import { DependencyInjector } from "../DependencyInjector";
+import { DependencyInjector } from "../../DependencyInjector";
 
-import { ActionBus, ActionHandler } from "../ActionBus";
-import { IAction } from "../IAction";
+import { ActionBus, ActionHandler } from "../../ActionBus";
+import { IAction } from "../../IAction";
 
 import { WebMidiInitializedAction, MidiDeviceConnectedAction, MidiDeviceDisconnectedAction,
-  MidiInputDeviceChangedAction, MidiInputDevicePitchRangeChangedAction } from "../AppMidi/Actions";
-  import { AppModel } from "../App/Model";
+  MidiInputDeviceChangedAction, MidiInputDevicePitchRangeChangedAction } from "../../AppMidi/Actions";
+  import { AppModel } from "../../App/Model";
 
 import { createStudyFlashCardSetComponent, StudyFlashCardsView } from "../StudyFlashCards/View";
 
-import { NavLinkView } from "../NavLinkView";
+import { NavLinkView } from "../../ui/NavLinkView";
 
-import { renderPianoKeyboardNoteNames, PianoKeyboardMetrics, PianoKeyboard } from "../Components/Utils/PianoKeyboard";
+import { renderPianoKeyboardNoteNames, PianoKeyboardMetrics, PianoKeyboard } from "../../Components/Utils/PianoKeyboard";
 
-import * as PianoNotes from "../Components/Quizzes/Notes/PianoNotes";
+import * as PianoNotes from "../../Components/Quizzes/Notes/PianoNotes";
 import * as ScalesQuiz from "./ScalesQuiz";
 import * as ChordsIntroQuiz from "./ChordsIntroQuiz";
 import * as DiatonicChordsQuiz from "./DiatonicChordsQuiz";
 import * as ChordProgressionsQuiz from "./ChordProgressionsQuiz";
 
-import { naturalPitches, accidentalPitches, allPitches } from "../Components/Quizzes/Notes/PianoNotes";
-import { PianoScaleFormulaDiagram } from "../Components/Utils/PianoScaleFormulaDiagram";
-import { PianoScaleDronePlayer } from '../Components/Utils/PianoScaleDronePlayer';
-import { MidiInputDeviceSelect } from "../Components/Utils/MidiInputDeviceSelect";
-import { fullPianoLowestPitch, fullPianoHighestPitch, fullPianoNumWhiteKeys } from '../Components/Utils/PianoUtils';
-import { MidiPianoRangeInput } from "../Components/Utils/MidiPianoRangeInput";
-import { LimitedWidthContentContainer } from "../Components/Utils/LimitedWidthContentContainer";
-import { NoteText } from '../Components/Utils/NoteText';
-import { PianoScaleMajorRelativeFormulaDiagram } from "../Components/Utils/PianoScaleMajorRelativeFormulaDiagram";
-import { PlayablePianoKeyboard } from "../Components/Utils/PlayablePianoKeyboard";
-import { ChordView } from '../Components/Utils/ChordView';
-import { ChordDiagram, ChordProgressionPlayer } from "../Components/Lessons/EssentialMusicTheory/ChordProgressions";
+import { naturalPitches, accidentalPitches, allPitches } from "../../Components/Quizzes/Notes/PianoNotes";
+import { PianoScaleFormulaDiagram } from "../../Components/Utils/PianoScaleFormulaDiagram";
+import { PianoScaleDronePlayer } from '../../Components/Utils/PianoScaleDronePlayer';
+import { MidiInputDeviceSelect } from "../../Components/Utils/MidiInputDeviceSelect";
+import { fullPianoLowestPitch, fullPianoHighestPitch, fullPianoNumWhiteKeys } from '../../Components/Utils/PianoUtils';
+import { MidiPianoRangeInput } from "../../Components/Utils/MidiPianoRangeInput";
+import { LimitedWidthContentContainer } from "../../Components/Utils/LimitedWidthContentContainer";
+import { NoteText } from '../../Components/Utils/NoteText';
+import { PianoScaleMajorRelativeFormulaDiagram } from "../../Components/Utils/PianoScaleMajorRelativeFormulaDiagram";
+import { PlayablePianoKeyboard } from "../../Components/Utils/PlayablePianoKeyboard";
+import { ChordView } from '../../Components/Utils/ChordView';
+import { ChordDiagram, ChordProgressionPlayer } from "../../Components/Lessons/EssentialMusicTheory/ChordProgressions";
 
 import "./Stylesheet.css"; // TODO: use a CSS preprocessor and split this into multiple files
-import { range } from '../lib/Core/MathUtils';
-import { Size2D } from '../lib/Core/Size2D';
-import { FlashCard } from "../FlashCard";
+import { range } from '../../lib/Core/MathUtils';
+import { Size2D } from '../../lib/Core/Size2D';
+import { FlashCard } from "../../FlashCard";
 import { majorScaleFormulaFlashCard, minorScaleFormulaFlashCard, createPressAllScaleNotesFlashCard } from './ScalesQuiz';
-import { FlashCardSet } from "../FlashCardSet";
-import { PressPianoKeysAllOctavesView } from "../Components/Utils/PressPianoKeysAllOctavesView";
+import { FlashCardSet } from "../../FlashCardSet";
+import { PressPianoKeysAllOctavesView } from "../../Components/Utils/PressPianoKeysAllOctavesView";
 import { fifthIntervalFlashCard } from "./ChordsIntroQuiz";
-import { renderNextButtonAnswerSelect, renderUserDeterminedCorrectnessAnswerSelect, renderStringAnswerSelect } from '../Components/Quizzes/Utils';
-import { ChordProgressionAnswerSelectView } from '../Components/Utils/ChordProgressionAnswerSelectView';
-import { Card } from "../ui/Card/Card";
-import { Button } from "../ui/Button/Button";
+import { renderNextButtonAnswerSelect, renderUserDeterminedCorrectnessAnswerSelect, renderStringAnswerSelect } from '../../Components/Quizzes/Utils';
+import { ChordProgressionAnswerSelectView } from '../../Components/Utils/ChordProgressionAnswerSelectView';
+import { Card } from "../../ui/Card/Card";
+import { Button } from "../../ui/Button/Button";
 
 export const maxPianoWidth = 1000;
 export const maxOneOctavePianoWidth = 400;

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { NavLinkView } from "../NavLinkView";
+import { NavLinkView } from "../ui/NavLinkView";
 
 import * as ScaleDegreeNames from "./Quizzes/Scales/ScaleDegreeNames";
 import * as ScaleNotes from "./Quizzes/Scales/ScaleFormulas";

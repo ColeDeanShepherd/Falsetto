@@ -8,7 +8,7 @@ import { PianoKeyboard, PianoKeyboardMetrics } from "../../Utils/PianoKeyboard";
 import { Pitch } from '../../../lib/TheoryLib/Pitch';
 import { PitchLetter } from '../../../lib/TheoryLib/PitchLetter';
 
-import { createStudyFlashCardSetComponent } from '../../../StudyFlashCards/View';
+import { createStudyFlashCardSetComponent } from '../../../ui/StudyFlashCards/View';
 
 import intervalQualityChart from "../../../img/interval-qualities.svg";
 
@@ -29,7 +29,7 @@ import _32ndRest from "../../../img/sheet-music/32nd-rest.svg";
 import { Vector2D } from '../../../lib/Core/Vector2D';
 import { Margin } from '../../../lib/Core/Margin';
 import { SectionProps, Term, SectionTitle, SubSectionTitle } from './EssentialMusicTheory';
-import { NavLinkView } from '../../../NavLinkView';
+import { NavLinkView } from '../../../ui/NavLinkView';
 import { NoteText } from "../../Utils/NoteText";
 
 const HalfStepsDiagram: React.FunctionComponent<{}> = props => {

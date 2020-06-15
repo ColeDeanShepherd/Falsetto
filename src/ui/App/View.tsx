@@ -2,11 +2,11 @@ import * as React from "react";
 import { Router } from "react-router-dom";
 import { History } from "history";
 
-import { DependencyInjector } from '../DependencyInjector';
-import { IAction } from '../IAction';
-import { ActionBus, ActionHandler } from '../ActionBus';
+import { DependencyInjector } from '../../DependencyInjector';
+import { IAction } from '../../IAction';
+import { ActionBus, ActionHandler } from '../../ActionBus';
 import { MainContainerView } from '../MainContainerView';
-import { Auth0UpdateAction } from '../Auth0Injector/Actions';
+import { Auth0UpdateAction } from '../../Auth0Injector/Actions';
 
 import "./Stylesheet.css"; // TODO: use a CSS preprocessor and split this into multiple files
 import { AppBarView } from "../AppBar/View";

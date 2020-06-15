@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Table, TableHead, TableBody, TableRow, TableCell } from "@material-ui/core";
 
-import { createStudyFlashCardSetComponent } from '../../../StudyFlashCards/View';
+import { createStudyFlashCardSetComponent } from '../../../ui/StudyFlashCards/View';
 
 import * as PianoChords from "../../Quizzes/Chords/PianoChords";
 
@@ -16,7 +16,7 @@ import { SectionProps, Term, SectionTitle, SubSectionTitle, defaultRootPitch } f
 import { Chord } from '../../../lib/TheoryLib/Chord';
 import { ChordTypeGroup } from "../../../lib/TheoryLib/ChordTypeGroup";
 import { ChordType } from "../../../lib/TheoryLib/ChordType";
-import { NavLinkView } from '../../../NavLinkView';
+import { NavLinkView } from '../../../ui/NavLinkView';
 import { NoteText } from "../../Utils/NoteText";
 
 export const ChordsSection: React.FunctionComponent<SectionProps> = props => (

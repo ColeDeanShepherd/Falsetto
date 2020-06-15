@@ -1,17 +1,15 @@
 import * as React from "react";
 import Close from '@material-ui/icons/Close';
 
-import { ActionBus, ActionHandler } from '../ActionBus';
-import { IAction } from '../IAction';
-import { NavigateAction } from '../App/Actions';
-//import { DependencyInjector } from '../DependencyInjector';
-//import { IUserManager } from "../UserManager";
-import { MainMenu } from '../Components/MainMenu';
-import { NavLinkView } from '../NavLinkView';
-import { Settings } from '../SettingsView';
+import { ActionBus, ActionHandler } from '../../ActionBus';
+import { IAction } from '../../IAction';
+import { NavigateAction } from '../../App/Actions';
+import { MainMenu } from '../../Components/MainMenu';
+import { NavLinkView } from '../../ui/NavLinkView';
+import { Settings } from '../../ui/SettingsView';
 
 import "./Stylesheet.css";
-import { Card } from "../ui/Card/Card";
+import { Card } from "../../ui/Card/Card";
 
 export interface IAppBarViewProps {}
 

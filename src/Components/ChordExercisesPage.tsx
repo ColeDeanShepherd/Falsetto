@@ -1,5 +1,5 @@
 import * as React from "react";
-import { NavLinkView } from "../NavLinkView";
+import { NavLinkView } from "../ui/NavLinkView";
 
 import * as ChordNotes from "./Quizzes/Chords/ChordNotes";
 import * as ChordFamilies from "./Quizzes/Chords/ChordFamilies";

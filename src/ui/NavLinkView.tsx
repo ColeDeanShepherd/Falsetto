@@ -1,6 +1,6 @@
 import * as React from "react";
-import { ActionBus } from './ActionBus';
-import { NavigateAction } from './App/Actions';
+import { ActionBus } from '../ActionBus';
+import { NavigateAction } from '../App/Actions';
 
 export interface INavLinkViewProps {
   to: string;

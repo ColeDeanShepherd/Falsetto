@@ -4,12 +4,12 @@ import * as PianoNotes from "../../Quizzes/Notes/PianoNotes";
 import * as GuitarNotes from "../../Quizzes/Notes/GuitarNotes";
 import * as SheetMusicNotes from "../../Quizzes/Sheet Music/SheetMusicNotes";
 
-import { createStudyFlashCardSetComponent } from '../../../StudyFlashCards/View';
+import { createStudyFlashCardSetComponent } from '../../../ui/StudyFlashCards/View';
 
 import * as NotesQuiz from "../../Quizzes/Notes/NotesQuiz";
 
 import { SectionTitle, Term, OctavesPlayer, SectionProps, SubSectionTitle } from './EssentialMusicTheory';
-import { NavLinkView } from "../../../NavLinkView";
+import { NavLinkView } from "../../../ui/NavLinkView";
 import { NoteText } from "../../Utils/NoteText";
 
 export const NotesSection: React.FunctionComponent<SectionProps> = props => (

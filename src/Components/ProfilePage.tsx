@@ -7,7 +7,7 @@ import { FlashCardId, FlashCard } from '../FlashCard';
 import { FlashCardSetStats } from '../Study/FlashCardSetStats';
 import { CircleProgressBar } from './CircleProgressBar';
 import { authDomain, authClientId } from '../Config';
-import { NavLinkView } from '../NavLinkView';
+import { NavLinkView } from '../ui/NavLinkView';
 import { DependencyInjector } from '../DependencyInjector';
 import { IUserManager } from '../UserManager';
 import { ActionBus } from '../ActionBus';

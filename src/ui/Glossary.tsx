@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Card } from "./ui/Card/Card";
+import { Card } from "./Card/Card";
 
 export class GlossaryEntry {
     public constructor(

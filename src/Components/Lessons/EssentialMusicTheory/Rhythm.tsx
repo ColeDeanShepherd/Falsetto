@@ -4,7 +4,7 @@ import { Table, TableHead, TableBody, TableRow, TableCell } from "@material-ui/c
 import { YouTubeVideo } from "../../Utils/YouTubeVideo";
 import { TimeSignature } from "../../../lib/TheoryLib/TimeSignature";
 
-import { createStudyFlashCardSetComponent } from '../../../StudyFlashCards/View';
+import { createStudyFlashCardSetComponent } from '../../../ui/StudyFlashCards/View';
 
 import { Metronome } from "../../Tools/Metronome";
 
@@ -35,7 +35,7 @@ import timeSignature34 from "../../../img/sheet-music/time-signature-3-4.svg";
 import { TimeSignaturePlayer } from '../../Tools/TimeSignaturePlayer';
 import { NoteValuePlayer } from '../../Tools/NoteValuePlayer';
 import { SectionProps, SectionTitle, Term, SubSectionTitle } from './EssentialMusicTheory';
-import { NavLinkView } from '../../../NavLinkView';
+import { NavLinkView } from '../../../ui/NavLinkView';
 import { NoteText } from "../../Utils/NoteText";
 
 const noteValueTableImgWidth = 24;

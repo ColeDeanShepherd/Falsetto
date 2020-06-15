@@ -24,7 +24,7 @@ import { polyfillWebAudio } from "./Audio/Audio";
 import { checkFlashCardSetIds, checkFlashCardIds } from './FlashCardGraph';
 
 import { AppModel } from './App/Model';
-import { AppView } from "./App/View";
+import { AppView } from "./ui/App/View";
 
 const analytics = DependencyInjector.instance.getRequiredService<IAnalytics>("IAnalytics");
 

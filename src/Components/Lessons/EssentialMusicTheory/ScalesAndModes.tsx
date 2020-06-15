@@ -4,7 +4,7 @@ import { Table, TableHead, TableBody, TableRow, TableCell } from "@material-ui/c
 import { Pitch } from "../../../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
 
-import { createStudyFlashCardSetComponent } from "../../../StudyFlashCards/View";
+import { createStudyFlashCardSetComponent } from "../../../ui/StudyFlashCards/View";
 
 import * as ScaleNotes from "../../Quizzes/Scales/ScaleFormulas";
 import * as PianoScales from "../../Quizzes/Scales/PianoScales";
@@ -17,7 +17,7 @@ import { ScaleType, Scale } from "../../../lib/TheoryLib/Scale";
 import { PianoScaleDronePlayer } from "../../Utils/PianoScaleDronePlayer";
 import { ScaleAudioPlayer } from "../../Utils/ScaleAudioPlayer";
 import { SectionProps, Term, SectionTitle, SubSectionTitle, defaultRootPitch } from "./EssentialMusicTheory";
-import { NavLinkView } from "../../../NavLinkView";
+import { NavLinkView } from "../../../ui/NavLinkView";
 import { PianoScaleFormulaDiagram } from "../../Utils/PianoScaleFormulaDiagram";
 import { NoteText } from "../../Utils/NoteText";
 

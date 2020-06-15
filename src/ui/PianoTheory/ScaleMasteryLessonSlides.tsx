@@ -4,20 +4,20 @@
 
 import * as React from "react";
 
-import {  Scale } from "../lib/TheoryLib/Scale";
+import {  Scale } from "../../lib/TheoryLib/Scale";
 
 import { createStudyFlashCardSetComponent } from "../StudyFlashCards/View";
 
-import { LimitedWidthContentContainer } from "../Components/Utils/LimitedWidthContentContainer";
-import { PianoScaleMajorRelativeFormulaDiagram } from "../Components/Utils/PianoScaleMajorRelativeFormulaDiagram";
+import { LimitedWidthContentContainer } from "../../Components/Utils/LimitedWidthContentContainer";
+import { PianoScaleMajorRelativeFormulaDiagram } from "../../Components/Utils/PianoScaleMajorRelativeFormulaDiagram";
 import { SlideGroup, Slide, maxTwoOctavePianoWidth } from "./PianoTheory";
-import * as PianoScaleDegrees from "../Components/Quizzes/Scales/PianoScaleDegrees";
-import * as PianoDiatonicChords from "../Components/Quizzes/Chords/PianoDiatonicChords";
-import { NoteText } from "../Components/Utils/NoteText";
-import { getRomanNumerals, unwrapMaybe } from '../lib/Core/Utils';
-import { range } from "../lib/Core/MathUtils";
-import { getChordExtensionTypeName } from '../lib/TheoryLib/ChordType';
-import { ChordView } from '../Components/Utils/ChordView';
+import * as PianoScaleDegrees from "../../Components/Quizzes/Scales/PianoScaleDegrees";
+import * as PianoDiatonicChords from "../../Components/Quizzes/Chords/PianoDiatonicChords";
+import { NoteText } from "../../Components/Utils/NoteText";
+import { getRomanNumerals, unwrapMaybe } from '../../lib/Core/Utils';
+import { range } from "../../lib/Core/MathUtils";
+import { getChordExtensionTypeName } from '../../lib/TheoryLib/ChordType';
+import { ChordView } from '../../Components/Utils/ChordView';
 
 export function createSlideGroups(scale: Scale): Array<SlideGroup> {
   const scaleName = `${scale.rootPitch.toString(/*includeOctaveNumber*/ false)} ${scale.type.name}`;

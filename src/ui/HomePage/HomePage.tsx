@@ -1,20 +1,21 @@
 import * as React from "react";
 
-import { Card } from "../ui/Card/Card";
+import { Card } from "../../ui/Card/Card";
 
-import { MainMenu } from '../Components/MainMenu';
-import { NavLinkView } from "../NavLinkView";
-import { PianoKeyboard, renderPianoKeyboardNoteNames } from "../Components/Utils/PianoKeyboard";
+import { MainMenu } from '../../Components/MainMenu';
+import { NavLinkView } from "../../ui/NavLinkView";
+import { PianoKeyboard, renderPianoKeyboardNoteNames } from "../../Components/Utils/PianoKeyboard";
 
-import { Size2D } from '../lib/Core/Size2D';
-import { Scale, ScaleType } from "../lib/TheoryLib/Scale";
-import { wrapInteger } from '../lib/Core/MathUtils';
-import { Pitch } from "../lib/TheoryLib/Pitch";
-import { PitchLetter } from "../lib/TheoryLib/PitchLetter";
+import { Size2D } from '../../lib/Core/Size2D';
+import { Scale, ScaleType } from "../../lib/TheoryLib/Scale";
+import { wrapInteger } from '../../lib/Core/MathUtils';
+import { Pitch } from "../../lib/TheoryLib/Pitch";
+import { PitchLetter } from "../../lib/TheoryLib/PitchLetter";
+
+import { Chord } from '../../lib/TheoryLib/Chord';
+import { ChordType } from '../../lib/TheoryLib/ChordType';
 
 import "./Stylesheet.css";
-import { Chord } from '../lib/TheoryLib/Chord';
-import { ChordType } from '../lib/TheoryLib/ChordType';
 
 // #region Topic Thumbnails
 

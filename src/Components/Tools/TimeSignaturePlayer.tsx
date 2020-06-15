@@ -6,7 +6,7 @@ import { TimeSignature } from "../../lib/TheoryLib/TimeSignature";
 import * as Audio from "../../Audio/Audio";
 import { VexFlowComponent } from "../Utils/VexFlowComponent";
 import { Rational } from "../../lib/Core/Rational";
-import { noteDurationToVexFlowStr } from '../../VexFlowUtils';
+import { noteDurationToVexFlowStr } from '../../ui/VexFlowUtils';
 import { RhythmPlayer, IRhythmNote } from '../../RhythmPlayer';
 import { SizeAwareContainer } from '../Utils/SizeAwareContainer';
 import { Size2D } from '../../lib/Core/Size2D';

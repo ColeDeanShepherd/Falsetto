@@ -8,7 +8,7 @@ import { PianoKeyboard, PianoKeyboardMetrics, renderPianoKeyboardKeyLabels } fro
 import { Pitch, getAccidentalString } from '../../../lib/TheoryLib/Pitch';
 import { PitchLetter } from '../../../lib/TheoryLib/PitchLetter';
 
-import { createStudyFlashCardSetComponent } from '../../../StudyFlashCards/View';
+import { createStudyFlashCardSetComponent } from '../../../ui/StudyFlashCards/View';
 
 import { Vector2D } from '../../../lib/Core/Vector2D';
 import { Margin } from '../../../lib/Core/Margin';
@@ -18,7 +18,7 @@ import { ChordType } from "../../../lib/TheoryLib/ChordType";
 import { PitchesAudioPlayer } from '../../Utils/PitchesAudioPlayer';
 import { SectionProps, Term, SectionTitle, SubSectionTitle, renderIntervalLabel, renderPianoKeyLabel } from './EssentialMusicTheory';
 
-import { NavLinkView } from "../../../NavLinkView";
+import { NavLinkView } from "../../../ui/NavLinkView";
 
 import * as ChordProgressionsQuiz from "../../Quizzes/Chords/ChordProgressionsQuiz";
 import * as ChordHarmonicFunctions from "../../Quizzes/Chords/ChordFamilies";

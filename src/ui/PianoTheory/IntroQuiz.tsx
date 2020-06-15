@@ -1,6 +1,6 @@
-import * as FlashCardUtils from "../Components/Quizzes/Utils";
-import { FlashCard } from "../FlashCard";
-import { FlashCardSet } from "../FlashCardSet";
+import * as FlashCardUtils from "../../Components/Quizzes/Utils";
+import { FlashCard } from "../../FlashCard";
+import { FlashCardSet } from "../../FlashCardSet";
 
 const flashCardSetId = "ptIntroQuiz";
 

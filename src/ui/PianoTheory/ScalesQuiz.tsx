@@ -1,17 +1,17 @@
 import * as React from "react";
 
-import * as FlashCardUtils from "../Components/Quizzes/Utils";
-import { FlashCard, FlashCardSide } from "../FlashCard";
-import { FlashCardSet } from "../FlashCardSet";
-import { renderUserDeterminedCorrectnessAnswerSelect } from '../Components/Quizzes/Utils';
-import { ScaleFormulaAnswerSelect } from "../Components/Utils/ScaleFormulaAnswerSelect";
-import { MajorScaleRelativeScaleFormulaAnswerSelect } from '../Components/Utils/MajorScaleRelativeScaleFormulaAnswerSelect';
-import { PianoKeyboard } from "../Components/Utils/PianoKeyboard";
-import { Pitch, getPitchRange } from '../lib/TheoryLib/Pitch';
-import { PitchLetter } from "../lib/TheoryLib/PitchLetter";
-import { Scale, ScaleType } from "../lib/TheoryLib/Scale";
-import { PianoKeysAnswerSelect } from "../Components/Utils/PianoKeysAnswerSelect";
-import { PianoScaleNotesAnswerSelect } from '../Components/Utils/PianoScaleNotesAnswerSelect';
+import * as FlashCardUtils from "../../Components/Quizzes/Utils";
+import { FlashCard, FlashCardSide } from "../../FlashCard";
+import { FlashCardSet } from "../../FlashCardSet";
+import { renderUserDeterminedCorrectnessAnswerSelect } from '../../Components/Quizzes/Utils';
+import { ScaleFormulaAnswerSelect } from "../../Components/Utils/ScaleFormulaAnswerSelect";
+import { MajorScaleRelativeScaleFormulaAnswerSelect } from '../../Components/Utils/MajorScaleRelativeScaleFormulaAnswerSelect';
+import { PianoKeyboard } from "../../Components/Utils/PianoKeyboard";
+import { Pitch, getPitchRange } from '../../lib/TheoryLib/Pitch';
+import { PitchLetter } from "../../lib/TheoryLib/PitchLetter";
+import { Scale, ScaleType } from "../../lib/TheoryLib/Scale";
+import { PianoKeysAnswerSelect } from "../../Components/Utils/PianoKeysAnswerSelect";
+import { PianoScaleNotesAnswerSelect } from '../../Components/Utils/PianoScaleNotesAnswerSelect';
 
 const flashCardSetId = "ptScalesQuiz";
 

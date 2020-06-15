@@ -1,19 +1,19 @@
 import * as React from "react";
 
-import { areArraysEqual } from "../lib/Core/ArrayUtils";
-import { FlashCard, FlashCardId } from "../FlashCard";
-import { renderFlashCardSide } from "../Components/FlashCard";
-import { DefaultFlashCardMultiSelect } from "../Components/Utils/DefaultFlashCardMultiSelect";
-import { FlashCardSet, FlashCardLevel } from '../FlashCardSet';
-import { Size2D } from '../lib/Core/Size2D';
+import { areArraysEqual } from "../../lib/Core/ArrayUtils";
+import { FlashCard, FlashCardId } from "../../FlashCard";
+import { renderFlashCardSide } from "../../Components/FlashCard";
+import { DefaultFlashCardMultiSelect } from "../../Components/Utils/DefaultFlashCardMultiSelect";
+import { FlashCardSet, FlashCardLevel } from '../../FlashCardSet';
+import { Size2D } from '../../lib/Core/Size2D';
 import { NavLinkView } from '../NavLinkView';
-import { StudyFlashCardsModel, getPercentToNextLevel } from './Model';
-import { unwrapValueOrUndefined } from '../lib/Core/Utils';
-import { LevelProgressBarView } from "../Components/Utils/LevelProgressBarView";
-import { WatermarkView } from "../Components/Utils/WatermarkView";
-import { QuizStudyAlgorithm } from '../Study/StudyAlgorithm';
-import { Card } from "../ui/Card/Card";
-import { Button } from "../ui/Button/Button";
+import { StudyFlashCardsModel, getPercentToNextLevel } from '../../StudyFlashCards/Model';
+import { unwrapValueOrUndefined } from '../../lib/Core/Utils';
+import { LevelProgressBarView } from "../../Components/Utils/LevelProgressBarView";
+import { WatermarkView } from "../../Components/Utils/WatermarkView";
+import { QuizStudyAlgorithm } from '../../Study/StudyAlgorithm';
+import { Card } from "../Card/Card";
+import { Button } from "../Button/Button";
 
 export function createStudyFlashCardSetComponent(
   flashCardSet: FlashCardSet, isEmbedded: boolean, hideMoreInfoUri: boolean,

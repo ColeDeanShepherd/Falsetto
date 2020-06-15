@@ -1,13 +1,13 @@
 import * as React from "react";
 
 import { SlideGroup, Slide } from "./PianoTheory";
-import { ChordType, getUriComponent as getChordTypeUriComponent } from '../lib/TheoryLib/ChordType';
-import { ChordView } from '../Components/Utils/ChordView';
-import { getValidKeyPitches } from '../lib/TheoryLib/Key';
-import { Chord, getUriComponent as getChordUriComponent } from "../lib/TheoryLib/Chord";
-import { LimitedWidthContentContainer } from "../Components/Utils/LimitedWidthContentContainer";
+import { ChordType, getUriComponent as getChordTypeUriComponent } from '../../lib/TheoryLib/ChordType';
+import { ChordView } from '../../Components/Utils/ChordView';
+import { getValidKeyPitches } from '../../lib/TheoryLib/Key';
+import { Chord, getUriComponent as getChordUriComponent } from "../../lib/TheoryLib/Chord";
+import { LimitedWidthContentContainer } from "../../Components/Utils/LimitedWidthContentContainer";
 import { createStudyFlashCardSetComponent } from "../StudyFlashCards/View";
-import * as PianoChords from "../Components/Quizzes/Chords/PianoChords";
+import * as PianoChords from "../../Components/Quizzes/Chords/PianoChords";
 
 export function createSlideGroups(chordType: ChordType): Array<SlideGroup> {
   const chordTypeName = chordType.name;

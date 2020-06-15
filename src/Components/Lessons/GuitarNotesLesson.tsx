@@ -10,9 +10,9 @@ import { standard6StringGuitarTuning } from "../Utils/StringedInstrumentTuning"
 import * as GuitarNotes from "../Quizzes/Notes/GuitarNotes";
 import { Pitch } from '../../lib/TheoryLib/Pitch';
 import { PitchLetter } from '../../lib/TheoryLib/PitchLetter';
-import { createStudyFlashCardSetComponent } from '../../StudyFlashCards/View';
+import { createStudyFlashCardSetComponent } from '../../ui/StudyFlashCards/View';
 import { StringedInstrumentNote } from '../../lib/TheoryLib/StringedInstrumentNote';
-import { NavLinkView } from '../../NavLinkView';
+import { NavLinkView } from '../../ui/NavLinkView';
 import { flattenArrays } from '../../lib/Core/ArrayUtils';
 import { Card } from "../../ui/Card/Card";
 

@@ -4,7 +4,7 @@ import * as Vex from "vexflow";
 import { IRhythmNote, RhythmPlayer } from "../../RhythmPlayer";
 import { VexFlowComponent } from "../Utils/VexFlowComponent";
 import { Rational } from "../../lib/Core/Rational";
-import { noteDurationToVexFlowStr } from '../../VexFlowUtils';
+import { noteDurationToVexFlowStr } from '../../ui/VexFlowUtils';
 import { TimeSignature } from '../../lib/TheoryLib/TimeSignature';
 import { Size2D } from '../../lib/Core/Size2D';
 import { randomElement, randomBoolean } from '../../lib/Core/Random';

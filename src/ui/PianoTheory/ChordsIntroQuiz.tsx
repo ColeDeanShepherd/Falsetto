@@ -1,10 +1,10 @@
 import * as React from "react";
 
-import * as FlashCardUtils from "../Components/Quizzes/Utils";
-import { FlashCard } from "../FlashCard";
-import { FlashCardSet } from "../FlashCardSet";
-import { renderUserDeterminedCorrectnessAnswerSelect, renderStringAnswerSelect } from '../Components/Quizzes/Utils';
-import { MajorScaleRelativeFormulaAnswerSelect } from "../Components/Utils/MajorScaleRelativeFormulaAnswerSelect";
+import * as FlashCardUtils from "../../Components/Quizzes/Utils";
+import { FlashCard } from "../../FlashCard";
+import { FlashCardSet } from "../../FlashCardSet";
+import { renderUserDeterminedCorrectnessAnswerSelect, renderStringAnswerSelect } from '../../Components/Quizzes/Utils';
+import { MajorScaleRelativeFormulaAnswerSelect } from "../../Components/Utils/MajorScaleRelativeFormulaAnswerSelect";
 
 const flashCardSetId = "ptChordsIntroQuiz";
 

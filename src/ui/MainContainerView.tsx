@@ -1,10 +1,9 @@
 import * as React from "react";
 
 import { RoutesView } from './Routes/View';
-import { FooterView } from "./Footer/View";
-import { ActionHandler, ActionBus } from './ActionBus';
-import { IAction } from './IAction';
-import { NavigateAction } from './App/Actions';
+import { ActionHandler, ActionBus } from '../ActionBus';
+import { IAction } from '../IAction';
+import { NavigateAction } from '../App/Actions';
 
 export class MainContainerView extends React.Component<{}, {}> {
   public constructor(props: {}) {
