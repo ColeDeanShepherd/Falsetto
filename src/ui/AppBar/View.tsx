@@ -4,7 +4,7 @@ import Close from '@material-ui/icons/Close';
 import { ActionBus, ActionHandler } from '../../ActionBus';
 import { IAction } from '../../IAction';
 import { NavigateAction } from '../../App/Actions';
-import { MainMenu } from '../../Components/MainMenu';
+import { MainMenu } from '../../ui/MainMenu';
 import { NavLinkView } from '../../ui/NavLinkView';
 import { Settings } from '../../ui/SettingsView';
 

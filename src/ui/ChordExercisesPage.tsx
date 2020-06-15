@@ -1,21 +1,21 @@
 import * as React from "react";
-import { NavLinkView } from "../ui/NavLinkView";
+import { NavLinkView } from "./NavLinkView";
 
-import * as ChordNotes from "./Quizzes/Chords/ChordNotes";
-import * as ChordFamilies from "./Quizzes/Chords/ChordFamilies";
-import * as AvailableChordTensions from "./Quizzes/Chords/AvailableChordTensions";
-import * as DiatonicTriads from "./Quizzes/Chords/DiatonicTriads";
-import * as DiatonicSeventhChords from "./Quizzes/Chords/DiatonicSeventhChords";
+import * as ChordNotes from "../ui/Quizzes/Chords/ChordNotes";
+import * as ChordFamilies from "../ui/Quizzes/Chords/ChordFamilies";
+import * as AvailableChordTensions from "../ui/Quizzes/Chords/AvailableChordTensions";
+import * as DiatonicTriads from "../ui/Quizzes/Chords/DiatonicTriads";
+import * as DiatonicSeventhChords from "../ui/Quizzes/Chords/DiatonicSeventhChords";
 import * as RandomChordGenerator from "./Tools/RandomChordGenerator";
-import * as PianoChords from "./Quizzes/Chords/PianoChords";
-import * as GuitarChords from "./Quizzes/Chords/GuitarChords";
-import * as SheetMusicChordRecognition from "./Quizzes/Sheet Music/SheetMusicChordRecognition";
-import * as ChordEarTraining from "./Quizzes/Chords/ChordEarTraining";
+import * as PianoChords from "../ui/Quizzes/Chords/PianoChords";
+import * as GuitarChords from "../ui/Quizzes/Chords/GuitarChords";
+import * as SheetMusicChordRecognition from "../ui/Quizzes/Sheet Music/SheetMusicChordRecognition";
+import * as ChordEarTraining from "../ui/Quizzes/Chords/ChordEarTraining";
 
 import { ChordTypeGroup } from '../lib/TheoryLib/ChordTypeGroup';
 import { ChordType, getUriComponent } from "../lib/TheoryLib/ChordType";
 import { ChordTypeSelectView } from "./Utils/ChordTypeSelectView";
-import { Card } from "../ui/Card/Card";
+import { Card } from "./Card/Card";
 
 export interface IChordExercisesProps {}
 

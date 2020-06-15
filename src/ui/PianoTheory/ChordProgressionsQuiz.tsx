@@ -1,9 +1,9 @@
 import * as React from "react";
 
-import * as FlashCardUtils from "../../Components/Quizzes/Utils";
+import * as FlashCardUtils from "../../ui/Quizzes/Utils";
 import { FlashCard } from "../../FlashCard";
 import { FlashCardSet } from "../../FlashCardSet";
-import { renderUserDeterminedCorrectnessAnswerSelect } from '../../Components/Quizzes/Utils';
+import { renderUserDeterminedCorrectnessAnswerSelect } from '../../ui/Quizzes/Utils';
 
 const flashCardSetId = "ptScalesQuiz";
 

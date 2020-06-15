@@ -1,7 +1,7 @@
 import * as React from "react";
 
-import { PianoKeyboard } from "../../Components/Utils/PianoKeyboard";
-import { fullPianoLowestPitch, fullPianoHighestPitch } from "../../Components/Utils/PianoUtils";
+import { PianoKeyboard } from "../../ui/Utils/PianoKeyboard";
+import { fullPianoLowestPitch, fullPianoHighestPitch } from "../../ui/Utils/PianoUtils";
 import { AppModel } from "../../App/Model";
 import { ActionBus, ActionHandler } from "../../ActionBus";
 import { MidiInputDevicePitchRangeChangedAction, WebMidiInitializedAction, MidiDeviceConnectedAction, MidiDeviceDisconnectedAction, MidiInputDeviceChangedAction } from '../../AppMidi/Actions';

@@ -1,14 +1,14 @@
 import * as React from "react";
 
-import * as FlashCardUtils from "../../Components/Quizzes/Utils";
+import * as FlashCardUtils from "../../ui/Quizzes/Utils";
 import { FlashCard } from "../../FlashCard";
 import { FlashCardSet } from "../../FlashCardSet";
-import { renderUserDeterminedCorrectnessAnswerSelect, renderStringAnswerSelect } from '../../Components/Quizzes/Utils';
+import { renderUserDeterminedCorrectnessAnswerSelect, renderStringAnswerSelect } from '../../ui/Quizzes/Utils';
 import { Scale, ScaleType } from '../../lib/TheoryLib/Scale';
 import { Pitch } from "../../lib/TheoryLib/Pitch";
 import { PitchLetter } from '../../lib/TheoryLib/PitchLetter';
 import { getOrdinalNumeral } from "../../lib/Core/Utils";
-import { createChordNotesFlashCard } from "../../Components/Quizzes/Chords/PianoDiatonicChords";
+import { createChordNotesFlashCard } from "../../ui/Quizzes/Chords/PianoDiatonicChords";
 
 const flashCardSetId = "ptDiatonicChordsQuiz";
 const diatonicTriadTypeStrings = ["Major", "Minor", "Diminished"];

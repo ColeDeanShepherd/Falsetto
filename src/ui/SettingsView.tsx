@@ -1,7 +1,7 @@
 import * as React from "react";
 
-import { MidiInputDeviceSelect } from '../Components/Utils/MidiInputDeviceSelect';
-import { MidiPianoRangeInput } from "../Components/Utils/MidiPianoRangeInput";
+import { MidiInputDeviceSelect } from '../ui/Utils/MidiInputDeviceSelect';
+import { MidiPianoRangeInput } from "../ui/Utils/MidiPianoRangeInput";
 
 export class Settings extends React.Component<{}, {}> {
   public render() {

@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { FlashCard, FlashCardSideRenderFn, FlashCardId } from "../../FlashCard";
-import { callFlashCardSideRenderFn } from "../../Components/FlashCard";
+import { callFlashCardSideRenderFn } from "../../ui/FlashCard";
 import { AnswerDifficulty } from "../../Study/AnswerDifficulty";
 import { FlashCardStudySessionInfo } from '../../FlashCardSet';
 import { Size2D } from '../../lib/Core/Size2D';

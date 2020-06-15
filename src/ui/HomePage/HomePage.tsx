@@ -2,9 +2,9 @@ import * as React from "react";
 
 import { Card } from "../../ui/Card/Card";
 
-import { MainMenu } from '../../Components/MainMenu';
+import { MainMenu } from '../../ui/MainMenu';
 import { NavLinkView } from "../../ui/NavLinkView";
-import { PianoKeyboard, renderPianoKeyboardNoteNames } from "../../Components/Utils/PianoKeyboard";
+import { PianoKeyboard, renderPianoKeyboardNoteNames } from "../../ui/Utils/PianoKeyboard";
 
 import { Size2D } from '../../lib/Core/Size2D';
 import { Scale, ScaleType } from "../../lib/TheoryLib/Scale";

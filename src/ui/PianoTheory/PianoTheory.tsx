@@ -25,26 +25,26 @@ import { createStudyFlashCardSetComponent, StudyFlashCardsView } from "../StudyF
 
 import { NavLinkView } from "../../ui/NavLinkView";
 
-import { renderPianoKeyboardNoteNames, PianoKeyboardMetrics, PianoKeyboard } from "../../Components/Utils/PianoKeyboard";
+import { renderPianoKeyboardNoteNames, PianoKeyboardMetrics, PianoKeyboard } from "../../ui/Utils/PianoKeyboard";
 
-import * as PianoNotes from "../../Components/Quizzes/Notes/PianoNotes";
+import * as PianoNotes from "../../ui/Quizzes/Notes/PianoNotes";
 import * as ScalesQuiz from "./ScalesQuiz";
 import * as ChordsIntroQuiz from "./ChordsIntroQuiz";
 import * as DiatonicChordsQuiz from "./DiatonicChordsQuiz";
 import * as ChordProgressionsQuiz from "./ChordProgressionsQuiz";
 
-import { naturalPitches, accidentalPitches, allPitches } from "../../Components/Quizzes/Notes/PianoNotes";
-import { PianoScaleFormulaDiagram } from "../../Components/Utils/PianoScaleFormulaDiagram";
-import { PianoScaleDronePlayer } from '../../Components/Utils/PianoScaleDronePlayer';
-import { MidiInputDeviceSelect } from "../../Components/Utils/MidiInputDeviceSelect";
-import { fullPianoLowestPitch, fullPianoHighestPitch, fullPianoNumWhiteKeys } from '../../Components/Utils/PianoUtils';
-import { MidiPianoRangeInput } from "../../Components/Utils/MidiPianoRangeInput";
-import { LimitedWidthContentContainer } from "../../Components/Utils/LimitedWidthContentContainer";
-import { NoteText } from '../../Components/Utils/NoteText';
-import { PianoScaleMajorRelativeFormulaDiagram } from "../../Components/Utils/PianoScaleMajorRelativeFormulaDiagram";
-import { PlayablePianoKeyboard } from "../../Components/Utils/PlayablePianoKeyboard";
-import { ChordView } from '../../Components/Utils/ChordView';
-import { ChordDiagram, ChordProgressionPlayer } from "../../Components/Lessons/EssentialMusicTheory/ChordProgressions";
+import { naturalPitches, accidentalPitches, allPitches } from "../../ui/Quizzes/Notes/PianoNotes";
+import { PianoScaleFormulaDiagram } from "../../ui/Utils/PianoScaleFormulaDiagram";
+import { PianoScaleDronePlayer } from '../../ui/Utils/PianoScaleDronePlayer';
+import { MidiInputDeviceSelect } from "../../ui/Utils/MidiInputDeviceSelect";
+import { fullPianoLowestPitch, fullPianoHighestPitch, fullPianoNumWhiteKeys } from '../../ui/Utils/PianoUtils';
+import { MidiPianoRangeInput } from "../../ui/Utils/MidiPianoRangeInput";
+import { LimitedWidthContentContainer } from "../../ui/Utils/LimitedWidthContentContainer";
+import { NoteText } from '../../ui/Utils/NoteText';
+import { PianoScaleMajorRelativeFormulaDiagram } from "../../ui/Utils/PianoScaleMajorRelativeFormulaDiagram";
+import { PlayablePianoKeyboard } from "../../ui/Utils/PlayablePianoKeyboard";
+import { ChordView } from '../../ui/Utils/ChordView';
+import { ChordDiagram, ChordProgressionPlayer } from "../../ui/Lessons/EssentialMusicTheory/ChordProgressions";
 
 import "./Stylesheet.css"; // TODO: use a CSS preprocessor and split this into multiple files
 import { range } from '../../lib/Core/MathUtils';
@@ -52,10 +52,10 @@ import { Size2D } from '../../lib/Core/Size2D';
 import { FlashCard } from "../../FlashCard";
 import { majorScaleFormulaFlashCard, minorScaleFormulaFlashCard, createPressAllScaleNotesFlashCard } from './ScalesQuiz';
 import { FlashCardSet } from "../../FlashCardSet";
-import { PressPianoKeysAllOctavesView } from "../../Components/Utils/PressPianoKeysAllOctavesView";
+import { PressPianoKeysAllOctavesView } from "../../ui/Utils/PressPianoKeysAllOctavesView";
 import { fifthIntervalFlashCard } from "./ChordsIntroQuiz";
-import { renderNextButtonAnswerSelect, renderUserDeterminedCorrectnessAnswerSelect, renderStringAnswerSelect } from '../../Components/Quizzes/Utils';
-import { ChordProgressionAnswerSelectView } from '../../Components/Utils/ChordProgressionAnswerSelectView';
+import { renderNextButtonAnswerSelect, renderUserDeterminedCorrectnessAnswerSelect, renderStringAnswerSelect } from '../../ui/Quizzes/Utils';
+import { ChordProgressionAnswerSelectView } from '../../ui/Utils/ChordProgressionAnswerSelectView';
 import { Card } from "../../ui/Card/Card";
 import { Button } from "../../ui/Button/Button";
 

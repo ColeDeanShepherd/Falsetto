@@ -1,6 +1,6 @@
 import { Size2D } from './lib/Core/Size2D';
 import { RenderAnswerSelectFunc } from './FlashCardSet';
-import { renderUserDeterminedCorrectnessAnswerSelect, renderNextButtonAnswerSelect } from "./Components/Quizzes/Utils";
+import { renderUserDeterminedCorrectnessAnswerSelect, renderNextButtonAnswerSelect } from "./ui/Quizzes/Utils";
 
 export type FlashCardId = string;
 

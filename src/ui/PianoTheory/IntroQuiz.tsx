@@ -1,4 +1,4 @@
-import * as FlashCardUtils from "../../Components/Quizzes/Utils";
+import * as FlashCardUtils from "../../ui/Quizzes/Utils";
 import { FlashCard } from "../../FlashCard";
 import { FlashCardSet } from "../../FlashCardSet";
 
