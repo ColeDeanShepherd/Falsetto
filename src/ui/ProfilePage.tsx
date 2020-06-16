@@ -2,16 +2,13 @@ import * as React from "react";
 
 import { FlashCardAnswer, IDatabase } from '../Database';
 import { FlashCardSet, FlashCardLevel } from '../FlashCardSet';
-import { flashCardSets, groupedFlashCardSets } from '../FlashCardGraph';
+import { groupedFlashCardSets } from '../FlashCardGraph';
 import { FlashCardId, FlashCard } from '../FlashCard';
 import { FlashCardSetStats } from '../Study/FlashCardSetStats';
 import { CircleProgressBar } from './CircleProgressBar';
-import { authDomain, authClientId } from '../Config';
 import { NavLinkView } from '../ui/NavLinkView';
 import { DependencyInjector } from '../DependencyInjector';
 import { IUserManager } from '../UserManager';
-import { ActionBus } from '../ActionBus';
-import { NavigateAction } from '../App/Actions';
 import { getFlashCardSetStatsFromAnswers, getPercentToNextLevel, getCurrentFlashCardLevel } from '../StudyFlashCards/Model';
 import { mean } from '../lib/Core/ArrayUtils';
 import { Card } from "../ui/Card/Card";
@@ -143,29 +140,7 @@ export class ProfilePage extends React.Component<{}, IProfilePageState> {
       return null;
     }
   }
+
   private async initiatePasswordReset(): Promise<void> {
-    const user = this.userManager.getCurrentUser();
-    if (!user) {
-      return Promise.reject("Could not get the current user.");
-    }
-
-    const requestBody = {
-      client_id: authClientId,
-      email: user.emailAddress,
-      connection: "Username-Password-Authentication"
-    };
-    const requestInit: RequestInit = {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(requestBody)
-    };
-    const response = await fetch(`https://${authDomain}/dbconnections/change_password`, requestInit);
-    if (!response.ok) {
-      return Promise.reject(`Failed initiating password reset. ${response.statusText}`);
-    }
-
-    ActionBus.instance.dispatch(new NavigateAction("/reset-password"));
   }
 }

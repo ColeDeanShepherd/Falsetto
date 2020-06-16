@@ -1,5 +1,7 @@
 import * as React from "react";
+
 import Close from '@material-ui/icons/Close';
+import PersonIcon from '@material-ui/icons/Person';
 
 import { ActionBus, ActionHandler } from '../../ActionBus';
 import { IAction } from '../../IAction';
@@ -61,6 +63,7 @@ export class AppBarView extends React.Component<IAppBarViewProps, IAppBarViewSta
           </NavLinkView>
           <i onClick={event => this.toggleMenu()} className="material-icons button cursor-pointer no-select">menu</i>
           <i onClick={event => this.toggleSettings()} className="material-icons button cursor-pointer no-select">settings</i>
+          <i onClick={event => this.onUserPress()} className="material-icons button cursor-pointer no-select">person_icon</i>
         </div>
         {isMenuContainerVisible
           ? (
@@ -128,5 +131,9 @@ export class AppBarView extends React.Component<IAppBarViewProps, IAppBarViewSta
       // hide menu if the settings are visible
       isMenuVisible: newIsSettingsVisible ? false : isMenuVisible
     });
+  }
+
+  private onUserPress() {
+    ActionBus.instance.dispatch(new NavigateAction("/login"));
   }
 }
