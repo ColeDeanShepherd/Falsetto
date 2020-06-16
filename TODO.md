@@ -3,6 +3,8 @@
 ## Pomodoro
 ## High Priority
 * Chord progressions content improvements
+* Search bar?
+* Hide "Learn More" links?
 
 * Fix user-determined answers in mini quizzes
 * improve slide URLs
@@ -13,6 +15,7 @@
 * Add account system
 * improve self-paced pages
 * conclusion and next steps
+* Make sure analytics work
 
 * Make sure everything in essential music theory is also in new course
 * Understanding the Piano Keyboard
