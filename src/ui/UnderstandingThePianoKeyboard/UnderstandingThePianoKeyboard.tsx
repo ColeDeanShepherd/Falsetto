@@ -2007,8 +2007,23 @@ export const pianoTheorySlideGroups = [
     )),
   ]),
   
-  new SlideGroup("Coming Soon", [
-    new Slide("coming-soon", () => <h3>More coming soon!</h3>)
+  new SlideGroup("Conclusion", [
+    new Slide("next-steps", () => (
+      <div>
+        <h2>Conclusion &amp; Next Steps</h2>
+        <p>We have come to the end of the "Understanding the Piano Keyboard" course!</p>
+        <p>With the essentials of music theory under your belt, you should now have a better understanding of music as a whole, and of the piano keyboard.</p>
+        <p>We encourage you to continue your study of scales and chords with the <NavLinkView to="/scale-exercises" openNewTab={true}>Self-Paced Scale Mastery</NavLinkView> and <NavLinkView to="/chord-exercises" openNewTab={true}>Self-Paced Chord Mastery</NavLinkView> sections of this website, and to experiment with your knowledge to come up with original ideas and develop your musical voice.</p>
+        <p>You are also equipped to tackle more advanced and specialized music theory in the musical genres that interest you, and we have included some useful links to other websites below to continue your studies in whatever direction you choose:</p>
+        <ul>
+          <li><a href="https://www.youtube.com/channel/UCJquYOG5EL82sKTfH9aMA9Q" target="_blank">Rick Beato's YouTube Channel</a></li>
+          <li><a href="https://www.youtube.com/user/MangoldProject" target="_blank">Manigold Project YouTube Channel</a></li>
+          <li><a href="http://tobyrush.com/theorypages/index.html" target="_blank">Toby Rush's Music Theory Posters</a></li>
+          <li><a href="http://openmusictheory.com/contents.html" target="_blank">Open Music Theory</a></li>
+          <li><a href="http://www.thejazzpianosite.com/jazz-piano-lessons/" target="_blank">www.thejazzpianosite.com</a> (and accompanying <a href="https://www.youtube.com/channel/UCk24OnGLcP5XlTBjZ9WBWvw" target="_black">YouTube channel</a>)</li>
+        </ul>
+      </div>
+    ))
   ])
 ];
 
