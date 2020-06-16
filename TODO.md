@@ -6,12 +6,12 @@
 * Search bar?
 * Hide "Learn More" links?
 
+* roman numerals quiz
 * Fix user-determined answers in mini quizzes
 * improve slide URLs
 * "Quiz" -> "Exercise"
 * scale & chord capitalization
 * Add degree #'s to self paced chord mastery
-* Improve dropdown menus
 * Add account system
 * improve self-paced pages
 * conclusion and next steps
@@ -89,7 +89,6 @@
     * Chord "Degrees"
     * Chord progressions
 ## Low Priority
-* Re-enable main menu
 * Understanding the Piano Keyboard
   * Piano scale drone player release stop playing?
   * Pressing the correct note doesn't play the sound...

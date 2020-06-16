@@ -1645,22 +1645,25 @@ export const pianoTheorySlideGroups = [
       <div>
         <p>Chord progressions are generally built with <strong>diatonic chords</strong> (chords build solely with notes in a particular scale).</p>
         <p>The chord progression we just saw, for example (<strong>D Minor</strong>, <strong>G7</strong>, <strong>C Major</strong>), consists solely of chords diatonic to the <strong>C Major scale</strong>.</p>
-        <p>As we've learned, diatonic chords have root notes associated with scale degree. We can take advantage of this and represent diatonic chord progressions in a compact, scale-independent way with <strong>roman numeral notation</strong>.</p>
+        <p>As we've learned, diatonic chords have root notes associated with scale degree. We can take advantage of this and represent diatonic chord progressions in a compact, scale-independent way with <strong>roman numeral notation</strong>, which uses upper-case &amp; lower-case roman numerals (an alternative way of writing numbers), with added symbols, to represent diatonic chords built on scale degrees.</p>
         <br />
-        <p><strong>Roman numeral notation</strong> uses upper-case &amp; lower-case roman numerals (an alternative way of writing numbers), with added symbols, to represent diatonic chords built on scale degrees.</p>
         <p>If you are unfamiliar with roman numerals, here are the roman numerals from 1 to 7:</p>
-        <table style={{ margin: "0 auto", fontWeight: "bold" }}>
+        <table className="table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>1</th>
+              <th>2</th>
+              <th>3</th>
+              <th>4</th>
+              <th>5</th>
+              <th>6</th>
+              <th>7</th>
+            </tr>
+          </thead>
           <tbody>
             <tr>
-              <td>1</td>
-              <td>2</td>
-              <td>3</td>
-              <td>4</td>
-              <td>5</td>
-              <td>6</td>
-              <td>7</td>
-            </tr>
-            <tr>
+              <td>upper-case</td>
               <td>I</td>
               <td>II</td>
               <td>III</td>
@@ -1669,17 +1672,34 @@ export const pianoTheorySlideGroups = [
               <td>VI</td>
               <td>VII</td>
             </tr>
+            <tr>
+              <td>lower-case</td>
+              <td>i</td>
+              <td>ii</td>
+              <td>iii</td>
+              <td>iv</td>
+              <td>v</td>
+              <td>vi</td>
+              <td>vii</td>
+            </tr>
           </tbody>
         </table>
         <br />
-
+      </div>
+    )),
+    new Slide("roman-numeral-notation-2", () => (
+      <div>
         <p>In <strong>roman numeral notation</strong>, the chord progression (<strong>D Minor</strong>, <strong>G7</strong>, <strong>C Major</strong>) in the <strong>C Major scale</strong> would be written with roman numerals, as: <strong>ii - V7 - I</strong>:</p>
+        <br />
         <p><strong>ii</strong> is the roman numeral for <strong>2</strong>, meaning it represents the diatonic chord with the <strong>2nd</strong> scale note (<strong>D</strong> in this example) as a root note.</p>
         <p><strong>ii</strong> is also lower-case, which signifies that the chord is a <strong>minor</strong> chord.</p>
+        <br />
         <p>The <strong>V</strong> in <strong>V7</strong> represents the diatonic chord with the <strong>5th</strong> scale note (<strong>G</strong> in this example) as a root note.</p>
         <p><strong>V</strong> is upper-case to signify that the chord is based on a <strong>major</strong> chord (dominant 7th chords are major triads with an added note).</p>
         <p>And the <strong>7</strong> in <strong>V7</strong> signifies that the chord is a <strong>dominant 7th chord</strong>.</p>
+        <br />
         <p>Lastly, <strong>I</strong> signifies a major chord with the <strong>1st</strong> scale note (<strong>C</strong> in this example) as a root note.</p>
+        <br />
         <p>So, writing "<strong>ii - V7 - I</strong>" in C Major is equivalent to writing "<strong>D Minor, G7, C Major</strong>."</p>
       </div>
     )),
