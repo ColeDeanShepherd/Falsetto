@@ -6,6 +6,22 @@
 * Search bar?
 * Hide "Learn More" links?
 
+* Marketing
+  * SEO
+  * Sell the course on the website
+    * Home page & course intro
+    * Sell the *results* - what the course does for you
+  * YouTube ads
+    * "Stop memorizing piano music and start understanding it
+  * Pay influencers?
+  * Get good standing on social website, share
+    * Reddit
+    * Facebook groups
+    * Forums
+  * Review & discount codes
+* Monetization
+  * Lock free users out of some content (maybe chords on?)
+
 * roman numerals quiz
 * Fix user-determined answers in mini quizzes
 * improve slide URLs
