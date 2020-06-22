@@ -5,6 +5,7 @@ import { InMemoryDatabase } from './Database';
 import { Analytics, MockAnalytics } from './Analytics';
 import { isProduction } from "./Config";
 import { ConsoleLogger } from './Logger';
+import { Server } from "./Server";
 
 export class DependencyInjector {
   public static instance = new DependencyInjector();
@@ -21,6 +22,8 @@ export class DependencyInjector {
         return this.database as any;
       case "IAnalytics":
         return this.analytics as any;
+      case "IServer":
+        return this.server as any;
       default:
         throw new Error(`Unknown service name: ${serviceName}`);
     }
@@ -31,4 +34,5 @@ export class DependencyInjector {
   private userManager = new UserManager();
   private database = new InMemoryDatabase(); // new TwoTierDatabase();
   private analytics = isProduction() ? (new Analytics()) : (new MockAnalytics());
+  private server = new Server();
 }

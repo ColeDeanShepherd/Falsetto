@@ -1,7 +1,12 @@
 # To-Do
 ## Other
 ## Pomodoro
+## Now
 ## High Priority
+* Account System
+  * Email confirmation
+  * Change password
+  * Change email?
 * Chord progressions content improvements
 * Search bar?
 * Hide "Learn More" links?
