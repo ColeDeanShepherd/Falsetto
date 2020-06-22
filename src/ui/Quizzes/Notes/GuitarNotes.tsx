@@ -1,6 +1,5 @@
 import * as React from "react";
 
-import * as FlashCardUtils from "../Utils";
 import { GuitarFretboard } from "../../Utils/GuitarFretboard";
 import { standard6StringGuitarTuning } from "../../Utils/StringedInstrumentTuning";
 import { FlashCard, FlashCardId } from "../../../FlashCard";
@@ -13,10 +12,14 @@ import {
   createFlashCards as baseCreateFlashCards
 } from '../../Utils/StringedInstrumentNotes';
 import { levelsNotes } from '../../Lessons/GuitarNotesLesson';
+import { AnswerDifficulty } from "../../../Study/AnswerDifficulty";
+import { renderStringedInstrumentNoteInputs } from '../../Utils/StringedInstrumentUtils';
 
 const flashCardSetId = "guitarNotes";
 const guitarTuning = standard6StringGuitarTuning;
 const MAX_MAX_FRET_NUMBER = 11;
+
+const guitarStyle: any = { width: "400px", maxWidth: "100%" };
 
 export function createFlashCardSet(guitarNotes?: Array<StringedInstrumentNote>): FlashCardSet {
   const renderFlashCardMultiSelect = (
@@ -31,7 +34,6 @@ export function createFlashCardSet(guitarNotes?: Array<StringedInstrumentNote>):
     />;
   };
 
-
   const flashCardSet = new FlashCardSet(flashCardSetId, "Guitar Notes", () => createFlashCards(guitarNotes));
   flashCardSet.configDataToEnabledFlashCardIds = (
     flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: IConfigData
@@ -40,7 +42,33 @@ export function createFlashCardSet(guitarNotes?: Array<StringedInstrumentNote>):
     maxFret: MAX_MAX_FRET_NUMBER
   });
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
-  flashCardSet.renderAnswerSelect = FlashCardUtils.renderNoteAnswerSelect;
+  flashCardSet.renderAnswerSelect = (info: FlashCardStudySessionInfo) => {
+    const { currentFlashCard } = info;
+
+    const configData = (info.configData as IConfigData);
+
+    // TODO: violin notes
+    return (
+      <GuitarFretboard
+        width={400} height={140}
+        tuning={guitarTuning}
+        fretCount={configData.maxFret}
+        renderExtrasFn={metrics => renderStringedInstrumentNoteInputs(
+          metrics,
+          guitarTuning,
+          (stringIndex, fretNumber) => (fretNumber <= configData.maxFret),
+          [],
+          note => {
+            const correctNote = currentFlashCard.backSide.data as StringedInstrumentNote;
+            const isCorrect = note.equals(correctNote);
+
+            info.onAnswer(isCorrect ? AnswerDifficulty.Easy : AnswerDifficulty.Incorrect, note)
+          })}
+        style={guitarStyle}
+      />
+    );
+  };
+  
   flashCardSet.moreInfoUri = "/learn-guitar-notes-in-10-steps";
   flashCardSet.containerHeight = "120px";
 
@@ -68,8 +96,6 @@ export function createFlashCardSet(guitarNotes?: Array<StringedInstrumentNote>):
 }
 
 export function createFlashCards(guitarNotes?: Array<StringedInstrumentNote>): FlashCard[] {
-  const guitarStyle: any = { width: "400px", maxWidth: "100%" };
-
   return baseCreateFlashCards(
     flashCardSetId, guitarTuning, MAX_MAX_FRET_NUMBER,
     (tuning, maxMaxFretNumber, note) => (

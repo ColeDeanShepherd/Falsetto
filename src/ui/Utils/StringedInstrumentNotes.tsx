@@ -126,7 +126,7 @@ export function createFlashCards(
   flashCardSetId: string,
   tuning: StringedInstrumentTuning,
   maxMaxFretNumber: number,
-  flashCardFrontSideRenderFn: (
+  flashCardBackSideRenderFn: (
     tuning: StringedInstrumentTuning,
     maxMaxFretNumber: number,
     note: StringedInstrumentNote
@@ -154,13 +154,16 @@ export function createFlashCards(
       };
       const id = JSON.stringify(deserializedId);
 
+      const pitchString = note.pitch.toOneAccidentalAmbiguousString(false, true);
+
       return new FlashCard(
         id,
         new FlashCardSide(
-          size => flashCardFrontSideRenderFn(tuning, maxMaxFretNumber, note)
+          `${pitchString} on ${Utils.getOrdinalNumeral(tuning.stringCount - note.stringIndex)} string`,
+          note
         ),
         new FlashCardSide(
-          note.pitch.toOneAccidentalAmbiguousString(false, true),
+          size => flashCardBackSideRenderFn(tuning, maxMaxFretNumber, note),
           note
         ),
       );
