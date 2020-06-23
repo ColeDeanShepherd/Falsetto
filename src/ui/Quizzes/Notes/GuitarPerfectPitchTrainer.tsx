@@ -186,7 +186,8 @@ function createFlashCardSet(guitarNotes?: Array<StringedInstrumentNote>): FlashC
   const flashCardSet = new FlashCardSet(flashCardSetId, "Guitar Perfect Pitch Trainer", () => createFlashCards(guitarNotes));
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.getInitialConfigData = (): IConfigData => ({
-    maxFret: MAX_MAX_FRET_NUMBER
+    maxFret: MAX_MAX_FRET_NUMBER,
+    enabledStringIndexes: new Set<number>(guitarTuning.openStringPitches.map((_, i) => i))
   });
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = (info: FlashCardStudySessionInfo) => <GuitarNoteAnswerSelect key={info.currentFlashCardId} args={info} tuning={guitarTuning} />;
