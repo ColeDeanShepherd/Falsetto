@@ -1,16 +1,19 @@
 import * as React from "react";
-import { TextField } from "@material-ui/core";
+import { TextField, Checkbox } from "@material-ui/core";
 
 import * as Utils from "../../lib/Core/Utils";
 import { FlashCardId, FlashCard, FlashCardSide } from "../../FlashCard";
 import { FlashCardStudySessionInfo, FlashCardSet } from "../../FlashCardSet";
 import { StringedInstrumentTuning } from './StringedInstrumentTuning';
 import { StringedInstrumentNote } from '../../lib/TheoryLib/StringedInstrumentNote';
-import { flattenArrays } from '../../lib/Core/ArrayUtils';
+import { flattenArrays, arrayContains, immutableToggleArrayElement } from '../../lib/Core/ArrayUtils';
 import { clamp, range } from '../../lib/Core/MathUtils';
+import { immutableToggleSetElement } from "../../lib/Core/SetUtils";
+import { getOrdinalNumeral } from '../../lib/Core/Utils';
 
 export interface IConfigData {
-  maxFret: number
+  maxFret: number;
+  enabledStringIndexes: Set<number>;
 };
 
 export function forEachNote(
@@ -41,8 +44,8 @@ export function configDataToEnabledFlashCardIds(
 
   forEachNote(
     tuning, maxMaxFretNumber, notes,
-    (_, fretNumber, i) => {
-      if (fretNumber <= configData.maxFret) {
+    (stringIndex, fretNumber, i) => {
+      if ((fretNumber <= configData.maxFret) && (configData.enabledStringIndexes.has(stringIndex))) {
         flashCardIds.push(flashCards[i].id);
       }
     }
@@ -78,18 +81,33 @@ export class StringedInstrumentNotesFlashCardMultiSelect extends React.Component
   }
 
   public render(): JSX.Element {
+    const { tuning } = this.props;
+    
+    const configData = this.props.studySessionInfo.configData as IConfigData;
+
     return (
-      <TextField
-        label="Max. Fret"
-        value={this.state.maxFretNumberString}
-        onChange={event => this.onMaxFretStringChange(event.target.value)}
-        onBlur={event => this.onMaxFretStringInputBlur()}
-        type="number"
-        InputLabelProps={{
-          shrink: true,
-        }}
-        margin="normal"
-      />
+      <div>
+        <TextField
+          label="Max. Fret"
+          value={this.state.maxFretNumberString}
+          onChange={event => this.onMaxFretStringChange(event.target.value)}
+          onBlur={event => this.onMaxFretStringInputBlur()}
+          type="number"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          margin="normal"
+        />
+        {tuning.openStringPitches.map((_, i) => {
+          const stringIndex = (tuning.stringCount - 1) - i;
+          const isChecked = configData.enabledStringIndexes.has(stringIndex)
+
+          return (
+            <p><Checkbox checked={isChecked} onChange={event => this.toggleStringEnabled(stringIndex)} />
+            {getOrdinalNumeral(tuning.stringCount - stringIndex)} string</p>
+          );
+        })}
+      </div>
     );
   }
   
@@ -103,8 +121,11 @@ export class StringedInstrumentNotesFlashCardMultiSelect extends React.Component
 
     const clampedMaxFret = clamp(maxFret, 0, this.props.maxMaxFretNumber);
 
+    const oldConfigData = this.props.studySessionInfo.configData as IConfigData;
+
     const newConfigData: IConfigData = {
-      maxFret: clampedMaxFret
+      maxFret: clampedMaxFret,
+      enabledStringIndexes: oldConfigData.enabledStringIndexes
     }
     const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(
       this.props.tuning,
@@ -120,6 +141,39 @@ export class StringedInstrumentNotesFlashCardMultiSelect extends React.Component
       : maxFret.toString();
     this.setState({ maxFretNumberString: newMaxFretNumberString });
   }
+
+  private toggleStringEnabled(stringIndex: number) {
+    if (!this.props.onChange) { return; }
+
+    const oldConfigData = this.props.studySessionInfo.configData as IConfigData;
+
+    const newConfigData: IConfigData = {
+      maxFret: oldConfigData.maxFret,
+      enabledStringIndexes: immutableToggleSetElement(oldConfigData.enabledStringIndexes, stringIndex)
+    };
+    const newEnabledFlashCardIds = configDataToEnabledFlashCardIds(
+      this.props.tuning,
+      this.props.maxMaxFretNumber, this.props.notes, this.props.studySessionInfo.flashCardSet,
+      this.props.studySessionInfo.flashCards, newConfigData
+    );
+    this.props.onChange(newEnabledFlashCardIds, newConfigData);
+  }
+}
+
+export function getNoteFlashCardId(
+  flashCardSetId: string,
+  tuning: StringedInstrumentTuning,
+  note: StringedInstrumentNote
+): string {
+  const deserializedId = {
+    set: flashCardSetId,
+    tuning: tuning.openStringPitches.map(p => p.toString(true, false)),
+    stringIndex: note.stringIndex,
+    fretNumber: note.getFretNumber(tuning)
+  };
+  const id = JSON.stringify(deserializedId);
+
+  return id;
 }
 
 export function createFlashCards(
@@ -146,13 +200,7 @@ export function createFlashCards(
 
   return notes
     .map(note => {
-      const deserializedId = {
-        set: flashCardSetId,
-        tuning: tuning.openStringPitches.map(p => p.toString(true, false)),
-        stringIndex: note.stringIndex,
-        fretNumber: note.getFretNumber(tuning)
-      };
-      const id = JSON.stringify(deserializedId);
+      const id = getNoteFlashCardId(flashCardSetId, tuning, note);
 
       const pitchString = note.pitch.toOneAccidentalAmbiguousString(false, true);
 

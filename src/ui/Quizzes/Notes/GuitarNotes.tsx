@@ -14,6 +14,8 @@ import {
 import { levelsNotes } from '../../Lessons/GuitarNotesLesson';
 import { AnswerDifficulty } from "../../../Study/AnswerDifficulty";
 import { renderStringedInstrumentNoteInputs } from '../../Utils/StringedInstrumentUtils';
+import { arrayContains } from '../../../lib/Core/ArrayUtils';
+import { getNoteFlashCardId } from '../../Utils/StringedInstrumentNotes';
 
 const flashCardSetId = "guitarNotes";
 const guitarTuning = standard6StringGuitarTuning;
@@ -39,7 +41,8 @@ export function createFlashCardSet(guitarNotes?: Array<StringedInstrumentNote>):
     flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: IConfigData
   ) => configDataToEnabledFlashCardIds(guitarTuning, MAX_MAX_FRET_NUMBER, guitarNotes, flashCardSet, flashCards, configData);
   flashCardSet.getInitialConfigData = (): IConfigData => ({
-    maxFret: MAX_MAX_FRET_NUMBER
+    maxFret: MAX_MAX_FRET_NUMBER,
+    enabledStringIndexes: new Set<number>(guitarTuning.openStringPitches.map((_, i) => i))
   });
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = (info: FlashCardStudySessionInfo) => {
@@ -56,7 +59,7 @@ export function createFlashCardSet(guitarNotes?: Array<StringedInstrumentNote>):
         renderExtrasFn={metrics => renderStringedInstrumentNoteInputs(
           metrics,
           guitarTuning,
-          (stringIndex, fretNumber) => (fretNumber <= configData.maxFret),
+          note => arrayContains(info.enabledFlashCardIds, getNoteFlashCardId(flashCardSetId, guitarTuning, note)),
           [],
           note => {
             const correctNote = currentFlashCard.backSide.data as StringedInstrumentNote;
@@ -85,10 +88,22 @@ export function createFlashCardSet(guitarNotes?: Array<StringedInstrumentNote>):
             .map(fc => fc.id),
           (curConfigData: IConfigData) => (
             {
-              maxFret: curConfigData.maxFret
+              maxFret: curConfigData.maxFret,
+              enabledStringIndexes: new Set<number>(guitarTuning.openStringPitches.map((_, i) => i))
             } as IConfigData
           )
         ))
+        .concat([
+          new FlashCardLevel(
+          "All Notes",
+          flashCards.map(fc => fc.id),
+          (curConfigData: IConfigData) => (
+            {
+              maxFret: MAX_MAX_FRET_NUMBER,
+              enabledStringIndexes: new Set<number>(guitarTuning.openStringPitches.map((_, i) => i))
+            } as IConfigData
+          ))
+        ])
     );
   }
 

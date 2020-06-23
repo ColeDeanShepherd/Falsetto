@@ -11,10 +11,12 @@ import {
   IConfigData,
   StringedInstrumentNotesFlashCardMultiSelect,
   configDataToEnabledFlashCardIds,
-  createFlashCards as baseCreateFlashCards
+  createFlashCards as baseCreateFlashCards,
+  getNoteFlashCardId
 } from '../../Utils/StringedInstrumentNotes';
 import { AnswerDifficulty } from "../../../Study/AnswerDifficulty";
 import { renderStringedInstrumentNoteInputs } from "../../Utils/StringedInstrumentUtils";
+import { arrayContains } from "../../../lib/Core/ArrayUtils";
 
 const flashCardSetId = "violinNotes";
 
@@ -43,7 +45,8 @@ function createFlashCardSet(notes?: Array<StringedInstrumentNote>): FlashCardSet
     flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, configData: IConfigData
   ) => configDataToEnabledFlashCardIds(violinTuning, MAX_MAX_FRET_NUMBER, undefined, flashCardSet, flashCards, configData);
   flashCardSet.getInitialConfigData = (): IConfigData => ({
-    maxFret: MAX_MAX_FRET_NUMBER
+    maxFret: MAX_MAX_FRET_NUMBER,
+    enabledStringIndexes: new Set<number>(violinTuning.openStringPitches.map((_, i) => i))
   });
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
 
@@ -61,7 +64,7 @@ function createFlashCardSet(notes?: Array<StringedInstrumentNote>): FlashCardSet
         renderExtrasFn={metrics => renderStringedInstrumentNoteInputs(
           metrics,
           violinTuning,
-          (stringIndex, fretNumber) => (fretNumber <= configData.maxFret),
+          note => arrayContains(info.enabledFlashCardIds, getNoteFlashCardId(flashCardSetId, violinTuning, note)),
           [],
           note => {
             const correctNote = currentFlashCard.backSide.data as StringedInstrumentNote;

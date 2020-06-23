@@ -10,7 +10,7 @@ import { flattenArrays } from '../../lib/Core/ArrayUtils';
 export function renderStringedInstrumentNoteInputs(
   metrics: StringedInstrumentMetrics,
   tuning: StringedInstrumentTuning,
-  shouldRenderFretInputFn: (stringIndex: number, fretNumber: number) => boolean,
+  shouldRenderFretInputFn: (note: StringedInstrumentNote) => boolean,
   selectedNotes: Array<StringedInstrumentNote>,
   onNoteSelected: (note: StringedInstrumentNote) => void
 ): JSX.Element {
@@ -23,7 +23,9 @@ export function renderStringedInstrumentNoteInputs(
   const buttons = flattenArrays(
     stringIndices.map(stringIndex =>
       fretNumbers.map(fretNumber => {
-        if (!shouldRenderFretInputFn(stringIndex, fretNumber)) {
+        const note = tuning.getNote(stringIndex, fretNumber);
+
+        if (!shouldRenderFretInputFn(note)) {
           return null;
         }
         
@@ -31,7 +33,6 @@ export function renderStringedInstrumentNoteInputs(
           metrics.getNoteX(fretNumber),
           metrics.getStringY(stringIndex)
         );
-        const note = tuning.getNote(stringIndex, fretNumber);
         const isSelected = selectedNotes.some(n => n.equals(note));
 
         return (
