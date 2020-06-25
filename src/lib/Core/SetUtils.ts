@@ -50,3 +50,14 @@ export function mapFilter<T>(set: Set<T>, predicate: (t: T) => boolean): Array<T
 
   return result;
 }
+
+// TODO: add tests
+export function immutableToggleSetElement<T>(set: Set<T>, element: T): Set<T> {
+  const newSet = new Set<T>(set);
+
+  if (!newSet.delete(element)) {
+    newSet.add(element);
+  }
+
+  return newSet;
+}
