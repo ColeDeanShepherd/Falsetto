@@ -69,7 +69,7 @@ export class LoginPage extends React.Component<{}, ILoginPageState> {
             </div>
           </div>
 
-          <p><NavLinkView to="/reset-password">Forgot Password?</NavLinkView> or <NavLinkView to="/sign-up">Sign up</NavLinkView></p>
+          <p><NavLinkView to="/forgot-password">Forgot Password?</NavLinkView> or <NavLinkView to="/sign-up">Sign up</NavLinkView></p>
 
           {error
             ? <div className="alert alert-danger">{error}</div>

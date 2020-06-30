@@ -6,12 +6,12 @@ import { Button } from "./Button/Button";
 import { DependencyInjector } from "../DependencyInjector";
 import { IServer } from "../Server";
 
-export interface IResetPasswordPageState {
+export interface IForgotPasswordPageState {
   email: string;
   error?: string;
 }
 
-export class ResetPasswordPage extends React.Component<{}, IResetPasswordPageState> {
+export class ForgotPasswordPage extends React.Component<{}, IForgotPasswordPageState> {
   public constructor(props: {}) {
     super(props);
 
@@ -30,7 +30,7 @@ export class ResetPasswordPage extends React.Component<{}, IResetPasswordPageSta
 
     return (
       <Card>
-        <h1 className="margin-bottom">Reset Password</h1>
+        <h1 className="margin-bottom">Forgot Password</h1>
 
         <div>
           <div className="form-group">
@@ -44,7 +44,7 @@ export class ResetPasswordPage extends React.Component<{}, IResetPasswordPageSta
               aria-describedby="emailHelp" />
           </div>
           <div className="form-group">
-            <Button onClick={() => this.resetPassword()}>Reset password</Button>
+            <Button onClick={() => this.emailPasswordResetLink()}>Email password reset link</Button>
           </div>
         </div>
 
@@ -63,7 +63,7 @@ export class ResetPasswordPage extends React.Component<{}, IResetPasswordPageSta
     this.setState({ email: e.target.value });
   }
 
-  private async resetPassword() {
+  private async emailPasswordResetLink() {
     const { email } = this.state;
 
     try {

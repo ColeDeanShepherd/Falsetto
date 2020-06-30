@@ -51,6 +51,7 @@ import { createSlideGroups as createChordTypeMasteryLessonSlideGroups } from '..
 import { PageNotFoundView } from '../../ui/PageNotFoundView';
 import { ChordPage } from "../../ui/ChordPage";
 import { ChordExercisesPage } from '../ChordExercisesPage';
+import { ForgotPasswordPage} from "../ForgotPasswordPage";
 import { ResetPasswordPage } from "../ResetPasswordPage";
 import { SignUpPage } from '../SignUpPage';
 
@@ -213,6 +214,15 @@ const routes: Array<IRouteData> = ([
     renderFn: () => (
       <LimitedWidthContentContainer>
         <ProfilePage />
+      </LimitedWidthContentContainer>
+    )
+  },
+  {
+    path: "/forgot-password",
+    title: "Forgot Password - Falsetto",
+    renderFn: () => (
+      <LimitedWidthContentContainer>
+        <ForgotPasswordPage />
       </LimitedWidthContentContainer>
     )
   },
