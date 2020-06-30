@@ -2,6 +2,10 @@
 ## Other
 ## Pomodoro
 ## High Priority
+* Account System
+  * Email confirmation
+  * Change password
+  * Change email?
 * Chord progressions content improvements
 * Search bar?
 * Hide "Learn More" links?
@@ -57,6 +61,21 @@
   * Save data
 * Monetize
 ## Medium Priority
+* Ear Training/Sight Singing Course
+  * Singing notes after hearing them
+  * Singing intervals (hear note, go up & down in random order)
+    * NEED TO DETERMINE ORDER OF INTERVALS
+  * Singing scales
+    * Up & down
+    * Major
+    * Minor
+    * Self-paced
+    * Singing degrees
+  * Singing chords (really arpeggios)
+    * Triads -> 7 -> etc.
+    * Inversions
+    * Up/down
+    * Singing degrees
 * Scoped stylesheets
 * Fix on mobile
 * Improve chord finder (E G B D F is Emin7b9)
