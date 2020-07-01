@@ -112,7 +112,7 @@ export class SignUpPage extends React.Component<{}, ISignUpPageState> {
     try {
       await this.server.signUp(email, password);
     } catch (ex) {
-      this.setState({ error: ex.message })
+      this.setState({ error: ex.toString() })
     }
   }
 }

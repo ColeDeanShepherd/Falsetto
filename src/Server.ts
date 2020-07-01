@@ -17,7 +17,8 @@ export class Server implements IServer {
 
     const response = await fetch(`${apiBaseUri}/sign-up`, requestInit);
     if (!response.ok) {
-      return Promise.reject(`Failed signing up: ${response.statusText}`);
+      const errorMessage = await response.text();
+      return Promise.reject(`Failed signing up: ${errorMessage}`);
     }
   }
   
@@ -30,7 +31,8 @@ export class Server implements IServer {
 
     const response = await fetch(`${apiBaseUri}/log-in`, requestInit);
     if (!response.ok) {
-      return Promise.reject(`Failed logging in: ${response.statusText}`);
+      const errorMessage = await response.text();
+      return Promise.reject(`Failed logging in: ${errorMessage}`);
     }
   }
   
@@ -43,7 +45,8 @@ export class Server implements IServer {
 
     const response = await fetch(`${apiBaseUri}/forgot-password`, requestInit);
     if (!response.ok) {
-      return Promise.reject(`Failed sending password reset email: ${response.statusText}`);
+      const errorMessage = await response.text();
+      return Promise.reject(`Failed sending password reset email: ${errorMessage}`);
     }
   }
 
@@ -56,7 +59,8 @@ export class Server implements IServer {
 
     const response = await fetch(`${apiBaseUri}/reset-password`, requestInit);
     if (!response.ok) {
-      return Promise.reject(`Failed resetting password: ${response.statusText}`);
+      const errorMessage = await response.text();
+      return Promise.reject(`Failed resetting password: ${errorMessage}`);
     }
   }
 }

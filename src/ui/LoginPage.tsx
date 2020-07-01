@@ -97,7 +97,7 @@ export class LoginPage extends React.Component<{}, ILoginPageState> {
     try {
       await this.server.logIn(email, password);
     } catch (ex) {
-      this.setState({ error: ex.message })
+      this.setState({ error: ex.toString() })
     }
   }
 }
