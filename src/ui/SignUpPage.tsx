@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Redirect } from 'react-router';
 import { TextField } from "@material-ui/core";
 
 import { Card } from "../ui/Card/Card";
@@ -7,6 +6,8 @@ import { Button } from "./Button/Button";
 import { NavLinkView } from "./NavLinkView";
 import { DependencyInjector } from "../DependencyInjector";
 import { IServer } from "../Server";
+import { ActionBus } from '../ActionBus';
+import { SignUpAction } from '../App/Actions';
 
 export interface ISignUpPageState {
   email: string;
@@ -110,7 +111,9 @@ export class SignUpPage extends React.Component<{}, ISignUpPageState> {
     }
 
     try {
-      await this.server.signUp(email, password);
+      const sessionToken = await this.server.signUp(email, password);
+      
+      ActionBus.instance.dispatch(new SignUpAction(sessionToken));
     } catch (ex) {
       this.setState({ error: ex.toString() })
     }

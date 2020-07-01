@@ -11,6 +11,7 @@ import { IServer } from "../Server";
 export interface IResetPasswordPageState {
   password: string;
   reEnteredPassword: string;
+  succeeded: boolean;
   error?: string;
 }
 
@@ -28,46 +29,55 @@ export class ResetPasswordPage extends React.Component<{}, IResetPasswordPageSta
     this.state = {
       password: "",
       reEnteredPassword: "",
+      succeeded: false,
       error: undefined
     };
   }
   
   public render(): JSX.Element {
-    const { password, reEnteredPassword, error } = this.state;
+    const { password, reEnteredPassword, succeeded, error } = this.state;
     
     return (
       <Card>
         <h1 className="margin-bottom">Reset Password</h1>
 
-        <p>Enter your new password below.</p>
+        {!succeeded
+          ? (
+            <div>
+              <p>Enter your new password below.</p>
 
-        <div>
-          <div className="form-group">
-            <TextField
-              id="password"
-              type="password"
-              label="Password"
-              value={password}
-              onChange={this.boundOnPasswordChange}
-              className="full-width" />
-          </div>
-          <div className="form-group">
-            <TextField
-              id="confirm-password"
-              type="password"
-              label="Confirm Password"
-              value={reEnteredPassword}
-              onChange={this.boundOnReEnteredPasswordChange}
-              className="full-width" />
-          </div>
-          <div className="form-group">
-            <Button onClick={this.boundResetPassword}>Reset password</Button>
-          </div>
-        </div>
+              <div>
+                <div className="form-group">
+                  <TextField
+                    id="password"
+                    type="password"
+                    label="Password"
+                    value={password}
+                    onChange={this.boundOnPasswordChange}
+                    className="full-width" />
+                </div>
+                <div className="form-group">
+                  <TextField
+                    id="confirm-password"
+                    type="password"
+                    label="Confirm Password"
+                    value={reEnteredPassword}
+                    onChange={this.boundOnReEnteredPasswordChange}
+                    className="full-width" />
+                </div>
+                <div className="form-group">
+                  <Button onClick={this.boundResetPassword}>Reset password</Button>
+                </div>
+              </div>
 
-        {error
-          ? <div className="alert alert-danger">{error}</div>
-          : null}
+              {error
+                ? <div className="alert alert-danger">{error}</div>
+                : null}
+            </div>
+          )
+          : (
+            <p>Your password has been successfully reset.</p>
+          )}
       </Card>
     );
   }
@@ -112,6 +122,7 @@ export class ResetPasswordPage extends React.Component<{}, IResetPasswordPageSta
 
     try {
       await this.server.resetPassword(resetPasswordToken, password);
+      this.setState({ succeeded: true });
     } catch (ex) {
       this.setState({ error: ex.toString() })
     }

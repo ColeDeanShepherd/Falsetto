@@ -1,14 +1,14 @@
 import { apiBaseUri } from "./Config";
 
 export interface IServer {
-  logIn(email: string, password: string): Promise<void>;
-  signUp(email: string, password: string): Promise<void>;
+  signUp(email: string, password: string): Promise<string>;
+  logIn(email: string, password: string): Promise<string>;
   emailResetPasswordLink(email: string): Promise<void>;
   resetPassword(resetPasswordToken: string, newPassword: string): Promise<void>;
 }
 
 export class Server implements IServer {
-  public async signUp(email: string, password: string): Promise<void> {
+  public async signUp(email: string, password: string): Promise<string> {
     const requestInit: RequestInit = {
       method: "POST",
       headers: { 'Content-Type': 'application/json' },
@@ -16,13 +16,17 @@ export class Server implements IServer {
     };
 
     const response = await fetch(`${apiBaseUri}/sign-up`, requestInit);
+
     if (!response.ok) {
       const errorMessage = await response.text();
       return Promise.reject(`Failed signing up: ${errorMessage}`);
     }
+
+    const sessionToken = await response.text();
+    return sessionToken;
   }
   
-  public async logIn(email: string, password: string): Promise<void> {
+  public async logIn(email: string, password: string): Promise<string> {
     const requestInit: RequestInit = {
       method: "POST",
       headers: { 'Content-Type': 'application/json' },
@@ -30,10 +34,14 @@ export class Server implements IServer {
     };
 
     const response = await fetch(`${apiBaseUri}/log-in`, requestInit);
+
     if (!response.ok) {
       const errorMessage = await response.text();
       return Promise.reject(`Failed logging in: ${errorMessage}`);
     }
+
+    const sessionToken = await response.text();
+    return sessionToken;
   }
   
   public async emailResetPasswordLink(email: string): Promise<void> {
@@ -44,6 +52,7 @@ export class Server implements IServer {
     };
 
     const response = await fetch(`${apiBaseUri}/forgot-password`, requestInit);
+
     if (!response.ok) {
       const errorMessage = await response.text();
       return Promise.reject(`Failed sending password reset email: ${errorMessage}`);
@@ -58,6 +67,7 @@ export class Server implements IServer {
     };
 
     const response = await fetch(`${apiBaseUri}/reset-password`, requestInit);
+
     if (!response.ok) {
       const errorMessage = await response.text();
       return Promise.reject(`Failed resetting password: ${errorMessage}`);

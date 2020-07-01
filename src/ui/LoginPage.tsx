@@ -7,6 +7,8 @@ import { Button } from "./Button/Button";
 import { NavLinkView } from "./NavLinkView";
 import { IServer } from "../Server";
 import { DependencyInjector } from '../DependencyInjector';
+import { LoginAction } from '../App/Actions';
+import { ActionBus } from "../ActionBus";
 
 export interface ILoginPageState {
   email: string;
@@ -95,7 +97,9 @@ export class LoginPage extends React.Component<{}, ILoginPageState> {
     const { email, password } = this.state;
 
     try {
-      await this.server.logIn(email, password);
+      const sessionToken = await this.server.logIn(email, password);
+      
+      ActionBus.instance.dispatch(new LoginAction(sessionToken));
     } catch (ex) {
       this.setState({ error: ex.toString() })
     }

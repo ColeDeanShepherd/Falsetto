@@ -4,9 +4,8 @@
 ## Now
 ## High Priority
 * Account System
-  * Email confirmation
-  * Change password
-  * Change email?
+  * Logout -> Home
+* Setup email service in prod
 * Chord progressions content improvements
 * Search bar?
 * Hide "Learn More" links?
@@ -78,6 +77,7 @@
   * Save data
 * Monetize
 ## Medium Priority
+* Email confirmation
 * Ear Training/Sight Singing Course
   * Singing notes after hearing them
   * Singing intervals (hear note, go up & down in random order)
