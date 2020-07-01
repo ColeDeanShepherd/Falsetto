@@ -1,11 +1,13 @@
 import * as React from "react";
-import { Redirect } from 'react-router';
+import { ActionBus } from "../ActionBus";
+import { LogoutAction } from '../App/Actions';
 
 export class LogoutPage extends React.Component<{}, {}> {
   public componentDidMount() {
-    // TODO: logout
+    ActionBus.instance.dispatch(new LogoutAction());
   }
-  public render(): JSX.Element {
-    return <Redirect to={{ pathname: '/' }} />;
+
+  public render(): JSX.Element | null {
+    return null;
   }
 }

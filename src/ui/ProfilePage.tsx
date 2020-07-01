@@ -4,6 +4,7 @@ import { Card } from "../ui/Card/Card";
 import { loadSessionToken } from '../Cookies';
 import { ActionBus } from '../ActionBus';
 import { NavigateAction } from '../App/Actions';
+import { NavLinkView } from './NavLinkView';
 
 export class ProfilePage extends React.Component<{}, {}> {
   public componentDidMount() {
@@ -20,6 +21,7 @@ export class ProfilePage extends React.Component<{}, {}> {
     return (
       <Card>
         <h1>My Profile</h1>
+        <p><NavLinkView to="/logout">Logout</NavLinkView></p>
       </Card>
     );
   }

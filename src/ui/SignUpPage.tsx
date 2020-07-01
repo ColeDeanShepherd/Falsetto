@@ -7,7 +7,8 @@ import { NavLinkView } from "./NavLinkView";
 import { DependencyInjector } from "../DependencyInjector";
 import { IServer } from "../Server";
 import { ActionBus } from '../ActionBus';
-import { SignUpAction } from '../App/Actions';
+import { SignUpAction, NavigateAction } from '../App/Actions';
+import { loadSessionToken } from "../Cookies";
 
 export interface ISignUpPageState {
   email: string;
@@ -32,6 +33,15 @@ export class SignUpPage extends React.Component<{}, ISignUpPageState> {
       reEnteredPassword: "",
       error: undefined
     };
+  }
+  
+  
+  public componentDidMount() {
+    const sessionToken = loadSessionToken();
+
+    if (sessionToken !== undefined) {
+      ActionBus.instance.dispatch(new NavigateAction("/profile"));
+    }
   }
   
   public render(): JSX.Element {

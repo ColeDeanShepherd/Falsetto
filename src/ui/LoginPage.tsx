@@ -7,8 +7,9 @@ import { Button } from "./Button/Button";
 import { NavLinkView } from "./NavLinkView";
 import { IServer } from "../Server";
 import { DependencyInjector } from '../DependencyInjector';
-import { LoginAction } from '../App/Actions';
+import { LoginAction, NavigateAction } from '../App/Actions';
 import { ActionBus } from "../ActionBus";
+import { loadSessionToken } from "../Cookies";
 
 export interface ILoginPageState {
   email: string;
@@ -30,6 +31,14 @@ export class LoginPage extends React.Component<{}, ILoginPageState> {
       password: "",
       error: undefined
     };
+  }
+  
+  public componentDidMount() {
+    const sessionToken = loadSessionToken();
+
+    if (sessionToken !== undefined) {
+      ActionBus.instance.dispatch(new NavigateAction("/profile"));
+    }
   }
 
   public render(): JSX.Element {

@@ -28,3 +28,13 @@ export class LoginAction implements IAction {
     return LoginAction.Id;
   }
 }
+
+export class LogoutAction implements IAction {
+  public static readonly Id = "app/logout";
+
+  public constructor() {}
+
+  public getId() {
+    return LogoutAction.Id;
+  }
+}
