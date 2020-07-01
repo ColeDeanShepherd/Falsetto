@@ -1,3 +1,5 @@
+import { History } from "history";
+import * as QueryString from "query-string";
 import * as React from "react";
 import { TextField } from "@material-ui/core";
 
@@ -7,7 +9,8 @@ import { DependencyInjector } from "../DependencyInjector";
 import { IServer } from "../Server";
 
 export interface IResetPasswordPageState {
-  email: string;
+  password: string;
+  reEnteredPassword: string;
   error?: string;
 }
 
@@ -15,36 +18,50 @@ export class ResetPasswordPage extends React.Component<{}, IResetPasswordPageSta
   public constructor(props: {}) {
     super(props);
 
+    this.history = DependencyInjector.instance.getRequiredService<History<any>>("History");
     this.server = DependencyInjector.instance.getRequiredService<IServer>("IServer");
 
-    this.boundOnEmailChange = this.onEmailChange.bind(this);
+    this.boundOnPasswordChange = this.onPasswordChange.bind(this);
+    this.boundOnReEnteredPasswordChange = this.onReEnteredPasswordChange.bind(this);
+    this.boundResetPassword = this.resetPassword.bind(this);
 
     this.state = {
-      email: "",
+      password: "",
+      reEnteredPassword: "",
       error: undefined
     };
   }
   
   public render(): JSX.Element {
-    const { email, error } = this.state;
-
+    const { password, reEnteredPassword, error } = this.state;
+    
     return (
       <Card>
         <h1 className="margin-bottom">Reset Password</h1>
 
+        <p>Enter your new password below.</p>
+
         <div>
           <div className="form-group">
             <TextField
-              id="email"
-              type="email"
-              label="Email"
-              value={email}
-              onChange={this.boundOnEmailChange}
-              className="full-width"
-              aria-describedby="emailHelp" />
+              id="password"
+              type="password"
+              label="Password"
+              value={password}
+              onChange={this.boundOnPasswordChange}
+              className="full-width" />
           </div>
           <div className="form-group">
-            <Button onClick={() => this.resetPassword()}>Reset password</Button>
+            <TextField
+              id="confirm-password"
+              type="password"
+              label="Confirm Password"
+              value={reEnteredPassword}
+              onChange={this.boundOnReEnteredPasswordChange}
+              className="full-width" />
+          </div>
+          <div className="form-group">
+            <Button onClick={this.boundResetPassword}>Reset password</Button>
           </div>
         </div>
 
@@ -55,19 +72,46 @@ export class ResetPasswordPage extends React.Component<{}, IResetPasswordPageSta
     );
   }
 
+  private history: History<any>;
   private server: IServer;
 
-  private boundOnEmailChange: (e: any) => void;
+  private boundOnPasswordChange: (e: any) => void;
+  private boundOnReEnteredPasswordChange: (e: any) => void;
+  private boundResetPassword: (e: any) => void;
+
+  private getResetPasswordToken(): string | undefined {
+    const searchParams = QueryString.parse(this.history.location.search);
+
+    return (searchParams.token !== undefined)
+      ? (searchParams.token as string)
+      : undefined;
+  }
   
-  private onEmailChange(e: any) {
-    this.setState({ email: e.target.value });
+  private onPasswordChange(e: any) {
+    this.setState({ password: e.target.value });
+  }
+  
+  private onReEnteredPasswordChange(e: any) {
+    this.setState({ reEnteredPassword: e.target.value });
   }
 
   private async resetPassword() {
-    const { email } = this.state;
+    const { password, reEnteredPassword } = this.state;
+    
+    const resetPasswordToken = this.getResetPasswordToken();
+
+    if (resetPasswordToken === undefined) {
+      this.setState({ error: "Invalid or expired password reset link." });
+      return;
+    }
+
+    if (reEnteredPassword != password) {
+      this.setState({ error: "Passwords don't match." });
+      return;
+    }
 
     try {
-      await this.server.emailResetPasswordLink(email);
+      await this.server.resetPassword(resetPasswordToken, password);
     } catch (ex) {
       this.setState({ error: ex.message })
     }

@@ -4,6 +4,7 @@ export interface IServer {
   logIn(email: string, password: string): Promise<void>;
   signUp(email: string, password: string): Promise<void>;
   emailResetPasswordLink(email: string): Promise<void>;
+  resetPassword(resetPasswordToken: string, newPassword: string): Promise<void>;
 }
 
 export class Server implements IServer {
@@ -43,6 +44,19 @@ export class Server implements IServer {
     const response = await fetch(`${apiBaseUri}/forgot-password`, requestInit);
     if (!response.ok) {
       return Promise.reject(`Failed sending password reset email: ${response.statusText}`);
+    }
+  }
+
+  public async resetPassword(resetPasswordToken: string, newPassword: string): Promise<void> {
+    const requestInit: RequestInit = {
+      method: "POST",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: resetPasswordToken, password: newPassword })
+    };
+
+    const response = await fetch(`${apiBaseUri}/reset-password`, requestInit);
+    if (!response.ok) {
+      return Promise.reject(`Failed resetting password: ${response.statusText}`);
     }
   }
 }
