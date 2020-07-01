@@ -189,11 +189,9 @@ export class FlashCardMultiSelect extends React.Component<IFlashCardMultiSelectP
 export function renderAnswerSelect(
   info: FlashCardStudySessionInfo
 ) {
-  const key = info.flashCards.indexOf(info.currentFlashCard);
   const correctAnswer = [(info.currentFlashCard.backSide.data as IFlashCardBackSideData).pitch];
   
   return <PianoKeysAnswerSelect
-    key={key}
     maxHeight={pianoMaxHeight}
     lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
     highestPitch={new Pitch(PitchLetter.B, 0, 5)}
@@ -220,7 +218,7 @@ export function createFlashCards(): Array<FlashCard> {
             p1
           ),
           new FlashCardSide(
-            p2.toOneAccidentalAmbiguousString(false),
+            p2.toOneAccidentalAmbiguousString(/*includeOctaveNumber*/ false),
             { pitch: p2, intervalString: interval } as IFlashCardBackSideData
           )
         )
