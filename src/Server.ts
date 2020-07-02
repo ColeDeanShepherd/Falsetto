@@ -1,10 +1,12 @@
 import { apiBaseUri } from "./Config";
+import { UserProfile } from './UserProfile';
 
 export interface IServer {
   signUp(email: string, password: string): Promise<string>;
   logIn(email: string, password: string): Promise<string>;
   emailResetPasswordLink(email: string): Promise<void>;
   resetPassword(resetPasswordToken: string, newPassword: string): Promise<void>;
+  getProfile(): Promise<UserProfile>;
 }
 
 export class Server implements IServer {
@@ -72,5 +74,24 @@ export class Server implements IServer {
       const errorMessage = await response.text();
       return Promise.reject(`Failed resetting password: ${errorMessage}`);
     }
+  }
+
+  public async getProfile(): Promise<UserProfile> {
+    const requestInit: RequestInit = {
+      // TODO: review security
+      credentials: "include" // include the session cookie
+    };
+
+    const response = await fetch(`${apiBaseUri}/profile`, requestInit);
+
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      return Promise.reject(`Failed getting profile: ${errorMessage}`);
+    }
+
+    const responseJson = await response.json();
+
+    const profile = responseJson as UserProfile;
+    return profile;
   }
 }

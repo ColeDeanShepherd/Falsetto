@@ -8,6 +8,7 @@ import { IServer } from "../Server";
 
 export interface IForgotPasswordPageState {
   email: string;
+  succeeded: boolean;
   error?: string;
 }
 
@@ -21,36 +22,45 @@ export class ForgotPasswordPage extends React.Component<{}, IForgotPasswordPageS
 
     this.state = {
       email: "",
+      succeeded: false,
       error: undefined
     };
   }
   
   public render(): JSX.Element {
-    const { email, error } = this.state;
+    const { email, succeeded, error } = this.state;
 
     return (
       <Card>
         <h1 className="margin-bottom">Forgot Password</h1>
 
-        <div>
-          <div className="form-group">
-            <TextField
-              id="email"
-              type="email"
-              label="Email"
-              value={email}
-              onChange={this.boundOnEmailChange}
-              className="full-width"
-              aria-describedby="emailHelp" />
-          </div>
-          <div className="form-group">
-            <Button onClick={() => this.emailPasswordResetLink()}>Email password reset link</Button>
-          </div>
-        </div>
+        {!succeeded
+          ? (
+            <div>
+              <div>
+                <div className="form-group">
+                  <TextField
+                    id="email"
+                    type="email"
+                    label="Email"
+                    value={email}
+                    onChange={this.boundOnEmailChange}
+                    className="full-width"
+                    aria-describedby="emailHelp" />
+                </div>
+                <div className="form-group">
+                  <Button onClick={() => this.emailPasswordResetLink()}>Email password reset link</Button>
+                </div>
+              </div>
 
-        {error
-          ? <div className="alert alert-danger">{error}</div>
-          : null}
+              {error
+                ? <div className="alert alert-danger">{error}</div>
+                : null}
+            </div>
+          )
+          : (
+            <p>If the email address above is registered with Falsetto, it has been sent a password recovery email which should arrive within 15 minutes.</p>
+          )}
       </Card>
     );
   }
@@ -68,6 +78,7 @@ export class ForgotPasswordPage extends React.Component<{}, IForgotPasswordPageS
 
     try {
       await this.server.emailResetPasswordLink(email);
+      this.setState({ succeeded: true });
     } catch (ex) {
       this.setState({ error: ex.toString() })
     }

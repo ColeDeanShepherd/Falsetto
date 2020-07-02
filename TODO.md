@@ -3,11 +3,14 @@
 ## Pomodoro
 ## Now
 ## High Priority
-* Setup email service in prod
 * Improve profile page
 * Improve user icon
 * Integrate payment processor
 * Lock part of course based on whether user has paid or not.
+* Make home page sections clickable
+* Better slideshow navigation
+* Make mobile usable
+* Improve self-paced scale/chord mastery
 * Review content
   * "Quiz" -> "Exercise"?
   * scale & chord capitalization
@@ -20,7 +23,6 @@
 
 
 
-* Chord progressions content improvements
 * Search bar?
 * Hide "Learn More" links?
 

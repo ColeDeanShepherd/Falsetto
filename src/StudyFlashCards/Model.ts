@@ -34,7 +34,7 @@ export async function getFlashCardSetStatsFromDatabase(
   flashCardSet: FlashCardSet, flashCards: Array<FlashCard>
 ): Promise<FlashCardSetStats> {
   const user = userManager.getCurrentUser();
-  const userId = user ? user.id : "";
+  const userId = ""; // TODO: user ? user.id : "";
   const flashCardIds = flashCards.map(fc => fc.id);
   const answers = await database.getAnswers(flashCardIds, userId);
   return getFlashCardSetStatsFromAnswers(flashCardSet, flashCards, answers);
