@@ -26,6 +26,7 @@
 }
 
 .home-topic .thumbnail {
+  display: block;
   width: 336px;
   height: 208px;
   background-size: cover;
@@ -38,8 +39,9 @@
   padding: 1em;
 }
 
-.home-topic .text h2 {
-  margin-top: 0;
+.home-topic .text h3 a,
+.home-topic .text h3 a:hover {
+  color: inherit;
 }
 
 .home-topic .text p {

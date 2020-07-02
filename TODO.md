@@ -4,10 +4,14 @@
 ## Now
 ## High Priority
 * Improve profile page
+  * Better logout button position
+  * Highlight unowned products available for purchase
 * Improve user icon
+  * Indicate logged in vs logged off?
+    * Login button when logged off?
+    * same user icon taking you to profile when logged in?
 * Integrate payment processor
 * Lock part of course based on whether user has paid or not.
-* Make home page sections clickable
 * Better slideshow navigation
 * Make mobile usable
 * Improve self-paced scale/chord mastery
@@ -20,6 +24,10 @@
 * Make sure analytics work
 * Last-minute improvements?
   * Scale fingerings
+
+
+
+* MIDI keyboard recommendations
 
 
 
