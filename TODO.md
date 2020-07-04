@@ -3,6 +3,11 @@
 ## Pomodoro
 ## Now
 ## High Priority
+* Integrate payment processor
+* Lock part of course based on whether user has paid or not.
+* Intervals section
+* Scale fingerings
+
 * Improve profile page
   * Better logout button position
   * Highlight unowned products available for purchase
@@ -10,20 +15,13 @@
   * Indicate logged in vs logged off?
     * Login button when logged off?
     * same user icon taking you to profile when logged in?
-* Integrate payment processor
-* Lock part of course based on whether user has paid or not.
 * Better slideshow navigation
 * Make mobile usable
 * Improve self-paced scale/chord mastery
 * Review content
   * "Quiz" -> "Exercise"?
   * scale & chord capitalization
-* Make sure what the course does for you (sell *results*) is clear.
-  * Home page
-  * Course intro
 * Make sure analytics work
-* Last-minute improvements?
-  * Scale fingerings
 
 
 

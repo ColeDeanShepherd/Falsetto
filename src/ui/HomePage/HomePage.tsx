@@ -152,6 +152,7 @@ export class HomePage extends React.Component<{}, {}> {
         </div>
 
         <h3 style={{ textAlign: "center" }}>Understanding the Piano Keyboard</h3>
+        <h4 className="h5" style={{ textAlign: "center" }}>The piano keyboard is more than just 12 notes. Better understand the music you enjoy, and improve your skills in music composition &amp; improvisation by learning to see intervals, scales, chords, and chord progressions on the piano keyboard.</h4>
         <div className="home-topic-container">
           <Card className="home-topic">
             <NavLinkView
