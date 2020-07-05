@@ -1,5 +1,7 @@
 import { isProduction, googleAnalyticsTrackingId } from "./Config";
 import { precondition } from './lib/Core/Dbc';
+import { ILogger } from './Logger';
+import { DependencyInjector } from './DependencyInjector';
 
 export interface IAnalytics {
   trackPageView(): Promise<void>;
@@ -61,7 +63,18 @@ export class Analytics implements IAnalytics {
 }
 
 export class MockAnalytics implements IAnalytics {
-  public trackPageView(): Promise<void> { return Promise.resolve(); }
+  public constructor() {
+    this.logger = DependencyInjector.instance.getRequiredService<ILogger>("ILogger");
+  }
+
+  public trackPageView(): Promise<void> {
+    this.logger.logInfo(`View to page ${location.pathname + location.search} tracked`);
+    return Promise.resolve();
+  
+  }
   public trackCustomEvent(id: string, label?: string, value?: number, category?: string): Promise<void> { return Promise.resolve(); }
+  
   public trackException(description: string, fatal: boolean): Promise<void> { return Promise.resolve(); }
+
+  private logger: ILogger;
 }
