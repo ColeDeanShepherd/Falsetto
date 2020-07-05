@@ -16,6 +16,7 @@ import { Chord } from '../../lib/TheoryLib/Chord';
 import { ChordType } from '../../lib/TheoryLib/ChordType';
 
 import "./Stylesheet.css";
+import { PaywallOverlay } from "../Utils/PaywallOverlay/PaywallOverlay";
 
 // #region Topic Thumbnails
 
@@ -197,6 +198,8 @@ export class HomePage extends React.Component<{}, {}> {
               <br />
               <p><NavLinkView to="/scale-exercises">Self-Paced Scale Mastery</NavLinkView></p>
             </div>
+            
+            <PaywallOverlay />
           </Card>
           
           <Card className="home-topic">
@@ -215,6 +218,8 @@ export class HomePage extends React.Component<{}, {}> {
               <br />
               <p><NavLinkView to="/chord-exercises">Self-Paced Chord Mastery</NavLinkView></p>
             </div>
+            
+            <PaywallOverlay />
           </Card>
           
           <Card className="home-topic">
@@ -228,6 +233,8 @@ export class HomePage extends React.Component<{}, {}> {
               <p><NavLinkView to="/understanding-the-piano-keyboard?slide=chord-progressions-review">Review</NavLinkView></p>
               <p><NavLinkView to="/understanding-the-piano-keyboard?slide=chord-progressions-quiz">Quiz</NavLinkView></p>
             </div>
+            
+            <PaywallOverlay />
           </Card>
         </div>
         

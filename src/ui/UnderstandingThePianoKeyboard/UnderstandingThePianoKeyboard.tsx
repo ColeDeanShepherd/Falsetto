@@ -1225,7 +1225,7 @@ export const pianoTheorySlideGroups = [
         <p>We will now continue on to cover <strong>chords</strong>.</p>
       </div>
     )),
-  ]),
+  ], /*isPremium*/ true),
 
   new SlideGroup("Chords", [
     new Slide("chords-introduction", () => (
@@ -1618,7 +1618,7 @@ export const pianoTheorySlideGroups = [
         <p>QUIZ</p>
       </div>
     )),*/
-  ]),
+  ], /*isPremium*/ true),
 
   new SlideGroup("Chord Progressions", [
     new Slide("chord-progressions-introduction", () => (
@@ -2027,7 +2027,7 @@ export const pianoTheorySlideGroups = [
           /*renderCard*/ studyFlashCardsViewRenderCard)}
       </div>
     )),
-  ]),
+  ], /*isPremium*/ true),
   
   new SlideGroup("Conclusion", [
     new Slide("next-steps", () => (
@@ -2046,7 +2046,7 @@ export const pianoTheorySlideGroups = [
         </ul>
       </div>
     ))
-  ])
+  ], /*isPremium*/ true)
 ];
 
 // #endregion Slides
