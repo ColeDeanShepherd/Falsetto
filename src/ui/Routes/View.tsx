@@ -51,6 +51,9 @@ import { createSlideGroups as createChordTypeMasteryLessonSlideGroups } from '..
 import { PageNotFoundView } from '../../ui/PageNotFoundView';
 import { ChordPage } from "../../ui/ChordPage";
 import { ChordExercisesPage } from '../ChordExercisesPage';
+import { ForgotPasswordPage} from "../ForgotPasswordPage";
+import { ResetPasswordPage } from "../ResetPasswordPage";
+import { SignUpPage } from '../SignUpPage';
 
 export interface IRouteData {
   key?: string;
@@ -179,6 +182,15 @@ const routes: Array<IRouteData> = ([
     )
   },
   {
+    path: "/sign-up",
+    title: "Sign Up - Falsetto",
+    renderFn: () => (
+      <LimitedWidthContentContainer>
+        <SignUpPage />
+      </LimitedWidthContentContainer>
+    )
+  },
+  {
     path: "/login",
     title: "Login - Falsetto",
     renderFn: () => (
@@ -206,11 +218,20 @@ const routes: Array<IRouteData> = ([
     )
   },
   {
+    path: "/forgot-password",
+    title: "Forgot Password - Falsetto",
+    renderFn: () => (
+      <LimitedWidthContentContainer>
+        <ForgotPasswordPage />
+      </LimitedWidthContentContainer>
+    )
+  },
+  {
     path: "/reset-password",
     title: "Reset Password - Falsetto",
     renderFn: () => (
       <LimitedWidthContentContainer>
-        <MessagePage title="Reset Password" message="An email has been sent to your email address with instructions to reset your password." />
+        <ResetPasswordPage />
       </LimitedWidthContentContainer>
     )
   },

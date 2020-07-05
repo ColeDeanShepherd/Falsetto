@@ -7,9 +7,7 @@ export class PageNotFoundView extends React.Component<{}, {}> {
     return (
       <LimitedWidthContentContainer>
         <Card>
-          <h2 className="h5 margin-bottom">
-            Not Found
-          </h2>
+          <h1 className="margin-bottom">Not Found</h1>
           <p>The requested URL was not found.</p>
         </Card>
       </LimitedWidthContentContainer>

@@ -655,11 +655,13 @@ export const pianoTheorySlideGroups = [
     new Slide("introduction", () => (
       <div>
         <div>
-          <h1>Understanding the Piano Keyboard</h1>
-          <h2>Section 1: Introduction &amp; Setup</h2>
-          <p>This is an interactive course designed to teach you the essentials of piano and music theory in a hands-on manner.</p>
-          <p>This course is designed to be viewed on tablets and computer monitors, not on mobile phones.</p>
-          <p>Press the "<i className="material-icons" style={{ verticalAlign: "bottom" }}>keyboard_arrow_right</i>" on the right of this page, or press the right arrow key on your computer keyboard, to move to the next slide.</p>
+          <h1 style={{ marginBottom: "1em" }}>Understanding the Piano Keyboard</h1>
+          <h2 style={{ marginBottom: "1em" }}>Section 1: Introduction &amp; Setup</h2>
+          <p>Welcome to Falsetto's interactive course "Understanding the Piano Keyboard!"</p>
+          <p>This is an interactive course designed to give you the tools to analyze the music you enjoy and compose your own music on the piano keyboard.</p>
+          <p>This course is designed to be viewed on tablets and computer monitors, not on mobile phones due to screen space limitations.</p>
+          <p>Without further ado, let's get started!</p>
+          <p>Press the "<i className="material-icons" style={{ verticalAlign: "bottom" }}>keyboard_arrow_right</i>" on the right of this page, or press the right arrow key on your computer keyboard, to move to the next slide where we will set up your MIDI piano keyboard, if you have one.</p>
         </div>
       </div>
     )),

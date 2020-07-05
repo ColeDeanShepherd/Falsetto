@@ -1,25 +1,53 @@
 # To-Do
 ## Other
 ## Pomodoro
+## Now
 ## High Priority
-* Account System
-  * Email confirmation
-  * Change password
-  * Change email?
-* Chord progressions content improvements
+* Integrate payment processor
+* Lock part of course based on whether user has paid or not.
+* Intervals section
+* Scale fingerings
+
+* Improve profile page
+  * Better logout button position
+  * Highlight unowned products available for purchase
+* Improve user icon
+  * Indicate logged in vs logged off?
+    * Login button when logged off?
+    * same user icon taking you to profile when logged in?
+* Better slideshow navigation
+* Make mobile usable
+* Improve self-paced scale/chord mastery
+* Review content
+  * "Quiz" -> "Exercise"?
+  * scale & chord capitalization
+* Make sure analytics work
+
+
+
+* MIDI keyboard recommendations
+
+
+
 * Search bar?
 * Hide "Learn More" links?
+
+* Marketing
+  * SEO
+  * YouTube ads
+    * "Stop memorizing piano music and start understanding it
+  * Pay influencers?
+  * Get good standing on social website, share
+    * Reddit
+    * Facebook groups
+    * Forums
+  * Review & discount codes
 
 * roman numerals quiz
 * Fix user-determined answers in mini quizzes
 * improve slide URLs
-* "Quiz" -> "Exercise"
-* scale & chord capitalization
 * Add degree #'s to self paced chord mastery
-* Add account system
 * improve self-paced pages
-* conclusion and next steps
-* Make sure analytics work
 
 * Make sure everything in essential music theory is also in new course
 * Understanding the Piano Keyboard
@@ -54,12 +82,9 @@
 * Improve Quizzes
   * Save quiz completion?
 * Account system
-  * Creation
-  * Changes
-  * Recover password
+  * Email confirmation
   * 2FA?
   * Save data
-* Monetize
 ## Medium Priority
 * Ear Training/Sight Singing Course
   * Singing notes after hearing them
@@ -82,7 +107,6 @@
 * Turn exercises into "active" exercises
   * Piano Intervals
   * Piano Scales
-  * Guitar Notes
   * Guitar Intervals
   * Guitar Scales
   * Guitar Chords
@@ -111,7 +135,6 @@
 * Understanding the Piano Keyboard
   * Piano scale drone player release stop playing?
   * Pressing the correct note doesn't play the sound...
-  * Piano notes exercises all have the same progress... Do I want that?
 * Get rid of flash card set container height.
 * Split scale types up into files.
 * Refactor pitch class into multiple (canonical, ambiguous)

@@ -8,9 +8,10 @@ import { IAnalytics } from "../Analytics";
 
 import { IAction } from "../IAction";
 import { ActionBus, ActionHandler } from "../ActionBus";
-import { NavigateAction } from "./Actions";
+import { NavigateAction, LoginAction, SignUpAction, LogoutAction } from './Actions';
 import { AppMidiModel } from "../AppMidi/Model";
 import { PianoAudio } from "../Audio/PianoAudio";
+import { saveSessionToken, clearSessionToken } from '../Cookies';
 
 export class AppModel implements IDisposable {
   public static instance: AppModel;
@@ -50,6 +51,30 @@ export class AppModel implements IDisposable {
         this.history.push((action as NavigateAction).to);
         this.analytics.trackPageView();
         break;
+      case SignUpAction.Id:
+        this.handleSignUpAction(action as SignUpAction);
+        break;
+      case LoginAction.Id:
+        this.handleLoginAction(action as LoginAction);
+        break;
+      case LogoutAction.Id:
+        this.handleLogoutAction(action as LogoutAction);
+        break;
     }
+  }
+
+  private async handleSignUpAction(signUpAction: SignUpAction) {
+    await saveSessionToken(signUpAction.sessionToken);
+    ActionBus.instance.dispatch(new NavigateAction("/profile"));
+  }
+
+  private async handleLoginAction(loginAction: LoginAction) {
+    await saveSessionToken(loginAction.sessionToken);
+    ActionBus.instance.dispatch(new NavigateAction("/profile"));
+  }
+
+  private async handleLogoutAction(logoutAction: LogoutAction) {
+    await clearSessionToken();
+    ActionBus.instance.dispatch(new NavigateAction("/"));
   }
 }

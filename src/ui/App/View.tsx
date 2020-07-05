@@ -6,7 +6,6 @@ import { DependencyInjector } from '../../DependencyInjector';
 import { IAction } from '../../IAction';
 import { ActionBus, ActionHandler } from '../../ActionBus';
 import { MainContainerView } from '../MainContainerView';
-import { Auth0UpdateAction } from '../../Auth0Injector/Actions';
 
 import "./Stylesheet.css"; // TODO: use a CSS preprocessor and split this into multiple files
 import { AppBarView } from "../AppBar/View";
@@ -45,8 +44,6 @@ export class AppView extends React.Component<{}, {}> {
 
   private handleAction(action: IAction) {
     switch (action.getId()) {
-      case Auth0UpdateAction.Id:
-        this.forceUpdate();
     }
   }
 }
