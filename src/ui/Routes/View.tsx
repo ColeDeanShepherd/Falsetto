@@ -54,6 +54,7 @@ import { ChordExercisesPage } from '../ChordExercisesPage';
 import { ForgotPasswordPage} from "../ForgotPasswordPage";
 import { ResetPasswordPage } from "../ResetPasswordPage";
 import { SignUpPage } from '../SignUpPage';
+import { understandingThePianoKeyboardProductId } from '../../Products';
 
 export interface IRouteData {
   key?: string;
@@ -266,7 +267,7 @@ const routes: Array<IRouteData> = ([
     path: "/understanding-the-piano-keyboard",
     title: "Understanding the Piano Keyboard - Falsetto",
     renderFn: () => (
-      <Slideshow slideGroups={pianoTheorySlideGroups} />
+      <Slideshow slideGroups={pianoTheorySlideGroups} premiumProductId={understandingThePianoKeyboardProductId} />
     )
   },
   {
@@ -471,7 +472,7 @@ const routes: Array<IRouteData> = ([
 
           return (
             <DocumentTitle title={`${scaleName} Scale - Falsetto`}>
-              <Slideshow slideGroups={slideGroups} />
+              <Slideshow slideGroups={slideGroups} premiumProductId={understandingThePianoKeyboardProductId} />
             </DocumentTitle>
           );
         }} />
@@ -487,7 +488,7 @@ const routes: Array<IRouteData> = ([
 
           return (
             <DocumentTitle title={`${scaleName} Scale Mastery - Falsetto`}>
-              <Slideshow slideGroups={slideGroups} />
+              <Slideshow slideGroups={slideGroups} premiumProductId={understandingThePianoKeyboardProductId} />
             </DocumentTitle>
           );
         }} />
@@ -549,7 +550,7 @@ const routes: Array<IRouteData> = ([
 
           return (
             <DocumentTitle title={`${chordTypeName} Chord Mastery - Falsetto`}>
-              <Slideshow slideGroups={slideGroups} />
+              <Slideshow slideGroups={slideGroups} premiumProductId={understandingThePianoKeyboardProductId} />
             </DocumentTitle>
           );
         }} />

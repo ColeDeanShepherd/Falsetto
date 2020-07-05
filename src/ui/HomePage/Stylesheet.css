@@ -23,6 +23,8 @@
 .home-topic {
   margin: 1em;
   padding: 0;
+  width: 336px;
+  position: relative;
 }
 
 .home-topic .thumbnail {

@@ -15,6 +15,9 @@ import { Button } from "../../ui/Button/Button";
 import "./Stylesheet.css"; // TODO: use a CSS preprocessor and split this into multiple files
 import { ActionBus } from '../../ActionBus';
 import { NavigateAction } from '../../App/Actions';
+import { UserProfile } from "../../UserProfile";
+import { IServer } from "../../Server";
+import { PaywallOverlay } from "../Utils/PaywallOverlay/PaywallOverlay";
 
 function getSlideGroup(slideGroups: Array<SlideGroup>, slideIndex: number): [SlideGroup, number] | undefined {
   let numSlidesSeen = 0;
@@ -41,15 +44,20 @@ export class Slide {
 }
 
 export class SlideGroup {
-  public constructor(public name: string, public slides: Array<Slide>) {}
+  public constructor(
+    public name: string,
+    public slides: Array<Slide>,
+    public isPremium: boolean = false) {}
 }
 
 export interface ISlideshowProps {
   slideGroups: Array<SlideGroup>;
+  premiumProductId?: number;
 }
 
 export interface ISlideshowState {
   slideIndex: number;
+  userProfile?: UserProfile;
 }
 
 export class Slideshow extends React.Component<ISlideshowProps, ISlideshowState> {
@@ -57,6 +65,7 @@ export class Slideshow extends React.Component<ISlideshowProps, ISlideshowState>
     super(props);
     
     this.history = DependencyInjector.instance.getRequiredService<History<any>>("History");
+    this.server = DependencyInjector.instance.getRequiredService<IServer>("IServer");
 
     [this.state, this.slides] = this.getStateFromProps(props);
   }
@@ -91,6 +100,10 @@ export class Slideshow extends React.Component<ISlideshowProps, ISlideshowState>
     });
 
     this.registerKeyEventHandlers();
+    
+    this.server.getProfile()
+      .then(p => this.setState({ userProfile: p }));
+    // TODO: error handling
   }
 
   public componentWillUnmount() {
@@ -107,9 +120,20 @@ export class Slideshow extends React.Component<ISlideshowProps, ISlideshowState>
   // TODO: show slide group
   public render(): JSX.Element {
     const { slides } = this;
-    const { slideIndex } = this.state;
+    const { slideGroups, premiumProductId } = this.props;
+    const { slideIndex, userProfile } = this.state;
 
-    const renderedSlide = slides[slideIndex].renderFn(this);
+    const slide = slides[slideIndex];
+    
+    const slideGroupInfo = getSlideGroup(slideGroups, slideIndex);
+    if (!slideGroupInfo) {
+      return <span style={{ padding: "0 1em" }}>Understanding the Piano Keyboard - Falsetto</span>;
+    }
+
+    const slideGroup = slideGroupInfo[0];
+    
+    const isSlideDisabledByPaywall = slideGroup.isPremium &&
+      ((userProfile === undefined) || !userProfile.boughtProductIds.some(pi => pi === premiumProductId));
 
     return (
       <div className="slideshow" style={{ height: "100%" }}>
@@ -125,10 +149,11 @@ export class Slideshow extends React.Component<ISlideshowProps, ISlideshowState>
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", textAlign: "center", flexGrow: 1, height: "100%" }}>
-            {false ? this.renderSlideLocation() : null}
             <LimitedWidthContentContainer style={{ flexGrow: 1 }}>
-              <Card style={{ height: "100%" }}>
-                {renderedSlide}
+              <Card style={{ height: "100%", position: "relative" }}>
+                {!isSlideDisabledByPaywall
+                  ? slide.renderFn(this)
+                  : <PaywallOverlay premiumProductId={premiumProductId} />}
               </Card>
             </LimitedWidthContentContainer>
           </div>
@@ -146,6 +171,8 @@ export class Slideshow extends React.Component<ISlideshowProps, ISlideshowState>
       </div>
     );
   }
+  
+  // #endregion React Functions
 
   private slides: Array<Slide>;
 
@@ -177,10 +204,9 @@ export class Slideshow extends React.Component<ISlideshowProps, ISlideshowState>
     );
   }
   
+  private server: IServer;
   private history: History<any>;
   private historyUnregisterCallback: UnregisterCallback | undefined;
-
-  // #endregion React Functions
 
   // #region Event Handlers
 
