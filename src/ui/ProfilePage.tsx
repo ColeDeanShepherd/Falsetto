@@ -9,6 +9,7 @@ import { IServer } from "../Server";
 import { DependencyInjector } from "../DependencyInjector";
 import { UserProfile } from '../UserProfile';
 import { Button } from "./Button/Button";
+import { premiumProducts } from '../Products';
 
 export interface IProfilePageState {
   userProfile: UserProfile | undefined
@@ -51,7 +52,9 @@ export class ProfilePage extends React.Component<{}, IProfilePageState> {
             <div>
               <h1>Welcome, {userProfile.email}</h1>
               <p><Button onClick={this.boundLogout}>Logout</Button></p>
-              <p>{this.getBoughtProductsString(userProfile)}</p>
+
+              <h2>Owned Courses</h2>
+              <p>{this.renderBoughtProducts(userProfile)}</p>
             </div>
           )
           : <p>Loading...</p>}
@@ -68,11 +71,24 @@ export class ProfilePage extends React.Component<{}, IProfilePageState> {
     this.setState({ userProfile: userProfile });
   }
 
-  private getBoughtProductsString(userProfile: UserProfile): string {
+  private renderBoughtProducts(userProfile: UserProfile): JSX.Element | null {
     if (userProfile.boughtProductIds.length === 0) {
-      return "You have not bought any products from Falsetto.";
+      return <p>You have not purchased any premium courses.</p>;
     } else {
-      return "TODO";
+      return (
+        <ul>
+          {userProfile.boughtProductIds.map(pId => {
+            const product = premiumProducts.find(p => p.id === pId);
+            return (
+              <li>
+                {(product !== undefined)
+                  ? (<NavLinkView to={product.uri}>{product.name}</NavLinkView>)
+                  : <span>Unknown product</span>}
+              </li>
+            );
+          })}
+        </ul>
+      );
     }
   }
 

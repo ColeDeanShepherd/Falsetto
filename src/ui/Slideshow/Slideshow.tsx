@@ -132,8 +132,8 @@ export class Slideshow extends React.Component<ISlideshowProps, ISlideshowState>
 
     const slideGroup = slideGroupInfo[0];
     
-    const isSlideDisabledByPaywall = !slideGroup.isPremium ||
-      ((userProfile !== undefined) && (userProfile.boughtProductIds.some(pi => pi === premiumProductId)));
+    const isSlideDisabledByPaywall = slideGroup.isPremium &&
+      ((userProfile === undefined) || !userProfile.boughtProductIds.some(pi => pi === premiumProductId));
 
     return (
       <div className="slideshow" style={{ height: "100%" }}>
@@ -151,9 +151,9 @@ export class Slideshow extends React.Component<ISlideshowProps, ISlideshowState>
           <div style={{ display: "flex", flexDirection: "column", textAlign: "center", flexGrow: 1, height: "100%" }}>
             <LimitedWidthContentContainer style={{ flexGrow: 1 }}>
               <Card style={{ height: "100%", position: "relative" }}>
-                {isSlideDisabledByPaywall
+                {!isSlideDisabledByPaywall
                   ? slide.renderFn(this)
-                  : <PaywallOverlay />}
+                  : <PaywallOverlay premiumProductId={premiumProductId} />}
               </Card>
             </LimitedWidthContentContainer>
           </div>
