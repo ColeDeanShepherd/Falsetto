@@ -1,14 +1,26 @@
-import { createBrowserHistory } from 'history';
+import { createBrowserHistory, History } from 'history';
 
 import { UserManager } from './UserManager';
 import { InMemoryDatabase } from './Database';
-import { Analytics, MockAnalytics } from './Analytics';
+import { Analytics, MockAnalytics, IAnalytics } from './Analytics';
 import { isProduction } from "./Config";
 import { ConsoleLogger } from './Logger';
 import { Server } from "./Server";
 
 export class DependencyInjector {
   public static instance = new DependencyInjector();
+
+  public constructor() {
+    // Ensure "instance" is initialized for use in constructors below.
+    DependencyInjector.instance = this;
+
+    this.logger = new ConsoleLogger();
+    this.history = createBrowserHistory();
+    this.userManager = new UserManager();
+    this.database = new InMemoryDatabase(); // new TwoTierDatabase();
+    this.analytics = isProduction() ? (new Analytics()) : (new MockAnalytics());
+    this.server = new Server();
+  }
 
   public getRequiredService<T>(serviceName: string): T {
     switch (serviceName) {
@@ -29,10 +41,10 @@ export class DependencyInjector {
     }
   }
 
-  private logger = new ConsoleLogger();
-  private history = createBrowserHistory();
-  private userManager = new UserManager();
-  private database = new InMemoryDatabase(); // new TwoTierDatabase();
-  private analytics = isProduction() ? (new Analytics()) : (new MockAnalytics());
-  private server = new Server();
+  private logger: ConsoleLogger;
+  private history: History<any>;
+  private userManager: UserManager;
+  private database: InMemoryDatabase; // new TwoTierDatabase();
+  private analytics: IAnalytics;
+  private server: Server;
 }

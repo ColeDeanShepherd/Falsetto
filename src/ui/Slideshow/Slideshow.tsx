@@ -13,6 +13,8 @@ import { Card } from "../../ui/Card/Card";
 import { Button } from "../../ui/Button/Button";
 
 import "./Stylesheet.css"; // TODO: use a CSS preprocessor and split this into multiple files
+import { ActionBus } from '../../ActionBus';
+import { NavigateAction } from '../../App/Actions';
 
 function getSlideGroup(slideGroups: Array<SlideGroup>, slideIndex: number): [SlideGroup, number] | undefined {
   let numSlidesSeen = 0;
@@ -262,10 +264,7 @@ export class Slideshow extends React.Component<ISlideshowProps, ISlideshowState>
       const oldSearchParams = QueryString.parse(this.history.location.search);
       const newSearchParams = { ...oldSearchParams, slide: slides[slideIndex].url };
 
-      this.history.push({
-        pathname: this.history.location.pathname,
-        search: `?${QueryString.stringify(newSearchParams)}`
-      });
+      ActionBus.instance.dispatch(new NavigateAction(this.history.location.pathname + `?${QueryString.stringify(newSearchParams)}`));
     });
   }
 
