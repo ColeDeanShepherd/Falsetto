@@ -1,0 +1,11 @@
+.menu.expandable {
+  width: 700px;
+}
+
+.menu-category-button {
+  display: block !important;
+  width: 100%;
+  padding-top: 0.5em !important;
+  padding-bottom: 0.5em !important;
+  border-bottom: 1px solid #CCC;
+}

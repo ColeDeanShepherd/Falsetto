@@ -55,6 +55,7 @@ import * as ScaleEarTraining from "../Quizzes/Scales/ScaleEarTraining";
 
 import { RhythmTapper } from "../Tools/RhythmTapper";
 import { NavLinkView } from "../NavLinkView";
+import { Button } from '../Button/Button';
 
 export interface MainMenuCategory {
   title: string;
@@ -392,42 +393,76 @@ const MenuCategoryView: React.FunctionComponent<{ menuCategory: MainMenuCategory
     </div>
   );
 
-export const MainMenu : React.FunctionComponent<{ collapseCategories: boolean }> = props => {
-  return !props.collapseCategories
-  ? (
-    <div className="menu">
-      <div className="row no-gutters">
-        <div className="col-sm">
-          {<MenuCategoryView menuCategory={mainMenuCategories[0]} collapseCategories={false} />}
-          {<MenuCategoryView menuCategory={mainMenuCategories[1]} collapseCategories={false} />}
+export interface IMainMenuProps {
+  collapseCategories: boolean;
+}
+
+export interface IMainMenuState {
+  expandedCategoryIndex: number | undefined;
+}
+
+export class MainMenu extends React.Component<IMainMenuProps, IMainMenuState> {
+  public constructor(props: IMainMenuProps) {
+    super(props);
+    
+    this.state = {
+      expandedCategoryIndex: undefined
+    };
+  }
+
+  public render(): JSX.Element {
+    const { collapseCategories } = this.props;
+    const { expandedCategoryIndex } = this.state;
+    
+    return !collapseCategories
+      ? (
+        <div className="menu">
+          <div className="row no-gutters">
+            <div className="col-sm">
+              {<MenuCategoryView menuCategory={mainMenuCategories[0]} collapseCategories={false} />}
+              {<MenuCategoryView menuCategory={mainMenuCategories[1]} collapseCategories={false} />}
+            </div>
+            <div className="col-sm">
+              {<MenuCategoryView menuCategory={mainMenuCategories[2]} collapseCategories={false} />}
+              {<MenuCategoryView menuCategory={mainMenuCategories[3]} collapseCategories={false} />}
+            </div>
+            <div className="col-sm">
+              {<MenuCategoryView menuCategory={mainMenuCategories[4]} collapseCategories={false} />}
+            </div>
+            <div className="col-sm">
+              {<MenuCategoryView menuCategory={mainMenuCategories[5]} collapseCategories={false} />}
+              {<MenuCategoryView menuCategory={mainMenuCategories[6]} collapseCategories={false} />}
+            </div>
+            <div className="col-sm">
+              {<MenuCategoryView menuCategory={mainMenuCategories[7]} collapseCategories={false} />}
+              {<MenuCategoryView menuCategory={mainMenuCategories[8]} collapseCategories={false} />}
+            </div>
+          </div>
         </div>
-        <div className="col-sm">
-          {<MenuCategoryView menuCategory={mainMenuCategories[2]} collapseCategories={false} />}
-          {<MenuCategoryView menuCategory={mainMenuCategories[3]} collapseCategories={false} />}
+      )
+      : (
+        <div className="menu expandable">
+          <div className="row no-gutters">
+            <div className="col-sm">
+              {mainMenuCategories.map((c, i) => (
+                <Button
+                  onClick={e => this.expandCategory(i)}
+                  className="menu-category-button">
+                  {c.title}
+                </Button>
+              ))}
+            </div>
+            <div className="col-sm" style={{ padding: "0 1em" }}>
+              {(expandedCategoryIndex !== undefined)
+                ? mainMenuCategories[expandedCategoryIndex].items.map(item => <NavLinkView to={item.uri}>{item.title}</NavLinkView>)
+                : null}
+            </div>
+          </div>
         </div>
-        <div className="col-sm">
-          {<MenuCategoryView menuCategory={mainMenuCategories[4]} collapseCategories={false} />}
-        </div>
-        <div className="col-sm">
-          {<MenuCategoryView menuCategory={mainMenuCategories[5]} collapseCategories={false} />}
-          {<MenuCategoryView menuCategory={mainMenuCategories[6]} collapseCategories={false} />}
-        </div>
-        <div className="col-sm">
-          {<MenuCategoryView menuCategory={mainMenuCategories[7]} collapseCategories={false} />}
-          {<MenuCategoryView menuCategory={mainMenuCategories[8]} collapseCategories={false} />}
-        </div>
-      </div>
-    </div>
-  )
-  : (
-    <div className="menu">
-      <div className="row no-gutters">
-        <div className="col-sm">
-          {mainMenuCategories.map(c => <div className="">{c.title}</div>)}
-        </div>
-        <div className="col-sm">
-        </div>
-      </div>
-    </div>
-  );
+      );
+  }
+
+  private expandCategory(categoryIndex: number) {
+    this.setState({ expandedCategoryIndex: categoryIndex });
+  }
 };

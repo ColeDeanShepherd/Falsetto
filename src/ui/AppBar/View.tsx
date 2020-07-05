@@ -75,7 +75,7 @@ export class AppBarView extends React.Component<IAppBarViewProps, IAppBarViewSta
                         onClick={event => this.toggleMenu()}
                         className="menu-close-button"
                       />
-                      <MainMenu collapseCategories={false} />
+                      <MainMenu collapseCategories={true} />
                     </Card>
                   )
                   : null}
