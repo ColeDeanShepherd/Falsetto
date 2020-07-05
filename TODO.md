@@ -3,10 +3,27 @@
 ## Pomodoro
 ## Now
 ## High Priority
-* Integrate payment processor
-* Lock part of course based on whether user has paid or not.
+* Better slideshow navigation
+
+* improve slide URLs
+
+
 * Intervals section
 * Scale fingerings
+* Improve self-paced scale/chord mastery
+
+
+
+* Integrate payment processor
+
+
+
+
+* Lock part of course based on whether user has paid or not.
+  * Visual indicators on home page
+  * Lock in slideshow
+  * Buttons to buy
+
 
 * Improve profile page
   * Better logout button position
@@ -15,13 +32,10 @@
   * Indicate logged in vs logged off?
     * Login button when logged off?
     * same user icon taking you to profile when logged in?
-* Better slideshow navigation
 * Make mobile usable
-* Improve self-paced scale/chord mastery
 * Review content
   * "Quiz" -> "Exercise"?
   * scale & chord capitalization
-* Make sure analytics work
 
 
 
@@ -44,8 +58,6 @@
   * Review & discount codes
 
 * roman numerals quiz
-* Fix user-determined answers in mini quizzes
-* improve slide URLs
 * Add degree #'s to self paced chord mastery
 * improve self-paced pages
 
@@ -78,7 +90,6 @@
   * Improve layout
 * Debug & fix scale viewer & chord viewer
 * Fix level not being detected properly when disabling & re-enabling in piano notes exercise (orders don't match due to toggle).
-* Improve Home Page
 * Improve Quizzes
   * Save quiz completion?
 * Account system
