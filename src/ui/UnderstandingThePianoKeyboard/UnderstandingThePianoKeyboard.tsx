@@ -1091,11 +1091,63 @@ export const pianoTheorySlideGroups = [
       </div>
     )),
   ]),
+  
+  new SlideGroup("Intervals", [
+    new Slide("intervals-introduction", () => (
+      <div>
+        <h2>Section 3: Intervals</h2>
+        <ul>
+          <li>Definition</li>
+          <li>example (P5)</li>
+          <li>example explanation ("perfect", "fifth", half steps, ascending/descending/harmonic)</li>
+          <li>all different intervals</li>
+          <li>quizzes</li>
+        </ul>
+      </div>
+    )),
+    
+    new Slide("intervals-summary", () => (
+      <div>
+        <p>You have now learned the names of all 12 notes in the repeating pattern of piano keys!</p>
+        <p>
+          <PianoNotesDiagram
+            lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
+            highestPitch={new Pitch(PitchLetter.B, 0, 4)}
+            maxWidth={maxOneOctavePianoWidth / 2}
+            labelWhiteKeys={true}
+            labelBlackKeys={true} />
+        </p>
+        <p>And here are all the note names on an 88 key piano keyboard:</p>
+        <p>
+          <PianoNotesDiagram
+            lowestPitch={fullPianoLowestPitch}
+            highestPitch={fullPianoHighestPitch}
+            maxWidth={maxPianoWidth}
+            labelWhiteKeys={true}
+            labelBlackKeys={true} />
+        </p>
+        <p>Study these note names, then move to the next slide to practice your knowledge with an interactive exercise.</p>
+      </div>
+    )),
+
+    new Slide("intervals-quiz", () => (
+      <div style={exerciseContainerStyle}>
+        {createStudyFlashCardSetComponent(
+          PianoNotes.createFlashCardSet(allPitches),
+          /*isEmbedded*/ false,
+          /*hideMoreInfoUri*/ true,
+          /*title*/ "Piano Notes Exercise",
+          /*style*/ undefined,
+          /*enableSettings*/ undefined,
+          /*renderCard*/ studyFlashCardsViewRenderCard)}
+      </div>
+    )),
+  ]),
 
   new SlideGroup("Scales", [
     new Slide("scales-introduction", () => (
       <div>
-        <h2>Section 3: Scales</h2>
+        <h2>Section 4: Scales</h2>
         <p>As you've learned, there are 12 different notes. Though musicians are free to use any of the 12 notes at any time, it is common to restrict the choice of keys to those in a particular <strong>scale</strong> &mdash; a set of notes.</p>
         <p>The <strong>C major scale</strong>, for example, consists of the 7 notes: <strong>C, D, E, F, G, A, B</strong>.</p>
         <p>Try pressing the piano keys below to get a feel for how the scale sounds. Pressing keys will play both the pressed note and the lowest C in the diagram, which helps convey the "feeling" of the scale.</p>
@@ -1230,7 +1282,7 @@ export const pianoTheorySlideGroups = [
   new SlideGroup("Chords", [
     new Slide("chords-introduction", () => (
       <div>
-        <h2>Section 4.1: Introduction to Chords</h2>
+        <h2>Section 5.1: Introduction to Chords</h2>
         <p><strong>Chords</strong> are sets of two or more notes played simultaneously.</p>
         <p>For example, here is a <strong>C Major</strong> chord, which consists of the three notes <strong>C, E, G</strong>, and has a root note of <strong>C</strong>.</p>
         <ChordView
@@ -1407,7 +1459,7 @@ export const pianoTheorySlideGroups = [
 
     new Slide("diatonic-chords", () => (
       <div>
-        <h2>Section 4.2: Diatonic Chords</h2>
+        <h2>Section 5.2: Diatonic Chords</h2>
         <p>Generally, in a section of music, musicians will restrict themselves to the chords consisting solely of notes from a particular scale &mdash; <strong>diatonic chords</strong>.</p>
         <p>For example, let's take the C Major scale, which consists of the notes: C, D, E, F, G, A, B. Any combination of two or more of these notes is a <strong>diatonic chord</strong> of the C Major scale.</p>
         <p>One example of a diatonic triad in the C Major scale is <strong>G Major</strong>, which has a root note of <strong>G</strong> (the 5th note in the C Major scale) and consists of the notes <strong>G, B, D</strong>, all of which are in the C Major scale:</p>
@@ -1623,7 +1675,7 @@ export const pianoTheorySlideGroups = [
   new SlideGroup("Chord Progressions", [
     new Slide("chord-progressions-introduction", () => (
       <div>
-        <h2>Section 5: Chord Progressions</h2>
+        <h2>Section 6: Chord Progressions</h2>
         <p><strong>Chord progressions</strong> are sequences of chords.</p>
         <p>Below is an example of a chord progression consisting of the chords: D Minor, G Dominant 7 (abbreviated as "G7"), C Major</p>
         <ChordProgressionPlayer

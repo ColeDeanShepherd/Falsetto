@@ -35,6 +35,20 @@ export const NotesThumbnail: React.FunctionComponent<{}> = props => (
     )} />
 );
 
+const intervalsThumbnailPitches = [
+  new Pitch(PitchLetter.C, 0, 4),
+  new Pitch(PitchLetter.G, 1, 4),
+];
+
+export const IntervalsThumbnail: React.FunctionComponent<{}> = props => (
+  <PianoKeyboard
+    maxWidth={topicThumbnailSize.width} 
+    maxHeight={topicThumbnailSize.height} /* from ".home-topic .thumbnail" in Stylesheet.css */
+    lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
+    highestPitch={new Pitch(PitchLetter.B, 0, 4)}
+    pressedPitches={intervalsThumbnailPitches} />
+);
+
 export interface IAnimatedPianoKeyboardThumbnailProps {
   animationStepPitches: Array<Array<Pitch>>;
   animationStepDurationMs: number;
@@ -179,6 +193,19 @@ export class HomePage extends React.Component<{}, {}> {
               <p><NavLinkView to="/understanding-the-piano-keyboard?slide=note-c-sharp">Black Keys</NavLinkView></p>
               <p><NavLinkView to="/understanding-the-piano-keyboard?slide=notes-summary">Review</NavLinkView></p>
               <p><NavLinkView to="/understanding-the-piano-keyboard?slide=notes-quiz">Quiz</NavLinkView></p>
+            </div>
+          </Card>
+
+          <Card className="home-topic">
+            <NavLinkView to="/understanding-the-piano-keyboard?slide=intervals-introduction" className="thumbnail">
+              <IntervalsThumbnail />
+            </NavLinkView>
+
+            <div className="text">
+              <h3><NavLinkView to="/understanding-the-piano-keyboard?slide=intervals-introduction">3. Intervals</NavLinkView></h3>
+              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=intervals-introduction">Introduction</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=intervals-summary">Review</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=intervals-quiz">Quiz</NavLinkView></p>
             </div>
           </Card>
 
