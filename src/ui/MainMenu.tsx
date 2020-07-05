@@ -54,19 +54,329 @@ import * as ScaleEarTraining from "./Quizzes/Scales/ScaleEarTraining";
 import { RhythmTapper } from "./Tools/RhythmTapper";
 import { NavLinkView } from "../ui/NavLinkView";
 
+export interface MainMenuCategory {
+  title: string;
+  items: Array<MainMenuItem>;
+}
+
+export interface MainMenuItem {
+  title: string;
+  uri: string;
+}
+
+const mainMenuCategories: Array<MainMenuCategory> = [
+  {
+    title: "Understanding the Piano Keyboard",
+    items: [
+      {
+        uri: "/understanding-the-piano-keyboard?slide=introduction",
+        title: "Introduction"
+      },
+      {
+        uri: "/understanding-the-piano-keyboard?slide=notes-introduction",
+        title: "Notes"
+      },
+      {
+        uri: "/understanding-the-piano-keyboard?slide=scales-introduction",
+        title: "Scales"
+      },
+      {
+        uri: "/understanding-the-piano-keyboard?slide=chords-introduction",
+        title: "Chords"
+      },
+      {
+        uri: "/understanding-the-piano-keyboard?slide=chord-progressions-introduction",
+        title: "Chord Progressions"
+      }
+    ]
+  },
+  // {
+  //   title: "(Old) Essential Music Theory Course",
+  //   items: [
+  //     {
+  //       uri: "/essential-music-theory",
+  //       title: "Introduction"
+  //     },
+  //     {
+  //       uri: "/essential-music-theory/rhythm",
+  //       title: "Rhythm"
+  //     },
+  //     {
+  //       uri: "/essential-music-theory/notes",
+  //       title: "Notes"
+  //     },
+  //     {
+  //       uri: "/essential-music-theory/intervals",
+  //       title: "Intervals"
+  //     },
+  //     {
+  //       uri: "/essential-music-theory/scales-and-modes",
+  //       title: "Scales & Modes"
+  //     },
+  //     {
+  //       uri: "/essential-music-theory/chords",
+  //       title: "Chords"
+  //     },
+  //     {
+  //       uri: "/essential-music-theory/chord-progressions",
+  //       title: "Chord Progressions"
+  //     },
+  //     {
+  //       uri: "/essential-music-theory/next-steps",
+  //       title: "Next Steps"
+  //     }
+  //   ]
+  // },
+  {
+    title: "Guitar Lessons",
+    items: [
+      {
+        uri: "/learn-guitar-notes-in-10-steps",
+        title: "Learn the Notes on Guitar in 10 Easy Steps"
+      },
+      {
+        uri: "/learn-guitar-scales",
+        title: "Learn Guitar Scale Shapes"
+      }
+    ]
+  },
+  {
+    title: "Tools",
+    items: [
+      {
+        uri: "/interval-chord-scale-finder",
+        title: "Interval/Chord/Scale Finder"
+      },
+      {
+        uri: "/scale-viewer",
+        title: "Scale Viewer"
+      },
+      {
+        uri: "/chord-viewer",
+        title: "Chord Viewer"
+      },
+      {
+        uri: "/diatonic-chord-player",
+        title: "Diatonic Chord Player"
+      },
+      {
+        uri: "/metronome",
+        title: "Metronome"
+      },
+      {
+        uri: "/tuner",
+        title: "Tuner"
+      },
+      {
+        uri: RandomChordGenerator.flashCardSet.route,
+        title: RandomChordGenerator.flashCardSet.name
+      }
+    ]
+  },
+  {
+    title: "Note Exercises",
+    items: [
+      {
+        uri: PianoNotes.flashCardSet.route,
+        title: PianoNotes.flashCardSet.name
+      },
+      {
+        uri: GuitarNotes.flashCardSet.route,
+        title: GuitarNotes.flashCardSet.name
+      },
+      {
+        uri: ViolinNotes.flashCardSet.route,
+        title: ViolinNotes.flashCardSet.name
+      },
+      {
+        uri: SheetMusicNotes.flashCardSet.route,
+        title: SheetMusicNotes.flashCardSet.name
+      },
+      {
+        uri: NoteDurations.flashCardSet.route,
+        title: NoteDurations.flashCardSet.name
+      },
+      {
+        uri: GuitarPerfectPitchTrainer.flashCardSet.route,
+        title: GuitarPerfectPitchTrainer.flashCardSet.name
+      }
+    ]
+  },
+  {
+    title: "Interval Exercises",
+    items: [
+      {
+        uri: IntervalQualitySymbolsToQualities.flashCardSet.route,
+        title: IntervalQualitySymbolsToQualities.flashCardSet.name
+      },
+      {
+        uri: IntervalNamesToHalfSteps.flashCardSet.route,
+        title: IntervalNamesToHalfSteps.flashCardSet.name
+      },
+      {
+        uri: IntervalsToConsonanceDissonance.flashCardSet.route,
+        title: IntervalsToConsonanceDissonance.flashCardSet.name
+      },
+      {
+        uri: Interval2ndNotes.flashCardSet.route,
+        title: Interval2ndNotes.flashCardSet.name
+      },
+      {
+        uri: IntervalNotes.flashCardSet.route,
+        title: IntervalNotes.flashCardSet.name
+      },
+      {
+        uri: SheetMusicIntervalRecognition.flashCardSet.route,
+        title: SheetMusicIntervalRecognition.flashCardSet.name
+      },
+      {
+        uri: PianoIntervals.flashCardSet.route,
+        title: PianoIntervals.flashCardSet.name
+      },
+      {
+        uri: GuitarIntervals.flashCardSet.route,
+        title: GuitarIntervals.flashCardSet.name
+      },
+      {
+        uri: IntervalEarTraining.flashCardSet.route,
+        title: IntervalEarTraining.flashCardSet.name
+      },
+      {
+        uri: Interval2ndNoteEarTraining.flashCardSet.route,
+        title: Interval2ndNoteEarTraining.flashCardSet.name
+      },
+      {
+        uri: Interval2ndNoteEarTrainingPiano.flashCardSet.route,
+        title: Interval2ndNoteEarTrainingPiano.flashCardSet.name
+      },
+      {
+        uri: IntervalSinging.flashCardSet.route,
+        title: IntervalSinging.flashCardSet.name
+      }
+    ]
+  },
+  {
+    title: "Scale Exercises",
+    items: [
+      {
+        uri: ScaleDegreeNames.flashCardSet.route,
+        title: ScaleDegreeNames.flashCardSet.name
+      },
+      {
+        uri: ScaleNotes.flashCardSet.route,
+        title: ScaleNotes.flashCardSet.name
+      },
+      {
+        uri: PianoScales.flashCardSet.route,
+        title: PianoScales.flashCardSet.name
+      },
+      {
+        uri: GuitarScales.flashCardSet.route,
+        title: GuitarScales.flashCardSet.name
+      },
+      {
+        uri: ScaleDegreeModes.flashCardSet.route,
+        title: ScaleDegreeModes.flashCardSet.name
+      },
+      {
+        uri: ScaleChords.flashCardSet.route,
+        title: ScaleChords.flashCardSet.name
+      },
+      {
+        uri: ScaleEarTraining.flashCardSet.route,
+        title: ScaleEarTraining.flashCardSet.name
+      },
+      {
+        uri: "/scale-exercises",
+        title: "More"
+      }
+    ]
+  },
+  {
+    title: "Key Exercises",
+    items: [
+      {
+        uri: KeyAccidentalCounts.flashCardSet.route,
+        title: KeyAccidentalCounts.flashCardSet.name
+      },
+      {
+        uri: KeyAccidentalNotes.flashCardSet.route,
+        title: KeyAccidentalNotes.flashCardSet.name
+      },
+      {
+        uri: KeySignatureIdentification.flashCardSet.route,
+        title: KeySignatureIdentification.flashCardSet.name
+      }
+    ]
+  },
+  {
+    title: "Chord Exercises",
+    items: [
+      {
+        uri: ChordFamilies.flashCardSet.route,
+        title: ChordFamilies.flashCardSet.name
+      },
+      {
+        uri: ChordNotes.flashCardSet.route,
+        title: ChordNotes.flashCardSet.name
+      },
+      {
+        uri: AvailableChordTensions.flashCardSet.route,
+        title: AvailableChordTensions.flashCardSet.name
+      },
+      {
+        uri: DiatonicTriads.flashCardSet.route,
+        title: DiatonicTriads.flashCardSet.name
+      },
+      {
+        uri: DiatonicSeventhChords.flashCardSet.route,
+        title: DiatonicSeventhChords.flashCardSet.name
+      },
+      {
+        uri: SheetMusicChordRecognition.flashCardSet.route,
+        title: SheetMusicChordRecognition.flashCardSet.name
+      },
+      {
+        uri: PianoChords.flashCardSet.route,
+        title: PianoChords.flashCardSet.name
+      },
+      {
+        uri: GuitarChords.flashCardSet.route,
+        title: GuitarChords.flashCardSet.name
+      },
+      {
+        uri: ChordEarTraining.flashCardSet.route,
+        title: ChordEarTraining.flashCardSet.name
+      }
+    ]
+  },
+  {
+    title: "Other",
+    items: [
+      {
+        uri: "/glossary",
+        title: "Glossary"
+      },
+      {
+        uri: "/contribute",
+        title: "Contribute"
+      }
+    ]
+  }
+];
+
 const NavSectionTitle: React.FunctionComponent<{ style?: any }> = props => <p style={Object.assign({ fontSize: "1.2em", fontWeight: "bold", textDecoration: "underline" }, props.style)}>{props.children}</p>;
 const NavSectionSubTitle: React.FunctionComponent<{ style?: any }> = props => <p style={Object.assign({ textDecoration: "underline" }, props.style)}>{props.children}</p>;
 
-const MenuCategory: React.FunctionComponent<{ title: string, collapseCategories: boolean }> = props =>
+const MenuCategoryView: React.FunctionComponent<{ menuCategory: MainMenuCategory, collapseCategories: boolean }> = props =>
   props.collapseCategories
   ? (
     <ExpansionPanel>
       <ExpansionPanelSummary
         expandIcon={<ExpandMoreIcon />}
         aria-controls="panel1a-content"
-        id="panel1a-header"
-        >
-        <span>{props.title}</span>
+        id="panel1a-header">
+        <span>{props.menuCategory.title}</span>
       </ExpansionPanelSummary>
       <ExpansionPanelDetails>
         <span>{props.children}</span>
@@ -75,148 +385,34 @@ const MenuCategory: React.FunctionComponent<{ title: string, collapseCategories:
   )
   : (
     <div className="menu-category">
-      <NavSectionSubTitle>{props.title}</NavSectionSubTitle>
-      {props.children}
+      <NavSectionSubTitle>{props.menuCategory.title}</NavSectionSubTitle>
+      {props.menuCategory.items.map(i => <NavLinkView to={i.uri}>{i.title}</NavLinkView>)}
     </div>
   );
 
 export const MainMenu : React.FunctionComponent<{ collapseCategories: boolean }> = props => {
-  const understandingThePianoKeyboardCategory = (
-    <MenuCategory title="Understanding the Piano Keyboard" collapseCategories={props.collapseCategories}>
-      {<NavLinkView to="/understanding-the-piano-keyboard?slide=introduction">{"Introduction"}</NavLinkView>}
-      {<NavLinkView to="/understanding-the-piano-keyboard?slide=notes-introduction">{"Notes"}</NavLinkView>}
-      {<NavLinkView to="/understanding-the-piano-keyboard?slide=scales-introduction">{"Scales"}</NavLinkView>}
-      {<NavLinkView to="/understanding-the-piano-keyboard?slide=chords-introduction">{"Chords"}</NavLinkView>}
-      {<NavLinkView to="/understanding-the-piano-keyboard?slide=chord-progressions-introduction">{"Chord Progressions"}</NavLinkView>}
-    </MenuCategory>
-  );
-
-  const essentialTheoryCategory = (
-    <MenuCategory title="(Old) Essential Music Theory Course" collapseCategories={props.collapseCategories}>
-      {<NavLinkView to="/essential-music-theory">{"Introduction"}</NavLinkView>}
-      {<NavLinkView to="/essential-music-theory/rhythm">{"Rhythm"}</NavLinkView>}
-      {<NavLinkView to="/essential-music-theory/notes">{"Notes"}</NavLinkView>}
-      {<NavLinkView to="/essential-music-theory/intervals">{"Intervals"}</NavLinkView>}
-      {<NavLinkView to="/essential-music-theory/scales-and-modes">{"Scales & Modes"}</NavLinkView>}
-      {<NavLinkView to="/essential-music-theory/chords">{"Chords"}</NavLinkView>}
-      {<NavLinkView to="/essential-music-theory/chord-progressions">{"Chord Progressions"}</NavLinkView>}
-      {<NavLinkView to="/essential-music-theory/next-steps">{"Next Steps"}</NavLinkView>}
-    </MenuCategory>
-  );
-
-  const guitarLessonsCategory = (
-    <MenuCategory title="Guitar Lessons" collapseCategories={props.collapseCategories}>
-      <NavLinkView to="/learn-guitar-notes-in-10-steps">Learn the Notes on Guitar in 10 Easy Steps</NavLinkView>
-      <NavLinkView to="/learn-guitar-scales">Learn Guitar Scale Shapes</NavLinkView>
-    </MenuCategory>
-  );
-
-  const toolsCategory = (
-    <MenuCategory title="Tools" collapseCategories={props.collapseCategories}>
-      <NavLinkView to="/interval-chord-scale-finder">Interval/Chord/Scale Finder</NavLinkView>
-      <NavLinkView to="/scale-viewer">Scale Viewer</NavLinkView>
-      <NavLinkView to="/chord-viewer">Chord Viewer</NavLinkView>
-      <NavLinkView to="/diatonic-chord-player">Diatonic Chord Player</NavLinkView>
-      <NavLinkView to="/metronome">Metronome</NavLinkView>
-      <NavLinkView to="/tuner">Tuner</NavLinkView>
-      <NavLinkView to={RandomChordGenerator.flashCardSet.route}>{RandomChordGenerator.flashCardSet.name}</NavLinkView>
-    </MenuCategory>
-  );
-
-  const noteExercisesCategory = (
-    <MenuCategory title="Note Exercises" collapseCategories={props.collapseCategories}>
-      <NavLinkView to={PianoNotes.flashCardSet.route}>{PianoNotes.flashCardSet.name}</NavLinkView>
-      <NavLinkView to={GuitarNotes.flashCardSet.route}>{GuitarNotes.flashCardSet.name}</NavLinkView>
-      <NavLinkView to={ViolinNotes.flashCardSet.route}>{ViolinNotes.flashCardSet.name}</NavLinkView>
-      <NavLinkView to={SheetMusicNotes.flashCardSet.route}>{SheetMusicNotes.flashCardSet.name}</NavLinkView>
-      <NavLinkView to={NoteDurations.flashCardSet.route}>{NoteDurations.flashCardSet.name}</NavLinkView>
-      <NavLinkView to={GuitarPerfectPitchTrainer.flashCardSet.route}>{GuitarPerfectPitchTrainer.flashCardSet.name}</NavLinkView>
-    </MenuCategory>
-  );
-
-  const intervalExercisesCategory = (
-    <MenuCategory title="Interval Exercises" collapseCategories={props.collapseCategories}>
-      <NavLinkView to={IntervalQualitySymbolsToQualities.flashCardSet.route}>{IntervalQualitySymbolsToQualities.flashCardSet.name}</NavLinkView>
-      <NavLinkView to={IntervalNamesToHalfSteps.flashCardSet.route}>{IntervalNamesToHalfSteps.flashCardSet.name}</NavLinkView>
-      <NavLinkView to={IntervalsToConsonanceDissonance.flashCardSet.route}>{IntervalsToConsonanceDissonance.flashCardSet.name}</NavLinkView>
-      <NavLinkView to={Interval2ndNotes.flashCardSet.route}>{Interval2ndNotes.flashCardSet.name}</NavLinkView>
-      <NavLinkView to={IntervalNotes.flashCardSet.route}>{IntervalNotes.flashCardSet.name}</NavLinkView>
-      <NavLinkView to={SheetMusicIntervalRecognition.flashCardSet.route}>{SheetMusicIntervalRecognition.flashCardSet.name}</NavLinkView>
-      <NavLinkView to={PianoIntervals.flashCardSet.route}>{PianoIntervals.flashCardSet.name}</NavLinkView>
-      <NavLinkView to={GuitarIntervals.flashCardSet.route}>{GuitarIntervals.flashCardSet.name}</NavLinkView>
-      <NavLinkView to={IntervalEarTraining.flashCardSet.route}>{IntervalEarTraining.flashCardSet.name}</NavLinkView>
-      <NavLinkView to={Interval2ndNoteEarTraining.flashCardSet.route}>{Interval2ndNoteEarTraining.flashCardSet.name}</NavLinkView>
-      <NavLinkView to={Interval2ndNoteEarTrainingPiano.flashCardSet.route}>{Interval2ndNoteEarTrainingPiano.flashCardSet.name}</NavLinkView>
-      <NavLinkView to={IntervalSinging.flashCardSet.route}>{IntervalSinging.flashCardSet.name}</NavLinkView>
-    </MenuCategory>
-  );
-
-  const scaleExercisesCategory = (
-    <MenuCategory title="Scale Exercises" collapseCategories={props.collapseCategories}>
-      <NavLinkView to={ScaleDegreeNames.flashCardSet.route}>{ScaleDegreeNames.flashCardSet.name}</NavLinkView>
-      <NavLinkView to={ScaleNotes.flashCardSet.route}>{ScaleNotes.flashCardSet.name}</NavLinkView>
-      <NavLinkView to={PianoScales.flashCardSet.route}>{PianoScales.flashCardSet.name}</NavLinkView>
-      <NavLinkView to={GuitarScales.flashCardSet.route}>{GuitarScales.flashCardSet.name}</NavLinkView>
-      <NavLinkView to={ScaleDegreeModes.flashCardSet.route}>{ScaleDegreeModes.flashCardSet.name}</NavLinkView>
-      <NavLinkView to={ScaleChords.flashCardSet.route}>{ScaleChords.flashCardSet.name}</NavLinkView>
-      <NavLinkView to={ScaleEarTraining.flashCardSet.route}>{ScaleEarTraining.flashCardSet.name}</NavLinkView>
-      <NavLinkView to="/scale-exercises">More</NavLinkView>
-    </MenuCategory>
-  );
-
-  const keyExercisesCategory = (
-    <MenuCategory title="Key Exercises" collapseCategories={props.collapseCategories}>
-      <NavLinkView to={KeyAccidentalCounts.flashCardSet.route}>{KeyAccidentalCounts.flashCardSet.name}</NavLinkView>
-      <NavLinkView to={KeyAccidentalNotes.flashCardSet.route}>{KeyAccidentalNotes.flashCardSet.name}</NavLinkView>
-      <NavLinkView to={KeySignatureIdentification.flashCardSet.route}>{KeySignatureIdentification.flashCardSet.name}</NavLinkView>
-    </MenuCategory>
-  );
-
-  const chordExercisesCategory = (
-    <MenuCategory title="Chord Exercises" collapseCategories={props.collapseCategories}>
-      <NavLinkView to={ChordFamilies.flashCardSet.route}>{ChordFamilies.flashCardSet.name}</NavLinkView>
-      <NavLinkView to={ChordNotes.flashCardSet.route}>{ChordNotes.flashCardSet.name}</NavLinkView>
-      <NavLinkView to={AvailableChordTensions.flashCardSet.route}>{AvailableChordTensions.flashCardSet.name}</NavLinkView>
-      <NavLinkView to={DiatonicTriads.flashCardSet.route}>{DiatonicTriads.flashCardSet.name}</NavLinkView>
-      <NavLinkView to={DiatonicSeventhChords.flashCardSet.route}>{DiatonicSeventhChords.flashCardSet.name}</NavLinkView>
-      <NavLinkView to={SheetMusicChordRecognition.flashCardSet.route}>{SheetMusicChordRecognition.flashCardSet.name}</NavLinkView>
-      <NavLinkView to={PianoChords.flashCardSet.route}>{PianoChords.flashCardSet.name}</NavLinkView>
-      <NavLinkView to={GuitarChords.flashCardSet.route}>{GuitarChords.flashCardSet.name}</NavLinkView>
-      <NavLinkView to={ChordEarTraining.flashCardSet.route}>{ChordEarTraining.flashCardSet.name}</NavLinkView>
-    </MenuCategory>
-  );
-
-  const otherCategory = (
-    <MenuCategory title="Other" collapseCategories={props.collapseCategories}>
-      <NavLinkView to={"/glossary"}>Glossary</NavLinkView>
-      <NavLinkView to="/contribute" style={{ fontWeight: "normal" }}>
-        Contribute
-      </NavLinkView>
-    </MenuCategory>
-  );
-
   return !props.collapseCategories
   ? (
     <div className="menu">
       <div className="row no-gutters">
         <div className="col-sm">
-          {understandingThePianoKeyboardCategory}
-          {guitarLessonsCategory}
+          {<MenuCategoryView menuCategory={mainMenuCategories[0]} collapseCategories={false} />}
+          {<MenuCategoryView menuCategory={mainMenuCategories[1]} collapseCategories={false} />}
         </div>
         <div className="col-sm">
-          {toolsCategory}
-          {noteExercisesCategory}
+          {<MenuCategoryView menuCategory={mainMenuCategories[2]} collapseCategories={false} />}
+          {<MenuCategoryView menuCategory={mainMenuCategories[3]} collapseCategories={false} />}
         </div>
         <div className="col-sm">
-          {intervalExercisesCategory}
+          {<MenuCategoryView menuCategory={mainMenuCategories[4]} collapseCategories={false} />}
         </div>
         <div className="col-sm">
-          {scaleExercisesCategory}
-          {keyExercisesCategory}
+          {<MenuCategoryView menuCategory={mainMenuCategories[5]} collapseCategories={false} />}
+          {<MenuCategoryView menuCategory={mainMenuCategories[6]} collapseCategories={false} />}
         </div>
         <div className="col-sm">
-          {chordExercisesCategory}
-          {otherCategory}
+          {<MenuCategoryView menuCategory={mainMenuCategories[7]} collapseCategories={false} />}
+          {<MenuCategoryView menuCategory={mainMenuCategories[8]} collapseCategories={false} />}
         </div>
       </div>
     </div>
@@ -225,19 +421,9 @@ export const MainMenu : React.FunctionComponent<{ collapseCategories: boolean }>
     <div className="menu">
       <div className="row no-gutters">
         <div className="col-sm">
-          {understandingThePianoKeyboardCategory}
-          {guitarLessonsCategory}
-          {toolsCategory}
+          {mainMenuCategories.map(c => <div className="">{c.title}</div>)}
         </div>
         <div className="col-sm">
-          {noteExercisesCategory}
-          {intervalExercisesCategory}
-          {scaleExercisesCategory}
-        </div>
-        <div className="col-sm">
-          {keyExercisesCategory}
-          {chordExercisesCategory}
-          {otherCategory}
         </div>
       </div>
     </div>
