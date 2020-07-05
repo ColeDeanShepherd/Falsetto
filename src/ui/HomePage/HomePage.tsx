@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { Card } from "../../ui/Card/Card";
 
-import { MainMenu } from '../../ui/MainMenu';
+import { MainMenu } from '../MainMenu/MainMenu';
 import { NavLinkView } from "../../ui/NavLinkView";
 import { PianoKeyboard, renderPianoKeyboardNoteNames } from "../../ui/Utils/PianoKeyboard";
 

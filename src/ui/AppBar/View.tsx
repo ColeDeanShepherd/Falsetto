@@ -6,7 +6,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import { ActionBus, ActionHandler } from '../../ActionBus';
 import { IAction } from '../../IAction';
 import { NavigateAction } from '../../App/Actions';
-import { MainMenu } from '../../ui/MainMenu';
+import { MainMenu } from '../MainMenu/MainMenu';
 import { NavLinkView } from '../../ui/NavLinkView';
 import { Settings } from '../../ui/SettingsView';
 
