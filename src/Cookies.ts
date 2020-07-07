@@ -2,15 +2,17 @@ import Cookies from "js-cookie";
 import { isProduction, websiteUriAuthority } from './Config';
 
 const sessionTokenCookieName = "sessionToken";
+const sessionTokenCookieAttributes = {
+  secure: isProduction(),
+  domain: `.${websiteUriAuthority}`
+};
 
 export function saveSessionToken(sessionToken: string) {
   Cookies.set(
     sessionTokenCookieName,
     sessionToken,
-    {
-      secure: isProduction(),
-      domain: `.${websiteUriAuthority}`
-    });
+    sessionTokenCookieAttributes
+  );
 }
 
 export function loadSessionToken(): string | undefined {
@@ -18,5 +20,5 @@ export function loadSessionToken(): string | undefined {
 }
 
 export function clearSessionToken() {
-  Cookies.remove(sessionTokenCookieName);
+  Cookies.remove(sessionTokenCookieName, sessionTokenCookieAttributes);
 }
