@@ -1,5 +1,5 @@
 import Cookies from "js-cookie";
-import { isProduction } from './Config';
+import { isProduction, websiteUriAuthority } from './Config';
 
 const sessionTokenCookieName = "sessionToken";
 
@@ -8,7 +8,8 @@ export function saveSessionToken(sessionToken: string) {
     sessionTokenCookieName,
     sessionToken,
     {
-      secure: isProduction()
+      secure: isProduction(),
+      domain: `.${websiteUriAuthority}`
     });
 }
 

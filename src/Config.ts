@@ -7,4 +7,7 @@ export function isProduction(): boolean {
 }
 
 export const googleAnalyticsTrackingId = "UA-72494315-5"; // TODO: move this somewhere else?
+
+export const websiteUriAuthority = isProduction() ? "falsetto.app" : "localhost:3000";
+
 export const apiBaseUri = isProduction() ? "https://api.falsetto.app" : "http://localhost:3001";
