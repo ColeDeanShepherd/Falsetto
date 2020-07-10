@@ -466,56 +466,6 @@ const routes: Array<IRouteData> = ([
       )
     } as IRouteData))
   )
-  .concat([
-    {
-      path: "/scale/:scaleId/:slidePath+",
-      renderFn: (props: any) => (
-        <ScaleRoute routeParams={props.match.params} renderRoute={scale => {
-          const scaleName = `${getPitchUriComponent(scale.rootPitch, /*includeOctaveNumber*/ false)} ${scale.type.name}`;
-          const slideGroups = createScaleMasteryLessonSlideGroups(scale);
-
-          return (
-            <DocumentTitle title={`${scaleName} Scale - Falsetto`}>
-              <Slideshow
-                slideGroups={slideGroups}
-                currentSlidePath={props.match.params.slidePath}
-                premiumProductId={understandingThePianoKeyboardProductId} />
-            </DocumentTitle>
-          );
-        }} />
-      )
-    },
-    
-    {
-      path: "/scale/:scaleId/lesson/:slidePath+",
-      renderFn: (props: any) => (
-        <ScaleRoute routeParams={props.match.params} renderRoute={scale => {
-          const scaleName = `${getPitchUriComponent(scale.rootPitch, /*includeOctaveNumber*/ false)} ${scale.type.name}`;
-          const slideGroups = createScaleMasteryLessonSlideGroups(scale);
-
-          return (
-            <DocumentTitle title={`${scaleName} Scale Mastery - Falsetto`}>
-              <Slideshow
-                slideGroups={slideGroups}
-                currentSlidePath={props.match.params.slidePath}
-                premiumProductId={understandingThePianoKeyboardProductId} />
-            </DocumentTitle>
-          );
-        }} />
-      )
-    },
-    
-    {
-      path: "/scale/:scaleId/degrees-exercise",
-      renderFn: (props: any) => (
-        <ScaleRoute routeParams={props.match.params} renderRoute={scale => {
-          const flashCardSet = PianoScaleDegrees.createFlashCardSet(scale);
-
-          return renderStudyFlashCardSetComponent(flashCardSet);
-        }} />
-      )
-    }
-  ])
   .concat([3, 4]
     .map(numChordPitches => {
       const path = `/scale/:scaleId/diatonic-${numChordPitches}-note-chords-exercise`;
@@ -533,7 +483,37 @@ const routes: Array<IRouteData> = ([
     })
   )
   .concat([
-    
+    {
+      path: "/scale/:scaleId/degrees-exercise",
+      renderFn: (props: any) => (
+        <ScaleRoute routeParams={props.match.params} renderRoute={scale => {
+          const flashCardSet = PianoScaleDegrees.createFlashCardSet(scale);
+
+          return renderStudyFlashCardSetComponent(flashCardSet);
+        }} />
+      )
+    },
+
+    {
+      path: "/scale/:scaleId/lesson/:slidePath+",
+      renderFn: (props: any) => (
+        <ScaleRoute routeParams={props.match.params} renderRoute={scale => {
+          const scaleName = `${getPitchUriComponent(scale.rootPitch, /*includeOctaveNumber*/ false)} ${scale.type.name}`;
+          const slideGroups = createScaleMasteryLessonSlideGroups(scale);
+
+          return (
+            <DocumentTitle title={`${scaleName} Scale - Falsetto`}>
+              <Slideshow
+                slideGroups={slideGroups}
+                currentSlidePath={props.match.params.slidePath}
+                premiumProductId={understandingThePianoKeyboardProductId} />
+            </DocumentTitle>
+          );
+        }} />
+      )
+    }
+  ])
+  .concat([
     {
       path: "/chord/:chordId",
       renderFn: (props: any) => (

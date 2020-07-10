@@ -58,7 +58,7 @@ export class ChordExercisesPage extends React.Component<IChordExercisesProps, IC
         </div>
 
         <div>
-          <NavLinkView to={`/chord/${getUriComponent(chordType)}/lesson`}>
+          <NavLinkView to={`/chord/${getUriComponent(chordType)}/lesson/introduction`}>
             {chordType.name} Chords Lesson
           </NavLinkView>
         </div>

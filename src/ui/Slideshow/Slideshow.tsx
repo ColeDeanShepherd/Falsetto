@@ -280,7 +280,7 @@ export class Slideshow extends React.Component<ISlideshowProps, ISlideshowState>
     this.setState({ slideIndex: slideIndex }, () => {
       const [slideGroup, _] = unwrapValueOrUndefined(getSlideGroup(slideGroups, slideIndex));
       
-      const newUri = this.getCurrentUriWithoutSlidePath(currentSlidePath) + slideGroup.url + '/' + slides[slideIndex].url;
+      const newUri = this.getCurrentUriWithoutSlidePath(currentSlidePath) + ((slideGroup.url.length > 0) ? (slideGroup.url + '/') : "") + slides[slideIndex].url;
 
       ActionBus.instance.dispatch(new NavigateAction(newUri));
     });

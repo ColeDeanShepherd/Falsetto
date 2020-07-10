@@ -4,7 +4,7 @@
 
 import * as React from "react";
 
-import { Scale, getUriComponent } from '../../lib/TheoryLib/Scale';
+import { Scale } from '../../lib/TheoryLib/Scale';
 
 import { createStudyFlashCardSetComponent } from "../StudyFlashCards/View";
 
@@ -27,11 +27,10 @@ export function createSlideGroups(scale: Scale): Array<SlideGroup> {
     .map(p => p.toString(/*includeOctaveNumber*/ false, /*useSymbols*/ true))
     .join(' ');
   const majorScaleRelativeFormulaString = scale.type.formula.toString(/*useSymbols*/ true);
-  const scaleUriComponent = getUriComponent(scale);
 
   const notesSlideGroup = new SlideGroup(
     "Notes",
-    scaleUriComponent,
+    "",
     [
       new Slide("introduction", () => (
         <div>
@@ -70,11 +69,12 @@ export function createSlideGroups(scale: Scale): Array<SlideGroup> {
         // TODO: fix this
         try {
           const chordExtensionTypeName = getChordExtensionTypeName(numChordPitches, /*capitalize*/ true);
+          const slideGroupUri = "diatonic-" + chordExtensionTypeName.replace(" ", "-").toLowerCase() + "s";
 
           return (
             new SlideGroup(
               `Diatonic ${chordExtensionTypeName}s`,
-              chordExtensionTypeName.replace(" ", "-"),
+              slideGroupUri,
               range(1, scale.type.numPitches)
                 .map(scaleDegreeNumber => {
                   const scaleDegreeRomanNumerals = getRomanNumerals(scaleDegreeNumber);
@@ -89,7 +89,7 @@ export function createSlideGroups(scale: Scale): Array<SlideGroup> {
                     .join(' ');
         
                   return (
-                    new Slide(`${numChordPitches}-note-diatonic-chord-${scaleDegreeRomanNumerals}`, () => (
+                    new Slide(scaleDegreeRomanNumerals, () => (
                       <div>
                         <p>The <strong>{scaleDegreeRomanNumerals}</strong> {chordExtensionTypeName} of {scaleName} is <strong>{chordName}</strong>, which consists of the notes <strong>{chordPitchesString}</strong> (scale degrees <strong>{chordScaleDegreesString}</strong>).</p>
                         <ChordView
@@ -100,7 +100,7 @@ export function createSlideGroups(scale: Scale): Array<SlideGroup> {
                   );
                 })
                 .concat([
-                  new Slide(`${numChordPitches}-note-diatonic-chords-quiz`, () => (
+                  new Slide("quiz", () => (
                     <LimitedWidthContentContainer>
                       <div style={{ marginTop: "1em" }}>
                         {createStudyFlashCardSetComponent(

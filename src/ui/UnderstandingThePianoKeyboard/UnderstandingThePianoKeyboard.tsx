@@ -2054,7 +2054,7 @@ export const pianoTheorySlideGroups = [
   
   new SlideGroup(
     "Conclusion",
-    "",
+    "conclusion",
     [
       new Slide("next-steps", () => (
         <div>
