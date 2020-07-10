@@ -4,7 +4,7 @@
 
 import * as React from "react";
 
-import {  Scale } from "../../lib/TheoryLib/Scale";
+import { Scale, getUriComponent } from '../../lib/TheoryLib/Scale';
 
 import { createStudyFlashCardSetComponent } from "../StudyFlashCards/View";
 
@@ -27,9 +27,12 @@ export function createSlideGroups(scale: Scale): Array<SlideGroup> {
     .map(p => p.toString(/*includeOctaveNumber*/ false, /*useSymbols*/ true))
     .join(' ');
   const majorScaleRelativeFormulaString = scale.type.formula.toString(/*useSymbols*/ true);
+  const scaleUriComponent = getUriComponent(scale);
 
   const notesSlideGroup = new SlideGroup(
-    "Notes", [
+    "Notes",
+    scaleUriComponent,
+    [
       new Slide("introduction", () => (
         <div>
           <h1>{scaleName} Lesson</h1>
@@ -71,6 +74,7 @@ export function createSlideGroups(scale: Scale): Array<SlideGroup> {
           return (
             new SlideGroup(
               `Diatonic ${chordExtensionTypeName}s`,
+              chordExtensionTypeName.replace(" ", "-"),
               range(1, scale.type.numPitches)
                 .map(scaleDegreeNumber => {
                   const scaleDegreeRomanNumerals = getRomanNumerals(scaleDegreeNumber);

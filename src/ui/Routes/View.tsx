@@ -264,10 +264,14 @@ const routes: Array<IRouteData> = ([
     )
   },
   {
-    path: "/understanding-the-piano-keyboard",
+    path: "/understanding-the-piano-keyboard/:slidePath+",
     title: "Understanding the Piano Keyboard - Falsetto",
-    renderFn: () => (
-      <Slideshow slideGroups={pianoTheorySlideGroups} premiumProductId={understandingThePianoKeyboardProductId} />
+    isPathExact: false,
+    renderFn: (props: any) => (
+      <Slideshow
+        slideGroups={pianoTheorySlideGroups}
+        currentSlidePath={props.match.params.slidePath}
+        premiumProductId={understandingThePianoKeyboardProductId} />
     )
   },
   {
@@ -464,7 +468,7 @@ const routes: Array<IRouteData> = ([
   )
   .concat([
     {
-      path: "/scale/:scaleId",
+      path: "/scale/:scaleId/:slidePath+",
       renderFn: (props: any) => (
         <ScaleRoute routeParams={props.match.params} renderRoute={scale => {
           const scaleName = `${getPitchUriComponent(scale.rootPitch, /*includeOctaveNumber*/ false)} ${scale.type.name}`;
@@ -472,7 +476,10 @@ const routes: Array<IRouteData> = ([
 
           return (
             <DocumentTitle title={`${scaleName} Scale - Falsetto`}>
-              <Slideshow slideGroups={slideGroups} premiumProductId={understandingThePianoKeyboardProductId} />
+              <Slideshow
+                slideGroups={slideGroups}
+                currentSlidePath={props.match.params.slidePath}
+                premiumProductId={understandingThePianoKeyboardProductId} />
             </DocumentTitle>
           );
         }} />
@@ -480,7 +487,7 @@ const routes: Array<IRouteData> = ([
     },
     
     {
-      path: "/scale/:scaleId/lesson",
+      path: "/scale/:scaleId/lesson/:slidePath+",
       renderFn: (props: any) => (
         <ScaleRoute routeParams={props.match.params} renderRoute={scale => {
           const scaleName = `${getPitchUriComponent(scale.rootPitch, /*includeOctaveNumber*/ false)} ${scale.type.name}`;
@@ -488,7 +495,10 @@ const routes: Array<IRouteData> = ([
 
           return (
             <DocumentTitle title={`${scaleName} Scale Mastery - Falsetto`}>
-              <Slideshow slideGroups={slideGroups} premiumProductId={understandingThePianoKeyboardProductId} />
+              <Slideshow
+                slideGroups={slideGroups}
+                currentSlidePath={props.match.params.slidePath}
+                premiumProductId={understandingThePianoKeyboardProductId} />
             </DocumentTitle>
           );
         }} />
@@ -542,7 +552,7 @@ const routes: Array<IRouteData> = ([
     },
 
     {
-      path: "/chord/:chordType/lesson",
+      path: "/chord/:chordType/lesson/:slidePath+",
       renderFn: (props: any) => (
         <ChordTypeRoute routeParams={props.match.params} renderRoute={chordType => {
           const slideGroups = createChordTypeMasteryLessonSlideGroups(chordType);
@@ -550,7 +560,10 @@ const routes: Array<IRouteData> = ([
 
           return (
             <DocumentTitle title={`${chordTypeName} Chord Mastery - Falsetto`}>
-              <Slideshow slideGroups={slideGroups} premiumProductId={understandingThePianoKeyboardProductId} />
+              <Slideshow
+                slideGroups={slideGroups}
+                currentSlidePath={props.match.params.slidePath}
+                premiumProductId={understandingThePianoKeyboardProductId} />
             </DocumentTitle>
           );
         }} />

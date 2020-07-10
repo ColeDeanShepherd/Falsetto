@@ -10,4 +10,4 @@ export const googleAnalyticsTrackingId = "UA-72494315-5"; // TODO: move this som
 
 export const websiteUriAuthority = isProduction() ? "falsetto.app" : "localhost:3000";
 
-export const apiBaseUri = isProduction() ? "https://api.falsetto.app" : "http://localhost:3001";
+export const apiBaseUri = isProduction() ? "https://api.falsetto.app" : "https://localhost:3001";

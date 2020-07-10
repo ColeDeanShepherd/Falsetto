@@ -83,24 +83,24 @@ const MenuCategory: React.FunctionComponent<{ title: string, collapseCategories:
 export const MainMenu : React.FunctionComponent<{ collapseCategories: boolean }> = props => {
   const understandingThePianoKeyboardCategory = (
     <MenuCategory title="Understanding the Piano Keyboard" collapseCategories={props.collapseCategories}>
-      {<NavLinkView to="/understanding-the-piano-keyboard?slide=introduction">{"Introduction"}</NavLinkView>}
-      {<NavLinkView to="/understanding-the-piano-keyboard?slide=notes-introduction">{"Notes"}</NavLinkView>}
-      {<NavLinkView to="/understanding-the-piano-keyboard?slide=scales-introduction">{"Scales"}</NavLinkView>}
-      {<NavLinkView to="/understanding-the-piano-keyboard?slide=chords-introduction">{"Chords"}</NavLinkView>}
-      {<NavLinkView to="/understanding-the-piano-keyboard?slide=chord-progressions-introduction">{"Chord Progressions"}</NavLinkView>}
+      {<NavLinkView to="/understanding-the-piano-keyboard/introduction">Introduction</NavLinkView>}
+      {<NavLinkView to="/understanding-the-piano-keyboard/notes/introduction">Notes</NavLinkView>}
+      {<NavLinkView to="/understanding-the-piano-keyboard/scales/introduction">Scales</NavLinkView>}
+      {<NavLinkView to="/understanding-the-piano-keyboard/chords/introduction">Chords</NavLinkView>}
+      {<NavLinkView to="/understanding-the-piano-keyboard/chord-progressions/introduction">Chord Progressions</NavLinkView>}
     </MenuCategory>
   );
 
   const essentialTheoryCategory = (
     <MenuCategory title="(Old) Essential Music Theory Course" collapseCategories={props.collapseCategories}>
-      {<NavLinkView to="/essential-music-theory">{"Introduction"}</NavLinkView>}
-      {<NavLinkView to="/essential-music-theory/rhythm">{"Rhythm"}</NavLinkView>}
-      {<NavLinkView to="/essential-music-theory/notes">{"Notes"}</NavLinkView>}
-      {<NavLinkView to="/essential-music-theory/intervals">{"Intervals"}</NavLinkView>}
-      {<NavLinkView to="/essential-music-theory/scales-and-modes">{"Scales & Modes"}</NavLinkView>}
-      {<NavLinkView to="/essential-music-theory/chords">{"Chords"}</NavLinkView>}
-      {<NavLinkView to="/essential-music-theory/chord-progressions">{"Chord Progressions"}</NavLinkView>}
-      {<NavLinkView to="/essential-music-theory/next-steps">{"Next Steps"}</NavLinkView>}
+      {<NavLinkView to="/essential-music-theory">Introduction</NavLinkView>}
+      {<NavLinkView to="/essential-music-theory/rhythm">Rhythm</NavLinkView>}
+      {<NavLinkView to="/essential-music-theory/notes">Notes</NavLinkView>}
+      {<NavLinkView to="/essential-music-theory/intervals">Intervals</NavLinkView>}
+      {<NavLinkView to="/essential-music-theory/scales-and-modes">Scales &amp; Modes</NavLinkView>}
+      {<NavLinkView to="/essential-music-theory/chords">Chords</NavLinkView>}
+      {<NavLinkView to="/essential-music-theory/chord-progressions">Chord Progressions</NavLinkView>}
+      {<NavLinkView to="/essential-music-theory/next-steps">Next Steps</NavLinkView>}
     </MenuCategory>
   );
 

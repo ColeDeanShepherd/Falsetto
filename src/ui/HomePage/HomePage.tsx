@@ -191,38 +191,38 @@ export class HomePage extends React.Component<{}, IHomePageState> {
 
             <div className="text">
               <h3><NavLinkView to="/understanding-the-piano-keyboard">1. Introduction &amp; Setup</NavLinkView></h3>
-              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=introduction">Introduction</NavLinkView></p>
-              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=setup">Setup</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard/introduction">Introduction</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard/introduction/setup">Setup</NavLinkView></p>
             </div>
           </Card>
 
           <Card className="home-topic">
-            <NavLinkView to="/understanding-the-piano-keyboard?slide=notes-introduction" className="thumbnail">
+            <NavLinkView to="/understanding-the-piano-keyboard/notes/introduction" className="thumbnail">
               <NotesThumbnail />
             </NavLinkView>
 
             <div className="text">
-              <h3><NavLinkView to="/understanding-the-piano-keyboard?slide=notes-introduction">2. Notes</NavLinkView></h3>
-              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=notes-introduction">Introduction</NavLinkView></p>
-              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=note-c">White Keys</NavLinkView></p>
-              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=note-c-sharp">Black Keys</NavLinkView></p>
-              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=notes-summary">Review</NavLinkView></p>
-              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=notes-quiz">Quiz</NavLinkView></p>
+              <h3><NavLinkView to="/understanding-the-piano-keyboard/notes/introduction">2. Notes</NavLinkView></h3>
+              <p><NavLinkView to="/understanding-the-piano-keyboard/notes/introduction">Introduction</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard/notes/c">White Keys</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard/notes/c-sharp">Black Keys</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard/notes/summary">Review</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard/notes/quiz">Quiz</NavLinkView></p>
             </div>
           </Card>
 
           <Card className="home-topic">
-            <NavLinkView to="/understanding-the-piano-keyboard?slide=scales-introduction" className="thumbnail">
+            <NavLinkView to="/understanding-the-piano-keyboard/scales/introduction" className="thumbnail">
               <ScalesThumbnail />
             </NavLinkView>
 
             <div className="text">
-              <h3><NavLinkView to="/understanding-the-piano-keyboard?slide=scales-introduction">3. Scales</NavLinkView></h3>
-              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=scales-introduction">Introduction</NavLinkView></p>
-              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=major-scale">Major Scale</NavLinkView></p>
-              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=natural-minor-scale">Natural Minor Scale</NavLinkView></p>
-              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=scales-summary">Review</NavLinkView></p>
-              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=scales-quiz">Quiz</NavLinkView></p>
+              <h3><NavLinkView to="/understanding-the-piano-keyboard/scales/introduction">3. Scales</NavLinkView></h3>
+              <p><NavLinkView to="/understanding-the-piano-keyboard/scales/introduction">Introduction</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard/scales/major">Major Scale</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard/scales/natural-minor">Natural Minor Scale</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard/scales/summary">Review</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard/scales/quiz">Quiz</NavLinkView></p>
               <br />
               <p><NavLinkView to="/scale-exercises">Self-Paced Scale Mastery</NavLinkView></p>
             </div>
@@ -231,18 +231,18 @@ export class HomePage extends React.Component<{}, IHomePageState> {
           </Card>
           
           <Card className="home-topic">
-            <NavLinkView to="/understanding-the-piano-keyboard?slide=chords-introduction" className="thumbnail">
+            <NavLinkView to="/understanding-the-piano-keyboard/chords/introduction" className="thumbnail">
               <ChordsThumbnail />
             </NavLinkView>
 
             <div className="text">
-              <h3><NavLinkView to="/understanding-the-piano-keyboard?slide=chords-introduction">4. Chords</NavLinkView></h3>
-              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=chords-introduction">Introduction</NavLinkView></p>
-              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=chords-introduction-review">Chords Review</NavLinkView></p>
-              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=chords-introduction-quiz">Chords Quiz</NavLinkView></p>
-              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=diatonic-chords">Diatonic Chords</NavLinkView></p>
-              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=diatonic-chords-review">Diatonic Chords Review</NavLinkView></p>
-              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=diatonic-chords-quiz">Diatonic Chords Quiz</NavLinkView></p>
+              <h3><NavLinkView to="/understanding-the-piano-keyboard/chords/introduction">4. Chords</NavLinkView></h3>
+              <p><NavLinkView to="/understanding-the-piano-keyboard/chords/introduction">Introduction</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard/chords/introduction-review">Chords Review</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard/chords/introduction-quiz">Chords Quiz</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard/chords/diatonic-chords">Diatonic Chords</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard/chords/diatonic-chords-review">Diatonic Chords Review</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard/chords/diatonic-chords-quiz">Diatonic Chords Quiz</NavLinkView></p>
               <br />
               <p><NavLinkView to="/chord-exercises">Self-Paced Chord Mastery</NavLinkView></p>
             </div>
@@ -251,15 +251,15 @@ export class HomePage extends React.Component<{}, IHomePageState> {
           </Card>
           
           <Card className="home-topic">
-            <NavLinkView to="/understanding-the-piano-keyboard?slide=chord-progressions-introduction" className="thumbnail">
+            <NavLinkView to="/understanding-the-piano-keyboard/chord-progressions/introduction" className="thumbnail">
               <ChordProgressionsThumbnail />
             </NavLinkView>
 
             <div className="text">
-              <h3><NavLinkView to="/understanding-the-piano-keyboard?slide=chord-progressions-introduction">5. Chord Progressions</NavLinkView></h3>
-              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=chord-progressions-introduction">Introduction</NavLinkView></p>
-              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=chord-progressions-review">Review</NavLinkView></p>
-              <p><NavLinkView to="/understanding-the-piano-keyboard?slide=chord-progressions-quiz">Quiz</NavLinkView></p>
+              <h3><NavLinkView to="/understanding-the-piano-keyboard/chord-progressions/introduction">5. Chord Progressions</NavLinkView></h3>
+              <p><NavLinkView to="/understanding-the-piano-keyboard/chord-progressions/introduction">Introduction</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard/chord-progressions/review">Review</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard/chord-progressions/quiz">Quiz</NavLinkView></p>
             </div>
             
             {!userOwnsUnderstandingThePianoKeyboardCourse ? <PaywallOverlay premiumProductId={understandingThePianoKeyboardProductId} /> : null}
