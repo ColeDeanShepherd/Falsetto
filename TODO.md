@@ -4,6 +4,7 @@
 ## Now
 ## High Priority
 * Better slideshow navigation
+* Fix nav buttons too wide
 
 * improve slide URLs
 

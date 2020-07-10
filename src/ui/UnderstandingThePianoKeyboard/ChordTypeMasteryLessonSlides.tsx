@@ -18,6 +18,7 @@ export function createSlideGroups(chordType: ChordType): Array<SlideGroup> {
 
   const slideGroup = new SlideGroup(
     `${chordTypeName} Chords`,
+    "",
     [
       new Slide("introduction", () => (
         <div>

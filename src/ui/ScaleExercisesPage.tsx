@@ -62,7 +62,7 @@ export class ScaleExercisesPage extends React.Component<IScaleExercisesProps, IS
         <div>
           {scales.map(scale => (
             <div>
-              <NavLinkView to={`/scale/${getUriComponent(scale)}/lesson`}>{scale.rootPitch.toString(/*includeOctaveNumber*/ false)} {scale.type.name} Lesson</NavLinkView>
+              <NavLinkView to={`/scale/${getUriComponent(scale)}/lesson/introduction`}>{scale.rootPitch.toString(/*includeOctaveNumber*/ false)} {scale.type.name} Lesson</NavLinkView>
             </div>
           ))}
         </div>

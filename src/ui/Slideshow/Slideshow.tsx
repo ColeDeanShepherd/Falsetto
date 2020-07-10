@@ -1,6 +1,5 @@
 import { History, UnregisterCallback } from "history";
 import * as React from "react";
-import * as QueryString from "query-string";
 
 import { flattenArrays } from '../../lib/Core/ArrayUtils';
 import { DependencyInjector } from "../../DependencyInjector";
@@ -18,6 +17,7 @@ import { NavigateAction } from '../../App/Actions';
 import { UserProfile } from "../../UserProfile";
 import { IServer } from "../../Server";
 import { PaywallOverlay } from "../Utils/PaywallOverlay/PaywallOverlay";
+import { unwrapValueOrUndefined } from '../../lib/Core/Utils';
 
 function getSlideGroup(slideGroups: Array<SlideGroup>, slideIndex: number): [SlideGroup, number] | undefined {
   let numSlidesSeen = 0;
@@ -46,12 +46,14 @@ export class Slide {
 export class SlideGroup {
   public constructor(
     public name: string,
+    public url: string,
     public slides: Array<Slide>,
     public isPremium: boolean = false) {}
 }
 
 export interface ISlideshowProps {
   slideGroups: Array<SlideGroup>;
+  currentSlidePath: string;
   premiumProductId?: number;
 }
 
@@ -92,12 +94,6 @@ export class Slideshow extends React.Component<ISlideshowProps, ISlideshowState>
     const { slides } = this;
 
     AppModel.instance.pianoAudio.preloadSounds();
-    
-    this.historyUnregisterCallback = this.history.listen((location, action) => {
-      this.setState({
-        slideIndex: this.getSlideIndexFromUriParams(slides, location.search)
-      });
-    });
 
     this.registerKeyEventHandlers();
     
@@ -110,11 +106,6 @@ export class Slideshow extends React.Component<ISlideshowProps, ISlideshowState>
     AppModel.instance.pianoAudio.releaseAllKeys();
 
     this.unregisterKeyEventHandlers();
-
-    if (this.historyUnregisterCallback) {
-      this.historyUnregisterCallback();
-      this.historyUnregisterCallback = undefined;
-    }
   }
 
   // TODO: show slide group
@@ -180,7 +171,7 @@ export class Slideshow extends React.Component<ISlideshowProps, ISlideshowState>
     const slides = flattenArrays<Slide>(props.slideGroups.map(sg => sg.slides));
 
     const state = {
-      slideIndex: this.getSlideIndexFromUriParams(slides, this.history.location.search)
+      slideIndex: this.getSlideIndexFromSlidePath(slides, props.currentSlidePath)
     } as ISlideshowState;
 
     return [state, slides];
@@ -206,7 +197,6 @@ export class Slideshow extends React.Component<ISlideshowProps, ISlideshowState>
   
   private server: IServer;
   private history: History<any>;
-  private historyUnregisterCallback: UnregisterCallback | undefined;
 
   // #region Event Handlers
 
@@ -285,22 +275,58 @@ export class Slideshow extends React.Component<ISlideshowProps, ISlideshowState>
 
   private moveToSlide(slideIndex: number) {
     const { slides } = this;
+    const { slideGroups, currentSlidePath } = this.props;
 
     this.setState({ slideIndex: slideIndex }, () => {
-      const oldSearchParams = QueryString.parse(this.history.location.search);
-      const newSearchParams = { ...oldSearchParams, slide: slides[slideIndex].url };
+      const [slideGroup, _] = unwrapValueOrUndefined(getSlideGroup(slideGroups, slideIndex));
+      
+      const newUri = this.getCurrentUriWithoutSlidePath(currentSlidePath) + ((slideGroup.url.length > 0) ? (slideGroup.url + '/') : "") + slides[slideIndex].url;
 
-      ActionBus.instance.dispatch(new NavigateAction(this.history.location.pathname + `?${QueryString.stringify(newSearchParams)}`));
+      ActionBus.instance.dispatch(new NavigateAction(newUri));
     });
   }
 
   // #endregion Actions
 
-  private getSlideIndexFromUriParams(slides: Array<Slide>, search: string): number {
-    const urlSearchParams = QueryString.parse(search);
-    if (!(urlSearchParams.slide && (typeof urlSearchParams.slide === 'string'))) { return 0; }
+  private getSlideIndexFromSlidePath(slides: Array<Slide>, slidePath: string): number {
+    const { slideGroups } = this.props;
 
-    const slideIndex = slides.findIndex(s => s.url === urlSearchParams.slide);
+    const slidePathParts = slidePath.split('/');
+
+    function getSlideGroup(): SlideGroup {
+      if (slidePathParts.length >= 1) {
+        const slideGroupUri = slidePathParts[0];
+        const slideGroup = slideGroups.find(g => g.url === slideGroupUri);
+
+        if (slideGroup !== undefined) { return slideGroup; }
+      }
+
+      return slideGroups[0];
+    }
+
+    const slideGroup = getSlideGroup();
+
+    function getSlide(): Slide {
+      if (slidePathParts.length >= 2) {
+        const slideUri = slidePathParts[1];
+        const slide = slideGroup.slides.find(s => s.url === slideUri);
+
+        if (slide !== undefined) { return slide; }
+      }
+
+      return slideGroup.slides[0];
+    }
+
+    const slide = getSlide();
+    
+    const slideIndex = slides.indexOf(slide);
     return Math.max(slideIndex, 0);
+  }
+
+  private getCurrentUriWithoutSlidePath(slidePath: string): string {
+    const slidePathStartIndex = this.history.location.pathname.lastIndexOf(slidePath);
+    return (slidePathStartIndex >= 0)
+      ? this.history.location.pathname.substring(0, slidePathStartIndex)
+      : this.history.location.pathname;
   }
 }

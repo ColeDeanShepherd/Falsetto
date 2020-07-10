@@ -1,10 +1,8 @@
 import Cookies from "js-cookie";
-import { isProduction, websiteUriAuthority } from './Config';
 
 const sessionTokenCookieName = "sessionToken";
 const sessionTokenCookieAttributes = {
-  secure: isProduction(),
-  domain: `.${websiteUriAuthority}`
+  secure: true
 };
 
 export function saveSessionToken(sessionToken: string) {
