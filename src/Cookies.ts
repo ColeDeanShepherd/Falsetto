@@ -1,9 +1,15 @@
 import Cookies from "js-cookie";
+import { websiteUriAuthority, isDevelopment } from './Config';
 
 const sessionTokenCookieName = "sessionToken";
-const sessionTokenCookieAttributes = {
-  secure: true
-};
+const sessionTokenCookieAttributes = isDevelopment()
+  ? {
+    secure: true
+  }
+  : {
+    secure: true,
+    domain: `.${websiteUriAuthority}`
+  };
 
 export function saveSessionToken(sessionToken: string) {
   Cookies.set(
