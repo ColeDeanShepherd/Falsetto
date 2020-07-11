@@ -1,25 +1,83 @@
 import * as React from "react";
+import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 
 import { Card } from "../../ui/Card/Card";
 
-export class CheckoutPage extends React.Component<{}, {}> {
-  public componentDidMount() {
+import "./Stylesheet.css";
+import { Button } from '../Button/Button';
+import { unwrapValueOrUndefined } from '../../lib/Core/Utils';
+import { DependencyInjector } from '../../DependencyInjector';
+import { IServer } from "../../Server";
+import { understandingThePianoKeyboardProduct } from '../../Products';
+
+const cardOptions = {
+  style: {
+    base: {
+      color: "#424770",
+      letterSpacing: "0.025em",
+      "::placeholder": {
+        color: "#aab7c4"
+      }
+    },
+    invalid: {
+      color: "#9e2146"
+    }
+  }
+};
+
+export const CheckoutPage = () => {
+  const stripe = useStripe();
+  const elements = useElements();
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    // Block native form submission.
+    event.preventDefault();
+
+    if (!stripe || !elements) {
+      // Stripe.js has not loaded yet. Make sure to disable
+      // form submission until Stripe.js has loaded.
+      return;
+    }
+
+    // Get a reference to a mounted CardElement. Elements knows how
+    // to find your CardElement because there can only ever be one of
+    // each type of element.
+    const cardElement = elements.getElement(CardElement);
+
+    if (!cardElement) {
+      console.error("Failed to find Stripe card element.");
+      return;
+    }
+
+    // Use your card Element with other Stripe.js APIs
+    const { error, paymentMethod } = await stripe.createPaymentMethod({
+      type: 'card',
+      card: cardElement,
+    });
+
+    if (error) {
+      console.log('[error]', error);
+      return;
+    }
+
+    const server = DependencyInjector.instance.getRequiredService<IServer>("IServer");
+    const purchaseInfo = await server.startPurchase(understandingThePianoKeyboardProduct.id);
+
+    const {} = await stripe.confirmCardPayment(purchaseInfo.stripeClientSecret, {
+      payment_method: unwrapValueOrUndefined(paymentMethod).id
+    });
   }
 
-  public render(): JSX.Element {
-    return (
-      <Card>
-        <h2 className="margin-bottom">
-          Checkout
-        </h2>
-        <p>Test checkout page</p>
+  return (
+    <Card>
+      <h2 className="margin-bottom">
+        Checkout
+      </h2>
 
-        <form id="payment-form">
-          <div id="card-element"></div>
-          <div id="card-errors" role="alert"></div>
-          <button id="submit">Pay</button>
-        </form>
-      </Card>
-    );
-  }
+      <form onSubmit={handleSubmit}>
+        <CardElement options={cardOptions} />
+        <Button type="submit" disabled={!stripe}>Pay</Button>
+      </form>
+    </Card>
+  );
 }

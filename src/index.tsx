@@ -16,7 +16,7 @@ import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
 import registerServiceWorker from "./registerServiceWorker";
 
 import { getErrorDescription } from './Error';
-import { isDevelopment, getStripeApiKey } from './Config';
+import { isDevelopment, getStripePublishableApiKey } from './Config';
 import { DependencyInjector } from './DependencyInjector';
 import { IAnalytics } from './Analytics';
 import { polyfillWebAudio } from "./Audio/Audio";
@@ -68,7 +68,7 @@ window.addEventListener("beforeunload", (e) => {
   app.dispose();
 });
 
-const stripePromise = loadStripe(getStripeApiKey());
+const stripePromise = loadStripe(getStripePublishableApiKey());
 
 const rootElement = (
   <MuiThemeProvider theme={theme}>

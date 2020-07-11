@@ -6,8 +6,8 @@ export function isProduction(): boolean {
   return process.env.NODE_ENV === "production";
 }
 
-export function getStripeApiKey(): string {
-  return process.env.REACT_APP_STRIPE_API_KEY as string;
+export function getStripePublishableApiKey(): string {
+  return process.env.REACT_APP_STRIPE_PUBLISHABLE_API_KEY as string;
 }
 
 export const googleAnalyticsTrackingId = "UA-72494315-5"; // TODO: move this somewhere else?

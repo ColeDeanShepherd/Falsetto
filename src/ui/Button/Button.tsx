@@ -4,6 +4,7 @@ import { Button as MaterialUiButton } from "@material-ui/core";
 export interface IButtonProps {
   onPointerDown?: ((event: React.PointerEvent<HTMLElement>) => void);
   onClick?: ((event: React.MouseEvent<HTMLElement, MouseEvent>) => void);
+  type?: "submit";
   disabled?: boolean;
   className?: string;
   color?: string;
@@ -11,7 +12,7 @@ export interface IButtonProps {
 }
 
 export const Button: React.FunctionComponent<IButtonProps> = props => {
-  const color = (props.color !== undefined)
+  const color = (props.color !== undefined) // TODO: use
     ? props.color
     : "primary";
   const style = Object.assign({ textTransform: "none" }, props.style);
@@ -21,6 +22,7 @@ export const Button: React.FunctionComponent<IButtonProps> = props => {
       variant="contained"
       onPointerDown={props.onPointerDown}
       onClick={props.onClick}
+      type={props.type}
       disabled={props.disabled}
       className={props.className ? props.className : ""}
       style={style}
