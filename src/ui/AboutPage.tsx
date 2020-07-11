@@ -1,11 +1,12 @@
 import * as React from "react";
+
 import { Card } from "../ui/Card/Card";
 
 export class AboutPage extends React.Component<{}, {}> {
   public render(): JSX.Element {
     return (
       <Card>
-        <h2 className="h5 margin-bottom">
+        <h2 className="margin-bottom">
           About
         </h2>
         <p>Falsetto was made by <a href="http://coledeanshepherd.com" target="_blank">Cole Shepherd</a>.</p>

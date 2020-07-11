@@ -37,8 +37,6 @@ import { ProfilePage } from "../../ui/ProfilePage";
 import { Metronome } from '../../ui/Tools/Metronome';
 import { DiatonicChordPlayer } from '../../ui/Tools/DiatonicChordPlayer';
 import { KnowledgeMapPage } from '../../ui/KnowledgeMapPage';
-import { LoginPage } from '../../ui/LoginPage';
-import { LogoutPage } from "../../ui/LogoutPage";
 import { MessagePage } from '../../ui/MessagePage';
 import { FlashCardSet } from '../../FlashCardSet';
 import { createStudyFlashCardSetComponent } from '../StudyFlashCards/View';
@@ -51,10 +49,16 @@ import { createSlideGroups as createChordTypeMasteryLessonSlideGroups } from '..
 import { PageNotFoundView } from '../../ui/PageNotFoundView';
 import { ChordPage } from "../../ui/ChordPage";
 import { ChordExercisesPage } from '../ChordExercisesPage';
+
+import { LoginPage } from '../../ui/LoginPage';
+import { LogoutPage } from "../../ui/LogoutPage";
 import { ForgotPasswordPage} from "../ForgotPasswordPage";
 import { ResetPasswordPage } from "../ResetPasswordPage";
 import { SignUpPage } from '../SignUpPage';
-import { understandingThePianoKeyboardProductId } from '../../Products';
+
+import { CheckoutPage } from '../CheckoutPage/View';
+
+import { understandingThePianoKeyboardProduct } from '../../Products';
 
 export interface IRouteData {
   key?: string;
@@ -237,6 +241,15 @@ const routes: Array<IRouteData> = ([
     )
   },
   {
+    path: "/checkout",
+    title: "Checkout - Falsetto",
+    renderFn: () => (
+      <LimitedWidthContentContainer>
+        <CheckoutPage />
+      </LimitedWidthContentContainer>
+    )
+  },
+  {
     path: "/about",
     title: "About - Falsetto",
     renderFn: () => (
@@ -271,7 +284,7 @@ const routes: Array<IRouteData> = ([
       <Slideshow
         slideGroups={pianoTheorySlideGroups}
         currentSlidePath={props.match.params.slidePath}
-        premiumProductId={understandingThePianoKeyboardProductId} />
+        premiumProductId={understandingThePianoKeyboardProduct.id} />
     )
   },
   {
@@ -506,7 +519,7 @@ const routes: Array<IRouteData> = ([
               <Slideshow
                 slideGroups={slideGroups}
                 currentSlidePath={props.match.params.slidePath}
-                premiumProductId={understandingThePianoKeyboardProductId} />
+                premiumProductId={understandingThePianoKeyboardProduct.id} />
             </DocumentTitle>
           );
         }} />
@@ -543,7 +556,7 @@ const routes: Array<IRouteData> = ([
               <Slideshow
                 slideGroups={slideGroups}
                 currentSlidePath={props.match.params.slidePath}
-                premiumProductId={understandingThePianoKeyboardProductId} />
+                premiumProductId={understandingThePianoKeyboardProduct.id} />
             </DocumentTitle>
           );
         }} />

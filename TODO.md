@@ -2,6 +2,7 @@
 ## Other
 ## Pomodoro
 ## Now
+* Integrate payment processor
 ## High Priority
 
 
@@ -12,10 +13,6 @@
 * Intervals section
 * Scale fingerings
 * Improve self-paced scale/chord mastery
-
-
-
-* Integrate payment processor
 
 
 

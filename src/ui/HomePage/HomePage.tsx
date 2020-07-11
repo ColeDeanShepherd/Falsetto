@@ -17,7 +17,7 @@ import { ChordType } from '../../lib/TheoryLib/ChordType';
 
 import "./Stylesheet.css";
 import { PaywallOverlay } from "../Utils/PaywallOverlay/PaywallOverlay";
-import { understandingThePianoKeyboardProductId } from '../../Products';
+import { understandingThePianoKeyboardProduct } from '../../Products';
 import { UserProfile } from '../../UserProfile';
 import { IServer } from "../../Server";
 import { DependencyInjector } from "../../DependencyInjector";
@@ -171,7 +171,7 @@ export class HomePage extends React.Component<{}, IHomePageState> {
     const { userProfile } = this.state;
 
     const userOwnsUnderstandingThePianoKeyboardCourse = (userProfile !== undefined) &&
-      userProfile.boughtProductIds.some(pId => pId == understandingThePianoKeyboardProductId);
+      userProfile.boughtProductIds.some(pId => pId == understandingThePianoKeyboardProduct.id);
     
     return (
       <div className="home-page">
@@ -227,7 +227,7 @@ export class HomePage extends React.Component<{}, IHomePageState> {
               <p><NavLinkView to="/scale-exercises">Self-Paced Scale Mastery</NavLinkView></p>
             </div>
             
-            {!userOwnsUnderstandingThePianoKeyboardCourse ? <PaywallOverlay premiumProductId={understandingThePianoKeyboardProductId} /> : null}
+            {!userOwnsUnderstandingThePianoKeyboardCourse ? <PaywallOverlay premiumProductId={understandingThePianoKeyboardProduct.id} /> : null}
           </Card>
           
           <Card className="home-topic">
@@ -247,7 +247,7 @@ export class HomePage extends React.Component<{}, IHomePageState> {
               <p><NavLinkView to="/chord-exercises">Self-Paced Chord Mastery</NavLinkView></p>
             </div>
             
-            {!userOwnsUnderstandingThePianoKeyboardCourse ? <PaywallOverlay premiumProductId={understandingThePianoKeyboardProductId} /> : null}
+            {!userOwnsUnderstandingThePianoKeyboardCourse ? <PaywallOverlay premiumProductId={understandingThePianoKeyboardProduct.id} /> : null}
           </Card>
           
           <Card className="home-topic">
@@ -262,7 +262,7 @@ export class HomePage extends React.Component<{}, IHomePageState> {
               <p><NavLinkView to="/understanding-the-piano-keyboard/chord-progressions/quiz">Quiz</NavLinkView></p>
             </div>
             
-            {!userOwnsUnderstandingThePianoKeyboardCourse ? <PaywallOverlay premiumProductId={understandingThePianoKeyboardProductId} /> : null}
+            {!userOwnsUnderstandingThePianoKeyboardCourse ? <PaywallOverlay premiumProductId={understandingThePianoKeyboardProduct.id} /> : null}
           </Card>
         </div>
         
