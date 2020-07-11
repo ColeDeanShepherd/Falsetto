@@ -665,6 +665,7 @@ export const pianoTheorySlideGroups = [
             <p>This course is designed to be viewed on tablets and computer monitors, not on mobile phones due to screen space limitations.</p>
             <p>Without further ado, let's get started!</p>
             <p>Press the "<i className="material-icons" style={{ verticalAlign: "bottom" }}>keyboard_arrow_right</i>" on the right of this page, or press the right arrow key on your computer keyboard, to move to the next slide where we will set up your MIDI piano keyboard, if you have one.</p>
+            <NoteText>This course is a work-in-progress. We are planning to add: intervals, scale fingerings, extended chords, more chord progressions, compositional tools, support for mobile devices, and more.</NoteText>
           </div>
         </div>
       )),

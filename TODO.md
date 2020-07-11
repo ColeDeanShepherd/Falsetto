@@ -3,10 +3,23 @@
 ## Pomodoro
 ## Now
 ## High Priority
-* Better slideshow navigation
+* Tester email
+  * Describe to-do list
+
+
+
+
+
+
+
+
+
 * Fix nav buttons too wide
 
-* improve slide URLs
+
+
+
+* Better slideshow navigation
 
 
 * Intervals section
