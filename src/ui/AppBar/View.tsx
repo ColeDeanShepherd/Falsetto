@@ -1,6 +1,8 @@
 import * as React from "react";
 
 import Close from '@material-ui/icons/Close';
+import MenuIcon from '@material-ui/icons/Menu';
+import SettingsIcon from '@material-ui/icons/Settings';
 import PersonIcon from '@material-ui/icons/Person';
 
 import { ActionBus, ActionHandler } from '../../ActionBus';
@@ -61,9 +63,9 @@ export class AppBarView extends React.Component<IAppBarViewProps, IAppBarViewSta
           <NavLinkView to="/" className="button">
             <img src="/logo-black.svg" style={{height: "24px", verticalAlign: "sub"}} />
           </NavLinkView>
-          <i onClick={event => this.toggleMenu()} className="material-icons button cursor-pointer no-select">menu</i>
-          <i onClick={event => this.toggleSettings()} className="material-icons button cursor-pointer no-select">settings</i>
-          <i onClick={event => this.onUserPress()} className="material-icons button cursor-pointer no-select">person_icon</i>
+          <span onClick={event => this.toggleMenu()} className="button cursor-pointer no-select"><MenuIcon /></span>
+          <span onClick={event => this.toggleSettings()} className="button cursor-pointer no-select"><SettingsIcon /></span>
+          <span onClick={event => this.onUserPress()} className="button cursor-pointer no-select"><PersonIcon /></span>
         </div>
         {isMenuContainerVisible
           ? (

@@ -3,19 +3,6 @@
 ## Pomodoro
 ## Now
 ## High Priority
-* Tester email
-  * Describe to-do list
-
-
-
-
-
-
-
-
-
-* Fix nav buttons too wide
-
 
 
 
