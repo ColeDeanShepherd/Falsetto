@@ -275,6 +275,17 @@ const routes: Array<IRouteData> = ([
     )
   },
   {
+    path: "/understanding-the-piano-keyboard",
+    title: "Understanding the Piano Keyboard - Falsetto",
+    isPathExact: false,
+    renderFn: (props: any) => (
+      <Slideshow
+        slideGroups={pianoTheorySlideGroups}
+        currentSlidePath={""}
+        premiumProductId={understandingThePianoKeyboardProduct.id} />
+    )
+  },
+  {
     path: "/essential-music-theory",
     title: "Essential Music Theory - Falsetto",
     renderFn: () => (
