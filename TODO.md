@@ -96,7 +96,7 @@
 * Account system
   * Email confirmation
   * 2FA?
-  * Save data
+  * Save data 
 ## Medium Priority
 * Ear Training/Sight Singing Course
   * Singing notes after hearing them

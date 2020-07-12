@@ -650,7 +650,7 @@ function createDiatonicTriadNotesQuizSlide(scaleDegreeNumber: number): Slide {
 }
 
 // TODO: dynamic width/height
-export const pianoTheorySlideGroups = [
+export const understandingThePianoKeyboardSlideGroups = [
   new SlideGroup(
     "Introduction & Setup",
     "introduction",

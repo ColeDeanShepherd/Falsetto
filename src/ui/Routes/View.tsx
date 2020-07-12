@@ -10,7 +10,10 @@ import { ChordType, parseChordTypeFromUriComponent, getUriComponent as getChordT
 import { Chord, parseChordFromUriComponent } from "../../lib/TheoryLib/Chord";
 
 import { Slideshow } from "../Slideshow/Slideshow";
-import { pianoTheorySlideGroups } from "../UnderstandingThePianoKeyboard/UnderstandingThePianoKeyboard";
+
+import { understandingThePianoKeyboardSlideGroups } from "../UnderstandingThePianoKeyboard/UnderstandingThePianoKeyboard";
+import { earTrainingCourseSlideGroups } from "../EarTrainingCourse/EarTrainingCourse";
+
 import {
   SectionContainer
 } from "../../ui/Lessons/EssentialMusicTheory/EssentialMusicTheory";
@@ -54,7 +57,7 @@ import { ChordExercisesPage } from '../ChordExercisesPage';
 import { ForgotPasswordPage} from "../ForgotPasswordPage";
 import { ResetPasswordPage } from "../ResetPasswordPage";
 import { SignUpPage } from '../SignUpPage';
-import { understandingThePianoKeyboardProductId } from '../../Products';
+import { understandingThePianoKeyboardProductId, earTrainingCourseProduct } from '../../Products';
 
 export interface IRouteData {
   key?: string;
@@ -263,13 +266,14 @@ const routes: Array<IRouteData> = ([
       </LimitedWidthContentContainer>
     )
   },
+
   {
     path: "/understanding-the-piano-keyboard/:slidePath+",
     title: "Understanding the Piano Keyboard - Falsetto",
     isPathExact: false,
     renderFn: (props: any) => (
       <Slideshow
-        slideGroups={pianoTheorySlideGroups}
+        slideGroups={understandingThePianoKeyboardSlideGroups}
         currentSlidePath={props.match.params.slidePath}
         premiumProductId={understandingThePianoKeyboardProductId} />
     )
@@ -280,11 +284,36 @@ const routes: Array<IRouteData> = ([
     isPathExact: false,
     renderFn: (props: any) => (
       <Slideshow
-        slideGroups={pianoTheorySlideGroups}
+        slideGroups={understandingThePianoKeyboardSlideGroups}
         currentSlidePath={""}
         premiumProductId={understandingThePianoKeyboardProductId} />
     )
   },
+
+  {
+    path: "/ear-training/:slidePath+",
+    title: "Ear Training Course - Falsetto",
+    isPathExact: false,
+    renderFn: (props: any) => (
+      <Slideshow
+        slideGroups={earTrainingCourseSlideGroups}
+        currentSlidePath={props.match.params.slidePath}
+        premiumProductId={earTrainingCourseProduct.id} />
+    )
+  },
+  {
+    path: "/ear-training",
+    title: "Ear Training Course - Falsetto",
+    isPathExact: false,
+    renderFn: (props: any) => (
+      <Slideshow
+        slideGroups={earTrainingCourseSlideGroups}
+        currentSlidePath={""}
+        premiumProductId={earTrainingCourseProduct.id} />
+    )
+  },
+  //earTrainingCourseSlideGroups
+
   {
     path: "/essential-music-theory",
     title: "Essential Music Theory - Falsetto",

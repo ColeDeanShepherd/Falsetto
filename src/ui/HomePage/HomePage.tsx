@@ -17,7 +17,7 @@ import { ChordType } from '../../lib/TheoryLib/ChordType';
 
 import "./Stylesheet.css";
 import { PaywallOverlay } from "../Utils/PaywallOverlay/PaywallOverlay";
-import { understandingThePianoKeyboardProductId } from '../../Products';
+import { understandingThePianoKeyboardProductId, earTrainingCourseProduct } from '../../Products';
 import { UserProfile } from '../../UserProfile';
 import { IServer } from "../../Server";
 import { DependencyInjector } from "../../DependencyInjector";
@@ -172,14 +172,12 @@ export class HomePage extends React.Component<{}, IHomePageState> {
 
     const userOwnsUnderstandingThePianoKeyboardCourse = (userProfile !== undefined) &&
       userProfile.boughtProductIds.some(pId => pId == understandingThePianoKeyboardProductId);
-    
-    return (
-      <div className="home-page">
-        <div className="headline">
-          <h1>Falsetto</h1>
-          <h2 className="elevator-pitch">Master your instrument, learn music theory, and train your ear with interactive lessons &amp; exercises!</h2>
-        </div>
 
+    const userOwnsEarTrainingCourse = (userProfile !== undefined) &&
+      userProfile.boughtProductIds.some(pId => pId == earTrainingCourseProduct.id);
+    
+    const understandingThePianoKeyboardSection = (
+      <div className="home-course">
         <h3 style={{ textAlign: "center" }}>Understanding the Piano Keyboard</h3>
         <h4 className="h5" style={{ textAlign: "center" }}>The piano keyboard is more than just 12 notes. Better understand the music you enjoy, and improve your skills in music composition &amp; improvisation by learning to see intervals, scales, chords, and chord progressions on the piano keyboard.</h4>
         <div className="home-topic-container">
@@ -265,6 +263,123 @@ export class HomePage extends React.Component<{}, IHomePageState> {
             {!userOwnsUnderstandingThePianoKeyboardCourse ? <PaywallOverlay premiumProductId={understandingThePianoKeyboardProductId} /> : null}
           </Card>
         </div>
+      </div>
+    );
+    
+    const earTrainingCourseSection = (
+      <div className="home-course">
+        <h3 style={{ textAlign: "center" }}>Ear Training Course</h3>
+        <h4 className="h5" style={{ textAlign: "center" }}>Train your ear and your mind.</h4>
+        <div className="home-topic-container">
+          <Card className="home-topic">
+            <NavLinkView
+              to="/ear-training"
+              className="thumbnail"
+              style={{ backgroundImage: "url('/img/setup-thumbnail.jpg')" }} />
+
+            <div className="text">
+              <h3><NavLinkView to="/ear-training">1. Introduction &amp; Setup</NavLinkView></h3>
+              <p><NavLinkView to="/ear-training/introduction">Introduction</NavLinkView></p>
+              <p><NavLinkView to="/ear-training/introduction/setup">Setup</NavLinkView></p>
+            </div>
+          </Card>
+          
+          <Card className="home-topic">
+            <NavLinkView to="/ear-training/notes/introduction" className="thumbnail">
+              <NotesThumbnail />
+            </NavLinkView>
+
+            <div className="text">
+              <h3><NavLinkView to="/ear-training/notes/introduction">2. Notes</NavLinkView></h3>
+              <p><NavLinkView to="/ear-training/notes/introduction">Introduction</NavLinkView></p>
+              <p><NavLinkView to="/ear-training/notes/c">White Keys</NavLinkView></p>
+              <p><NavLinkView to="/ear-training/notes/c-sharp">Black Keys</NavLinkView></p>
+              <p><NavLinkView to="/ear-training/notes/summary">Review</NavLinkView></p>
+              <p><NavLinkView to="/ear-training/notes/quiz">Quiz</NavLinkView></p>
+            </div>
+          </Card>
+
+          <Card className="home-topic">
+            <NavLinkView to="/ear-training/intervals/introduction" className="thumbnail">
+              <NotesThumbnail />
+            </NavLinkView>
+
+            <div className="text">
+              <h3><NavLinkView to="/ear-training/intervals/introduction">3. Intervals</NavLinkView></h3>
+              <p><NavLinkView to="/ear-training/intervals/introduction">Introduction</NavLinkView></p>
+              <p><NavLinkView to="/ear-training/intervals/c">White Keys</NavLinkView></p>
+              <p><NavLinkView to="/ear-training/intervals/c-sharp">Black Keys</NavLinkView></p>
+              <p><NavLinkView to="/ear-training/intervals/summary">Review</NavLinkView></p>
+              <p><NavLinkView to="/ear-training/intervals/quiz">Quiz</NavLinkView></p>
+            </div>
+          </Card>
+
+          <Card className="home-topic">
+            <NavLinkView to="/ear-training/scales/introduction" className="thumbnail">
+              <ScalesThumbnail />
+            </NavLinkView>
+
+            <div className="text">
+              <h3><NavLinkView to="/ear-training/scales/introduction">4. Scales</NavLinkView></h3>
+              <p><NavLinkView to="/ear-training/scales/introduction">Introduction</NavLinkView></p>
+              <p><NavLinkView to="/ear-training/scales/major">Major Scale</NavLinkView></p>
+              <p><NavLinkView to="/ear-training/scales/natural-minor">Natural Minor Scale</NavLinkView></p>
+              <p><NavLinkView to="/ear-training/scales/summary">Review</NavLinkView></p>
+              <p><NavLinkView to="/ear-training/scales/quiz">Quiz</NavLinkView></p>
+              <br />
+              <p><NavLinkView to="/scale-exercises">Self-Paced Scale Mastery</NavLinkView></p>
+            </div>
+            
+            {!userOwnsEarTrainingCourse ? <PaywallOverlay premiumProductId={earTrainingCourseProduct.id} /> : null}
+          </Card>
+          
+          <Card className="home-topic">
+            <NavLinkView to="/ear-training/chords/introduction" className="thumbnail">
+              <ChordsThumbnail />
+            </NavLinkView>
+
+            <div className="text">
+              <h3><NavLinkView to="/ear-training/chords/introduction">5. Chords</NavLinkView></h3>
+              <p><NavLinkView to="/ear-training/chords/introduction">Introduction</NavLinkView></p>
+              <p><NavLinkView to="/ear-training/chords/introduction-review">Chords Review</NavLinkView></p>
+              <p><NavLinkView to="/ear-training/chords/introduction-quiz">Chords Quiz</NavLinkView></p>
+              <p><NavLinkView to="/ear-training/chords/diatonic-chords">Diatonic Chords</NavLinkView></p>
+              <p><NavLinkView to="/ear-training/chords/diatonic-chords-review">Diatonic Chords Review</NavLinkView></p>
+              <p><NavLinkView to="/ear-training/chords/diatonic-chords-quiz">Diatonic Chords Quiz</NavLinkView></p>
+              <br />
+              <p><NavLinkView to="/chord-exercises">Self-Paced Chord Mastery</NavLinkView></p>
+            </div>
+            
+            {!userOwnsEarTrainingCourse ? <PaywallOverlay premiumProductId={earTrainingCourseProduct.id} /> : null}
+          </Card>
+          
+          <Card className="home-topic">
+            <NavLinkView to="/ear-training/chord-progressions/introduction" className="thumbnail">
+              <ChordProgressionsThumbnail />
+            </NavLinkView>
+
+            <div className="text">
+              <h3><NavLinkView to="/ear-training/chord-progressions/introduction">6. Chord Progressions</NavLinkView></h3>
+              <p><NavLinkView to="/ear-training/chord-progressions/introduction">Introduction</NavLinkView></p>
+              <p><NavLinkView to="/ear-training/chord-progressions/review">Review</NavLinkView></p>
+              <p><NavLinkView to="/ear-training/chord-progressions/quiz">Quiz</NavLinkView></p>
+            </div>
+            
+            {!userOwnsEarTrainingCourse ? <PaywallOverlay premiumProductId={earTrainingCourseProduct.id} /> : null}
+          </Card>
+        </div>
+      </div>
+    );
+    
+    return (
+      <div className="home-page">
+        <div className="headline">
+          <h1>Falsetto</h1>
+          <h2 className="elevator-pitch">Master your instrument, learn music theory, and train your ear with interactive lessons &amp; exercises!</h2>
+        </div>
+
+        {understandingThePianoKeyboardSection}
+        {earTrainingCourseSection}
         
         <Card className="other-stuff">
           <h2>Other Lessons, Tools, and Exercises</h2>

@@ -14,6 +14,10 @@
 }
 
 /* Topic Cards */
+.home-course {
+  margin-bottom: 8em;
+}
+
 .home-topic-container {
   display: flex;
   flex-wrap: wrap;
@@ -52,5 +56,4 @@
 
 /* Other Stuff */
 .other-stuff {
-  margin-top: 8em;
 }
