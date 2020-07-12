@@ -101,7 +101,7 @@ export function createFlashCards(): FlashCard[] {
       info => <MajorScaleRelativeFormulaAnswerSelect
         info={info}
         correctAnswer={[0, -1, 0, -1]}
-        scaleDegreeNumbers={[1, 3, 5]} />
+        scaleDegreeNumbers={[1, 3, 5, 7]} />
     ),
   ];
 }

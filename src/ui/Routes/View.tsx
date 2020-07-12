@@ -282,7 +282,7 @@ const routes: Array<IRouteData> = ([
       <Slideshow
         slideGroups={pianoTheorySlideGroups}
         currentSlidePath={""}
-        premiumProductId={understandingThePianoKeyboardProduct.id} />
+        premiumProductId={understandingThePianoKeyboardProductId} />
     )
   },
   {
