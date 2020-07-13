@@ -207,7 +207,7 @@ export class HomePage extends React.Component<{}, IHomePageState> {
               <p><NavLinkView to="/understanding-the-piano-keyboard/notes/c">White Keys</NavLinkView></p>
               <p><NavLinkView to="/understanding-the-piano-keyboard/notes/c-sharp">Black Keys</NavLinkView></p>
               <p><NavLinkView to="/understanding-the-piano-keyboard/notes/summary">Review</NavLinkView></p>
-              <p><NavLinkView to="/understanding-the-piano-keyboard/notes/quiz">Quiz</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard/notes/exercise">Practice</NavLinkView></p>
             </div>
           </Card>
 
@@ -222,7 +222,7 @@ export class HomePage extends React.Component<{}, IHomePageState> {
               <p><NavLinkView to="/understanding-the-piano-keyboard/scales/major">Major Scale</NavLinkView></p>
               <p><NavLinkView to="/understanding-the-piano-keyboard/scales/natural-minor">Natural Minor Scale</NavLinkView></p>
               <p><NavLinkView to="/understanding-the-piano-keyboard/scales/summary">Review</NavLinkView></p>
-              <p><NavLinkView to="/understanding-the-piano-keyboard/scales/quiz">Quiz</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard/scales/exercise">Practice</NavLinkView></p>
               <br />
               <p><NavLinkView to="/scale-exercises">Self-Paced Scale Mastery</NavLinkView></p>
             </div>
@@ -239,10 +239,10 @@ export class HomePage extends React.Component<{}, IHomePageState> {
               <h3><NavLinkView to="/understanding-the-piano-keyboard/chords/introduction">4. Chords</NavLinkView></h3>
               <p><NavLinkView to="/understanding-the-piano-keyboard/chords/introduction">Introduction</NavLinkView></p>
               <p><NavLinkView to="/understanding-the-piano-keyboard/chords/introduction-review">Chords Review</NavLinkView></p>
-              <p><NavLinkView to="/understanding-the-piano-keyboard/chords/introduction-quiz">Chords Quiz</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard/chords/introduction-exercise">Chords Practice</NavLinkView></p>
               <p><NavLinkView to="/understanding-the-piano-keyboard/chords/diatonic-chords">Diatonic Chords</NavLinkView></p>
               <p><NavLinkView to="/understanding-the-piano-keyboard/chords/diatonic-chords-review">Diatonic Chords Review</NavLinkView></p>
-              <p><NavLinkView to="/understanding-the-piano-keyboard/chords/diatonic-chords-quiz">Diatonic Chords Quiz</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard/chords/diatonic-chords-exercise">Diatonic Chords Practice</NavLinkView></p>
               <br />
               <p><NavLinkView to="/chord-exercises">Self-Paced Chord Mastery</NavLinkView></p>
             </div>
@@ -259,7 +259,7 @@ export class HomePage extends React.Component<{}, IHomePageState> {
               <h3><NavLinkView to="/understanding-the-piano-keyboard/chord-progressions/introduction">5. Chord Progressions</NavLinkView></h3>
               <p><NavLinkView to="/understanding-the-piano-keyboard/chord-progressions/introduction">Introduction</NavLinkView></p>
               <p><NavLinkView to="/understanding-the-piano-keyboard/chord-progressions/review">Review</NavLinkView></p>
-              <p><NavLinkView to="/understanding-the-piano-keyboard/chord-progressions/quiz">Quiz</NavLinkView></p>
+              <p><NavLinkView to="/understanding-the-piano-keyboard/chord-progressions/exercise">Practice</NavLinkView></p>
             </div>
             
             {!userOwnsUnderstandingThePianoKeyboardCourse ? <PaywallOverlay premiumProductId={understandingThePianoKeyboardProductId} /> : null}

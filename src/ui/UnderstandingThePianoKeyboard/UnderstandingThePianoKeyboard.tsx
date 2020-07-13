@@ -884,7 +884,7 @@ export const pianoTheorySlideGroups = [
         </div>
       )),
       
-      new Slide("white-notes-quiz", () => (
+      new Slide("white-notes-exercise", () => (
         <div style={exerciseContainerStyle}>
           {createStudyFlashCardSetComponent(
             PianoNotes.createFlashCardSet(naturalPitches),
@@ -1049,7 +1049,7 @@ export const pianoTheorySlideGroups = [
         </div>
       )),
       
-      new Slide("black-notes-quiz", () => (
+      new Slide("black-notes-exercise", () => (
         <div style={exerciseContainerStyle}>
           {createStudyFlashCardSetComponent(
             PianoNotes.createFlashCardSet(accidentalPitches),
@@ -1086,7 +1086,7 @@ export const pianoTheorySlideGroups = [
         </div>
       )),
 
-      new Slide("quiz", () => (
+      new Slide("exercise", () => (
         <div style={exerciseContainerStyle}>
           {createStudyFlashCardSetComponent(
             PianoNotes.createFlashCardSet(allPitches),
@@ -1217,7 +1217,7 @@ export const pianoTheorySlideGroups = [
         </div>
       )),
 
-      new Slide("quiz", () => (
+      new Slide("exercise", () => (
         <div style={exerciseContainerStyle}>
           {createStudyFlashCardSetComponent(
             ScalesQuiz.flashCardSet,
@@ -1409,7 +1409,7 @@ export const pianoTheorySlideGroups = [
         </div>
       )),
       
-      new Slide("introduction-quiz", () => (
+      new Slide("introduction-exercise", () => (
         <div style={exerciseContainerStyle}>
           {createStudyFlashCardSetComponent(
             ChordsIntroQuiz.flashCardSet,
@@ -1554,7 +1554,7 @@ export const pianoTheorySlideGroups = [
         </div>
       )),
       
-      new Slide("diatonic-chords-quiz", () => (
+      new Slide("diatonic-chords-exercise", () => (
         <div style={exerciseContainerStyle}>
           {createStudyFlashCardSetComponent(
             DiatonicChordsQuiz.flashCardSet,
@@ -1619,7 +1619,7 @@ export const pianoTheorySlideGroups = [
 
       new Slide("review-3", () => (
         <div>
-          <p>Review material below, then move to the next slide to test your knowledge of chords with a quiz.</p>
+          <p>Review material below, then move to the next slide to test your knowledge of chords with an interactive exercise.</p>
           <br />
           <p>The note you choose to make the <strong>lowest note in the chord (the bass)</strong> determines which <strong>inversion</strong> the chord is in.</p>
           <p>A chord played with the <strong>root note</strong> in the bass is said to be in <strong>root position</strong>.</p>
@@ -2037,7 +2037,7 @@ export const pianoTheorySlideGroups = [
         </div>
       )),
 
-      new Slide("quiz", () => (
+      new Slide("exercise", () => (
         <div style={exerciseContainerStyle}>
           {createStudyFlashCardSetComponent(
             ChordProgressionsQuiz.flashCardSet,
