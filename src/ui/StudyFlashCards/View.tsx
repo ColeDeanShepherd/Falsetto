@@ -131,7 +131,7 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
 
       const currentLevel = (currentLevelIndex !== undefined)
         ? flashCardLevels[currentLevelIndex]
-        : new FlashCardLevel(flashCardSet.name, model.enabledFlashCardIds, () => null);
+        : undefined;
 
       const percentToNextLevel = (currentLevel !== undefined)
         ? getPercentToNextLevel(currentLevel, studyAlgorithm.flashCardSetStats)
