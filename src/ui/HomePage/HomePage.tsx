@@ -181,7 +181,7 @@ export class HomePage extends React.Component<{}, IHomePageState> {
         </div>
 
         <h3 style={{ textAlign: "center" }}>Understanding the Piano Keyboard</h3>
-        <h4 className="h5" style={{ textAlign: "center" }}>The piano keyboard is more than just 12 notes. Better understand the music you enjoy, and improve your skills in music composition &amp; improvisation by learning to see intervals, scales, chords, and chord progressions on the piano keyboard.</h4>
+        <h4 className="h5" style={{ textAlign: "center" }}>The piano keyboard is more than just 12 notes. Better understand the music you enjoy, and improve your skills in music composition &amp; improvisation by learning to see intervals, scales, chords, and chord progressions on the piano keyboard. Covers the essentials of music theory, and includes tools to help you master 500+ scales and 700+ chords.</h4>
         <div className="home-topic-container">
           <Card className="home-topic">
             <NavLinkView
@@ -217,14 +217,12 @@ export class HomePage extends React.Component<{}, IHomePageState> {
             </NavLinkView>
 
             <div className="text">
-              <h3><NavLinkView to="/understanding-the-piano-keyboard/scales/introduction">3. Scales</NavLinkView></h3>
+              <h3><NavLinkView to="/understanding-the-piano-keyboard/scales/introduction">3. Scale Basics</NavLinkView></h3>
               <p><NavLinkView to="/understanding-the-piano-keyboard/scales/introduction">Introduction</NavLinkView></p>
               <p><NavLinkView to="/understanding-the-piano-keyboard/scales/major">Major Scale</NavLinkView></p>
               <p><NavLinkView to="/understanding-the-piano-keyboard/scales/natural-minor">Natural Minor Scale</NavLinkView></p>
               <p><NavLinkView to="/understanding-the-piano-keyboard/scales/summary">Review</NavLinkView></p>
               <p><NavLinkView to="/understanding-the-piano-keyboard/scales/exercise">Practice</NavLinkView></p>
-              <br />
-              <p><NavLinkView to="/scale-exercises">Self-Paced Scale Mastery</NavLinkView></p>
             </div>
             
             {!userOwnsUnderstandingThePianoKeyboardCourse ? <PaywallOverlay premiumProductId={understandingThePianoKeyboardProductId} /> : null}
@@ -236,15 +234,13 @@ export class HomePage extends React.Component<{}, IHomePageState> {
             </NavLinkView>
 
             <div className="text">
-              <h3><NavLinkView to="/understanding-the-piano-keyboard/chords/introduction">4. Chords</NavLinkView></h3>
-              <p><NavLinkView to="/understanding-the-piano-keyboard/chords/introduction">Introduction</NavLinkView></p>
+              <h3><NavLinkView to="/understanding-the-piano-keyboard/chords/introduction">4. Chord Basics</NavLinkView></h3>
+              <p><NavLinkView to="/understanding-the-piano-keyboard/chords/introduction">Chords Introduction</NavLinkView></p>
               <p><NavLinkView to="/understanding-the-piano-keyboard/chords/introduction-review">Chords Review</NavLinkView></p>
               <p><NavLinkView to="/understanding-the-piano-keyboard/chords/introduction-exercise">Chords Practice</NavLinkView></p>
               <p><NavLinkView to="/understanding-the-piano-keyboard/chords/diatonic-chords">Diatonic Chords</NavLinkView></p>
               <p><NavLinkView to="/understanding-the-piano-keyboard/chords/diatonic-chords-review">Diatonic Chords Review</NavLinkView></p>
               <p><NavLinkView to="/understanding-the-piano-keyboard/chords/diatonic-chords-exercise">Diatonic Chords Practice</NavLinkView></p>
-              <br />
-              <p><NavLinkView to="/chord-exercises">Self-Paced Chord Mastery</NavLinkView></p>
             </div>
             
             {!userOwnsUnderstandingThePianoKeyboardCourse ? <PaywallOverlay premiumProductId={understandingThePianoKeyboardProductId} /> : null}
@@ -256,10 +252,36 @@ export class HomePage extends React.Component<{}, IHomePageState> {
             </NavLinkView>
 
             <div className="text">
-              <h3><NavLinkView to="/understanding-the-piano-keyboard/chord-progressions/introduction">5. Chord Progressions</NavLinkView></h3>
+              <h3><NavLinkView to="/understanding-the-piano-keyboard/chord-progressions/introduction">5. Chord Progression Basics</NavLinkView></h3>
               <p><NavLinkView to="/understanding-the-piano-keyboard/chord-progressions/introduction">Introduction</NavLinkView></p>
               <p><NavLinkView to="/understanding-the-piano-keyboard/chord-progressions/review">Review</NavLinkView></p>
               <p><NavLinkView to="/understanding-the-piano-keyboard/chord-progressions/exercise">Practice</NavLinkView></p>
+            </div>
+            
+            {!userOwnsUnderstandingThePianoKeyboardCourse ? <PaywallOverlay premiumProductId={understandingThePianoKeyboardProductId} /> : null}
+          </Card>
+          
+          <Card className="home-topic">
+            <NavLinkView to="/scale-exercises" className="thumbnail">
+              <ScalesThumbnail />
+            </NavLinkView>
+
+            <div className="text">
+              <h3><NavLinkView to="/scale-exercises">Scale Mastery</NavLinkView></h3>
+              <p><NavLinkView to="/scale-exercises">Master 500+ Scales &amp; Diatonic Chords</NavLinkView></p>
+            </div>
+            
+            {!userOwnsUnderstandingThePianoKeyboardCourse ? <PaywallOverlay premiumProductId={understandingThePianoKeyboardProductId} /> : null}
+          </Card>
+          
+          <Card className="home-topic">
+            <NavLinkView to="/chord-exercises" className="thumbnail">
+              <ChordsThumbnail />
+            </NavLinkView>
+
+            <div className="text">
+              <h3><NavLinkView to="/chord-exercises">Chord Mastery</NavLinkView></h3>
+              <p><NavLinkView to="/chord-exercises">Master 700+ Chords</NavLinkView></p>
             </div>
             
             {!userOwnsUnderstandingThePianoKeyboardCourse ? <PaywallOverlay premiumProductId={understandingThePianoKeyboardProductId} /> : null}

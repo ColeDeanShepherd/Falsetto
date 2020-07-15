@@ -1107,7 +1107,7 @@ export const pianoTheorySlideGroups = [
     [
       new Slide("introduction", () => (
         <div>
-          <h2>Section 3: Scales</h2>
+          <h2>Section 3: Scale Basics</h2>
           <p>As you've learned, there are 12 different notes. Though musicians are free to use any of the 12 notes at any time, it is common to restrict the choice of keys to those in a particular <strong>scale</strong> &mdash; a set of notes.</p>
           <p>The <strong>C major scale</strong>, for example, consists of the 7 notes: <strong>C, D, E, F, G, A, B</strong>.</p>
           <p>Try pressing the piano keys below to get a feel for how the scale sounds. Pressing keys will play both the pressed note and the lowest C in the diagram, which helps convey the "feeling" of the scale.</p>
@@ -1243,8 +1243,8 @@ export const pianoTheorySlideGroups = [
       new Slide("next-steps", () => (
         <div>
           <h2>Next Steps</h2>
-          <p>You have now learned about scales, and memorized a couple of them, but there are many other scales to familiarize yourself with. You can learn about these other scales in your own time here: <NavLinkView to="/scale-exercises" openNewTab={true}>Self-Paced Scale Mastery</NavLinkView>.</p>
-          <p>We will now continue on to cover <strong>chords</strong>.</p>
+          <p>You have now learned about scales, and memorized a couple of them, but there are 500+ scales you can familiarize yourself with in your own time in the <NavLinkView to="/scale-exercises" openNewTab={true}>Scale Mastery</NavLinkView> section of the course.</p>
+          <p>For now, we will continue on to learn about <strong>chords</strong>.</p>
         </div>
       )),
     ],
@@ -1257,7 +1257,7 @@ export const pianoTheorySlideGroups = [
     [
       new Slide("introduction", () => (
         <div>
-          <h2>Section 4.1: Introduction to Chords</h2>
+          <h2>Section 4.1: Chord Basics</h2>
           <p><strong>Chords</strong> are sets of two or more notes played simultaneously.</p>
           <p>For example, here is a <strong>C Major</strong> chord, which consists of the three notes <strong>C, E, G</strong>, and has a root note of <strong>C</strong>.</p>
           <ChordView
@@ -1595,8 +1595,8 @@ export const pianoTheorySlideGroups = [
       new Slide("next-steps", () => (
         <div>
           <h2>Next Steps</h2>
-          <p>There are many chords you can learn about in your own time here: <NavLinkView to="/chord-exercises" openNewTab={true}>Self-Paced Chord Mastery</NavLinkView>.</p>
-          <p>We will now continue on to cover <strong>chord progressions</strong>.</p>
+          <p>You have now learned the basics about chords and memorized a some of them, but there are 700+ chords you can familiarize yourself in your own time in the <NavLinkView to="/chord-exercises" openNewTab={true}>Chord Mastery</NavLinkView> section of the course.</p>
+          <p>For now, we will continue on to cover <strong>chord progressions</strong>.</p>
         </div>
       )),
       
@@ -1670,7 +1670,7 @@ export const pianoTheorySlideGroups = [
     [
       new Slide("introduction", () => (
         <div>
-          <h2>Section 5: Chord Progressions</h2>
+          <h2>Section 5: Chord Progression Basics</h2>
           <p><strong>Chord progressions</strong> are sequences of chords.</p>
           <p>Below is an example of a chord progression consisting of the chords: D Minor, G Dominant 7 (abbreviated as "G7"), C Major</p>
           <ChordProgressionPlayer

@@ -14,14 +14,13 @@ import * as ChordEarTraining from "../ui/Quizzes/Chords/ChordEarTraining";
 
 import { ChordTypeGroup } from '../lib/TheoryLib/ChordTypeGroup';
 import { ChordType, getUriComponent } from "../lib/TheoryLib/ChordType";
-import { ChordTypeSelectView } from "./Utils/ChordTypeSelectView";
 import { Card } from "./Card/Card";
+import { ChordTypeGroupSelectView } from "./Utils/ChordTypeGroupSelectView";
 
 export interface IChordExercisesProps {}
 
 export interface IChordExercisesState {
-  chordTypeGroup: ChordTypeGroup,
-  chordType: ChordType
+  chordTypeGroup: ChordTypeGroup
 }
 
 export class ChordExercisesPage extends React.Component<IChordExercisesProps, IChordExercisesState> {
@@ -29,40 +28,40 @@ export class ChordExercisesPage extends React.Component<IChordExercisesProps, IC
     super(props);
 
     const chordTypeGroup = ChordType.Groups[0];
-    const chordType = chordTypeGroup.chordTypes[0];
 
     this.state = {
-      chordTypeGroup: chordTypeGroup,
-      chordType: chordType
+      chordTypeGroup: chordTypeGroup
     };
   }
 
   public render(): JSX.Element {
-    const { chordType, chordTypeGroup } = this.state;
+    const { chordTypeGroup } = this.state;
 
     return (
       <Card>
-        <h2 className="h5 margin-bottom">
-          Chord Exercises
+        <h2 className="margin-bottom">
+          Chord Mastery
         </h2>
 
-        <h3>Per-Chord Exercises</h3>
+        <p>Pick a chord category &amp;, then click a link below to master a particular chord.</p>
 
-        <div style={{textAlign: "center"}}>
-          <ChordTypeSelectView
+        <div style={{ textAlign: "center" }}>
+          <ChordTypeGroupSelectView
             chordTypeGroups={ChordType.Groups}
-            value={[chordTypeGroup, chordType]}
-            onChange={newValue => this.onChordTypeChange(newValue)} />
-            
-          <p style={{fontSize: "1.5em"}}>{chordType.name} Chord Lessons</p>
+            value={chordTypeGroup}
+            onChange={newValue => this.onChordTypeGroupChange(newValue)} />
         </div>
 
         <div>
-          <NavLinkView to={`/chord/${getUriComponent(chordType)}/lesson/introduction`}>
-            {chordType.name} Chords Lesson
-          </NavLinkView>
+          {chordTypeGroup.chordTypes.map(chordType => (
+            <div>
+              <NavLinkView to={`/chord/${getUriComponent(chordType)}/lesson/introduction`}>
+                {chordType.name} Chords Lesson
+              </NavLinkView>
+            </div>
+          ))}
         </div>
-        
+        <br />
         <h3>Non-Chord-Specific Exercises</h3>
         <div><NavLinkView to={ChordFamilies.flashCardSet.route}>{ChordFamilies.flashCardSet.name}</NavLinkView></div>
         <div><NavLinkView to={ChordNotes.flashCardSet.route}>{ChordNotes.flashCardSet.name}</NavLinkView></div>
@@ -78,12 +77,9 @@ export class ChordExercisesPage extends React.Component<IChordExercisesProps, IC
     );
   }
 
-  private onChordTypeChange(newValue: [ChordTypeGroup, ChordType]) {
-    const [ newChordTypeGroup, newChordType ] = newValue;
-
+  private onChordTypeGroupChange(newValue: ChordTypeGroup) {
     this.setState({
-      chordTypeGroup: newChordTypeGroup,
-      chordType: newChordType
+      chordTypeGroup: newValue
     });
   }
 }

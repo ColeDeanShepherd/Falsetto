@@ -44,19 +44,17 @@ export class ScaleExercisesPage extends React.Component<IScaleExercisesProps, IS
 
     return (
       <Card>
-        <h2 className="h5 margin-bottom">
-          Scale Exercises
+        <h2 className="margin-bottom">
+          Scale Mastery
         </h2>
 
-        <h3>Per-Scale Exercises</h3>
+        <p>Pick a scale category &amp; type, then click a link below to master a particular scale.</p>
 
-        <div style={{textAlign: "center"}}>
+        <div style={{ textAlign: "center" }}>
           <ScaleTypeSelect
             scaleTypeGroups={ScaleType.Groups}
             value={[scaleTypeGroup, scaleType]}
             onChange={newValue => this.onScaleTypeChange(newValue)} />
-            
-          <p style={{fontSize: "1.5em"}}>{scaleType.name} Scale Lessons</p>
         </div>
 
         <div>
@@ -66,7 +64,7 @@ export class ScaleExercisesPage extends React.Component<IScaleExercisesProps, IS
             </div>
           ))}
         </div>
-        
+        <br />
         <h3>Non-Scale-Specific Exercises</h3>
         <div><NavLinkView to={ScaleDegreeNames.flashCardSet.route}>{ScaleDegreeNames.flashCardSet.name}</NavLinkView></div>
         <div><NavLinkView to={ScaleNotes.flashCardSet.route}>{ScaleNotes.flashCardSet.name}</NavLinkView></div>
