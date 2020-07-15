@@ -606,8 +606,8 @@ function renderDiatonicTriadSlideContents(scaleDegreeNumber: number): JSX.Elemen
 
   return (
     <div>
-        <p>The diatonic triad built on the {renderedScaleDegree} degree of the major scale is the <strong>{chordTypeName}</strong> chord.</p>
-        <p>In the C major scale (C, D, E, F, G, A, B), the diatonic triad built with thirds on the {renderedScaleDegree} scale degree is <strong>{chordName}</strong>, which has a root note of <strong>{chordPitchStrings[0]}</strong> and consists of the notes <strong>{chordPitchesString}</strong>:</p>
+        <p>The diatonic triad built on the {renderedScaleDegree} degree of any major scale is always a <strong>{chordTypeName}</strong> chord.</p>
+        <p>In the C major scale (C, D, E, F, G, A, B), this chord is <strong>{chordName}</strong>, which has a root note of <strong>{chordPitchStrings[0]}</strong> and consists of the notes <strong>{chordPitchesString}</strong>:</p>
         <ChordView
           chord={chord}
           showChordInfoText={false}
@@ -1151,34 +1151,44 @@ export const pianoTheorySlideGroups = [
           </p>
           <p>To figure out the notes in any major scale, you simply pick a note and follow the major scale formula.</p>
 
-          <p>Below is an interactive diagram of the C major scale and the major scale formula.</p>
           <p>
             <PianoScaleFormulaDiagram
               scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))}
               octaveCount={2}
               maxWidth={maxTwoOctavePianoWidth} />
           </p>
-          <div style={{ display: "inline-block" }}><NoteText>Though scale formulas define the notes of a scale in a particular order, you are free to play the notes in any order you like.</NoteText></div>
+          
         </div>
       )),
       createMiniQuizSlide("major-scale-formula-quiz", [majorScaleFormulaFlashCard]),
+      
+      new Slide("degrees", () => (
+        <div>
+          <p>The major scale formula (<strong>W W H W W W</strong>) gives us the notes of major scales in a particular order (ex: <strong>C, D, E, F, G, A, B</strong> for <strong>C major</strong>).</p>
+          <p>Musicians sometimes number scale notes in this order and call the scale notes <strong>"degrees"</strong> &mdash; for example, we can say that C is the <strong>"1st degree"</strong>, of C major, that D is the <strong>"2nd degree"</strong> of C major, and so on.</p>
+          <p>The 1st degree of a scale <strong>generally sounds stable and "like home"</strong>, and it is common for musical phrases to begin and/or end with this scale degree.</p>
+          <p>Try coming up with musical phrases beginning and/or ending on the piano keyboard below to hear this for yourself!</p>
+          <p>
+            <PianoScaleDronePlayer
+              scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))}
+              octaveCount={2}
+              maxWidth={maxTwoOctavePianoWidth} />
+          </p>
+          <NoteText>Though scale formulas define the notes of a scale in a particular order, you are free to play the notes in any order you like.</NoteText>
+        </div>
+      )),
 
       new Slide("natural-minor", () => (
         <div>
           <p>Another way to write scale formulas is <strong>relative to the major scale</strong>.</p>
-          <p>Let's assign a number to each note in the major scale &mdash; <strong>1</strong> for the 1st note (ex: <strong>C</strong> in <strong>C major</strong>), <strong>2</strong> for the 2nd note (in ascending order &ndash; ex: <strong>D</strong> in <strong>C major</strong>), and so on.</p>
-          <p>Now the major scale can be written as: <strong className="no-wrap">1, 2, 3, 4, 5, 6, 7</strong>.</p>
+          <p>If we assign a number to each note in the major scale, starting with 1, we have: <strong className="no-wrap">1, 2, 3, 4, 5, 6, 7</strong></p>
           <p>We can then raise or lower the notes with sharps or flats to write formulas for other scales relative to the major scale.</p>
           <p>For example, another common type of scale is the <strong>natural minor scale</strong> (sometimes simply called the <strong>minor</strong> scale), which has a major-scale-relative formula of: <strong className="no-wrap">1, 2, 3♭, 4, 5, 6♭, 7♭</strong>.</p>
-          <p>We can use this formula to figure out the notes of the <strong>C minor scale</strong>, for example, by taking the notes of the <strong>C major scale</strong> (<span className="no-wrap">C, D, E, F, G, A, B</span>) and flattening degrees 3, 6, &amp; 7, giving us: <strong className="no-wrap">C, D, E♭, F, G, A♭, B♭</strong>.</p>
-          <br />
-          <p>Below is an interactive diagram of the <strong>C minor</strong> scale, along its major-scale-relative fomula. Press the piano keys below to get a feel for how the scale sounds!</p>
+          <p>To figure out the notes of the <strong>C minor scale</strong>, for example, using the major-scale-relative formula above, we can take the notes of the <strong>C major scale</strong> (<span className="no-wrap">C, D, E, F, G, A, B</span>) and flattening degrees 3, 6, &amp; 7, giving us: <strong className="no-wrap">C, D, E♭, F, G, A♭, B♭</strong>.</p>
           <p><PianoScaleMajorRelativeFormulaDiagram
             scale={new Scale(ScaleType.Aeolian, new Pitch(PitchLetter.C, 0, 4))}
             octaveCount={2}
             maxWidth={maxTwoOctavePianoWidth} /></p>
-          
-          <NoteText>The 1st note of a scale is sometimes referred to as the <strong>1st degree</strong> of the scale, and <strong>generally sounds stable and "like home"</strong>. The 2nd note is sometimes referred to as the <strong>2nd degree</strong> scale, the 3rd note as the <strong>3rd degree</strong> and so on.</NoteText>
         </div>
       )),
 
@@ -1441,11 +1451,26 @@ export const pianoTheorySlideGroups = [
       new Slide("c-major-diatonic-triad-1", () => (
         <div>
           <p>Earlier, we said that most chords are built with thirds, and diatonic chords are no exception.</p>
-          <p>Let's take a look at all the 3-note diatonic chords (chords with 3 distinct notes are also called <strong>triads</strong>) built with thirds in the major scale.</p>
-          <p>Each of the 7 degrees of the major scale has a particular type of diatonic triad built on top of it.</p>
+          <p>Let's take a look at all the 3-note diatonic chords built with thirds in the major scale.</p>
+          <NoteText>Chords with 3 distinct notes are also called <strong>triads</strong>.</NoteText>
+          <p>Each of the 7 degrees of the major scale has a particular type of diatonic triad built on top of it, so there are 7 diatonic triads in major scales.</p>
+          <br />
           {renderDiatonicTriadSlideContents(/*scaleDegreeNumber*/ 1)}
         </div>
       )),
+      new Slide("c-major-chord-notes-quiz", (slideshow) => {
+        const pitches = new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4)).getPitches();
+
+        return (
+          <div>
+            <p>Press all the keys in the <strong>C major chord</strong> on your MIDI keyboard (or on-screen) to continue.</p>
+            <PressPianoKeysAllOctavesSlide
+              slideshow={slideshow}
+              pitches={pitches}
+              />
+          </div>
+        );
+      }),
 
       createDiatonicTriadSlide(/*scaleDegreeNumber*/ 2),
       new Slide("d-minor-chord-notes-quiz", (slideshow) => {
@@ -1544,13 +1569,13 @@ export const pianoTheorySlideGroups = [
           <p><strong>Diatonic chords</strong> are chords consisting solely of notes from a particular scale.</p>
           <p><strong>Triads</strong> are chords with 3 distinct notes.</p>
           <br />
-          <p>The diatonic triad build on the 1st degree of any major scale is the <strong>major</strong> chord. The 1st diatonic triad in the C Major scale built with thirds is <strong>C major</strong>, which has a root note of <strong>C</strong> and consists of the notes <strong>C, E, G</strong>.</p>
-          <p>The diatonic triad build on the 2nd degree of any major scale is the <strong>minor</strong> chord. The 2nd diatonic triad in the C Major scale built with thirds is <strong>D minor</strong>, which has a root note of <strong>D</strong> and consists of the notes <strong>D, F, A</strong>.</p>
-          <p>The diatonic triad build on the 3rd degree of any major scale is the <strong>minor</strong> chord. The 3rd diatonic triad in the C Major scale built with thirds is <strong>E minor</strong>, which has a root note of <strong>E</strong> and consists of the notes <strong>E, G, B</strong>.</p>
-          <p>The diatonic triad build on the 4th degree of any major scale is the <strong>major</strong> chord. The 4th diatonic triad in the C Major scale built with thirds is <strong>F major</strong>, which has a root note of <strong>F</strong> and consists of the notes <strong>F, A, C</strong>.</p>
-          <p>The diatonic triad build on the 5th degree of any major scale is the <strong>major</strong> chord. The 5th diatonic triad in the C Major scale built with thirds is <strong>G major</strong>, which has a root note of <strong>G</strong> and consists of the notes <strong>G, B, D</strong>.</p>
-          <p>The diatonic triad build on the 6th degree of any major scale is the <strong>minor</strong> chord. The 6th diatonic triad in the C Major scale built with thirds is <strong>A minor</strong>, which has a root note of <strong>A</strong> and consists of the notes <strong>A, C, E</strong>.</p>
-          <p>The diatonic triad build on the 7th degree of any major scale is the <strong>diminished</strong> chord. The 7th, and last, diatonic triad in the C Major scale built with thirds is <strong>B diminished</strong>, which has a root note of <strong>B</strong> and consists of the notes <strong>B, D, F</strong>.</p>
+          <p>The diatonic triad build on the 1st degree of any major scale is always a <strong>major</strong> chord.<br />The 1st diatonic triad in the C Major scale built with thirds is <strong>C major</strong>, which has a root note of <strong>C</strong> and consists of the notes <strong>C, E, G</strong>.</p>
+          <p>The diatonic triad build on the 2nd degree of any major scale is always a <strong>minor</strong> chord.<br />The 2nd diatonic triad in the C Major scale built with thirds is <strong>D minor</strong>, which has a root note of <strong>D</strong> and consists of the notes <strong>D, F, A</strong>.</p>
+          <p>The diatonic triad build on the 3rd degree of any major scale is always a <strong>minor</strong> chord.<br />The 3rd diatonic triad in the C Major scale built with thirds is <strong>E minor</strong>, which has a root note of <strong>E</strong> and consists of the notes <strong>E, G, B</strong>.</p>
+          <p>The diatonic triad build on the 4th degree of any major scale is always a <strong>major</strong> chord.<br />The 4th diatonic triad in the C Major scale built with thirds is <strong>F major</strong>, which has a root note of <strong>F</strong> and consists of the notes <strong>F, A, C</strong>.</p>
+          <p>The diatonic triad build on the 5th degree of any major scale is always a <strong>major</strong> chord.<br />The 5th diatonic triad in the C Major scale built with thirds is <strong>G major</strong>, which has a root note of <strong>G</strong> and consists of the notes <strong>G, B, D</strong>.</p>
+          <p>The diatonic triad build on the 6th degree of any major scale is always a <strong>minor</strong> chord.<br />The 6th diatonic triad in the C Major scale built with thirds is <strong>A minor</strong>, which has a root note of <strong>A</strong> and consists of the notes <strong>A, C, E</strong>.</p>
+          <p>The diatonic triad build on the 7th degree of any major scale is always a <strong>diminished</strong> chord.<br />The 7th, and last, diatonic triad in the C Major scale built with thirds is <strong>B diminished</strong>, which has a root note of <strong>B</strong> and consists of the notes <strong>B, D, F</strong>.</p>
         </div>
       )),
       
@@ -1671,7 +1696,7 @@ export const pianoTheorySlideGroups = [
           <p>The chord progression we just saw, for example (<strong>D Minor</strong>, <strong>G7</strong>, <strong>C Major</strong>), consists solely of chords diatonic to the <strong>C Major scale</strong>.</p>
           <p>As we've learned, diatonic chords have root notes associated with scale degree. We can take advantage of this and represent diatonic chord progressions in a compact, scale-independent way with <strong>roman numeral notation</strong>, which uses upper-case &amp; lower-case roman numerals (an alternative way of writing numbers), with added symbols, to represent diatonic chords built on scale degrees.</p>
           <br />
-          <p>If you are unfamiliar with roman numerals, here are the roman numerals from 1 to 7:</p>
+          <p>If you aren't familiar with roman numerals, here are the roman numerals from 1 to 7:</p>
           <table className="table">
             <thead>
               <tr>
@@ -1713,18 +1738,24 @@ export const pianoTheorySlideGroups = [
       )),
       new Slide("roman-numeral-notation-2", () => (
         <div>
-          <p>In <strong>roman numeral notation</strong>, the chord progression (<strong>D Minor</strong>, <strong>G7</strong>, <strong>C Major</strong>) in the <strong>C Major scale</strong> would be written with roman numerals, as: <strong>ii - V7 - I</strong>:</p>
+          <p>In <strong>roman numeral notation</strong>, the chord progression (<strong>D minor</strong>, <strong>G7</strong>, <strong>C major</strong>) in the <strong>C Major scale</strong> would be written with roman numerals, as: <strong>ii - V7 - I</strong>:</p>
           <br />
+          <h4 style={{ textDecoration: "underline" }}>ii</h4>
           <p><strong>ii</strong> is the roman numeral for <strong>2</strong>, meaning it represents the diatonic chord with the <strong>2nd</strong> scale note (<strong>D</strong> in this example) as a root note.</p>
           <p><strong>ii</strong> is also lower-case, which signifies that the chord is a <strong>minor</strong> chord.</p>
+          <p>So, <strong>ii</strong> means <strong>D minor</strong> in this example.</p>
           <br />
+          <h4 style={{ textDecoration: "underline" }}>V7</h4>
           <p>The <strong>V</strong> in <strong>V7</strong> represents the diatonic chord with the <strong>5th</strong> scale note (<strong>G</strong> in this example) as a root note.</p>
           <p><strong>V</strong> is upper-case to signify that the chord is based on a <strong>major</strong> chord (dominant 7th chords are major triads with an added note).</p>
           <p>And the <strong>7</strong> in <strong>V7</strong> signifies that the chord is a <strong>dominant 7th chord</strong>.</p>
+          <p>So, <strong>V7</strong> means <strong>G7</strong> in this example.</p>
           <br />
+          <h4 style={{ textDecoration: "underline" }}>I</h4>
           <p>Lastly, <strong>I</strong> signifies a major chord with the <strong>1st</strong> scale note (<strong>C</strong> in this example) as a root note.</p>
+          <p>So, <strong>I</strong> means <strong>C major</strong> in this example.</p>
           <br />
-          <p>So, writing "<strong>ii - V7 - I</strong>" in C Major is equivalent to writing "<strong>D Minor, G7, C Major</strong>."</p>
+          <p>So, writing "<strong>ii - V7 - I</strong>" in C Major is equivalent to writing "<strong>D minor, G7, C major</strong>."</p>
         </div>
       )),
       
@@ -1784,6 +1815,7 @@ export const pianoTheorySlideGroups = [
           <p>One of the strongest sounding, and most common, chord progressions is the <strong>descending fifth</strong>.</p>
           <p>This can take many forms &mdash; some examples being: <strong>V7 - I</strong>, <strong>ii - V</strong>, <strong>iii - vi</strong>, and more.</p>
           <p>What all these have in common is: <strong>the 2nd chord is a "fifth" below the first chord</strong>:</p>
+          <br />
           <p>In the <strong>C Major scale</strong>, for example, <strong>V7 - I</strong> is <strong>G7 - C Major</strong>, and <strong>C</strong> is a fifth below <strong>G</strong> (they span five letters: C, D, E, F, G)</p>
           <p>In the <strong>C Major scale</strong>, for example, <strong>ii - V</strong> is <strong>D Minor - G Major</strong>, and <strong>G</strong> is a fifth below <strong>D</strong> (they span five letters: G, A, B, C, D)</p>
           <p>In the <strong>C Major scale</strong>, for example, <strong>iii - vi</strong> is <strong>E Minor - A Minor</strong>, and <strong>A</strong> is a fifth below <strong>E</strong> (they span five letters: A, B, C, D, E)</p>
@@ -1866,32 +1898,18 @@ export const pianoTheorySlideGroups = [
 
       new Slide("voice-leading", () => (
         <div>
-          <p>It is important to use good <strong>voice leading</strong> when playing chord progressions.</p>
+          <p>Using good <strong>voice leading</strong> can help chord progressions sound better when played.</p>
           <p><strong>Voice leading</strong> is the arrangement of chord notes in a progression to create smooth transitions between chords.</p>
           <p>The most important rule of voice leading is <strong>to use the smallest possible movements when transitioning from one chord from the next</strong>.</p>
-
-          <p>Here is an example of "bad" voice leading in a ii - V7 - I progression, which makes big jumps between each chord:</p>
+          <br />
+          <p>Press the play button below to hear "bad" voice leading in a ii - V7 - I progression, which makes big jumps between each chord, followed by good voice leading:</p>
           <p>
             <ChordProgressionPlayer
               chordsPitches={[
                 [new Pitch(PitchLetter.D, 0, 5), new Pitch(PitchLetter.F, 0, 5), new Pitch(PitchLetter.A, 0, 5)],
                 [new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.B, 0, 4), new Pitch(PitchLetter.D, 0, 5), new Pitch(PitchLetter.F, 0, 5)],
-                [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]
-              ]}
-              chords={[
-                new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 4)),
-                new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)),
-                new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))
-              ]}
-              scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
-              chordScaleDegreeNumbers={[2, 5, 1]}
-              maxWidth={maxTwoOctavePianoWidth} />
-          </p>
+                [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)],
 
-          <p>And here is an example of good voice leading:</p>
-          <p>
-            <ChordProgressionPlayer
-              chordsPitches={[
                 [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.A, 0, 4)],
                 [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.B, 0, 4)],
                 [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]
@@ -1899,12 +1917,18 @@ export const pianoTheorySlideGroups = [
               chords={[
                 new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 4)),
                 new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)),
+                new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4)),
+                
+                new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 4)),
+                new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)),
                 new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))
               ]}
+              chordStartDelaysMs={[0, 1500, 3000, 6000, 7500, 9000]}
               scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
-              chordScaleDegreeNumbers={[2, 5, 1]}
+              chordScaleDegreeNumbers={[2, 5, 1, 2, 5, 1]}
               maxWidth={maxTwoOctavePianoWidth} />
           </p>
+          <NoteText>You are free to intentionally break this rule, just like any other "rule" in music theory, if doing so produces the sound you're looking for!</NoteText>
         </div>
       )),
       
@@ -1924,39 +1948,32 @@ export const pianoTheorySlideGroups = [
           <p>One way to find chords that sound similar to another chord is looking for chords which share many of the same notes.</p>
           <p>For example, in C Major, the <strong>ii</strong> chord (D minor - D F A) and the <strong>IV</strong> chord (F Major - F A C) share two notes in common (F and A), so they have a similar sound and work as substitutes for each other in chord progressions.</p>
 
-          <p>So, we can take a ii - V - I progression:</p>
+          <p>So, we can take a ii - V7 - I progression, for example, and use chord substitution to create a new chord progression &ndash; IV - V7 - I. Press the play button below to hear both chord progressions:</p>
           <p>
             <ChordProgressionPlayer
               chordsPitches={[
                 [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.A, 0, 4)],
+                [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.B, 0, 4)],
+                [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)],
+                
+                [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.A, 0, 4)],
                 [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.B, 0, 4)],
                 [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]
               ]}
               chords={[
                 new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 4)),
                 new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)),
+                new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4)),
+                
+                new Chord(ChordType.Major, new Pitch(PitchLetter.F, 0, 4)),
+                new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)),
                 new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))
               ]}
+              chordStartDelaysMs={[0, 1500, 3000, 6000, 7500, 9000]}
               scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
-              chordScaleDegreeNumbers={[2, 5, 1]}
+              chordScaleDegreeNumbers={[2, 5, 1, 4, 5, 1]}
               maxWidth={maxTwoOctavePianoWidth} />
           </p>
-          
-          <p>And use chord substitution to create a new chord progression - IV - V - I:</p>
-          <ChordProgressionPlayer
-            chordsPitches={[
-              [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.A, 0, 4)],
-              [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.B, 0, 4)],
-              [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]
-            ]}
-            chords={[
-              new Chord(ChordType.Major, new Pitch(PitchLetter.F, 0, 4)),
-              new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)),
-              new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))
-            ]}
-            scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
-            chordScaleDegreeNumbers={[4, 5, 1]}
-            maxWidth={maxTwoOctavePianoWidth} />
         </div>
       )),
       
@@ -2024,8 +2041,8 @@ export const pianoTheorySlideGroups = [
           <p><strong>Chord progressions</strong> are generally built with <strong>diatonic chords</strong>.</p>
           <p><strong>Roman numeral notation</strong> is a concise, scale-independent way to represent chord progressions.</p>
           <p>In roman numeral notation, the roman numeral represents the number of the scale note that the chord is built on.</p>
-          <p>In roman numeral notation, chords based on the major triad are upper-case (ex: IV, V7).</p>
-          <p>In roman numeral notation, chords based on the minor triad are lower-case. (ex: ii, vii°)</p>
+          <p>In roman numeral notation, chords based on the major triad are <strong>upper-case</strong> (ex: IV, V7).</p>
+          <p>In roman numeral notation, chords based on the minor triad are <strong>lower-case</strong>. (ex: ii, vii°)</p>
           <p>One of the strongest sounding, and most common, chord progressions is the <strong>descending fifth</strong>.</p>
           <p>In the <strong>descending fifth</strong> chord progression, the 2nd chord is a fifth below the first chord.</p>
           <p>One of the strongest descending fifth progressions is <strong>V7 - I</strong>.</p>
@@ -2065,11 +2082,14 @@ export const pianoTheorySlideGroups = [
           <p>We encourage you to continue your study of scales and chords with the <NavLinkView to="/scale-exercises" openNewTab={true}>Self-Paced Scale Mastery</NavLinkView> and <NavLinkView to="/chord-exercises" openNewTab={true}>Self-Paced Chord Mastery</NavLinkView> sections of this website, and to experiment with your knowledge to come up with original ideas and develop your musical voice.</p>
           <p>You are also equipped to tackle more advanced and specialized music theory in the musical genres that interest you, and we have included some useful links to other websites below to continue your studies in whatever direction you choose:</p>
           <ul>
-            <li><a href="https://www.youtube.com/channel/UCJquYOG5EL82sKTfH9aMA9Q" target="_blank">Rick Beato's YouTube Channel</a></li>
-            <li><a href="https://www.youtube.com/user/MangoldProject" target="_blank">Manigold Project YouTube Channel</a></li>
-            <li><a href="http://tobyrush.com/theorypages/index.html" target="_blank">Toby Rush's Music Theory Posters</a></li>
             <li><a href="http://openmusictheory.com/contents.html" target="_blank">Open Music Theory</a></li>
             <li><a href="http://www.thejazzpianosite.com/jazz-piano-lessons/" target="_blank">www.thejazzpianosite.com</a> (and accompanying <a href="https://www.youtube.com/channel/UCk24OnGLcP5XlTBjZ9WBWvw" target="_black">YouTube channel</a>)</li>
+            <li><a href="https://www.coursera.org/learn/classical-composition" target="_blank">Write Like Mozart - Coursera</a></li>
+            <li><a href="https://www.udemy.com/orchestrationcourse/" target="_blank">Orchestration Course - Udemy</a></li>
+            <li><a href="https://www.youtube.com/channel/UCJquYOG5EL82sKTfH9aMA9Q" target="_blank">Rick Beato's YouTube Channel</a></li>
+            <li><a href="https://www.youtube.com/user/MangoldProject" target="_blank">Manigold Project YouTube Channel</a></li>
+            <li><a href="https://www.youtube.com/channel/UCdmjw5sm9Kn83TB_rA_QBCw" target="_blank">Kent Hewitt's YouTube Channel (Jazz Lessons)</a></li>
+            <li><a href="http://tobyrush.com/theorypages/index.html" target="_blank">Toby Rush's Music Theory Posters</a></li>
           </ul>
         </div>
       ))
