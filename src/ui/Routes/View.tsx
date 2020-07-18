@@ -54,6 +54,8 @@ import { ChordExercisesPage } from '../ChordExercisesPage';
 import { ForgotPasswordPage} from "../ForgotPasswordPage";
 import { ResetPasswordPage } from "../ResetPasswordPage";
 import { SignUpPage } from '../SignUpPage';
+import { MidiPlayerView } from '../MidiPlayer/MidiPlayer';
+
 import { understandingThePianoKeyboardProductId } from '../../Products';
 
 export interface IRouteData {
@@ -182,6 +184,9 @@ const routes: Array<IRouteData> = ([
       </LimitedWidthContentContainer>
     )
   },
+
+  // #region Account Routes
+
   {
     path: "/sign-up",
     title: "Sign Up - Falsetto",
@@ -234,6 +239,16 @@ const routes: Array<IRouteData> = ([
       <LimitedWidthContentContainer>
         <ResetPasswordPage />
       </LimitedWidthContentContainer>
+    )
+  },
+
+  // #endregion
+
+  {
+    path: "/midi-player",
+    title: "MIDI Player - Falsetto",
+    renderFn: () => (
+      <MidiPlayerView />
     )
   },
   {
