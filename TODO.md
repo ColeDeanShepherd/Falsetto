@@ -2,6 +2,17 @@
 ## Other
 ## Pomodoro
 ## Now
+* MIDI Player
+  * MVP
+    * Pick a MIDI file
+    * Play
+    * Render analysis
+  * UI
+    * Render piano at bottom of screen
+  * Logic
+    * Load MIDI file into data structure
+    * Analyze MIDI file
+    * Play MIDI file
 ## High Priority
 
 
