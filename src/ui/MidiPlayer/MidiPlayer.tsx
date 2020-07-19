@@ -12,11 +12,15 @@ const midiFile = "data:audio/midi;base64,TVRoZAAAAAYAAAABAYBNVHJrAAAu3QD/UQMH0zQ
 
 const frameIntervalMs = 16;
 
-function runUpdateLoop(updateFn: (timeMs: number, deltaMs: number) => void) {
+function runUpdateLoop(updateFn: (timeMs: number, deltaMs: number) => void): () => void {
+  let isCanceled = false;
+
   const firstFrameTime = performance.now();
   let lastFrameTime = firstFrameTime;
 
   const internalUpdate = () => {
+    if (isCanceled) { return; }
+
     const time = performance.now();
 
     const deltaMs = time - lastFrameTime;
@@ -30,6 +34,8 @@ function runUpdateLoop(updateFn: (timeMs: number, deltaMs: number) => void) {
   };
 
   window.setTimeout(internalUpdate, frameIntervalMs);
+
+  return () => { isCanceled = true; };
 }
 
 interface PlayState {
@@ -81,6 +87,12 @@ export class MidiPlayerView extends React.Component<{}, {}> {
     this.parseMidiFile();
   }
 
+  public componentWillUnmount() {
+    if (this.cancelPlayingFn) {
+      this.cancelPlayingFn();
+    }
+  }
+
   public render(): JSX.Element {
     const pressedPitches = (this.playState !== undefined)
       ? this.playState.currentlyPlayingNotes
@@ -102,6 +114,7 @@ export class MidiPlayerView extends React.Component<{}, {}> {
   }
 
   private playState: PlayState | undefined = undefined;
+  private cancelPlayingFn: (() => void) | undefined = undefined;
 
   private async parseMidiFile() {
     const midi = await Midi.fromUrl(midiFile);
@@ -113,7 +126,7 @@ export class MidiPlayerView extends React.Component<{}, {}> {
       currentlyPlayingNotes: []
     } as PlayState;
 
-    runUpdateLoop((timeMs, deltaMs) => {
+    this.cancelPlayingFn = runUpdateLoop((timeMs, deltaMs) => {
       updateMidiPlaying(unwrapValueOrUndefined(this.playState), timeMs, deltaMs);
       this.forceUpdate();
     });
