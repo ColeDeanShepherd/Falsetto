@@ -145,6 +145,10 @@ export class PianoKeyboardMetrics {
 
     return pitches;
   }
+
+  public getHeight(): number {
+    return this.whiteKeySize.height;
+  }
 }
 
 export function renderPianoKeyboardKeyLabels(metrics: PianoKeyboardMetrics, useSharps?: boolean, getLabels?: (pitch: Pitch) => Array<string> | null): JSX.Element {
