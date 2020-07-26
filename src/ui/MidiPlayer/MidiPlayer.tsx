@@ -2,6 +2,7 @@ import * as React from "react";
 import { Midi } from "@tonejs/midi";
 import { Note as MidiNote } from "@tonejs/midi/dist/Note";
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import PauseIcon from '@material-ui/icons/Pause';
 
 import { Pitch } from "../../lib/TheoryLib/Pitch";
 import { PianoKeyboard, PianoKeyboardMetrics } from '../Utils/PianoKeyboard';
@@ -20,7 +21,7 @@ const midiFile1 = "data:audio/midi;base64,TVRoZAAAAAYAAAABAYBNVHJrAAAu3QD/UQMH0z
 
 const frameIntervalMs = 16;
 
-function runUpdateLoop(updateFn: (timeMs: number, deltaMs: number) => void): () => void {
+function runUpdateLoop(updateFn: (deltaMs: number) => void): () => void {
   let isCanceled = false;
 
   const firstFrameTime = performance.now();
@@ -34,9 +35,7 @@ function runUpdateLoop(updateFn: (timeMs: number, deltaMs: number) => void): () 
     const deltaMs = time - lastFrameTime;
     lastFrameTime = time;
 
-    const timeSinceStart = time - firstFrameTime;
-
-    updateFn(timeSinceStart, deltaMs);
+    updateFn(deltaMs);
 
     window.setTimeout(internalUpdate, frameIntervalMs);
   };
@@ -47,20 +46,23 @@ function runUpdateLoop(updateFn: (timeMs: number, deltaMs: number) => void): () 
 }
 
 interface PlayState {
+  isPlaying: boolean;
   midi: Midi;
   timeMs: number;
   trackNextNoteIndexes: Array<number>;
   currentlyPlayingNotes: Array<MidiNote>;
 }
 
-function updateMidiPlaying(playState: PlayState, timeMs: number, deltaMs: number) {
+function updateMidiPlaying(playState: PlayState, deltaMs: number) {
+  playState.timeMs += deltaMs;
+
   // release pitches
   for (let i = 0; i < playState.currentlyPlayingNotes.length;) {
     const note = playState.currentlyPlayingNotes[i];
     const noteEndTimeS = note.time + note.duration;
     const noteEndTimeMs = 1000 * noteEndTimeS;
 
-    if (timeMs > noteEndTimeMs) {
+    if (playState.timeMs > noteEndTimeMs) {
       AppModel.instance.pianoAudio.releaseKey(Pitch.createFromMidiNumber(note.midi));
       playState.currentlyPlayingNotes.splice(i, 1);
     } else {
@@ -75,7 +77,7 @@ function updateMidiPlaying(playState: PlayState, timeMs: number, deltaMs: number
     let track = playState.midi.tracks[trackIndex];
     let nextNoteIndex = playState.trackNextNoteIndexes[trackIndex];
 
-    while ((nextNoteIndex < track.notes.length) && ((1000 * track.notes[nextNoteIndex].time) < timeMs)) {
+    while ((nextNoteIndex < track.notes.length) && ((1000 * track.notes[nextNoteIndex].time) < playState.timeMs)) {
       pitchesToPlay.push([Pitch.createFromMidiNumber(track.notes[nextNoteIndex].midi), track.notes[nextNoteIndex].velocity]);
       playState.currentlyPlayingNotes.push(track.notes[nextNoteIndex]);
       nextNoteIndex++;
@@ -86,9 +88,6 @@ function updateMidiPlaying(playState: PlayState, timeMs: number, deltaMs: number
 
   // play pitches
   AppModel.instance.pianoAudio.pressKeys(pitchesToPlay);
-
-  // update play time
-  playState.timeMs = timeMs;
 }
 
 export const size = new Size2D(1024, 768);
@@ -101,6 +100,7 @@ export class MidiPlayerView extends React.Component<{}, {}> {
   public componentWillUnmount() {
     if (this.cancelPlayingFn) {
       this.cancelPlayingFn();
+      this.cancelPlayingFn = undefined;
     }
   }
 
@@ -173,30 +173,15 @@ export class MidiPlayerView extends React.Component<{}, {}> {
     };
     
     return (
-      <div style={{ height: "100%" }}>
-        <div style={{ display: "none" }}>
-          <Button><PlayArrowIcon /></Button>
-
-          <div>
-            <p><span style={{ fontWeight: "bold" }}>Notes: </span>{pressedPitchesStr}</p>
-            <p>
-              <span style={{ fontWeight: "bold" }}>Interval: </span>
-              {this.getIntervalsString(intervalsChordsScales.intervals)}
-            </p>
-            <p>
-              <span style={{ fontWeight: "bold" }}>Chords: </span>
-              {(intervalsChordsScales.chords.length > 0)
-                //? intervalsChordsScales.chords.map(c => c.rootPitch.toOneAccidentalAmbiguousString(false) + " " + c.chordType.name).join(', ')
-                ? intervalsChordsScales.chords.map(c => c.getSymbol(true)).join(', ')
-                : null}
-            </p>
-            <p>
-              <span style={{ fontWeight: "bold" }}>Scales: </span>
-              {(intervalsChordsScales.scales.length > 0)
-                ? intervalsChordsScales.scales.map(s => s[1].toOneAccidentalAmbiguousString(false) + " " + s[0].name).join(', ')
-                : null}
-            </p>
-          </div>
+      <div style={{ height: "100%", textAlign: "center" }}>
+        <div>
+          {(this.playState && !this.playState.isPlaying)
+            ? <Button onClick={() => this.play()}><PlayArrowIcon /></Button>
+            : null}
+            
+          {(this.playState && this.playState.isPlaying)
+            ? <Button onClick={() => this.pause()}><PauseIcon /></Button>
+            : null}
         </div>
 
         <div style={{ height: "100%" }}>
@@ -227,6 +212,7 @@ export class MidiPlayerView extends React.Component<{}, {}> {
     await AppModel.instance.pianoAudio.preloadSounds();
     
     this.playState = {
+      isPlaying: false,
       midi: midi,
       timeMs: 0,
       trackNextNoteIndexes: midi.tracks.map(t => 0),
@@ -234,17 +220,30 @@ export class MidiPlayerView extends React.Component<{}, {}> {
     } as PlayState;
 
     this.forceUpdate();
-
-    this.play();
   }
 
   private play() {
     if (!this.playState) { return; }
 
-    this.cancelPlayingFn = runUpdateLoop((timeMs, deltaMs) => {
-      updateMidiPlaying(unwrapValueOrUndefined(this.playState), timeMs, deltaMs);
+    this.playState.isPlaying = true;
+
+    this.cancelPlayingFn = runUpdateLoop((deltaMs) => {
+      updateMidiPlaying(unwrapValueOrUndefined(this.playState), deltaMs);
       this.forceUpdate();
     });
+  }
+
+  private pause() {
+    if (!this.playState) { return; }
+
+    this.playState.isPlaying = false;
+
+    this.forceUpdate();
+
+    if (this.cancelPlayingFn) {
+      this.cancelPlayingFn();
+      this.cancelPlayingFn = undefined;
+    }
   }
 
   private getIntervalsString(intervals: Array<Interval>) {
