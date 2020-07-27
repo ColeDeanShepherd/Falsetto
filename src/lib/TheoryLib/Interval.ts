@@ -1,7 +1,45 @@
-import * as Utils from "../Core/Utils";
 import { Pitch } from './Pitch';
 import { mod } from '../Core/MathUtils';
 import { precondition, invariant } from '../Core/Dbc';
+
+export function intervalFromHalfSteps(halfSteps: number): Interval {
+  const numOctaves = Math.floor(halfSteps / 12);
+  const baseType = 1 + (7 * numOctaves);
+  const simpleIntervalHalfSteps = halfSteps % 12;
+
+  switch (simpleIntervalHalfSteps) {
+    case 0:
+      return new Interval(baseType, 0);
+    case 1:
+      return new Interval(baseType + 1, -1);
+    case 2:
+      return new Interval(baseType + 1, 0);
+    case 3:
+      return new Interval(baseType + 2, -1);
+    case 4:
+      return new Interval(baseType + 2, 0);
+    case 5:
+      return new Interval(baseType + 3, 0);
+    case 6:
+      return new Interval(baseType + 4, -1);
+    case 7:
+      return new Interval(baseType + 4, 0);
+    case 8:
+      return new Interval(baseType + 5, -1);
+    case 9:
+      return new Interval(baseType + 5, 0);
+    case 10:
+      return new Interval(baseType + 6, -1);
+    case 11:
+      return new Interval(baseType + 6, 0);
+    default:
+      throw new Error();
+  }
+}
+
+export function intervalsEqual(a: Interval, b: Interval): boolean {
+  return (a.type === b.type) && (a.quality === b.quality);
+}
 
 export class Interval {
   public static readonly upDirectionSymbol = "↑";
@@ -33,40 +71,11 @@ export class Interval {
     
     return interval;
   }
-  public static fromHalfSteps(halfSteps: number): Interval {
-    const numOctaves = Math.floor(halfSteps / 12);
-    const baseType = 1 + (7 * numOctaves);
-    const simpleIntervalHalfSteps = halfSteps % 12;
 
-    switch (simpleIntervalHalfSteps) {
-      case 0:
-        return new Interval(baseType, 0);
-      case 1:
-        return new Interval(baseType + 1, -1);
-      case 2:
-        return new Interval(baseType + 1, 0);
-      case 3:
-        return new Interval(baseType + 2, -1);
-      case 4:
-        return new Interval(baseType + 2, 0);
-      case 5:
-        return new Interval(baseType + 3, 0);
-      case 6:
-        return new Interval(baseType + 4, -1);
-      case 7:
-        return new Interval(baseType + 4, 0);
-      case 8:
-        return new Interval(baseType + 5, -1);
-      case 9:
-        return new Interval(baseType + 5, 0);
-      case 10:
-        return new Interval(baseType + 6, -1);
-      case 11:
-        return new Interval(baseType + 6, 0);
-      default:
-        throw new Error();
-    }
+  public static fromHalfSteps(halfSteps: number): Interval {
+    return intervalFromHalfSteps(halfSteps);
   }
+  
   public static getSimpleIntervalType(intervalType: number): number {
     return 1 + mod((intervalType - 1), 7);
   }
@@ -151,8 +160,9 @@ export class Interval {
   }
 
   public equals(i: Interval): boolean {
-    return (this.type === i.type) && (this.quality === i.quality);
+    return intervalsEqual(this, i);
   }
+  
   public toString(): string {
     return `${this.qualityString}${this.type}`;
   }

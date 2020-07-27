@@ -1,14 +1,13 @@
 import * as React from "react";
 import { InputEventNoteon, InputEventNoteoff } from "webmidi";
 
-import { Pitch } from "../../lib/TheoryLib/Pitch";
+import { Pitch, keyToPitch } from "../../lib/TheoryLib/Pitch";
 
 import { AppModel } from "../../App/Model";
 
 import { IAction } from "../../IAction";
 import { ActionHandler, ActionBus } from "../../ActionBus";
 import { MidiDeviceConnectedAction, MidiDeviceDisconnectedAction, MidiInputDeviceChangedAction } from "../../AppMidi/Actions";
-import { keyToPitch } from "../Tools/IntervalChordScaleFinder";
 
 export interface IMidiNoteEventListenerProps {
   onNoteOn: (pitch: Pitch, velocity: number) => void;

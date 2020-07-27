@@ -331,6 +331,10 @@ export function uniq<T>(array: Array<T>) {
   return array.filter((x, index) => array.indexOf(x) === index);
 }
 
+export function uniqWithSet<T>(array: Array<T>): Array<T> {
+  return [...(new Set<T>(array))];
+}
+
 // TODO: add tests
 export function uniqWithSelector<T, R>(array: Array<T>, selector: (e: T) => R) {
   const result = new Array<T>();
@@ -396,4 +400,9 @@ export function uint8ArrayMax(array: Uint8Array): number {
   }
 
   return max;
+}
+
+export function sortNumbersAscendingInPlace(array: Array<number>): Array<number> {
+  array.sort((a, b) => a - b);
+  return array;
 }

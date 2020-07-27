@@ -32,6 +32,10 @@ export function getNonConstEnumValues(enumType: any): any[] {
     .filter(value => !isNaN(value));
 }
 
+export function withBitSet(x: number, bitIndex: number): number {
+  return x |= (1 << bitIndex);
+}
+
 // TODO: add tests
 export function setBitIndicesToInt(setBitIndices: number[]): number {
   let result = 0;

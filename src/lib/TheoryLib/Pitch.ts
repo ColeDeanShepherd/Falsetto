@@ -223,36 +223,125 @@ export function areMidiNumbersSamePitchClass(a: number, b: number): boolean {
   return (Math.abs(a - b)) % 12 === 0
 }
 
+export function keyToPitch(keyString: string): Pitch | null {
+  switch (keyString) {
+    // bottom rows
+    case "z":
+      return new Pitch(PitchLetter.C, 0, 4);
+    case "s":
+      return new Pitch(PitchLetter.D, -1, 4);
+    case "x":
+      return new Pitch(PitchLetter.D, 0, 4);
+    case "d":
+      return new Pitch(PitchLetter.E, -1, 4);
+    case "c":
+      return new Pitch(PitchLetter.E, 0, 4);
+    case "v":
+      return new Pitch(PitchLetter.F, 0, 4);
+    case "g":
+      return new Pitch(PitchLetter.G, -1, 4);
+    case "b":
+      return new Pitch(PitchLetter.G, 0, 4);
+    case "h":
+      return new Pitch(PitchLetter.A, -1, 4);
+    case "n":
+      return new Pitch(PitchLetter.A, 0, 4);
+    case "j":
+      return new Pitch(PitchLetter.B, -1, 4);
+    case "m":
+      return new Pitch(PitchLetter.B, 0, 4);
+    case ",":
+      return new Pitch(PitchLetter.C, 0, 5);
+    case "l":
+      return new Pitch(PitchLetter.D, -1, 5);
+    case ".":
+      return new Pitch(PitchLetter.D, 0, 5);
+    case ";":
+      return new Pitch(PitchLetter.E, -1, 5);
+    case "/":
+      return new Pitch(PitchLetter.E, 0, 5);
+
+    // top rows
+    case "q":
+      return new Pitch(PitchLetter.C, 0, 5);
+    case "2":
+      return new Pitch(PitchLetter.D, -1, 5);
+    case "w":
+      return new Pitch(PitchLetter.D, 0, 5);
+    case "3":
+      return new Pitch(PitchLetter.E, -1, 5);
+    case "e":
+      return new Pitch(PitchLetter.E, 0, 5);
+    case "r":
+      return new Pitch(PitchLetter.F, 0, 5);
+    case "5":
+      return new Pitch(PitchLetter.G, -1, 5);
+    case "t":
+      return new Pitch(PitchLetter.G, 0, 5);
+    case "6":
+      return new Pitch(PitchLetter.A, -1, 5);
+    case "y":
+      return new Pitch(PitchLetter.A, 0, 5);
+    case "7":
+      return new Pitch(PitchLetter.B, -1, 5);
+    case "u":
+      return new Pitch(PitchLetter.B, 0, 5);
+    case "i":
+      return new Pitch(PitchLetter.C, 0, 6);
+    case "9":
+      return new Pitch(PitchLetter.C, 1, 6);
+    case "o":
+      return new Pitch(PitchLetter.D, 0, 6);
+    case "0":
+      return new Pitch(PitchLetter.D, 1, 6);
+    case "p":
+      return new Pitch(PitchLetter.E, 0, 6);
+    case "[":
+      return new Pitch(PitchLetter.F, 0, 6);
+    case "=":
+      return new Pitch(PitchLetter.F, 1, 6);
+    case "]":
+      return new Pitch(PitchLetter.G, 0, 6);
+    
+    default:
+      return null;
+  }
+}
+
+export function pitchFromClass(pitchClass: number, octaveNumber: number, useSharps: boolean = true): Pitch {
+  switch (pitchClass) {
+    case 0:
+      return new Pitch(PitchLetter.C, 0, octaveNumber);
+    case 1:
+      return useSharps ? new Pitch(PitchLetter.C, 1, octaveNumber) : new Pitch(PitchLetter.D, -1, octaveNumber);
+    case 2:
+      return new Pitch(PitchLetter.D, 0, octaveNumber);
+    case 3:
+      return useSharps ? new Pitch(PitchLetter.D, 1, octaveNumber) : new Pitch(PitchLetter.E, -1, octaveNumber);
+    case 4:
+      return new Pitch(PitchLetter.E, 0, octaveNumber);
+    case 5:
+      return new Pitch(PitchLetter.F, 0, octaveNumber);
+    case 6:
+      return useSharps ? new Pitch(PitchLetter.F, 1, octaveNumber) : new Pitch(PitchLetter.G, -1, octaveNumber);
+    case 7:
+      return new Pitch(PitchLetter.G, 0, octaveNumber);
+    case 8:
+      return useSharps ? new Pitch(PitchLetter.G, 1, octaveNumber) : new Pitch(PitchLetter.A, -1, octaveNumber);
+    case 9:
+      return new Pitch(PitchLetter.A, 0, octaveNumber);
+    case 10:
+      return useSharps ? new Pitch(PitchLetter.A, 1, octaveNumber) : new Pitch(PitchLetter.B, -1, octaveNumber);
+    case 11:
+      return new Pitch(PitchLetter.B, 0, octaveNumber);
+    default:
+      throw new Error(`Invalid pitch class: ${pitchClass}`);
+  }
+}
+
 export class Pitch {
   public static createFromPitchClass(pitchClass: number, octaveNumber: number, useSharps: boolean = true): Pitch {
-    switch (pitchClass) {
-      case 0:
-        return new Pitch(PitchLetter.C, 0, octaveNumber);
-      case 1:
-        return useSharps ? new Pitch(PitchLetter.C, 1, octaveNumber) : new Pitch(PitchLetter.D, -1, octaveNumber);
-      case 2:
-        return new Pitch(PitchLetter.D, 0, octaveNumber);
-      case 3:
-        return useSharps ? new Pitch(PitchLetter.D, 1, octaveNumber) : new Pitch(PitchLetter.E, -1, octaveNumber);
-      case 4:
-        return new Pitch(PitchLetter.E, 0, octaveNumber);
-      case 5:
-        return new Pitch(PitchLetter.F, 0, octaveNumber);
-      case 6:
-        return useSharps ? new Pitch(PitchLetter.F, 1, octaveNumber) : new Pitch(PitchLetter.G, -1, octaveNumber);
-      case 7:
-        return new Pitch(PitchLetter.G, 0, octaveNumber);
-      case 8:
-        return useSharps ? new Pitch(PitchLetter.G, 1, octaveNumber) : new Pitch(PitchLetter.A, -1, octaveNumber);
-      case 9:
-        return new Pitch(PitchLetter.A, 0, octaveNumber);
-      case 10:
-        return useSharps ? new Pitch(PitchLetter.A, 1, octaveNumber) : new Pitch(PitchLetter.B, -1, octaveNumber);
-      case 11:
-        return new Pitch(PitchLetter.B, 0, octaveNumber);
-      default:
-        throw new Error(`Invalid pitch class: ${pitchClass}`);
-    }
+    return pitchFromClass(pitchClass, octaveNumber, useSharps);
   }
 
   public static createFromMidiNumber(midiNumber: number, useSharps: boolean = true): Pitch {
