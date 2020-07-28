@@ -61,3 +61,25 @@ export function immutableToggleSetElement<T>(set: Set<T>, element: T): Set<T> {
 
   return newSet;
 }
+
+export function setWithout<T>(set: Set<T>, elementToExclude: T): Set<T> {
+  const result = new Set<T>(set);
+  result.delete(elementToExclude);
+  return result;
+}
+
+export function setWithoutMany<T>(set: Set<T>, ...elementsToExclude: Array<T>): Set<T> {
+  const result = new Set<T>(set);
+
+  for (const elementToExclude of elementsToExclude) {
+    result.delete(elementToExclude);
+  }
+  
+  return result;
+}
+
+export function setWith<T>(set: Set<T>, elementToInclude: T): Set<T> {
+  const result = new Set<T>(set);
+  result.add(elementToInclude);
+  return result;
+}

@@ -4,15 +4,14 @@ import { Interval, intervalFromHalfSteps } from '../../lib/TheoryLib/Interval';
 import { Chord } from '../../lib/TheoryLib/Chord';
 import { ChordType } from "../../lib/TheoryLib/ChordType";
 import { ScaleType, getAllModePitchIntegers } from '../../lib/TheoryLib/Scale';
-import { generateChordNames } from '../../lib/TheoryLib/ChordName';
-import { ChordScaleFormula } from '../../lib/TheoryLib/ChordScaleFormula';
 import { areArraysEqual, uniqWithSet } from '../../lib/Core/ArrayUtils';
 import { intervalsEqual } from './Interval';
 import { sortNumbersAscendingInPlace } from '../Core/ArrayUtils';
-import { CanonicalChordType, CanonicalChord, containsPerfectFifth, toBitMask, containsMajorThird, containsMinorThird, containsAugmentedFifth, containsDiminishedFifth } from './CanonicalChord';
+import { CanonicalChordType, CanonicalChord, toBitMask } from './CanonicalChord';
 import { mod } from "../Core/MathUtils";
 import { PitchClass, pitchFromClass } from './Pitch';
 import { NumberDictionary } from '../Core/NumberDictionary';
+import { setWithout, setWith, setWithoutMany } from '../Core/SetUtils';
 
 // TODO: refactor Chord, Scale
 // TODO: add support for multiple chord names
@@ -74,9 +73,9 @@ export function* getCanonicalChords(pitches: Array<Pitch>) {
   }
 }
 
-export const chordTypesByCanonicalChordTypeBitMask: NumberDictionary<Array<ChordType>> = {};
+function createChordTypeByCanonicalChordTypeBitMask(): NumberDictionary<ChordType> {
+  const chordTypeByCanonicalChordTypeBitMask: NumberDictionary<ChordType> = {};
 
-{
   const R = 0;
   const _2 = 2;
   const _9 = 2;
@@ -87,163 +86,173 @@ export const chordTypesByCanonicalChordTypeBitMask: NumberDictionary<Array<Chord
   const d5 = 6;
   const P5 = 7;
   const A5 = 8;
-  const M6 = 9;
+  const _6 = 9;
   const _13 = 9;
   const d7 = 9;
   const m7 = 10;
   const M7 = 11;
 
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, P5]))] = [ChordType.Power];
+  chordTypeByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, P5]))] = ChordType.Power;
 
   // basic triads
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, M3, P5]))] = [ChordType.Major];
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, m3, P5]))] = [ChordType.Minor];
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, M3, A5]))] = [ChordType.Augmented];
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, m3, d5]))] = [ChordType.Diminished];
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _2, P5]))] = [ChordType.Sus2];
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _4, P5]))] = [ChordType.Sus4];
+  chordTypeByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, M3, P5]))] = ChordType.Major;
+  chordTypeByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, m3, P5]))] = ChordType.Minor;
+  chordTypeByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, M3, A5]))] = ChordType.Augmented;
+  chordTypeByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, m3, d5]))] = ChordType.Diminished;
+  chordTypeByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _2, P5]))] = ChordType.Sus2;
+  chordTypeByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _4, P5]))] = ChordType.Sus4;
 
-  // d5 chords
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, M3, P5, M6]))] = [ChordType.Maj6];
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, m3, P5, M6]))] = [ChordType.Min6];
+  // sixth chords
+  function addSixthChordType(canonicalChordType: Set<number>, chordType: ChordType) {
+    chordTypeByCanonicalChordTypeBitMask[toBitMask(canonicalChordType)] = chordType;
+    
+    // drop 5
+    const alternateCanonicalChord = setWithout(canonicalChordType, P5);
+    chordTypeByCanonicalChordTypeBitMask[toBitMask(alternateCanonicalChord)] = chordType;
+  }
 
-  // d5/M6 chords
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, M3, P5, M6]))] = [ChordType.Maj69];
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, m3, P5, M6]))] = [ChordType.Min69];
+  addSixthChordType(new Set<number>([R, M3, P5, _6]), ChordType.Maj6);
+  addSixthChordType(new Set<number>([R, m3, P5, _6]), ChordType.Min6);
 
-  // 7th chords
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, M3, P5, m7]))] = [ChordType.Dom7];
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, M3, m7]))] = [ChordType.Dom7]; // drop 5
+  // 6/9 chords
+  addSixthChordType(new Set<number>([R, M3, P5, _6, _9]), ChordType.Maj69);
+  addSixthChordType(new Set<number>([R, m3, P5, _6, _9]), ChordType.Min69);
 
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, M3, P5, M7]))] = [ChordType.Maj7];
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, M3, M7]))] = [ChordType.Maj7]; // drop 5
+  // seventh chords
+  function addExtendedChordTypes(
+    seventhCanonicalChordType: Set<number>,
+    is5Optional: boolean,
+    seventhChordType: ChordType,
+    ninthChordType: ChordType,
+    eleventhChordType: ChordType,
+    thirteenthChordType?: ChordType) {
+    // 7 chords
+    {
+      chordTypeByCanonicalChordTypeBitMask[toBitMask(seventhCanonicalChordType)] = seventhChordType;
+      
+      // drop 5
+      if (is5Optional) {
+        const alternateCanonicalChord = setWithout(seventhCanonicalChordType, P5);
+        chordTypeByCanonicalChordTypeBitMask[toBitMask(alternateCanonicalChord)] = seventhChordType;
+      }
+    }
 
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, m3, P5, m7]))] = [ChordType.Min7];
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, m3, m7]))] = [ChordType.Min7]; // drop 5
+    // 9 chords
+    const ninthCanonicalChordType = setWith(seventhCanonicalChordType, _9);
 
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, m3, d5, m7]))] = [ChordType.HalfDim7];
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, m3, d5, d7]))] = [ChordType.Dim7];
+    {
+      chordTypeByCanonicalChordTypeBitMask[toBitMask(ninthCanonicalChordType)] = ninthChordType;
+      
+      // drop 5
+      if (is5Optional) {
+        const alternateCanonicalChord = setWithout(ninthCanonicalChordType, P5);
+        chordTypeByCanonicalChordTypeBitMask[toBitMask(alternateCanonicalChord)] = ninthChordType;
+      }
+    }
 
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, m3, P5, M7]))] = [ChordType.MinMaj7];
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, m3, M7]))] = [ChordType.MinMaj7]; // drop 5
+    // 11 chords
+    const eleventhCanonicalChordType = setWith(ninthCanonicalChordType, _11);
 
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, M3, A5, m7]))] = [ChordType.Aug7];
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, M3, A5, M7]))] = [ChordType.AugMaj7];
+    {
+      chordTypeByCanonicalChordTypeBitMask[toBitMask(eleventhCanonicalChordType)] = eleventhChordType;
+      
+      // drop 5
+      if (is5Optional) {
+        const alternateCanonicalChord = setWithout(eleventhCanonicalChordType, P5);
+        chordTypeByCanonicalChordTypeBitMask[toBitMask(alternateCanonicalChord)] = eleventhChordType;
+      }
+      
+      // drop 9
+      {
+        const alternateCanonicalChord = setWithout(eleventhCanonicalChordType, _9);
+        chordTypeByCanonicalChordTypeBitMask[toBitMask(alternateCanonicalChord)] = eleventhChordType;
+      }
 
-  // 9th chords
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, M3, P5, m7]))] = [ChordType.Dom9];
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, M3, m7]))] = [ChordType.Dom9]; // drop 5
+      // drop 5 & 9
+      if (is5Optional) {
+        const alternateCanonicalChord = setWithoutMany(eleventhCanonicalChordType, P5, _9);
+        chordTypeByCanonicalChordTypeBitMask[toBitMask(alternateCanonicalChord)] = eleventhChordType;
+      }
+    }
 
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, M3, P5, M7]))] = [ChordType.Maj9];
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, M3, M7]))] = [ChordType.Maj9]; // drop 5
+    // 13 chords
+    const thirteenthCanonicalChordType = setWith(eleventhCanonicalChordType, _13);
 
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, m3, P5, m7]))] = [ChordType.Min9];
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, m3, m7]))] = [ChordType.Min9]; // drop 5
+    if (thirteenthChordType !== undefined) {
+      chordTypeByCanonicalChordTypeBitMask[toBitMask(thirteenthCanonicalChordType)] = thirteenthChordType;
+      
+      // drop 5
+      if (is5Optional) {
+        const alternateCanonicalChord = setWithout(thirteenthCanonicalChordType, P5);
+        chordTypeByCanonicalChordTypeBitMask[toBitMask(alternateCanonicalChord)] = thirteenthChordType;
+      }
+      
+      // drop 9
+      {
+        const alternateCanonicalChord = setWithout(thirteenthCanonicalChordType, _9);
+        chordTypeByCanonicalChordTypeBitMask[toBitMask(alternateCanonicalChord)] = thirteenthChordType;
+      }
+      
+      // drop 11
+      {
+        const alternateCanonicalChord = setWithout(thirteenthCanonicalChordType, _11);
+        chordTypeByCanonicalChordTypeBitMask[toBitMask(alternateCanonicalChord)] = thirteenthChordType;
+      }
+      
+      // drop 5 & 9
+      if (is5Optional)
+      {
+        const alternateCanonicalChord = setWithoutMany(thirteenthCanonicalChordType, P5, _9);
+        chordTypeByCanonicalChordTypeBitMask[toBitMask(alternateCanonicalChord)] = thirteenthChordType;
+      }
 
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, m3, d5, m7]))] = [ChordType.HalfDim9];
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, m3, d5, M6]))] = [ChordType.Dim9];
+      // drop 5 & 11
+      if (is5Optional)
+      {
+        const alternateCanonicalChord = setWithoutMany(thirteenthCanonicalChordType, P5, _11);
+        chordTypeByCanonicalChordTypeBitMask[toBitMask(alternateCanonicalChord)] = thirteenthChordType;
+      }
 
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, m3, P5, M7]))] = [ChordType.MinMaj9];
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, m3, M7]))] = [ChordType.MinMaj9]; // drop 5
+      // drop 9 & 11
+      {
+        const alternateCanonicalChord = setWithoutMany(thirteenthCanonicalChordType, _9, _11);
+        chordTypeByCanonicalChordTypeBitMask[toBitMask(alternateCanonicalChord)] = thirteenthChordType;
+      }
 
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, M3, A5, m7]))] = [ChordType.Aug9];
+      // drop 5 & 9 & 11
+      if (is5Optional)
+      {
+        const alternateCanonicalChord = setWithoutMany(thirteenthCanonicalChordType, P5, _9, _11);
+        chordTypeByCanonicalChordTypeBitMask[toBitMask(alternateCanonicalChord)] = thirteenthChordType;
+      }
+    }
+  }
 
-  // 11th chords
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, M3, _11, P5, m7]))] = [ChordType.Dom11];
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, M3, _11, m7]))] = [ChordType.Dom11]; // drop 5
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, M3, _11, P5, m7]))] = [ChordType.Dom11]; // drop 9
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, M3, _11, m7]))] = [ChordType.Dom11]; // drop 5 & 9
+  addExtendedChordTypes(new Set<number>([R, M3, P5, M7]), /*is5Optional*/ true, ChordType.Maj7, ChordType.Maj9, ChordType.Maj11, ChordType.Maj13);
+  addExtendedChordTypes(new Set<number>([R, M3, P5, m7]), /*is5Optional*/ true, ChordType.Dom7, ChordType.Dom9, ChordType.Dom11, ChordType.Dom13);
+  addExtendedChordTypes(new Set<number>([R, m3, P5, M7]), /*is5Optional*/ true, ChordType.MinMaj7, ChordType.MinMaj9, ChordType.MinMaj11, ChordType.MinMaj13);
+  addExtendedChordTypes(new Set<number>([R, m3, P5, m7]), /*is5Optional*/ true, ChordType.Min7, ChordType.Min9, ChordType.Min11, ChordType.Min13);
+  addExtendedChordTypes(new Set<number>([R, m3, d5, M7]), /*is5Optional*/ false, ChordType.DimMaj7, ChordType.DimMaj9, ChordType.DimMaj11, ChordType.DimMaj13);
+  addExtendedChordTypes(new Set<number>([R, m3, d5, m7]), /*is5Optional*/ false, ChordType.HalfDim7, ChordType.HalfDim9, ChordType.HalfDim11, ChordType.HalfDim13);
+  addExtendedChordTypes(new Set<number>([R, m3, d5, d7]), /*is5Optional*/ false, ChordType.Dim7, ChordType.Dim9, ChordType.Dim11, undefined);
+  addExtendedChordTypes(new Set<number>([R, M3, A5, M7]), /*is5Optional*/ false, ChordType.AugMaj7, ChordType.AugMaj9, ChordType.AugMaj11, ChordType.AugMaj13);
+  addExtendedChordTypes(new Set<number>([R, M3, A5, m7]), /*is5Optional*/ false, ChordType.Aug7, ChordType.Aug9, ChordType.Aug11, ChordType.Aug13);
 
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, M3, _11, P5, M7]))] = [ChordType.Maj11];
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, M3, _11, M7]))] = [ChordType.Maj11]; // drop 5
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, M3, _11, P5, M7]))] = [ChordType.Maj11]; // drop 9
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, M3, _11, M7]))] = [ChordType.Maj11]; // drop 5 & 9
-
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, m3, _11, P5, m7]))] = [ChordType.Min11];
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, m3, _11, m7]))] = [ChordType.Min11]; // drop 5
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, m3, _11, P5, m7]))] = [ChordType.Min11]; // drop 9
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, m3, _11, m7]))] = [ChordType.Min11]; // drop 5 & 9
-
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, m3, _11, d5, m7]))] = [ChordType.HalfDim11];
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, m3, _11, d5, m7]))] = [ChordType.HalfDim11]; // drop 9
-
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, m3, _11, d5, d7]))] = [ChordType.Dim11];
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, m3, _11, d5, d7]))] = [ChordType.Dim11]; // drop 9
-
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, m3, _11, P5, M7]))] = [ChordType.MinMaj11];
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, m3, _11, M7]))] = [ChordType.MinMaj11]; // drop 5
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, m3, _11, P5, M7]))] = [ChordType.MinMaj11]; // drop 9
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, m3, _11, M7]))] = [ChordType.MinMaj11]; // drop 5 & 9
-
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, M3, _11, A5, m7]))] = [ChordType.Aug11];
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, M3, _11, A5, m7]))] = [ChordType.Aug11]; // drop 9
-
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, M3, _11, A5, M7]))] = [ChordType.AugMaj11];
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, M3, _11, A5, M7]))] = [ChordType.AugMaj11]; // drop 9
-
-  // 13th chords
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, M3, _11, P5, _13, m7]))] = [ChordType.Dom13];
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, M3, _11, _13, m7]))] = [ChordType.Dom13]; // drop 5
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, M3, _11, P5, _13, m7]))] = [ChordType.Dom13]; // drop 9
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, M3, P5, _13, m7]))] = [ChordType.Dom13]; // drop 11
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, M3, _11, _13, m7]))] = [ChordType.Dom13]; // drop 5 & 9
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, M3, _13, m7]))] = [ChordType.Dom13]; // drop 5 & 11
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, M3, P5, _13, m7]))] = [ChordType.Dom13]; // drop 9 & 11
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, M3, _13, m7]))] = [ChordType.Dom13]; // drop 5 & 9 & 11
-
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, M3, _11, P5, _13, M7]))] = [ChordType.Maj13];
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, M3, _11, _13, M7]))] = [ChordType.Maj13]; // drop 5
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, M3, _11, P5, _13, M7]))] = [ChordType.Maj13]; // drop 9
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, M3, P5, _13, M7]))] = [ChordType.Maj13]; // drop 11
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, M3, _11, _13, M7]))] = [ChordType.Maj13]; // drop 5 & 9
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, M3, _13, M7]))] = [ChordType.Maj13]; // drop 5 & 11
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, M3, P5, _13, M7]))] = [ChordType.Maj13]; // drop 9 & 11
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, M3, _13, M7]))] = [ChordType.Maj13]; // drop 5 & 9 & 11
-
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, m3, _11, P5, _13, m7]))] = [ChordType.Min13];
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, m3, _11, _13, m7]))] = [ChordType.Min13]; // drop 5
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, m3, _11, P5, _13, m7]))] = [ChordType.Min13]; // drop 9
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, m3, P5, _13, m7]))] = [ChordType.Min13]; // drop 11
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, m3, _11, _13, m7]))] = [ChordType.Min13]; // drop 5 & 9
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, m3, _13, m7]))] = [ChordType.Min13]; // drop 5 & 11
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, m3, _13, P5, m7]))] = [ChordType.Min13]; // drop 9 & 11
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, m3, _13, m7]))] = [ChordType.Min13]; // drop 5 & 9 & 11
-
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, m3, _11, d5, _13, m7]))] = [ChordType.HalfDim13];
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, m3, _11, d5, _13, m7]))] = [ChordType.HalfDim13]; // drop 9
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, m3, d5, _13, m7]))] = [ChordType.HalfDim13]; // drop 11
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, m3, d5, _13, m7]))] = [ChordType.HalfDim13]; // drop 9 & 11
-
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, m3, _11, P5, _13, M7]))] = [ChordType.MinMaj13];
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, m3, _11, _13, M7]))] = [ChordType.MinMaj13]; // drop 5
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, m3, _11, P5, _13, M7]))] = [ChordType.MinMaj13]; // drop 9
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, m3, P5, _13, M7]))] = [ChordType.MinMaj13]; // drop 11
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, m3, _11, _13, M7]))] = [ChordType.MinMaj13]; // drop 5 & 9
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, m3, _13, M7]))] = [ChordType.MinMaj13]; // drop 5 & 11
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, m3, P5, _13, M7]))] = [ChordType.MinMaj13]; // drop 9 & 11
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, m3, _13, M7]))] = [ChordType.MinMaj13]; // drop 5 & 9 & 11
-
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, M3, _11, A5, _13, m7]))] = [ChordType.Aug13];
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, M3, _11, A5, _13, m7]))] = [ChordType.Aug13]; // drop 9
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, M3, A5, _13, m7]))] = [ChordType.Aug13]; // drop 11
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, M3, A5, _13, m7]))] = [ChordType.Aug13]; // drop 9 & 11
-
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, M3, _11, A5, _13, M7]))] = [ChordType.AugMaj13];
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, M3, _11, A5, _13, M7]))] = [ChordType.AugMaj13]; // drop 9
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _9, M3, A5, _13, M7]))] = [ChordType.AugMaj13]; // drop 11
-  chordTypesByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, M3, A5, _13, M7]))] = [ChordType.AugMaj13]; // drop 9 & 11
+  return chordTypeByCanonicalChordTypeBitMask;
 }
 
-export function getChordTypes(chordType: CanonicalChordType): Array<ChordType> {
-  const bitMask = toBitMask(chordType);
-  const chordTypes = chordTypesByCanonicalChordTypeBitMask[bitMask];
+export const chordTypeByCanonicalChordTypeBitMask = createChordTypeByCanonicalChordTypeBitMask();
+
+export function getChordType(canonicalChordType: CanonicalChordType): ChordType | undefined {
+  const bitMask = toBitMask(canonicalChordType);
+  const chordType = chordTypeByCanonicalChordTypeBitMask[bitMask];
   // TODO: additions
   // TODO: b5, #5
   // TODO: b9
   // TODO: b13
   // #11
   // #9
-  return chordTypes ? chordTypes : [];
+  return chordType;
 }
 
 export function findChords(pitches: Array<Pitch>): Array<Chord> {
@@ -252,10 +261,10 @@ export function findChords(pitches: Array<Pitch>): Array<Chord> {
   if (pitches.length === 0) { return chords; }
   
   for (const canonicalChord of getCanonicalChords(pitches)) {
-    const chordTypes = getChordTypes(canonicalChord.type);
-
-    for (const chordType of chordTypes) {
-      chords.push(new Chord(chordType, pitchFromClass(canonicalChord.rootPitchClass, 0)));
+    const chordType = getChordType(canonicalChord.type);
+    
+    if (chordType !== undefined) {
+      chords.push(new Chord(chordType, pitchFromClass(canonicalChord.rootPitchClass, /*octaveNumber*/ 0)));
     }
   }
 

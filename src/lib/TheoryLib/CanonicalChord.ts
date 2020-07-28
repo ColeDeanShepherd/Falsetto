@@ -17,6 +17,10 @@ export const augmentedFifthPitchInteger = 8;
 export const minorSeventhPitchInteger = 10;
 export const majorSeventhPitchInteger = 11;
 
+export function numNotes(chordType: CanonicalChordType): number {
+  return chordType.size;
+}
+
 export function containsMinorThird(chordType: CanonicalChordType): boolean {
   return chordType.has(minorThirdPitchInteger);
 }
