@@ -79,7 +79,7 @@ export class Glossary extends React.Component<{}, {}> {
   public render(): JSX.Element {
     return (
       <Card>
-        <h2 className="h5 margin-bottom">
+        <h2 className="margin-bottom">
           Glossary
         </h2>
 

@@ -57,6 +57,7 @@ import { SignUpPage } from '../SignUpPage';
 import { MidiPlayerView } from '../MidiPlayer/MidiPlayer';
 
 import { understandingThePianoKeyboardProductId } from '../../Products';
+import { AllNotesIntervalsChordsScales } from "../AllNotesIntervalsChordsScales/AllNotesIntervalsChordsScales";
 
 export interface IRouteData {
   key?: string;
@@ -243,6 +244,16 @@ const routes: Array<IRouteData> = ([
   },
 
   // #endregion
+
+  {
+    path: "/all-notes-intervals-chords-scales",
+    title: "All Notes, Intervals, Chords, & Scales - Falsetto",
+    renderFn: () => (
+      <LimitedWidthContentContainer>
+        <AllNotesIntervalsChordsScales />
+      </LimitedWidthContentContainer>
+    )
+  },
 
   {
     path: "/midi-player",

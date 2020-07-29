@@ -22,6 +22,19 @@ import { numMatchingCharsAtStart, numSubstringOccurrences } from '../Core/String
  */
 export type PitchClass = number;
 
+export const cPitchClass: PitchClass = 0;
+export const cSharpDFlatPitchClass: PitchClass = 1;
+export const dPitchClass: PitchClass = 2;
+export const dSharpEFlatPitchClass: PitchClass = 3;
+export const ePitchClass: PitchClass = 4;
+export const fPitchClass: PitchClass = 5;
+export const fSharpGFlatPitchClass: PitchClass = 6;
+export const gPitchClass: PitchClass = 7;
+export const gSharpAFlatPitchClass: PitchClass = 8;
+export const aPitchClass: PitchClass = 9;
+export const aSharpBFlatPitchClass: PitchClass = 10;
+export const bPitchClass: PitchClass = 11;
+
 export type SignedAccidental = number;
 
 export function getPitchRange(minPitch: Pitch, maxPitch: Pitch) {
