@@ -91,7 +91,12 @@ enum ChordAlteration {
   AddSharp9,
   Add11,
   AddSharp11,
-  Add13
+  Add13,
+
+  // Removals
+  No5,
+  No9,
+  No11
 }
 
 function withChordAlteration(canonicalChordType: CanonicalChordType, chordAlteration: ChordAlteration): CanonicalChordType {
@@ -283,6 +288,42 @@ function withChordAlteration(canonicalChordType: CanonicalChordType, chordAltera
 
         // add thirteenth
         canonicalChordType.add(thirteenthPitchInteger);
+      }
+      
+      // return altered canonical chord type
+      return canonicalChordType;
+      
+    case ChordAlteration.No5:
+      if (containsPitchInteger(canonicalChordType, perfectFifthPitchInteger)) {
+        // copy canonical chord type
+        canonicalChordType = new Set<number>(canonicalChordType);
+
+        // remove note
+        canonicalChordType.delete(perfectFifthPitchInteger);
+      }
+      
+      // return altered canonical chord type
+      return canonicalChordType;
+      
+    case ChordAlteration.No9:
+      if (containsPitchInteger(canonicalChordType, ninthPitchInteger)) {
+        // copy canonical chord type
+        canonicalChordType = new Set<number>(canonicalChordType);
+
+        // remove note
+        canonicalChordType.delete(ninthPitchInteger);
+      }
+      
+      // return altered canonical chord type
+      return canonicalChordType;
+      
+    case ChordAlteration.No11:
+      if (containsPitchInteger(canonicalChordType, eleventhPitchInteger)) {
+        // copy canonical chord type
+        canonicalChordType = new Set<number>(canonicalChordType);
+
+        // remove note
+        canonicalChordType.delete(eleventhPitchInteger);
       }
       
       // return altered canonical chord type
