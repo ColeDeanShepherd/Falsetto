@@ -9,7 +9,7 @@ import { PitchLetter } from "../../lib/TheoryLib/PitchLetter";
 
 interface TableRowData {
   pitches: Array<Pitch>;
-  chordType: ChordType;
+  chordType?: ChordType;
 }
 
 const pitchOctaveNumber = 4;
@@ -50,7 +50,7 @@ export class AllNotesIntervalsChordsScales extends React.Component<{}, {}> {
             </tr>
           </thead>
           <tbody>
-            {this.tableData.map(trd => (
+            {this.tableData.filter(trd => trd.chordType).map(trd => (
               <tr>
                 <td>
                   <PianoKeyboard

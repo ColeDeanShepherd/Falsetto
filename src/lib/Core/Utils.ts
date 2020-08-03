@@ -91,3 +91,13 @@ export function getOrdinalNumeral(x: number): string {
       throw new Error(`Failed converting ${x} to a roman numeral.`);
   }
 }
+
+export function* generateValueCombinationBitMasks<T>(values: Array<T>) {
+  precondition(values.length > 0);
+  
+  const numCombinations = 1 << values.length; // 2 ^ n
+
+  for (let arrayBitMask = 0; arrayBitMask < numCombinations; arrayBitMask++) {
+    yield arrayBitMask;
+  }
+}

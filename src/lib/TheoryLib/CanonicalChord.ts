@@ -29,6 +29,10 @@ export const sharpEleventhPitchInteger = 6;
 
 export const thirteenthPitchInteger = 9;
 
+export function copy(canonicalChordType: CanonicalChordType): CanonicalChordType {
+  return new Set<number>(canonicalChordType);
+}
+
 export function numNotes(chordType: CanonicalChordType): number {
   return chordType.size;
 }
@@ -139,9 +143,11 @@ export function* generateAllCanonicalChords() {
   const bitMaskGenerator = generateAllCanonicalChordBitMasks();
 
   let generatorResult = bitMaskGenerator.next();
+  
   while (!generatorResult.done) {
     const bitMask = generatorResult.value;
     const canonicalChord = fromBitMask(bitMask);
     yield canonicalChord;
+    generatorResult = bitMaskGenerator.next()
   }
 }

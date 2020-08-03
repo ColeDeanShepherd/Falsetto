@@ -38,6 +38,89 @@ export class ChordScaleFormula {
   }
 }
 
+export function copyChordScaleFormula(chordScaleFormula: ChordScaleFormula): ChordScaleFormula {
+  return new ChordScaleFormula(
+    chordScaleFormula.parts.map(copyChordScaleFormulaPart)
+  );
+}
+
+export function containsPart(formula: ChordScaleFormula, part: ChordScaleFormulaPart): boolean {
+  return formula.parts.some(p => p.pitchInteger === part.pitchInteger);
+}
+
+export function removePart(formula: ChordScaleFormula, chordNoteNumber: number, signedAccidental: number): boolean {
+  for (let i = 0; i < formula.parts.length;) {
+    const part = formula.parts[i];
+
+    if ((part.chordNoteNumber === chordNoteNumber) && (part.signedAccidental === signedAccidental)) {
+      formula.parts.splice(i, 1);
+      return true;
+    } else {
+      i++;
+    }
+  }
+
+  return false;
+}
+
+export function removePartWithPitchInteger(formula: ChordScaleFormula, pitchInteger: number): boolean {
+  for (let i = 0; i < formula.parts.length;) {
+    const part = formula.parts[i];
+
+    if ((part.pitchInteger === pitchInteger)) {
+      formula.parts.splice(i, 1);
+      return true;
+    } else {
+      i++;
+    }
+  }
+
+  return false;
+}
+
+function partComesBefore(a: ChordScaleFormulaPart, b: ChordScaleFormulaPart): boolean {
+  function calculateQuotientRemainder(p: ChordScaleFormulaPart): [number, number] {
+    let quotient: number;
+    let remainder: number;
+    
+    if (a.chordNoteNumber < 8) {
+      quotient = 0;
+      remainder = p.chordNoteNumber;
+    } else {
+      quotient = 1;
+      remainder = p.chordNoteNumber - 7;
+    }
+
+    return [quotient, remainder];
+  }
+  
+  let [aQuotient, aRemainder] = calculateQuotientRemainder(a);
+  let [bQuotient, bRemainder] = calculateQuotientRemainder(b);
+
+  if (aRemainder < bRemainder) { return true; }
+  else if (aRemainder > bRemainder) { return false; }
+  else { return aQuotient < bQuotient; }
+}
+
+function findPartInsertIndex(part: ChordScaleFormulaPart, formula: ChordScaleFormula): number {
+  let insertIndex = 0;
+
+  while (partComesBefore(part, formula.parts[insertIndex])) {
+    insertIndex++;
+  }
+
+  return insertIndex;
+}
+
+export function addPart(formula: ChordScaleFormula, newPart: ChordScaleFormulaPart): boolean {
+  if (containsPart(formula, newPart)) { return false; }
+
+  const insertIndex = findPartInsertIndex(newPart, formula);
+  formula.parts.splice(insertIndex, 0, newPart);
+
+  return true;
+}
+
 export class ChordScaleFormulaPart {
   public static parse(formulaPartString: string): ChordScaleFormulaPart {
     precondition(formulaPartString.length > 0);
@@ -90,4 +173,12 @@ export class ChordScaleFormulaPart {
 
     return pitch;
   }
+}
+
+export function copyChordScaleFormulaPart(chordScaleFormulaPart: ChordScaleFormulaPart): ChordScaleFormulaPart {
+  return new ChordScaleFormulaPart(
+    chordScaleFormulaPart.chordNoteNumber,
+    chordScaleFormulaPart.signedAccidental,
+    chordScaleFormulaPart.isOptional
+  );
 }

@@ -1,17 +1,24 @@
-import * as Utils from "../../lib/Core/Utils";
-import { Pitch } from "../../lib/TheoryLib/Pitch";
-import { Interval, intervalFromHalfSteps } from '../../lib/TheoryLib/Interval';
-import { Chord } from '../../lib/TheoryLib/Chord';
-import { ChordType } from "../../lib/TheoryLib/ChordType";
-import { ScaleType, getAllModePitchIntegers } from '../../lib/TheoryLib/Scale';
-import { areArraysEqual, uniqWithSet } from '../../lib/Core/ArrayUtils';
+import * as Utils from "../Core/Utils";
+import { Pitch } from "./Pitch";
+import { Interval, intervalFromHalfSteps } from './Interval';
+import { Chord } from './Chord';
+import { ChordType, copy as copyChordType } from "./ChordType";
+import { ScaleType, getAllModePitchIntegers } from './Scale';
+import { areArraysEqual, uniqWithSet, sortNumbersAscendingInPlace } from '../Core/ArrayUtils';
 import { intervalsEqual } from './Interval';
-import { sortNumbersAscendingInPlace } from '../Core/ArrayUtils';
-import { CanonicalChordType, CanonicalChord, toBitMask, containsAugmentedFifth, containsPerfectFifth, perfectFifthPitchInteger, augmentedFifthPitchInteger, containsNinth, ninthPitchInteger, sharpNinthPitchInteger, diminishedFifthPitchInteger, containsMinorThird, containsMajorSecond, majorThirdPitchInteger, majorSecondPitchInteger, minorThirdPitchInteger, perfectFourthPitchInteger, containsPitchInteger, flatNinthPitchInteger, eleventhPitchInteger, sharpEleventhPitchInteger, thirteenthPitchInteger } from './CanonicalChord';
+import {
+  CanonicalChordType, CanonicalChord, toBitMask, containsAugmentedFifth, containsPerfectFifth, perfectFifthPitchInteger,
+  augmentedFifthPitchInteger, containsNinth, ninthPitchInteger, sharpNinthPitchInteger, diminishedFifthPitchInteger,
+  containsMinorThird, containsMajorSecond, majorThirdPitchInteger, majorSecondPitchInteger, minorThirdPitchInteger,
+  perfectFourthPitchInteger, containsPitchInteger, flatNinthPitchInteger, eleventhPitchInteger, sharpEleventhPitchInteger,
+  thirteenthPitchInteger, copy as copyCanonicalChordType
+} from './CanonicalChord';
 import { mod } from "../Core/MathUtils";
 import { PitchClass, pitchFromClass } from './Pitch';
 import { NumberDictionary } from '../Core/NumberDictionary';
 import { setWithout, setWith, setWithoutMany } from '../Core/SetUtils';
+import { isBitSet, generateValueCombinationBitMasks } from '../Core/Utils';
+import { containsPart, removePart, addPart, removePartWithPitchInteger, ChordScaleFormulaPart } from './ChordScaleFormula';
 
 // TODO: refactor Chord, Scale
 // TODO: add support for multiple chord names
@@ -73,7 +80,7 @@ export function* getCanonicalChords(pitches: Array<Pitch>) {
   }
 }
 
-enum ChordAlteration {
+export enum ChordAlteration {
   // Sharpen/Flatten
   Sharp5,
   Sharp9,
@@ -99,13 +106,10 @@ enum ChordAlteration {
   No11
 }
 
-function withChordAlteration(canonicalChordType: CanonicalChordType, chordAlteration: ChordAlteration): CanonicalChordType {
+export function alterCanonicalChordType(canonicalChordType: CanonicalChordType, chordAlteration: ChordAlteration): CanonicalChordType {
   switch (chordAlteration) {
     case ChordAlteration.Sharp5:
       if (containsPerfectFifth(canonicalChordType)) {
-        // copy canonical chord type
-        canonicalChordType = new Set<number>(canonicalChordType);
-
         // remove perfect fifth
         canonicalChordType.delete(perfectFifthPitchInteger);
 
@@ -118,9 +122,6 @@ function withChordAlteration(canonicalChordType: CanonicalChordType, chordAltera
 
     case ChordAlteration.Sharp9:
       if (containsNinth(canonicalChordType)) {
-        // copy canonical chord type
-        canonicalChordType = new Set<number>(canonicalChordType);
-
         // remove ninth
         canonicalChordType.delete(ninthPitchInteger);
 
@@ -133,9 +134,6 @@ function withChordAlteration(canonicalChordType: CanonicalChordType, chordAltera
 
     case ChordAlteration.Flat5:
       if (containsPerfectFifth(canonicalChordType)) {
-        // copy canonical chord type
-        canonicalChordType = new Set<number>(canonicalChordType);
-
         // remove perfect fifth
         canonicalChordType.delete(perfectFifthPitchInteger);
 
@@ -148,9 +146,6 @@ function withChordAlteration(canonicalChordType: CanonicalChordType, chordAltera
 
     case ChordAlteration.Flat9:
       if (containsNinth(canonicalChordType)) {
-        // copy canonical chord type
-        canonicalChordType = new Set<number>(canonicalChordType);
-
         // remove ninth
         canonicalChordType.delete(ninthPitchInteger);
 
@@ -163,18 +158,12 @@ function withChordAlteration(canonicalChordType: CanonicalChordType, chordAltera
 
     case ChordAlteration.Sus2:
       if (containsMinorThird(canonicalChordType)) {
-        // copy canonical chord type
-        canonicalChordType = new Set<number>(canonicalChordType);
-
         // remove major third
         canonicalChordType.delete(majorThirdPitchInteger);
 
         // add second
         canonicalChordType.add(majorSecondPitchInteger);
       } else if (containsMinorThird(canonicalChordType)) {
-        // copy canonical chord type
-        canonicalChordType = new Set<number>(canonicalChordType);
-
         // remove minor third
         canonicalChordType.delete(minorThirdPitchInteger);
 
@@ -187,18 +176,12 @@ function withChordAlteration(canonicalChordType: CanonicalChordType, chordAltera
 
     case ChordAlteration.Sus4:
       if (containsMinorThird(canonicalChordType)) {
-        // copy canonical chord type
-        canonicalChordType = new Set<number>(canonicalChordType);
-
         // remove major third
         canonicalChordType.delete(majorThirdPitchInteger);
 
         // add fourth
         canonicalChordType.add(perfectFourthPitchInteger);
       } else if (containsMinorThird(canonicalChordType)) {
-        // copy canonical chord type
-        canonicalChordType = new Set<number>(canonicalChordType);
-
         // remove minor third
         canonicalChordType.delete(minorThirdPitchInteger);
 
@@ -211,9 +194,6 @@ function withChordAlteration(canonicalChordType: CanonicalChordType, chordAltera
 
     case ChordAlteration.AddSharp5:
       if (!containsAugmentedFifth(canonicalChordType)) {
-        // copy canonical chord type
-        canonicalChordType = new Set<number>(canonicalChordType);
-
         // add sharp fifth
         canonicalChordType.add(augmentedFifthPitchInteger);
       }
@@ -223,9 +203,6 @@ function withChordAlteration(canonicalChordType: CanonicalChordType, chordAltera
 
     case ChordAlteration.AddFlat9:
       if (!containsPitchInteger(canonicalChordType, flatNinthPitchInteger)) {
-        // copy canonical chord type
-        canonicalChordType = new Set<number>(canonicalChordType);
-
         // add flat ninth
         canonicalChordType.add(flatNinthPitchInteger);
       }
@@ -235,9 +212,6 @@ function withChordAlteration(canonicalChordType: CanonicalChordType, chordAltera
 
     case ChordAlteration.Add9:
       if (!containsPitchInteger(canonicalChordType, ninthPitchInteger)) {
-        // copy canonical chord type
-        canonicalChordType = new Set<number>(canonicalChordType);
-
         // add ninth
         canonicalChordType.add(ninthPitchInteger);
       }
@@ -247,9 +221,6 @@ function withChordAlteration(canonicalChordType: CanonicalChordType, chordAltera
 
     case ChordAlteration.AddSharp9:
       if (!containsPitchInteger(canonicalChordType, sharpNinthPitchInteger)) {
-        // copy canonical chord type
-        canonicalChordType = new Set<number>(canonicalChordType);
-
         // add sharp ninth
         canonicalChordType.add(sharpNinthPitchInteger);
       }
@@ -259,9 +230,6 @@ function withChordAlteration(canonicalChordType: CanonicalChordType, chordAltera
 
     case ChordAlteration.Add11:
       if (!containsPitchInteger(canonicalChordType, eleventhPitchInteger)) {
-        // copy canonical chord type
-        canonicalChordType = new Set<number>(canonicalChordType);
-
         // add eleventh
         canonicalChordType.add(eleventhPitchInteger);
       }
@@ -271,9 +239,6 @@ function withChordAlteration(canonicalChordType: CanonicalChordType, chordAltera
 
     case ChordAlteration.AddSharp11:
       if (!containsPitchInteger(canonicalChordType, sharpEleventhPitchInteger)) {
-        // copy canonical chord type
-        canonicalChordType = new Set<number>(canonicalChordType);
-
         // add sharp eleventh
         canonicalChordType.add(sharpEleventhPitchInteger);
       }
@@ -283,9 +248,6 @@ function withChordAlteration(canonicalChordType: CanonicalChordType, chordAltera
 
     case ChordAlteration.Add13:
       if (!containsPitchInteger(canonicalChordType, thirteenthPitchInteger)) {
-        // copy canonical chord type
-        canonicalChordType = new Set<number>(canonicalChordType);
-
         // add thirteenth
         canonicalChordType.add(thirteenthPitchInteger);
       }
@@ -295,9 +257,6 @@ function withChordAlteration(canonicalChordType: CanonicalChordType, chordAltera
       
     case ChordAlteration.No5:
       if (containsPitchInteger(canonicalChordType, perfectFifthPitchInteger)) {
-        // copy canonical chord type
-        canonicalChordType = new Set<number>(canonicalChordType);
-
         // remove note
         canonicalChordType.delete(perfectFifthPitchInteger);
       }
@@ -307,9 +266,6 @@ function withChordAlteration(canonicalChordType: CanonicalChordType, chordAltera
       
     case ChordAlteration.No9:
       if (containsPitchInteger(canonicalChordType, ninthPitchInteger)) {
-        // copy canonical chord type
-        canonicalChordType = new Set<number>(canonicalChordType);
-
         // remove note
         canonicalChordType.delete(ninthPitchInteger);
       }
@@ -319,9 +275,6 @@ function withChordAlteration(canonicalChordType: CanonicalChordType, chordAltera
       
     case ChordAlteration.No11:
       if (containsPitchInteger(canonicalChordType, eleventhPitchInteger)) {
-        // copy canonical chord type
-        canonicalChordType = new Set<number>(canonicalChordType);
-
         // remove note
         canonicalChordType.delete(eleventhPitchInteger);
       }
@@ -331,6 +284,417 @@ function withChordAlteration(canonicalChordType: CanonicalChordType, chordAltera
 
     default:
       throw new Error(`Unknown ChordAlteration: ${chordAlteration}`);
+  }
+}
+
+export function canonicalChordTypeWithAlteration(canonicalChordType: CanonicalChordType, chordAlteration: ChordAlteration): CanonicalChordType {
+  // copy canonical chord type
+  canonicalChordType = copyCanonicalChordType(canonicalChordType);
+
+  // alter the copied canonical chord type
+  alterCanonicalChordType(canonicalChordType, chordAlteration);
+
+  // return the altered canonical chord type
+  return canonicalChordType;
+}
+
+export function alterChordType(chordType: ChordType, chordAlteration: ChordAlteration): [ChordType, boolean] {
+  let wasAlterationApplied = false;
+
+  switch (chordAlteration) {
+    case ChordAlteration.Sharp5:
+      // alter formula
+      if (removePartWithPitchInteger(chordType.formula, perfectFifthPitchInteger)) {
+        // alter ID
+        chordType.id += "#5";
+  
+        // alter name
+        chordType.name += " ♯5";
+
+        // add sharp fifth
+        addPart(chordType.formula, new ChordScaleFormulaPart(/*chordNoteNumber*/ 5, /*signedAccidental*/ 1, /*isOptional*/ false));
+
+        // add symbols
+        for (let i = 0; i < chordType.symbols.length; i++) {
+          chordType.symbols[i] += "♯5";
+        }
+
+        wasAlterationApplied = true;
+      }
+      
+      // return altered chord type
+      return [chordType, wasAlterationApplied];
+
+    case ChordAlteration.Sharp9:
+      // alter formula
+      if (removePartWithPitchInteger(chordType.formula, ninthPitchInteger)) {
+        // alter ID
+        chordType.id += "#9";
+  
+        // alter name
+        chordType.name += " ♯9";
+
+        // add sharp ninth
+        addPart(chordType.formula, new ChordScaleFormulaPart(/*chordNoteNumber*/ 9, /*signedAccidental*/ 1, /*isOptional*/ false));
+
+        // add symbols
+        for (let i = 0; i < chordType.symbols.length; i++) {
+          chordType.symbols[i] += "♯9";
+        }
+
+        wasAlterationApplied = true;
+      }
+      
+      // return altered chord type
+      return [chordType, wasAlterationApplied];
+
+    case ChordAlteration.Flat5:
+      // alter formula
+      if (removePartWithPitchInteger(chordType.formula, perfectFifthPitchInteger)) {
+        // alter ID
+        chordType.id += "b5";
+  
+        // alter name
+        chordType.name += " ♭5";
+
+        // add flat fifth
+        addPart(chordType.formula, new ChordScaleFormulaPart(/*chordNoteNumber*/ 5, /*signedAccidental*/ -1, /*isOptional*/ false));
+
+        // add symbols
+        for (let i = 0; i < chordType.symbols.length; i++) {
+          chordType.symbols[i] += "♭5";
+        }
+
+        wasAlterationApplied = true;
+      }
+
+      // return altered chord type
+      return [chordType, wasAlterationApplied];
+
+    case ChordAlteration.Flat9:
+      // alter formula
+      if (removePartWithPitchInteger(chordType.formula, ninthPitchInteger)) {
+        // alter ID
+        chordType.id += "b9";
+  
+        // alter name
+        chordType.name += " ♭9";
+
+        // add flat ninth
+        addPart(chordType.formula, new ChordScaleFormulaPart(/*chordNoteNumber*/ 9, /*signedAccidental*/ -1, /*isOptional*/ false));
+        
+        // add symbols
+        for (let i = 0; i < chordType.symbols.length; i++) {
+          chordType.symbols[i] += "♭9";
+        }
+
+        wasAlterationApplied = true;
+      }
+      
+      // return altered chord type
+      return [chordType, wasAlterationApplied];
+
+    case ChordAlteration.Sus2:
+      {
+        if (removePartWithPitchInteger(chordType.formula, majorThirdPitchInteger)) {
+          // add second
+          addPart(chordType.formula, new ChordScaleFormulaPart(/*chordNoteNumber*/ 2, /*signedAccidental*/ 0, /*isOptional*/ false));
+          wasAlterationApplied = true;
+        } else if (removePartWithPitchInteger(chordType.formula, minorThirdPitchInteger)) {
+          // add second
+          addPart(chordType.formula, new ChordScaleFormulaPart(/*chordNoteNumber*/ 2, /*signedAccidental*/ 0, /*isOptional*/ false));
+          wasAlterationApplied = true;
+        }
+
+        if (wasAlterationApplied) {
+          // alter ID
+          chordType.id += "sus2";
+    
+          // alter name
+          chordType.name += " sus2";
+    
+          // add symbols
+          for (let i = 0; i < chordType.symbols.length; i++) {
+            chordType.symbols[i] += "sus2";
+          }
+        }
+        
+        // return altered chord type
+        return [chordType, wasAlterationApplied];
+      }
+
+    case ChordAlteration.Sus4:
+      {
+        // alter formula
+        if (removePartWithPitchInteger(chordType.formula, majorThirdPitchInteger)) {
+          // add fourth
+          addPart(chordType.formula, new ChordScaleFormulaPart(/*chordNoteNumber*/ 4, /*signedAccidental*/ 0, /*isOptional*/ false));
+          wasAlterationApplied = true;
+        } else if (removePartWithPitchInteger(chordType.formula, minorThirdPitchInteger)) {
+          // add fourth
+          addPart(chordType.formula, new ChordScaleFormulaPart(/*chordNoteNumber*/ 4, /*signedAccidental*/ 0, /*isOptional*/ false));
+          wasAlterationApplied = true;
+        }
+
+        if (wasAlterationApplied) {
+          // alter ID
+          chordType.id += "sus4";
+    
+          // alter name
+          chordType.name += " sus4";
+    
+          // add symbols
+          for (let i = 0; i < chordType.symbols.length; i++) {
+            chordType.symbols[i] += "sus4";
+          }
+        }
+        
+        // return altered chord type
+        return [chordType, wasAlterationApplied];
+      }
+
+    case ChordAlteration.AddSharp5:
+      // alter formula
+      if (addPart(chordType.formula, new ChordScaleFormulaPart(/*chordNoteNumber*/ 5, /*signedAccidental*/ 1, /*isOptional*/ false))) {
+        // alter ID
+        chordType.id += "add#5";
+  
+        // alter name
+        chordType.name += " add♯5";
+
+        // add symbols
+        for (let i = 0; i < chordType.symbols.length; i++) {
+          chordType.symbols[i] += "add♯5";
+        }
+
+        wasAlterationApplied = true;
+      }
+      
+      // return altered chord type
+      return [chordType, wasAlterationApplied];
+
+    case ChordAlteration.AddFlat9:
+      // alter formula
+      if (addPart(chordType.formula, new ChordScaleFormulaPart(/*chordNoteNumber*/ 9, /*signedAccidental*/ -1, /*isOptional*/ false))) {
+        // alter ID
+        chordType.id += "addb9";
+  
+        // alter name
+        chordType.name += " add♭9";
+
+        // add symbols
+        for (let i = 0; i < chordType.symbols.length; i++) {
+          chordType.symbols[i] += "add♭9";
+        }
+        
+        wasAlterationApplied = true;
+      }
+      
+      // return altered chord type
+      return [chordType, wasAlterationApplied];
+
+    case ChordAlteration.Add9:
+      // alter formula
+      if (addPart(chordType.formula, new ChordScaleFormulaPart(/*chordNoteNumber*/ 9, /*signedAccidental*/ 0, /*isOptional*/ false))) {
+        // alter ID
+        chordType.id += "add9";
+  
+        // alter name
+        chordType.name += " add9";
+
+        // add symbols
+        for (let i = 0; i < chordType.symbols.length; i++) {
+          chordType.symbols[i] += "add9";
+        }
+        
+        wasAlterationApplied = true;
+      }
+      
+      // return altered chord type
+      return [chordType, wasAlterationApplied];
+
+    case ChordAlteration.AddSharp9:
+      // alter formula
+      if (addPart(chordType.formula, new ChordScaleFormulaPart(/*chordNoteNumber*/ 9, /*signedAccidental*/ 1, /*isOptional*/ false))) {
+        // alter ID
+        chordType.id += "add#9";
+  
+        // alter name
+        chordType.name += " add♯9";
+
+        // add symbols
+        for (let i = 0; i < chordType.symbols.length; i++) {
+          chordType.symbols[i] += "add♯9";
+        }
+        
+        wasAlterationApplied = true;
+      }
+      
+      // return altered chord type
+      return [chordType, wasAlterationApplied];
+
+    case ChordAlteration.Add11:
+      // alter formula
+      if (addPart(chordType.formula, new ChordScaleFormulaPart(/*chordNoteNumber*/ 11, /*signedAccidental*/ 0, /*isOptional*/ false))) {
+        // alter ID
+        chordType.id += "add11";
+  
+        // alter name
+        chordType.name += " add11";
+
+        // add symbols
+        for (let i = 0; i < chordType.symbols.length; i++) {
+          chordType.symbols[i] += "add11";
+        }
+        
+        wasAlterationApplied = true;
+      }
+      
+      // return altered chord type
+      return [chordType, wasAlterationApplied];
+
+    case ChordAlteration.AddSharp11:
+      // alter formula
+      if (addPart(chordType.formula, new ChordScaleFormulaPart(/*chordNoteNumber*/ 11, /*signedAccidental*/ 1, /*isOptional*/ false))) {
+        // alter ID
+        chordType.id += "add#11";
+  
+        // alter name
+        chordType.name += " add♯11";
+
+        // add symbols
+        for (let i = 0; i < chordType.symbols.length; i++) {
+          chordType.symbols[i] += "add♯11";
+        }
+        
+        wasAlterationApplied = true;
+      }
+      
+      // return altered chord type
+      return [chordType, wasAlterationApplied];
+
+    case ChordAlteration.Add13:
+      // alter formula
+      if (addPart(chordType.formula, new ChordScaleFormulaPart(/*chordNoteNumber*/ 13, /*signedAccidental*/ 0, /*isOptional*/ false))) {
+        // alter ID
+        chordType.id += "add13";
+  
+        // alter name
+        chordType.name += " add13";
+
+        // add symbols
+        for (let i = 0; i < chordType.symbols.length; i++) {
+          chordType.symbols[i] += "add13";
+        }
+        
+        wasAlterationApplied = true;
+      }
+      
+      // return altered chord type
+      return [chordType, wasAlterationApplied];
+      
+    case ChordAlteration.No5:
+      if (removePart(chordType.formula, /*chordNoteNumber*/ 5, /*signedAccidental*/ 0)) {
+        // alter ID
+        chordType.id += "no5";
+  
+        // alter name
+        chordType.name += " no5";
+        
+        // add symbols
+        for (let i = 0; i < chordType.symbols.length; i++) {
+          chordType.symbols[i] += "no5";
+        }
+        
+        wasAlterationApplied = true;
+      }
+
+      // return altered chord type
+      return [chordType, wasAlterationApplied];
+      
+    case ChordAlteration.No9:
+      if (removePart(chordType.formula, /*chordNoteNumber*/ 9, /*signedAccidental*/ 0)) {
+        // alter ID
+        chordType.id += "no9";
+  
+        // alter name
+        chordType.name += " no9";
+  
+        // add symbols
+        for (let i = 0; i < chordType.symbols.length; i++) {
+          chordType.symbols[i] += "no9";
+        }
+        
+        wasAlterationApplied = true;
+      }
+      
+      // return altered chord type
+      return [chordType, wasAlterationApplied];
+      
+    case ChordAlteration.No11:
+      if (removePart(chordType.formula, /*chordNoteNumber*/ 11, /*signedAccidental*/ 0)) {
+        // alter ID
+        chordType.id += "no11";
+  
+        // alter name
+        chordType.name += " no11";
+  
+        // add symbols
+        for (let i = 0; i < chordType.symbols.length; i++) {
+          chordType.symbols[i] += "no11";
+        }
+        
+        wasAlterationApplied = true;
+      }
+      
+      // return altered chord type
+      return [chordType, wasAlterationApplied];
+
+    default:
+      throw new Error(`Unknown ChordAlteration: ${chordAlteration}`);
+  }
+}
+
+export function chordTypeWithAlteration(chordType: ChordType, chordAlteration: ChordAlteration): [ChordType, boolean] {
+  // copy canonical chord type
+  chordType = copyChordType(chordType);
+
+  // alter the copied canonical chord type
+  let wasAlterationApplied: boolean;
+  [chordType, wasAlterationApplied] = alterChordType(chordType, chordAlteration);
+
+  // return the altered canonical chord type
+  return [chordType, wasAlterationApplied];
+}
+
+function* generateAlteredChords(canonicalChordType: CanonicalChordType, chordType: ChordType, alterations: Array<ChordAlteration>) {
+  const alterationCombinationBitMaskGenerator = generateValueCombinationBitMasks(alterations);
+  let iterationResult = alterationCombinationBitMaskGenerator.next();
+
+  while (!iterationResult.done) {
+    const alterationCombinationBitMask = iterationResult.value;
+    let alteredCanonicalChordType = canonicalChordType;
+    let alteredChordType = chordType;
+    let wasChordAltered = false;
+
+    for (let bitIndex = 0; bitIndex < alterations.length; bitIndex++) {
+      if (isBitSet(alterationCombinationBitMask, bitIndex)) {
+        const alteration = alterations[bitIndex];
+        alteredCanonicalChordType = canonicalChordTypeWithAlteration(alteredCanonicalChordType, alteration);
+
+        let wasAlterationApplied: boolean;
+        [alteredChordType, wasAlterationApplied] = chordTypeWithAlteration(alteredChordType, alteration);
+
+        wasChordAltered = wasChordAltered || wasAlterationApplied;
+      }
+    }
+
+    if (wasChordAltered) {
+      let result: [CanonicalChordType, ChordType] = [alteredCanonicalChordType, alteredChordType];
+      yield result;
+    }
+
+    iterationResult = alterationCombinationBitMaskGenerator.next();
   }
 }
 
@@ -357,15 +721,31 @@ function createChordTypeByCanonicalChordTypeBitMask(): NumberDictionary<ChordTyp
 
   // basic triads
   function addTriadChordTypes(canonicalChordType: CanonicalChordType, chordType: ChordType) {
-    chordTypeByCanonicalChordTypeBitMask[toBitMask(canonicalChordType)] = chordType;
+    const validAlterations = [
+      ChordAlteration.AddSharp5,
+      ChordAlteration.AddFlat9,
+      ChordAlteration.Add9,
+      ChordAlteration.AddSharp9,
+      ChordAlteration.Add11,
+      ChordAlteration.AddSharp11
+    ];
+
+    const chordTypeGenerator = generateAlteredChords(canonicalChordType, chordType, validAlterations);
+    let chordTypeGeneratorResult = chordTypeGenerator.next();
+
+    while(!chordTypeGeneratorResult.done) {
+      let [alteredCanonicalChordType, alteredChordType] = chordTypeGeneratorResult.value;
+      chordTypeByCanonicalChordTypeBitMask[toBitMask(alteredCanonicalChordType)] = alteredChordType;
+      chordTypeGeneratorResult = chordTypeGenerator.next();
+    }
   }
 
-  chordTypeByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, M3, P5]))] = ChordType.Major;
-  chordTypeByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, m3, P5]))] = ChordType.Minor;
-  chordTypeByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, M3, A5]))] = ChordType.Augmented;
-  chordTypeByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, m3, d5]))] = ChordType.Diminished;
-  chordTypeByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _2, P5]))] = ChordType.Sus2;
-  chordTypeByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, _4, P5]))] = ChordType.Sus4;
+  addTriadChordTypes(new Set<number>([R, M3, P5]), ChordType.Major);
+  addTriadChordTypes(new Set<number>([R, m3, P5]), ChordType.Minor);
+  addTriadChordTypes(new Set<number>([R, M3, A5]), ChordType.Augmented);
+  addTriadChordTypes(new Set<number>([R, m3, d5]), ChordType.Diminished);
+  addTriadChordTypes(new Set<number>([R, _2, P5]), ChordType.Sus2);
+  addTriadChordTypes(new Set<number>([R, _4, P5]), ChordType.Sus4);
 
   // sixth chords
   function addSixthChordType(canonicalChordType: CanonicalChordType, chordType: ChordType) {

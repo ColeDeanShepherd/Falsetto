@@ -6,7 +6,7 @@ import { flattenArrays, areArraysEqual, arrayMax } from '../Core/ArrayUtils';
 import { Pitch } from "./Pitch";
 import { getIntervalsFromFormula } from './Scale';
 import { Interval } from './Interval';
-import { ChordScaleFormula } from './ChordScaleFormula';
+import { ChordScaleFormula, copyChordScaleFormula } from './ChordScaleFormula';
 import { ChordTypeGroup } from "./ChordTypeGroup";
 
 export class ChordType {
@@ -281,6 +281,10 @@ export class ChordType {
       ? alterations
       : null;
   }
+}
+
+export function copy(chordType: ChordType): ChordType {
+  return new ChordType(chordType.id, chordType.name, copyChordScaleFormula(chordType.formula), chordType.symbols.slice());
 }
 
 export const chordTypeLevels = [
