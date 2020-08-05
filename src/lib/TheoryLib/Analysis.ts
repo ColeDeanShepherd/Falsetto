@@ -16,9 +16,10 @@ import {
 import { mod } from "../Core/MathUtils";
 import { PitchClass, pitchFromClass } from './Pitch';
 import { NumberDictionary } from '../Core/NumberDictionary';
-import { setWithout, setWith, setWithoutMany } from '../Core/SetUtils';
+import { setWithout, setWith, setWithoutMany, areSetsEqual } from '../Core/SetUtils';
 import { isBitSet, generateValueCombinationBitMasks } from '../Core/Utils';
 import { containsPart, removePart, addPart, removePartWithPitchInteger, ChordScaleFormulaPart } from './ChordScaleFormula';
+import { minorSecondPitchInteger, augmentedFourthPitchInteger } from './CanonicalChord';
 
 // TODO: refactor Chord, Scale
 // TODO: add support for multiple chord names
@@ -88,8 +89,10 @@ export enum ChordAlteration {
   Flat9,
 
   // Suspensions
+  SusFlat2,
   Sus2,
   Sus4,
+  SusSharp4,
 
   // Additions
   AddSharp5,
@@ -155,6 +158,24 @@ export function alterCanonicalChordType(canonicalChordType: CanonicalChordType, 
       
       // return altered canonical chord type
       return canonicalChordType;
+      
+    case ChordAlteration.SusFlat2:
+      if (containsMinorThird(canonicalChordType)) {
+        // remove major third
+        canonicalChordType.delete(majorThirdPitchInteger);
+
+        // add second
+        canonicalChordType.add(minorSecondPitchInteger);
+      } else if (containsMinorThird(canonicalChordType)) {
+        // remove minor third
+        canonicalChordType.delete(minorThirdPitchInteger);
+
+        // add second
+        canonicalChordType.add(minorSecondPitchInteger);
+      }
+      
+      // return altered canonical chord type
+      return canonicalChordType;
 
     case ChordAlteration.Sus2:
       if (containsMinorThird(canonicalChordType)) {
@@ -187,6 +208,24 @@ export function alterCanonicalChordType(canonicalChordType: CanonicalChordType, 
 
         // add fourth
         canonicalChordType.add(perfectFourthPitchInteger);
+      }
+      
+      // return altered canonical chord type
+      return canonicalChordType;
+      
+    case ChordAlteration.SusSharp4:
+      if (containsMinorThird(canonicalChordType)) {
+        // remove major third
+        canonicalChordType.delete(majorThirdPitchInteger);
+
+        // add fourth
+        canonicalChordType.add(augmentedFourthPitchInteger);
+      } else if (containsMinorThird(canonicalChordType)) {
+        // remove minor third
+        canonicalChordType.delete(minorThirdPitchInteger);
+
+        // add fourth
+        canonicalChordType.add(augmentedFourthPitchInteger);
       }
       
       // return altered canonical chord type
@@ -322,8 +361,7 @@ export function alterChordType(chordType: ChordType, chordAlteration: ChordAlter
         wasAlterationApplied = true;
       }
       
-      // return altered chord type
-      return [chordType, wasAlterationApplied];
+      break;
 
     case ChordAlteration.Sharp9:
       // alter formula
@@ -345,8 +383,7 @@ export function alterChordType(chordType: ChordType, chordAlteration: ChordAlter
         wasAlterationApplied = true;
       }
       
-      // return altered chord type
-      return [chordType, wasAlterationApplied];
+      break;
 
     case ChordAlteration.Flat5:
       // alter formula
@@ -368,8 +405,7 @@ export function alterChordType(chordType: ChordType, chordAlteration: ChordAlter
         wasAlterationApplied = true;
       }
 
-      // return altered chord type
-      return [chordType, wasAlterationApplied];
+      break;
 
     case ChordAlteration.Flat9:
       // alter formula
@@ -391,8 +427,35 @@ export function alterChordType(chordType: ChordType, chordAlteration: ChordAlter
         wasAlterationApplied = true;
       }
       
-      // return altered chord type
-      return [chordType, wasAlterationApplied];
+      break;
+      
+    case ChordAlteration.SusFlat2:
+      {
+        if (removePartWithPitchInteger(chordType.formula, majorThirdPitchInteger)) {
+          // add second
+          addPart(chordType.formula, new ChordScaleFormulaPart(/*chordNoteNumber*/ 2, /*signedAccidental*/ -1, /*isOptional*/ false));
+          wasAlterationApplied = true;
+        } else if (removePartWithPitchInteger(chordType.formula, minorThirdPitchInteger)) {
+          // add second
+          addPart(chordType.formula, new ChordScaleFormulaPart(/*chordNoteNumber*/ 2, /*signedAccidental*/ -1, /*isOptional*/ false));
+          wasAlterationApplied = true;
+        }
+
+        if (wasAlterationApplied) {
+          // alter ID
+          chordType.id += "susb2";
+    
+          // alter name
+          chordType.name += " sus♭2";
+    
+          // add symbols
+          for (let i = 0; i < chordType.symbols.length; i++) {
+            chordType.symbols[i] += "sus♭2";
+          }
+        }
+        
+        break;
+      }
 
     case ChordAlteration.Sus2:
       {
@@ -419,8 +482,7 @@ export function alterChordType(chordType: ChordType, chordAlteration: ChordAlter
           }
         }
         
-        // return altered chord type
-        return [chordType, wasAlterationApplied];
+        break;
       }
 
     case ChordAlteration.Sus4:
@@ -449,8 +511,35 @@ export function alterChordType(chordType: ChordType, chordAlteration: ChordAlter
           }
         }
         
-        // return altered chord type
-        return [chordType, wasAlterationApplied];
+        break;
+      }
+      
+    case ChordAlteration.SusSharp4:
+      {
+        if (removePartWithPitchInteger(chordType.formula, majorThirdPitchInteger)) {
+          // add second
+          addPart(chordType.formula, new ChordScaleFormulaPart(/*chordNoteNumber*/ 4, /*signedAccidental*/ 1, /*isOptional*/ false));
+          wasAlterationApplied = true;
+        } else if (removePartWithPitchInteger(chordType.formula, minorThirdPitchInteger)) {
+          // add second
+          addPart(chordType.formula, new ChordScaleFormulaPart(/*chordNoteNumber*/ 4, /*signedAccidental*/ 1, /*isOptional*/ false));
+          wasAlterationApplied = true;
+        }
+
+        if (wasAlterationApplied) {
+          // alter ID
+          chordType.id += "sus#2";
+    
+          // alter name
+          chordType.name += " sus♯2";
+    
+          // add symbols
+          for (let i = 0; i < chordType.symbols.length; i++) {
+            chordType.symbols[i] += "sus♯2";
+          }
+        }
+        
+        break;
       }
 
     case ChordAlteration.AddSharp5:
@@ -470,8 +559,7 @@ export function alterChordType(chordType: ChordType, chordAlteration: ChordAlter
         wasAlterationApplied = true;
       }
       
-      // return altered chord type
-      return [chordType, wasAlterationApplied];
+      break;
 
     case ChordAlteration.AddFlat9:
       // alter formula
@@ -490,8 +578,7 @@ export function alterChordType(chordType: ChordType, chordAlteration: ChordAlter
         wasAlterationApplied = true;
       }
       
-      // return altered chord type
-      return [chordType, wasAlterationApplied];
+      break;
 
     case ChordAlteration.Add9:
       // alter formula
@@ -510,8 +597,7 @@ export function alterChordType(chordType: ChordType, chordAlteration: ChordAlter
         wasAlterationApplied = true;
       }
       
-      // return altered chord type
-      return [chordType, wasAlterationApplied];
+      break;
 
     case ChordAlteration.AddSharp9:
       // alter formula
@@ -530,8 +616,7 @@ export function alterChordType(chordType: ChordType, chordAlteration: ChordAlter
         wasAlterationApplied = true;
       }
       
-      // return altered chord type
-      return [chordType, wasAlterationApplied];
+      break;
 
     case ChordAlteration.Add11:
       // alter formula
@@ -550,8 +635,7 @@ export function alterChordType(chordType: ChordType, chordAlteration: ChordAlter
         wasAlterationApplied = true;
       }
       
-      // return altered chord type
-      return [chordType, wasAlterationApplied];
+      break;
 
     case ChordAlteration.AddSharp11:
       // alter formula
@@ -570,8 +654,7 @@ export function alterChordType(chordType: ChordType, chordAlteration: ChordAlter
         wasAlterationApplied = true;
       }
       
-      // return altered chord type
-      return [chordType, wasAlterationApplied];
+      break;
 
     case ChordAlteration.Add13:
       // alter formula
@@ -590,8 +673,7 @@ export function alterChordType(chordType: ChordType, chordAlteration: ChordAlter
         wasAlterationApplied = true;
       }
       
-      // return altered chord type
-      return [chordType, wasAlterationApplied];
+      break;
       
     case ChordAlteration.No5:
       if (removePart(chordType.formula, /*chordNoteNumber*/ 5, /*signedAccidental*/ 0)) {
@@ -609,8 +691,7 @@ export function alterChordType(chordType: ChordType, chordAlteration: ChordAlter
         wasAlterationApplied = true;
       }
 
-      // return altered chord type
-      return [chordType, wasAlterationApplied];
+      break;
       
     case ChordAlteration.No9:
       if (removePart(chordType.formula, /*chordNoteNumber*/ 9, /*signedAccidental*/ 0)) {
@@ -628,8 +709,7 @@ export function alterChordType(chordType: ChordType, chordAlteration: ChordAlter
         wasAlterationApplied = true;
       }
       
-      // return altered chord type
-      return [chordType, wasAlterationApplied];
+      break;
       
     case ChordAlteration.No11:
       if (removePart(chordType.formula, /*chordNoteNumber*/ 11, /*signedAccidental*/ 0)) {
@@ -647,12 +727,18 @@ export function alterChordType(chordType: ChordType, chordAlteration: ChordAlter
         wasAlterationApplied = true;
       }
       
-      // return altered chord type
-      return [chordType, wasAlterationApplied];
+      break;
 
     default:
       throw new Error(`Unknown ChordAlteration: ${chordAlteration}`);
   }
+  
+  if (wasAlterationApplied) {
+    chordType.alterationCount++;
+  }
+
+  // return altered chord type
+  return [chordType, wasAlterationApplied];
 }
 
 export function chordTypeWithAlteration(chordType: ChordType, chordAlteration: ChordAlteration): [ChordType, boolean] {
@@ -675,7 +761,7 @@ function* generateAlteredChords(canonicalChordType: CanonicalChordType, chordTyp
     const alterationCombinationBitMask = iterationResult.value;
     let alteredCanonicalChordType = canonicalChordType;
     let alteredChordType = chordType;
-    let wasChordAltered = false;
+    let alterationCount = 0;
 
     for (let bitIndex = 0; bitIndex < alterations.length; bitIndex++) {
       if (isBitSet(alterationCombinationBitMask, bitIndex)) {
@@ -685,11 +771,13 @@ function* generateAlteredChords(canonicalChordType: CanonicalChordType, chordTyp
         let wasAlterationApplied: boolean;
         [alteredChordType, wasAlterationApplied] = chordTypeWithAlteration(alteredChordType, alteration);
 
-        wasChordAltered = wasChordAltered || wasAlterationApplied;
+        if (wasAlterationApplied) {
+          alterationCount++;
+        }
       }
     }
 
-    if (wasChordAltered) {
+    if (alterationCount > 0) {
       let result: [CanonicalChordType, ChordType] = [alteredCanonicalChordType, alteredChordType];
       yield result;
     }
@@ -702,11 +790,13 @@ function createChordTypeByCanonicalChordTypeBitMask(): NumberDictionary<ChordTyp
   const chordTypeByCanonicalChordTypeBitMask: NumberDictionary<ChordType> = {};
 
   const R = 0;
+  const b2 = 1;
   const _2 = 2;
   const _9 = 2;
   const m3 = 3;
   const M3 = 4;
   const _4 = 5;
+  const A4 = 6;
   const _11 = 5;
   const d5 = 6;
   const P5 = 7;
@@ -719,6 +809,32 @@ function createChordTypeByCanonicalChordTypeBitMask(): NumberDictionary<ChordTyp
 
   chordTypeByCanonicalChordTypeBitMask[toBitMask(new Set<number>([R, P5]))] = ChordType.Power;
 
+  function addChordTypesWithAlterations(
+    canonicalChordType: CanonicalChordType,
+    chordType: ChordType,
+    alterations: Array<ChordAlteration>
+  ) {
+    // add the unaltered chord type
+    chordTypeByCanonicalChordTypeBitMask[toBitMask(canonicalChordType)] = chordType;
+
+    // add altered chord types
+    const chordTypeGenerator = generateAlteredChords(canonicalChordType, chordType, alterations);
+    let chordTypeGeneratorResult = chordTypeGenerator.next();
+
+    while(!chordTypeGeneratorResult.done) {
+      let [alteredCanonicalChordType, alteredChordType] = chordTypeGeneratorResult.value;
+      const bitMask = toBitMask(alteredCanonicalChordType);
+
+      const existingAlteredChordType = chordTypeByCanonicalChordTypeBitMask[bitMask];
+
+      if (!existingAlteredChordType || (alteredChordType.alterationCount < existingAlteredChordType.alterationCount)) {
+        chordTypeByCanonicalChordTypeBitMask[bitMask] = alteredChordType;
+      }
+
+      chordTypeGeneratorResult = chordTypeGenerator.next();
+    }
+  }
+
   // basic triads
   function addTriadChordTypes(canonicalChordType: CanonicalChordType, chordType: ChordType) {
     const validAlterations = [
@@ -727,33 +843,36 @@ function createChordTypeByCanonicalChordTypeBitMask(): NumberDictionary<ChordTyp
       ChordAlteration.Add9,
       ChordAlteration.AddSharp9,
       ChordAlteration.Add11,
-      ChordAlteration.AddSharp11
+      ChordAlteration.AddSharp11,
+      ChordAlteration.Add13,
+      ChordAlteration.No5
     ];
 
-    const chordTypeGenerator = generateAlteredChords(canonicalChordType, chordType, validAlterations);
-    let chordTypeGeneratorResult = chordTypeGenerator.next();
-
-    while(!chordTypeGeneratorResult.done) {
-      let [alteredCanonicalChordType, alteredChordType] = chordTypeGeneratorResult.value;
-      chordTypeByCanonicalChordTypeBitMask[toBitMask(alteredCanonicalChordType)] = alteredChordType;
-      chordTypeGeneratorResult = chordTypeGenerator.next();
-    }
+    addChordTypesWithAlterations(canonicalChordType, chordType, validAlterations);
   }
 
   addTriadChordTypes(new Set<number>([R, M3, P5]), ChordType.Major);
   addTriadChordTypes(new Set<number>([R, m3, P5]), ChordType.Minor);
   addTriadChordTypes(new Set<number>([R, M3, A5]), ChordType.Augmented);
   addTriadChordTypes(new Set<number>([R, m3, d5]), ChordType.Diminished);
-  addTriadChordTypes(new Set<number>([R, _2, P5]), ChordType.Sus2);
   addTriadChordTypes(new Set<number>([R, _4, P5]), ChordType.Sus4);
+  addTriadChordTypes(new Set<number>([R, _2, P5]), ChordType.Sus2);
+  addTriadChordTypes(new Set<number>([R, b2, P5]), ChordType.SusFlat2);
+  addTriadChordTypes(new Set<number>([R, A4, P5]), ChordType.SusSharp4);
 
   // sixth chords
   function addSixthChordType(canonicalChordType: CanonicalChordType, chordType: ChordType) {
-    chordTypeByCanonicalChordTypeBitMask[toBitMask(canonicalChordType)] = chordType;
+    const validAlterations = [
+      ChordAlteration.AddSharp5,
+      ChordAlteration.AddFlat9,
+      ChordAlteration.Add9,
+      ChordAlteration.AddSharp9,
+      ChordAlteration.Add11,
+      ChordAlteration.AddSharp11,
+      ChordAlteration.No5
+    ];
     
-    // drop 5
-    const alternateCanonicalChord = setWithout(canonicalChordType, P5);
-    chordTypeByCanonicalChordTypeBitMask[toBitMask(alternateCanonicalChord)] = chordType;
+    addChordTypesWithAlterations(canonicalChordType, chordType, validAlterations);
   }
 
   addSixthChordType(new Set<number>([R, M3, P5, _6]), ChordType.Maj6);
@@ -773,104 +892,87 @@ function createChordTypeByCanonicalChordTypeBitMask(): NumberDictionary<ChordTyp
     thirteenthChordType?: ChordType) {
     // 7 chords
     {
-      chordTypeByCanonicalChordTypeBitMask[toBitMask(seventhCanonicalChordType)] = seventhChordType;
+      const validAlterations = [
+        ChordAlteration.AddSharp5,
+        ChordAlteration.AddFlat9,
+        ChordAlteration.AddSharp9,
+        ChordAlteration.AddSharp11,
+        ChordAlteration.No5,
+        ChordAlteration.SusFlat2,
+        ChordAlteration.Sus2,
+        ChordAlteration.Sus4,
+        ChordAlteration.SusSharp4,
+        ChordAlteration.Flat5,
+        ChordAlteration.Sharp5
+      ];
       
-      // drop 5
-      if (is5Optional) {
-        const alternateCanonicalChord = setWithout(seventhCanonicalChordType, P5);
-        chordTypeByCanonicalChordTypeBitMask[toBitMask(alternateCanonicalChord)] = seventhChordType;
-      }
-
+      addChordTypesWithAlterations(seventhCanonicalChordType, seventhChordType, validAlterations);
     }
 
     // 9 chords
     const ninthCanonicalChordType = setWith(seventhCanonicalChordType, _9);
 
     {
-      chordTypeByCanonicalChordTypeBitMask[toBitMask(ninthCanonicalChordType)] = ninthChordType;
+      const validAlterations = [
+        ChordAlteration.AddSharp5,
+        ChordAlteration.AddFlat9,
+        ChordAlteration.AddSharp9,
+        ChordAlteration.AddSharp11,
+        ChordAlteration.No5,
+        ChordAlteration.SusFlat2,
+        ChordAlteration.Sus2,
+        ChordAlteration.Sus4,
+        ChordAlteration.SusSharp4,
+        ChordAlteration.Flat5,
+        ChordAlteration.Sharp5
+      ];
       
-      // drop 5
-      if (is5Optional) {
-        const alternateCanonicalChord = setWithout(ninthCanonicalChordType, P5);
-        chordTypeByCanonicalChordTypeBitMask[toBitMask(alternateCanonicalChord)] = ninthChordType;
-      }
+      addChordTypesWithAlterations(ninthCanonicalChordType, ninthChordType, validAlterations);
     }
 
     // 11 chords
     const eleventhCanonicalChordType = setWith(ninthCanonicalChordType, _11);
 
     {
-      chordTypeByCanonicalChordTypeBitMask[toBitMask(eleventhCanonicalChordType)] = eleventhChordType;
+      const validAlterations = [
+        ChordAlteration.AddSharp5,
+        ChordAlteration.AddFlat9,
+        ChordAlteration.AddSharp9,
+        ChordAlteration.AddSharp11,
+        ChordAlteration.No5,
+        ChordAlteration.No9,
+        ChordAlteration.SusFlat2,
+        ChordAlteration.Sus2,
+        ChordAlteration.Sus4,
+        ChordAlteration.SusSharp4,
+        ChordAlteration.Flat5,
+        ChordAlteration.Sharp5
+      ];
       
-      // drop 5
-      if (is5Optional) {
-        const alternateCanonicalChord = setWithout(eleventhCanonicalChordType, P5);
-        chordTypeByCanonicalChordTypeBitMask[toBitMask(alternateCanonicalChord)] = eleventhChordType;
-      }
-      
-      // drop 9
-      {
-        const alternateCanonicalChord = setWithout(eleventhCanonicalChordType, _9);
-        chordTypeByCanonicalChordTypeBitMask[toBitMask(alternateCanonicalChord)] = eleventhChordType;
-      }
-
-      // drop 5 & 9
-      if (is5Optional) {
-        const alternateCanonicalChord = setWithoutMany(eleventhCanonicalChordType, P5, _9);
-        chordTypeByCanonicalChordTypeBitMask[toBitMask(alternateCanonicalChord)] = eleventhChordType;
-      }
+      addChordTypesWithAlterations(eleventhCanonicalChordType, eleventhChordType, validAlterations);
     }
 
     // 13 chords
     const thirteenthCanonicalChordType = setWith(eleventhCanonicalChordType, _13);
 
     if (thirteenthChordType !== undefined) {
-      chordTypeByCanonicalChordTypeBitMask[toBitMask(thirteenthCanonicalChordType)] = thirteenthChordType;
+      const validAlterations = [
+        ChordAlteration.AddSharp5,
+        ChordAlteration.AddFlat9,
+        ChordAlteration.AddSharp9,
+        ChordAlteration.AddSharp11,
+        ChordAlteration.No5,
+        ChordAlteration.No9,
+        ChordAlteration.No11,
+        ChordAlteration.SusFlat2,
+        ChordAlteration.Sus2,
+        ChordAlteration.Sus4,
+        ChordAlteration.SusSharp4,
+        ChordAlteration.Flat5,
+        ChordAlteration.Sharp5
+      ];
       
-      // drop 5
-      if (is5Optional) {
-        const alternateCanonicalChord = setWithout(thirteenthCanonicalChordType, P5);
-        chordTypeByCanonicalChordTypeBitMask[toBitMask(alternateCanonicalChord)] = thirteenthChordType;
-      }
-      
-      // drop 9
-      {
-        const alternateCanonicalChord = setWithout(thirteenthCanonicalChordType, _9);
-        chordTypeByCanonicalChordTypeBitMask[toBitMask(alternateCanonicalChord)] = thirteenthChordType;
-      }
-      
-      // drop 11
-      {
-        const alternateCanonicalChord = setWithout(thirteenthCanonicalChordType, _11);
-        chordTypeByCanonicalChordTypeBitMask[toBitMask(alternateCanonicalChord)] = thirteenthChordType;
-      }
-      
-      // drop 5 & 9
-      if (is5Optional)
-      {
-        const alternateCanonicalChord = setWithoutMany(thirteenthCanonicalChordType, P5, _9);
-        chordTypeByCanonicalChordTypeBitMask[toBitMask(alternateCanonicalChord)] = thirteenthChordType;
-      }
-
-      // drop 5 & 11
-      if (is5Optional)
-      {
-        const alternateCanonicalChord = setWithoutMany(thirteenthCanonicalChordType, P5, _11);
-        chordTypeByCanonicalChordTypeBitMask[toBitMask(alternateCanonicalChord)] = thirteenthChordType;
-      }
-
-      // drop 9 & 11
-      {
-        const alternateCanonicalChord = setWithoutMany(thirteenthCanonicalChordType, _9, _11);
-        chordTypeByCanonicalChordTypeBitMask[toBitMask(alternateCanonicalChord)] = thirteenthChordType;
-      }
-
-      // drop 5 & 9 & 11
-      if (is5Optional)
-      {
-        const alternateCanonicalChord = setWithoutMany(thirteenthCanonicalChordType, P5, _9, _11);
-        chordTypeByCanonicalChordTypeBitMask[toBitMask(alternateCanonicalChord)] = thirteenthChordType;
-      }
+      addChordTypesWithAlterations(thirteenthCanonicalChordType, thirteenthChordType, validAlterations);
     }
 
     // https://evangelisticpiano.com/files/everychord.pdf
@@ -895,12 +997,6 @@ export const chordTypeByCanonicalChordTypeBitMask = createChordTypeByCanonicalCh
 export function getChordType(canonicalChordType: CanonicalChordType): ChordType | undefined {
   const bitMask = toBitMask(canonicalChordType);
   const chordType = chordTypeByCanonicalChordTypeBitMask[bitMask];
-  // TODO: additions
-  // TODO: b5, #5
-  // TODO: b9
-  // TODO: b13
-  // #11
-  // #9
   return chordType;
 }
 

@@ -9,10 +9,12 @@ import { withBitSet, isBitSet } from '../Core/Utils';
 export type CanonicalChordType = Set<number>;
 
 export const rootPitchInteger = 0;
+export const minorSecondPitchInteger = 1;
 export const majorSecondPitchInteger = 2;
 export const minorThirdPitchInteger = 3;
 export const majorThirdPitchInteger = 4;
 export const perfectFourthPitchInteger = 5;
+export const augmentedFourthPitchInteger = 6;
 export const diminishedFifthPitchInteger = 6;
 export const perfectFifthPitchInteger = 7;
 export const augmentedFifthPitchInteger = 8;
@@ -128,26 +130,27 @@ export function getPitches(canonicalChord: CanonicalChord, rootPitchOctaveNumber
     .map(pi => pitchFromClass(pi, rootPitchOctaveNumber));
 }
 
-export function* generateAllCanonicalChordBitMasks() {
-  // All canonical chords contain the root, and an arbitrary combination of the other 11 notes.
+export function* generateAllCanonicalChordTypeBitMasks() {
+  // All canonical chord types contain the root, and an arbitrary combination of the other 11 notes.
   // We can iterate through all combinations by using an integer as a list of bits, where each bit
   // represents whether a note is on of off.
-  // If there are 11 possible notes, we need to iterate through 2^11 (2048) integers.
+  // If there are 12 possible notes, we need to iterate through 2^12 (4096) integers.
 
-  for (let bitMask = 0; bitMask < 2048; bitMask++) {
+  // Iterating through odd bit masks, which all contain the root.
+  for (let bitMask = 1; bitMask < 4096; bitMask += 2) {
     yield bitMask;
   }
 }
 
-export function* generateAllCanonicalChords() {
-  const bitMaskGenerator = generateAllCanonicalChordBitMasks();
+export function* generateAllCanonicalChordTypes() {
+  const bitMaskGenerator = generateAllCanonicalChordTypeBitMasks();
 
   let generatorResult = bitMaskGenerator.next();
   
   while (!generatorResult.done) {
     const bitMask = generatorResult.value;
-    const canonicalChord = fromBitMask(bitMask);
-    yield canonicalChord;
+    const canonicalChordType = fromBitMask(bitMask);
+    yield canonicalChordType;
     generatorResult = bitMaskGenerator.next()
   }
 }

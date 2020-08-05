@@ -2,7 +2,7 @@ import * as React from "react";
 import { Card } from "../Card/Card";
 import { Pitch, cPitchClass } from '../../lib/TheoryLib/Pitch';
 import { ChordType } from "../../lib/TheoryLib/ChordType";
-import { fromBitMask, generateAllCanonicalChordBitMasks, CanonicalChord, getPitches } from '../../lib/TheoryLib/CanonicalChord';
+import { fromBitMask, generateAllCanonicalChordTypeBitMasks, CanonicalChord, getPitches } from '../../lib/TheoryLib/CanonicalChord';
 import { chordTypeByCanonicalChordTypeBitMask } from "../../lib/TheoryLib/Analysis";
 import { PianoKeyboard } from "../Utils/PianoKeyboard";
 import { PitchLetter } from "../../lib/TheoryLib/PitchLetter";
@@ -15,7 +15,7 @@ interface TableRowData {
 const pitchOctaveNumber = 4;
 
 function generateTableData(): Array<TableRowData> {
-  return [...generateAllCanonicalChordBitMasks()]
+  return [...generateAllCanonicalChordTypeBitMasks()]
     .map(bitMask => {
       const canonicalChordType = fromBitMask(bitMask);
       const canonicalChord: CanonicalChord = {
@@ -45,13 +45,15 @@ export class AllNotesIntervalsChordsScales extends React.Component<{}, {}> {
         <table className="table">
           <thead>
             <tr>
+              <th></th>
               <th>Notes</th>
               <th>Chord Names</th>
             </tr>
           </thead>
           <tbody>
-            {this.tableData.filter(trd => trd.chordType).map(trd => (
+            {this.tableData.map((trd, i) => (
               <tr>
+                <td>{i}</td>
                 <td>
                   <PianoKeyboard
                     maxWidth={200}

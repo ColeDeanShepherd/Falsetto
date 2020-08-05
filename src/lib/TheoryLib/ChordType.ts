@@ -16,8 +16,10 @@ export class ChordType {
   public static Augmented = new ChordType("augmented", "Augmented", ChordScaleFormula.parse("1 3 #5"), ["+", "aug"]);
   public static Diminished = new ChordType("diminished", "Diminished", ChordScaleFormula.parse("1 b3 b5"), ["°", "dim"]);
 
+  public static SusFlat2 = new ChordType("susb2", "sus♭2", ChordScaleFormula.parse("1 b2 5"), ["sus♭2"]);
   public static Sus2 = new ChordType("sus2", "sus2", ChordScaleFormula.parse("1 2 5"), ["sus2"]);
   public static Sus4 = new ChordType("sus4", "sus4", ChordScaleFormula.parse("1 4 5"), ["sus4", "sus"]);
+  public static SusSharp4 = new ChordType("sus#4", "sus♯4", ChordScaleFormula.parse("1 #4 5"), ["sus♯4"]);
 
   public static BasicTriads = [
     ChordType.Major,
@@ -28,8 +30,10 @@ export class ChordType {
   public static Triads = new Array<ChordType>()
     .concat(ChordType.BasicTriads)  
     .concat([
+      ChordType.SusFlat2,
       ChordType.Sus2,
-      ChordType.Sus4
+      ChordType.Sus4,
+      ChordType.SusSharp4
     ]);
 
   // Sixth Chords
@@ -170,7 +174,8 @@ export class ChordType {
     public id: string,
     public name: string,
     public formula: ChordScaleFormula,
-    public symbols: Array<string>
+    public symbols: Array<string>,
+    public alterationCount: number = 0
   ) {
     this.pitchIntegers = this.formula.parts.map(p => p.pitchInteger);
   }
