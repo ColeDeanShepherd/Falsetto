@@ -406,3 +406,9 @@ export function sortNumbersAscendingInPlace(array: Array<number>): Array<number>
   array.sort((a, b) => a - b);
   return array;
 }
+
+export function* reverseIterateArray<T>(array: Array<T>) {
+  for (let i = array.length - 1; i >= 0; i--) {
+    yield array[i];
+  }
+}
