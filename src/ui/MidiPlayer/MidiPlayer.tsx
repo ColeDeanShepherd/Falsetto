@@ -3,6 +3,7 @@ import { Midi, Track } from "@tonejs/midi";
 import { Note as MidiNote } from "@tonejs/midi/dist/Note";
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import PauseIcon from '@material-ui/icons/Pause';
+import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 
 import { Pitch } from "../../lib/TheoryLib/Pitch";
 import { PianoKeyboard, PianoKeyboardMetrics } from '../Utils/PianoKeyboard';
@@ -16,12 +17,6 @@ import { Size2D } from '../../lib/Core/Size2D';
 import { Vector2D } from '../../lib/Core/Vector2D';
 import { getTranslateTransformString } from '../../lib/Core/SvgUtils';
 import { findIntervalsChordsScales } from "../../lib/TheoryLib/Analysis";
-import { testMidiFile1 } from '../../lib/Midi/TestMidiFile1';
-import { addAscendingScale, addDescendingScale, addChord, addAscendingArpeggio, addDescendingArpeggio } from '../../lib/Midi/MidiGeneration';
-import { Scale, ScaleType } from '../../lib/TheoryLib/Scale';
-import { PitchLetter } from '../../lib/TheoryLib/PitchLetter';
-import { Chord } from "../../lib/TheoryLib/Chord";
-import { ChordType } from '../../lib/TheoryLib/ChordType';
 import { createAnalysisTestMidi } from '../../lib/Midi/AnalysisTestMidiFile';
 
 const frameIntervalMs = 16;
@@ -180,6 +175,10 @@ export class MidiPlayerView extends React.Component<{}, {}> {
     return (
       <div style={{ height: "100%", textAlign: "center" }}>
         <div>
+          {this.playState
+            ? <Button onClick={() => this.playState ? this.resetPlayStateToBeginning(this.playState) : undefined}><SkipPreviousIcon /></Button>
+            : null}
+
           {(this.playState && !this.playState.isPlaying)
             ? <Button onClick={() => this.play()}><PlayArrowIcon /></Button>
             : null}
@@ -219,14 +218,28 @@ export class MidiPlayerView extends React.Component<{}, {}> {
 
   private async prepareToPlay(midi: Midi) {
     await AppModel.instance.pianoAudio.preloadSounds();
-    
-    this.playState = {
+    this.playState = this.createPlayState(midi);
+    this.forceUpdate();
+  }
+
+  private createPlayState(midi: Midi): PlayState {
+    const playState = {
       isPlaying: false,
       midi: midi,
       timeMs: 0,
       trackNextNoteIndexes: midi.tracks.map(t => 0),
       currentlyPlayingNotes: []
     } as PlayState;
+
+    return playState;
+  }
+
+  private resetPlayStateToBeginning(playState: PlayState) {
+    playState.timeMs = 0;
+    playState.trackNextNoteIndexes = playState.midi.tracks.map(t => 0);
+    playState.currentlyPlayingNotes = [];
+
+    AppModel.instance.pianoAudio.releaseAllKeys();
 
     this.forceUpdate();
   }
