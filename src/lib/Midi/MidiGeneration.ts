@@ -2,6 +2,7 @@ import { Midi, Track } from '@tonejs/midi';
 import { Scale } from '../TheoryLib/Scale';
 import { reverseIterateArray } from '../Core/ArrayUtils';
 import { Chord } from '../TheoryLib/Chord';
+import { Pitch } from "../TheoryLib/Pitch";
 
 export function addAscendingScale(
   midiTrack: Track,
@@ -10,19 +11,7 @@ export function addAscendingScale(
   noteDurationTicks: number
 ) {
   const scalePitches = scale.getPitches();
-  let noteStartTimeTicks = startTimeTicks;
-
-  for (const pitch of scalePitches) {
-    const noteEndTimeTicks = noteStartTimeTicks + noteDurationTicks;
-
-    midiTrack.addNote({
-      midi: pitch.midiNumber,
-      ticks: noteStartTimeTicks,
-      durationTicks: noteDurationTicks,
-    });
-
-    noteStartTimeTicks = noteEndTimeTicks;
-  }
+  addSequentialPitches(midiTrack, scalePitches, startTimeTicks, noteDurationTicks);
 }
 
 export function addDescendingScale(
@@ -32,10 +21,22 @@ export function addDescendingScale(
   noteDurationTicks: number
 ) {
   const scalePitches = scale.getPitches();
+  addSequentialPitches(midiTrack, reverseIterateArray(scalePitches), startTimeTicks, noteDurationTicks);
+}
+
+export function addSequentialPitches(
+  midiTrack: Track,
+  pitches: Iterable<Pitch>,
+  startTimeTicks: number,
+  noteDurationTicks: number,
+  noteSpacingTicks?: number
+) {
+  noteSpacingTicks = (noteSpacingTicks !== undefined) ? noteSpacingTicks : noteDurationTicks;
+
   let noteStartTimeTicks = startTimeTicks;
 
-  for (const pitch of reverseIterateArray(scalePitches)) {
-    const noteEndTimeTicks = noteStartTimeTicks + noteDurationTicks;
+  for (const pitch of pitches) {
+    const noteEndTimeTicks = noteStartTimeTicks + noteSpacingTicks;
 
     midiTrack.addNote({
       midi: pitch.midiNumber,
@@ -51,17 +52,11 @@ export function addChord(
   midiTrack: Track,
   chord: Chord,
   startTimeTicks: number,
-  noteDurationTicks: number
+  noteDurationTicks: number,
+  inversion?: number
 ) {
   const chordPitches = chord.getPitches();
-
-  for (const pitch of chordPitches) {
-    midiTrack.addNote({
-      midi: pitch.midiNumber,
-      ticks: startTimeTicks,
-      durationTicks: noteDurationTicks,
-    });
-  }
+  addSequentialPitches(midiTrack, chordPitches, startTimeTicks, noteDurationTicks, /*noteSpacingTicks*/0);
 }
 
 export function addAscendingArpeggio(
@@ -70,20 +65,8 @@ export function addAscendingArpeggio(
   startTimeTicks: number,
   noteDurationTicks: number
 ) {
-  const scalePitches = chord.getPitches();
-  let noteStartTimeTicks = startTimeTicks;
-
-  for (const pitch of scalePitches) {
-    const noteEndTimeTicks = noteStartTimeTicks + noteDurationTicks;
-
-    midiTrack.addNote({
-      midi: pitch.midiNumber,
-      ticks: noteStartTimeTicks,
-      durationTicks: noteDurationTicks,
-    });
-
-    noteStartTimeTicks = noteEndTimeTicks;
-  }
+  const chordPitches = chord.getPitches();
+  addSequentialPitches(midiTrack, chordPitches, startTimeTicks, noteDurationTicks);
 }
 
 export function addDescendingArpeggio(
@@ -92,18 +75,6 @@ export function addDescendingArpeggio(
   startTimeTicks: number,
   noteDurationTicks: number
 ) {
-  const scalePitches = chord.getPitches();
-  let noteStartTimeTicks = startTimeTicks;
-
-  for (const pitch of reverseIterateArray(scalePitches)) {
-    const noteEndTimeTicks = noteStartTimeTicks + noteDurationTicks;
-
-    midiTrack.addNote({
-      midi: pitch.midiNumber,
-      ticks: noteStartTimeTicks,
-      durationTicks: noteDurationTicks,
-    });
-
-    noteStartTimeTicks = noteEndTimeTicks;
-  }
+  const chordPitches = chord.getPitches();
+  addSequentialPitches(midiTrack, reverseIterateArray(chordPitches), startTimeTicks, noteDurationTicks);
 }

@@ -1,5 +1,5 @@
 import { Pitch, parseFromUriComponent, getUriComponent as getPitchUriComponent } from "./Pitch";
-import { getSimpleScaleDegree } from './Scale';
+import { getSimpleScaleDegree, Scale } from './Scale';
 import { ChordType, parseChordTypeFromUriComponent, getUriComponent as getChordTypeUriComponent } from "./ChordType";
 
 export function getSimpleChordNoteNumber(chordNoteNumber: number) {
@@ -41,4 +41,10 @@ export class Chord {
   public getPitches(): Array<Pitch> {
     return this.type.formula.getPitches(this.rootPitch);
   }
+}
+
+export function getNeapolitanChord(scale: Scale): Chord {
+  const rootPitch = Pitch.addHalfSteps(scale.rootPitch, 1);
+  const chord = new Chord(ChordType.Major, rootPitch);
+  return chord;
 }

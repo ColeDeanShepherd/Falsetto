@@ -412,3 +412,27 @@ export function* reverseIterateArray<T>(array: Array<T>) {
     yield array[i];
   }
 }
+
+export function reverseSubArray<T>(array: Array<T>, startIndex: number, endIndex: number) {
+  while (startIndex <= endIndex) {
+    const temp = array[startIndex];
+    array[startIndex]=array[endIndex];
+    array[endIndex]=temp;
+
+    startIndex++;
+    endIndex--;
+  }
+}
+
+export function rotateArrayRight<T>(array: Array<T>, steps: number) {
+  // Make sure steps is in-between 0 and (array.length - 1)
+  steps = steps % array.length;
+
+  // If we're taking no rotation steps, just return.
+  if (steps === 0) { return; }
+
+  // Reverse the entire array, then reverse the first "steps" # of elements, then reverse the rest of the elements.
+  reverseSubArray(array, 0, array.length - 1);
+  reverseSubArray(array, 0, steps - 1);
+  reverseSubArray(array, steps, array.length - 1);
+}

@@ -352,6 +352,14 @@ export function pitchFromClass(pitchClass: number, octaveNumber: number, useShar
   }
 }
 
+export function invertPitches(pitches: Array<Pitch>, inversion: number) {
+  inversion = inversion % pitches.length;
+
+  for (let i = 0; i < inversion; i++) {
+    pitches[i].octaveNumber++;
+  }
+}
+
 export class Pitch {
   public static createFromPitchClass(pitchClass: number, octaveNumber: number, useSharps: boolean = true): Pitch {
     return pitchFromClass(pitchClass, octaveNumber, useSharps);
