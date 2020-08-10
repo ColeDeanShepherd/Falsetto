@@ -19,7 +19,9 @@ import { getTranslateTransformString } from '../../lib/Core/SvgUtils';
 import { findIntervalsChordsScales } from "../../lib/TheoryLib/Analysis";
 import { createAnalysisTestMidi } from '../../lib/Midi/AnalysisTestMidiFile';
 
-const frameIntervalMs = 16;
+import { MidiNotesAnalysis, analyzeMidiNotes } from '../../lib/Midi/MidiAnalysis';
+
+const frameIntervalMs = 16; // 60 FPS
 
 function runUpdateLoop(updateFn: (deltaMs: number) => void): () => void {
   let isCanceled = false;
@@ -209,6 +211,7 @@ export class MidiPlayerView extends React.Component<{}, {}> {
   }
 
   private playState: PlayState | undefined = undefined;
+  private analysis: MidiNotesAnalysis | undefined = undefined;
   private cancelPlayingFn: (() => void) | undefined = undefined;
 
   private async parseMidiFile() {
@@ -219,6 +222,8 @@ export class MidiPlayerView extends React.Component<{}, {}> {
   private async prepareToPlay(midi: Midi) {
     await AppModel.instance.pianoAudio.preloadSounds();
     this.playState = this.createPlayState(midi);
+    this.analysis = analyzeMidiNotes(midi);
+
     this.forceUpdate();
   }
 

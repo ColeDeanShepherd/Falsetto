@@ -7,4 +7,8 @@ export class NumberRange {
   ) {
     precondition(minValue <= maxValue);
   }
+
+  public contains(value: number): boolean {
+    return (value >= this.minValue) && (value <= this.maxValue);
+  }
 }
