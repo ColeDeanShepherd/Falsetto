@@ -3,6 +3,8 @@ import { Scale } from '../TheoryLib/Scale';
 import { reverseIterateArray } from '../Core/ArrayUtils';
 import { Chord } from '../TheoryLib/Chord';
 import { Pitch } from "../TheoryLib/Pitch";
+import { fullPianoLowestPitch, fullPianoHighestPitch } from '../../ui/Utils/PianoUtils';
+import { randomInt } from '../Core/Random';
 
 export function addAscendingScale(
   midiTrack: Track,
@@ -77,4 +79,30 @@ export function addDescendingArpeggio(
 ) {
   const chordPitches = chord.getPitches();
   addSequentialPitches(midiTrack, reverseIterateArray(chordPitches), startTimeTicks, noteDurationTicks);
+}
+
+export function addRandomPianoNotes(
+  midiTrack: Track,
+  numNotes: number,
+  startTimeTicks: number,
+  noteDurationTicks: number
+) {
+  const lowestPitchMidiNumber = fullPianoLowestPitch.midiNumber;
+  const highestPitchMidiNumber = fullPianoHighestPitch.midiNumber;
+  
+  let noteStartTimeTicks = startTimeTicks;
+
+  for (let i = 0; i < numNotes; i++) {
+    const midiNumber = randomInt(lowestPitchMidiNumber, highestPitchMidiNumber);
+
+    const noteEndTimeTicks = noteStartTimeTicks + noteDurationTicks;
+
+    midiTrack.addNote({
+      midi: midiNumber,
+      ticks: noteStartTimeTicks,
+      durationTicks: noteDurationTicks,
+    });
+
+    noteStartTimeTicks = noteEndTimeTicks;
+  }
 }

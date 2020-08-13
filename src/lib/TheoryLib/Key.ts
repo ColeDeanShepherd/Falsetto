@@ -1,7 +1,7 @@
-import * as Utils from "../Core/Utils";
 import { PitchLetter } from './PitchLetter';
-import { Pitch } from './Pitch';
+import { Pitch, PitchClass } from './Pitch';
 import { precondition } from '../Core/Dbc';
+import { Scale, ScaleType } from './Scale';
 
 export function getValidKeyPitches(preferredOctaveNumber: number): Array<Pitch> {
   return [
@@ -97,13 +97,36 @@ export class Key {
   public static readonly All = Key.MajorKeys.concat(Key.MinorKeys);
 
   public constructor(
-    public pitchLetter: PitchLetter,
-    public signedAccidental: number,
-    public isMajor: boolean
+    public readonly pitchLetter: PitchLetter,
+    public readonly signedAccidental: number,
+    public readonly isMajor: boolean
   ) {
     precondition(validKeyPitchesOctave0
       .some(kp => (kp.letter === pitchLetter) && (kp.signedAccidental === signedAccidental))
     );
+  }
+
+  public getScaleType(): ScaleType {
+    return this.isMajor ? ScaleType.Major : ScaleType.NaturalMinor;
+  }
+
+  public getScale(octaveNumber: number): Scale {
+    const rootPitch = new Pitch(this.pitchLetter, this.signedAccidental, octaveNumber);
+    return new Scale(this.getScaleType(), rootPitch);
+  }
+
+  public getPitchClasses(): Set<PitchClass> {
+    const scale = this.getScale(/*octaveNumber*/ 4);
+    const pitches = scale.getPitches();
+    const pitchClasses = new Set<PitchClass>(pitches.map(p => p.class));
+    return pitchClasses;
+  }
+
+  public toString(): string {
+    const rootPitch = new Pitch(this.pitchLetter, this.signedAccidental, /*octaveNumber*/ 4);
+    const rootPitchStr = rootPitch.toString(/*includeOctaveNumber*/ false, /*useSymbols*/ true);
+    const majorMinorStr = this.isMajor ? "Major" : "Minor";
+    return `${rootPitchStr} ${majorMinorStr}`;
   }
 }
 
@@ -133,6 +156,7 @@ export function doesKeyUseSharps(pitchLetter: PitchLetter, signedAccidental: num
       return true;
   }
 }
+
 export function doesKeyUseFlats(pitchLetter: PitchLetter, signedAccidental: number) {
   return !doesKeyUseSharps(pitchLetter, signedAccidental);
 }

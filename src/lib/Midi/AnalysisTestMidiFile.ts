@@ -1,7 +1,7 @@
 import { Midi, Track } from "@tonejs/midi";
 import * as _ from "lodash";
 
-import { addAscendingScale, addDescendingScale, addChord, addAscendingArpeggio, addDescendingArpeggio, addSequentialPitches } from './MidiGeneration';
+import { addAscendingScale, addDescendingScale, addChord, addAscendingArpeggio, addDescendingArpeggio, addSequentialPitches, addRandomPianoNotes } from './MidiGeneration';
 import { Scale, ScaleType } from "../TheoryLib/Scale";
 import { Pitch, invertPitches } from '../TheoryLib/Pitch';
 import { PitchLetter } from "../TheoryLib/PitchLetter";
@@ -77,10 +77,11 @@ export function createAnalysisTestMidi(): Midi {
 
   const track = midi.addTrack();
 
+
   addTwoHanded251(
     track,
     new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 5)),
-    /*startTimeTicks*/ 0,
+    /*startTimeTicks*/ track.durationTicks + testSpacingTicks,
     /*durationTicks*/ 8 * midi.header.ppq);
 
   addTwoHanded251(
@@ -113,6 +114,12 @@ export function createAnalysisTestMidi(): Midi {
     _.shuffle((new Scale(ScaleType.Mixolydian, new Pitch(PitchLetter.F, 0, 4))).getPitches()),
     /*startTimeTicks*/ track.durationTicks + testSpacingTicks,
     /*durationTicks*/ midi.header.ppq);
+    
+  addRandomPianoNotes(
+    track,
+    /*numNotes*/ 12,
+    /*startTimeTicks*/ track.durationTicks + testSpacingTicks,
+    /*noteDurationTicks*/ midi.header.ppq);
     
   // scale with chromatic notes
   {

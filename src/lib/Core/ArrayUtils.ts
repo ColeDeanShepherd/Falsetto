@@ -71,6 +71,24 @@ export function arrayMax<T>(array: T[]): T {
   return max;
 }
 
+export function arrayMaxSelector<TElement, TSelectorResult>(array: TElement[], selector: (e: TElement) => TSelectorResult): TElement {
+  precondition(array.length > 0);
+
+  let maxElement = array[0];
+  let maxSelectorResult = selector(array[0]);
+
+  for (let i = 1; i < array.length; i++) {
+    const selectorResult = selector(array[i]);
+
+    if (selectorResult > maxSelectorResult) {
+      maxElement = array[i];
+      maxSelectorResult = selectorResult;
+    }
+  }
+  
+  return maxElement;
+}
+
 export function circularArraySlice<T>(array: T[], start: number, length: number): T[] {
   precondition(start >= 0);
   precondition(start < array.length);

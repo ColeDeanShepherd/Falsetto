@@ -127,13 +127,52 @@ export class MidiPlayerView extends React.Component<{}, {}> {
 
     const msToPixelScale = 0.075;
 
+    // TODO: variable tempo midi files
+    const msPerBeat = (bpm: number): number => 60000 / bpm;
+
+    const ticksToMs = (ticks: number): number => this.playState
+      ? msPerBeat(this.playState.midi.header.tempos[0].bpm) * (ticks / this.playState.midi.header.ppq)
+      : 0;
+
     const msToHeight = (ms: number): number => msToPixelScale * ms;
     const heightToMs = (height: number): number => height / msToPixelScale;
 
     const timeMsToY = (timeMs: number): number => pianoPosition.y - msToHeight(timeMs);
     const yToTimeMs = (y: number): number => heightToMs(pianoPosition.y - y);
 
-    const renderNoteBars = (): JSX.Element | null => {
+    const renderNoteContainer = (): JSX.Element | null => {
+      if (this.playState === undefined) { return null; }
+
+      const noteContainer = (
+        <g transform={getTranslateTransformString(new Vector2D(0, msToHeight(this.playState.timeMs)))}>
+          {renderNoteBars()}
+          {renderKeys()}
+        </g>
+      );
+      
+      return noteContainer;
+    }
+
+    const renderKeys = (): JSX.Element[] | null => {
+      if (this.playState === undefined) { return null; }
+      if (this.analysis === undefined) { return null; }
+
+      let keyIndicators = new Array<JSX.Element>();
+
+      for (const detectedKey of this.analysis.keys) {
+        const y = timeMsToY(ticksToMs(detectedKey.tickRange.minValue));
+        keyIndicators.push(
+          <g>
+            <text x={0} y={y - 5}>{detectedKey.key.toString()}</text>
+            <line x1={0} y1={y} x2={size.width} y2={y} stroke="#000" strokeWidth="2" />
+          </g>
+        );
+      }
+
+      return keyIndicators;
+    };
+
+    const renderNoteBars = (): JSX.Element[] | null => {
       if (this.playState === undefined) { return null; }
 
       const minTimeMs = this.playState.timeMs + yToTimeMs(pianoPosition.y);
@@ -171,7 +210,7 @@ export class MidiPlayerView extends React.Component<{}, {}> {
         }
       }
 
-      return <g transform={getTranslateTransformString(new Vector2D(0, msToHeight(this.playState.timeMs)))}>{noteBars}</g>;
+      return noteBars;
     };
     
     return (
@@ -197,7 +236,7 @@ export class MidiPlayerView extends React.Component<{}, {}> {
             version="1.1" xmlns="http://www.w3.org/2000/svg"
             style={{ flexGrow: 1 }}
           >
-            {renderNoteBars()}
+            {renderNoteContainer()}
             <PianoKeyboard
               position={pianoPosition}
               maxWidth={size.width}
