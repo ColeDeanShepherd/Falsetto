@@ -19,7 +19,7 @@ import { getTranslateTransformString } from '../../lib/Core/SvgUtils';
 import { findIntervalsChordsScales } from "../../lib/TheoryLib/Analysis";
 import { createAnalysisTestMidi } from '../../lib/Midi/AnalysisTestMidiFile';
 
-import { MidiNotesAnalysis, analyzeMidiNotes } from '../../lib/Midi/MidiAnalysis';
+import { MidiNotesAnalysis, analyzeMidiNotes, getDetectedKeyAtTicks } from '../../lib/Midi/MidiAnalysis';
 
 const frameIntervalMs = 16; // 60 FPS
 
@@ -146,14 +146,14 @@ export class MidiPlayerView extends React.Component<{}, {}> {
       const noteContainer = (
         <g transform={getTranslateTransformString(new Vector2D(0, msToHeight(this.playState.timeMs)))}>
           {renderNoteBars()}
-          {renderKeys()}
+          {renderKeyIndicators()}
         </g>
       );
       
       return noteContainer;
     }
 
-    const renderKeys = (): JSX.Element[] | null => {
+    const renderKeyIndicators = (): JSX.Element[] | null => {
       if (this.playState === undefined) { return null; }
       if (this.analysis === undefined) { return null; }
 
@@ -174,6 +174,7 @@ export class MidiPlayerView extends React.Component<{}, {}> {
 
     const renderNoteBars = (): JSX.Element[] | null => {
       if (this.playState === undefined) { return null; }
+      if (this.analysis === undefined) { return null; }
 
       const minTimeMs = this.playState.timeMs + yToTimeMs(pianoPosition.y);
       const maxTimeMs = this.playState.timeMs + yToTimeMs(0);
@@ -200,12 +201,19 @@ export class MidiPlayerView extends React.Component<{}, {}> {
             new Vector2D(pianoKeyRect.left, timeMsToY(noteEndTimeMs))
           );
 
+          const detectedKey = getDetectedKeyAtTicks(this.analysis, note.ticks);
+
           noteBars.push((
-            <rect
-              x={noteBarRect.left} y={noteBarRect.top}
-              width={noteBarRect.size.width} height={noteBarRect.size.height}
-              fill="green">
-            </rect>
+            <g>
+              <rect
+                x={noteBarRect.left} y={noteBarRect.top}
+                width={noteBarRect.size.width} height={noteBarRect.size.height}
+                fill="green">
+              </rect>
+              {(detectedKey !== undefined)
+                ? (<text x={noteBarRect.left + 3} y={noteBarRect.bottom - 6}>{detectedKey.getPitchClassScaleDegree(pitch.class).toString()}</text>)
+                : null}
+            </g>
           ));
         }
       }

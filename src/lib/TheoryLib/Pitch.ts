@@ -352,6 +352,11 @@ export function pitchFromClass(pitchClass: number, octaveNumber: number, useShar
   }
 }
 
+export function getClassRelativePitchInteger(basePitchClass: number, pitchClass: number) {
+  if (pitchClass < basePitchClass) { pitchClass += 12; }
+  return pitchClass - basePitchClass;
+}
+
 export function invertPitches(pitches: Array<Pitch>, inversion: number) {
   inversion = inversion % pitches.length;
 

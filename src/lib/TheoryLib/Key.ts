@@ -1,7 +1,9 @@
 import { PitchLetter } from './PitchLetter';
-import { Pitch, PitchClass } from './Pitch';
+import { Pitch, PitchClass, getClassRelativePitchInteger } from './Pitch';
 import { precondition } from '../Core/Dbc';
 import { Scale, ScaleType } from './Scale';
+import { ChordScaleFormulaPart } from './ChordScaleFormula';
+import { mod } from '../Core/MathUtils';
 
 export function getValidKeyPitches(preferredOctaveNumber: number): Array<Pitch> {
   return [
@@ -120,6 +122,34 @@ export class Key {
     const pitches = scale.getPitches();
     const pitchClasses = new Set<PitchClass>(pitches.map(p => p.class));
     return pitchClasses;
+  }
+
+  public getOrderedPitchClasses(): Array<PitchClass> {
+    const scale = this.getScale(/*octaveNumber*/ 4);
+    const pitches = scale.getPitches();
+    const orderedPitchClasses = pitches.map(p => p.class);
+    return orderedPitchClasses;
+  }
+
+  public getPitchClassScaleDegree(pitchClass: PitchClass): ChordScaleFormulaPart {
+    const scale = this.getScale(/*octaveNumber*/ 4);
+    const scalePitchIntegers = scale.type.pitchIntegers;
+    const pitchInteger = getClassRelativePitchInteger(scale.rootPitch.class, pitchClass);
+
+    function getNearestPitchInteger() {
+      // TODO: improve
+      for (let i = 0; i < scalePitchIntegers.length; i++) {
+        if (scalePitchIntegers[i] >= pitchInteger) {
+          return [scalePitchIntegers[i], 1 + i];
+        }
+      }
+
+      return [scalePitchIntegers[scalePitchIntegers.length - 1], scalePitchIntegers.length];
+    }
+
+    const [nearestPitchInteger, nearestScaleDegree] = getNearestPitchInteger();
+    const scaleDegree = new ChordScaleFormulaPart(nearestScaleDegree, (pitchInteger - nearestPitchInteger), /*isOptional*/ false);
+    return scaleDegree;
   }
 
   public toString(): string {

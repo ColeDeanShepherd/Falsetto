@@ -246,4 +246,14 @@ function registerDetectedKey(detectedKeys: Array<DetectedKey>, detectedKey: Dete
   }
 }
 
+export function getDetectedKeyAtTicks(analysis: MidiNotesAnalysis, ticks: number): Key | undefined {
+  for (const detectedKey of analysis.keys) {
+    if (detectedKey.tickRange.containsExclusiveMax(ticks)) {
+      return detectedKey.key;
+    }
+  }
+
+  return undefined;
+}
+
 // #endregion Helper Functions
