@@ -45,9 +45,9 @@ export class PitchesAudioPlayer extends React.Component<IPitchesAudioPlayerProps
     this.loadedSounds = null;
     this.cancelPlayingFn = null;
 
-    props.onGetExports
-      ? props.onGetExports(new PitchesAudioPlayerExports(() => this.stopSounds()))
-      : null;
+    if (props.onGetExports) {
+      props.onGetExports(new PitchesAudioPlayerExports(() => this.stopSounds()));
+    }
   }
   public render(): JSX.Element {
     const buttonStyle: any = { textTransform: "none" };

@@ -258,7 +258,7 @@ export class HomePage extends React.Component<{}, IHomePageState> {
               <p><NavLinkView to="/understanding-the-piano-keyboard/chord-progressions/exercise">Practice</NavLinkView></p>
             </div>
             
-            {!userOwnsUnderstandingThePianoKeyboardCourse ? <PaywallOverlay premiumProductId={understandingThePianoKeyboardProductId} /> : null}
+            {!userOwnsUnderstandingThePianoKeyboardCourse ? <PaywallOverlay premiumProductId={understandingThePianoKeyboardProduct.id} /> : null}
           </Card>
           
           <Card className="home-topic">
@@ -271,7 +271,7 @@ export class HomePage extends React.Component<{}, IHomePageState> {
               <p><NavLinkView to="/scale-exercises">Master 500+ Scales &amp; Diatonic Chords</NavLinkView></p>
             </div>
             
-            {!userOwnsUnderstandingThePianoKeyboardCourse ? <PaywallOverlay premiumProductId={understandingThePianoKeyboardProductId} /> : null}
+            {!userOwnsUnderstandingThePianoKeyboardCourse ? <PaywallOverlay premiumProductId={understandingThePianoKeyboardProduct.id} /> : null}
           </Card>
           
           <Card className="home-topic">

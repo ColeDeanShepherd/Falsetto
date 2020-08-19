@@ -15,7 +15,7 @@ export class Analytics implements IAnalytics {
       const gtag = this.getGtag();
       gtag("config", googleAnalyticsTrackingId, {
         "page_title" : document.title,
-        "page_path": location.pathname + location.search
+        "page_path": window.location.pathname + window.location.search
       });
     }
 
@@ -68,7 +68,7 @@ export class MockAnalytics implements IAnalytics {
   }
 
   public trackPageView(): Promise<void> {
-    this.logger.logInfo(`View to page ${location.pathname + location.search} tracked`);
+    this.logger.logInfo(`View to page ${window.location.pathname + window.location.search} tracked`);
     return Promise.resolve();
   
   }
