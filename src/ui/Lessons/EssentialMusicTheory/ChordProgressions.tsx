@@ -163,6 +163,7 @@ export interface IChordProgressionPlayerProps {
   scale: Scale;
   chordScaleDegreeNumbers: Array<number>;
   chordScaleDegreeSignedAccidentals?: Array<number>;
+  chordStartDelaysMs?: Array<number>;
   lowestPitch?: Pitch;
   highestPitch?: Pitch;
   octaveCount?: number;
@@ -274,6 +275,14 @@ export class ChordProgressionPlayer extends React.Component<IChordProgressionPla
 
   // TODO: prevent playing if still loading
 
+  private getChordStartDelayMs(chordIndex: number): number {
+    const { chordStartDelaysMs } = this.props;
+
+    return (chordStartDelaysMs !== undefined)
+      ? chordStartDelaysMs[chordIndex]
+      : (chordIndex * this.delayInMs);
+  }
+
   private play() {
     const { delayInMs } = this;
     const { chordsPitches } = this.props;
@@ -291,13 +300,13 @@ export class ChordProgressionPlayer extends React.Component<IChordProgressionPla
         // play the new chord
         this.cancelAudioFn = playPitches(chordsPitches[i])[1];
         this.setState({ currentChordIndex: i, isPlaying: true });
-      }, delayInMs * i);
+      }, this.getChordStartDelayMs(i));
     }
 
     // set a timeout to clear the stop button
     this.timeoutIds[chordsPitches.length] = window.setTimeout(() => {
       this.stop();
-    }, delayInMs * (chordsPitches.length + 2));
+    }, this.getChordStartDelayMs(chordsPitches.length - 1) + (2 * delayInMs));
   }
 
   private stop() {

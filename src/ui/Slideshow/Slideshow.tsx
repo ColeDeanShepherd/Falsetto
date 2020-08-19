@@ -325,8 +325,15 @@ export class Slideshow extends React.Component<ISlideshowProps, ISlideshowState>
 
   private getCurrentUriWithoutSlidePath(slidePath: string): string {
     const slidePathStartIndex = this.history.location.pathname.lastIndexOf(slidePath);
-    return (slidePathStartIndex >= 0)
+
+    let uriWithoutSlidePath = (slidePathStartIndex >= 0)
       ? this.history.location.pathname.substring(0, slidePathStartIndex)
       : this.history.location.pathname;
+
+    if (uriWithoutSlidePath[uriWithoutSlidePath.length - 1] !== '/') {
+      uriWithoutSlidePath += '/';
+    }
+
+    return uriWithoutSlidePath;
   }
 }

@@ -18,8 +18,6 @@ export class ScaleTypeSelect extends React.Component<IScaleTypeSelectProps, {}> 
       : ScaleType.Groups;
 
     const [ scaleTypeGroup, scaleType ] = value;
-    
-    const baseButtonStyle: any = { textTransform: "none" };
 
     return (
       <div style={{textAlign: "center"}}>
@@ -27,14 +25,20 @@ export class ScaleTypeSelect extends React.Component<IScaleTypeSelectProps, {}> 
           Category
         </h4>
         <div style={{padding: "1em 0"}}>
-          {scaleTypeGroups.map(scaleTypeGroup => {
+          {scaleTypeGroups.map(stg => {
+            const buttonStyle: any = { };
+            const isPressed = stg.name === scaleTypeGroup.name;
+            if (isPressed) {
+              buttonStyle.backgroundColor = "#959595";
+            }
+
             return (
               <Button
-                key={scaleTypeGroup.name}
-                onClick={event => this.onScaleTypeGroupClick(scaleTypeGroup)}
-                style={baseButtonStyle}
+                key={stg.name}
+                onClick={event => this.onScaleTypeGroupClick(stg)}
+                style={buttonStyle}
               >
-                {scaleTypeGroup.name}
+                {stg.name}
               </Button>
             );
           })}
@@ -46,7 +50,7 @@ export class ScaleTypeSelect extends React.Component<IScaleTypeSelectProps, {}> 
 
         <div style={{padding: "1em 0"}}>
           {scaleTypeGroup.scaleTypes.map(st => {
-            const buttonStyle: any = { ...baseButtonStyle };
+            const buttonStyle: any = { };
             const isPressed = st.name === scaleType.name;
             if (isPressed) {
               buttonStyle.backgroundColor = "#959595";

@@ -3,6 +3,7 @@ import * as React from "react";
 import { ChordTypeGroup } from "../../lib/TheoryLib/ChordTypeGroup";
 import { ChordType } from "../../lib/TheoryLib/ChordType";
 import { Button } from "../../ui/Button/Button";
+import { ChordTypeGroupSelectView } from "./ChordTypeGroupSelectView";
 
 export interface IChordTypeSelectViewProps {
   chordTypeGroups?: Array<ChordTypeGroup>;
@@ -14,37 +15,19 @@ export class ChordTypeSelectView extends React.Component<IChordTypeSelectViewPro
   public render(): JSX.Element {
     const [ chordTypeGroup, chordType ] = this.props.value;
 
-    const baseButtonStyle: any = { textTransform: "none" };
-
     return (
       <div>
-        {(this.chordTypeGroups.length > 1) ? (
-          <div>
-            <h4 className="h6 margin-bottom">
-              Category
-            </h4>
-            <div style={{padding: "1em 0"}}>
-              {this.chordTypeGroups.map(chordTypeGroup => {
-                return (
-                  <Button
-                    key={chordTypeGroup.name}
-                    onClick={event => this.onChordTypeGroupClick(chordTypeGroup)}
-                    style={baseButtonStyle}
-                  >
-                    {chordTypeGroup.name}
-                  </Button>
-                );
-              })}
-            </div>
-          </div>
-        ) : null}
+        {<ChordTypeGroupSelectView
+          chordTypeGroups={this.chordTypeGroups}
+          value={chordTypeGroup}
+          onChange={value => this.onChordTypeGroupClick(value)} />}
 
         <h4 className="h6 margin-bottom">
           Type
         </h4>
         <div style={{padding: "1em 0"}}>
           {chordTypeGroup.chordTypes.map(ct => {
-            const style: any = { ...baseButtonStyle };
+            const style: any = { };
             
             const isPressed = ct.name === chordType.name;
             if (isPressed) {

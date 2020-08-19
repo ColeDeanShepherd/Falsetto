@@ -24,7 +24,7 @@ export function createSlideGroups(chordType: ChordType): Array<SlideGroup> {
         <div>
           <h1>{chordTypeName} Chords Lesson</h1>
           <p>The <strong>{chordTypeName}</strong> chord is a chord with the following major-scale-relative formula: <strong>{formulaString}</strong></p>
-          <p>The following slides are {chordTypeName} chords for each possible root note.</p>
+          <p>We will learn {chordTypeName} chords for each possible root note in the following slides.</p>
         </div>
       )),
     ]
