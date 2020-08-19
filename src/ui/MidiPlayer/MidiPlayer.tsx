@@ -20,6 +20,7 @@ import { findIntervalsChordsScales } from "../../lib/TheoryLib/Analysis";
 import { createAnalysisTestMidi } from '../../lib/Midi/AnalysisTestMidiFile';
 
 import { MidiNotesAnalysis, analyzeMidiNotes, getDetectedKeyAtTicks } from '../../lib/Midi/MidiAnalysis';
+import { testMidiFile1 } from '../../lib/Midi/TestMidiFile1';
 
 const frameIntervalMs = 16; // 60 FPS
 
@@ -262,6 +263,7 @@ export class MidiPlayerView extends React.Component<{}, {}> {
   private cancelPlayingFn: (() => void) | undefined = undefined;
 
   private async parseMidiFile() {
+    //const midi = await Midi.fromUrl(testMidiFile1);
     const midi = createAnalysisTestMidi();
     await this.prepareToPlay(midi);
   }

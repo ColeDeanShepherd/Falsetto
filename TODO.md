@@ -1,7 +1,12 @@
 # To-Do
+# Ideas
+* Add midi files to S3 bucket
+
 ## Other
 ## Pomodoro
 ## Now
+
+
 * MIDI Player
   * MVP
     * Pick a MIDI file
