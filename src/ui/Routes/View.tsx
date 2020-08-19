@@ -245,7 +245,7 @@ const routes: Array<IRouteData> = ([
     title: "Checkout - Falsetto",
     renderFn: () => (
       <LimitedWidthContentContainer>
-        <CheckoutPage />
+        <CheckoutPage productId={understandingThePianoKeyboardProduct.id} />
       </LimitedWidthContentContainer>
     )
   },

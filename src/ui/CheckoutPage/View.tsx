@@ -8,7 +8,7 @@ import { Button } from '../Button/Button';
 import { unwrapValueOrUndefined } from '../../lib/Core/Utils';
 import { DependencyInjector } from '../../DependencyInjector';
 import { IServer } from "../../Server";
-import { understandingThePianoKeyboardProduct } from '../../Products';
+import { premiumProducts } from "../../Products";
 
 const cardOptions = {
   style: {
@@ -25,9 +25,20 @@ const cardOptions = {
   }
 };
 
-export const CheckoutPage = () => {
+export const CheckoutPage = (props: { productId: number }) => {
   const stripe = useStripe();
   const elements = useElements();
+
+  const { productId } = props;
+
+  const product = premiumProducts.find(p => p.id === productId);
+
+  const PurchaseForm = () => (
+    <form onSubmit={handleSubmit}>
+      <CardElement options={cardOptions} />
+      <Button type="submit" disabled={!stripe}>Pay</Button>
+    </form>
+  );
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     // Block native form submission.
@@ -61,7 +72,7 @@ export const CheckoutPage = () => {
     }
 
     const server = DependencyInjector.instance.getRequiredService<IServer>("IServer");
-    const purchaseInfo = await server.startPurchase(understandingThePianoKeyboardProduct.id);
+    const purchaseInfo = await server.startPurchase(productId);
 
     const {} = await stripe.confirmCardPayment(purchaseInfo.stripeClientSecret, {
       payment_method: unwrapValueOrUndefined(paymentMethod).id
@@ -74,10 +85,9 @@ export const CheckoutPage = () => {
         Checkout
       </h2>
 
-      <form onSubmit={handleSubmit}>
-        <CardElement options={cardOptions} />
-        <Button type="submit" disabled={!stripe}>Pay</Button>
-      </form>
+      {product
+        ? <PurchaseForm />
+        : <p>Invalid product ID.</p>}
     </Card>
   );
 }
