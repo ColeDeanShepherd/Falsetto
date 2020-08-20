@@ -9,7 +9,7 @@ export const understandingThePianoKeyboardProduct: PremiumProduct = {
   id: 1,
   name: "Understanding the Piano Keyboard",
   uri: "/understanding-the-piano-keyboard",
-  priceInUsCents: 2000
+  priceInUsCents: 5 * 100
 };
 
 export const premiumProducts = [

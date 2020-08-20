@@ -1,5 +1,5 @@
 import * as React from "react";
-import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { CardElement as StripeCardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 
 import { Card } from "../../ui/Card/Card";
 
@@ -9,6 +9,11 @@ import { unwrapValueOrUndefined } from '../../lib/Core/Utils';
 import { DependencyInjector } from '../../DependencyInjector';
 import { IServer } from "../../Server";
 import { premiumProducts } from "../../Products";
+import { usCentsToDollarsString } from '../../lib/Core/Currency';
+import { useEffect, useState } from "react";
+import { loadSessionToken } from "../../Cookies";
+import { ActionBus } from "../../ActionBus";
+import { NavigateAction } from "../../App/Actions";
 
 const cardOptions = {
   style: {
@@ -26,8 +31,19 @@ const cardOptions = {
 };
 
 export const CheckoutPage = (props: { productId: number }) => {
+  const [error, setError] = useState(undefined);
+
   const stripe = useStripe();
   const elements = useElements();
+
+  useEffect(() => {
+    // redirect to login page if logged out
+    const sessionToken = loadSessionToken();
+
+    if (sessionToken === undefined) {
+      ActionBus.instance.dispatch(new NavigateAction("/login"));
+    }
+  });
 
   const { productId } = props;
 
@@ -35,12 +51,14 @@ export const CheckoutPage = (props: { productId: number }) => {
 
   const PurchaseForm = () => (
     <form onSubmit={handleSubmit}>
-      <CardElement options={cardOptions} />
-      <Button type="submit" disabled={!stripe}>Pay</Button>
+      <StripeCardElement options={cardOptions} />
+      <p><Button type="submit" disabled={!stripe}>Buy Now</Button></p>
     </form>
   );
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    if (!product) { return; }
+    
     // Block native form submission.
     event.preventDefault();
 
@@ -53,7 +71,7 @@ export const CheckoutPage = (props: { productId: number }) => {
     // Get a reference to a mounted CardElement. Elements knows how
     // to find your CardElement because there can only ever be one of
     // each type of element.
-    const cardElement = elements.getElement(CardElement);
+    const cardElement = elements.getElement(StripeCardElement);
 
     if (!cardElement) {
       console.error("Failed to find Stripe card element.");
@@ -72,11 +90,16 @@ export const CheckoutPage = (props: { productId: number }) => {
     }
 
     const server = DependencyInjector.instance.getRequiredService<IServer>("IServer");
-    const purchaseInfo = await server.startPurchase(productId);
 
-    const {} = await stripe.confirmCardPayment(purchaseInfo.stripeClientSecret, {
-      payment_method: unwrapValueOrUndefined(paymentMethod).id
-    });
+    try {
+      const purchaseInfo = await server.startPurchase(productId, product.priceInUsCents);
+  
+      const {} = await stripe.confirmCardPayment(purchaseInfo.stripeClientSecret, {
+        payment_method: unwrapValueOrUndefined(paymentMethod).id
+      });
+    } catch (ex) {
+      setError(ex.toString());
+    }
   }
 
   return (
@@ -86,8 +109,17 @@ export const CheckoutPage = (props: { productId: number }) => {
       </h2>
 
       {product
-        ? <PurchaseForm />
+        ? (
+          <div>
+            <h3>{product.name} - {usCentsToDollarsString(product.priceInUsCents)}</h3>
+            <PurchaseForm />
+          </div>
+        )
         : <p>Invalid product ID.</p>}
+
+      {error
+        ? <div className="alert alert-danger">{error}</div>
+        : null}
     </Card>
   );
 }

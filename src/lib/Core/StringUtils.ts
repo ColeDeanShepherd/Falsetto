@@ -92,3 +92,12 @@ export function numSubstringOccurrences(string: string, substring: string, allow
 
   return n;
 }
+
+export function zeroPad(str: string, desiredLength: number): string {
+  if (str.length < desiredLength) {
+    const numZeros = desiredLength - str.length;
+    return "0".repeat(numZeros) + str;
+  } else {
+    return str;
+  }
+}

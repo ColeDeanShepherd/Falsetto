@@ -7,7 +7,7 @@ export interface IServer {
   emailResetPasswordLink(email: string): Promise<void>;
   resetPassword(resetPasswordToken: string, newPassword: string): Promise<void>;
   getProfile(): Promise<UserProfile>;
-  startPurchase(productId: number): Promise<StartPurchaseResponseDto>;
+  startPurchase(productId: number, priceUsCents: number): Promise<StartPurchaseResponseDto>;
 }
 
 export interface StartPurchaseResponseDto {
@@ -100,13 +100,13 @@ export class Server implements IServer {
     return profile;
   }
   
-  public async startPurchase(productId: number): Promise<StartPurchaseResponseDto> {
+  public async startPurchase(productId: number, priceUsCents: number): Promise<StartPurchaseResponseDto> {
     const requestInit: RequestInit = {
       method: "POST",
       // TODO: review security
       credentials: "include", // include the session cookie,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ productId })
+      body: JSON.stringify({ productId, priceUsCents })
     };
 
     const response = await fetch(`${apiBaseUri}/start-purchase`, requestInit);
