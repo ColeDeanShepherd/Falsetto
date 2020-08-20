@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Route, Switch } from "react-router-dom";
 import DocumentTitle from "react-document-title";
+import * as QueryString from "query-string";
 
 import { flashCardSets } from "../../FlashCardGraph";
 
@@ -59,6 +60,7 @@ import { SignUpPage } from '../SignUpPage';
 import { CheckoutPage } from '../CheckoutPage/View';
 
 import { understandingThePianoKeyboardProduct } from '../../Products';
+import { tryParseIntFromAny } from '../../lib/Core/Utils';
 
 export interface IRouteData {
   key?: string;
@@ -243,11 +245,16 @@ const routes: Array<IRouteData> = ([
   {
     path: "/checkout",
     title: "Checkout - Falsetto",
-    renderFn: () => (
-      <LimitedWidthContentContainer>
-        <CheckoutPage productId={understandingThePianoKeyboardProduct.id} />
-      </LimitedWidthContentContainer>
-    )
+    renderFn: () => {
+      const searchParams = QueryString.parse(window.location.search);
+      const productId = tryParseIntFromAny(searchParams.productId);
+
+      return (
+        <LimitedWidthContentContainer>
+          <CheckoutPage productId={productId} />
+        </LimitedWidthContentContainer>
+      );
+    }
   },
   {
     path: "/about",

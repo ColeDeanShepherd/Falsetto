@@ -87,3 +87,8 @@ export function getOrdinalNumeral(x: number): string {
       throw new Error(`Failed converting ${x} to a roman numeral.`);
   }
 }
+
+export function tryParseIntFromAny(value: any): number {
+  if (typeof value !== 'string') { return NaN; }
+  return parseInt(value as string, /*radix*/ 10);
+}
