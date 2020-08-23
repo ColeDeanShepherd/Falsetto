@@ -162,9 +162,7 @@ export class HomePage extends React.Component<{}, IHomePageState> {
     };
   }
   public componentDidMount() {
-    this.server.getProfile()
-      .then(p => this.setState({ userProfile: p }));
-    // TODO: error handling
+    this.loadProfileAsync();
   }
 
   public render(): JSX.Element {
@@ -297,4 +295,9 @@ export class HomePage extends React.Component<{}, IHomePageState> {
   }
   
   private server: IServer;
+
+  private async loadProfileAsync() {
+    const profile = await this.server.getProfile();
+    this.setState({ userProfile: profile });
+  }
 }

@@ -31,7 +31,7 @@ const cardOptions = {
 };
 
 export const CheckoutPage = (props: { productId: number }) => {
-  const [error, setError] = useState(undefined);
+  const [error, setError] = useState(undefined as (string | undefined));
 
   const stripe = useStripe();
   const elements = useElements();
@@ -94,9 +94,13 @@ export const CheckoutPage = (props: { productId: number }) => {
     try {
       const purchaseInfo = await server.startPurchase(productId, product.priceInUsCents);
   
-      const {} = await stripe.confirmCardPayment(purchaseInfo.stripeClientSecret, {
+      const result = await stripe.confirmCardPayment(purchaseInfo.stripeClientSecret, {
         payment_method: unwrapValueOrUndefined(paymentMethod).id
       });
+
+      if (result.error) {
+        setError(result.error.message ? result.error.message : "");
+      }
     } catch (ex) {
       setError(ex.toString());
     }
