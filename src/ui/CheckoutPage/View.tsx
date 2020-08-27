@@ -56,7 +56,10 @@ export const CheckoutPage = (props: { productId: number }) => {
     </form>
   );
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {};
+
+  // Not fully implemented. Re-examine Stripe docs.
+  const handleSubmit2 = async (event: React.FormEvent<HTMLFormElement>) => {
     if (!product) { return; }
     
     // Block native form submission.
