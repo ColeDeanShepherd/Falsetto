@@ -61,6 +61,8 @@ import { CheckoutPage } from '../CheckoutPage/View';
 
 import { understandingThePianoKeyboardProduct } from '../../Products';
 import { tryParseIntFromAny } from '../../lib/Core/Utils';
+import { CheckoutSuccessPage } from '../CheckoutSuccessPage';
+import { CheckoutCancelledPage } from '../CheckoutCancelledPage';
 
 export interface IRouteData {
   key?: string;
@@ -252,6 +254,28 @@ const routes: Array<IRouteData> = ([
       return (
         <LimitedWidthContentContainer>
           <CheckoutPage productId={productId} />
+        </LimitedWidthContentContainer>
+      );
+    }
+  },
+  {
+    path: "/checkout-success",
+    title: "Checkout Success - Falsetto",
+    renderFn: () => {
+      return (
+        <LimitedWidthContentContainer>
+          <CheckoutSuccessPage />
+        </LimitedWidthContentContainer>
+      );
+    }
+  },
+  {
+    path: "/checkout-cancelled",
+    title: "Checkout Cancelled - Falsetto",
+    renderFn: () => {
+      return (
+        <LimitedWidthContentContainer>
+          <CheckoutCancelledPage />
         </LimitedWidthContentContainer>
       );
     }
