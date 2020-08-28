@@ -3,10 +3,10 @@ import { useStripe } from "@stripe/react-stripe-js";
 
 import { DependencyInjector } from '../../DependencyInjector';
 import { IServer } from "../../Server";
-import { Product } from '../../../../server/src/Products';
 import { Button } from "../Button/Button";
+import { PremiumProduct } from '../../Products';
 
-export function StripeCheckoutButton(props: { product: Product }): JSX.Element {
+export function StripeCheckoutButton(props: { product: PremiumProduct }): JSX.Element {
   const stripe = useStripe();
 
   const handleClick = async (event: React.MouseEvent<HTMLElement, MouseEvent>) => {

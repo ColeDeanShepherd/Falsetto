@@ -12,7 +12,6 @@ import { Button } from "./Button/Button";
 import { premiumProducts } from '../Products';
 import { arrayContains } from '../lib/Core/ArrayUtils';
 import { StripeCheckoutButton } from "./Utils/StripeCheckoutButton";
-import { products } from '../../../server/src/Products';
 
 export interface IProfilePageState {
   userProfile: UserProfile | undefined
