@@ -7,8 +7,7 @@ export function CheckoutSuccessPage(): JSX.Element {
       <h1>Thanks for your order!</h1>
       <p>
         We appreciate your business!
-        If you have any questions, please email
-        <a href="mailto:orders@example.com">orders@example.com</a>.
+        If you have any questions, please <a href="https://docs.google.com/forms/d/e/1FAIpQLSfHT8tJTdmW_hCjxMPUf14wchM6GBPQAaq8PSMW05C01gBW4g/viewform" target="_blank" className="button cursor-pointer no-select">contact us</a>.
       </p>
     </Card>
   );
