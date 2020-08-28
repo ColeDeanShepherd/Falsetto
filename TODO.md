@@ -2,7 +2,6 @@
 ## Other
 ## Pomodoro
 ## Now
-* Integrate payment processor
 ## High Priority
 
 
