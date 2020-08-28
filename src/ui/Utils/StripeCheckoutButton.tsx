@@ -4,11 +4,12 @@ import { useStripe } from "@stripe/react-stripe-js";
 import { DependencyInjector } from '../../DependencyInjector';
 import { IServer } from "../../Server";
 import { Product } from '../../../../server/src/Products';
+import { Button } from "../Button/Button";
 
 export function StripeCheckoutButton(props: { product: Product }): JSX.Element {
   const stripe = useStripe();
 
-  const handleClick = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleClick = async (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
     if (!stripe) { return; }
 
     const { product } = props;
@@ -27,8 +28,6 @@ export function StripeCheckoutButton(props: { product: Product }): JSX.Element {
   };
 
   return (
-    <button role="link" onClick={handleClick}>
-      Checkout
-    </button>
+    <Button onClick={handleClick}>Purchase</Button>
   );
 }
