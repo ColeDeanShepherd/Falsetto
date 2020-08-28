@@ -2,14 +2,16 @@ export interface PremiumProduct {
   id: number;
   name: string;
   uri: string;
+  priceInUsCents: number;
 }
 
-export const understandingThePianoKeyboardProductId = 1;
+export const understandingThePianoKeyboardProduct: PremiumProduct = {
+  id: 1,
+  name: "Understanding the Piano Keyboard",
+  uri: "/understanding-the-piano-keyboard",
+  priceInUsCents: 5 * 100
+};
 
 export const premiumProducts = [
-  {
-    id: understandingThePianoKeyboardProductId,
-    name: "Understanding the Piano Keyboard",
-    uri: "/understanding-the-piano-keyboard"
-  }
+  understandingThePianoKeyboardProduct
 ];
