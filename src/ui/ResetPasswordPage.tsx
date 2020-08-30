@@ -6,7 +6,7 @@ import { TextField } from "@material-ui/core";
 import { Card } from "../ui/Card/Card";
 import { Button } from "./Button/Button";
 import { DependencyInjector } from "../DependencyInjector";
-import { IServer } from "../Server";
+import { IApiClient } from "../ApiClient";
 
 export interface IResetPasswordPageState {
   password: string;
@@ -20,7 +20,7 @@ export class ResetPasswordPage extends React.Component<{}, IResetPasswordPageSta
     super(props);
 
     this.history = DependencyInjector.instance.getRequiredService<History<any>>("History");
-    this.server = DependencyInjector.instance.getRequiredService<IServer>("IServer");
+    this.apiClient = DependencyInjector.instance.getRequiredService<IApiClient>("IApiClient");
 
     this.boundOnPasswordChange = this.onPasswordChange.bind(this);
     this.boundOnReEnteredPasswordChange = this.onReEnteredPasswordChange.bind(this);
@@ -83,7 +83,7 @@ export class ResetPasswordPage extends React.Component<{}, IResetPasswordPageSta
   }
 
   private history: History<any>;
-  private server: IServer;
+  private apiClient: IApiClient;
 
   private boundOnPasswordChange: (e: any) => void;
   private boundOnReEnteredPasswordChange: (e: any) => void;
@@ -121,7 +121,7 @@ export class ResetPasswordPage extends React.Component<{}, IResetPasswordPageSta
     }
 
     try {
-      await this.server.resetPassword(resetPasswordToken, password);
+      await this.apiClient.resetPassword(resetPasswordToken, password);
       this.setState({ succeeded: true });
     } catch (ex) {
       this.setState({ error: ex.toString() })

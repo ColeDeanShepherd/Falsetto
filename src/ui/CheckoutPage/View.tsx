@@ -7,7 +7,7 @@ import "./Stylesheet.css";
 import { Button } from '../Button/Button';
 import { unwrapValueOrUndefined } from '../../lib/Core/Utils';
 import { DependencyInjector } from '../../DependencyInjector';
-import { IServer } from "../../Server";
+import { IApiClient } from "../../ApiClient";
 import { premiumProducts } from "../../Products";
 import { usCentsToDollarsString } from '../../lib/Core/Currency';
 import { useEffect, useState } from "react";
@@ -92,10 +92,10 @@ export const CheckoutPage = (props: { productId: number }) => {
       return;
     }
 
-    const server = DependencyInjector.instance.getRequiredService<IServer>("IServer");
+    const apiClient = DependencyInjector.instance.getRequiredService<IApiClient>("IApiClient");
 
     try {
-      const purchaseInfo = await server.startPurchase(productId, product.priceInUsCents);
+      const purchaseInfo = await apiClient.startPurchase(productId, product.priceInUsCents);
   
       const result = await stripe.confirmCardPayment(purchaseInfo.stripeClientSecret, {
         payment_method: unwrapValueOrUndefined(paymentMethod).id

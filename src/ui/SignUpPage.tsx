@@ -5,7 +5,7 @@ import { Card } from "../ui/Card/Card";
 import { Button } from "./Button/Button";
 import { NavLinkView } from "./NavLinkView";
 import { DependencyInjector } from "../DependencyInjector";
-import { IServer } from "../Server";
+import { IApiClient } from "../ApiClient";
 import { ActionBus } from '../ActionBus';
 import { SignUpAction, NavigateAction } from '../App/Actions';
 import { loadSessionToken } from "../Cookies";
@@ -21,7 +21,7 @@ export class SignUpPage extends React.Component<{}, ISignUpPageState> {
   public constructor(props: {}) {
     super(props);
 
-    this.server = DependencyInjector.instance.getRequiredService<IServer>("IServer");
+    this.apiClient = DependencyInjector.instance.getRequiredService<IApiClient>("IApiClient");
 
     this.boundOnEmailChange = this.onEmailChange.bind(this);
     this.boundOnPasswordChange = this.onPasswordChange.bind(this);
@@ -94,7 +94,7 @@ export class SignUpPage extends React.Component<{}, ISignUpPageState> {
     );
   }
 
-  private server: IServer;
+  private apiClient: IApiClient;
 
   private boundOnEmailChange: (e: any) => void;
   private boundOnPasswordChange: (e: any) => void;
@@ -121,7 +121,7 @@ export class SignUpPage extends React.Component<{}, ISignUpPageState> {
     }
 
     try {
-      const sessionToken = await this.server.signUp(email, password);
+      const sessionToken = await this.apiClient.signUp(email, password);
       
       ActionBus.instance.dispatch(new SignUpAction(sessionToken));
     } catch (ex) {

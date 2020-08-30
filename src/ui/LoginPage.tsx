@@ -5,7 +5,7 @@ import { TextField } from "@material-ui/core";
 import { Card } from "../ui/Card/Card";
 import { Button } from "./Button/Button";
 import { NavLinkView } from "./NavLinkView";
-import { IServer } from "../Server";
+import { IApiClient } from "../ApiClient";
 import { DependencyInjector } from '../DependencyInjector';
 import { LoginAction, NavigateAction } from '../App/Actions';
 import { ActionBus } from "../ActionBus";
@@ -21,7 +21,7 @@ export class LoginPage extends React.Component<{}, ILoginPageState> {
   public constructor(props: {}) {
     super(props);
 
-    this.server = DependencyInjector.instance.getRequiredService<IServer>("IServer");
+    this.apiClient = DependencyInjector.instance.getRequiredService<IApiClient>("IApiClient");
 
     this.boundOnEmailChange = this.onEmailChange.bind(this);
     this.boundOnPasswordChange = this.onPasswordChange.bind(this);
@@ -89,7 +89,7 @@ export class LoginPage extends React.Component<{}, ILoginPageState> {
     );
   }
 
-  private server: IServer;
+  private apiClient: IApiClient;
 
   private boundOnEmailChange: (e: any) => void;
   private boundOnPasswordChange: (e: any) => void;
@@ -106,7 +106,7 @@ export class LoginPage extends React.Component<{}, ILoginPageState> {
     const { email, password } = this.state;
 
     try {
-      const sessionToken = await this.server.logIn(email, password);
+      const sessionToken = await this.apiClient.logIn(email, password);
       
       ActionBus.instance.dispatch(new LoginAction(sessionToken));
     } catch (ex) {

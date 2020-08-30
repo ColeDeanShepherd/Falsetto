@@ -1,7 +1,7 @@
 import { apiBaseUri } from "./Config";
 import { UserProfile } from './UserProfile';
 
-export interface IServer {
+export interface IApiClient {
   signUp(email: string, password: string): Promise<string>;
   logIn(email: string, password: string): Promise<string>;
   emailResetPasswordLink(email: string): Promise<void>;
@@ -19,7 +19,7 @@ export interface CreateStripeCheckoutSessionResponseDto {
   checkoutSessionId: string;
 }
 
-export class Server implements IServer {
+export class ApiClient implements IApiClient {
   public async signUp(email: string, password: string): Promise<string> {
     const requestInit: RequestInit = {
       method: "POST",

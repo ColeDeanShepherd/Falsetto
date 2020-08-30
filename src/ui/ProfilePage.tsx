@@ -5,7 +5,7 @@ import { loadSessionToken } from '../Cookies';
 import { ActionBus } from '../ActionBus';
 import { NavigateAction } from '../App/Actions';
 import { NavLinkView } from './NavLinkView';
-import { IServer } from "../Server";
+import { IApiClient } from "../ApiClient";
 import { DependencyInjector } from "../DependencyInjector";
 import { UserProfile } from '../UserProfile';
 import { Button } from "./Button/Button";
@@ -21,7 +21,7 @@ export class ProfilePage extends React.Component<{}, IProfilePageState> {
   public constructor(props: {}) {
     super(props);
 
-    this.server = DependencyInjector.instance.getRequiredService<IServer>("IServer");
+    this.apiClient = DependencyInjector.instance.getRequiredService<IApiClient>("IApiClient");
 
     this.boundLogout = this.logout.bind(this);
 
@@ -65,13 +65,17 @@ export class ProfilePage extends React.Component<{}, IProfilePageState> {
     );
   }
 
-  private server: IServer;
+  private apiClient: IApiClient;
   private boundLogout: () => void;
   
   private async loadProfile() {
     // TODO: error handling
-    const userProfile = await this.server.getProfile();
-    this.setState({ userProfile: userProfile });
+    try {
+      const userProfile = await this.apiClient.getProfile();
+      this.setState({ userProfile: userProfile });
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   private renderBoughtProducts(userProfile: UserProfile): JSX.Element | null {

@@ -19,7 +19,7 @@ import "./Stylesheet.css";
 import { PaywallOverlay } from "../Utils/PaywallOverlay/PaywallOverlay";
 import { understandingThePianoKeyboardProduct } from '../../Products';
 import { UserProfile } from '../../UserProfile';
-import { IServer } from "../../Server";
+import { IApiClient } from "../../ApiClient";
 import { DependencyInjector } from "../../DependencyInjector";
 
 // #region Topic Thumbnails
@@ -155,7 +155,7 @@ export class HomePage extends React.Component<{}, IHomePageState> {
   public constructor(props: {}) {
     super(props);
     
-    this.server = DependencyInjector.instance.getRequiredService<IServer>("IServer");
+    this.apiClient = DependencyInjector.instance.getRequiredService<IApiClient>("IApiClient");
 
     this.state = {
       userProfile: undefined
@@ -294,11 +294,11 @@ export class HomePage extends React.Component<{}, IHomePageState> {
     );
   }
   
-  private server: IServer;
+  private apiClient: IApiClient;
 
   private async loadProfileAsync() {
     try {
-      const profile = await this.server.getProfile();
+      const profile = await this.apiClient.getProfile();
       this.setState({ userProfile: profile });
     } catch (e) {
       console.error(e);
