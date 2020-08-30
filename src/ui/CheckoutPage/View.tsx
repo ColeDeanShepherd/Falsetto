@@ -95,7 +95,7 @@ export const CheckoutPage = (props: { productId: number }) => {
     const apiClient = DependencyInjector.instance.getRequiredService<IApiClient>("IApiClient");
 
     try {
-      const purchaseInfo = await apiClient.startPurchase(productId, product.priceInUsCents);
+      const purchaseInfo = await apiClient.startPurchaseAsync(productId, product.priceInUsCents);
   
       const result = await stripe.confirmCardPayment(purchaseInfo.stripeClientSecret, {
         payment_method: unwrapValueOrUndefined(paymentMethod).id

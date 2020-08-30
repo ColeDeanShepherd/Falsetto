@@ -298,7 +298,7 @@ export class HomePage extends React.Component<{}, IHomePageState> {
 
   private async loadProfileAsync() {
     try {
-      const profile = await this.apiClient.getProfile();
+      const profile = await this.apiClient.getProfileAsync();
       this.setState({ userProfile: profile });
     } catch (e) {
       console.error(e);

@@ -52,28 +52,28 @@ export class AppModel implements IDisposable {
         this.analytics.trackPageView();
         break;
       case SignUpAction.Id:
-        this.handleSignUpAction(action as SignUpAction);
+        this.handleSignUpActionAsync(action as SignUpAction);
         break;
       case LoginAction.Id:
-        this.handleLoginAction(action as LoginAction);
+        this.handleLoginActionAsync(action as LoginAction);
         break;
       case LogoutAction.Id:
-        this.handleLogoutAction(action as LogoutAction);
+        this.handleLogoutActionAsync(action as LogoutAction);
         break;
     }
   }
 
-  private async handleSignUpAction(signUpAction: SignUpAction) {
+  private async handleSignUpActionAsync(signUpAction: SignUpAction) {
     await saveSessionToken(signUpAction.sessionToken);
     ActionBus.instance.dispatch(new NavigateAction("/profile"));
   }
 
-  private async handleLoginAction(loginAction: LoginAction) {
+  private async handleLoginActionAsync(loginAction: LoginAction) {
     await saveSessionToken(loginAction.sessionToken);
     ActionBus.instance.dispatch(new NavigateAction("/profile"));
   }
 
-  private async handleLogoutAction(logoutAction: LogoutAction) {
+  private async handleLogoutActionAsync(logoutAction: LogoutAction) {
     await clearSessionToken();
     ActionBus.instance.dispatch(new NavigateAction("/"));
   }

@@ -15,7 +15,7 @@ export function StripeCheckoutButton(props: { product: PremiumProduct }): JSX.El
     const { product } = props;
     const apiClient = DependencyInjector.instance.getRequiredService<IApiClient>("IApiClient");
     
-    const createSessionResult = await apiClient.createStripeCheckoutSession(product.id, product.priceInUsCents);
+    const createSessionResult = await apiClient.createStripeCheckoutSessionAsync(product.id, product.priceInUsCents);
 
     const result = await stripe.redirectToCheckout({
       sessionId: createSessionResult.checkoutSessionId

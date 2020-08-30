@@ -2,13 +2,13 @@ import { apiBaseUri } from "./Config";
 import { UserProfile } from './UserProfile';
 
 export interface IApiClient {
-  signUp(email: string, password: string): Promise<string>;
-  logIn(email: string, password: string): Promise<string>;
-  emailResetPasswordLink(email: string): Promise<void>;
-  resetPassword(resetPasswordToken: string, newPassword: string): Promise<void>;
-  getProfile(): Promise<UserProfile>;
-  startPurchase(productId: number, priceUsCents: number): Promise<StartPurchaseResponseDto>;
-  createStripeCheckoutSession(productId: number, priceUsCents: number): Promise<CreateStripeCheckoutSessionResponseDto>;
+  signUpAsync(email: string, password: string): Promise<string>;
+  logInAsync(email: string, password: string): Promise<string>;
+  emailResetPasswordLinkAsync(email: string): Promise<void>;
+  resetPasswordAsync(resetPasswordToken: string, newPassword: string): Promise<void>;
+  getProfileAsync(): Promise<UserProfile>;
+  startPurchaseAsync(productId: number, priceUsCents: number): Promise<StartPurchaseResponseDto>;
+  createStripeCheckoutSessionAsync(productId: number, priceUsCents: number): Promise<CreateStripeCheckoutSessionResponseDto>;
 }
 
 export interface StartPurchaseResponseDto {
@@ -20,7 +20,7 @@ export interface CreateStripeCheckoutSessionResponseDto {
 }
 
 export class ApiClient implements IApiClient {
-  public async signUp(email: string, password: string): Promise<string> {
+  public async signUpAsync(email: string, password: string): Promise<string> {
     const requestInit: RequestInit = {
       method: "POST",
       headers: { 'Content-Type': 'application/json' },
@@ -38,7 +38,7 @@ export class ApiClient implements IApiClient {
     return sessionToken;
   }
   
-  public async logIn(email: string, password: string): Promise<string> {
+  public async logInAsync(email: string, password: string): Promise<string> {
     const requestInit: RequestInit = {
       method: "POST",
       headers: { 'Content-Type': 'application/json' },
@@ -56,7 +56,7 @@ export class ApiClient implements IApiClient {
     return sessionToken;
   }
   
-  public async emailResetPasswordLink(email: string): Promise<void> {
+  public async emailResetPasswordLinkAsync(email: string): Promise<void> {
     const requestInit: RequestInit = {
       method: "POST",
       headers: { 'Content-Type': 'application/json' },
@@ -71,7 +71,7 @@ export class ApiClient implements IApiClient {
     }
   }
 
-  public async resetPassword(resetPasswordToken: string, newPassword: string): Promise<void> {
+  public async resetPasswordAsync(resetPasswordToken: string, newPassword: string): Promise<void> {
     const requestInit: RequestInit = {
       method: "POST",
       headers: { 'Content-Type': 'application/json' },
@@ -86,7 +86,7 @@ export class ApiClient implements IApiClient {
     }
   }
 
-  public async getProfile(): Promise<UserProfile> {
+  public async getProfileAsync(): Promise<UserProfile> {
     const requestInit: RequestInit = {
       // TODO: review security
       credentials: "include" // include the session cookie
@@ -105,7 +105,7 @@ export class ApiClient implements IApiClient {
     return profile;
   }
   
-  public async startPurchase(productId: number, priceUsCents: number): Promise<StartPurchaseResponseDto> {
+  public async startPurchaseAsync(productId: number, priceUsCents: number): Promise<StartPurchaseResponseDto> {
     const requestInit: RequestInit = {
       method: "POST",
       // TODO: review security
@@ -127,7 +127,7 @@ export class ApiClient implements IApiClient {
     return responseDto;
   }
 
-  public async createStripeCheckoutSession(productId: number, priceUsCents: number): Promise<CreateStripeCheckoutSessionResponseDto> {
+  public async createStripeCheckoutSessionAsync(productId: number, priceUsCents: number): Promise<CreateStripeCheckoutSessionResponseDto> {
     const requestInit: RequestInit = {
       method: "POST",
       // TODO: review security

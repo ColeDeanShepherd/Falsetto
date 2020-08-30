@@ -71,7 +71,7 @@ export class ProfilePage extends React.Component<{}, IProfilePageState> {
   private async loadProfile() {
     // TODO: error handling
     try {
-      const userProfile = await this.apiClient.getProfile();
+      const userProfile = await this.apiClient.getProfileAsync();
       this.setState({ userProfile: userProfile });
     } catch (err) {
       console.error(err);

@@ -106,7 +106,7 @@ export class LoginPage extends React.Component<{}, ILoginPageState> {
     const { email, password } = this.state;
 
     try {
-      const sessionToken = await this.apiClient.logIn(email, password);
+      const sessionToken = await this.apiClient.logInAsync(email, password);
       
       ActionBus.instance.dispatch(new LoginAction(sessionToken));
     } catch (ex) {

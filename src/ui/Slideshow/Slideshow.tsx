@@ -97,7 +97,7 @@ export class Slideshow extends React.Component<ISlideshowProps, ISlideshowState>
 
     this.registerKeyEventHandlers();
     
-    this.apiClient.getProfile()
+    this.apiClient.getProfileAsync()
       .then(p => this.setState({ userProfile: p }));
     // TODO: error handling
   }
