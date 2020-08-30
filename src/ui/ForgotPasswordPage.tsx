@@ -4,7 +4,7 @@ import { TextField } from "@material-ui/core";
 import { Card } from "../ui/Card/Card";
 import { Button } from "./Button/Button";
 import { DependencyInjector } from "../DependencyInjector";
-import { IServer } from "../Server";
+import { IApiClient } from "../ApiClient";
 
 export interface IForgotPasswordPageState {
   email: string;
@@ -16,7 +16,7 @@ export class ForgotPasswordPage extends React.Component<{}, IForgotPasswordPageS
   public constructor(props: {}) {
     super(props);
 
-    this.server = DependencyInjector.instance.getRequiredService<IServer>("IServer");
+    this.apiClient = DependencyInjector.instance.getRequiredService<IApiClient>("IApiClient");
 
     this.boundOnEmailChange = this.onEmailChange.bind(this);
 
@@ -65,7 +65,7 @@ export class ForgotPasswordPage extends React.Component<{}, IForgotPasswordPageS
     );
   }
 
-  private server: IServer;
+  private apiClient: IApiClient;
 
   private boundOnEmailChange: (e: any) => void;
   
@@ -77,7 +77,7 @@ export class ForgotPasswordPage extends React.Component<{}, IForgotPasswordPageS
     const { email } = this.state;
 
     try {
-      await this.server.emailResetPasswordLink(email);
+      await this.apiClient.emailResetPasswordLinkAsync(email);
       this.setState({ succeeded: true });
     } catch (ex) {
       this.setState({ error: ex.toString() })

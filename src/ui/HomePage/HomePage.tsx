@@ -19,8 +19,10 @@ import "./Stylesheet.css";
 import { PaywallOverlay } from "../Utils/PaywallOverlay/PaywallOverlay";
 import { understandingThePianoKeyboardProduct } from '../../Products';
 import { UserProfile } from '../../UserProfile';
-import { IServer } from "../../Server";
+import { IApiClient } from "../../ApiClient";
 import { DependencyInjector } from "../../DependencyInjector";
+import { AppModel } from "../../App/Model";
+import { unwrapValueOrUndefined } from "../../lib/Core/Utils";
 
 // #region Topic Thumbnails
 
@@ -155,8 +157,6 @@ export class HomePage extends React.Component<{}, IHomePageState> {
   public constructor(props: {}) {
     super(props);
     
-    this.server = DependencyInjector.instance.getRequiredService<IServer>("IServer");
-
     this.state = {
       userProfile: undefined
     };
@@ -293,15 +293,16 @@ export class HomePage extends React.Component<{}, IHomePageState> {
       </div>
     );
   }
-  
-  private server: IServer;
 
   private async loadProfileAsync() {
-    try {
-      const profile = await this.server.getProfile();
-      this.setState({ userProfile: profile });
-    } catch (e) {
-      console.error(e);
+    // TODO: error handling
+    const loadProfileResult = await AppModel.instance.loadProfileAsync();
+
+    if (loadProfileResult.isOk) {
+      const userProfile = unwrapValueOrUndefined(loadProfileResult.value);
+      this.setState({ userProfile: userProfile });
+    } else {
+      console.error(loadProfileResult.error);
     }
   }
 }

@@ -1,14 +1,15 @@
 import { apiBaseUri } from "./Config";
 import { UserProfile } from './UserProfile';
+import { Result, Err, Ok } from './lib/Core/Result';
 
-export interface IServer {
-  signUp(email: string, password: string): Promise<string>;
-  logIn(email: string, password: string): Promise<string>;
-  emailResetPasswordLink(email: string): Promise<void>;
-  resetPassword(resetPasswordToken: string, newPassword: string): Promise<void>;
-  getProfile(): Promise<UserProfile>;
-  startPurchase(productId: number, priceUsCents: number): Promise<StartPurchaseResponseDto>;
-  createStripeCheckoutSession(productId: number, priceUsCents: number): Promise<CreateStripeCheckoutSessionResponseDto>;
+export interface IApiClient {
+  signUpAsync(email: string, password: string): Promise<string>;
+  logInAsync(email: string, password: string): Promise<string>;
+  emailResetPasswordLinkAsync(email: string): Promise<void>;
+  resetPasswordAsync(resetPasswordToken: string, newPassword: string): Promise<void>;
+  getProfileAsync(): Promise<[Result<UserProfile, string>, Response]>;
+  startPurchaseAsync(productId: number, priceUsCents: number): Promise<StartPurchaseResponseDto>;
+  createStripeCheckoutSessionAsync(productId: number, priceUsCents: number): Promise<CreateStripeCheckoutSessionResponseDto>;
 }
 
 export interface StartPurchaseResponseDto {
@@ -19,8 +20,8 @@ export interface CreateStripeCheckoutSessionResponseDto {
   checkoutSessionId: string;
 }
 
-export class Server implements IServer {
-  public async signUp(email: string, password: string): Promise<string> {
+export class ApiClient implements IApiClient {
+  public async signUpAsync(email: string, password: string): Promise<string> {
     const requestInit: RequestInit = {
       method: "POST",
       headers: { 'Content-Type': 'application/json' },
@@ -38,7 +39,7 @@ export class Server implements IServer {
     return sessionToken;
   }
   
-  public async logIn(email: string, password: string): Promise<string> {
+  public async logInAsync(email: string, password: string): Promise<string> {
     const requestInit: RequestInit = {
       method: "POST",
       headers: { 'Content-Type': 'application/json' },
@@ -56,7 +57,7 @@ export class Server implements IServer {
     return sessionToken;
   }
   
-  public async emailResetPasswordLink(email: string): Promise<void> {
+  public async emailResetPasswordLinkAsync(email: string): Promise<void> {
     const requestInit: RequestInit = {
       method: "POST",
       headers: { 'Content-Type': 'application/json' },
@@ -71,7 +72,7 @@ export class Server implements IServer {
     }
   }
 
-  public async resetPassword(resetPasswordToken: string, newPassword: string): Promise<void> {
+  public async resetPasswordAsync(resetPasswordToken: string, newPassword: string): Promise<void> {
     const requestInit: RequestInit = {
       method: "POST",
       headers: { 'Content-Type': 'application/json' },
@@ -86,7 +87,7 @@ export class Server implements IServer {
     }
   }
 
-  public async getProfile(): Promise<UserProfile> {
+  public async getProfileAsync(): Promise<[Result<UserProfile, string>, Response]> {
     const requestInit: RequestInit = {
       // TODO: review security
       credentials: "include" // include the session cookie
@@ -96,16 +97,16 @@ export class Server implements IServer {
 
     if (!response.ok) {
       const errorMessage = await response.text();
-      return Promise.reject(`Failed getting profile: ${errorMessage}`);
+      return [Err(`Failed getting profile: ${errorMessage}`), response];
     }
 
     const responseJson = await response.json();
+    const userProfile = responseJson as UserProfile;
 
-    const profile = responseJson as UserProfile;
-    return profile;
+    return [Ok(userProfile), response];
   }
   
-  public async startPurchase(productId: number, priceUsCents: number): Promise<StartPurchaseResponseDto> {
+  public async startPurchaseAsync(productId: number, priceUsCents: number): Promise<StartPurchaseResponseDto> {
     const requestInit: RequestInit = {
       method: "POST",
       // TODO: review security
@@ -127,7 +128,7 @@ export class Server implements IServer {
     return responseDto;
   }
 
-  public async createStripeCheckoutSession(productId: number, priceUsCents: number): Promise<CreateStripeCheckoutSessionResponseDto> {
+  public async createStripeCheckoutSessionAsync(productId: number, priceUsCents: number): Promise<CreateStripeCheckoutSessionResponseDto> {
     const requestInit: RequestInit = {
       method: "POST",
       // TODO: review security

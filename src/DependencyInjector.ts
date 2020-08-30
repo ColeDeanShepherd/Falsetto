@@ -5,7 +5,7 @@ import { InMemoryDatabase } from './Database';
 import { Analytics, MockAnalytics, IAnalytics } from './Analytics';
 import { isProduction } from "./Config";
 import { ConsoleLogger } from './Logger';
-import { Server } from "./Server";
+import { ApiClient } from "./ApiClient";
 
 export class DependencyInjector {
   public static instance = new DependencyInjector();
@@ -19,7 +19,7 @@ export class DependencyInjector {
     this.userManager = new UserManager();
     this.database = new InMemoryDatabase(); // new TwoTierDatabase();
     this.analytics = isProduction() ? (new Analytics()) : (new MockAnalytics());
-    this.server = new Server();
+    this.apiClient = new ApiClient();
   }
 
   public getRequiredService<T>(serviceName: string): T {
@@ -34,8 +34,8 @@ export class DependencyInjector {
         return this.database as any;
       case "IAnalytics":
         return this.analytics as any;
-      case "IServer":
-        return this.server as any;
+      case "IApiClient":
+        return this.apiClient as any;
       default:
         throw new Error(`Unknown service name: ${serviceName}`);
     }
@@ -46,5 +46,5 @@ export class DependencyInjector {
   private userManager: UserManager;
   private database: InMemoryDatabase; // new TwoTierDatabase();
   private analytics: IAnalytics;
-  private server: Server;
+  private apiClient: ApiClient;
 }
