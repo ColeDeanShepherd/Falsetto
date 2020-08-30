@@ -12,6 +12,8 @@ import { Button } from "./Button/Button";
 import { premiumProducts } from '../Products';
 import { arrayContains } from '../lib/Core/ArrayUtils';
 import { StripeCheckoutButton } from "./Utils/StripeCheckoutButton";
+import { AppModel } from '../App/Model';
+import { unwrapValueOrUndefined } from '../lib/Core/Utils';
 
 export interface IProfilePageState {
   userProfile: UserProfile | undefined
@@ -39,7 +41,7 @@ export class ProfilePage extends React.Component<{}, IProfilePageState> {
     }
 
     // get profile info
-    this.loadProfile();
+    this.loadProfileAsync();
   }
 
   public render(): JSX.Element {
@@ -68,13 +70,15 @@ export class ProfilePage extends React.Component<{}, IProfilePageState> {
   private apiClient: IApiClient;
   private boundLogout: () => void;
   
-  private async loadProfile() {
-    // TODO: error handling
-    try {
-      const userProfile = await this.apiClient.getProfileAsync();
+  private async loadProfileAsync() {
+    const loadProfileResult = await AppModel.instance.loadProfileAsync();
+
+    if (loadProfileResult.isOk) {
+      const userProfile = unwrapValueOrUndefined(loadProfileResult.value);
       this.setState({ userProfile: userProfile });
-    } catch (err) {
-      console.error(err);
+    } else {
+      console.error(loadProfileResult.error);
+      ActionBus.instance.dispatch(new NavigateAction("/login"));
     }
   }
 

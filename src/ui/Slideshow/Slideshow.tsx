@@ -97,9 +97,7 @@ export class Slideshow extends React.Component<ISlideshowProps, ISlideshowState>
 
     this.registerKeyEventHandlers();
     
-    this.apiClient.getProfileAsync()
-      .then(p => this.setState({ userProfile: p }));
-    // TODO: error handling
+    this.loadProfileAsync();
   }
 
   public componentWillUnmount() {
@@ -335,5 +333,17 @@ export class Slideshow extends React.Component<ISlideshowProps, ISlideshowState>
     }
 
     return uriWithoutSlidePath;
+  }
+
+  private async loadProfileAsync() {
+    // TODO: error handling
+    const loadProfileResult = await AppModel.instance.loadProfileAsync();
+
+    if (loadProfileResult.isOk) {
+      const userProfile = unwrapValueOrUndefined(loadProfileResult.value);
+      this.setState({ userProfile: userProfile });
+    } else {
+      console.error(loadProfileResult.error);
+    }
   }
 }
