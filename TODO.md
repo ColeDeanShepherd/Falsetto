@@ -31,10 +31,6 @@
 
 
 
-* Integrate payment processor
-
-
-
 
 * Lock part of course based on whether user has paid or not.
   * Visual indicators on home page

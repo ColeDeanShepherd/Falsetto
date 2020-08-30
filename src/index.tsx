@@ -2,6 +2,9 @@ import "core-js";
 import "whatwg-fetch";
 import "pepjs";
 
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./index.css";
 
@@ -13,7 +16,7 @@ import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
 import registerServiceWorker from "./registerServiceWorker";
 
 import { getErrorDescription } from './Error';
-import { isDevelopment } from './Config';
+import { isDevelopment, getStripePublishableApiKey } from './Config';
 import { DependencyInjector } from './DependencyInjector';
 import { IAnalytics } from './Analytics';
 import { polyfillWebAudio } from "./Audio/Audio";
@@ -65,9 +68,13 @@ window.addEventListener("beforeunload", (e) => {
   app.dispose();
 });
 
+const stripePromise = loadStripe(getStripePublishableApiKey());
+
 const rootElement = (
   <MuiThemeProvider theme={theme}>
-    <AppView />
+    <Elements stripe={stripePromise}>
+      <AppView />
+    </Elements>
   </MuiThemeProvider>
 );
 

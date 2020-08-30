@@ -7,6 +7,7 @@
 
 .app-bar > .button {
   opacity: 0.25;
+  color: #212529;
   padding: 1rem;
   transition: opacity 0.5s;
 }

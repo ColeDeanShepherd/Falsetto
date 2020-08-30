@@ -101,3 +101,8 @@ export function* generateValueCombinationBitMasks<T>(values: Array<T>) {
     yield arrayBitMask;
   }
 }
+
+export function tryParseIntFromAny(value: any): number {
+  if (typeof value !== 'string') { return NaN; }
+  return parseInt(value as string, /*radix*/ 10);
+}

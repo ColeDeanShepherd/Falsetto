@@ -1,4 +1,5 @@
 import * as React from "react";
+
 import { Card } from "../ui/Card/Card";
 
 export class AboutPage extends React.Component<{}, {}> {
