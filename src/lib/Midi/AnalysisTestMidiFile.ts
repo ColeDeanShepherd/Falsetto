@@ -77,7 +77,6 @@ export function createAnalysisTestMidi(): Midi {
 
   const track = midi.addTrack();
 
-
   addTwoHanded251(
     track,
     new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 5)),

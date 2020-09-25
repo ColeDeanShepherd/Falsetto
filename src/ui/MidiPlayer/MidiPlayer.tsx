@@ -245,6 +245,7 @@ export class MidiPlayerView extends React.Component<{}, {}> {
             version="1.1" xmlns="http://www.w3.org/2000/svg"
             style={{ flexGrow: 1 }}
           >
+            <rect width="100%" height="100%" fill="#303030" />
             {renderNoteContainer()}
             <PianoKeyboard
               position={pianoPosition}

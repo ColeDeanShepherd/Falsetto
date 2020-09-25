@@ -26,30 +26,82 @@ export function analyzeMidiNotes(midi: Midi): MidiNotesAnalysis {
   };
 
   // detect keys
-  {
-    // try to find the largest ranges of time when detecting keys
-    // can have multiple notes at the same time, but we don't want to consider only some of them
-    // so we need to look at distinct times
-    // iterate through time ranges
-    const orderedDistinctNoteStartEndTicks = getOrderedDistinctNoteStartEndTicks(midi);
-    const combinedTrack = combineTracks(midi);
+  //slidingWindowsDetectKeys(analysis, midi);
+  bruteForceDetectKeys(analysis, midi);
 
-    for (const tickRange of generateAllTickRanges(orderedDistinctNoteStartEndTicks)) {
+  //debugger;
+  return analysis;
+}
+
+// #region Helper Functions
+
+function bruteForceDetectKeys(analysis: MidiNotesAnalysis, midi: Midi) {
+  // try to find the largest ranges of time when detecting keys
+  // can have multiple notes at the same time, but we don't want to consider only some of them
+  // so we need to look at distinct times
+  // iterate through time ranges
+  const orderedDistinctNoteStartEndTicks = getOrderedDistinctNoteStartEndTicks(midi);
+  const combinedTrack = combineTracks(midi);
+
+  for (const tickRange of generateAllTickRanges(orderedDistinctNoteStartEndTicks)) {
+    const noteStatistics: NoteStatistics = {
+      numOccurrencesPerPitchClass: repeatElement(0, 12)
+    };
+
+    // get notes in tick range
+    for (const note of generateNotesInTickRange(combinedTrack, tickRange)) {
+      const pitch = Pitch.createFromMidiNumber(note.midi);
+      noteStatistics.numOccurrencesPerPitchClass[pitch.class]++;
+    }
+
+    const keyProbabilities = calculateKeyProbabilities(noteStatistics);
+
+    const mostProbableKey = arrayMaxSelector(keyProbabilities, x => x[1]);
+
+    if (mostProbableKey[1] >= 0.8) {
+      const detectedKey: DetectedKey = {
+        key: mostProbableKey[0],
+        tickRange: tickRange,
+        probability: mostProbableKey[1]
+      };
+
+      registerDetectedKey(analysis.keys, detectedKey);
+      
+      //const keyProbabilitiesStr = keyProbabilitiesToString(keyProbabilities);
+    }
+  }
+}
+
+function slidingWindowsDetectKeys(analysis: MidiNotesAnalysis, midi: Midi) {
+  const numNotesInWindows = [14, 21];
+
+  const combinedTrack = combineTracks(midi);
+  
+  for (const numNotesInWindow of numNotesInWindows) {
+    const maxStartI = combinedTrack.notes.length - numNotesInWindow;
+
+    for (let noteStartI = 0; noteStartI <= maxStartI; noteStartI++) {
       const noteStatistics: NoteStatistics = {
         numOccurrencesPerPitchClass: repeatElement(0, 12)
       };
 
-      // get notes in tick range
-      for (const note of generateNotesInTickRange(combinedTrack, tickRange)) {
+      for (let i = 0; i < numNotesInWindow; i++) {
+        const note = combinedTrack.notes[noteStartI + i];
         const pitch = Pitch.createFromMidiNumber(note.midi);
         noteStatistics.numOccurrencesPerPitchClass[pitch.class]++;
       }
 
+      // TODO: review code below
       const keyProbabilities = calculateKeyProbabilities(noteStatistics);
 
       const mostProbableKey = arrayMaxSelector(keyProbabilities, x => x[1]);
 
       if (mostProbableKey[1] >= 0.8) {
+        const firstNoteInWindow = combinedTrack.notes[noteStartI];
+        const lastNoteInWindow = combinedTrack.notes[noteStartI + numNotesInWindow - 1];
+
+        const tickRange = new NumberRange(firstNoteInWindow.ticks, lastNoteInWindow.ticks);
+
         const detectedKey: DetectedKey = {
           key: mostProbableKey[0],
           tickRange: tickRange,
@@ -62,12 +114,7 @@ export function analyzeMidiNotes(midi: Midi): MidiNotesAnalysis {
       }
     }
   }
-
-  debugger;
-  return analysis;
 }
-
-// #region Helper Functions
 
 function getOrderedDistinctNoteStartEndTicks(midi: Midi): Array<number> {
    // get distinct note start/end ticks
