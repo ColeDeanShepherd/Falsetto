@@ -168,8 +168,9 @@ export class HomePage extends React.Component<{}, IHomePageState> {
   public render(): JSX.Element {
     const { userProfile } = this.state;
 
-    const userOwnsUnderstandingThePianoKeyboardCourse = (userProfile !== undefined) &&
-      userProfile.boughtProductIds.some(pId => pId == understandingThePianoKeyboardProduct.id);
+    // const userOwnsUnderstandingThePianoKeyboardCourse = (userProfile !== undefined) &&
+    //   userProfile.boughtProductIds.some(pId => pId == understandingThePianoKeyboardProduct.id);
+    const userOwnsUnderstandingThePianoKeyboardCourse = true;
     
     return (
       <div className="home-page">

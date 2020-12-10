@@ -66,7 +66,7 @@ export class AppBarView extends React.Component<IAppBarViewProps, IAppBarViewSta
           </NavLinkView>
           <span onClick={event => this.toggleMenu()} className="button cursor-pointer no-select"><MenuIcon /></span>
           <span onClick={event => this.toggleSettings()} className="button cursor-pointer no-select"><SettingsIcon /></span>
-          <span onClick={event => this.onUserPress()} className="button cursor-pointer no-select"><PersonIcon /></span>
+          <span onClick={event => this.onUserPress()} className="button cursor-pointer no-select d-none"><PersonIcon /></span>
           <a href="https://docs.google.com/forms/d/e/1FAIpQLSfHT8tJTdmW_hCjxMPUf14wchM6GBPQAaq8PSMW05C01gBW4g/viewform" target="_blank" className="button cursor-pointer no-select"><MailIcon /></a>
         </div>
         {isMenuContainerVisible

@@ -121,8 +121,9 @@ export class Slideshow extends React.Component<ISlideshowProps, ISlideshowState>
 
     const slideGroup = slideGroupInfo[0];
     
-    const isSlideDisabledByPaywall = slideGroup.isPremium &&
-      ((userProfile === undefined) || !userProfile.boughtProductIds.some(pi => pi === premiumProductId));
+    // const isSlideDisabledByPaywall = slideGroup.isPremium &&
+    //   ((userProfile === undefined) || !userProfile.boughtProductIds.some(pi => pi === premiumProductId));
+    const isSlideDisabledByPaywall = false;
 
     return (
       <div className="slideshow" style={{ height: "100%" }}>
