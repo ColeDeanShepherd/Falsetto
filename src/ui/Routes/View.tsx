@@ -23,6 +23,7 @@ import { ScalesAndModesSection } from "../../ui/Lessons/EssentialMusicTheory/Sca
 import { ChordsSection } from "../../ui/Lessons/EssentialMusicTheory/Chords";
 import { ChordProgressionsSection } from "../../ui/Lessons/EssentialMusicTheory/ChordProgressions";
 import { NextStepsSection } from "../../ui/Lessons/EssentialMusicTheory/NextSteps";
+import { PianoVisualization } from "../../ui/Lessons/PianoVisualization";
 import { GuitarNotesLesson } from "../../ui/Lessons/GuitarNotesLesson";
 import { GuitarScalesLesson } from "../../ui/Lessons/GuitarScalesLesson";
 import { ScaleViewer } from "../../ui/Tools/ScaleViewer";
@@ -488,6 +489,15 @@ const routes: Array<IRouteData> = ([
     renderFn: () => (
       <LimitedWidthContentContainer>
         <RhythmTapper />
+      </LimitedWidthContentContainer>
+    )
+  },
+  {
+    path: "/piano-visualization",
+    title: "Visualize Scales and Chords on Piano - Falsetto",
+    renderFn: () => (
+      <LimitedWidthContentContainer>
+        <PianoVisualization />
       </LimitedWidthContentContainer>
     )
   },

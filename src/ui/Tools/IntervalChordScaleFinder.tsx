@@ -3,7 +3,7 @@ import * as React from "react";
 import * as Utils from "../../lib/Core/Utils";
 import { PitchLetter } from "../../lib/TheoryLib/PitchLetter";
 import { Pitch } from "../../lib/TheoryLib/Pitch";
-import { PianoKeyboard, renderPianoKeyboardNoteNames, PianoKeyboardMetrics, renderPressedPianoKeys } from "../Utils/PianoKeyboard";
+import { PianoKeyboard, renderPianoKeyboardNoteNames, PianoKeyboardMetrics, renderPianoKeyHighlights } from "../Utils/PianoKeyboard";
 import { Interval } from '../../lib/TheoryLib/Interval';
 import { Chord } from '../../lib/TheoryLib/Chord';
 import { ChordType } from "../../lib/TheoryLib/ChordType";
@@ -269,14 +269,14 @@ export class IntervalChordScaleFinder extends React.Component<IIntervalChordScal
       .filter(p => p.isWhiteKey);
     const whiteKeyLayerExtras = (
       <g>
-        {renderPressedPianoKeys(metrics, whitePressedPitches)}
+        {renderPianoKeyHighlights(metrics, whitePressedPitches)}
       </g>
     );
     const blackPressedPitches = this.state.pressedPitches
       .filter(p => p.isBlackKey);
     const blackKeyLayerExtras = (
       <g>
-        {renderPressedPianoKeys(metrics, blackPressedPitches)}
+        {renderPianoKeyHighlights(metrics, blackPressedPitches)}
         {renderPianoKeyboardNoteNames(metrics)}
       </g>
     );

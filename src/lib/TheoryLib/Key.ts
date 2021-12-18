@@ -1,7 +1,25 @@
-import * as Utils from "../Core/Utils";
 import { PitchLetter } from './PitchLetter';
 import { Pitch } from './Pitch';
 import { precondition } from '../Core/Dbc';
+
+export function getCommonKeyPitches(preferredOctaveNumber: number): Array<Pitch> {
+  return [
+    new Pitch(PitchLetter.C, 0, preferredOctaveNumber),
+    new Pitch(PitchLetter.C, 1, preferredOctaveNumber),
+    new Pitch(PitchLetter.D, 0, preferredOctaveNumber),
+    new Pitch(PitchLetter.E, -1, preferredOctaveNumber),
+    new Pitch(PitchLetter.E, 0, preferredOctaveNumber),
+    new Pitch(PitchLetter.F, 0, preferredOctaveNumber),
+    new Pitch(PitchLetter.F, 1, preferredOctaveNumber),
+    new Pitch(PitchLetter.G, 0, preferredOctaveNumber),
+    new Pitch(PitchLetter.A, -1, preferredOctaveNumber),
+    new Pitch(PitchLetter.A, 0, preferredOctaveNumber),
+    new Pitch(PitchLetter.B, -1, preferredOctaveNumber),
+    new Pitch(PitchLetter.B, 0, preferredOctaveNumber)
+  ];
+}
+
+export const commonKeyPitchesOctave0 = getCommonKeyPitches(0);
 
 export function getValidKeyPitches(preferredOctaveNumber: number): Array<Pitch> {
   return [
@@ -23,7 +41,7 @@ export function getValidKeyPitches(preferredOctaveNumber: number): Array<Pitch> 
   ];
 }
 
-const validKeyPitchesOctave0 = getValidKeyPitches(0);
+export const validKeyPitchesOctave0 = getValidKeyPitches(0);
 
 export class Key {
   public static readonly CMajor = new Key(PitchLetter.C, 0, true);

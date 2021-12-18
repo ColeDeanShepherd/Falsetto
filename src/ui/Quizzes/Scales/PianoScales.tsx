@@ -1,9 +1,9 @@
 import * as React from "react";
 
-import { Pitch, ambiguousKeyPitchStringsSymbols } from "../../../lib/TheoryLib/Pitch";
+import { Pitch, ambiguousKeyPitchStringsSymbols, getPitchRange } from "../../../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
 import { ScaleType, scaleTypeLevels } from "../../../lib/TheoryLib/Scale";
-import { PianoKeyboard } from "../../Utils/PianoKeyboard";
+import { PianoKeyboard, PianoKeyboardMetrics, renderPianoKeyboardKeyLabels } from "../../Utils/PianoKeyboard";
 import { FlashCard, FlashCardSide, FlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
 import { ScaleAnswerSelect } from "../../Utils/ScaleAnswerSelect";
@@ -156,7 +156,13 @@ export function createFlashCards(): FlashCard[] {
   forEachScale((scaleType, rootPitchStr, i) => {
     const halfStepsFromC = mod(i - 3, 12);
     const rootPitch = Pitch.createFromMidiNumber((new Pitch(PitchLetter.C, 0, 4)).midiNumber + halfStepsFromC);
-    const pitches = new ChordScaleFormula(scaleType.formula.parts.concat(new ChordScaleFormulaPart(8, 0, false))).getPitches(rootPitch);
+    const formula = new ChordScaleFormula(scaleType.formula.parts.concat(new ChordScaleFormulaPart(8, 0, false)));
+    const pitches = formula.getPitches(rootPitch);
+    const pitchMidiNumbersNoOctave = new Set<number>(pitches.map(p => p.midiNumberNoOctave));
+    const lowestPitch = new Pitch(PitchLetter.C, 0, 4);
+    const highestPitch = new Pitch(PitchLetter.B, 0, 5);
+    const pressedPitches = getPitchRange(lowestPitch, highestPitch)
+      .filter(p => pitchMidiNumbersNoOctave.has(p.midiNumberNoOctave));
     
     const deserializedId = {
       set: flashCardSetId,
@@ -170,9 +176,10 @@ export function createFlashCards(): FlashCard[] {
         size => (
           <PianoKeyboard
             maxWidth={240}
-            lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-            highestPitch={new Pitch(PitchLetter.B, 0, 5)}
-            pressedPitches={pitches}
+            lowestPitch={lowestPitch}
+            highestPitch={highestPitch}
+            pressedPitches={pressedPitches}
+            renderExtrasFn={metrics => renderScaleDegree1LabelExtras(metrics, rootPitch)}
           />
         ),
         pitches
@@ -202,6 +209,16 @@ export function renderAnswerSelect(
     key={correctAnswer} scales={activeScales} ambiguousPitchStringsSymbols={rootPitchStrings} correctAnswer={correctAnswer}
     onAnswer={info.onAnswer} lastCorrectAnswer={info.lastCorrectAnswer}
     incorrectAnswers={info.incorrectAnswers} />;
+}
+
+export function renderScaleDegree1LabelExtras(metrics: PianoKeyboardMetrics, rootPitch: Pitch): JSX.Element {
+  return renderPianoKeyboardKeyLabels(
+    metrics,
+    /*useSharps*/ undefined,
+    /*getLabels*/
+    p => (p.midiNumberNoOctave === rootPitch.midiNumberNoOctave)
+      ? ["1"]
+      : null)
 }
 
 export const flashCardSet = createFlashCardSet();

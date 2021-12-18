@@ -191,7 +191,7 @@ export function renderPianoKeyboardKeyLabels(metrics: PianoKeyboardMetrics, useS
   return <g className="pass-through-click">{texts}</g>;
 }
 
-export function renderPressedPianoKeys(metrics: PianoKeyboardMetrics, pressedPitches: Array<Pitch>): JSX.Element {
+export function renderPianoKeyHighlights(metrics: PianoKeyboardMetrics, pressedPitches: Array<Pitch>, fill?: string): JSX.Element {
   return (
     <g className="pass-through-click">
       {pressedPitches.map(p => {
@@ -203,7 +203,7 @@ export function renderPressedPianoKeys(metrics: PianoKeyboardMetrics, pressedPit
           <path
             key={`p${p.midiNumber}`}
             d={getRectRoundedBottomPathDefString(highlightRect.position, highlightRect.size, highlightRadius)}
-            fill="gray" strokeWidth={0}
+            fill={fill ? fill : 'gray'} strokeWidth={0}
           />
         );
       })}
@@ -358,10 +358,10 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
     }
 
     const whiteNoteHighlights = this.props.pressedPitches
-      ? renderPressedPianoKeys(metrics, this.props.pressedPitches.filter(p => p.isWhiteKey))
+      ? renderPianoKeyHighlights(metrics, this.props.pressedPitches.filter(p => p.isWhiteKey))
       : null;
     const blackNoteHighlights = this.props.pressedPitches
-      ? renderPressedPianoKeys(metrics, this.props.pressedPitches.filter(p => p.isBlackKey))
+      ? renderPianoKeyHighlights(metrics, this.props.pressedPitches.filter(p => p.isBlackKey))
       : null;
 
     const extraElements = this.props.renderExtrasFn
