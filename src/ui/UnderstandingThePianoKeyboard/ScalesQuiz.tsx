@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import * as FlashCardUtils from "../../ui/Quizzes/Utils";
-import { FlashCard, FlashCardSide } from "../../FlashCard";
+import { createFlashCardId, FlashCard, FlashCardSide } from "../../FlashCard";
 import { FlashCardSet } from "../../FlashCardSet";
 import { renderUserDeterminedCorrectnessAnswerSelect } from '../../ui/Quizzes/Utils';
 import { ScaleFormulaAnswerSelect } from "../../ui/Utils/ScaleFormulaAnswerSelect";
@@ -30,7 +30,7 @@ export function createPressAllScaleNotesFlashCard(id: string, scale: Scale, scal
   const scaleName = `${scale.rootPitch.toString(/*includeOctaveNumber*/ false)} ${scaleTypeName}`;
   
   return new FlashCard(
-    JSON.stringify({ set: flashCardSetId, id: id }),
+    createFlashCardId(flashCardSetId, { id: id }),
     new FlashCardSide(`Press at least one of each note in the ${scaleName} scale.`),
     new FlashCardSide(
       () => {
@@ -63,14 +63,14 @@ export function createPressAllScaleNotesFlashCard(id: string, scale: Scale, scal
 }
 
 export const majorScaleFormulaFlashCard = FlashCard.fromRenderFns(
-  JSON.stringify({ set: flashCardSetId, id: "majorScaleFormula" }),
+  createFlashCardId(flashCardSetId, { id: "majorScaleFormula" }),
   "What is the formula for major scales?",
   "W W H W W W",
   info => <ScaleFormulaAnswerSelect info={info} correctAnswer={["W", "W", "H", "W", "W", "W"]} />
 );
 
 export const minorScaleFormulaFlashCard = FlashCard.fromRenderFns(
-  JSON.stringify({ set: flashCardSetId, id: "natMinorScaleFormula" }),
+  createFlashCardId(flashCardSetId, { id: "natMinorScaleFormula" }),
   "What is the major-scale-relative formula for natural minor scales?",
   "1 2 3♭ 4 5 6♭ 7♭",
   info => <MajorScaleRelativeScaleFormulaAnswerSelect info={info} correctAnswer={[0, 0, -1, 0, 0, -1, -1]} />
@@ -79,43 +79,43 @@ export const minorScaleFormulaFlashCard = FlashCard.fromRenderFns(
 export function createFlashCards(): FlashCard[] {
   return [
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "scaleDef" }),
+      createFlashCardId(flashCardSetId, { id: "scaleDef" }),
       "What is a scale?",
       "a set of notes with a designated root note",
       renderUserDeterminedCorrectnessAnswerSelect
     ),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "rootNoteDef" }),
+      createFlashCardId(flashCardSetId, { id: "rootNoteDef" }),
       "What is the root note of a scale?",
       "the note that generally \"sounds like home\" in the scale",
       renderUserDeterminedCorrectnessAnswerSelect
     ),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "formulaHDef" }),
+      createFlashCardId(flashCardSetId, { id: "formulaHDef" }),
       "What does \"H\" mean in scale formulas?",
       "the next note in the scale is a half step higher than the previous note",
       renderUserDeterminedCorrectnessAnswerSelect
     ),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "formulaWDef" }),
+      createFlashCardId(flashCardSetId, { id: "formulaWDef" }),
       "What does \"W\" mean in scale formulas?",
       "the next note in the scale is a whole step higher than the previous note",
       renderUserDeterminedCorrectnessAnswerSelect
     ),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "halfStepDef" }),
+      createFlashCardId(flashCardSetId, { id: "halfStepDef" }),
       "How many keys does a half step span?",
       "one",
       renderUserDeterminedCorrectnessAnswerSelect
     ),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "wholeStepDef" }),
+      createFlashCardId(flashCardSetId, { id: "wholeStepDef" }),
       "How many keys does a whole step span?",
       "two",
       renderUserDeterminedCorrectnessAnswerSelect
     ),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "scaleUnordered" }),
+      createFlashCardId(flashCardSetId, { id: "scaleUnordered" }),
       "Do scale notes need to be played in the same order as they are defined in scale formulas?",
       "no",
       renderUserDeterminedCorrectnessAnswerSelect

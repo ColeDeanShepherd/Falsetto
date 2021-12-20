@@ -41,7 +41,7 @@ import { ChordDiagram, ChordProgressionPlayer } from "../Lessons/EssentialMusicT
 
 import { range } from '../../lib/Core/MathUtils';
 import { Size2D } from '../../lib/Core/Size2D';
-import { FlashCard } from "../../FlashCard";
+import { createFlashCardId, FlashCard } from "../../FlashCard";
 import { majorScaleFormulaFlashCard, minorScaleFormulaFlashCard } from './ScalesQuiz';
 import { FlashCardSet } from "../../FlashCardSet";
 import { PressPianoKeysAllOctavesView } from "../Utils/PressPianoKeysAllOctavesView";
@@ -1755,25 +1755,25 @@ export const pianoTheorySlideGroups = [
       
       createMiniQuizSlide("roman-numeral-notation-quiz", [
         FlashCard.fromRenderFns(
-          JSON.stringify({ set: "roman-numeral-notation-quiz", id: "numeral-meaning" }),
+          createFlashCardId("roman-numeral-notation-quiz", { id: "numeral-meaning" }),
           "What does the roman numeral (ex: \"V\" in \"V7\") represent, ignoring upper-case/lower-case?",
           "the scale degree the chord is built on",
           renderNextButtonAnswerSelect
         ),
         FlashCard.fromRenderFns(
-          JSON.stringify({ set: "roman-numeral-notation-quiz", id: "upper-case-meaning" }),
+          createFlashCardId("roman-numeral-notation-quiz", { id: "upper-case-meaning" }),
           "What type of chord does an upper-case roman numeral represent?",
           "major",
           renderNextButtonAnswerSelect
         ),
         FlashCard.fromRenderFns(
-          JSON.stringify({ set: "roman-numeral-notation-quiz", id: "lower-case-meaning" }),
+          createFlashCardId("roman-numeral-notation-quiz", { id: "lower-case-meaning" }),
           "What type of chord does a lower-case roman numeral represent?",
           "minor",
           renderNextButtonAnswerSelect
         ),
         FlashCard.fromRenderFns(
-          JSON.stringify({ set: "roman-numeral-notation-quiz", id: "7-symbol-meaning" }),
+          createFlashCardId("roman-numeral-notation-quiz", { id: "7-symbol-meaning" }),
           "What does the \"7\" in \"V7\" mean?",
           "the chord is a dominant 7th chord",
           renderNextButtonAnswerSelect
@@ -1836,7 +1836,7 @@ export const pianoTheorySlideGroups = [
       
       createMiniQuizSlide("descending-fifth-progression-quiz", [
         FlashCard.fromRenderFns(
-          JSON.stringify({ set: "descending-fifth-progression-quiz", id: "chord-after-4" }),
+          createFlashCardId("descending-fifth-progression-quiz", "chord-after-4"),
           "What chord comes after IV in a descending fifth progression?",
           "vii°",
           info => renderStringAnswerSelect(["I", "ii", "iii", "IV", "V", "vi", "vii°"], info)
@@ -1883,7 +1883,7 @@ export const pianoTheorySlideGroups = [
 
       createMiniQuizSlide("circle-progression-quiz", [
         FlashCard.fromRenderFns(
-          JSON.stringify({ set: "circle-progression-quiz", id: "circleProgression" }),
+          createFlashCardId("circle-progression-quiz", { id: "circleProgression" }),
           "What chords are in the circle progression, starting and ending with I?",
           "I - IV - vii° - iii - vi - ii - V - I",
           info => <ChordProgressionAnswerSelectView info={info} correctAnswer={"I - IV - vii° - iii - vi - ii - V - I"} />
@@ -1928,7 +1928,7 @@ export const pianoTheorySlideGroups = [
       
       createMiniQuizSlide("voice-leading-quiz", [
         FlashCard.fromRenderFns(
-          JSON.stringify({ set: "voice-leading-quiz", id: "voiceLeadingMostImportantRule" }),
+          createFlashCardId("voice-leading-quiz", { id: "voiceLeadingMostImportantRule" }),
           "What is the most important rule of voice leading?",
           "use the smallest possible movements when transitioning from one chord from the next",
           renderUserDeterminedCorrectnessAnswerSelect
@@ -1973,13 +1973,13 @@ export const pianoTheorySlideGroups = [
       
       createMiniQuizSlide("chord-substitution-quiz", [
         FlashCard.fromRenderFns(
-          JSON.stringify({ set: "chord-substitution-quiz", id: "chordSubstitutionDef" }),
+          createFlashCardId("chord-substitution-quiz", { id: "chordSubstitutionDef" }),
           "What is chord substitution?",
           "replacing one chord with another that sounds similar or has a similar \"feel\" in the progression",
           renderUserDeterminedCorrectnessAnswerSelect
         ),
         FlashCard.fromRenderFns(
-          JSON.stringify({ set: "chord-substitution-quiz", id: "chordsSharingNotesSimilar" }),
+          createFlashCardId("chord-substitution-quiz", { id: "chordsSharingNotesSimilar" }),
           "One way to find chords that sound similar to another chord is looking for chords which _.",
           "share many of the same notes",
           renderUserDeterminedCorrectnessAnswerSelect

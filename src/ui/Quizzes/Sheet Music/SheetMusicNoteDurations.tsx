@@ -2,7 +2,7 @@ import * as React from "react";
 import * as Vex from "vexflow";
 
 import * as FlashCardUtils from "../Utils";
-import { FlashCard, FlashCardId } from "../../../FlashCard";
+import { createFlashCardId, FlashCard, FlashCardId } from "../../../FlashCard";
 import { VexFlowComponent } from "../../Utils/VexFlowComponent";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { Size2D } from '../../../lib/Core/Size2D';
@@ -36,7 +36,7 @@ function createFlashCardSet(): FlashCardSet {
 export function createFlashCards(): FlashCard[] {
   return [
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "w" }),
+      createFlashCardId(flashCardSetId, { id: "w" }),
       () => (
         <VexFlowComponent
           size={canvasSize}
@@ -46,7 +46,7 @@ export function createFlashCards(): FlashCard[] {
       "Whole Note"
     ),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "h" }),
+      createFlashCardId(flashCardSetId, { id: "h" }),
       () => (
         <VexFlowComponent
           size={canvasSize}
@@ -56,7 +56,7 @@ export function createFlashCards(): FlashCard[] {
       "Half Note"
     ),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "q" }),
+      createFlashCardId(flashCardSetId, { id: "q" }),
       () => (
         <VexFlowComponent
           size={canvasSize}
@@ -66,7 +66,7 @@ export function createFlashCards(): FlashCard[] {
       "Quarter Note"
     ),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "8" }),
+      createFlashCardId(flashCardSetId, { id: "8" }),
       () => (
         <VexFlowComponent
           size={canvasSize}
@@ -76,7 +76,7 @@ export function createFlashCards(): FlashCard[] {
       "Eighth Note"
     ),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "16" }),
+      createFlashCardId(flashCardSetId, { id: "16" }),
       () => (
         <VexFlowComponent
           size={canvasSize}
@@ -86,7 +86,7 @@ export function createFlashCards(): FlashCard[] {
       "Sixteenth Note"
     ),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "32" }),
+      createFlashCardId(flashCardSetId, { id: "32" }),
       () => (
         <VexFlowComponent
           size={canvasSize}
@@ -96,7 +96,7 @@ export function createFlashCards(): FlashCard[] {
       "32nd Note"
     ),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "64" }),
+      createFlashCardId(flashCardSetId, { id: "64" }),
       () => (
         <VexFlowComponent
           size={canvasSize}
@@ -106,7 +106,7 @@ export function createFlashCards(): FlashCard[] {
       "64th Note"
     ),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "128" }),
+      createFlashCardId(flashCardSetId, { id: "128" }),
       () => (
         <VexFlowComponent
           size={canvasSize}
@@ -116,7 +116,7 @@ export function createFlashCards(): FlashCard[] {
       "128th Note"
     ),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "wr" }),
+      createFlashCardId(flashCardSetId, { id: "wr" }),
       () => (
         <VexFlowComponent
           size={canvasSize}
@@ -126,7 +126,7 @@ export function createFlashCards(): FlashCard[] {
       "Whole Rest"
     ),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "h4" }),
+      createFlashCardId(flashCardSetId, { id: "h4" }),
       () => (
         <VexFlowComponent
           size={canvasSize}
@@ -136,7 +136,7 @@ export function createFlashCards(): FlashCard[] {
       "Half Rest"
     ),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "qr" }),
+      createFlashCardId(flashCardSetId, { id: "qr" }),
       () => (
         <VexFlowComponent
           size={canvasSize}
@@ -146,7 +146,7 @@ export function createFlashCards(): FlashCard[] {
       "Quarter Rest"
     ),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "8r" }),
+      createFlashCardId(flashCardSetId, { id: "8r" }),
       () => (
         <VexFlowComponent
           size={canvasSize}
@@ -156,7 +156,7 @@ export function createFlashCards(): FlashCard[] {
       "Eighth Rest"
     ),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "16r" }),
+      createFlashCardId(flashCardSetId, { id: "16r" }),
       () => (
         <VexFlowComponent
           size={canvasSize}
@@ -166,7 +166,7 @@ export function createFlashCards(): FlashCard[] {
       "Sixteenth Rest"
     ),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "32r" }),
+      createFlashCardId(flashCardSetId, { id: "32r" }),
       () => (
         <VexFlowComponent
           size={canvasSize}
@@ -176,7 +176,7 @@ export function createFlashCards(): FlashCard[] {
       "32nd Rest"
     ),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "64r" }),
+      createFlashCardId(flashCardSetId, { id: "64r" }),
       () => (
         <VexFlowComponent
           size={canvasSize}
@@ -186,7 +186,7 @@ export function createFlashCards(): FlashCard[] {
       "64th Rest"
     ),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "128r" }),
+      createFlashCardId(flashCardSetId, { id: "128r" }),
       () => (
         <VexFlowComponent
           size={canvasSize}

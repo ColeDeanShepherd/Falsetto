@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { PianoKeyboard } from "../../Utils/PianoKeyboard";
-import { FlashCard, FlashCardSide } from "../../../FlashCard";
+import { createFlashCardId, FlashCard, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardLevel, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { Pitch, getPitchRange } from "../../../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
@@ -63,16 +63,10 @@ export function createFlashCardSet(pitches?: Array<Pitch>): FlashCardSet {
 function createFlashCards(pitches?: Array<Pitch>): FlashCard[] {
   return (pitches ? pitches : allPitches)
     .map((pitch, i) => {
-      const deserializedId = {
-        set: flashCardSetId,
-        note: pitch.toOneAccidentalAmbiguousString(false, false)
-      };
-      const id = JSON.stringify(deserializedId);
-
       const pitchString = pitch.toOneAccidentalAmbiguousString(false, true);
 
       return new FlashCard(
-        id,
+        createFlashCardId(flashCardSetId, { note: pitch.toOneAccidentalAmbiguousString(false, false) }),
         new FlashCardSide(
           `Press ${pitchString}`,
           pitch

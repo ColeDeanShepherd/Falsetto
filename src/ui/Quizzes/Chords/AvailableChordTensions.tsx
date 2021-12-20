@@ -1,5 +1,5 @@
 import * as FlashCardUtils from "../Utils";
-import { FlashCard } from "../../../FlashCard";
+import { createFlashCardId, FlashCard } from "../../../FlashCard";
 import { FlashCardSet } from "../../../FlashCardSet";
 
 const flashCardSetId = "availableChordTensions";
@@ -14,31 +14,31 @@ function createFlashCardSet(): FlashCardSet {
 export function createFlashCards(): FlashCard[] {
   return [
     FlashCard.fromRenderFns(
-      JSON.stringify({ "set": flashCardSetId, chordType: "maj7" }),
+      createFlashCardId(flashCardSetId, { chordType: "maj7" }),
       "Maj7", "9, #11, 13"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ "set": flashCardSetId, chordType: "m7" }),
+      createFlashCardId(flashCardSetId, { chordType: "m7" }),
       "m7", "9, 11, 13"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ "set": flashCardSetId, chordType: "halfDim7" }),
+      createFlashCardId(flashCardSetId, { chordType: "halfDim7" }),
       "ø7", "9, 11, b13"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ "set": flashCardSetId, chordType: "mMaj7" }),
+      createFlashCardId(flashCardSetId, { chordType: "mMaj7" }),
       "mMaj7", "9, 11, 13"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ "set": flashCardSetId, chordType: "augMaj7" }),
+      createFlashCardId(flashCardSetId, { chordType: "augMaj7" }),
       "Maj+7", "9, #11"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ "set": flashCardSetId, chordType: "dim7" }),
+      createFlashCardId(flashCardSetId, { chordType: "dim7" }),
       "o", "9, 11, b13, 7"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ "set": flashCardSetId, chordType: "7" }),
+      createFlashCardId(flashCardSetId, { chordType: "7" }),
       "7", "b9, 9, #9, #11, b13, 13"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ "set": flashCardSetId, chordType: "7sus" }),
+      createFlashCardId(flashCardSetId, { chordType: "7sus" }),
       "7sus", "b9, 9, #9, b11, b13, 13"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ "set": flashCardSetId, chordType: "aug7" }),
+      createFlashCardId(flashCardSetId, { chordType: "aug7" }),
       "+7", "b9, 9, #9, #11, 13"),
   ];
 }

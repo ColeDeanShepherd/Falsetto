@@ -4,7 +4,7 @@ import { Pitch, ambiguousKeyPitchStringsSymbols, getPitchRange } from "../../../
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
 import { ScaleType, scaleTypeLevels } from "../../../lib/TheoryLib/Scale";
 import { PianoKeyboard, PianoKeyboardMetrics, renderPianoKeyboardKeyLabels } from "../../Utils/PianoKeyboard";
-import { FlashCard, FlashCardSide, FlashCardId } from "../../../FlashCard";
+import { FlashCard, FlashCardSide, FlashCardId, createFlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
 import { ScaleAnswerSelect } from "../../Utils/ScaleAnswerSelect";
 import { ChordScaleFormula, ChordScaleFormulaPart } from '../../../lib/TheoryLib/ChordScaleFormula';
@@ -162,15 +162,9 @@ export function createFlashCards(): FlashCard[] {
     const highestPitch = new Pitch(PitchLetter.B, 0, 5);
     const pressedPitches = getPitchRange(lowestPitch, highestPitch)
       .filter(p => pitchMidiNumbersNoOctave.has(p.midiNumberNoOctave));
-    
-    const deserializedId = {
-      set: flashCardSetId,
-      scale: `${rootPitch.toString(false)} ${scaleType.name}`
-    };
-    const id = JSON.stringify(deserializedId);
 
     const flashCard = new FlashCard(
-      id,
+      createFlashCardId(flashCardSetId, { scale: `${rootPitch.toString(false)} ${scaleType.name}` }),
       new FlashCardSide(
         size => (
           <PianoKeyboard

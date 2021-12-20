@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import * as FlashCardUtils from "../../ui/Quizzes/Utils";
-import { FlashCard } from "../../FlashCard";
+import { createFlashCardId, FlashCard } from "../../FlashCard";
 import { FlashCardSet } from "../../FlashCardSet";
 import { renderUserDeterminedCorrectnessAnswerSelect, renderStringAnswerSelect } from '../../ui/Quizzes/Utils';
 import { MajorScaleRelativeFormulaAnswerSelect } from "../../ui/Utils/MajorScaleRelativeFormulaAnswerSelect";
@@ -9,7 +9,7 @@ import { MajorScaleRelativeFormulaAnswerSelect } from "../../ui/Utils/MajorScale
 const flashCardSetId = "ptChordsIntroQuiz";
 
 export const fifthIntervalFlashCard = FlashCard.fromRenderFns(
-  JSON.stringify({ set: flashCardSetId, id: "fifthInterval" }),
+  JSON.stringify({ id: "fifthInterval" }),
   "What is the interval from A to E?",
   "fifth",
   info => renderStringAnswerSelect(["first", "second", "third", "fourth", "fifth", "sixth", "seventh"], info)
@@ -25,49 +25,49 @@ function createFlashCardSet(): FlashCardSet {
 export function createFlashCards(): FlashCard[] {
   return [
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "chordDef" }),
+      createFlashCardId(flashCardSetId, { id: "chordDef" }),
       "What is a chord?",
       "two or more notes played simultaneously",
       renderUserDeterminedCorrectnessAnswerSelect
     ),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "chordUnorderedRepeat" }),
+      createFlashCardId(flashCardSetId, { id: "chordUnorderedRepeat" }),
       "Are you allowed to re-order and/or repeat the notes in a chord?",
       "yes",
       renderUserDeterminedCorrectnessAnswerSelect
     ),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "intervalDef" }),
+      createFlashCardId(flashCardSetId, { id: "intervalDef" }),
       "What is an interval?",
       "the distance between two notes",
       renderUserDeterminedCorrectnessAnswerSelect
     ),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "mostlyTertialChords" }),
+      createFlashCardId(flashCardSetId, { id: "mostlyTertialChords" }),
       "In practice, most chords are built with what interval?",
       "thirds",
       renderUserDeterminedCorrectnessAnswerSelect
     ),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "thirdDef" }),
+      createFlashCardId(flashCardSetId, { id: "thirdDef" }),
       "What is a third?",
       "an interval that spans three letters",
       renderUserDeterminedCorrectnessAnswerSelect
     ),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "tertialRootNote" }),
+      createFlashCardId(flashCardSetId, { id: "tertialRootNote" }),
       "When we say that a chord is built with thirds, we only care that chord notes are thirds apart when starting with which note in the chord?",
       "root note",
       renderUserDeterminedCorrectnessAnswerSelect
     ),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "tertialNoteOrder" }),
+      createFlashCardId(flashCardSetId, { id: "tertialNoteOrder" }),
       "When we say that a chord is built with thirds, we only care that chord notes are thirds apart when listed in what order?",
       "left-to-right on the piano keyboard",
       renderUserDeterminedCorrectnessAnswerSelect
     ),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "majorChordFormula" }),
+      createFlashCardId(flashCardSetId, { id: "majorChordFormula" }),
       "What is the major-scale-relative formula for major chords?",
       "1 3 5",
       info => <MajorScaleRelativeFormulaAnswerSelect
@@ -76,7 +76,7 @@ export function createFlashCards(): FlashCard[] {
         scaleDegreeNumbers={[1, 3, 5]} />
     ),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "minorChordFormula" }),
+      createFlashCardId(flashCardSetId, { id: "minorChordFormula" }),
       "What is the major-scale-relative formula for minor chords?",
       "1 3♭ 5",
       info => <MajorScaleRelativeFormulaAnswerSelect
@@ -85,7 +85,7 @@ export function createFlashCards(): FlashCard[] {
         scaleDegreeNumbers={[1, 3, 5]} />
     ),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "diminishedChordFormula" }),
+      createFlashCardId(flashCardSetId, { id: "diminishedChordFormula" }),
       "What is the major-scale-relative formula for diminished chords?",
       "1 3♭ 5♭",
       info => <MajorScaleRelativeFormulaAnswerSelect
@@ -94,7 +94,7 @@ export function createFlashCards(): FlashCard[] {
         scaleDegreeNumbers={[1, 3, 5]} />
     ),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "dominant7ChordFormula" }),
+      createFlashCardId(flashCardSetId, { id: "dominant7ChordFormula" }),
       "What is the major-scale-relative formula for dominant 7th chords?",
       "1 3♭ 5 7♭",
       info => <MajorScaleRelativeFormulaAnswerSelect

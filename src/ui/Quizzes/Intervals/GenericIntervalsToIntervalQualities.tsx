@@ -1,5 +1,5 @@
 import * as FlashCardUtils from "../Utils";
-import { FlashCard } from "../../../FlashCard";
+import { createFlashCardId, FlashCard } from "../../../FlashCard";
 import { FlashCardSet } from "../../../FlashCardSet";
 
 const flashCardSetId = "genericIntervalQualities";
@@ -14,28 +14,28 @@ function createFlashCardSet(): FlashCardSet {
 export function createFlashCards(): FlashCard[] {
   return [
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, interval: 1 }),
+      createFlashCardId(flashCardSetId, { interval: 1 }),
       "1st", "perfect"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, interval: 2 }),
+      createFlashCardId(flashCardSetId, { interval: 2 }),
       "2nd", "imperfect"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, interval: 3 }),
+      createFlashCardId(flashCardSetId, { interval: 3 }),
       "3rd", "imperfect"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, interval: 4 }),
+      createFlashCardId(flashCardSetId, { interval: 4 }),
       "4th", "perfect"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, interval: 5 }),
+      createFlashCardId(flashCardSetId, { interval: 5 }),
       "5th", "perfect"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, interval: 6 }),
+      createFlashCardId(flashCardSetId, { interval: 6 }),
       "6th", "imperfect"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, interval: 7 }),
+      createFlashCardId(flashCardSetId, { interval: 7 }),
       "7th", "imperfect"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, interval: 8 }),
+      createFlashCardId(flashCardSetId, { interval: 8 }),
       "8th", "perfect"),
   ];
 }

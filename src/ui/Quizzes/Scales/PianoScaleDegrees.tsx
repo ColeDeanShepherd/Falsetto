@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { PianoKeyboard } from "../../Utils/PianoKeyboard";
-import { FlashCard, FlashCardSide } from "../../../FlashCard";
+import { createFlashCardId, FlashCard, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 
 import { Pitch, tryWrapPitchOctave } from '../../../lib/TheoryLib/Pitch';
@@ -55,14 +55,8 @@ function createFlashCards(flashCardSetId: string, scale: Scale): FlashCard[] {
     .map((pitch, i) => {
       const scaleDegreeNumber = 1 + i;
 
-      const deserializedId = {
-        set: flashCardSetId,
-        degree: scaleDegreeNumber
-      };
-      const id = JSON.stringify(deserializedId);
-
       return new FlashCard(
-        id,
+        createFlashCardId(flashCardSetId, { degree: scaleDegreeNumber }),
         new FlashCardSide(
           `Degree ${scaleDegreeNumber}`,
           pitch

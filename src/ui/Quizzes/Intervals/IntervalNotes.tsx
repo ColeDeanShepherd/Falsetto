@@ -2,7 +2,7 @@ import * as React from "react";
 
 import * as Utils from "../../../lib/Core/Utils";
 import * as FlashCardUtils from "../Utils";
-import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
+import { createFlashCardId, FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
 import { Pitch } from "../../../lib/TheoryLib/Pitch";
 import { VerticalDirection } from "../../../lib/Core/VerticalDirection";
@@ -150,14 +150,8 @@ export function createFlashCards(): Array<FlashCard> {
       new Interval(genericIntervalNum, intervalQualityNum)
     );
     
-    const deserializedId = {
-      set: flashCardSetId,
-      pitches: [rootPitch.toString(true), newPitch.toString(true)]
-    };
-    const id = JSON.stringify(deserializedId);
-    
     const flashCard = new FlashCard(
-      id,
+      createFlashCardId(flashCardSetId, { pitches: [rootPitch.toString(true), newPitch.toString(true)] }),
       new FlashCardSide(
         rootPitch.toString(true) + ", " + newPitch.toString(true)
       ),

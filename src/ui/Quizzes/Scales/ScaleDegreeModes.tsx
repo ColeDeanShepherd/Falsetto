@@ -1,5 +1,5 @@
 import * as FlashCardUtils from "../Utils";
-import { FlashCard, FlashCardId } from "../../../FlashCard";
+import { createFlashCardId, FlashCard, FlashCardId } from "../../../FlashCard";
 import { FlashCardSet } from "../../../FlashCardSet";
 
 const flashCardSetId = "scaleDegreeModes";
@@ -24,113 +24,113 @@ function createFlashCardSet(): FlashCardSet {
 export function createFlashCards(): FlashCard[] {
   return [
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "M1" }),
+      createFlashCardId(flashCardSetId, { id: "M1" }),
       "Major Degree 1 Mode", "Ionian"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "M2" }),
+      createFlashCardId(flashCardSetId, { id: "M2" }),
       "Major Degree 2 Mode", "Dorian"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "M3" }),
+      createFlashCardId(flashCardSetId, { id: "M3" }),
       "Major Degree 3 Mode", "Phrygian"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "M4" }),
+      createFlashCardId(flashCardSetId, { id: "M4" }),
       "Major Degree 4 Mode", "Lydian"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "M5" }),
+      createFlashCardId(flashCardSetId, { id: "M5" }),
       "Major Degree 5 Mode", "Mixolydian"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "M6" }),
+      createFlashCardId(flashCardSetId, { id: "M6" }),
       "Major Degree 6 Mode", "Aeolian"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "M7" }),
+      createFlashCardId(flashCardSetId, { id: "M7" }),
       "Major Degree 7 Mode", "Locrian"),
 
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "melMin1" }),
+      createFlashCardId(flashCardSetId, { id: "melMin1" }),
       "Melodic Minor Degree 1 Mode", "Melodic Minor"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "melMin2" }),
+      createFlashCardId(flashCardSetId, { id: "melMin2" }),
       "Melodic Minor Degree 2 Mode", "Phrygian ♯6 or Dorian ♭2"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "melMin3" }),
+      createFlashCardId(flashCardSetId, { id: "melMin3" }),
       "Melodic Minor Degree 3 Mode", "Lydian Augmented"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "melMin4" }),
+      createFlashCardId(flashCardSetId, { id: "melMin4" }),
       "Melodic Minor Degree 4 Mode", "Lydian Dominant"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "melMin5" }),
+      createFlashCardId(flashCardSetId, { id: "melMin5" }),
       "Melodic Minor Degree 5 Mode", "Mixolydian ♭6"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "melMin6" }),
+      createFlashCardId(flashCardSetId, { id: "melMin6" }),
       "Melodic Minor Degree 6 Mode", "Half-Diminished"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "melMin7" }),
+      createFlashCardId(flashCardSetId, { id: "melMin7" }),
       "Melodic Minor Degree 7 Mode", "Altered dominant"),
     
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "harmMin1" }),
+      createFlashCardId(flashCardSetId, { id: "harmMin1" }),
       "Harmonic Minor Degree 1 Mode", "Harmonic Minor"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "harmMin2" }),
+      createFlashCardId(flashCardSetId, { id: "harmMin2" }),
       "Harmonic Minor Degree 2 Mode", "Locrian ♯6"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "harmMin3" }),
+      createFlashCardId(flashCardSetId, { id: "harmMin3" }),
       "Harmonic Minor Degree 3 Mode", "Ionian ♯5"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "harmMin4" }),
+      createFlashCardId(flashCardSetId, { id: "harmMin4" }),
       "Harmonic Minor Degree 4 Mode", "Ukrainian Dorian"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "harmMin5" }),
+      createFlashCardId(flashCardSetId, { id: "harmMin5" }),
       "Harmonic Minor Degree 5 Mode", "Phrygian Dominant"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "harmMin6" }),
+      createFlashCardId(flashCardSetId, { id: "harmMin6" }),
       "Harmonic Minor Degree 6 Mode", "Lydian ♯2"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "harmMin7" }),
+      createFlashCardId(flashCardSetId, { id: "harmMin7" }),
       "Harmonic Minor Degree 7 Mode", "Altered Diminished"),
     
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "harmMaj1" }),
+      createFlashCardId(flashCardSetId, { id: "harmMaj1" }),
       "Harmonic Major Degree 1 Mode", "Harmonic Major"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "harmMaj2" }),
+      createFlashCardId(flashCardSetId, { id: "harmMaj2" }),
       "Harmonic Major Degree 2 Mode", "Dorian b5"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "harmMaj3" }),
+      createFlashCardId(flashCardSetId, { id: "harmMaj3" }),
       "Harmonic Major Degree 3 Mode", "Phrygian b4"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "harmMaj4" }),
+      createFlashCardId(flashCardSetId, { id: "harmMaj4" }),
       "Harmonic Major Degree 4 Mode", "Lydian b3"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "harmMaj5" }),
+      createFlashCardId(flashCardSetId, { id: "harmMaj5" }),
       "Harmonic Major Degree 5 Mode", "Mixolydian b9"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "harmMaj6" }),
+      createFlashCardId(flashCardSetId, { id: "harmMaj6" }),
       "Harmonic Major Degree 6 Mode", "Lydian Augmented #2"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "harmMaj7" }),
+      createFlashCardId(flashCardSetId, { id: "harmMaj7" }),
       "Harmonic Major Degree 7 Mode", "Locrian bb7"),
     
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "dHarmMaj1" }),
+      createFlashCardId(flashCardSetId, { id: "dHarmMaj1" }),
       "Double Harmonic Major Degree 1 Mode", "Double Harmonic Major"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "dHarmMaj2" }),
+      createFlashCardId(flashCardSetId, { id: "dHarmMaj2" }),
       "Double Harmonic Major Degree 2 Mode", "Lydian ♯2 ♯6"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "dHarmMaj3" }),
+      createFlashCardId(flashCardSetId, { id: "dHarmMaj3" }),
       "Double Harmonic Major Degree 3 Mode", "Phrygian ♭♭7 ♭4"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "dHarmMaj4" }),
+      createFlashCardId(flashCardSetId, { id: "dHarmMaj4" }),
       "Double Harmonic Major Degree 4 Mode", "Hungarian Minor"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "dHarmMaj5" }),
+      createFlashCardId(flashCardSetId, { id: "dHarmMaj5" }),
       "Double Harmonic Major Degree 5 Mode", "Locrian ♮6 ♮3 or Mixolydian ♭5 ♭2"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "dHarmMaj6" }),
+      createFlashCardId(flashCardSetId, { id: "dHarmMaj6" }),
       "Double Harmonic Major Degree 6 Mode", "Ionian ♯5 ♯2"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "dHarmMaj7" }),
+      createFlashCardId(flashCardSetId, { id: "dHarmMaj7" }),
       "Double Harmonic Major Degree 7 Mode", "Locrian ♭♭3 ♭♭7 "),
   ];
 }

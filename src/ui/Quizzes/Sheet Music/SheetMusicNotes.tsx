@@ -5,7 +5,7 @@ import * as Vex from "vexflow";
 import * as FlashCardUtils from "../Utils";
 import { VexFlowComponent } from "../../Utils/VexFlowComponent";
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
-import { FlashCard, FlashCardId } from "../../../FlashCard";
+import { createFlashCardId, FlashCard, FlashCardId } from "../../../FlashCard";
 import { Pitch } from "../../../lib/TheoryLib/Pitch";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { Size2D } from '../../../lib/Core/Size2D';
@@ -83,7 +83,7 @@ export function createFlashCards(): FlashCard[] {
     }
 
     return FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, clef: clef, pitch: pitch.toString(true) }),
+      createFlashCardId(flashCardSetId, { clef: clef, pitch: pitch.toString(true) }),
       () => (  
         <SheetMusicSingleNote
           size={new Size2D(150, 200)}

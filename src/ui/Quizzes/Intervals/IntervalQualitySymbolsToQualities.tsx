@@ -1,5 +1,5 @@
 import * as FlashCardUtils from "../Utils";
-import { FlashCard } from "../../../FlashCard";
+import { createFlashCardId, FlashCard } from "../../../FlashCard";
 import { FlashCardSet } from "../../../FlashCardSet";
 
 const flashCardSetId = "intervalQualitySymbols";
@@ -14,19 +14,19 @@ function createFlashCardSet(): FlashCardSet {
 export function createFlashCards(): FlashCard[] {
   return [
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "M" }),
+      createFlashCardId(flashCardSetId, { id: "M" }),
       "M", "major"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "m" }),
+      createFlashCardId(flashCardSetId, { id: "m" }),
       "m", "minor"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "A" }),
+      createFlashCardId(flashCardSetId, { id: "A" }),
       "A", "augmented"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "d" }),
+      createFlashCardId(flashCardSetId, { id: "d" }),
       "d", "diminished"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "P" }),
+      createFlashCardId(flashCardSetId, { id: "P" }),
       "P", "perfect"),
   ];
 }

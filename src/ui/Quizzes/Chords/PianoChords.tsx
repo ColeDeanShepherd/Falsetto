@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { PianoKeyboard } from "../../Utils/PianoKeyboard";
-import { FlashCard, FlashCardSide, FlashCardId } from "../../../FlashCard";
+import { FlashCard, FlashCardSide, FlashCardId, createFlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
 import { Pitch, ambiguousKeyPitchStringsSymbols } from "../../../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
@@ -174,14 +174,9 @@ export function createFlashCards(chordTypes: Array<ChordType>): FlashCard[] {
         const halfStepsFromC = mod(i - 3, 12);
         const rootPitch = Pitch.createFromMidiNumber((new Pitch(PitchLetter.C, 0, 4)).midiNumber + halfStepsFromC);
         const pitches = new Chord(chordType, rootPitch).getPitches();
-        const deserializedId = {
-          set: flashCardSetId,
-          chord: `${rootPitch.toString(false)} ${chordType.name}`
-        };
-        const id = JSON.stringify(deserializedId);
 
         return new FlashCard(
-          id,
+          createFlashCardId(flashCardSetId, { chord: `${rootPitch.toString(false)} ${chordType.name}` }),
 
           new FlashCardSide(
             rootPitchStr + " " + chordType.name,

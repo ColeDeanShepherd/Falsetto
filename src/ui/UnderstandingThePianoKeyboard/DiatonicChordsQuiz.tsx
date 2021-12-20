@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import * as FlashCardUtils from "../../ui/Quizzes/Utils";
-import { FlashCard } from "../../FlashCard";
+import { createFlashCardId, FlashCard } from "../../FlashCard";
 import { FlashCardSet } from "../../FlashCardSet";
 import { renderUserDeterminedCorrectnessAnswerSelect, renderStringAnswerSelect } from '../../ui/Quizzes/Utils';
 import { Scale, ScaleType } from '../../lib/TheoryLib/Scale';
@@ -23,13 +23,13 @@ function createFlashCardSet(): FlashCardSet {
 export function createFlashCards(): FlashCard[] {
   return [
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "diatonicChordDef" }),
+      createFlashCardId(flashCardSetId, { id: "diatonicChordDef" }),
       "What is a diatonic chord?",
       "a chord consisting solely of notes from a particular scale",
       renderUserDeterminedCorrectnessAnswerSelect
     ),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "triadDef" }),
+      createFlashCardId(flashCardSetId, { id: "triadDef" }),
       "What is a triad?",
       "a chord with with 3 distinct notes",
       renderUserDeterminedCorrectnessAnswerSelect
@@ -49,44 +49,44 @@ export function createFlashCards(): FlashCard[] {
       })
   )
   .concat([
-      FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "majorDiatonicTriad1" }),
+    FlashCard.fromRenderFns(
+      createFlashCardId(flashCardSetId, { id: "majorDiatonicTriad1" }),
       "What type of triad is built with thirds on the 1st note of the major scale?",
       "Major",
       info => renderStringAnswerSelect(diatonicTriadTypeStrings, info)
     ),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "majorDiatonicTriad2" }),
+      createFlashCardId(flashCardSetId, { id: "majorDiatonicTriad2" }),
       "What type of triad is built with thirds on the 2nd note of the major scale?",
       "Minor",
       info => renderStringAnswerSelect(diatonicTriadTypeStrings, info)
     ),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "majorDiatonicTriad3" }),
+      createFlashCardId(flashCardSetId, { id: "majorDiatonicTriad3" }),
       "What type of triad is built with thirds on the 3rd note of the major scale?",
       "Minor",
       info => renderStringAnswerSelect(diatonicTriadTypeStrings, info)
     ),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "majorDiatonicTriad4" }),
+      createFlashCardId(flashCardSetId, { id: "majorDiatonicTriad4" }),
       "What type of triad is built with thirds on the 4th note of the major scale?",
       "Major",
       info => renderStringAnswerSelect(diatonicTriadTypeStrings, info)
     ),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "majorDiatonicTriad5" }),
+      createFlashCardId(flashCardSetId, { id: "majorDiatonicTriad5" }),
       "What type of triad is built with thirds on the 5th note of the major scale?",
       "Major",
       info => renderStringAnswerSelect(diatonicTriadTypeStrings, info)
     ),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "majorDiatonicTriad6" }),
+      createFlashCardId(flashCardSetId, { id: "majorDiatonicTriad6" }),
       "What type of triad is built with thirds on the 6th note of the major scale?",
       "Minor",
       info => renderStringAnswerSelect(diatonicTriadTypeStrings, info)
     ),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, id: "majorDiatonicTriad7" }),
+      createFlashCardId(flashCardSetId, { id: "majorDiatonicTriad7" }),
       "What type of triad is built with thirds on the 7th note of the major scale?",
       "Diminished",
       info => renderStringAnswerSelect(diatonicTriadTypeStrings, info)

@@ -6,7 +6,7 @@ import { Pitch } from "../../../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
 import { Scale, getUriComponent } from "../../../lib/TheoryLib/Scale";
 
-import { FlashCard, FlashCardSide, FlashCardSideRenderFn } from '../../../FlashCard';
+import { createFlashCardId, FlashCard, FlashCardSide, FlashCardSideRenderFn } from '../../../FlashCard';
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 
 import { PianoKeyboard } from "../../Utils/PianoKeyboard";
@@ -52,12 +52,6 @@ export function createChordNotesFlashCard(
   canonicalChord: CanonicalChord,
   frontSideRenderFn: FlashCardSideRenderFn
 ): FlashCard {
-  const deserializedId = {
-    set: flashCardSetId,
-    chord: `${canonicalChord.rootPitchClass.toString()} ${canonicalChordTypeToString(canonicalChord.type)}`
-  };
-  const id = JSON.stringify(deserializedId);
-
   const chordPitches = getPitchClasses(canonicalChord)
     .map(pitchClass => Pitch.createFromPitchClass(
       pitchClass,
@@ -66,7 +60,7 @@ export function createChordNotesFlashCard(
     ));
 
   return new FlashCard(
-    id,
+    createFlashCardId(flashCardSetId, { chord: `${canonicalChord.rootPitchClass.toString()} ${canonicalChordTypeToString(canonicalChord.type)}` }),
 
     new FlashCardSide(
       frontSideRenderFn,

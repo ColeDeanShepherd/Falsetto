@@ -2,7 +2,7 @@ import * as React from "react";
 import { TextField, Checkbox } from "@material-ui/core";
 
 import * as Utils from "../../lib/Core/Utils";
-import { FlashCardId, FlashCard, FlashCardSide } from "../../FlashCard";
+import { FlashCardId, FlashCard, FlashCardSide, createFlashCardId } from "../../FlashCard";
 import { FlashCardStudySessionInfo, FlashCardSet } from "../../FlashCardSet";
 import { StringedInstrumentTuning } from './StringedInstrumentTuning';
 import { StringedInstrumentNote } from '../../lib/TheoryLib/StringedInstrumentNote';
@@ -165,15 +165,14 @@ export function getNoteFlashCardId(
   tuning: StringedInstrumentTuning,
   note: StringedInstrumentNote
 ): string {
-  const deserializedId = {
-    set: flashCardSetId,
-    tuning: tuning.openStringPitches.map(p => p.toString(true, false)),
-    stringIndex: note.stringIndex,
-    fretNumber: note.getFretNumber(tuning)
-  };
-  const id = JSON.stringify(deserializedId);
-
-  return id;
+  return createFlashCardId(
+    flashCardSetId,
+    {
+      tuning: tuning.openStringPitches.map(p => p.toString(true, false)),
+      stringIndex: note.stringIndex,
+      fretNumber: note.getFretNumber(tuning)
+    }
+  );
 }
 
 export function createFlashCards(

@@ -5,7 +5,7 @@ import {
 } from "../../Utils/GuitarFretboard";
 import { StringedInstrumentMetrics } from "../../Utils/StringedInstrumentFingerboard";
 import { standard6StringGuitarTuning, StringedInstrumentTuning } from "../../Utils/StringedInstrumentTuning";
-import { FlashCard, FlashCardSide, FlashCardId } from "../../../FlashCard";
+import { FlashCard, FlashCardSide, FlashCardId, createFlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { StringedInstrumentNote, getStringedInstrumentNotes } from '../../../lib/TheoryLib/StringedInstrumentNote';
 import { playPitches } from '../../../Audio/GuitarAudio';
@@ -210,16 +210,15 @@ export function createFlashCards(notes?: Array<StringedInstrumentNote>): FlashCa
 
   return notes
     .map(note => {
-      const deserializedId = {
-        set: flashCardSetId,
-        tuning: guitarTuning.openStringPitches.map(p => p.toString(true, false)),
-        stringIndex: note.stringIndex,
-        fretNumber: note.getFretNumber(guitarTuning)
-      };
-      const id = JSON.stringify(deserializedId);
-
       return new FlashCard(
-        id,
+        createFlashCardId(
+          flashCardSetId,
+          {
+            tuning: guitarTuning.openStringPitches.map(p => p.toString(true, false)),
+            stringIndex: note.stringIndex,
+            fretNumber: note.getFretNumber(guitarTuning)
+          }
+        ),
         new FlashCardSide(
           size => {
             return <FlashCardFrontSide

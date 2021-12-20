@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import * as FlashCardUtils from "../Utils";
-import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
+import { createFlashCardId, FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
 import { Pitch } from "../../../lib/TheoryLib/Pitch";
 import { playPitches, playPitchesSequentially } from "../../../Audio/PianoAudio";
@@ -91,15 +91,14 @@ export function createFlashCards(): Array<FlashCard> {
   const includeHarmonicIntervals = true;
   forEachInterval([firstPitches[0]],
     (interval, direction, pitch1, pitch2, isHarmonicInterval, i) => {
-      const deserializedId = {
-        set: flashCardSetId,
-        interval: interval,
-        direction: direction
-      };
-      const id = JSON.stringify(deserializedId);
-
       flashCards.push(new FlashCard(
-        id,
+        createFlashCardId(
+          flashCardSetId,
+          {
+            interval: interval,
+            direction: direction
+          }
+        ),
         new FlashCardSide(
           () => <FlashCardFrontSide key={i} interval={interval} direction={direction} />
         ),

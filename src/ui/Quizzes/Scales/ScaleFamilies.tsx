@@ -1,5 +1,5 @@
 import * as FlashCardUtils from "../Utils";
-import { FlashCard, FlashCardId } from "../../../FlashCard";
+import { createFlashCardId, FlashCard, FlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 
 const flashCardSetId = "scaleFamilies";
@@ -23,90 +23,90 @@ function createFlashCardSet(): FlashCardSet {
 export function createFlashCards(): FlashCard[] {
   return [
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scale: "Ionian" }),
+      createFlashCardId(flashCardSetId, { scale: "Ionian" }),
       "Ionian (Major)", "Major7"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scale: "Dorian" }),
+      createFlashCardId(flashCardSetId, { scale: "Dorian" }),
       "Dorian", "Minor7"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scale: "Phrygian" }),
+      createFlashCardId(flashCardSetId, { scale: "Phrygian" }),
       "Phrygian", "Minor7"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scale: "Lydian" }),
+      createFlashCardId(flashCardSetId, { scale: "Lydian" }),
       "Lydian", "Major7"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scale: "Mixolydian" }),
+      createFlashCardId(flashCardSetId, { scale: "Mixolydian" }),
       "Mixolydian", "Dom7"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scale: "Aeolian" }),
+      createFlashCardId(flashCardSetId, { scale: "Aeolian" }),
       "Aeolian (Natural Minor)", "Minor7"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scale: "Locrian" }),
+      createFlashCardId(flashCardSetId, { scale: "Locrian" }),
       "Locrian", "Minor7b5"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scale: "Melodic Minor" }),
+      createFlashCardId(flashCardSetId, { scale: "Melodic Minor" }),
       "Melodic Minor", "Minor7"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scale: "Harmonic Minor" }),
+      createFlashCardId(flashCardSetId, { scale: "Harmonic Minor" }),
       "Harmonic Minor", "Minor7"),
 
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scale: "Tonic Diminished" }),
+      createFlashCardId(flashCardSetId, { scale: "Tonic Diminished" }),
       "Tonic Diminished", "Diminished"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scale: "Dominant Diminished" }),
+      createFlashCardId(flashCardSetId, { scale: "Dominant Diminished" }),
       "Dominant Diminished", "Dom7"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scale: "Whole Tone" }),
+      createFlashCardId(flashCardSetId, { scale: "Whole Tone" }),
       "Whole Tone", "Dom7, Augmented"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scale: "Augmented" }),
+      createFlashCardId(flashCardSetId, { scale: "Augmented" }),
       "Augmented", "Augmented, Major7"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scale: "Major Pentatonic" }),
+      createFlashCardId(flashCardSetId, { scale: "Major Pentatonic" }),
       "Major Pentatonic", "Dom7, Major7"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scale: "Minor Pentatonic" }),
+      createFlashCardId(flashCardSetId, { scale: "Minor Pentatonic" }),
       "Minor Pentatonic", "Dom7, Minor7"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scale: "Major Blues" }),
+      createFlashCardId(flashCardSetId, { scale: "Major Blues" }),
       "Major Blues", "Dom7, Major7"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scale: "Minor Blues" }),
+      createFlashCardId(flashCardSetId, { scale: "Minor Blues" }),
       "Minor Blues", "Dom7, Minor7"),
 
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scale: "Lydian Augmented" }),
+      createFlashCardId(flashCardSetId, { scale: "Lydian Augmented" }),
       "Lydian aug", "Major7"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scale: "Ionian Augmented" }),
+      createFlashCardId(flashCardSetId, { scale: "Ionian Augmented" }),
       "Ionian aug", "Major7"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scale: "Dorian b2" }),
+      createFlashCardId(flashCardSetId, { scale: "Dorian b2" }),
       "Dorian b2", "Minor7"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scale: "Dorian #4" }),
+      createFlashCardId(flashCardSetId, { scale: "Dorian #4" }),
       "Dorian #4", "Minor7"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scale: "Locrian Nat. 2" }),
+      createFlashCardId(flashCardSetId, { scale: "Locrian Nat. 2" }),
       "Locrian nat2", "Minor7b5"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scale: "Locrian Nat. 6" }),
+      createFlashCardId(flashCardSetId, { scale: "Locrian Nat. 6" }),
       "Locrian nat6", "Minor7b5"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scale: "Mixolydian #11" }),
+      createFlashCardId(flashCardSetId, { scale: "Mixolydian #11" }),
       "Mixolydian #11", "Dom7"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scale: "Mixolydian b6" }),
+      createFlashCardId(flashCardSetId, { scale: "Mixolydian b6" }),
       "Mixolydian b6", "Dom7"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scale: "Altered Dominant" }),
+      createFlashCardId(flashCardSetId, { scale: "Altered Dominant" }),
       "Altered Dominant", "Dom7"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scale: "Phrygian Major" }),
+      createFlashCardId(flashCardSetId, { scale: "Phrygian Major" }),
       "Phrygian Major", "Dom7"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scale: "Altered Dominant bb7" }),
+      createFlashCardId(flashCardSetId, { scale: "Altered Dominant bb7" }),
       "Altered Dominant bb7", "Diminished"),
   ];
 }

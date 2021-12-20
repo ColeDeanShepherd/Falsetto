@@ -4,6 +4,14 @@ import { renderUserDeterminedCorrectnessAnswerSelect, renderNextButtonAnswerSele
 
 export type FlashCardId = string;
 
+export function createFlashCardId(flashCardSetId: string, flashCardIdProperties: any): FlashCardId {
+  const deserializedId = Object.assign(
+    { set: flashCardSetId, },
+    flashCardIdProperties
+  );
+  return JSON.stringify(deserializedId);
+}
+
 export class FlashCard {
   public static fromRenderFns(
     id: FlashCardId,

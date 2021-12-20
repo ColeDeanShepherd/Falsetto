@@ -2,7 +2,7 @@ import * as React from "react";
 import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody } from "@material-ui/core";
 
 import * as FlashCardUtils from "../Utils";
-import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
+import { createFlashCardId, FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
 import { Pitch } from "../../../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
@@ -178,14 +178,8 @@ export function createFlashCards(): Array<FlashCard> {
   const flashCards = new Array<FlashCard>();
 
   forEachInterval((pitches, intervalString) => {
-    const deserializedId = {
-      set: flashCardSetId,
-      pitches: pitches.map(p => p.toString(true, false))
-    };
-    const id = JSON.stringify(deserializedId);
-
     flashCards.push(new FlashCard(
-      id,
+      createFlashCardId(flashCardSetId, { pitches: pitches.map(p => p.toString(true, false)) }),
       new FlashCardSide(
         size => {
           return (

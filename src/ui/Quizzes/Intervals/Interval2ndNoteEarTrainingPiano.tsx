@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import * as Utils from "../../../lib/Core/Utils";
-import { FlashCard, FlashCardSide, FlashCardId } from "../../../FlashCard";
+import { FlashCard, FlashCardSide, FlashCardId, createFlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
 import { Pitch } from "../../../lib/TheoryLib/Pitch";
 import { playPitchesSequentially } from "../../../Audio/PianoAudio";
@@ -203,15 +203,9 @@ export function createFlashCards(): Array<FlashCard> {
   const flashCards = new Array<FlashCard>();
   forEachInterval(rootNotes,
     (interval, direction, p1, p2, _, i) => {
-      const deserializedId = {
-        set: flashCardSetId,
-        pitches: [p1.toString(true), p2.toString(true)]
-      };
-      const id = JSON.stringify(deserializedId);
-
       flashCards.push(
         new FlashCard(
-          id,
+          createFlashCardId(flashCardSetId, { pitches: [p1.toString(true), p2.toString(true)] }),
           new FlashCardSide(
             size => <FlashCardFrontSide key={i} pitch1={p1} pitch2={p2} />,
             p1

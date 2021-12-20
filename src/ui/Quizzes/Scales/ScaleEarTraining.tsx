@@ -5,7 +5,7 @@ import { arrayContains, toggleArrayElement } from "../../../lib/Core/ArrayUtils"
 import { range } from "../../../lib/Core/MathUtils";
 import { randomElement } from "../../../lib/Core/Random";
 import * as FlashCardUtils from "../Utils";
-import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
+import { createFlashCardId, FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
 import { Pitch } from "../../../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
@@ -185,14 +185,8 @@ export function createFlashCards(): Array<FlashCard> {
     const iCopy = i;
     i++;
 
-    const deserializedId = {
-      set: flashCardSetId,
-      scale: `${scaleType.name}`
-    };
-    const id = JSON.stringify(deserializedId);
-
     flashCards.push(new FlashCard(
-      id,
+      createFlashCardId(flashCardSetId, { scale: `${scaleType.name}` }),
       new FlashCardSide(() => <FlashCardFrontSide key={iCopy} scaleType={scaleType} />),
       new FlashCardSide(
         scaleType.name,

@@ -2,7 +2,7 @@ import * as React from "react";
 import * as Vex from "vexflow";
 
 import * as FlashCardUtils from "../Utils";
-import { FlashCard } from "../../../FlashCard";
+import { createFlashCardId, FlashCard } from "../../../FlashCard";
 import { FlashCardSet } from "../../../FlashCardSet";
 import { VexFlowComponent } from "../../Utils/VexFlowComponent";
 import { Pitch } from "../../../lib/TheoryLib/Pitch";
@@ -87,7 +87,7 @@ export class SheetMusicKeySignature extends React.Component<ISheetMusicKeySignat
 export function createFlashCards(): Array<FlashCard> {
   return allowedPitches
     .map((pitch, i) => FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, keys: answers[i] }),
+      createFlashCardId(flashCardSetId, { keys: answers[i] }),
       size => <SheetMusicKeySignature
         size={new Size2D(300, 200)}
         keySignature={pitch.toVexFlowKeySignatureString()}

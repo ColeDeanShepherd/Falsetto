@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import * as Utils from "../../lib/Core/Utils";
-import { FlashCard, FlashCardId, FlashCardSide } from "../../FlashCard";
+import { createFlashCardId, FlashCard, FlashCardId, FlashCardSide } from "../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../FlashCardSet";
 import { ChordType, chordTypeLevels } from "../../lib/TheoryLib/ChordType";
 import { CheckboxColumnsFlashCardMultiSelect, CheckboxColumnCell, CheckboxColumn } from '../Utils/CheckboxColumnsFlashCardMultiSelect';
@@ -108,7 +108,7 @@ export function createFlashCards(): Array<FlashCard> {
 
   forEachChord((chordRootPitch, chordType, i) => {
     const flashCard = new FlashCard(
-      JSON.stringify({ set: flashCardSetId, chord: chordRootPitch.toString(false, true) + " " + chordType.name }),
+      createFlashCardId(flashCardSetId, { chord: chordRootPitch.toString(false, true) + " " + chordType.name }),
       new FlashCardSide(
         chordRootPitch.toString(false, true) + " " + chordType.name
       ),

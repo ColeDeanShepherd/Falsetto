@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import * as FlashCardUtils from "../Utils";
-import { FlashCard } from "../../../FlashCard";
+import { createFlashCardId, FlashCard } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 
 const flashCardSetId = "keyAccidentalNotes";
@@ -39,95 +39,95 @@ function createFlashCardSet(): FlashCardSet {
 export function createFlashCards(): FlashCard[] {
   return [
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, key: "C" }),
+      createFlashCardId(flashCardSetId, { key: "C" }),
       "C Major", "none"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, key: "C♯" }),
+      createFlashCardId(flashCardSetId, { key: "C♯" }),
       "C♯ Major", "F♯, C♯, G♯, D♯, A♯, E♯, B♯"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, key: "D♭" }),
+      createFlashCardId(flashCardSetId, { key: "D♭" }),
       "D♭ Major", "B♭, E♭, A♭, D♭, G♭"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, key: "D" }),
+      createFlashCardId(flashCardSetId, { key: "D" }),
       "D Major", "F♯, C♯"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, key: "E♭" }),
+      createFlashCardId(flashCardSetId, { key: "E♭" }),
       "E♭ Major", "B♭, E♭, A♭"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, key: "E" }),
+      createFlashCardId(flashCardSetId, { key: "E" }),
       "E Major", "F♯, C♯, G♯, D♯"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, key: "F" }),
+      createFlashCardId(flashCardSetId, { key: "F" }),
       "F Major", "B♭"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, key: "F♯" }),
+      createFlashCardId(flashCardSetId, { key: "F♯" }),
       "F♯ Major", "F♯, C♯, G♯, D♯, A♯, E♯"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, key: "G♭" }),
+      createFlashCardId(flashCardSetId, { key: "G♭" }),
       "G♭ Major", "B♭, E♭, A♭, D♭, G♭, C♭"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, key: "G" }),
+      createFlashCardId(flashCardSetId, { key: "G" }),
       "G Major", "F♯"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, key: "A♭" }),
+      createFlashCardId(flashCardSetId, { key: "A♭" }),
       "A♭ Major", "B♭, E♭, A♭, D♭"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, key: "A" }),
+      createFlashCardId(flashCardSetId, { key: "A" }),
       "A Major", "F♯, C♯, G♯"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, key: "B♭" }),
+      createFlashCardId(flashCardSetId, { key: "B♭" }),
       "B♭ Major", "B♭, E♭"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, key: "B" }),
+      createFlashCardId(flashCardSetId, { key: "B" }),
       "B Major", "F♯, C♯, G♯, D♯, A♯"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, key: "C♭" }),
+      createFlashCardId(flashCardSetId, { key: "C♭" }),
       "C♭ Major", "B♭, E♭, A♭, D♭, G♭, C♭, F♭"),
 
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, key: "Am" }),
+      createFlashCardId(flashCardSetId, { key: "Am" }),
       "A Minor", "none"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, key: "A♯m" }),
+      createFlashCardId(flashCardSetId, { key: "A♯m" }),
       "A♯ Minor", "F♯, C♯, G♯, D♯, A♯, E♯, B♯"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, key: "B♭m" }),
+      createFlashCardId(flashCardSetId, { key: "B♭m" }),
       "B♭ Minor", "B♭, E♭, A♭, D♭, G♭"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, key: "Bm" }),
+      createFlashCardId(flashCardSetId, { key: "Bm" }),
       "B Minor", "F♯, C♯"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, key: "Cm" }),
+      createFlashCardId(flashCardSetId, { key: "Cm" }),
       "C Minor", "B♭, E♭, A♭"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, key: "C♯m" }),
+      createFlashCardId(flashCardSetId, { key: "C♯m" }),
       "C♯ Minor", "F♯, C♯, G♯, D♯"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, key: "Dm" }),
+      createFlashCardId(flashCardSetId, { key: "Dm" }),
       "D Minor", "B♭"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, key: "D♯m" }),
+      createFlashCardId(flashCardSetId, { key: "D♯m" }),
       "D♯ Minor", "F♯, C♯, G♯, D♯, A♯, E♯"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, key: "E♭m" }),
+      createFlashCardId(flashCardSetId, { key: "E♭m" }),
       "E♭ Minor", "B♭, E♭, A♭, D♭, G♭, C♭"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, key: "Em" }),
+      createFlashCardId(flashCardSetId, { key: "Em" }),
       "E Minor", "F♯"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, key: "Fm" }),
+      createFlashCardId(flashCardSetId, { key: "Fm" }),
       "F Minor", "B♭, E♭, A♭, D♭"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, key: "F♯m" }),
+      createFlashCardId(flashCardSetId, { key: "F♯m" }),
       "F♯ Minor", "F♯, C♯, G♯"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, key: "Gm" }),
+      createFlashCardId(flashCardSetId, { key: "Gm" }),
       "G Minor", "B♭, E♭"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, key: "G♯m" }),
+      createFlashCardId(flashCardSetId, { key: "G♯m" }),
       "G♯ Minor", "F♯, C♯, G♯, D♯, A♯"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, key: "A♭m" }),
+      createFlashCardId(flashCardSetId, { key: "A♭m" }),
       "A♭ Minor", "B♭, E♭, A♭, D♭, G♭, C♭, F♭")
   ];
 }

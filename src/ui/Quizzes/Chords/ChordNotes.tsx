@@ -1,5 +1,5 @@
 import * as FlashCardUtils from "../Utils";
-import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
+import { createFlashCardId, FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardLevel, } from "../../../FlashCardSet";
 import { chordTypeLevels } from '../../../lib/TheoryLib/ChordType';
 import { ChordType } from "../../../lib/TheoryLib/ChordType";
@@ -38,10 +38,8 @@ function createFlashCardSet(): FlashCardSet {
 export function createFlashCards(): FlashCard[] {
   return ChordType.All
     .map(chordType => {
-      const deserializedId = { "set": flashCardSetId, chord: chordType.symbols[0] };
-      const id = JSON.stringify(deserializedId);
       return new FlashCard(
-        id,
+        createFlashCardId(flashCardSetId, { chord: chordType.symbols[0] }),
         new FlashCardSide(chordType.name),
         new FlashCardSide(
           chordType.formula.toString(),

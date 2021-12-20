@@ -1,5 +1,5 @@
 import * as FlashCardUtils from "../Utils";
-import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
+import { createFlashCardId, FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardLevel, } from "../../../FlashCardSet";
 import { ScaleType, scaleTypeLevels } from '../../../lib/TheoryLib/Scale';
 import { arrayContains } from '../../../lib/Core/ArrayUtils';
@@ -39,7 +39,7 @@ function createFlashCardSet(): FlashCardSet {
 export function createFlashCards(): FlashCard[] {
   return ScaleType.All
     .map(scaleType => new FlashCard(
-      JSON.stringify({ set: flashCardSetId, scale: scaleType.name }),
+      createFlashCardId(flashCardSetId, { scale: scaleType.name }),
       new FlashCardSide(scaleType.name),
       new FlashCardSide(
         scaleType.formula.toString(),

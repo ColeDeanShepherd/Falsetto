@@ -2,7 +2,7 @@ import * as React from "react";
 import { TableRow, TableCell, Table, TableHead, TableBody, Grid, Checkbox } from "@material-ui/core";
 
 import { Size2D } from "../../../lib/Core/Size2D";
-import { FlashCard, FlashCardSide, FlashCardId } from "../../../FlashCard";
+import { FlashCard, FlashCardSide, FlashCardId, createFlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
 import { Pitch } from "../../../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
@@ -144,13 +144,9 @@ export function createFlashCards(): FlashCard[] {
   return chordTypes.map(chordType => {
     const rootPitch = new Pitch(PitchLetter.F, 0, 2);
     const pitches = chordType.getPitches(rootPitch);
-    const deserializedId = {
-      set: flashCardSetId,
-      chord: chordType.name
-    };
-    const id = JSON.stringify(deserializedId);
+    
     return new FlashCard(
-      id,
+      createFlashCardId(flashCardSetId, { chord: chordType.name }),
       new FlashCardSide(
         size => {
           return (

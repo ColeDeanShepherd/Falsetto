@@ -2,7 +2,7 @@ import * as React from "react";
 import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody } from "@material-ui/core";
 
 import * as FlashCardUtils from "../Utils";
-import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
+import { createFlashCardId, FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
 import { Interval, createIntervalLevels } from "../../../lib/TheoryLib/Interval";
 import {
@@ -277,17 +277,14 @@ export function createFlashCards(): Array<FlashCard> {
     const directionChar = (direction === VerticalDirection.Up)
       ? Interval.upDirectionSymbol
       : Interval.downDirectionSymbol;
-    
-    const deserializedId = {
-      set: flashCardSetId,
-      stringIndex0: stringIndex0,
-      deltaStringIndex: deltaStringIndex,
-      deltaFretNumber: deltaFretNumber
-    };
-    const id = JSON.stringify(deserializedId);
 
     const flashCard = new FlashCard(
-      id,
+      createFlashCardId(flashCardSetId,
+        {
+          stringIndex0: stringIndex0,
+          deltaStringIndex: deltaStringIndex,
+          deltaFretNumber: deltaFretNumber
+        }),
       new FlashCardSide(
         size => (
           <FlashCardFrontSide

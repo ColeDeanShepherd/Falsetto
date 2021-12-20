@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import * as FlashCardUtils from "../Utils";
-import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
+import { createFlashCardId, FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
 import { Pitch, getAmbiguousPitchRange } from "../../../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
@@ -143,12 +143,10 @@ export function createFlashCards(): Array<FlashCard> {
 
   for (const rootPitch of rootPitches) {
     for (const chordType of chordTypes) {
-      const deserializedId = { set: flashCardSetId, chord: `${rootPitch.toString(true)} ${chordType.name}` };
-      const id = JSON.stringify(deserializedId);
       const pitches = new Chord(chordType, rootPitch).getPitches();
 
       flashCards.push(new FlashCard(
-        id,
+        createFlashCardId(flashCardSetId, { chord: `${rootPitch.toString(true)} ${chordType.name}` }),
         new FlashCardSide(
           size => (
             <div>

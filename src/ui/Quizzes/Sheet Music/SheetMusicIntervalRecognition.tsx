@@ -3,7 +3,7 @@ import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody } from "@mat
 
 import * as Utils from "../../../lib/Core/Utils";
 import * as FlashCardUtils from "../Utils";
-import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
+import { createFlashCardId, FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
 import { Pitch, getAmbiguousPitchRange } from "../../../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
@@ -195,7 +195,7 @@ export function createFlashCards(): Array<FlashCard> {
 
   forEachInterval((pitches, interval) => {
     flashCards.push(new FlashCard(
-      JSON.stringify({ set: flashCardSetId, pitches: pitches.map(p => p.toString(true)) }),
+      createFlashCardId(flashCardSetId, { pitches: pitches.map(p => p.toString(true)) }),
       new FlashCardSide(
         size => (
           <div>

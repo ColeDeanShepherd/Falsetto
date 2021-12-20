@@ -1,5 +1,5 @@
 import * as FlashCardUtils from "../Utils";
-import { FlashCard } from "../../../FlashCard";
+import { createFlashCardId, FlashCard } from "../../../FlashCard";
 import { FlashCardSet } from "../../../FlashCardSet";
 
 const flashCardSetId = "noteVal#s";
@@ -14,28 +14,28 @@ function createFlashCardSet(): FlashCardSet {
 export function createFlashCards(): FlashCard[] {
   return [
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, num: 1 }),
+      createFlashCardId(flashCardSetId, { num: 1 }),
       "1", "Whole Note/Rest"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, num: 2 }),
+      createFlashCardId(flashCardSetId, { num: 2 }),
       "2", "Half Note/Rest"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, num: 4 }),
+      createFlashCardId(flashCardSetId, { num: 4 }),
       "4", "Quarter Note/Rest"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, num: 8 }),
+      createFlashCardId(flashCardSetId, { num: 8 }),
       "8", "Eighth Note/Rest"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, num: 16 }),
+      createFlashCardId(flashCardSetId, { num: 16 }),
       "16", "Sixteenth Note/Rest"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, num: 32 }),
+      createFlashCardId(flashCardSetId, { num: 32 }),
       "32", "32nd Note/Rest"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, num: 64 }),
+      createFlashCardId(flashCardSetId, { num: 64 }),
       "64", "64th Note/Rest"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, num: 128 }),
+      createFlashCardId(flashCardSetId, { num: 128 }),
       "128", "128th Note/Rest")
   ];
 }

@@ -1,5 +1,5 @@
 import * as FlashCardUtils from "../Utils";
-import { FlashCard } from "../../../FlashCard";
+import { createFlashCardId, FlashCard } from "../../../FlashCard";
 import { FlashCardSet } from "../../../FlashCardSet";
 
 const flashCardSetId = "diatonicChordFamilies";
@@ -14,25 +14,25 @@ function createFlashCardSet(): FlashCardSet {
 export function createFlashCards(): FlashCard[] {
   return [
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scaleDegree: 1 }),
+      createFlashCardId(flashCardSetId, { scaleDegree: 1 }),
       "1", "Tonic"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scaleDegree: 2 }),
+      createFlashCardId(flashCardSetId, { scaleDegree: 2 }),
       "2", "Pre-Dominant"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scaleDegree: 3 }),
+      createFlashCardId(flashCardSetId, { scaleDegree: 3 }),
       "3", "Tonic"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scaleDegree: 4 }),
+      createFlashCardId(flashCardSetId, { scaleDegree: 4 }),
       "4", "Pre-Dominant"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scaleDegree: 5 }),
+      createFlashCardId(flashCardSetId, { scaleDegree: 5 }),
       "5", "Dominant"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scaleDegree: 6 }),
+      createFlashCardId(flashCardSetId, { scaleDegree: 6 }),
       "6", "Tonic"),
     FlashCard.fromRenderFns(
-      JSON.stringify({ set: flashCardSetId, scaleDegree: 7 }),
+      createFlashCardId(flashCardSetId, { scaleDegree: 7 }),
       "7", "Dominant"),
   ];
 }

@@ -3,7 +3,7 @@ import { TableRow, TableCell, Table, TableHead, TableBody, Grid, Checkbox } from
 
 import { Size2D } from "../../../lib/Core/Size2D";
 import { ScaleType, Scale, scaleTypeLevels } from "../../../lib/TheoryLib/Scale";
-import { FlashCard, FlashCardSide, FlashCardId } from "../../../FlashCard";
+import { FlashCard, FlashCardSide, FlashCardId, createFlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
 import { Pitch } from "../../../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
@@ -158,16 +158,11 @@ export function createFlashCards(): Array<FlashCard> {
   forEachScaleType((scaleType, i) => {
     const rootPitch = new Pitch(PitchLetter.F, 0, 2);
     const pitches = new ChordScaleFormula(scaleType.formula.parts.concat(new ChordScaleFormulaPart(8, 0, false))).getPitches(rootPitch);
-    const deserializedId = {
-      set: flashCardSetId,
-      scale: scaleType.name
-    };
-    const id = JSON.stringify(deserializedId);
 
     const scale = new Scale(scaleType, rootPitch);
 
     flashCards.push(new FlashCard(
-      id,
+      createFlashCardId(flashCardSetId, { scale: scaleType.name }),
       new FlashCardSide(
         size => {
           return (

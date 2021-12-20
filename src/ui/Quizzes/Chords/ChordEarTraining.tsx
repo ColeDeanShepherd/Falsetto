@@ -2,7 +2,7 @@ import * as React from "react";
 import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid } from "@material-ui/core";
 
 import * as FlashCardUtils from "../Utils";
-import { FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
+import { createFlashCardId, FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
 import { Pitch } from "../../../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
@@ -155,14 +155,8 @@ export function createFlashCards(): Array<FlashCard> {
     const iCopy = i;
     i++;
 
-    const deserializedId = {
-      set: flashCardSetId,
-      chord: `${chordType.name}`
-    };
-    const id = JSON.stringify(deserializedId);
-
     flashCards.push(new FlashCard(
-      id,
+      createFlashCardId(flashCardSetId, { chord: `${chordType.name}`}),
       new FlashCardSide(
         () => <FlashCardFrontSide key={iCopy} chordType={chordType} />
       ),
