@@ -171,9 +171,9 @@ export const RhythmSection: React.FunctionComponent<SectionProps> = props => (
     <NoteValuePlayer notesPerBeat={3} maxNotesPerBeat={5} showNotesPerBeatSelect={true} />
     
     <SubSectionTitle>Interactive Exercises</SubSectionTitle>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(RhythmQuiz.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(NoteDurations.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(NoteValueNumbers.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(RhythmQuiz.flashCardSet, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(NoteDurations.flashCardSet, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(NoteValueNumbers.flashCardSet, props.hideMoreInfoUri)}</div>
 
     <p style={{ textAlign: "center" }}><NavLinkView to="/essential-music-theory">{"<< Previous: Introduction"}</NavLinkView> | <NavLinkView to="/essential-music-theory/notes">{"Next: Notes >>"}</NavLinkView></p>
   </div>

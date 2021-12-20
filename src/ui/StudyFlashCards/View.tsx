@@ -10,13 +10,12 @@ import { NavLinkView } from '../NavLinkView';
 import { StudyFlashCardsModel, getPercentToNextLevel } from '../../StudyFlashCards/Model';
 import { unwrapValueOrUndefined } from '../../lib/Core/Utils';
 import { LevelProgressBarView } from "../../ui/Utils/LevelProgressBarView";
-import { WatermarkView } from "../../ui/Utils/WatermarkView";
 import { QuizStudyAlgorithm } from '../../Study/StudyAlgorithm';
 import { Card } from "../Card/Card";
 import { Button } from "../Button/Button";
 
 export function createStudyFlashCardSetComponent(
-  flashCardSet: FlashCardSet, isEmbedded: boolean, hideMoreInfoUri: boolean,
+  flashCardSet: FlashCardSet, hideMoreInfoUri: boolean,
   title?: string, style?: any, enableSettings?: boolean, renderCard?: boolean
 ): JSX.Element {
   return (
@@ -26,7 +25,6 @@ export function createStudyFlashCardSetComponent(
       flashCardSet={flashCardSet}
       hideMoreInfoUri={hideMoreInfoUri}
       enableSettings={enableSettings}
-      isEmbedded={isEmbedded} // TODO: remove
       style={style}
       renderCard={renderCard}
     />
@@ -44,7 +42,6 @@ export interface IStudyFlashCardsViewProps {
   quizMode?: boolean;
   flashCardSet: FlashCardSet;
   enableSettings?: boolean;
-  isEmbedded?: boolean; // TODO: remove
   style?: any;
   showRelatedExercises?: boolean;
   onQuizFinished?: () => void;
@@ -91,7 +88,6 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
   public render(): JSX.Element {
     const { model } = this;
     const { flashCardSet, flashCards, flashCardLevels, studyAlgorithm, isShowingBackSide } = model;
-    const { isEmbedded } = this.props;
 
     // TODO: move consts out of here
     const flashCardContainerStyle: any = {
@@ -101,9 +97,10 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
       marginBottom: "1em"
     };
 
-    const cardStyle: any = Object.assign(this.props.isEmbedded
-      ? { minHeight: "100vh", boxShadow: "none", position: "relative", height: "100%" }
-      : { height: "100%", marginBottom: "1em", position: "relative", overflowY: "auto" }, this.props.style);
+    const cardStyle: any = Object.assign(
+      { height: "100%", marginBottom: "1em", position: "relative", overflowY: "auto" },
+      this.props.style
+    );
 
     let cardContents: JSX.Element;
 
@@ -180,7 +177,7 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
             </Card>
           ) : null}
   
-          {(!this.props.isEmbedded && moreInfoUri)
+          {moreInfoUri
             ? <p style={{ margin: "0.5em 0" }}><a href={moreInfoUri} className="moreInfoLink" target="_blank">To learn more, click here.</a></p>
             : null}
           {renderCorrectIncorrectIcon()}
@@ -398,12 +395,11 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
           ? (
             <Card style={cardStyle}>
               {cardContents}
-              <WatermarkView isEmbedded={isEmbedded ? isEmbedded : false} />
             </Card>
           )
           : cardContents}
 
-        {(!this.props.isEmbedded && showRelatedExercises && (flashCardSet.relatedSets.length > 0)) ? (
+        {(showRelatedExercises && (flashCardSet.relatedSets.length > 0)) ? (
           renderRelatedExercises()
         ) : null}
       </div>

@@ -121,13 +121,13 @@ export const ScalesAndModesSection: React.FunctionComponent<SectionProps> = prop
 
     <SubSectionTitle>Other Common Scales &amp; Modes</SubSectionTitle>
     <p>There are many other common, named scales (and keep in mind that a mode can be built off each scale degree in each scale). Explore them below with the interactive diagram below:</p>
-    <ScaleViewer renderAllScaleShapes={false} isEmbedded={props.isEmbedded} />
+    <ScaleViewer renderAllScaleShapes={false} />
 
     <SubSectionTitle>Interactive Exercises</SubSectionTitle>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(ScaleNotes.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(PianoScales.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(GuitarScales.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(ScaleEarTraining.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(ScaleNotes.flashCardSet, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(PianoScales.flashCardSet, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(GuitarScales.flashCardSet, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(ScaleEarTraining.flashCardSet, props.hideMoreInfoUri)}</div>
 
     <p style={{ textAlign: "center" }}><NavLinkView to="/essential-music-theory/intervals">{"<< Previous: Intervals"}</NavLinkView> | <NavLinkView to="/essential-music-theory/chords">{"Next: Chords >>"}</NavLinkView></p>
   </div>

@@ -39,16 +39,16 @@ export const NotesSection: React.FunctionComponent<SectionProps> = props => (
 
     <SubSectionTitle>Interactive Exercises</SubSectionTitle>
     <div style={{ marginBottom: "2em" }}>
-      {createStudyFlashCardSetComponent(NotesQuiz.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}
+      {createStudyFlashCardSetComponent(NotesQuiz.flashCardSet, props.hideMoreInfoUri)}
     </div>
     <div style={{ marginBottom: "2em" }}>
-      {createStudyFlashCardSetComponent(PianoNotes.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}
+      {createStudyFlashCardSetComponent(PianoNotes.flashCardSet, props.hideMoreInfoUri)}
     </div>
     <div style={{ marginBottom: "2em" }}>
-      {createStudyFlashCardSetComponent(GuitarNotes.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}
+      {createStudyFlashCardSetComponent(GuitarNotes.flashCardSet, props.hideMoreInfoUri)}
     </div>
     <div style={{ marginBottom: "2em" }}>
-      {createStudyFlashCardSetComponent(SheetMusicNotes.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}
+      {createStudyFlashCardSetComponent(SheetMusicNotes.flashCardSet, props.hideMoreInfoUri)}
     </div>
     
     <p style={{ textAlign: "center" }}><NavLinkView to="/essential-music-theory/rhythm">{"<< Previous: Rhythm"}</NavLinkView> | <NavLinkView to="/essential-music-theory/intervals">{"Next: Intervals >>"}</NavLinkView></p>

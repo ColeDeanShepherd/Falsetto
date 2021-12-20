@@ -195,7 +195,7 @@ export class GuitarScalesLesson extends React.Component<IGuitarScalesLessonProps
         
         <h3>Major Scale Mode Exercises</h3>
         <p>We have now learned the 7 modes of the F major scale, and with that knowledge, we can now play any mode of any other major scale, simply by shifting the patterns to the left or right to start on the desired note. Use the interactive exercises below to test your knowledge:</p>
-        <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(GuitarScales.createFlashCardSet("Modes of the Major Scale", ScaleType.MajorScaleModes), false, true)}</div>
+        <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(GuitarScales.createFlashCardSet("Modes of the Major Scale", ScaleType.MajorScaleModes), true)}</div>
 
         <h3 style={{ marginTop: "3em" }}>Major Pentatonic Scale</h3>
         <p>Now let's take a look at the shapes for the 5 modes of the A major pentatonic scale.</p>
@@ -237,7 +237,7 @@ export class GuitarScalesLesson extends React.Component<IGuitarScalesLessonProps
 
         <h3>Exercises</h3>
         <p>Use the interactive exercises below to test your knowledge of the 5 modes of the major pentatonic scale:</p>
-        <div>{createStudyFlashCardSetComponent(GuitarScales.createFlashCardSet("Modes of the Major Pentatonic Scale", ScaleType.MajorPentatonicScaleModes), false, true)}</div>
+        <div>{createStudyFlashCardSetComponent(GuitarScales.createFlashCardSet("Modes of the Major Pentatonic Scale", ScaleType.MajorPentatonicScaleModes), true)}</div>
 
         <h3 style={{ marginTop: "3em" }}>Modes of the Melodic Minor Scale</h3>
         <p>For the modes of the melodic minor scale, there are 7 parts to the repeating pattern:</p>
@@ -302,11 +302,11 @@ export class GuitarScalesLesson extends React.Component<IGuitarScalesLessonProps
         
         <h3>Melodic Minor Scale Mode Exercises</h3>
         <p>We have now learned the 7 modes of the F melodic minor scale, and with that knowledge, we can now play any mode of any other melodic minor scale, simply by shifting the patterns to the left or right to start on the desired note. Use the interactive exercises below to test your knowledge:</p>
-        <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(GuitarScales.createFlashCardSet("Modes of the Melodic Minor Scale", ScaleType.MelodicMinorScaleModes), false, true)}</div>
+        <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(GuitarScales.createFlashCardSet("Modes of the Melodic Minor Scale", ScaleType.MelodicMinorScaleModes), true)}</div>
 
         <h3 id="all-scales" style={{ marginTop: "4em" }}>Other Scales</h3>
         <p>Use the interactive diagram below to view other guitar scales.</p>
-        <ScaleViewer renderAllScaleShapes={false} showPianoKeyboard={false} isEmbedded={false} />
+        <ScaleViewer renderAllScaleShapes={false} showPianoKeyboard={false} />
     </Card>
     );
   }

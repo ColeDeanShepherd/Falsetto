@@ -888,7 +888,6 @@ export const pianoTheorySlideGroups = [
         <div style={exerciseContainerStyle}>
           {createStudyFlashCardSetComponent(
             PianoNotes.createFlashCardSet(naturalPitches),
-            /*isEmbedded*/ false,
             /*hideMoreInfoUri*/ true,
             /*title*/ "White Piano Key Names Exercise",
             /*style*/ undefined,
@@ -1053,7 +1052,6 @@ export const pianoTheorySlideGroups = [
         <div style={exerciseContainerStyle}>
           {createStudyFlashCardSetComponent(
             PianoNotes.createFlashCardSet(accidentalPitches),
-            /*isEmbedded*/ false,
             /*hideMoreInfoUri*/ true,
             /*title*/ "Black Piano Key Names Exercise",
             /*style*/ undefined,
@@ -1090,7 +1088,6 @@ export const pianoTheorySlideGroups = [
         <div style={exerciseContainerStyle}>
           {createStudyFlashCardSetComponent(
             PianoNotes.createFlashCardSet(allPitches),
-            /*isEmbedded*/ false,
             /*hideMoreInfoUri*/ true,
             /*title*/ "Piano Notes Exercise",
             /*style*/ undefined,
@@ -1231,7 +1228,6 @@ export const pianoTheorySlideGroups = [
         <div style={exerciseContainerStyle}>
           {createStudyFlashCardSetComponent(
             ScalesQuiz.flashCardSet,
-            /*isEmbedded*/ false,
             /*hideMoreInfoUri*/ true,
             /*title*/ undefined,
             /*style*/ undefined,
@@ -1423,7 +1419,6 @@ export const pianoTheorySlideGroups = [
         <div style={exerciseContainerStyle}>
           {createStudyFlashCardSetComponent(
             ChordsIntroQuiz.flashCardSet,
-            /*isEmbedded*/ false,
             /*hideMoreInfoUri*/ true,
             /*title*/ undefined,
             /*style*/ undefined,
@@ -1583,7 +1578,6 @@ export const pianoTheorySlideGroups = [
         <div style={exerciseContainerStyle}>
           {createStudyFlashCardSetComponent(
             DiatonicChordsQuiz.flashCardSet,
-            /*isEmbedded*/ false,
             /*hideMoreInfoUri*/ true,
             /*title*/ undefined,
             /*style*/ undefined,
@@ -2058,7 +2052,6 @@ export const pianoTheorySlideGroups = [
         <div style={exerciseContainerStyle}>
           {createStudyFlashCardSetComponent(
             ChordProgressionsQuiz.flashCardSet,
-            /*isEmbedded*/ false,
             /*hideMoreInfoUri*/ true,
             /*title*/ undefined,
             /*style*/ undefined,

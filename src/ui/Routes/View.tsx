@@ -97,7 +97,7 @@ function renderStudyFlashCardSetComponent(currentFlashCardSet: FlashCardSet): JS
   return (
     <DocumentTitle title={currentFlashCardSet.name + " - Falsetto"}>
       <LimitedWidthContentContainer>
-        {createStudyFlashCardSetComponent(currentFlashCardSet, /*isEmbedded:*/ false, /*hideMoreInfoUri:*/ false)}
+        {createStudyFlashCardSetComponent(currentFlashCardSet, /*hideMoreInfoUri:*/ false)}
       </LimitedWidthContentContainer>
     </DocumentTitle>
   );
@@ -526,7 +526,7 @@ const routes: Array<IRouteData> = ([
       title: `${fcs.name} - Falsetto`,
       renderFn: () => (
         <LimitedWidthContentContainer style={{ height: "100%" }}>
-          {createStudyFlashCardSetComponent(fcs, /*isEmbedded:*/ false, /*hideMoreInfoUri:*/ false)}
+          {createStudyFlashCardSetComponent(fcs, /*hideMoreInfoUri:*/ false)}
         </LimitedWidthContentContainer>
       )
     } as IRouteData))

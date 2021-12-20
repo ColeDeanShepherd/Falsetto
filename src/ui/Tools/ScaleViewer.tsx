@@ -26,7 +26,6 @@ export interface IScaleViewerProps {
   playSimultaneously?: boolean;
   showPianoKeyboard?: boolean;
   showGuitarFretboard?: boolean;
-  isEmbedded?: boolean;
 }
 export interface IScaleViewerState {
   scaleTypeGroup: ScaleTypeGroup;

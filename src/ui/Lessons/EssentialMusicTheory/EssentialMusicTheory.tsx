@@ -113,7 +113,6 @@ export function renderIntervalLabel(metrics: PianoKeyboardMetrics, leftPitch: Pi
 }
 
 export interface SectionProps {
-  isEmbedded: boolean;
   hideMoreInfoUri: boolean;
 }
 
@@ -124,11 +123,10 @@ export class SectionContainer extends React.Component<ISectionProps, {}> {
   public render(): JSX.Element {
     return (
       <Card>
-        {React.createElement(this.props.section, { isEmbedded: this.isEmbedded, hideMoreInfoUri: this.hideMoreInfoUri })}
+        {React.createElement(this.props.section, { hideMoreInfoUri: this.hideMoreInfoUri })}
       </Card>
     );
   }
 
-  private isEmbedded: boolean = false;
   private hideMoreInfoUri: boolean = true;
 }

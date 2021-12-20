@@ -347,16 +347,16 @@ export const IntervalsSection: React.FunctionComponent<SectionProps> = props => 
     <IntervalsTable />
   
     <SubSectionTitle>Interactive Exercises</SubSectionTitle>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(IntervalQualitySymbols.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(IntervalNamesToHalfSteps.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(IntervalNotes.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(Interval2ndNotes.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(SheetMusicIntervalRecognition.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(GuitarIntervals.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(IntervalsToConsonanceDissonance.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(IntervalEarTraining.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(Interval2ndNoteEarTraining.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}</div>
-    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(Interval2ndNoteEarTrainingPiano.flashCardSet, props.isEmbedded, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(IntervalQualitySymbols.flashCardSet, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(IntervalNamesToHalfSteps.flashCardSet, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(IntervalNotes.flashCardSet, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(Interval2ndNotes.flashCardSet, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(SheetMusicIntervalRecognition.flashCardSet, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(GuitarIntervals.flashCardSet, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(IntervalsToConsonanceDissonance.flashCardSet, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(IntervalEarTraining.flashCardSet, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(Interval2ndNoteEarTraining.flashCardSet, props.hideMoreInfoUri)}</div>
+    <div style={{ marginBottom: "2em" }}>{createStudyFlashCardSetComponent(Interval2ndNoteEarTrainingPiano.flashCardSet, props.hideMoreInfoUri)}</div>
     
     <p style={{ textAlign: "center" }}><NavLinkView to="/essential-music-theory/notes">{"<< Previous: Notes"}</NavLinkView> | <NavLinkView to="/essential-music-theory/scales-and-modes">{"Next: Scales & Modes >>"}</NavLinkView></p>
   </div>

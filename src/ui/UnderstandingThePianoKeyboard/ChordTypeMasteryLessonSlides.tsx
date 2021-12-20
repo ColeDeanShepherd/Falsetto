@@ -51,7 +51,6 @@ export function createSlideGroups(chordType: ChordType): Array<SlideGroup> {
           <div style={{ marginTop: "1em" }}>
             {createStudyFlashCardSetComponent(
               PianoChords.createFlashCardSet([chordType]),
-              /*isEmbedded*/ false,
               /*hideMoreInfoUri*/ true,
               /*title*/ undefined,
               /*style*/ undefined,

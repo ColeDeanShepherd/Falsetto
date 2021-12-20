@@ -37,9 +37,7 @@ Need a way of configuring options
 Add space tapping
 */
 
-interface IRhythmTapperProps {
-  isEmbedded?: boolean;
-}
+interface IRhythmTapperProps {}
 interface IRhythmTapperState {
   rhythmNotes: Array<IRhythmNote>;
   beatsPerMinute: number;

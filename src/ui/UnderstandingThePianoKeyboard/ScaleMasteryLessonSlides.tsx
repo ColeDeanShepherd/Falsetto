@@ -52,7 +52,6 @@ export function createSlideGroups(scale: Scale): Array<SlideGroup> {
           <div style={{ marginTop: "1em" }}>
             {createStudyFlashCardSetComponent(
               PianoScaleDegrees.createFlashCardSet(scale),
-              /*isEmbedded*/ false,
               /*hideMoreInfoUri*/ true,
               /*title*/ undefined,
               /*style*/ undefined,
@@ -105,7 +104,6 @@ export function createSlideGroups(scale: Scale): Array<SlideGroup> {
                       <div style={{ marginTop: "1em" }}>
                         {createStudyFlashCardSetComponent(
                           PianoDiatonicChords.createFlashCardSet(scale, numChordPitches),
-                          /*isEmbedded*/ false,
                           /*hideMoreInfoUri*/ true,
                           /*title*/ undefined,
                           /*style*/ undefined,

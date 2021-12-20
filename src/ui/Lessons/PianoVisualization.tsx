@@ -154,40 +154,27 @@ const chordShapeFlashCardSets = chordShapesFlashCardSetScaleTypes
 
 // #endregion Chord Shape Flash Cards
 
-export interface IPianoVisualizationProps {}
+export function PianoVisualization(props: {}): JSX.Element {
+  return (
+    <Card>
+      <h1>Piano Visualization Master Class</h1>
+      
+      <h3>Notes</h3>
 
-export interface IPianoVisualizationState {}
+      <p>
+        {createStudyFlashCardSetComponent(pianoNotesFlashCardSet, true)}
+      </p>
 
-export class PianoVisualization extends React.Component<IPianoVisualizationProps, IPianoVisualizationState> {
-  public constructor(props: IPianoVisualizationProps) {
-    super(props);
-    
-    this.state = {};
-  }
+      <h3>Scale Shapes</h3>
 
-  public render(): JSX.Element {
+      {scaleShapeFlashCardSets
+        .map(set => <p>{createStudyFlashCardSetComponent(set, true)}</p>)}
 
-    return (
-      <Card>
-        <h1>Piano Visualization Master Class</h1>
-        
-        <h3>Notes</h3>
+      <h3>Chord Shapes</h3>
 
-        <p>
-          {createStudyFlashCardSetComponent(pianoNotesFlashCardSet, false, true, undefined, { margin: "0 auto" })}
-        </p>
+      {chordShapeFlashCardSets
+        .map(set => <p>{createStudyFlashCardSetComponent(set, true)}</p>)}
 
-        <h3>Scale Shapes</h3>
-
-        {scaleShapeFlashCardSets
-          .map(set => <p>{createStudyFlashCardSetComponent(set, false, true, undefined, { margin: "0 auto" })}</p>)}
-
-        <h3>Chord Shapes</h3>
-
-        {chordShapeFlashCardSets
-          .map(set => <p>{createStudyFlashCardSetComponent(set, false, true, undefined, { margin: "0 auto" })}</p>)}
-
-      </Card>
-    );
-  }
+    </Card>
+  );
 }
