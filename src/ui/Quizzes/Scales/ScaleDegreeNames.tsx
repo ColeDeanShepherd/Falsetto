@@ -8,7 +8,6 @@ function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Scale Degree Names", createFlashCards);
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.moreInfoUri = "http://musictheoryblog.blogspot.com/2007/01/scale-degrees.html";
-  flashCardSet.containerHeight = "80px";
 
   return flashCardSet;
 }

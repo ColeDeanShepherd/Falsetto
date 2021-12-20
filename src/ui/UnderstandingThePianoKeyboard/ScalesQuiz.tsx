@@ -22,7 +22,6 @@ const pianoMaxWidth = 240;
 function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Scales Exercise", createFlashCards);
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
-  flashCardSet.containerHeight = "160px";
 
   return flashCardSet;
 }

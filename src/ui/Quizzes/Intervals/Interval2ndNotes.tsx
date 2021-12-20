@@ -231,7 +231,6 @@ function createFlashCardSet(): FlashCardSet {
   });
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = renderPitchAnswerSelect;
-  flashCardSet.containerHeight = "80px";
   flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (
     createIntervalLevels(false, true)
       .map(level => new FlashCardLevel(

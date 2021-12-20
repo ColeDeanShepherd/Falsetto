@@ -145,7 +145,6 @@ export function createFlashCardSet(chordTypes: Array<ChordType>): FlashCardSet {
     ? renderFlashCardMultiSelect
     : undefined;
   flashCardSet.renderAnswerSelect = renderAnswerSelect;
-  flashCardSet.containerHeight = "150px";
 
   if (chordTypes === ChordType.All) {
     flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (

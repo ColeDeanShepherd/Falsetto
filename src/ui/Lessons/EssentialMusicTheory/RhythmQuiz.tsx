@@ -7,7 +7,6 @@ const flashCardSetId = "esmRhythmQuiz";
 function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Rhythm Quiz", createFlashCards);
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
-  flashCardSet.containerHeight = "160px";
 
   return flashCardSet;
 }

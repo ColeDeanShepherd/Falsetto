@@ -78,7 +78,6 @@ function createFlashCardSet(notes?: Array<StringedInstrumentNote>): FlashCardSet
   };
 
   //flashCardSet.moreInfoUri = "https://medium.com/@aslushnikov/memorizing-fretboard-a9f4f28dbf03";
-  flashCardSet.containerHeight = "160px";
 
   return flashCardSet;
 }

@@ -33,7 +33,6 @@ export function createFlashCardSet(scale: Scale, numChordPitches: number): Flash
     () => createFlashCards(flashCardSetId, scale, numChordPitches));
   flashCardSet.route = `scale/${getUriComponent(scale)}/diatonic-${numChordPitches}-note-chords-exercise`;
   flashCardSet.renderAnswerSelect = renderChordNotesFlashCardAnswerSelect;
-  flashCardSet.containerHeight = `${150}px`;
 
   return flashCardSet;
 }

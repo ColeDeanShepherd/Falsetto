@@ -32,7 +32,6 @@ function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Key Accidental Notes", createFlashCards);
   flashCardSet.renderAnswerSelect = renderAnswerSelect;
   flashCardSet.moreInfoUri = "http://myguitarpal.com/the-order-of-sharps-and-flats/";
-  flashCardSet.containerHeight = "80px";
 
   return flashCardSet;
 }

@@ -23,7 +23,6 @@ const minPitch = new Pitch(PitchLetter.C, 0, 4);
 const maxPitch = new Pitch(PitchLetter.B, 0, 5);
 const includeHarmonicIntervals = false;
 
-const containerHeight = 180;
 const pianoMaxHeight = 140;
 
 export const rootNotes = [
@@ -265,7 +264,6 @@ function createFlashCardSet(): FlashCardSet {
         return firstPitch.midiNumber === secondPitch.midiNumber;
       });
   };
-  flashCardSet.containerHeight = `${containerHeight}px`;
   flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (
     createIntervalLevels(false, false)
       .map(level => new FlashCardLevel(

@@ -99,7 +99,6 @@ function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Key Signature Identification", createFlashCards);
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.moreInfoUri = "https://method-behind-the-music.com/theory/scalesandkeys/#sigs";
-  flashCardSet.containerHeight = "160px";
 
   return flashCardSet;
 }

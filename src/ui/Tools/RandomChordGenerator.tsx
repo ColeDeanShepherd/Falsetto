@@ -146,7 +146,6 @@ function createFlashCardSet(): FlashCardSet {
       .filter((_, i) => i <= 16)
   });
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
-  flashCardSet.containerHeight = "80px";
   flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (
     chordTypeLevels
       .map(ctl =>

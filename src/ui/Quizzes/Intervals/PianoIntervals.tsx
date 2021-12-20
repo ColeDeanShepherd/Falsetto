@@ -10,7 +10,7 @@ import { PianoKeyboard } from "../../Utils/PianoKeyboard";
 import { createIntervalLevels } from '../../../lib/TheoryLib/Interval';
 import { arrayContains, toggleArrayElement } from '../../../lib/Core/ArrayUtils';
 
-const containerHeight = 120;
+const pianoKeyboardMaxHeight = 120;
 const minPitch = new Pitch(PitchLetter.C, 0, 4);
 const maxPitch = new Pitch(PitchLetter.B, 0, 5);
 
@@ -191,7 +191,7 @@ export function createFlashCards(): Array<FlashCard> {
           return (
             <div>
               <PianoKeyboard
-                maxHeight={containerHeight}
+                maxHeight={pianoKeyboardMaxHeight}
                 lowestPitch={minPitch}
                 highestPitch={maxPitch}
                 pressedPitches={pitches}
@@ -233,7 +233,6 @@ function createFlashCardSet(): FlashCardSet {
   });
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = renderAnswerSelect;
-  flashCardSet.containerHeight = `${containerHeight}px`;
   flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (
     createIntervalLevels(false, false)
       .map(level => new FlashCardLevel(

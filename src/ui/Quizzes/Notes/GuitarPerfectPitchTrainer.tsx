@@ -191,7 +191,6 @@ function createFlashCardSet(guitarNotes?: Array<StringedInstrumentNote>): FlashC
   });
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = (info: FlashCardStudySessionInfo) => <GuitarNoteAnswerSelect key={info.currentFlashCardId} args={info} tuning={guitarTuning} />;
-  flashCardSet.containerHeight = "200px";
 
   return flashCardSet;
 }

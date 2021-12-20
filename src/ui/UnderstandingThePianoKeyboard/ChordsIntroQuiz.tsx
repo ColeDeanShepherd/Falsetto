@@ -18,7 +18,6 @@ export const fifthIntervalFlashCard = FlashCard.fromRenderFns(
 function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Chords Introduction Quiz", createFlashCards);
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
-  flashCardSet.containerHeight = "160px";
 
   return flashCardSet;
 }

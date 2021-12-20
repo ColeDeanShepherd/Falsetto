@@ -8,7 +8,6 @@ function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Interval Quality Symbols", createFlashCards);
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.moreInfoUri = "/essential-music-theory/intervals";
-  flashCardSet.containerHeight = "80px";
 
   return flashCardSet;
 }

@@ -16,6 +16,17 @@ const pianoKeyboardHighestPitch = new Pitch(PitchLetter.B, 0, 5);
 
 // #region Scale Shape Flash Cards
 
+export function createPianoScaleShapesFlashCardSet(scaleType: ScaleType): FlashCardSet {
+  const id = `pianoScaleShape${scaleType.id}`;
+  const flashCardSet = new FlashCardSet(id, `${scaleType.name} Scales`, () => createScaleShapesFlashCards(id, scaleType));
+  return flashCardSet;
+}
+
+export function createScaleShapesFlashCards(flashCardSetId: string, scaleType: ScaleType): Array<FlashCard> {
+  return commonKeyPitchesOctave0
+    .map(rootPitch => createScaleShapeFlashCard(flashCardSetId, new Scale(scaleType, rootPitch)));
+}
+
 export function createScaleShapeFlashCard(flashCardSetId: string, scale: Scale): FlashCard {
   const deserializedId = {
     set: flashCardSetId,
@@ -51,18 +62,6 @@ export function createScaleShapeFlashCard(flashCardSetId: string, scale: Scale):
   );
 }
 
-export function createScaleShapesFlashCards(flashCardSetId: string, scaleType: ScaleType): Array<FlashCard> {
-  return commonKeyPitchesOctave0
-    .map(rootPitch => createScaleShapeFlashCard(flashCardSetId, new Scale(scaleType, rootPitch)));
-}
-
-export function createScaleShapesFlashCardSet(scaleType: ScaleType): FlashCardSet {
-  const id = `pianoScaleShape${scaleType.id}`;
-  const flashCardSet = new FlashCardSet(id, `${scaleType.name} scales`, () => createScaleShapesFlashCards(id, scaleType));
-  flashCardSet.containerHeight = "80px";
-  return flashCardSet;
-}
-
 const scaleShapesFlashCardSetScaleTypes = [
   ScaleType.Major,
   ScaleType.MelodicMinor,
@@ -73,7 +72,7 @@ const scaleShapesFlashCardSetScaleTypes = [
 ];
 
 const scaleShapeFlashCardSets = scaleShapesFlashCardSetScaleTypes
-  .map(createScaleShapesFlashCardSet);
+  .map(createPianoScaleShapesFlashCardSet);
 
 // #endregion Scale Shape Flash Cards
 
@@ -138,7 +137,6 @@ export function createChordShapesFlashCards(flashCardSetId: string, scaleType: S
 export function createChordShapesFlashCardSet(scaleType: ScaleType): FlashCardSet {
   const id = `pianoChordShape${scaleType.id}`;
   const flashCardSet = new FlashCardSet(id, `${scaleType.name} chords`, () => createChordShapesFlashCards(id, scaleType));
-  flashCardSet.containerHeight = "80px";
   return flashCardSet;
 }
 

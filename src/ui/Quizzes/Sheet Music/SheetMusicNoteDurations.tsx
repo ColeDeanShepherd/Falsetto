@@ -29,7 +29,6 @@ function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Sheet Music Note Durations", createFlashCards);
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.renderAnswerSelect = renderAnswerSelect;
-  flashCardSet.containerHeight = "80px";
   flashCardSet.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/the-basics/overview/";
 
   return flashCardSet;

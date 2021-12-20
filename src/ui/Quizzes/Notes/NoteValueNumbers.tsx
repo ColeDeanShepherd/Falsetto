@@ -7,7 +7,6 @@ const flashCardSetId = "noteVal#s";
 function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Note Value Numbers", createFlashCards);
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
-  flashCardSet.containerHeight = "80px";
   flashCardSet.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/the-basics/overview/";
 
   return flashCardSet;

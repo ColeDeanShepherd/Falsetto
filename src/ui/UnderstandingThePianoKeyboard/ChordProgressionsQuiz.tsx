@@ -10,7 +10,6 @@ const flashCardSetId = "ptScalesQuiz";
 function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Chord Progressions Quiz", createFlashCards);
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
-  flashCardSet.containerHeight = "160px";
 
   return flashCardSet;
 }

@@ -7,7 +7,6 @@ const flashCardSetId = "esmNotesQuiz";
 function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Notes Quiz", createFlashCards);
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
-  flashCardSet.containerHeight = "160px";
 
   return flashCardSet;
 }

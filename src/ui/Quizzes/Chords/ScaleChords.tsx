@@ -17,7 +17,6 @@ function createFlashCardSet(): FlashCardSet {
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.moreInfoUri = "http://www.thejazzpianosite.com/jazz-piano-lessons/jazz-scales/chord-scale-system/";
-  flashCardSet.containerHeight = "80px";
 
   return flashCardSet;
 }

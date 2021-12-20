@@ -121,7 +121,6 @@ function createFlashCardSet(): FlashCardSet {
   });
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = renderDistinctFlashCardSideAnswerSelect;
-  flashCardSet.containerHeight = "120px";
   flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (
     chordTypeLevels
       .map(ctl =>

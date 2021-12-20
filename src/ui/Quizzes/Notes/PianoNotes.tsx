@@ -34,7 +34,6 @@ function renderAnswerSelect(
 
 export function createFlashCardSet(pitches?: Array<Pitch>): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Piano Notes", () => createFlashCards(pitches));
-  flashCardSet.containerHeight = `${200}px`;
   flashCardSet.moreInfoUri = "/essential-music-theory/notes";
   flashCardSet.renderAnswerSelect = renderAnswerSelect;
 

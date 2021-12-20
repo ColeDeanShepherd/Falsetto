@@ -8,7 +8,6 @@ function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Chord Harmonic Functions", createFlashCards);
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.moreInfoUri = "https://davidkulma.com/musictheory/harmonicfunction";
-  flashCardSet.containerHeight = "80px";
 
   return flashCardSet;
 }

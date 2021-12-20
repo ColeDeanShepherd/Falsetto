@@ -40,7 +40,6 @@ export function createFlashCardSet(scale: Scale): FlashCardSet {
     `${scale.rootPitch.toString(/*includeOctaveNumber*/ false)} ${scale.type.name} Scale Degrees`,
     () => createFlashCards(flashCardSetId, scale));
   flashCardSet.route = `scale/${getUriComponent(scale)}/degrees-exercise`;
-  flashCardSet.containerHeight = `${200}px`;
   flashCardSet.moreInfoUri = "/essential-music-theory/notes";
   flashCardSet.renderAnswerSelect = renderAnswerSelect;
 

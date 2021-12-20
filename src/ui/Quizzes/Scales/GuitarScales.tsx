@@ -134,7 +134,6 @@ export function createFlashCardSet(title?: string, initialScaleTypes?: Array<Sca
   });
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = renderDistinctFlashCardSideAnswerSelect;
-  flashCardSet.containerHeight = "180px";
   flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (
     scaleTypeLevels
       .map(level => new FlashCardLevel(

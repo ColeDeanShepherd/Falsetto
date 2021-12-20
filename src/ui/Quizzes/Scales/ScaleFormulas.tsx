@@ -19,7 +19,6 @@ function createFlashCardSet(): FlashCardSet {
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.moreInfoUri = "/essential-music-theory/scales-and-modes";
-  flashCardSet.containerHeight = "80px";
   flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (
     scaleTypeLevels
       .map(level => new FlashCardLevel(

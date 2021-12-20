@@ -17,7 +17,6 @@ function createFlashCardSet(): FlashCardSet {
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.moreInfoUri = "/essential-music-theory/scales-and-modes";
-  flashCardSet.containerHeight = "80px";
 
   return flashCardSet;
 }

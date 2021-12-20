@@ -142,7 +142,6 @@ function createFlashCardSet(): FlashCardSet {
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = FlashCardUtils.renderDistinctFlashCardSideAnswerSelect;
   flashCardSet.moreInfoUri = "https://www.youtube.com/watch?v=_aDCO3h_xik";
-  flashCardSet.containerHeight = "120px";
   flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (
     createIntervalLevels(false, false)
       .map(level => new FlashCardLevel(

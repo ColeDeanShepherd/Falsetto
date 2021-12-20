@@ -73,7 +73,6 @@ export function createFlashCardSet(guitarNotes?: Array<StringedInstrumentNote>):
   };
   
   flashCardSet.moreInfoUri = "/learn-guitar-notes-in-10-steps";
-  flashCardSet.containerHeight = "120px";
 
   if (!guitarNotes) {
     flashCardSet.createFlashCardLevels = (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => (

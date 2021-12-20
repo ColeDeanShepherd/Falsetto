@@ -44,7 +44,6 @@ function createFlashCardSet(): FlashCardSet {
   });
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = renderNoteAnswerSelect;
-  flashCardSet.containerHeight = "200px";
   flashCardSet.moreInfoUri = "https://www.joytunes.com/blog/music-fun/best-way-memorize-piano-notes/";
 
   return flashCardSet;
