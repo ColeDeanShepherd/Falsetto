@@ -1,7 +1,8 @@
 import * as React from "react";
+import wu from "wu";
 
 import { getRectRoundedBottomPathDefString } from "../../lib/Core/SvgUtils";
-import { Pitch, getPitchRange } from '../../lib/TheoryLib/Pitch';
+import { Pitch, getPitchesInRange } from '../../lib/TheoryLib/Pitch';
 import { Rect2D } from '../../lib/Core/Rect2D';
 import { Margin } from '../../lib/Core/Margin';
 import { Size2D } from '../../lib/Core/Size2D';
@@ -29,8 +30,9 @@ export class PianoKeyboardMetrics {
     invariant(this.lowestPitch.midiNumber <= this.highestPitch.midiNumber);
 
     // Calculate key counts.
-    const areKeysWhite = getPitchRange(lowestPitch, highestPitch)
-      .map(p => p.isWhiteKey);
+    const areKeysWhite = wu(getPitchesInRange(lowestPitch, highestPitch))
+      .map(p => p.isWhiteKey)
+      .toArray();
 
     this.whiteKeyCount = 0;
     this.blackKeyCount = 0;

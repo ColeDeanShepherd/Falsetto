@@ -13,6 +13,7 @@
     "core-js": "^2.6.9",
     "howler": "^2.1.2",
     "js-cookie": "^2.2.1",
+    "lodash": "^4.17.21",
     "pepjs": "^0.5.2",
     "query-string": "^6.11.1",
     "react": "^16.13.1",
@@ -27,7 +28,8 @@
     "svg-pan-zoom": "^3.6.0",
     "vexflow": "^1.2.89",
     "webmidi": "^2.5.1",
-    "whatwg-fetch": "^3.0.0"
+    "whatwg-fetch": "^3.0.0",
+    "wu": "^2.1.0"
   },
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
@@ -41,6 +43,7 @@
     "@types/howler": "^2.1.1",
     "@types/jest": "^23.3.14",
     "@types/js-cookie": "^2.2.6",
+    "@types/lodash": "^4.14.178",
     "@types/node": "^10.14.12",
     "@types/react": "^16.9.43",
     "@types/react-document-title": "^2.0.4",
@@ -48,6 +51,7 @@
     "@types/react-router-dom": "^5.1.5",
     "@types/stacktrace-js": "0.0.32",
     "@types/vexflow": "^1.2.33",
+    "@types/wu": "^2.1.42",
     "typescript": "^3.5.3"
   },
   "browserslist": [

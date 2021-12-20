@@ -1,9 +1,10 @@
 import * as React from "react";
+import wu from "wu";
 
 import { PianoKeyboard } from "../../Utils/PianoKeyboard";
 import { createFlashCardId, FlashCard, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardLevel, FlashCardStudySessionInfo } from "../../../FlashCardSet";
-import { Pitch, getPitchRange } from "../../../lib/TheoryLib/Pitch";
+import { Pitch, getPitchesInRange } from "../../../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
 import { PianoKeysAnswerSelect } from '../../Utils/PianoKeysAnswerSelect';
 
@@ -12,7 +13,7 @@ const flashCardSetId = "pianoNotes1Octave";
 const lowestPitch = new Pitch(PitchLetter.C, 0, 4);
 const highestPitch = new Pitch(PitchLetter.B, 0, 4);
 
-export const allPitches = getPitchRange(lowestPitch, highestPitch);
+export const allPitches = [...getPitchesInRange(lowestPitch, highestPitch)];
 export const naturalPitches = allPitches
   .filter(p => p.isNatural);
 export const accidentalPitches = allPitches
@@ -61,7 +62,7 @@ export function createFlashCardSet(pitches?: Array<Pitch>): FlashCardSet {
 }
 
 function createFlashCards(pitches?: Array<Pitch>): FlashCard[] {
-  return (pitches ? pitches : allPitches)
+  return (pitches ? pitches : [...allPitches])
     .map((pitch, i) => {
       const pitchString = pitch.toOneAccidentalAmbiguousString(false, true);
 

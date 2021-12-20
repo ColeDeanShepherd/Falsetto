@@ -24,17 +24,13 @@ export type PitchClass = number;
 
 export type SignedAccidental = number;
 
-export function getPitchRange(minPitch: Pitch, maxPitch: Pitch) {
+export function* getPitchesInRange(minPitch: Pitch, maxPitch: Pitch) {
   const minMidiNumber = minPitch.midiNumber;
   const maxMidiNumber = maxPitch.midiNumber;
 
-  let pitches = new Array<Pitch>();
-
   for (let midiNumber = minMidiNumber; midiNumber <= maxMidiNumber; midiNumber++) {
-    pitches.push(Pitch.createFromMidiNumber(midiNumber));
+    yield Pitch.createFromMidiNumber(midiNumber);
   }
-
-  return pitches;
 }
 
 export function getAmbiguousPitchRange(

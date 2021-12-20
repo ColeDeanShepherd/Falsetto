@@ -1,4 +1,5 @@
 import * as React from "react";
+import wu from "wu";
 
 import * as FlashCardUtils from "../../ui/Quizzes/Utils";
 import { createFlashCardId, FlashCard, FlashCardSide } from "../../FlashCard";
@@ -7,10 +8,9 @@ import { renderUserDeterminedCorrectnessAnswerSelect } from '../../ui/Quizzes/Ut
 import { ScaleFormulaAnswerSelect } from "../../ui/Utils/ScaleFormulaAnswerSelect";
 import { MajorScaleRelativeScaleFormulaAnswerSelect } from '../../ui/Utils/MajorScaleRelativeScaleFormulaAnswerSelect';
 import { PianoKeyboard } from "../../ui/Utils/PianoKeyboard";
-import { Pitch, getPitchRange } from '../../lib/TheoryLib/Pitch';
+import { Pitch, getPitchesInRange } from '../../lib/TheoryLib/Pitch';
 import { PitchLetter } from "../../lib/TheoryLib/PitchLetter";
 import { Scale, ScaleType } from "../../lib/TheoryLib/Scale";
-import { PianoKeysAnswerSelect } from "../../ui/Utils/PianoKeysAnswerSelect";
 import { PianoScaleNotesAnswerSelect } from '../../ui/Utils/PianoScaleNotesAnswerSelect';
 
 const flashCardSetId = "ptScalesQuiz";
@@ -38,8 +38,9 @@ export function createPressAllScaleNotesFlashCard(id: string, scale: Scale, scal
           scale.getPitches()
             .map(p => p.midiNumberNoOctave)
         );
-        const possibleCorrectPitches = getPitchRange(pianoLowestPitch, pianoHighestPitch)
-          .filter(p => scalePitchMidiNumbersNoOctave.has(p.midiNumberNoOctave));
+        const possibleCorrectPitches = wu(getPitchesInRange(pianoLowestPitch, pianoHighestPitch))
+          .filter(p => scalePitchMidiNumbersNoOctave.has(p.midiNumberNoOctave))
+          .toArray();
 
         return (
           <PianoKeyboard

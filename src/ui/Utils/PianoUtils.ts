@@ -1,7 +1,5 @@
-import { Pitch, getPitchRange } from '../../lib/TheoryLib/Pitch';
+import { Pitch } from '../../lib/TheoryLib/Pitch';
 import { PitchLetter } from '../../lib/TheoryLib/PitchLetter';
-import { precondition } from "../../lib/Core/Dbc";
-import { Size2D } from '../../lib/Core/Size2D';
 
 export const fullPianoNumKeys = 88;
 export const fullPianoNumWhiteKeys = 52;

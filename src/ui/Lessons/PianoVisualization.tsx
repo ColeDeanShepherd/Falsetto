@@ -1,4 +1,5 @@
 import * as React from "react";
+import wu from "wu";
 
 import { createStudyFlashCardSetComponent } from '../../ui/StudyFlashCards/View';
 import { Card } from "../../ui/Card/Card";
@@ -8,7 +9,7 @@ import { createFlashCardId, FlashCard, FlashCardSide } from "../../FlashCard";
 import { commonKeyPitchesOctave0 } from "../../lib/TheoryLib/Key";
 import { PianoKeyboard, renderPianoKeyHighlights as renderPianoKeyHighlights } from "../Utils/PianoKeyboard";
 import { PitchLetter } from "../../lib/TheoryLib/PitchLetter";
-import { getPitchRange, Pitch } from "../../lib/TheoryLib/Pitch";
+import { getPitchesInRange, Pitch } from "../../lib/TheoryLib/Pitch";
 import { flashCardSet as pianoNotesFlashCardSet } from '../Quizzes/Notes/PianoNotes';
 
 const pianoKeyboardLowestPitch = new Pitch(PitchLetter.C, 0, 4);
@@ -27,13 +28,14 @@ export function createScaleShapeFlashCards(flashCardSetId: string, scaleType: Sc
 }
 
 export function createScaleShapeFlashCard(flashCardSetId: string, scale: Scale): FlashCard {
-  const scalePitchMidiNumberNoOcttaves = new Set<number>(
+  const scalePitchMidiNumberNoOctaves = new Set<number>(
     scale.getPitches()
       .map(p => p.midiNumberNoOctave)
   );
 
-  const pressedPitches = getPitchRange(pianoKeyboardLowestPitch, pianoKeyboardHighestPitch)
-    .filter(p => scalePitchMidiNumberNoOcttaves.has(p.midiNumberNoOctave));
+  const pressedPitches = wu(getPitchesInRange(pianoKeyboardLowestPitch, pianoKeyboardHighestPitch))
+    .filter(p => scalePitchMidiNumberNoOctaves.has(p.midiNumberNoOctave))
+    .toArray();
 
   return new FlashCard(
     createFlashCardId(flashCardSetId, { scale: `${scale.rootPitch.toString(false)} ${scale.type.name}` }),
@@ -72,23 +74,25 @@ const scaleShapeFlashCardSets = scaleShapesFlashCardSetScaleTypes
 // #region Chord Shape Flash Cards
 
 export function createChordShapeFlashCard(flashCardSetId: string, scale: Scale): FlashCard {
-  const pianoKeyboardPitches = getPitchRange(pianoKeyboardLowestPitch, pianoKeyboardHighestPitch);
+  const pianoKeyboardPitches = getPitchesInRange(pianoKeyboardLowestPitch, pianoKeyboardHighestPitch);
 
   const chordPitchMidiNumberNoOctaves = new Set<number>(
     scale.getDiatonicChord(1, /*numChordPitches*/4).getPitches()
       .map(p => p.midiNumberNoOctave)
   );
 
-  const highlightedChordPitches = pianoKeyboardPitches
-    .filter(p => chordPitchMidiNumberNoOctaves.has(p.midiNumberNoOctave));
+  const highlightedChordPitches = wu(pianoKeyboardPitches)
+    .filter(p => chordPitchMidiNumberNoOctaves.has(p.midiNumberNoOctave))
+    .toArray();
 
   const scalePitchMidiNumberNoOctaves = new Set<number>(
     scale.getPitches()
       .map(p => p.midiNumberNoOctave)
   );
 
-  const pressedPitches = pianoKeyboardPitches
-    .filter(p => scalePitchMidiNumberNoOctaves.has(p.midiNumberNoOctave));
+  const pressedPitches = wu(pianoKeyboardPitches)
+    .filter(p => scalePitchMidiNumberNoOctaves.has(p.midiNumberNoOctave))
+    .toArray();
 
   const highlightFill = "DodgerBlue";
 
