@@ -5,6 +5,7 @@ import * as Audio from "../../Audio/Audio";
 import { unwrapMaybe } from '../../lib/Core/Utils';
 import { Card } from "../../ui/Card/Card";
 import { Button } from "../../ui/Button/Button";
+import { Howl } from "howler";
 
 const clickAudioPath = "/audio/metronome_click.wav";
 

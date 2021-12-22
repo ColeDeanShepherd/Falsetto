@@ -1,5 +1,4 @@
 import * as React from "react";
-import { InputEventNoteon, InputEventNoteoff } from "webmidi";
 
 import { Pitch } from "../../lib/TheoryLib/Pitch";
 
@@ -131,8 +130,8 @@ export class MidiNoteEventListener extends React.Component<IMidiNoteEventListene
   
   // #region MIDI
 
-  private onNoteOn: ((event: InputEventNoteon) => void) | undefined = undefined;
-  private onNoteOff: ((event: InputEventNoteoff) => void) | undefined = undefined;
+  private onNoteOn: ((event: any) => void) | undefined = undefined;
+  private onNoteOff: ((event: any) => void) | undefined = undefined;
   private disconnectFromMidiInput: (() => void) | undefined = undefined;
 
   private async reinitializeMidi() {
@@ -161,17 +160,23 @@ export class MidiNoteEventListener extends React.Component<IMidiNoteEventListene
       this.disconnectFromMidiInput = () => {
         if (midiInput) {
           if (this.onNoteOn) {
-            midiInput.removeListener("noteon", "all", this.onNoteOn);
+            for (const channel of midiInput.channels) {
+              channel.removeListener("noteon", this.onNoteOn);
+            }
           }
           
           if (this.onNoteOff) {
-            midiInput.removeListener("noteoff", "all", this.onNoteOff);
+            for (const channel of midiInput.channels) {
+              channel.removeListener("noteoff", this.onNoteOff);
+            }
           }
         }
       };
   
-      midiInput.addListener("noteon", "all", this.onNoteOn);
-      midiInput.addListener("noteoff", "all", this.onNoteOff);
+      for (const channel of midiInput.channels) {
+        channel.addListener("noteon", this.onNoteOn);
+        channel.addListener("noteoff", this.onNoteOff);
+      }
     }
   }
 

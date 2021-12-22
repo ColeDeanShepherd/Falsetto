@@ -115,7 +115,7 @@ export class PressPianoKeysAllOctavesView extends React.Component<IPressPianoKey
 
       correctIcons[i] = (
         <CheckCircle
-          nativeColor="green"
+          htmlColor="green"
           component="g"
           transform={getScaleTranslateTransformString(iconScale, iconPosition)}
           className="pass-through-click"

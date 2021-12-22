@@ -1,5 +1,5 @@
 import * as React from "react";
-import * as Vex from "vexflow";
+import Vex from "vexflow";
 
 import { Pitch } from "../../../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";

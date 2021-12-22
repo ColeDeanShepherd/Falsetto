@@ -31,6 +31,7 @@ import { Margin } from '../../../lib/Core/Margin';
 import { SectionProps, Term, SectionTitle, SubSectionTitle } from './EssentialMusicTheory';
 import { NavLinkView } from '../../../ui/NavLinkView';
 import { NoteText } from "../../Utils/NoteText";
+import { Howl } from "howler";
 
 const HalfStepsDiagram: React.FunctionComponent<{}> = props => {
   const margin = new Margin(0, 50, 0, 0);

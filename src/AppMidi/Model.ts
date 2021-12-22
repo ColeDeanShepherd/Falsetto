@@ -1,4 +1,4 @@
-import WebMidi, { Input as MidiInput, WebMidiEventConnected, WebMidiEventDisconnected } from "webmidi";
+import { WebMidi, Input as MidiInput } from "webmidi";
 
 import { DependencyInjector } from "../DependencyInjector";
 import { ActionBus } from "../ActionBus";
@@ -56,24 +56,19 @@ export class AppMidiModel implements IDisposable {
   private midiInputPitchRange: [Pitch, Pitch] | undefined;
 
   private initializeMidi() {
-    this._initializeMidiPromise = new Promise<void>((resolve, reject) => {
-      WebMidi.enable(error => {
-        if (!error) {
+    this._initializeMidiPromise = 
+      WebMidi.enable()
+        .then(() => {
           if (!this.midiInput && (WebMidi.inputs.length > 0)) {
             this.setMidiInputInternal(WebMidi.inputs[0]);
           }
           
-          WebMidi.addListener("connected", event => this.onMidiDeviceConnected(event));
-          WebMidi.addListener("disconnected", event => this.onMidiDeviceDisconnected(event));
+          WebMidi.addListener("connected", (event: any) => this.onMidiDeviceConnected(event));
+          WebMidi.addListener("disconnected", (event: any) => this.onMidiDeviceDisconnected(event));
           
           ActionBus.instance.dispatch(new WebMidiInitializedAction());
-        } else {
-          this.logger.logError(error);
-        }
-        
-        resolve();
-      });
-    });
+        })
+        .catch(err => this.logger.logError(err));
   }
 
   private uninitializeMidi() {
@@ -110,7 +105,7 @@ export class AppMidiModel implements IDisposable {
     }
   }
 
-  private onMidiDeviceConnected(event: WebMidiEventConnected) {
+  private onMidiDeviceConnected(event: any) {
     if (!this.midiInput && (WebMidi.inputs.length > 0)) {
       this.setMidiInputInternal(WebMidi.inputs[0]);
     }
@@ -118,7 +113,7 @@ export class AppMidiModel implements IDisposable {
     ActionBus.instance.dispatch(new MidiDeviceConnectedAction(event.port.id));
   }
 
-  private onMidiDeviceDisconnected(event: WebMidiEventDisconnected) {
+  private onMidiDeviceDisconnected(event: any) {
     if (!arrayContains(WebMidi.inputs, this.midiInput)) {
       this.setMidiInputInternal(undefined);
     }

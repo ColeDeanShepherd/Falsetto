@@ -117,7 +117,7 @@ export class ChordNotesFlashCardMultiSelect extends React.Component<IChordNotesF
     );
 
     return (
-      <Grid container spacing={32}>
+      <Grid container spacing={10}>
         <Grid item xs={12}>{chordTypeCheckboxes}</Grid>
       </Grid>
     );
