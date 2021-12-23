@@ -29,7 +29,7 @@ export function createFlashCardSet(scale: Scale, numChordPitches: number): Flash
 
   const flashCardSet = new FlashCardSet(
     flashCardSetId,
-    `${scale.rootPitch.toString(/*includeOctaveNumber*/ false)} ${scale.type.name} Diatonic ${chordExtensionTypeName}s`,
+    `${scale.rootPitchClass.toString(/*includeOctaveNumber*/ false)} ${scale.type.name} Diatonic ${chordExtensionTypeName}s`,
     () => createFlashCards(flashCardSetId, scale, numChordPitches));
   flashCardSet.route = `scale/${getUriComponent(scale)}/diatonic-${numChordPitches}-note-chords-exercise`;
   flashCardSet.renderAnswerSelect = renderChordNotesFlashCardAnswerSelect;

@@ -1,6 +1,7 @@
 import { precondition } from '../Core/Dbc';
 import { PitchLetter } from './PitchLetter';
-import { Pitch, PitchClassName } from './Pitch';
+import { Pitch } from './Pitch';
+import { PitchClassName } from './PitchClassName';
 
 export const commonKeyPitchClassNames: Array<PitchClassName> = [
   { letter: PitchLetter.C, signedAccidental: 0 },
@@ -17,6 +18,25 @@ export const commonKeyPitchClassNames: Array<PitchClassName> = [
   { letter: PitchLetter.B, signedAccidental: 0 }
 ];
 
+export const validKeyPitchClassNames: Array<PitchClassName> = [
+  { letter: PitchLetter.C, signedAccidental: 0 },
+  { letter: PitchLetter.C, signedAccidental: 1 },
+  { letter: PitchLetter.D, signedAccidental: -1 },
+  { letter: PitchLetter.D, signedAccidental: 0 },
+  { letter: PitchLetter.E, signedAccidental: -1 },
+  { letter: PitchLetter.E, signedAccidental: 0 },
+  { letter: PitchLetter.F, signedAccidental: 0 },
+  { letter: PitchLetter.F, signedAccidental: 1 },
+  { letter: PitchLetter.G, signedAccidental: -1 },
+  { letter: PitchLetter.G, signedAccidental: 0 },
+  { letter: PitchLetter.A, signedAccidental: -1 },
+  { letter: PitchLetter.A, signedAccidental: 0 },
+  { letter: PitchLetter.B, signedAccidental: -1 },
+  { letter: PitchLetter.B, signedAccidental: 0 },
+  { letter: PitchLetter.C, signedAccidental: -1 }
+];
+
+// TODO: remove
 export function getValidKeyPitches(preferredOctaveNumber: number): Array<Pitch> {
   return [
     new Pitch(PitchLetter.C, 0, preferredOctaveNumber),

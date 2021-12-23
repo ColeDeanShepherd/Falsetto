@@ -29,7 +29,7 @@ export class PianoScaleFingeringDiagram extends React.Component<IPianoScaleFinge
         lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
         highestPitch={new Pitch(PitchLetter.C, 0, 6)}
         pressedPitches={[]}
-        renderExtrasFn={metrics => renderExtrasFn(metrics, pitches, scale.rootPitch)} />
+        renderExtrasFn={metrics => renderExtrasFn(metrics, pitches, scale.rootPitchClass)} />
     );
   }
 }

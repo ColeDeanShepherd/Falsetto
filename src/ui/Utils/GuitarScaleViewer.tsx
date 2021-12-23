@@ -17,7 +17,7 @@ export const GuitarScaleViewer: React.FunctionComponent<{
   size: Size2D
 }> = props => {
   let rootPitch = Pitch.createFromMidiNumber(
-    (new Pitch(PitchLetter.C, 0, 2)).midiNumber + props.scale.rootPitch.midiNumberNoOctave
+    (new Pitch(PitchLetter.C, 0, 2)).midiNumber + props.scale.rootPitchClass.midiNumberNoOctave
   );
 
   // If the root pitch is below the range of the guitar, add an octave.

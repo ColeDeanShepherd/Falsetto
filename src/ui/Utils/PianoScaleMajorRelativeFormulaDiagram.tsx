@@ -16,7 +16,7 @@ export class PianoScaleMajorRelativeFormulaDiagram extends React.Component<IPian
   public render(): JSX.Element {
     const { scale, octaveCount, maxWidth } = this.props;
 
-    const useSharps = doesKeyUseSharps(scale.rootPitch.letter, scale.rootPitch.signedAccidental);
+    const useSharps = doesKeyUseSharps(scale.rootPitchClass.letter, scale.rootPitchClass.signedAccidental);
     const useSymbols = true;
     const pitchMidiNumberNoOctaves = scale.getPitches()
       .map(p => p.midiNumberNoOctave);

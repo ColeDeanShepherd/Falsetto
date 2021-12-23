@@ -24,7 +24,7 @@ export class ScaleSelect extends React.Component<IScaleSelectProps, {}> {
         <div style={{padding: "1em 0"}}>
           <ValidKeyPitchSelect
             preferredOctaveNumber={4}
-            value={[scale.rootPitch]}
+            value={[scale.rootPitchClass]}
             onChange={rootPitches => this.onRootPitchClick(rootPitches[0])}
           />
         </div>
@@ -52,7 +52,7 @@ export class ScaleSelect extends React.Component<IScaleSelectProps, {}> {
     const { onChange } = this.props;
     const [ _, scale ] = this.props.value;
 
-    const newScale = new Scale(scaleType, scale.rootPitch);
+    const newScale = new Scale(scaleType, scale.rootPitchClass);
 
     if (onChange) {
       onChange([scaleTypeGroup, newScale]);

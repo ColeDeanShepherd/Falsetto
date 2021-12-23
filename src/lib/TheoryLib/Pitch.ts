@@ -4,34 +4,12 @@ import { Interval } from "./Interval";
 import { precondition } from '../Core/Dbc';
 import { mod } from '../Core/MathUtils';
 import { numMatchingCharsAtStart, numSubstringOccurrences } from '../Core/StringUtils';
-
-/**
- * A "pitch class" represented by a number from 0 to 11, where:
- * 0 = C
- * 1 = C#/Db
- * 2 = D
- * 3 = D#/Eb
- * 4 = E
- * 5 = F
- * 6 = F#/Gb
- * 7 = G
- * 8 = G#/Ab
- * 9 = A
- * 10 = A#/Bb
- * 11 = B
- */
-export type PitchClass = number;
-
-export interface PitchClassName {
-  letter: PitchLetter;
-  signedAccidental: number;
-}
+import { parseSignedAccidental, PitchClassName } from './PitchClassName';
+import { parseEnglishSignedAccidental, PitchClass } from './PitchClass';
 
 export function pitchClassNameToPitch(pitchClassName: PitchClassName, octaveNumber: number): Pitch {
   return new Pitch(pitchClassName.letter, pitchClassName.signedAccidental, octaveNumber);
 }
-
-export type SignedAccidental = number;
 
 export function* getPitchesInRange(minPitch: Pitch, maxPitch: Pitch) {
   const minMidiNumber = minPitch.midiNumber;
@@ -106,23 +84,6 @@ export function getNumPitchesInRange(pitchRange: [Pitch, Pitch]): number {
   return pitchRange[1].midiNumber - pitchRange[0].midiNumber + 1;
 }
 
-export function parseSignedAccidental(str: string): number | undefined {
-  if (str.length === 0) { return 0; }
-
-  const firstChar = str[0];
-
-  switch (firstChar) {
-    case '#':
-    case '♯':
-      return numMatchingCharsAtStart(str, firstChar);
-    case 'b':
-    case '♭':
-      return -numMatchingCharsAtStart(str, firstChar);
-    default:
-      return undefined;
-  }
-}
-
 export function tryWrapPitchOctave(
   pitch: Pitch,
   lowestPitch: Pitch,
@@ -184,21 +145,6 @@ export const ambiguousKeyPitchStringsSymbols = [
 
 export function getEnglishAccidentalString(signedAccidental: number): string {
   return getAccidentalStringInternal(signedAccidental, "sharp", "flat");
-}
-
-export function parseEnglishSignedAccidental(str: string): number | undefined {
-  if (str.length === 0) { return 0; }
-
-  const firstChar = str[0];
-
-  switch (firstChar) {
-    case 's':
-      return numSubstringOccurrences(str, "sharp", /*allowOverlapping*/ false);
-    case 'f':
-      return -numSubstringOccurrences(str, "flat", /*allowOverlapping*/ false);
-    default:
-      return undefined;
-  }
 }
 
 export function getUriComponent(pitch: Pitch, includeOctaveNumber: boolean = false): string {
@@ -272,6 +218,7 @@ export class Pitch {
     return new Pitch(letter, signedAccidental, octaveNumber);
   }
 
+  // TODO: remove
   public static parseNoOctave(str: string, octaveNumber: number): Pitch | undefined {
     const pitchLetter = parsePitchLetter(str);
     if (pitchLetter === undefined) { return undefined; }

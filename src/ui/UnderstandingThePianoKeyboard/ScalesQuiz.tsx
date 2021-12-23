@@ -27,7 +27,7 @@ function createFlashCardSet(): FlashCardSet {
 }
 
 export function createPressAllScaleNotesFlashCard(id: string, scale: Scale, scaleTypeName: string): FlashCard {
-  const scaleName = `${scale.rootPitch.toString(/*includeOctaveNumber*/ false)} ${scaleTypeName}`;
+  const scaleName = `${scale.rootPitchClass.toString(/*includeOctaveNumber*/ false)} ${scaleTypeName}`;
   
   return new FlashCard(
     createFlashCardId(flashCardSetId, { id: id }),

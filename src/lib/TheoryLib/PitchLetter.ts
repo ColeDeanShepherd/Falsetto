@@ -1,3 +1,5 @@
+import { PitchClass } from "./PitchClass";
+
 export enum PitchLetter {
   A,
   B,
@@ -7,6 +9,7 @@ export enum PitchLetter {
   F,
   G
 }
+
 export const pitchLetters = [
   PitchLetter.A,
   PitchLetter.B,
@@ -17,7 +20,7 @@ export const pitchLetters = [
   PitchLetter.G,
 ];
 
-export function getPitchLetterMidiNoteNumberOffset(pitchLetter: PitchLetter): number {
+export function pitchLetterToPitchClass(pitchLetter: PitchLetter): PitchClass {
   switch (pitchLetter) {
     case PitchLetter.A:
       return 9;
@@ -37,6 +40,11 @@ export function getPitchLetterMidiNoteNumberOffset(pitchLetter: PitchLetter): nu
       const exhaustiveCheck: never = pitchLetter;
       return -1;
   }
+}
+
+// TODO: remove
+export function getPitchLetterMidiNoteNumberOffset(pitchLetter: PitchLetter): number {
+  return pitchLetterToPitchClass(pitchLetter);
 }
 
 export function parsePitchLetter(str: string): PitchLetter | undefined {

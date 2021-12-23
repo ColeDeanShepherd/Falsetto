@@ -3,14 +3,15 @@ import wu from "wu";
 
 import { createStudyFlashCardSetComponent } from '../../ui/StudyFlashCards/View';
 import { Card } from "../../ui/Card/Card";
-import { Scale, ScaleType } from "../../lib/TheoryLib/Scale";
+import { Scale } from "../../lib/TheoryLib/Scale";
 import { FlashCardSet } from "../../FlashCardSet";
 import { createFlashCardId, FlashCard, FlashCardSide } from "../../FlashCard";
-import { commonKeyPitchClassNames } from "../../lib/TheoryLib/Key";
 import { PianoKeyboard, renderPianoKeyHighlights as renderPianoKeyHighlights } from "../Utils/PianoKeyboard";
 import { PitchLetter } from "../../lib/TheoryLib/PitchLetter";
-import { getPitchesInRange, Pitch, pitchClassNameToPitch } from "../../lib/TheoryLib/Pitch";
+import { getPitchesInRange, Pitch } from "../../lib/TheoryLib/Pitch";
 import { flashCardSet as pianoNotesFlashCardSet } from '../Quizzes/Notes/PianoNotes';
+import { pitchClasses } from "../../lib/TheoryLib/PitchClass";
+import { ScaleType } from "../../lib/TheoryLib/ScaleType";
 
 const pianoKeyboardLowestPitch = new Pitch(PitchLetter.C, 0, 4);
 const pianoKeyboardHighestPitch = new Pitch(PitchLetter.B, 0, 5);
@@ -23,10 +24,10 @@ export function createPianoScaleShapesFlashCardSet(scaleType: ScaleType): FlashC
 }
 
 export function createScaleShapeFlashCards(flashCardSetId: string, scaleType: ScaleType): Array<FlashCard> {
-  return commonKeyPitchClassNames
-    .map(rootPitchClassName => createScaleShapeFlashCard(
+  return pitchClasses
+    .map(rootPitchClass => createScaleShapeFlashCard(
       flashCardSetId,
-      new Scale(scaleType, pitchClassNameToPitch(rootPitchClassName, 0))
+      new Scale(scaleType, rootPitchClass)
       )
     );
 }
@@ -42,9 +43,9 @@ export function createScaleShapeFlashCard(flashCardSetId: string, scale: Scale):
     .toArray();
 
   return new FlashCard(
-    createFlashCardId(flashCardSetId, { scale: `${scale.rootPitch.toString(false)} ${scale.type.name}` }),
+    createFlashCardId(flashCardSetId, { scale: `${scale.rootPitchClass.toString(false)} ${scale.type.name}` }),
     new FlashCardSide(
-      scale.rootPitch.toString(false, true) + " " + scale.type.name,
+      scale.rootPitchClass.toString(false, true) + " " + scale.type.name,
       scale
     ),
     new FlashCardSide(
@@ -101,9 +102,9 @@ export function createChordShapeFlashCard(flashCardSetId: string, scale: Scale):
   const highlightFill = "DodgerBlue";
 
   return new FlashCard(
-    createFlashCardId(flashCardSetId, { scale: `${scale.rootPitch.toString(false)} ${scale.type.name}` }),
+    createFlashCardId(flashCardSetId, { scale: `${scale.rootPitchClass.toString(false)} ${scale.type.name}` }),
     new FlashCardSide(
-      scale.rootPitch.toString(false, true) + " " + scale.type.name,
+      scale.rootPitchClass.toString(false, true) + " " + scale.type.name,
       scale
     ),
     new FlashCardSide(
@@ -125,10 +126,10 @@ export function createChordShapeFlashCard(flashCardSetId: string, scale: Scale):
 }
 
 export function createChordShapesFlashCards(flashCardSetId: string, scaleType: ScaleType): Array<FlashCard> {
-  return commonKeyPitchClassNames
-    .map(rootPitchClassName => createChordShapeFlashCard(
+  return pitchClasses
+    .map(rootPitchClass => createChordShapeFlashCard(
         flashCardSetId,
-        new Scale(scaleType, pitchClassNameToPitch(rootPitchClassName, 0))
+        new Scale(scaleType, rootPitchClass)
       )
     );
 }

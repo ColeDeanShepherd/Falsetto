@@ -21,7 +21,7 @@ import { getChordExtensionTypeName } from '../../lib/TheoryLib/ChordType';
 import { ChordView } from '../../ui/Utils/ChordView';
 
 export function createSlideGroups(scale: Scale): Array<SlideGroup> {
-  const scaleName = `${scale.rootPitch.toString(/*includeOctaveNumber*/ false)} ${scale.type.name}`;
+  const scaleName = `${scale.rootPitchClass.toString(/*includeOctaveNumber*/ false)} ${scale.type.name}`;
   const scalePitches = scale.getPitches();
   const scalePitchesString = scalePitches
     .map(p => p.toString(/*includeOctaveNumber*/ false, /*useSymbols*/ true))

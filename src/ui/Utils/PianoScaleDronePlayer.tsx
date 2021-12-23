@@ -32,11 +32,11 @@ function onKeyPressInternal(scale: Scale, keyPitch: Pitch) {
   }
 
   // always release the root note so it plays again
-  AppModel.instance.pianoAudio.releaseKey(scale.rootPitch);
+  AppModel.instance.pianoAudio.releaseKey(scale.rootPitchClass);
 
-  const keyPresses: Array<[Pitch, number]> = (keyPitch.midiNumber === scale.rootPitch.midiNumber)
-      ? [[scale.rootPitch, 1]]
-      : [[scale.rootPitch, 1], [keyPitch, 1]];
+  const keyPresses: Array<[Pitch, number]> = (keyPitch.midiNumber === scale.rootPitchClass.midiNumber)
+      ? [[scale.rootPitchClass, 1]]
+      : [[scale.rootPitchClass, 1], [keyPitch, 1]];
   
   AppModel.instance.pianoAudio.pressKeys(keyPresses);
 }
@@ -97,7 +97,7 @@ export class PianoScaleDronePlayer extends React.Component<IPianoScaleDronePlaye
           pressedPitches={this.state.pressedPitches}
           renderExtrasFn={metrics => (
             <g>
-              {renderDefaultExtras ? renderExtrasFn(metrics, pitches, scale.rootPitch) : null}
+              {renderDefaultExtras ? renderExtrasFn(metrics, pitches, scale.rootPitchClass) : null}
               {this.props.renderExtrasFn ? this.props.renderExtrasFn(metrics) : null}
             </g>
           )}
@@ -143,7 +143,7 @@ export class PianoScaleDronePlayer extends React.Component<IPianoScaleDronePlaye
           let newPressedPitches = immutableAddIfNotFoundInArray(prevState.pressedPitches, wrappedPitch, p => p.equals(wrappedPitch));
 
           // Add the root pitch of the scale.
-          addIfNotFoundInArray(newPressedPitches, scale.rootPitch, p => p.equals(scale.rootPitch));
+          addIfNotFoundInArray(newPressedPitches, scale.rootPitchClass, p => p.equals(scale.rootPitchClass));
           
           return { pressedPitches: newPressedPitches };
         });
@@ -165,7 +165,7 @@ export class PianoScaleDronePlayer extends React.Component<IPianoScaleDronePlaye
       let newPressedPitches: Array<Pitch>;
 
       // Remove the released pitch if it's not the root pitch of the scale.
-      if (!wrappedPitch.equals(scale.rootPitch)) {
+      if (!wrappedPitch.equals(scale.rootPitchClass)) {
         newPressedPitches = immutableRemoveIfFoundInArray(prevState.pressedPitches, p => p.equals(wrappedPitch));
         AppModel.instance.pianoAudio.releaseKey(wrappedPitch);
       } else {
@@ -173,9 +173,9 @@ export class PianoScaleDronePlayer extends React.Component<IPianoScaleDronePlaye
       }
 
       // Remove the root pitch of the scale if no other pitches are still pressed.
-      if ((newPressedPitches.length === 1) && newPressedPitches.find(p => p.equals(scale.rootPitch))) {
-        removeIfFoundInArray(newPressedPitches, p => p.equals(scale.rootPitch));
-        AppModel.instance.pianoAudio.releaseKey(scale.rootPitch);
+      if ((newPressedPitches.length === 1) && newPressedPitches.find(p => p.equals(scale.rootPitchClass))) {
+        removeIfFoundInArray(newPressedPitches, p => p.equals(scale.rootPitchClass));
+        AppModel.instance.pianoAudio.releaseKey(scale.rootPitchClass);
       }
 
       return { pressedPitches: newPressedPitches };

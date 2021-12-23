@@ -106,7 +106,7 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
             onChange={newValue => this.onScaleChange(newValue)} />
           
           <div style={{fontSize: "1.5em"}}>
-            <p>{this.state.scale.rootPitch.toString(false)} {this.state.scale.type.name}</p>
+            <p>{this.state.scale.rootPitchClass.toString(false)} {this.state.scale.type.name}</p>
             <p>{pitchesString}</p>
             <p>{this.state.scale.type.formula.toString()}</p>
             <p>{intervalsString}</p>
@@ -130,7 +130,7 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
                   lowestPitch={pianoKeyboardLowestPitch}
                   highestPitch={pianoKeyboardHighestPitch}
                   onKeyPress={onKeyPress}
-                  renderExtrasFn={metrics => PianoScaleDronePlayer.renderExtrasFn(metrics, pitches, this.state.scale.rootPitch)}
+                  renderExtrasFn={metrics => PianoScaleDronePlayer.renderExtrasFn(metrics, pitches, this.state.scale.rootPitchClass)}
                 />
               ) : null}
             </div>

@@ -37,7 +37,7 @@ export function createFlashCardSet(scale: Scale): FlashCardSet {
   const flashCardSetId = getFlashCardSetId(scale);
   const flashCardSet = new FlashCardSet(
     flashCardSetId,
-    `${scale.rootPitch.toString(/*includeOctaveNumber*/ false)} ${scale.type.name} Scale Degrees`,
+    `${scale.rootPitchClass.toString(/*includeOctaveNumber*/ false)} ${scale.type.name} Scale Degrees`,
     () => createFlashCards(flashCardSetId, scale));
   flashCardSet.route = `scale/${getUriComponent(scale)}/degrees-exercise`;
   flashCardSet.moreInfoUri = "/essential-music-theory/notes";

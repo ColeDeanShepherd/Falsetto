@@ -30,7 +30,7 @@ export class PianoScaleFormulaDiagram extends React.Component<IPianoScaleFormula
           {renderScaleStepLabels(metrics)}
           {renderPianoKeyboardNoteNames(
             metrics,
-            doesKeyUseSharps(scale.rootPitch.letter, scale.rootPitch.signedAccidental),
+            doesKeyUseSharps(scale.rootPitchClass.letter, scale.rootPitchClass.signedAccidental),
             p => arrayContains(pitchMidiNumberNoOctaves, p.midiNumberNoOctave))}
         </g>
       );

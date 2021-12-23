@@ -563,7 +563,7 @@ const routes: Array<IRouteData> = ([
       path: "/scale/:scaleId/lesson/:slidePath+",
       renderFn: (props: any) => (
         <ScaleRoute routeParams={props.match.params} renderRoute={scale => {
-          const scaleName = `${getPitchUriComponent(scale.rootPitch, /*includeOctaveNumber*/ false)} ${scale.type.name}`;
+          const scaleName = `${getPitchUriComponent(scale.rootPitchClass, /*includeOctaveNumber*/ false)} ${scale.type.name}`;
           const slideGroups = createScaleMasteryLessonSlideGroups(scale);
 
           return (
