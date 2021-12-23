@@ -12,7 +12,6 @@ import { NavigateAction, LoginAction, SignUpAction, LogoutAction } from './Actio
 import { AppMidiModel } from "../AppMidi/Model";
 import { PianoAudio } from "../Audio/PianoAudio";
 import { saveSessionToken, clearSessionToken } from '../Cookies';
-import { IApiClient } from "../ApiClient";
 import { UserProfile } from '../UserProfile';
 import { Result, Ok, Err } from '../lib/Core/Result';
 import { unwrapValueOrUndefined } from '../lib/Core/Utils';
@@ -31,7 +30,6 @@ export class AppModel implements IDisposable {
 
     this.analytics = DependencyInjector.instance.getRequiredService<IAnalytics>("IAnalytics");
     this.history = DependencyInjector.instance.getRequiredService<History<any>>("History");
-    this.apiClient = DependencyInjector.instance.getRequiredService<IApiClient>("IApiClient");
 
     this.boundHandleAction = this.handleAction.bind(this);
     ActionBus.instance.subscribe(this.boundHandleAction);
@@ -46,28 +44,8 @@ export class AppModel implements IDisposable {
     ActionBus.instance.unsubscribe(this.boundHandleAction);
   }
 
-  public async loadProfileAsync(): Promise<Result<UserProfile, string>> {
-    try {
-      const [getProfileResult, httpResponse] = await this.apiClient.getProfileAsync();
-
-      if (!getProfileResult.isOk) {
-        if (httpResponse.status === HttpStatusCode.Unauthorized) {
-          clearSessionToken();
-        }
-
-        return Err(unwrapValueOrUndefined(getProfileResult.error));
-      }
-
-      const userProfile = unwrapValueOrUndefined(getProfileResult.value);
-      return Ok(userProfile);
-    } catch (err: any) {
-      return Err(err.toString());
-    }
-  }
-
   private analytics: IAnalytics;
   private history: History<any>;
-  private apiClient: IApiClient;
 
   private boundHandleAction: ActionHandler;
 

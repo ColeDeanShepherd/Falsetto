@@ -19,8 +19,6 @@ import "./Stylesheet.css";
 import { PaywallOverlay } from "../Utils/PaywallOverlay/PaywallOverlay";
 import { understandingThePianoKeyboardProduct } from '../../Products';
 import { UserProfile } from '../../UserProfile';
-import { IApiClient } from "../../ApiClient";
-import { DependencyInjector } from "../../DependencyInjector";
 import { AppModel } from "../../App/Model";
 import { unwrapValueOrUndefined } from "../../lib/Core/Utils";
 

@@ -1,44 +1,15 @@
 import * as Utils from "../lib/Core/Utils";
 import { FlashCard, FlashCardId } from "../FlashCard";
-import { StudyAlgorithm, LeitnerStudyAlgorithm, QuizStudyAlgorithm } from '../Study/StudyAlgorithm';
-import { AnswerDifficulty, answerDifficultyToPercentCorrect, isAnswerDifficultyCorrect } from "../Study/AnswerDifficulty";
+import { StudyAlgorithm, LeitnerStudyAlgorithm } from '../Study/StudyAlgorithm';
+import { AnswerDifficulty, isAnswerDifficultyCorrect } from "../Study/AnswerDifficulty";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../FlashCardSet";
-import { IDatabase, FlashCardAnswer } from "../Database";
-import { IUserManager } from "../UserManager";
 import { Size2D } from "../lib/Core/Size2D";
 import { DependencyInjector } from "../DependencyInjector";
 import { IAnalytics } from "../Analytics";
 import { FlashCardSetStats } from "../Study/FlashCardSetStats";
 import { FlashCardStats } from '../Study/FlashCardStats';
-import { arrayCountPassing, arrayContains, sum, removeElement, uniq, areArraysEqual } from "../lib/Core/ArrayUtils";
+import {  arrayContains, sum, removeElement, uniq, areArraysEqual } from "../lib/Core/ArrayUtils";
 import { assert } from "../lib/Core/Dbc";
-
-export function getFlashCardSetStatsFromAnswers(
-  flashCardSet: FlashCardSet, flashCards: Array<FlashCard>, answers: Array<FlashCardAnswer>
-): FlashCardSetStats {
-  const minPctCorrect = answerDifficultyToPercentCorrect(AnswerDifficulty.Easy);
-  const flashCardStats = flashCards
-    .map(fc => {
-      const numCorrectGuesses = arrayCountPassing(
-        answers, a => (a.flashCardId === fc.id) && (a.percentCorrect >= minPctCorrect)
-      );
-      const numIncorrectGuesses = arrayCountPassing(
-        answers, a => (a.flashCardId === fc.id) && (a.percentCorrect < minPctCorrect)
-      );
-      return new FlashCardStats(fc.id, numCorrectGuesses, numIncorrectGuesses);
-    });
-    return new FlashCardSetStats(flashCardSet.id, flashCardStats);
-}
-export async function getFlashCardSetStatsFromDatabase(
-  database: IDatabase, userManager: IUserManager,
-  flashCardSet: FlashCardSet, flashCards: Array<FlashCard>
-): Promise<FlashCardSetStats> {
-  const user = userManager.getCurrentUser();
-  const userId = ""; // TODO: user ? user.id : "";
-  const flashCardIds = flashCards.map(fc => fc.id);
-  const answers = await database.getAnswers(flashCardIds, userId);
-  return getFlashCardSetStatsFromAnswers(flashCardSet, flashCards, answers);
-}
 
 export const MIN_PCT_CORRECT_FLASH_CARD_LEVEL = 0.85;
 
@@ -66,8 +37,6 @@ export function getPercentToNextLevel(currentFlashCardLevel: FlashCardLevel, fla
 
 // TODO: make study algorithm stateless? (leitner algorithm is stateful)
 export class StudyFlashCardsModel {
-  private userManager: IUserManager;
-  //private database: IDatabase;
   private analytics: IAnalytics;
 
   public flashCardSet: FlashCardSet;
@@ -100,8 +69,6 @@ export class StudyFlashCardsModel {
   }
 
   public constructor(flashCardSet: FlashCardSet, studyAlgorithm?: StudyAlgorithm) {
-    this.userManager = DependencyInjector.instance.getRequiredService<IUserManager>("IUserManager");
-    //this.database = DependencyInjector.instance.getRequiredService<IDatabase>("IDatabase");
     this.analytics = DependencyInjector.instance.getRequiredService<IAnalytics>("IAnalytics");
 
     this.flashCardSet = flashCardSet;
@@ -239,7 +206,6 @@ export class StudyFlashCardsModel {
     answerDifficulty: AnswerDifficulty): Promise<void> {
     this.uiStateHandleUserAnswerAction(flashCardId, answer, answerDifficulty);
     this.studyAlgorithmHandleUserAnswerAction(flashCardId, answer, answerDifficulty);
-    await this.databaseHandleUserAnswerAction(flashCardId, answer, answerDifficulty);
     await this.analyticsHandleUserAnswerAction(flashCardId, answer, answerDifficulty);
     this.handleUserAnswerActionInternal(flashCardId, answer, answerDifficulty);
   }
@@ -272,22 +238,6 @@ export class StudyFlashCardsModel {
     if (!this.haveGottenCurrentFlashCardWrong) {
       this.studyAlgorithm.onAnswer(answerDifficulty);
     }
-  }
-
-  private async databaseHandleUserAnswerAction(
-    flashCardId: FlashCardId,
-    answer: any,
-    answerDifficulty: AnswerDifficulty): Promise<void> {
-    // if (!this.haveGottenCurrentFlashCardWrong) {
-    //   const user = this.userManager.getCurrentUser();
-    //   const userId = user ? user.id : "";
-    //   const answeredAt = new Date();
-
-    //   await this.database.addAnswers([new FlashCardAnswer(
-    //     this.currentFlashCardId, userId,
-    //     answerDifficultyToPercentCorrect(answerDifficulty), answeredAt
-    //   )]);
-    // }
   }
 
   private async analyticsHandleUserAnswerAction(

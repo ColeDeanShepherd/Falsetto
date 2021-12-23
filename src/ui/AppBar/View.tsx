@@ -27,8 +27,6 @@ export class AppBarView extends React.Component<IAppBarViewProps, IAppBarViewSta
   public constructor(props: IAppBarViewProps) {
     super(props);
 
-    //this.userManager = DependencyInjector.instance.getRequiredService<IUserManager>("IUserManager");
-
     this.boundHandleAction = this.handleAction.bind(this);
 
     this.state = {
@@ -50,14 +48,6 @@ export class AppBarView extends React.Component<IAppBarViewProps, IAppBarViewSta
 
     const isMenuContainerVisible = isMenuVisible || isSettingsVisible;
 
-    // Account Stuff
-    //const userProfile = this.userManager.getCurrentUser();
-    //const isAuthenticated = userProfile !== null;
-
-    //{!isAuthenticated ? <a href="/login" onClick={event => { this.userManager.loginWithRedirect(); event.preventDefault(); event.stopPropagation(); }} style={{ fontWeight: "normal" }}>Log In</a> : null}
-    //{(isAuthenticated && userProfile) ? <NavLinkView to="/profile" style={{ fontWeight: "normal" }}>{userProfile.fullName}</NavLinkView> : null}
-    //{isAuthenticated ? <a href="/logout" onClick={event => { this.userManager.logout(); event.preventDefault(); event.stopPropagation(); }} style={{ fontWeight: "normal" }}>Log Out</a> : null}
-    
     return (
       <div>
         <div className="app-bar">
@@ -101,7 +91,6 @@ export class AppBarView extends React.Component<IAppBarViewProps, IAppBarViewSta
     );
   }
 
-  //private userManager: IUserManager;
   private boundHandleAction: ActionHandler;
 
   private handleAction(action: IAction) {

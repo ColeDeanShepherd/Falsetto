@@ -1,30 +1,30 @@
+// polyfills
 import "core-js";
 import "whatwg-fetch";
 import "pepjs";
+import { polyfillWebAudio } from "./Audio/Audio";
 
-import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
-
-import "bootstrap/dist/css/bootstrap.min.css";
-import "./index.css";
+// create-react-app
+import registerServiceWorker from "./registerServiceWorker";
 
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
-import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
-
-import registerServiceWorker from "./registerServiceWorker";
-
 import { getErrorDescription } from './Error';
-import { isDevelopment, getStripePublishableApiKey } from './Config';
+import { isDevelopment } from './Config';
 import { DependencyInjector } from './DependencyInjector';
 import { IAnalytics } from './Analytics';
-import { polyfillWebAudio } from "./Audio/Audio";
 
 import { checkFlashCardSetIds, checkFlashCardIds } from './FlashCardGraph';
 
+import { createTheme, MuiThemeProvider } from "@material-ui/core";
+
 import { AppModel } from './App/Model';
 import { AppView } from "./ui/App/View";
+
+// css
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./index.css";
 
 const analytics = DependencyInjector.instance.getRequiredService<IAnalytics>("IAnalytics");
 
@@ -34,7 +34,7 @@ window.onerror = (msg, file, line, col, error) => {
     .then(errorDescription => analytics.trackException(errorDescription, fatal));
 };
 
-const theme = createMuiTheme({
+const theme = createTheme({
   /*typography: {
     useNextVariants: true,
   },*/
@@ -68,13 +68,9 @@ window.addEventListener("beforeunload", (e) => {
   app.dispose();
 });
 
-const stripePromise = loadStripe(getStripePublishableApiKey());
-
 const rootElement = (
   <MuiThemeProvider theme={theme}>
-    <Elements stripe={stripePromise}>
-      <AppView />
-    </Elements>
+    <AppView />
   </MuiThemeProvider>
 );
 

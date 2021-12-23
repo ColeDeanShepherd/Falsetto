@@ -15,7 +15,6 @@ import "./Stylesheet.css"; // TODO: use a CSS preprocessor and split this into m
 import { ActionBus } from '../../ActionBus';
 import { NavigateAction } from '../../App/Actions';
 import { UserProfile } from "../../UserProfile";
-import { IApiClient } from "../../ApiClient";
 import { PaywallOverlay } from "../Utils/PaywallOverlay/PaywallOverlay";
 import { unwrapValueOrUndefined } from '../../lib/Core/Utils';
 
@@ -67,7 +66,6 @@ export class Slideshow extends React.Component<ISlideshowProps, ISlideshowState>
     super(props);
     
     this.history = DependencyInjector.instance.getRequiredService<History<any>>("History");
-    this.apiClient = DependencyInjector.instance.getRequiredService<IApiClient>("IApiClient");
 
     [this.state, this.slides] = this.getStateFromProps(props);
   }
@@ -194,7 +192,6 @@ export class Slideshow extends React.Component<ISlideshowProps, ISlideshowState>
     );
   }
   
-  private apiClient: IApiClient;
   private history: History<any>;
 
   // #region Event Handlers
