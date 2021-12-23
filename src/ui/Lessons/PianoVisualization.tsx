@@ -6,10 +6,10 @@ import { Card } from "../../ui/Card/Card";
 import { Scale, ScaleType } from "../../lib/TheoryLib/Scale";
 import { FlashCardSet } from "../../FlashCardSet";
 import { createFlashCardId, FlashCard, FlashCardSide } from "../../FlashCard";
-import { commonKeyPitchesOctave0 } from "../../lib/TheoryLib/Key";
+import { commonKeyPitchClassNames } from "../../lib/TheoryLib/Key";
 import { PianoKeyboard, renderPianoKeyHighlights as renderPianoKeyHighlights } from "../Utils/PianoKeyboard";
 import { PitchLetter } from "../../lib/TheoryLib/PitchLetter";
-import { getPitchesInRange, Pitch } from "../../lib/TheoryLib/Pitch";
+import { getPitchesInRange, Pitch, pitchClassNameToPitch } from "../../lib/TheoryLib/Pitch";
 import { flashCardSet as pianoNotesFlashCardSet } from '../Quizzes/Notes/PianoNotes';
 
 const pianoKeyboardLowestPitch = new Pitch(PitchLetter.C, 0, 4);
@@ -23,8 +23,12 @@ export function createPianoScaleShapesFlashCardSet(scaleType: ScaleType): FlashC
 }
 
 export function createScaleShapeFlashCards(flashCardSetId: string, scaleType: ScaleType): Array<FlashCard> {
-  return commonKeyPitchesOctave0
-    .map(rootPitch => createScaleShapeFlashCard(flashCardSetId, new Scale(scaleType, rootPitch)));
+  return commonKeyPitchClassNames
+    .map(rootPitchClassName => createScaleShapeFlashCard(
+      flashCardSetId,
+      new Scale(scaleType, pitchClassNameToPitch(rootPitchClassName, 0))
+      )
+    );
 }
 
 export function createScaleShapeFlashCard(flashCardSetId: string, scale: Scale): FlashCard {
@@ -121,8 +125,12 @@ export function createChordShapeFlashCard(flashCardSetId: string, scale: Scale):
 }
 
 export function createChordShapesFlashCards(flashCardSetId: string, scaleType: ScaleType): Array<FlashCard> {
-  return commonKeyPitchesOctave0
-    .map(rootPitch => createChordShapeFlashCard(flashCardSetId, new Scale(scaleType, rootPitch)));
+  return commonKeyPitchClassNames
+    .map(rootPitchClassName => createChordShapeFlashCard(
+        flashCardSetId,
+        new Scale(scaleType, pitchClassNameToPitch(rootPitchClassName, 0))
+      )
+    );
 }
 
 export function createChordShapesFlashCardSet(scaleType: ScaleType): FlashCardSet {

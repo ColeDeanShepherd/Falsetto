@@ -22,6 +22,15 @@ import { numMatchingCharsAtStart, numSubstringOccurrences } from '../Core/String
  */
 export type PitchClass = number;
 
+export interface PitchClassName {
+  letter: PitchLetter;
+  signedAccidental: number;
+}
+
+export function pitchClassNameToPitch(pitchClassName: PitchClassName, octaveNumber: number): Pitch {
+  return new Pitch(pitchClassName.letter, pitchClassName.signedAccidental, octaveNumber);
+}
+
 export type SignedAccidental = number;
 
 export function* getPitchesInRange(minPitch: Pitch, maxPitch: Pitch) {

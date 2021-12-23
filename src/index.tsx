@@ -35,9 +35,6 @@ window.onerror = (msg, file, line, col, error) => {
 };
 
 const theme = createTheme({
-  /*typography: {
-    useNextVariants: true,
-  },*/
   overrides: {
     MuiTableCell: {
       root: {

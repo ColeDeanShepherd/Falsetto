@@ -1,25 +1,21 @@
-import { PitchLetter } from './PitchLetter';
-import { Pitch } from './Pitch';
 import { precondition } from '../Core/Dbc';
+import { PitchLetter } from './PitchLetter';
+import { Pitch, PitchClassName } from './Pitch';
 
-export function getCommonKeyPitches(preferredOctaveNumber: number): Array<Pitch> {
-  return [
-    new Pitch(PitchLetter.C, 0, preferredOctaveNumber),
-    new Pitch(PitchLetter.C, 1, preferredOctaveNumber),
-    new Pitch(PitchLetter.D, 0, preferredOctaveNumber),
-    new Pitch(PitchLetter.E, -1, preferredOctaveNumber),
-    new Pitch(PitchLetter.E, 0, preferredOctaveNumber),
-    new Pitch(PitchLetter.F, 0, preferredOctaveNumber),
-    new Pitch(PitchLetter.F, 1, preferredOctaveNumber),
-    new Pitch(PitchLetter.G, 0, preferredOctaveNumber),
-    new Pitch(PitchLetter.A, -1, preferredOctaveNumber),
-    new Pitch(PitchLetter.A, 0, preferredOctaveNumber),
-    new Pitch(PitchLetter.B, -1, preferredOctaveNumber),
-    new Pitch(PitchLetter.B, 0, preferredOctaveNumber)
-  ];
-}
-
-export const commonKeyPitchesOctave0 = getCommonKeyPitches(0);
+export const commonKeyPitchClassNames: Array<PitchClassName> = [
+  { letter: PitchLetter.C, signedAccidental: 0 },
+  { letter: PitchLetter.C, signedAccidental: 1 },
+  { letter: PitchLetter.D, signedAccidental: 0 },
+  { letter: PitchLetter.E, signedAccidental: -1 },
+  { letter: PitchLetter.E, signedAccidental: 0 },
+  { letter: PitchLetter.F, signedAccidental: 0 },
+  { letter: PitchLetter.F, signedAccidental: 1 },
+  { letter: PitchLetter.G, signedAccidental: 0 },
+  { letter: PitchLetter.A, signedAccidental: -1 },
+  { letter: PitchLetter.A, signedAccidental: 0 },
+  { letter: PitchLetter.B, signedAccidental: -1 },
+  { letter: PitchLetter.B, signedAccidental: 0 }
+];
 
 export function getValidKeyPitches(preferredOctaveNumber: number): Array<Pitch> {
   return [
