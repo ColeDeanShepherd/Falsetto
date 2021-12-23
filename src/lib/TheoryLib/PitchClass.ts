@@ -18,10 +18,6 @@ import { numSubstringOccurrences } from "../Core/StringUtils";
 export type PitchClass = number;
 
 export const pitchClasses = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
- 
-export function getPitchClassUriComponent(pitchClass: PitchClass): string {
-  return pitchClass.toString();
-}
 
 export function parseEnglishSignedAccidental(str: string): number | undefined {
   if (str.length === 0) { return 0; }
@@ -36,4 +32,8 @@ export function parseEnglishSignedAccidental(str: string): number | undefined {
     default:
       return undefined;
   }
+}
+
+export function getPitchClassUriComponent(pitchClass: PitchClass): string {
+  return pitchClass.toString();
 }
