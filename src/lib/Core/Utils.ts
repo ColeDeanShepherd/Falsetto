@@ -1,6 +1,8 @@
 import { reverseString } from './StringUtils';
 import { precondition } from './Dbc';
 
+export type MappedTypeKey = string | number | symbol;
+
 export function identity<T>(value: T): T {
   return value;
 }
@@ -91,4 +93,14 @@ export function getOrdinalNumeral(x: number): string {
 export function tryParseIntFromAny(value: any): number {
   if (typeof value !== 'string') { return NaN; }
   return parseInt(value as string, /*radix*/ 10);
+}
+
+export function reverseMappedType(map: { [key in MappedTypeKey]: MappedTypeKey }): { [key in MappedTypeKey]: MappedTypeKey } {
+  const result: { [key in MappedTypeKey]: MappedTypeKey } = {};
+
+  for (const [key, value] of Object.entries(map)) {
+    result[value] = key;
+  }
+
+  return result;
 }
