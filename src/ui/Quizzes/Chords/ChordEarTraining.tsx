@@ -35,7 +35,7 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
     const rootPitch = randomElement(rootPitches);
 
     this.state = {
-      pitches: new Chord(this.props.chordType, rootPitch).getPitches()
+      pitches: new Chord(this.props.chordType, rootPitch).getPitchClasses()
     };
   }
 

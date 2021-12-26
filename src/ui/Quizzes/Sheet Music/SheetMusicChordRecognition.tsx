@@ -69,7 +69,7 @@ export function configDataToEnabledFlashCardIds(
       configData.enabledRootPitches.some(erp => erp.equalsNoOctave(rootPitch)) &&
       arrayContains(configData.enabledChordTypes, chordType.name)
     ) {
-      const pitches = new Chord(chordType, rootPitch).getPitches();
+      const pitches = new Chord(chordType, rootPitch).getPitchClasses();
       
       // VexFlow doesn't allow triple sharps/flats
       if (pitches.every(pitch => Math.abs(pitch.signedAccidental) < 3)) {
@@ -143,7 +143,7 @@ export function createFlashCards(): Array<FlashCard> {
 
   for (const rootPitch of rootPitches) {
     for (const chordType of chordTypes) {
-      const pitches = new Chord(chordType, rootPitch).getPitches();
+      const pitches = new Chord(chordType, rootPitch).getPitchClasses();
 
       flashCards.push(new FlashCard(
         createFlashCardId(flashCardSetId, { chord: `${rootPitch.toString(true)} ${chordType.name}` }),

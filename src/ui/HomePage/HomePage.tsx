@@ -121,7 +121,7 @@ export const ScalesThumbnail: React.FunctionComponent<{}> = props => (
 );
 
 const chordsThumbnailPitches = (new Chord(ChordType.Minor, new Pitch(PitchLetter.C, 0, 4)))
-  .getPitches();
+  .getPitchClasses();
 
 export const ChordsThumbnail: React.FunctionComponent<{}> = props => (
   <PianoKeyboard

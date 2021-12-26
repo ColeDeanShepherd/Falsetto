@@ -82,7 +82,7 @@ export function createSlideGroups(scale: Scale): Array<SlideGroup> {
                   const chordScaleDegreeNumbers = scale.type.getDiatonicChordScaleDegreeNumbers(scaleDegreeNumber, numChordPitches);
                   const chordScaleDegreesString = chordScaleDegreeNumbers.join(' ');
                   const chordName = `${chord.rootPitchClass.toString(/*includeOctaveNumber*/ false)} ${chord.type.name}`;
-                  const chordPitches = chord.getPitches();
+                  const chordPitches = chord.getPitchClasses();
                   const chordPitchesString = chordPitches
                     .map(p => p.toString(/*includeOctaveNumber*/ false, /*useSymbols*/ true))
                     .join(' ');

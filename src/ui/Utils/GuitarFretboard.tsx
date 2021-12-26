@@ -209,7 +209,7 @@ export function findGuitarChordShape(
   precondition((inversion >= 0) && (inversion < chord.type.pitchCount));
   precondition((firstStringIndex >= 0) && (firstStringIndex < tuning.stringCount));
 
-  const pitches = chord.getPitches();
+  const pitches = chord.getPitchClasses();
 
   let guitarNotes = new Array<StringedInstrumentNote>();
 

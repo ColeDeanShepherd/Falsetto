@@ -6,7 +6,7 @@ export interface BiDirectionalDictionary<TKey, TValue> {
   reverseData: { [key in MappedTypeKey]: TKey };
 }
 
-export function createDictionary<TKey, TValue>(
+export function createBiDirectionalDictionary<TKey, TValue>(
   data?: { [key in MappedTypeKey]: TValue }
 ): BiDirectionalDictionary<TKey, TValue> {
   return {
@@ -19,10 +19,15 @@ export function createDictionary<TKey, TValue>(
   };
 }
 
-export function get<TKey, TValue>(dictionary: BiDirectionalDictionary<TKey, TValue>, key: MappedTypeKey): TValue {
-  return dictionary.data[key];
+export function get<TKey, TValue>(dictionary: BiDirectionalDictionary<TKey, TValue>, key: TKey): TValue {
+  return dictionary.data[key as any]; // TODO: fix cast
 }
 
-export function set<TKey, TValue>(dictionary: BiDirectionalDictionary<TKey, TValue>, key: MappedTypeKey, value: TValue) {
-  dictionary.data[key] = value;
+export function getReverse<TKey, TValue>(dictionary: BiDirectionalDictionary<TKey, TValue>, key: TValue): TKey {
+  return dictionary.reverseData[key as any]; // TODO: fix cast
+}
+
+export function set<TKey, TValue>(dictionary: BiDirectionalDictionary<TKey, TValue>, key: TKey, value: TValue) {
+  dictionary.data[key as any] = value; // TODO: fix cast
+  dictionary.reverseData[value as any] = key; // TODO: fix cast
 }

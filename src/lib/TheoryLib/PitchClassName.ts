@@ -1,6 +1,8 @@
+import { mod } from "../Core/MathUtils";
 import { numMatchingCharsAtStart } from "../Core/StringUtils";
 import { parseEnglishSignedAccidental, PitchClass } from "./PitchClass";
-import { parsePitchLetter, PitchLetter, pitchLetterToPitchClass } from "./PitchLetter";
+import { parsePitchLetter, PitchLetter, pitchLetterToMidiNumberOffset, pitchLetterToPitchClass } from "./PitchLetter";
+import { MAX_MIDI_NUMBER_OFFSET } from "./Utils";
  
 export interface PitchClassName {
   letter: PitchLetter;
@@ -8,8 +10,10 @@ export interface PitchClassName {
 }
 
 export function pitchClassNameToPitchClass(pitchClassName: PitchClassName): PitchClass {
-  const letterPitchClass = pitchLetterToPitchClass(pitchClassName.letter);
-  return letterPitchClass + pitchClassName.signedAccidental;
+  return mod(
+    pitchLetterToMidiNumberOffset(pitchClassName.letter) + pitchClassName.signedAccidental,
+    MAX_MIDI_NUMBER_OFFSET
+  );
 }
 
 export function parseSignedAccidental(str: string): number | undefined {

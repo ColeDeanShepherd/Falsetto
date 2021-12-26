@@ -8,7 +8,7 @@ export interface IChordAudioPlayerProps {
 }
 export class ChordAudioPlayer extends React.Component<IChordAudioPlayerProps, {}> {
   public render(): JSX.Element {
-    const pitches = this.props.chord.getPitches();
+    const pitches = this.props.chord.getPitchClasses();
     return <PitchesAudioPlayer pitches={pitches} playSequentially={false} />;
   }
 }

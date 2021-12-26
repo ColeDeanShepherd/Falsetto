@@ -1,6 +1,5 @@
 import { Howl } from "howler";
-
-import { NumberDictionary } from "../lib/Core/NumberDictionary";
+import { createDictionary, Dictionary, get, set } from "../lib/Core/Dictionary";
 
 export function polyfillWebAudio() {
   const windowAny = window as any;
@@ -22,14 +21,14 @@ export function polyfillWebAudio() {
     }
   
     const scaleFactor = 0.0078125; // 1 / 128
-    const uint8SampleBuffersBySize: NumberDictionary<Uint8Array> = {};
+    const uint8SampleBuffersBySize: Dictionary<number, Uint8Array> = createDictionary({});
   
     AnalyserNode.prototype.getFloatTimeDomainData = function (this: AnalyserNode, sampleBuffer: Float32Array) {
-      if (!uint8SampleBuffersBySize[sampleBuffer.length]) {
-        uint8SampleBuffersBySize[sampleBuffer.length] = new Uint8Array(sampleBuffer.length);
+      if (!get(uint8SampleBuffersBySize, sampleBuffer.length)) {
+        set(uint8SampleBuffersBySize, sampleBuffer.length, new Uint8Array(sampleBuffer.length));
       }
 
-      const uint8SampleBuffer = uint8SampleBuffersBySize[sampleBuffer.length];
+      const uint8SampleBuffer = get(uint8SampleBuffersBySize, sampleBuffer.length);
       this.getByteTimeDomainData(uint8SampleBuffer);
 
       for (let i = 0; i < sampleBuffer.length; i++) {

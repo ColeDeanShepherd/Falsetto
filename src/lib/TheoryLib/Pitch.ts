@@ -1,4 +1,4 @@
-import { PitchLetter, getPitchLetterMidiNoteNumberOffset, parsePitchLetter } from './PitchLetter';
+import { PitchLetter, pitchLetterToMidiNumberOffset, parsePitchLetter } from './PitchLetter';
 import { VerticalDirection } from "../Core/VerticalDirection";
 import { Interval } from "./Interval";
 import { precondition } from '../Core/Dbc';
@@ -308,7 +308,7 @@ export class Pitch {
   }
 
   public get midiNumber(): number {
-    const pitchLetterMidiNoteNumberOffset = getPitchLetterMidiNoteNumberOffset(this.letter);
+    const pitchLetterMidiNoteNumberOffset = pitchLetterToMidiNumberOffset(this.letter);
     return (12 * (this.octaveNumber + 1)) + pitchLetterMidiNoteNumberOffset + this.signedAccidental;
   }
 

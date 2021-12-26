@@ -55,7 +55,7 @@ export class ChordView extends React.Component<IChordViewProps, {}> {
   public render(): JSX.Element {
     const { chord } = this.props;
     
-    const pitches = chord.getPitches();
+    const pitches = chord.getPitchClasses();
 
     const renderPitchesText = () => {
       const pitchStrings = pitches
@@ -196,7 +196,7 @@ export class ChordView extends React.Component<IChordViewProps, {}> {
       this.playAudioCancelFn = null;
     }
 
-    const pitches = chord.getPitches();
+    const pitches = chord.getPitchClasses();
     const allChordPitches = getPitchesInRange(pianoLowestPitch, pianoHighestPitch, pitches);
     this.playAudioCancelFn = playPitches(allChordPitches)[1];
   }

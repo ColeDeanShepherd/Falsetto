@@ -10,7 +10,7 @@ import { MajorScaleRelativeScaleFormulaAnswerSelect } from '../../ui/Utils/Major
 import { PianoKeyboard } from "../../ui/Utils/PianoKeyboard";
 import { Pitch, getPitchesInRange } from '../../lib/TheoryLib/Pitch';
 import { PitchLetter } from "../../lib/TheoryLib/PitchLetter";
-import { Scale, ScaleType } from "../../lib/TheoryLib/Scale";
+import { Scale } from "../../lib/TheoryLib/Scale";
 import { PianoScaleNotesAnswerSelect } from '../../ui/Utils/PianoScaleNotesAnswerSelect';
 
 const flashCardSetId = "ptScalesQuiz";

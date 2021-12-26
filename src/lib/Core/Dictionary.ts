@@ -15,12 +15,12 @@ export function createDictionary<TKey, TValue>(
   };
 }
 
-export function get<TKey, TValue>(dictionary: Dictionary<TKey, TValue>, key: MappedTypeKey): TValue {
-  return dictionary.data[key];
+export function get<TKey, TValue>(dictionary: Dictionary<TKey, TValue>, key: TKey): TValue {
+  return dictionary.data[key as any]; // TODO: remove cast
 }
 
-export function set<TKey, TValue>(dictionary: Dictionary<TKey, TValue>, key: MappedTypeKey, value: TValue) {
-  dictionary.data[key] = value;
+export function set<TKey, TValue>(dictionary: Dictionary<TKey, TValue>, key: TKey, value: TValue) {
+  dictionary.data[key as any] = value; // TODO: remove vast
 }
 
 export function reversed<TKey, TValue>(dictionary: Dictionary<TKey, TValue>): Dictionary<TValue, TKey> {

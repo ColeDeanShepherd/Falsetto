@@ -173,7 +173,7 @@ export function createFlashCards(chordTypes: Array<ChordType>): FlashCard[] {
       chordTypes.map(chordType => {
         const halfStepsFromC = mod(i - 3, 12);
         const rootPitch = Pitch.createFromMidiNumber((new Pitch(PitchLetter.C, 0, 4)).midiNumber + halfStepsFromC);
-        const pitches = new Chord(chordType, rootPitch).getPitches();
+        const pitches = new Chord(chordType, rootPitch).getPitchClasses();
 
         return new FlashCard(
           createFlashCardId(flashCardSetId, { chord: `${rootPitch.toString(false)} ${chordType.name}` }),

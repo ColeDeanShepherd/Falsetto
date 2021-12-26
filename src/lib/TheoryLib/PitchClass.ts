@@ -1,3 +1,4 @@
+import { createBiDirectionalDictionary, get, getReverse } from "../Core/BiDirectionalDictionary";
 import { numSubstringOccurrences } from "../Core/StringUtils";
 
 export enum PitchClass {
@@ -30,7 +31,7 @@ export const pitchClasses = [
   PitchClass.B
 ];
 
-export const midiNumberOffsetsByPitchClass: { [key in PitchClass]: number } = {
+export const pitchClassMidiNumberOffsetMapping = createBiDirectionalDictionary<PitchClass, number>({
   [PitchClass.C]: 0,
   [PitchClass.CSharpDFlat]: 1,
   [PitchClass.D]: 2,
@@ -43,10 +44,14 @@ export const midiNumberOffsetsByPitchClass: { [key in PitchClass]: number } = {
   [PitchClass.A]: 9,
   [PitchClass.ASharpBFlat]: 10,
   [PitchClass.B]: 11
-};
+});
 
 export function pitchClassToMidiNumberOffset(pitchClass: PitchClass): number {
-  return midiNumberOffsetsByPitchClass[pitchClass];
+  return get(pitchClassMidiNumberOffsetMapping, pitchClass);
+}
+
+export function midiNumberOffsetToPitchClass(midiNumberOffset: number): PitchClass {
+  return getReverse(pitchClassMidiNumberOffsetMapping, midiNumberOffset);
 }
 
 export function parseEnglishSignedAccidental(str: string): number | undefined {

@@ -41,7 +41,7 @@ export class Chord {
     return `${rootPitchString}${this.type.symbols[0]}`;
   }
   
-  public getPitches(): Array<PitchClass> {
+  public getPitchClasses(): Array<PitchClass> {
     return this.type.formula.getPitchClasses(this.rootPitchClass);
   }
 }

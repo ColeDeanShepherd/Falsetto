@@ -130,7 +130,7 @@ export class DiatonicChordPlayer extends React.Component<IDiatonicChordPlayerPro
   }
 
   private renderCell(scaleRootPitch: Pitch, scaleDegree: number, chord: Chord): JSX.Element {
-    let pitches = chord.getPitches();
+    let pitches = chord.getPitchClasses();
     if (this.state.playDrone) {
       pitches.push(new Pitch(
         scaleRootPitch.letter,

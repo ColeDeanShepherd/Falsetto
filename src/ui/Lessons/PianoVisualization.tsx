@@ -82,7 +82,7 @@ export function createChordShapeFlashCard(flashCardSetId: string, scale: Scale):
   const pianoKeyboardPitches = getPitchesInRange(pianoKeyboardLowestPitch, pianoKeyboardHighestPitch);
 
   const chordPitchMidiNumberNoOctaves = new Set<number>(
-    scale.getDiatonicChord(1, /*numChordPitches*/4).getPitches()
+    scale.getDiatonicChord(1, /*numChordPitches*/4).getPitchClasses()
       .map(p => p.midiNumberNoOctave)
   );
 

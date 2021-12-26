@@ -597,7 +597,7 @@ function renderDiatonicTriadSlideContents(scaleDegreeNumber: number): JSX.Elemen
   const chord = scale.getDiatonicChord(scaleDegreeNumber, /*numChordPitches*/ 3);
 
   const chordTypeName = chord.type.name;
-  const chordPitchStrings = chord.getPitches()
+  const chordPitchStrings = chord.getPitchClasses()
     .map(p => p.toString(/*includeOctaveNumber*/ false, /*useSymbols*/ true));
   const chordPitchesString = chordPitchStrings.join(", ");
   const chordName = `${chordPitchStrings[0]} ${chordTypeName}`;
@@ -628,7 +628,7 @@ function createDiatonicTriadNotesQuizSlide(scaleDegreeNumber: number): Slide {
   const scale = new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4));
   const chord = scale.getDiatonicChord(scaleDegreeNumber, /*numChordPitches*/ 3);
 
-  const chordPitches = chord.getPitches();
+  const chordPitches = chord.getPitchClasses();
 
   const chordTypeName = chord.type.name;
   const chordRootPitchString = chord.rootPitchClass.toString(/*includeOctaveNumber*/ false, /*useSymbols*/ true);
@@ -1277,7 +1277,7 @@ export const pianoTheorySlideGroups = [
       )),
       
       new Slide("c-major-chord-notes-quiz", (slideshow) => {
-        const pitches = new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4)).getPitches();
+        const pitches = new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4)).getPitchClasses();
 
         return (
           <div>
@@ -1331,7 +1331,7 @@ export const pianoTheorySlideGroups = [
       )),
       
       new Slide("c-minor-chord-notes-quiz", (slideshow) => {
-        const pitches = new Chord(ChordType.Minor, new Pitch(PitchLetter.C, 0, 4)).getPitches();
+        const pitches = new Chord(ChordType.Minor, new Pitch(PitchLetter.C, 0, 4)).getPitchClasses();
 
         return (
           <div>
@@ -1358,7 +1358,7 @@ export const pianoTheorySlideGroups = [
       )),
       
       new Slide("c-diminished-chord-notes-quiz", (slideshow) => {
-        const pitches = new Chord(ChordType.Diminished, new Pitch(PitchLetter.C, 0, 4)).getPitches();
+        const pitches = new Chord(ChordType.Diminished, new Pitch(PitchLetter.C, 0, 4)).getPitchClasses();
 
         return (
           <div>
@@ -1385,7 +1385,7 @@ export const pianoTheorySlideGroups = [
       )),
       
       new Slide("c-dominant-7-chord-notes-quiz", (slideshow) => {
-        const pitches = new Chord(ChordType.Dom7, new Pitch(PitchLetter.C, 0, 4)).getPitches();
+        const pitches = new Chord(ChordType.Dom7, new Pitch(PitchLetter.C, 0, 4)).getPitchClasses();
 
         return (
           <div>
@@ -1454,7 +1454,7 @@ export const pianoTheorySlideGroups = [
         </div>
       )),
       new Slide("c-major-chord-notes-quiz", (slideshow) => {
-        const pitches = new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4)).getPitches();
+        const pitches = new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4)).getPitchClasses();
 
         return (
           <div>
@@ -1469,7 +1469,7 @@ export const pianoTheorySlideGroups = [
 
       createDiatonicTriadSlide(/*scaleDegreeNumber*/ 2),
       new Slide("d-minor-chord-notes-quiz", (slideshow) => {
-        const pitches = new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 4)).getPitches();
+        const pitches = new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 4)).getPitchClasses();
 
         return (
           <div>
@@ -1484,7 +1484,7 @@ export const pianoTheorySlideGroups = [
       
       createDiatonicTriadSlide(/*scaleDegreeNumber*/ 3),
       new Slide("e-minor-chord-notes-quiz", (slideshow) => {
-        const pitches = new Chord(ChordType.Minor, new Pitch(PitchLetter.E, 0, 4)).getPitches();
+        const pitches = new Chord(ChordType.Minor, new Pitch(PitchLetter.E, 0, 4)).getPitchClasses();
 
         return (
           <div>
@@ -1499,7 +1499,7 @@ export const pianoTheorySlideGroups = [
 
       createDiatonicTriadSlide(/*scaleDegreeNumber*/ 4),
       new Slide("f-major-chord-notes-quiz", (slideshow) => {
-        const pitches = new Chord(ChordType.Major, new Pitch(PitchLetter.F, 0, 4)).getPitches();
+        const pitches = new Chord(ChordType.Major, new Pitch(PitchLetter.F, 0, 4)).getPitchClasses();
 
         return (
           <div>
@@ -1514,7 +1514,7 @@ export const pianoTheorySlideGroups = [
 
       createDiatonicTriadSlide(/*scaleDegreeNumber*/ 5),
       new Slide("g-major-chord-notes-quiz", (slideshow) => {
-        const pitches = new Chord(ChordType.Major, new Pitch(PitchLetter.G, 0, 4)).getPitches();
+        const pitches = new Chord(ChordType.Major, new Pitch(PitchLetter.G, 0, 4)).getPitchClasses();
 
         return (
           <div>
@@ -1529,7 +1529,7 @@ export const pianoTheorySlideGroups = [
 
       createDiatonicTriadSlide(/*scaleDegreeNumber*/ 6),
       new Slide("a-minor-chord-notes-quiz", (slideshow) => {
-        const pitches = new Chord(ChordType.Minor, new Pitch(PitchLetter.A, 0, 4)).getPitches();
+        const pitches = new Chord(ChordType.Minor, new Pitch(PitchLetter.A, 0, 4)).getPitchClasses();
 
         return (
           <div>
@@ -1544,7 +1544,7 @@ export const pianoTheorySlideGroups = [
 
       createDiatonicTriadSlide(/*scaleDegreeNumber*/ 7),
       new Slide("b-diminished-chord-notes-quiz", (slideshow) => {
-        const pitches = new Chord(ChordType.Diminished, new Pitch(PitchLetter.B, 0, 4)).getPitches();
+        const pitches = new Chord(ChordType.Diminished, new Pitch(PitchLetter.B, 0, 4)).getPitchClasses();
 
         return (
           <div>

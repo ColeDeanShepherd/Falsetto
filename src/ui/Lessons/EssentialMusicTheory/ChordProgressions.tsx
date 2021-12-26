@@ -12,7 +12,7 @@ import { createStudyFlashCardSetComponent } from '../../../ui/StudyFlashCards/Vi
 
 import { Vector2D } from '../../../lib/Core/Vector2D';
 import { Margin } from '../../../lib/Core/Margin';
-import { ScaleType, Scale } from '../../../lib/TheoryLib/Scale';
+import { Scale } from '../../../lib/TheoryLib/Scale';
 import { Chord } from "../../../lib/TheoryLib/Chord";
 import { ChordType } from "../../../lib/TheoryLib/ChordType";
 import { PitchesAudioPlayer } from '../../Utils/PitchesAudioPlayer';
@@ -26,19 +26,20 @@ import { NoteText } from "../../Utils/NoteText";
 import { getChordRomanNumeralNotation } from "../../Tools/DiatonicChordPlayer";
 import { PlayablePianoKeyboard } from '../../Utils/PlayablePianoKeyboard';
 import { Button } from "../../../ui/Button/Button";
+import { PitchClass } from "../../../lib/TheoryLib/PitchClass";
 
 export const FiveChordDiagram: React.FunctionComponent<{}> = props => {
   const lowestPitch = new Pitch(PitchLetter.C, 0, 4);
   const highestPitch = new Pitch(PitchLetter.B, 0, 5);
   const maxWidth = 300;
   const margin = new Margin(0, 80, 0, 80);
-  const chord = new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4));
-  const pitches = chord.getPitches();
+  const chord = new Chord(ChordType.Dom7, PitchClass.G);
+  const pitchClasses = chord.getPitchClasses();
   const scaleDegreeLabels = ["5", "7", "2", "4"];
 
   function renderLabels(metrics: PianoKeyboardMetrics): JSX.Element {
     const getKeyScaleDegreeLabels = (pitch: Pitch) => {
-      const pitchIndex = pitches.findIndex(p => p.midiNumber === pitch.midiNumber);
+      const pitchIndex = pitchClasses.findIndex(p => p === pitch.class);
       return (pitchIndex >= 0)
         ? [scaleDegreeLabels[pitchIndex], pitch.toOneAccidentalAmbiguousString(false)]
         : null;
@@ -47,15 +48,15 @@ export const FiveChordDiagram: React.FunctionComponent<{}> = props => {
     return (
       <g>
         {renderPianoKeyboardKeyLabels(metrics, true, getKeyScaleDegreeLabels)}
-        {renderIntervalLabel(metrics, pitches[1], pitches[3], "tritone", true)}
-        {renderPianoKeyLabel(metrics, pitches[1], "leading tone", false, new Vector2D(-40, 0))}
+        {renderIntervalLabel(metrics, pitchClasses[1], pitchClasses[3], "tritone", true)}
+        {renderPianoKeyLabel(metrics, pitchClasses[1], "leading tone", false, new Vector2D(-40, 0))}
         {renderPianoKeyLabel(metrics, new Pitch(PitchLetter.C, 0, 5), "root note", false, new Vector2D(40, 0))}
       </g>
     );
   }
 
   function onKeyPress(p: Pitch) {
-    const pitchMidiNumbers = pitches.map(p => p.midiNumber);
+    const pitchMidiNumbers = pitchClasses.map(p => p.midiNumber);
 
     if (arrayContains(pitchMidiNumbers, p.midiNumber)) {
       playPitches([p]);
@@ -64,7 +65,7 @@ export const FiveChordDiagram: React.FunctionComponent<{}> = props => {
 
   return (
     <div>
-      <p><PitchesAudioPlayer pitches={pitches} playSequentially={false} /></p>
+      <p><PitchesAudioPlayer pitches={pitchClasses} playSequentially={false} /></p>
       <PianoKeyboard
         maxWidth={maxWidth}
         margin={margin}
@@ -433,7 +434,7 @@ export const ChordProgressionsSection: React.FunctionComponent<SectionProps> = p
     <p style={{textAlign: "center"}}><ChordDiagram pitches={[new Pitch(PitchLetter.A, 0, 4), new Pitch(PitchLetter.D, 0, 5), new Pitch(PitchLetter.F, 0, 5)]} scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))} /></p>
     
     <p style={{fontSize: "1.25em", fontWeight: "bold", textDecoration: "underline", textAlign: "center"}}>V7</p>
-    <p style={{textAlign: "center"}}><ChordDiagram pitches={new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)).getPitches()} scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))} /></p>
+    <p style={{textAlign: "center"}}><ChordDiagram pitches={new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)).getPitchClasses()} scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))} /></p>
     
     <p style={{fontSize: "1.25em", fontWeight: "bold", textDecoration: "underline", textAlign: "center"}}>I</p>
     <p style={{textAlign: "center"}}><ChordDiagram pitches={[new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5), new Pitch(PitchLetter.E, 0, 5)]} scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))} /></p>
@@ -480,7 +481,7 @@ export const ChordProgressionsSection: React.FunctionComponent<SectionProps> = p
     
     <p style={{textAlign: "center"}}>
       <ChordTransitionDiagram
-        chord1Pitches={new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)).getPitches()}
+        chord1Pitches={new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)).getPitchClasses()}
         chord1Name="V7"
         chord2Pitches={[new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]}
         chord2Name="I"
@@ -510,7 +511,7 @@ export const ChordProgressionsSection: React.FunctionComponent<SectionProps> = p
       Large jumps in the bass voice (the lowest notes) of chords are sometimes acceptable, as they are more pleasing to the ear than large jumps with other chord voices. The example below illustrates this: both the V7 chord and the I chord are in root position, and the bass voice jumps down by a P5, but the chord progression still sounds good.
       <p style={{textAlign: "center"}}>
         <ChordTransitionDiagram
-          chord1Pitches={new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)).getPitches()}
+          chord1Pitches={new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)).getPitchClasses()}
           chord1Name="V7"
           chord2Pitches={[new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5), new Pitch(PitchLetter.E, 0, 5)]}
           chord2Name="I"

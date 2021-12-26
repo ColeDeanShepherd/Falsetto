@@ -12,10 +12,6 @@ import { NavigateAction, LoginAction, SignUpAction, LogoutAction } from './Actio
 import { AppMidiModel } from "../AppMidi/Model";
 import { PianoAudio } from "../Audio/PianoAudio";
 import { saveSessionToken, clearSessionToken } from '../Cookies';
-import { UserProfile } from '../UserProfile';
-import { Result, Ok, Err } from '../lib/Core/Result';
-import { unwrapValueOrUndefined } from '../lib/Core/Utils';
-import { HttpStatusCode } from '../lib/Core/HttpStatusCode';
 
 export class AppModel implements IDisposable {
   public static instance: AppModel;
