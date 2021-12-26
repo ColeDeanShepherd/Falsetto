@@ -2,7 +2,7 @@ import * as React from "react";
 import { TableRow, TableCell, Table, TableHead, TableBody, Grid, Checkbox } from "@material-ui/core";
 
 import { Size2D } from "../../../lib/Core/Size2D";
-import { ScaleType, Scale, scaleTypeLevels } from "../../../lib/TheoryLib/Scale";
+import { Scale } from "../../../lib/TheoryLib/Scale";
 import { FlashCard, FlashCardSide, FlashCardId, createFlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
 import { Pitch } from "../../../lib/TheoryLib/Pitch";
@@ -13,6 +13,8 @@ import { GuitarScaleViewer } from '../../Utils/GuitarScaleViewer';
 import { renderDistinctFlashCardSideAnswerSelect } from '../Utils';
 import { arrayContains, toggleArrayElement } from '../../../lib/Core/ArrayUtils';
 import { unwrapValueOrUndefined } from '../../../lib/Core/Utils';
+import { ScaleType, scaleTypeLevels } from "../../../lib/TheoryLib/ScaleType";
+import { pitchClassF } from "../../../lib/TheoryLib/PitchClass";
 
 const flashCardSetId = "guitarScalesOrderedNotes";
 
@@ -157,9 +159,9 @@ export function createFlashCards(): Array<FlashCard> {
 
   forEachScaleType((scaleType, i) => {
     const rootPitch = new Pitch(PitchLetter.F, 0, 2);
-    const pitches = new ChordScaleFormula(scaleType.formula.parts.concat(new ChordScaleFormulaPart(8, 0, false))).getPitches(rootPitch);
+    const pitches = new ChordScaleFormula(scaleType.formula.parts.concat(new ChordScaleFormulaPart(8, 0, false))).getPitchClasses(rootPitch);
 
-    const scale = new Scale(scaleType, rootPitch);
+    const scale = new Scale(scaleType, pitchClassF);
 
     flashCards.push(new FlashCard(
       createFlashCardId(flashCardSetId, { scale: scaleType.name }),

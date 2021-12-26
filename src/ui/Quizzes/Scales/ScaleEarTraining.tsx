@@ -10,9 +10,9 @@ import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../.
 import { Pitch } from "../../../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
 import { playPitchesSequentially } from "../../../Audio/PianoAudio";
-import { ScaleType, scaleTypeLevels } from "../../../lib/TheoryLib/Scale";
 import { ChordScaleFormula, ChordScaleFormulaPart } from '../../../lib/TheoryLib/ChordScaleFormula';
 import { Button } from "../../../ui/Button/Button";
+import { ScaleType, scaleTypeLevels } from "../../../lib/TheoryLib/ScaleType";
 
 const flashCardSetId = "scaleEarTraining";
 

@@ -35,7 +35,7 @@ export function createPressAllScaleNotesFlashCard(id: string, scale: Scale, scal
     new FlashCardSide(
       () => {
         const scalePitchMidiNumbersNoOctave = new Set<number>(
-          scale.getPitches()
+          scale.getPitchClasses()
             .map(p => p.midiNumberNoOctave)
         );
         const possibleCorrectPitches = wu(getPitchesInRange(pianoLowestPitch, pianoHighestPitch))

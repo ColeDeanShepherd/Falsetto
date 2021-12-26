@@ -584,7 +584,7 @@ const routes: Array<IRouteData> = ([
       renderFn: (props: any) => (
         <LimitedWidthContentContainer>
           <ChordRoute routeParams={props.match.params} renderRoute={chord => {
-            const chordName = `${getPitchUriComponent(chord.rootPitch, /*includeOctaveNumber*/ false)} ${getChordTypeUriComponent(chord.type)}`;
+            const chordName = `${getPitchUriComponent(chord.rootPitchClass, /*includeOctaveNumber*/ false)} ${getChordTypeUriComponent(chord.type)}`;
 
             return (
               <DocumentTitle title={`${chordName} Chord - Falsetto`}>

@@ -21,7 +21,7 @@ export class PianoScaleFormulaDiagram extends React.Component<IPianoScaleFormula
     const { scale, octaveCount, maxWidth } = this.props;
 
     const margin = new Margin(0, maxWidth / 10, 0, 0);
-    const pitches = scale.getPitches();
+    const pitches = scale.getPitchClasses();
     const pitchMidiNumberNoOctaves = pitches.map(p => p.midiNumberNoOctave);
     
     function renderExtrasFn(metrics: PianoKeyboardMetrics): JSX.Element {

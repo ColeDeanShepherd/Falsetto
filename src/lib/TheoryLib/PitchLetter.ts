@@ -1,4 +1,4 @@
-import { PitchClass } from "./PitchClass";
+import { PitchClass, pitchClassToMidiNumberOffset } from "./PitchClass";
 
 export enum PitchLetter {
   A,
@@ -20,54 +20,38 @@ export const pitchLetters = [
   PitchLetter.G,
 ];
 
+export const pitchClassesByPitchLetter: { [key in PitchLetter]: PitchClass } = {
+  [PitchLetter.A]: PitchClass.A,
+  [PitchLetter.B]: PitchClass.B,
+  [PitchLetter.C]: PitchClass.C,
+  [PitchLetter.D]: PitchClass.D,
+  [PitchLetter.E]: PitchClass.E,
+  [PitchLetter.F]: PitchClass.F,
+  [PitchLetter.G]: PitchClass.G
+};
+
 export function pitchLetterToPitchClass(pitchLetter: PitchLetter): PitchClass {
-  switch (pitchLetter) {
-    case PitchLetter.A:
-      return 9;
-    case PitchLetter.B:
-      return 11;
-    case PitchLetter.C:
-      return 0;
-    case PitchLetter.D:
-      return 2;
-    case PitchLetter.E:
-      return 4;
-    case PitchLetter.F:
-      return 5;
-    case PitchLetter.G:
-      return 7;
-    default:
-      const exhaustiveCheck: never = pitchLetter;
-      return -1;
-  }
+  return pitchClassesByPitchLetter[pitchLetter];
 }
 
 // TODO: remove
 export function getPitchLetterMidiNoteNumberOffset(pitchLetter: PitchLetter): number {
-  return pitchLetterToPitchClass(pitchLetter);
+  return pitchClassToMidiNumberOffset(pitchLetterToPitchClass(pitchLetter));
 }
+
+export const pitchLettersByUpperCaseString: { [key in string]: PitchLetter } = {
+  ['A']: PitchLetter.A,
+  ['B']: PitchLetter.B,
+  ['C']: PitchLetter.C,
+  ['D']: PitchLetter.D,
+  ['E']: PitchLetter.E,
+  ['F']: PitchLetter.F,
+  ['G']: PitchLetter.G,
+};
 
 export function parsePitchLetter(str: string): PitchLetter | undefined {
   if (str.length === 0) { return undefined; }
 
   const pitchLetterStr = str[0].toUpperCase();
-
-  switch (pitchLetterStr) {
-    case 'A':
-      return PitchLetter.A;
-    case 'B':
-      return PitchLetter.B;
-    case 'C':
-      return PitchLetter.C;
-    case 'D':
-      return PitchLetter.D;
-    case 'E':
-      return PitchLetter.E;
-    case 'F':
-      return PitchLetter.F;
-    case 'G':
-      return PitchLetter.G;
-    default:
-      return undefined;
-  }
+  return pitchLettersByUpperCaseString[pitchLetterStr];
 }

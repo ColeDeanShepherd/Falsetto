@@ -28,7 +28,7 @@ export class ChordSelectView extends React.Component<IChordSelectViewProps, {}> 
         <div style={{padding: "1em 0"}}>
           <ValidKeyPitchSelect
             preferredOctaveNumber={4}
-            value={[chord.rootPitch]}
+            value={[chord.rootPitchClass]}
             onChange={rootPitches => this.onRootPitchClick(rootPitches[0])}
           />
         </div>
@@ -64,7 +64,7 @@ export class ChordSelectView extends React.Component<IChordSelectViewProps, {}> 
     
     const [_, chord] = this.props.value;
 
-    const newChord = new Chord(chordType, chord.rootPitch);
+    const newChord = new Chord(chordType, chord.rootPitchClass);
     
     onChange([chordTypeGroup, newChord]);
   }

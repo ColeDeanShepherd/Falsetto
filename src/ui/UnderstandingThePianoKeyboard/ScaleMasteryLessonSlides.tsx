@@ -22,7 +22,7 @@ import { ChordView } from '../../ui/Utils/ChordView';
 
 export function createSlideGroups(scale: Scale): Array<SlideGroup> {
   const scaleName = `${scale.rootPitchClass.toString(/*includeOctaveNumber*/ false)} ${scale.type.name}`;
-  const scalePitches = scale.getPitches();
+  const scalePitches = scale.getPitchClasses();
   const scalePitchesString = scalePitches
     .map(p => p.toString(/*includeOctaveNumber*/ false, /*useSymbols*/ true))
     .join(' ');
@@ -81,7 +81,7 @@ export function createSlideGroups(scale: Scale): Array<SlideGroup> {
                   const chord = scale.getDiatonicChord(scaleDegreeNumber, numChordPitches);
                   const chordScaleDegreeNumbers = scale.type.getDiatonicChordScaleDegreeNumbers(scaleDegreeNumber, numChordPitches);
                   const chordScaleDegreesString = chordScaleDegreeNumbers.join(' ');
-                  const chordName = `${chord.rootPitch.toString(/*includeOctaveNumber*/ false)} ${chord.type.name}`;
+                  const chordName = `${chord.rootPitchClass.toString(/*includeOctaveNumber*/ false)} ${chord.type.name}`;
                   const chordPitches = chord.getPitches();
                   const chordPitchesString = chordPitches
                     .map(p => p.toString(/*includeOctaveNumber*/ false, /*useSymbols*/ true))

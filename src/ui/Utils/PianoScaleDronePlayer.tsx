@@ -15,7 +15,7 @@ const lowestPitch = new Pitch(PitchLetter.C, 0, 4);
 const wrapOctave = true;
 
 export function onKeyPress(scale: Scale, keyPitch: Pitch) {
-  const scalePitches = scale.getPitches();
+  const scalePitches = scale.getPitchClasses();
   const pitchMidiNumberNoOctaves = scalePitches.map(p => p.midiNumberNoOctave);
 
   if (arrayContains(pitchMidiNumberNoOctaves, keyPitch.midiNumberNoOctave)) {
@@ -86,7 +86,7 @@ export class PianoScaleDronePlayer extends React.Component<IPianoScaleDronePlaye
       ? this.props.renderDefaultExtras
       : true;
     
-    const pitches = scale.getPitches();
+    const pitches = scale.getPitchClasses();
   
     return (
       <div>
@@ -127,7 +127,7 @@ export class PianoScaleDronePlayer extends React.Component<IPianoScaleDronePlaye
   private onKeyPress(pitch: Pitch, velocity: number) {
     const { scale } = this.props;
 
-    const scalePitches = scale.getPitches();
+    const scalePitches = scale.getPitchClasses();
     const pitchMidiNumberNoOctaves = scalePitches.map(p => p.midiNumberNoOctave);
   
     if (arrayContains(pitchMidiNumberNoOctaves, pitch.midiNumberNoOctave)) {

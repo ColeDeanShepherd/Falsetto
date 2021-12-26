@@ -47,7 +47,7 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
       ? this.props.title
       : "Scale Viewer";
     
-    const pitches = this.state.scale.getPitches();
+    const pitches = this.state.scale.getPitchClasses();
     const pitchStrings = pitches
       .map(pitch => pitch.toString(false));
     const pitchesString = pitchStrings.join(", ");

@@ -1,8 +1,8 @@
 import * as FlashCardUtils from "../Utils";
 import { createFlashCardId, FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardLevel, } from "../../../FlashCardSet";
-import { ScaleType, scaleTypeLevels } from '../../../lib/TheoryLib/Scale';
 import { arrayContains } from '../../../lib/Core/ArrayUtils';
+import { scaleTypeLevels, ScaleType } from "../../../lib/TheoryLib/ScaleType";
 
 const flashCardSetId = "scaleFormulasMajor";
 

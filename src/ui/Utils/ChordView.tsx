@@ -87,7 +87,7 @@ export class ChordView extends React.Component<IChordViewProps, {}> {
     const renderChordInfoText = () => {
       return (
         <div style={{fontSize: "1.5em"}}>
-          <p>{chord.rootPitch.toString(false)} {chord.type.name}</p>
+          <p>{chord.rootPitchClass.toString(false)} {chord.type.name}</p>
           {renderPitchesText()}
           {renderScaleDegreesText()}
           {renderIntervalsText()}
@@ -171,7 +171,7 @@ export class ChordView extends React.Component<IChordViewProps, {}> {
 
         if (showScaleDegreesOnPiano) {
           const { scale } = this.props;
-          const scalePitches = unwrapValueOrUndefined(scale).getPitches();
+          const scalePitches = unwrapValueOrUndefined(scale).getPitchClasses();
           const scaleDegreeIndex = scalePitches.findIndex(sp => sp.midiNumberNoOctave == pitch.midiNumberNoOctave);
 
           if (scaleDegreeIndex >= 0) {

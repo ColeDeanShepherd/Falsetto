@@ -21,7 +21,7 @@ export class PianoScaleFingeringDiagram extends React.Component<IPianoScaleFinge
   public render(): JSX.Element {
     const { scale } = this.props;
     
-    const pitches = scale.getPitches();
+    const pitches = scale.getPitchClasses();
   
     return (
       <PianoKeyboard

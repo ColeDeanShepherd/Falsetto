@@ -8,6 +8,8 @@ import { ChordScaleFormula } from "./ChordScaleFormula";
 import { ChordType } from "./ChordType";
 import { Interval } from "./Interval";
 import { Pitch } from "./Pitch";
+import { PitchClass } from "./PitchClass";
+import { PitchClassName } from "./PitchClassName";
 import { getModePitchIntegers } from "./Scale";
 
 export class ScaleTypeGroup {
@@ -177,12 +179,12 @@ export class ScaleTypeGroup {
       return this.formula.parts.map(p => p.getIntervalFromRootNote());
     }
   
-    public getPitch(rootPitch: Pitch, scaleDegree: number): Pitch {
-      return this.formula.getPitch(rootPitch, scaleDegree);
+    public getPitchClassForDegree(rootPitchClass: PitchClass, scaleDegree: number): PitchClass {
+      return this.formula.getPitchClassForDegree(rootPitchClass, scaleDegree);
     }
   
-    public getPitches(rootPitch: Pitch): Array<Pitch> {
-      return this.formula.getPitches(rootPitch);
+    public getPitchClasses(rootPitchClass: PitchClass): Array<PitchClass> {
+      return this.formula.getPitchClasses(rootPitchClass);
     }
   
     public getMode(scaleDegree: number): ScaleType {

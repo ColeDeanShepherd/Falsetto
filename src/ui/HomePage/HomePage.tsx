@@ -96,7 +96,7 @@ export class AnimatedPianoKeyboardThumbnail extends React.Component<IAnimatedPia
 }
 
 const scalesThumbnailScale = new Scale(ScaleType.Aeolian, new Pitch(PitchLetter.C, 0, 4));
-const scalesThumbnailScalePitches = scalesThumbnailScale.getPitches();
+const scalesThumbnailScalePitches = scalesThumbnailScale.getPitchClasses();
 const scalesThumbnailAnimationStepPitches = (
   () => {
     const animationStepPitches = new Array<Array<Pitch>>();

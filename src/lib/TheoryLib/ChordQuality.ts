@@ -16,6 +16,7 @@ export enum ChordQuality {
   Power,
   Quartal
 }
+
 export function chordQualityToString(chordQuality: ChordQuality): string {
   switch (chordQuality) {
     case ChordQuality.Major:
@@ -48,6 +49,7 @@ export function chordQualityToString(chordQuality: ChordQuality): string {
       throw new Error(`Unknown chord quality: ${chordQuality}`);
   }
 }
+
 export function isAugmentedChordQuality(chordQuality: ChordQuality) {
   switch (chordQuality) {
     case ChordQuality.Augmented:
@@ -57,6 +59,7 @@ export function isAugmentedChordQuality(chordQuality: ChordQuality) {
       return false;
   }
 }
+
 export function isDiminishedChordQuality(chordQuality: ChordQuality) {
   switch (chordQuality) {
     case ChordQuality.Diminished:

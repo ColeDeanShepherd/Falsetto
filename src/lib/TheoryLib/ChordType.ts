@@ -203,7 +203,7 @@ export class ChordType {
   }
   
   public getPitches(rootPitch: Pitch): Array<Pitch> {
-    return this.formula.getPitches(rootPitch);
+    return this.formula.getPitchClasses(rootPitch);
   }
   public getIntervals(): Array<Interval> {
     return getIntervalsFromFormula(this.formula);

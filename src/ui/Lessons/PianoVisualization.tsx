@@ -34,7 +34,7 @@ export function createScaleShapeFlashCards(flashCardSetId: string, scaleType: Sc
 
 export function createScaleShapeFlashCard(flashCardSetId: string, scale: Scale): FlashCard {
   const scalePitchMidiNumberNoOctaves = new Set<number>(
-    scale.getPitches()
+    scale.getPitchClasses()
       .map(p => p.midiNumberNoOctave)
   );
 
@@ -91,7 +91,7 @@ export function createChordShapeFlashCard(flashCardSetId: string, scale: Scale):
     .toArray();
 
   const scalePitchMidiNumberNoOctaves = new Set<number>(
-    scale.getPitches()
+    scale.getPitchClasses()
       .map(p => p.midiNumberNoOctave)
   );
 

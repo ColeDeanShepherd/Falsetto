@@ -1,11 +1,14 @@
-import { Pitch, parseFromUriComponent, getUriComponent as getPitchUriComponent } from "./Pitch";
+import { parseFromUriComponent } from "./Pitch";
 import { getSimpleScaleDegree } from './Scale';
 import { ChordType, parseChordTypeFromUriComponent, getUriComponent as getChordTypeUriComponent } from "./ChordType";
+import { getPitchClassUriComponent, PitchClass } from "./PitchClass";
+import { pitchClassNameToPitchClass } from "./PitchClassName";
 
 export function getSimpleChordNoteNumber(chordNoteNumber: number) {
   return getSimpleScaleDegree(chordNoteNumber);
 }
 
+// TODO: add tests
 export function parseChordFromUriComponent(uriComponent: string): Chord | undefined {
   const splitStr = uriComponent.split("-");
   if (splitStr.length !== 2) { return undefined; }
@@ -14,31 +17,31 @@ export function parseChordFromUriComponent(uriComponent: string): Chord | undefi
   const chordType = parseChordTypeFromUriComponent(chordTypeUriComponent);
   if (!chordType) { return undefined; }
 
-  const rootPitchString = splitStr[0];
-  const rootPitch = parseFromUriComponent(rootPitchString, /*octaveNumber*/ 4);
-  if (!rootPitch) { return undefined; }
+  const rootPitchClassNameString = splitStr[0];
+  const rootPitchClassName = parseFromUriComponent(rootPitchClassNameString, /*octaveNumber*/ 4);
+  if (!rootPitchClassName) { return undefined; }
 
-  return new Chord(chordType, rootPitch);
+  return new Chord(chordType, pitchClassNameToPitchClass(rootPitchClassName));
 }
 
 export function getUriComponent(chord: Chord): string {
-  return `${getPitchUriComponent(chord.rootPitch)}-${getChordTypeUriComponent(chord.type)}`;
+  return `${getPitchClassUriComponent(chord.rootPitchClass)}-${getChordTypeUriComponent(chord.type)}`;
 }
 
 export class Chord {
   public constructor(
     public type: ChordType,
-    public rootPitch: Pitch
+    public rootPitchClass: PitchClass
   ) {}
 
   public getSymbol(useOneAccidentalAmbiguousPitch: boolean): string {
     const rootPitchString = useOneAccidentalAmbiguousPitch
-      ? this.rootPitch.toOneAccidentalAmbiguousString(false)
-      : this.rootPitch.toString(false);
+      ? this.rootPitchClass.toOneAccidentalAmbiguousString(false)
+      : this.rootPitchClass.toString(false);
     return `${rootPitchString}${this.type.symbols[0]}`;
   }
   
-  public getPitches(): Array<Pitch> {
-    return this.type.formula.getPitches(this.rootPitch);
+  public getPitches(): Array<PitchClass> {
+    return this.type.formula.getPitchClasses(this.rootPitchClass);
   }
 }

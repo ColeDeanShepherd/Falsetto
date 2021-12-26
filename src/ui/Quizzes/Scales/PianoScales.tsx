@@ -2,7 +2,6 @@ import * as React from "react";
 
 import { Pitch, ambiguousKeyPitchStringsSymbols, getPitchesInRange } from "../../../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
-import { ScaleType, scaleTypeLevels } from "../../../lib/TheoryLib/Scale";
 import { PianoKeyboard, PianoKeyboardMetrics, renderPianoKeyboardKeyLabels } from "../../Utils/PianoKeyboard";
 import { FlashCard, FlashCardSide, FlashCardId, createFlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
@@ -12,6 +11,7 @@ import { CheckboxColumnsFlashCardMultiSelect, CheckboxColumn, CheckboxColumnCell
 import { arrayContains } from '../../../lib/Core/ArrayUtils';
 import { mod } from '../../../lib/Core/MathUtils';
 import wu from "wu";
+import { ScaleType, scaleTypeLevels } from "../../../lib/TheoryLib/ScaleType";
 
 const flashCardSetId = "pianoScalesOrderedNotes";
 
@@ -157,7 +157,7 @@ export function createFlashCards(): FlashCard[] {
     const halfStepsFromC = mod(i - 3, 12);
     const rootPitch = Pitch.createFromMidiNumber((new Pitch(PitchLetter.C, 0, 4)).midiNumber + halfStepsFromC);
     const formula = new ChordScaleFormula(scaleType.formula.parts.concat(new ChordScaleFormulaPart(8, 0, false)));
-    const pitches = formula.getPitches(rootPitch);
+    const pitches = formula.getPitchClasses(rootPitch);
     const pitchMidiNumbersNoOctave = new Set<number>(pitches.map(p => p.midiNumberNoOctave));
     const lowestPitch = new Pitch(PitchLetter.C, 0, 4);
     const highestPitch = new Pitch(PitchLetter.B, 0, 5);

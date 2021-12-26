@@ -18,7 +18,7 @@ export function generateGuitarScaleTextDiagram(scale: Scale, stringCount: number
   const minFretNumber = 1;
   const maxFretNumber = 17;
   const tuning = getStandardGuitarTuning(stringCount);
-  const pitches = scale.getPitches();
+  const pitches = scale.getPitchClasses();
   const guitarNotes = getPreferredGuitarScaleShape(scale, tuning);
   
   let diagram = "";
@@ -103,7 +103,7 @@ export function findGuitarScaleShapes(
   scale: Scale, tuning: StringedInstrumentTuning
 ): Array<Array<StringedInstrumentNote>> {
     const { minNotesPerString, maxNotesPerString } = getPreferredNumNotesPerStringRange(scale.type);
-    const scalePitches = scale.getPitches();
+    const scalePitches = scale.getPitchClasses();
 
     const state = new GuitarScaleShapeFinderState();
     const outShapes = new Array<Array<StringedInstrumentNote>>();
@@ -290,7 +290,7 @@ export function renderGuitarFretboardScaleExtras(
   renderAllScaleShapes: boolean = false
 ): JSX.Element {
   const tuning = getStandardGuitarTuning(metrics.stringCount);
-  const pitches = scale.getPitches();
+  const pitches = scale.getPitchClasses();
   const guitarNotes = renderAllScaleShapes
     ? (
       StringedInstrumentNote.allNotesOfPitches(
@@ -353,7 +353,7 @@ export function renderGuitarFretboardChordExtras(
   metrics: StringedInstrumentMetrics, chord: Chord
 ): JSX.Element {
   const tuning = getStandardGuitarTuning(metrics.stringCount);
-  const pitches = chord.type.getPitches(chord.rootPitch);
+  const pitches = chord.type.getPitches(chord.rootPitchClass);
   const guitarNotes = findGuitarChordShape(chord, 1, 0, tuning);
   const formulaStringParts = chord.type.formula.parts.map(p => p.toString());
 

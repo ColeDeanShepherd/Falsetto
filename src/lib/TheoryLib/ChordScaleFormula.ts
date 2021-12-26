@@ -3,6 +3,7 @@ import { VerticalDirection } from "../Core/VerticalDirection";
 import { Interval } from './Interval';
 import { precondition, invariant } from '../Core/Dbc';
 import { isNullOrWhiteSpace, takeCharsWhile } from '../Core/StringUtils';
+import { PitchClass } from "./PitchClass";
 
 export class ChordScaleFormula {
   public static parse(formulaString: string): ChordScaleFormula {
@@ -19,13 +20,18 @@ export class ChordScaleFormula {
     return this.parts.map(p => p.pitchInteger);
   }
 
-  public getPitch(rootPitch: Pitch, scaleDegree: number): Pitch {
+  public getPitchClassForDegree(rootPitchClass: PitchClass, scaleDegree: number): PitchClass {
     precondition(scaleDegree >= 1);
     precondition(scaleDegree <= this.parts.length);
 
-    return this.parts[scaleDegree - 1].getPitch(rootPitch);
+    return this.parts[scaleDegree - 1].getPitch(rootPitchClass);
   }
 
+  public getPitchClasses(rootPitchClass: PitchClass): Array<PitchClass> {
+    return this.parts
+      .map(p => p.getPitch(rootPitchClass));
+  }
+  
   public getPitches(rootPitch: Pitch): Array<Pitch> {
     return this.parts
       .map(p => p.getPitch(rootPitch));

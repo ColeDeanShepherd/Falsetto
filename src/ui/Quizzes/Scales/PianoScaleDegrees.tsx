@@ -47,7 +47,7 @@ export function createFlashCardSet(scale: Scale): FlashCardSet {
 }
 
 function createFlashCards(flashCardSetId: string, scale: Scale): FlashCard[] {
-  const scalePitches = scale.getPitches()
+  const scalePitches = scale.getPitchClasses()
     .map(p => unwrapValueOrUndefined(tryWrapPitchOctave(p, lowestPitch, highestPitch)));
 
   // Create flash cards.

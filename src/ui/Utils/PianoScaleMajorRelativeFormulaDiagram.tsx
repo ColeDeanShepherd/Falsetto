@@ -18,7 +18,7 @@ export class PianoScaleMajorRelativeFormulaDiagram extends React.Component<IPian
 
     const useSharps = doesKeyUseSharps(scale.rootPitchClass.letter, scale.rootPitchClass.signedAccidental);
     const useSymbols = true;
-    const pitchMidiNumberNoOctaves = scale.getPitches()
+    const pitchMidiNumberNoOctaves = scale.getPitchClasses()
       .map(p => p.midiNumberNoOctave);
     
     function renderExtrasFn(metrics: PianoKeyboardMetrics): JSX.Element {

@@ -87,7 +87,7 @@ export class PianoScaleNotesAnswerSelect extends React.Component<IPianoScaleNote
     const { pressedPitches } = this.state;
     
     const correctMidiNumberNoOctaves = new Set<number>(
-      scale.getPitches()
+      scale.getPitchClasses()
         .map(pitch => pitch.midiNumberNoOctave)
     );
     
@@ -147,7 +147,7 @@ export class PianoScaleNotesAnswerSelect extends React.Component<IPianoScaleNote
       
       // register an incorrect answer if necessary
       const correctMidiNumberNoOctaves = new Set<number>(
-        scale.getPitches()
+        scale.getPitchClasses()
           .map(pitch => pitch.midiNumberNoOctave)
       );
       const isPitchInScale = correctMidiNumberNoOctaves.has(pitch.midiNumberNoOctave);
@@ -187,7 +187,7 @@ export class PianoScaleNotesAnswerSelect extends React.Component<IPianoScaleNote
         .map(pitch => pitch.midiNumberNoOctave)
     );
     const correctMidiNumberNoOctaves = new Set<number>(
-      scale.getPitches()
+      scale.getPitchClasses()
         .map(pitch => pitch.midiNumberNoOctave)
     );
 

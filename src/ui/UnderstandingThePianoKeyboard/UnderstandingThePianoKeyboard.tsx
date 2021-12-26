@@ -631,7 +631,7 @@ function createDiatonicTriadNotesQuizSlide(scaleDegreeNumber: number): Slide {
   const chordPitches = chord.getPitches();
 
   const chordTypeName = chord.type.name;
-  const chordRootPitchString = chord.rootPitch.toString(/*includeOctaveNumber*/ false, /*useSymbols*/ true);
+  const chordRootPitchString = chord.rootPitchClass.toString(/*includeOctaveNumber*/ false, /*useSymbols*/ true);
   const chordName = `${chordRootPitchString} ${chordTypeName}`;
 
   const chordUriComponent = getUriComponent(chord);
@@ -1119,7 +1119,7 @@ export const pianoTheorySlideGroups = [
       )),
 
       new Slide("c-major-scale-notes-quiz", (slideshow) => {
-        const pitches = new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4)).getPitches();
+        const pitches = new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4)).getPitchClasses();
 
         return (
           <div>
@@ -1192,7 +1192,7 @@ export const pianoTheorySlideGroups = [
       createMiniQuizSlide("minor-scale-formula-quiz", [minorScaleFormulaFlashCard]),
       
       new Slide("c-minor-scale-notes-quiz", (slideshow) => {
-        const pitches = new Scale(ScaleType.Aeolian, new Pitch(PitchLetter.C, 0, 4)).getPitches();
+        const pitches = new Scale(ScaleType.Aeolian, new Pitch(PitchLetter.C, 0, 4)).getPitchClasses();
 
         return (
           <div>

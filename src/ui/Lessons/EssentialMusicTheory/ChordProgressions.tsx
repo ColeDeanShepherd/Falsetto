@@ -102,7 +102,7 @@ function renderChordDiagramLabels(
   scale: Scale,
   showScaleDegreeNumbers: boolean
 ): JSX.Element {
-  const scalePitches = scale.getPitches();
+  const scalePitches = scale.getPitchClasses();
   const scaleDegreeLabels = pitches
     .map(p => 1 + scalePitches.findIndex(sp => sp.midiNumberNoOctave == p.midiNumberNoOctave));
 
@@ -232,7 +232,7 @@ export class ChordProgressionPlayer extends React.Component<IChordProgressionPla
         <p style={textStyle}>
           {(showRomanNumerals) ? (
             <span>{signedAccidentalString}{getChordRomanNumeralNotation(chords[currentChordIndex], chordScaleDegreeNumbers[currentChordIndex])} - </span>) : null}
-          {chords[currentChordIndex].rootPitch.toString(/*includeOctaveNumber*/ false)} {chords[currentChordIndex].type.name}
+          {chords[currentChordIndex].rootPitchClass.toString(/*includeOctaveNumber*/ false)} {chords[currentChordIndex].type.name}
         </p>
       );
     }

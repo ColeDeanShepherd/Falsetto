@@ -13,13 +13,14 @@ import { ScaleViewer } from "../../Tools/ScaleViewer";
 
 import * as GuitarScales from "../../Quizzes/Scales/GuitarScales";
 
-import { ScaleType, Scale } from "../../../lib/TheoryLib/Scale";
+import { Scale } from "../../../lib/TheoryLib/Scale";
 import { PianoScaleDronePlayer } from "../../Utils/PianoScaleDronePlayer";
 import { ScaleAudioPlayer } from "../../Utils/ScaleAudioPlayer";
 import { SectionProps, Term, SectionTitle, SubSectionTitle, defaultRootPitch } from "./EssentialMusicTheory";
 import { NavLinkView } from "../../../ui/NavLinkView";
 import { PianoScaleFormulaDiagram } from "../../Utils/PianoScaleFormulaDiagram";
 import { NoteText } from "../../Utils/NoteText";
+import { ScaleType } from "../../../lib/TheoryLib/ScaleType";
 
 export const ScalesAndModesSection: React.FunctionComponent<SectionProps> = props => (
   <div>

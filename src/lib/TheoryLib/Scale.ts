@@ -1,4 +1,4 @@
-import { Pitch, pitchClassNameToPitch } from './Pitch';
+import { Pitch } from './Pitch';
 import { Chord } from './Chord';
 import { Interval } from './Interval';
 import { ChordScaleFormula } from './ChordScaleFormula';
@@ -122,23 +122,23 @@ export class Scale {
     );
   }
 
-  public getPitch(scaleDegree: number): Pitch {
-    return this.type.getPitch(this.rootPitchClass, scaleDegree);
+  public getPitchClassForDegree(scaleDegree: number): PitchClass {
+    return this.type.getPitchClassForDegree(this.rootPitchClass, scaleDegree);
   }
 
-  public getPitches(): Array<Pitch> {
-    return this.type.formula.getPitches(this.rootPitchClass);
+  public getPitchClasses(): Array<PitchClass> {
+    return this.type.formula.getPitchClasses(this.rootPitchClass);
   }
 
   public getDiatonicCanonicalChord(scaleDegree: number, numChordPitches: number): CanonicalChord {
     return {
       type: this.type.getDiatonicCanonicalChordType(scaleDegree, numChordPitches),
-      rootPitchClass: this.type.formula.getPitch(this.rootPitchClass, scaleDegree).class
+      rootPitchClass: this.type.formula.getPitchClassForDegree(this.rootPitchClass, scaleDegree)
     } as CanonicalChord;
   }
   
   public getDiatonicChord(scaleDegree: number, numChordPitches: number): Chord {
-    const rootPitch = this.type.formula.getPitch(this.rootPitchClass, scaleDegree);
+    const rootPitch = this.type.formula.getPitchClassForDegree(this.rootPitchClass, scaleDegree);
     const chordType = this.type.getDiatonicChordType(scaleDegree, numChordPitches);
     return new Chord(chordType, rootPitch);
   }
@@ -147,8 +147,7 @@ export class Scale {
     precondition(numChordPitches >= 1);
     precondition(numChordPitches <= this.type.numPitches);
 
-    const pitchClasses = this.getPitches()
-      .map(p => p.class);
+    const pitchClasses = this.getPitchClasses();
 
     return pitchClasses
       .map((pitchClass, i) => ({
@@ -164,12 +163,12 @@ export class Scale {
     precondition(numChordPitches >= 1);
     precondition(numChordPitches <= this.type.numPitches);
 
-    const pitches = this.getPitches();
+    const pitchClasses = this.getPitchClasses();
 
     return this.type.pitchIntegers
       .map((_, i) => new Chord(
         this.type.getDiatonicChordType(1 + i, numChordPitches),
-        pitches[i]
+        pitchClasses[i]
       ));
   }
 }

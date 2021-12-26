@@ -15,7 +15,7 @@ export class ScaleAudioPlayer extends React.Component<IScaleAudioPlayerProps, {}
   public render(): JSX.Element {
     const { scale, pitchCount, pitchesAudio, onGetExports } = this.props;
 
-    const pitches = this.getPitchesToPlay(scale.getPitches(), pitchCount);
+    const pitches = this.getPitchesToPlay(scale.getPitchClasses(), pitchCount);
     
     return <PitchesAudioPlayer
       pitches={pitches}
