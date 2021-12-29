@@ -1,4 +1,3 @@
-import * as Utils from "../Core/Utils";
 import { Pitch } from './Pitch';
 import { mod } from '../Core/MathUtils';
 import { precondition, invariant } from '../Core/Dbc';

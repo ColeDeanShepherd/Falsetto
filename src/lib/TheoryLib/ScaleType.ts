@@ -7,317 +7,560 @@ import { CanonicalChordType } from "./CanonicalChord";
 import { ChordScaleFormula } from "./ChordScaleFormula";
 import { ChordType } from "./ChordType";
 import { Interval } from "./Interval";
-import { Pitch } from "./Pitch";
 import { PitchClass } from "./PitchClass";
-import { PitchClassName } from "./PitchClassName";
 import { getModePitchIntegers } from "./Scale";
 
-export class ScaleTypeGroup {
-    public constructor(
-      public name: string,
-      public scaleTypes: Array<ScaleType>
-    ) {}
+export interface ScaleTypeGroup {
+  name: string;
+  scaleTypes: Array<ScaleType>;
+}
+
+// TODO: specify type properly
+export const ScaleTypes = {
+  Ionian: {
+    id: "major",
+    name: "Major (Ionian)",
+    formula: ChordScaleFormula.parse("1 2 3 4 5 6 7"),
+    pitchIntegers: [0, 2, 4, 5, 7, 9, 11]
+  } as ScaleType,
+  Dorian: {
+    id: "dorian",
+    name: "Dorian",
+    formula: ChordScaleFormula.parse("1 2 b3 4 5 6 b7"),
+    pitchIntegers: [0, 2, 3, 5, 7, 9, 10]
+  } as ScaleType,
+  Phrygian: {
+    id: "phrygian",
+    name: "Phrygian",
+    formula: ChordScaleFormula.parse("1 b2 b3 4 5 b6 b7"),
+    pitchIntegers: [0, 1, 3, 5, 7, 8, 10]
+  } as ScaleType,
+  Lydian: {
+    id: "lydian",
+    name: "Lydian",
+    formula: ChordScaleFormula.parse("1 2 3 #4 5 6 7"),
+    pitchIntegers: [0, 2, 4, 6, 7, 9, 11]
+  } as ScaleType,
+  Mixolydian: {
+    id: "mixolydian",
+    name: "Mixolydian",
+    formula: ChordScaleFormula.parse("1 2 3 4 5 6 b7"),
+    pitchIntegers: [0, 2, 4, 5, 7, 9, 10]
+  } as ScaleType,
+  Aeolian: {
+    id: "minor",
+    name: "Natural Minor (Aeolian)",
+    formula: ChordScaleFormula.parse("1 2 b3 4 5 b6 b7"),
+    pitchIntegers: [0, 2, 3, 5, 7, 8, 10]
+  } as ScaleType,
+  Locrian: {
+    id: "locrian",
+    name: "Locrian",
+    formula: ChordScaleFormula.parse("1 b2 b3 4 b5 b6 b7"),
+    pitchIntegers: [0, 1, 3, 5, 6, 8, 10]
+  } as ScaleType,
+  
+  MelodicMinor: {
+    id: "melodicMinor",
+    name: "Melodic Minor",
+    formula: ChordScaleFormula.parse("1 2 b3 4 5 6 7"),
+    pitchIntegers: [0, 2, 3, 5, 7, 9, 11]
+  } as ScaleType,
+  Dorianb2: {
+    id: "dorianb2",
+    name: "Dorian b2",
+    formula: ChordScaleFormula.parse("1 b2 b3 4 5 6 b7"),
+    pitchIntegers: [0, 1, 3, 5, 7, 9, 10]
+  } as ScaleType,
+  LydianAug: {
+    id: "lydianAug",
+    name: "Lydian Aug.",
+    formula: ChordScaleFormula.parse("1 2 3 #4 #5 6 7"),
+    pitchIntegers: [0, 2, 4, 6, 8, 9, 11]
+  } as ScaleType,
+  MixolydianSharp11: {
+    id: "mixolydian#11",
+    name: "Mixolydian #11",
+    formula: ChordScaleFormula.parse("1 2 3 #4 5 6 b7"),
+    pitchIntegers: [0, 2, 4, 6, 7, 9, 10]
+  } as ScaleType,
+  Mixolydianb6: {
+    id: "mixolydianb6",
+    name: "Mixolydian b6",
+    formula: ChordScaleFormula.parse("1 2 3 4 5 b6 b7"),
+    pitchIntegers: [0, 2, 4, 5, 7, 8, 10]
+  } as ScaleType,
+  LocrianNat9: {
+    id: "locrianNat9",
+    name: "Locrian Nat. 9",
+    formula: ChordScaleFormula.parse("1 2 b3 4 b5 b6 b7"),
+    pitchIntegers: [0, 2, 3, 5, 6, 7, 10]
+  } as ScaleType,
+  AlteredDominant: {
+    id: "alteredDominant",
+    name: "Altered Dominant",
+    formula: ChordScaleFormula.parse("1 b2 b3 b4 b5 b6 b7"),
+    pitchIntegers: [0, 1, 3, 4, 6, 8, 10]
+  } as ScaleType,
+  
+  HarmonicMinor: {
+    id: "harmonicMinor",
+    name: "Harmonic Minor",
+    formula: ChordScaleFormula.parse("1 2 b3 4 5 b6 7"),
+    pitchIntegers: [0, 2, 3, 5, 7, 8, 11]
+  } as ScaleType,
+  LocrianNat6: {
+    id: "locrianNat6",
+    name: "Locrian Nat. 6",
+    formula: ChordScaleFormula.parse("1 b2 b3 4 b5 6 b7"),
+    pitchIntegers: [0, 1, 3, 5, 6, 9, 10]
+  } as ScaleType,
+  IonianAug: {
+    id: "ionianAug",
+    name: "Ionian Aug.",
+    formula: ChordScaleFormula.parse("1 2 3 4 #5 6 7"),
+    pitchIntegers: [0, 2, 4, 5, 8, 9, 11]
+  } as ScaleType,
+  DorianSharp11: {
+    id: "dorian#11",
+    name: "Dorian #11",
+    formula: ChordScaleFormula.parse("1 2 b3 #4 5 6 b7"),
+    pitchIntegers: [0, 2, 4, 6, 7, 9, 10]
+  } as ScaleType,
+  PhrygianMajor: {
+    id: "phrygianDominant",
+    name: "Phrygian Dominant",
+    formula: ChordScaleFormula.parse("1 b2 3 4 5 b6 b7"),
+    pitchIntegers: [0, 1, 4, 5, 7, 8, 10]
+  } as ScaleType,
+  LydianSharp9: {
+    id: "lydian#9",
+    name: "Lydian #9",
+    formula: ChordScaleFormula.parse("1 #2 3 #4 5 6 7"),
+    pitchIntegers: [0, 3, 4, 6, 7, 9, 11]
+  } as ScaleType,
+  AlteredDominantbb7: { // TODO: figure out what's wrong here
+    id: "alteredDominantbb7",
+    name: "Altered Dominant bb7",
+    formula: ChordScaleFormula.parse("1 b2 b3 b4 b5 b6 bb7"),
+    pitchIntegers: [0, 1, 3, 4, 6, 9, 9]
+  } as ScaleType,
+  
+  HarmonicMajor: {
+    id: "harmonicMajor",
+    name: "Harmonic Major",
+    formula: ChordScaleFormula.parse("1 2 3 4 5 b6 7"),
+    pitchIntegers: [0, 2, 4, 5, 7, 8, 11]
+  } as ScaleType,
+  Dorianb5: {
+    id: "dorianb5",
+    name: "Dorian b5",
+    formula: ChordScaleFormula.parse("1 2 b3 4 b5 6 b7"),
+    pitchIntegers: [0, 2, 3, 5, 6, 9, 10]
+  } as ScaleType,
+  Phrygianb4: {
+    id: "phrygianb4",
+    name: "Phrygian b4",
+    formula: ChordScaleFormula.parse("1 b2 b3 b4 5 b6 b7"),
+    pitchIntegers: [0, 1, 3, 4, 7, 9, 10]
+  } as ScaleType,
+  Lydianb3: {
+    id: "lydianb3",
+    name: "Lydian b3",
+    formula: ChordScaleFormula.parse("1 2 b3 #4 5 6 7"),
+    pitchIntegers: [0, 2, 4, 5, 7, 9, 11]
+  } as ScaleType,
+  Mixolydianb2: {
+    id: "mixolydianb2",
+    name: "Mixolydian b2",
+    formula: ChordScaleFormula.parse("1 b2 3 4 5 6 b7"),
+    pitchIntegers: [0, 1, 4, 5, 7, 9, 10]
+  } as ScaleType,
+  LydianAugmentedSharp2: {
+    id: "lydianaug#2",
+    name: "Lydian Augmented #2",
+    formula: ChordScaleFormula.parse("1 #2 3 #4 #5 6 7"),
+    pitchIntegers: [0, 3, 4, 6, 8, 9, 11]
+  } as ScaleType,
+  Locrianbb7: {
+    id: "locrianbb7",
+    name: "Locrian bb7",
+    formula: ChordScaleFormula.parse("1 b2 b3 4 b5 b6 bb7"),
+    pitchIntegers: [0, 1, 3, 5, 6, 8, 9]
+  } as ScaleType,
+  
+  DoubleHarmonicMajor: {
+    id: "doubleHarmonicMajor",
+    name: "Double Harmonic Major",
+    formula: ChordScaleFormula.parse("1 b2 3 4 5 b6 7"),
+    pitchIntegers: [0, 1, 4, 5, 7, 8, 11]
+  } as ScaleType,
+  LydianSharp2Sharp6: {
+    id: "lydian#2#6",
+    name: "Lydian #2 #6",
+    formula: ChordScaleFormula.parse("1 #2 3 #4 5 #6 7"),
+    pitchIntegers: [0, 3, 4, 6, 7, 10, 11]
+  } as ScaleType,
+  Ultraphrygian: {
+    id: "ultraphrygian",
+    name: "Ultraphrygian",
+    formula: ChordScaleFormula.parse("1 b2 b3 b4 5 b6 bb7"),
+    pitchIntegers: [0, 1, 3, 4, 7, 8, 9]
+  } as ScaleType,
+  HungarianMinor: {
+    id: "hungarianMinor",
+    name: "Hungarian Minor",
+    formula: ChordScaleFormula.parse("1 2 b3 #4 5 b6 7"),
+    pitchIntegers: [0, 2, 4, 6, 7, 8, 11]
+  } as ScaleType,
+  Oriental: {
+    id: "oriental",
+    name: "Oriental",
+    formula: ChordScaleFormula.parse("1 b2 3 4 b5 6 b7"),
+    pitchIntegers: [0, 1, 4, 5, 6, 9, 10]
+  } as ScaleType,
+  IonianAugmentedSharp2: {
+    id: "ionianAug#2",
+    name: "Ionian Augmented #2",
+    formula: ChordScaleFormula.parse("1 #2 3 4 #5 6 7"),
+    pitchIntegers: [0, 3, 4, 5, 8, 9, 11]
+  } as ScaleType,
+  Locrianbb3bb7: {
+    id: "locrianbb3bb7",
+    name: "Locrian bb3 bb7",
+    formula: ChordScaleFormula.parse("1 b2 bb3 4 b5 b6 bb7"),
+    pitchIntegers: [0, 1, 2, 5, 6, 7, 9]
+  } as ScaleType,
+  
+  TonicDiminished: {
+    id: "tonicDiminished",
+    name: "Tonic Diminished",
+    formula: ChordScaleFormula.parse("1 2 b3 4 b5 b6 bb7 7"),
+    pitchIntegers: [0, 2, 3, 5, 6, 8, 9, 11]
+  } as ScaleType,
+  DominantDiminished: {
+    id: "dominantDiminished",
+    name: "Dominant Diminished",
+    formula: ChordScaleFormula.parse("1 b2 b3 b4 b5 5 6 b7"),
+    pitchIntegers: [0, 1, 3, 4, 6, 7, 9, 10]
+  } as ScaleType,
+  WholeTone: {
+    id: "wholeTone",
+    name: "Whole Tone",
+    formula: ChordScaleFormula.parse("1 2 3 #4 #5 b7"),
+    pitchIntegers: [0, 2, 4, 6, 8, 10]
+  } as ScaleType,
+  Augmented: {
+    id: "augmented",
+    name: "Augmented",
+    formula: ChordScaleFormula.parse("1 #2 3 5 #5 7"),
+    pitchIntegers: [0, 3, 4, 7, 8, 11]
+  } as ScaleType,
+  
+  MajorPentatonic: {
+    id: "majorPentatonic",
+    name: "Major Pentatonic",
+    formula: ChordScaleFormula.parse("1 2 3 5 6"),
+    pitchIntegers: [0, 2, 4, 7, 9]
+  } as ScaleType,
+  MajorPentatonicMode2: {
+    id: "majorPentatonicMode2",
+    name: "Major Pentatonic Mode 2",
+    formula: ChordScaleFormula.parse("1 2 4 5 b7"),
+    pitchIntegers: [0, 2, 5, 7, 10]
+  } as ScaleType,
+  MajorPentatonicMode3: {
+    id: "majorPentatonicMode3",
+    name: "Major Pentatonic Mode 3",
+    formula: ChordScaleFormula.parse("1 b3 4 b6 b7"),
+    pitchIntegers: [0, 3, 5, 8, 10]
+  } as ScaleType,
+  MajorPentatonicMode4: {
+    id: "majorPentatonicMode4",
+    name: "Major Pentatonic Mode 4",
+    formula: ChordScaleFormula.parse("1 2 4 5 6"),
+    pitchIntegers: [0, 2, 5, 7, 9]
+  } as ScaleType,
+  MinorPentatonic: {
+    id: "minorPentatonic",
+    name: "Minor Pentatonic",
+    formula: ChordScaleFormula.parse("1 b3 4 5 b7"),
+    pitchIntegers: [0, 3, 5, 7, 10]
+  } as ScaleType,
+  
+  MajorBlues: {
+    id: "majorBlues",
+    name: "Major Blues",
+    formula: ChordScaleFormula.parse("1 2 b3 3 5 6"),
+    pitchIntegers: [0, 2, 3, 4, 7, 9]
+  } as ScaleType,
+  MinorBlues: {
+    id: "minorBlues",
+    name: "Minor Blues",
+    formula: ChordScaleFormula.parse("1 b3 4 b5 5 b7"),
+    pitchIntegers: [0, 3, 5, 6, 7, 10]
+  } as ScaleType,
+  Chromatic: {
+    id: "chromatic",
+    name: "Chromatic",
+    formula: ChordScaleFormula.parse("1 b2 2 b3 3 4 b5 5 b6 6 b7 7"),
+    pitchIntegers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+  } as ScaleType,
+};
+
+export const MajorScaleModes: Array<ScaleType> = [
+  ScaleTypes.Ionian,
+  ScaleTypes.Dorian,
+  ScaleTypes.Phrygian,
+  ScaleTypes.Lydian,
+  ScaleTypes.Mixolydian,
+  ScaleTypes.Aeolian,
+  ScaleTypes.Locrian
+];
+export const MajorPentatonicScaleModes: Array<ScaleType> = [
+  ScaleTypes.MajorPentatonic,
+  ScaleTypes.MajorPentatonicMode2,
+  ScaleTypes.MajorPentatonicMode3,
+  ScaleTypes.MajorPentatonicMode4,
+  ScaleTypes.MinorPentatonic,
+];
+export const MelodicMinorScaleModes: Array<ScaleType> = [
+  ScaleTypes.MelodicMinor,
+  ScaleTypes.Dorianb2,
+  ScaleTypes.LydianAug,
+  ScaleTypes.MixolydianSharp11,
+  ScaleTypes.Mixolydianb6,
+  ScaleTypes.LocrianNat9,
+  ScaleTypes.AlteredDominant
+];
+export const HarmonicMinorScaleModes: Array<ScaleType> = [
+  ScaleTypes.HarmonicMinor,
+  ScaleTypes.LocrianNat6,
+  ScaleTypes.IonianAug,
+  ScaleTypes.DorianSharp11,
+  ScaleTypes.PhrygianMajor,
+  ScaleTypes.LydianSharp9,
+  ScaleTypes.AlteredDominantbb7
+];
+export const HarmonicMajorScaleModes: Array<ScaleType> = [
+  ScaleTypes.HarmonicMajor,
+  ScaleTypes.Dorianb5,
+  ScaleTypes.Phrygianb4,
+  ScaleTypes.Lydianb3,
+  ScaleTypes.Mixolydianb2,
+  ScaleTypes.LydianAugmentedSharp2,
+  ScaleTypes.Locrianbb7
+];
+export const DoubleHarmonicMajorScaleModes: Array<ScaleType> = [
+  ScaleTypes.DoubleHarmonicMajor,
+  ScaleTypes.LydianSharp2Sharp6,
+  ScaleTypes.Ultraphrygian,
+  ScaleTypes.HungarianMinor,
+  ScaleTypes.Oriental,
+  ScaleTypes.IonianAugmentedSharp2,
+  ScaleTypes.Locrianbb3bb7
+];
+export const DiminishedScales: Array<ScaleType> = [
+  ScaleTypes.TonicDiminished,
+  ScaleTypes.DominantDiminished
+];
+export const ScaleTypeGroups: Array<ScaleTypeGroup> = [
+  { name: "Major Scale Modes", scaleTypes: MajorScaleModes },
+  { name: "Melodic Minor Scale Modes", scaleTypes: MelodicMinorScaleModes },
+  { name: "Harmonic Minor Scale Modes", scaleTypes: HarmonicMinorScaleModes },
+  { name: "Harmonic Major Scale Modes", scaleTypes: HarmonicMajorScaleModes },
+  { name: "Double Harmonic Major Scale Modes", scaleTypes: DoubleHarmonicMajorScaleModes },
+  { name: "Diminished Scales", scaleTypes: DiminishedScales },
+  { name: "Major Pentatonic Scale Modes", scaleTypes: MajorPentatonicScaleModes },
+  { name: "Blues Scales", scaleTypes: [
+      ScaleTypes.MajorBlues,
+      ScaleTypes.MinorBlues
+    ]
+  },
+  { name: "Other Scales", scaleTypes: [
+      ScaleTypes.WholeTone,
+      ScaleTypes.Augmented,
+      ScaleTypes.Chromatic
+    ]
   }
-  export class ScaleType {
-    public static Ionian = new ScaleType("major", "Major (Ionian)", ChordScaleFormula.parse("1 2 3 4 5 6 7"));
-    public static Dorian = new ScaleType("dorian", "Dorian", ChordScaleFormula.parse("1 2 b3 4 5 6 b7"));
-    public static Phrygian = new ScaleType("phrygian", "Phrygian", ChordScaleFormula.parse("1 b2 b3 4 5 b6 b7"));
-    public static Lydian = new ScaleType("lydian", "Lydian", ChordScaleFormula.parse("1 2 3 #4 5 6 7"));
-    public static Mixolydian = new ScaleType("mixolydian", "Mixolydian", ChordScaleFormula.parse("1 2 3 4 5 6 b7"));
-    public static Aeolian = new ScaleType("minor", "Natural Minor (Aeolian)", ChordScaleFormula.parse("1 2 b3 4 5 b6 b7"));
-    public static Locrian = new ScaleType("locrian", "Locrian", ChordScaleFormula.parse("1 b2 b3 4 b5 b6 b7"));
+];
+export const AllScaleTypes = flattenArrays<ScaleType>(
+  ScaleTypeGroups.map(st => st.scaleTypes)
+);
+
+export interface ScaleType {
+  id: string;
+  name: string;
+  formula: ChordScaleFormula;
+  pitchIntegers: Array<number>;
+}
+
+export function getNumPitches(scaleType: ScaleType): number {
+  return scaleType.pitchIntegers.length;
+}
+
+export function equals(scaleType: ScaleType, other: ScaleType): boolean {
+  return areArraysEqual(scaleType.pitchIntegers, other.pitchIntegers);
+}
+
+export function getIntervals(scaleType: ScaleType): Array<Interval> {
+  return scaleType.formula.parts.map(p => p.getIntervalFromRootNote());
+}
+
+export function getPitchClassForDegree(scaleType: ScaleType, rootPitchClass: PitchClass, scaleDegree: number): PitchClass {
+  return scaleType.formula.getPitchClassForDegree(rootPitchClass, scaleDegree);
+}
+
+export function getPitchClasses(scaleType: ScaleType, rootPitchClass: PitchClass): Array<PitchClass> {
+  return scaleType.formula.getPitchClasses(rootPitchClass);
+}
+
+export function getMode(scaleType: ScaleType, scaleDegree: number): ScaleType {
+  precondition(scaleDegree >= 1);
+  precondition(scaleDegree <= getNumPitches(scaleType));
+
+  if (scaleDegree === 1) { return scaleType; }
+
+  const modePitchIntegers = getModePitchIntegers(scaleType.pitchIntegers, scaleDegree);
+  const mode = AllScaleTypes.find(scale => areArraysEqual(modePitchIntegers, scale.pitchIntegers));
+  return unwrapValueOrUndefined(mode);
+}
+
+export function getDiatonicChordScaleDegreeNumbers(
+  scaleType: ScaleType,
+  scaleDegree: number,
+  numChordPitches: number
+): Array<number> {
+  precondition(scaleDegree >= 1);
+  precondition(scaleDegree <= getNumPitches(scaleType));
+  precondition(numChordPitches >= 1);
+  precondition(numChordPitches <= getNumPitches(scaleType));
+
+  const i = scaleDegree - 1;
+  const chordScaleDegreeNumbers = new Array<number>(numChordPitches);
+
+  for (let chordI = 0; chordI < numChordPitches; chordI++) {
+    const unwrappedScaleI = i + (2 * chordI);
+    const baseScaleI = unwrappedScaleI % getNumPitches(scaleType);
     
-    public static Major = ScaleType.Ionian;
-    public static NaturalMinor = ScaleType.Aeolian;
-  
-    public static MelodicMinor = new ScaleType("melodicMinor", "Melodic Minor", ChordScaleFormula.parse("1 2 b3 4 5 6 7"));
-    public static Dorianb2 = new ScaleType("dorianb2", "Dorian b2", ChordScaleFormula.parse("1 b2 b3 4 5 6 b7"));
-    public static LydianAug = new ScaleType("lydianAug", "Lydian Aug.", ChordScaleFormula.parse("1 2 3 #4 #5 6 7"));
-    public static MixolydianSharp11 = new ScaleType("mixolydian#11", "Mixolydian #11", ChordScaleFormula.parse("1 2 3 #4 5 6 b7"));
-    public static Mixolydianb6 = new ScaleType("mixolydianb6", "Mixolydian b6", ChordScaleFormula.parse("1 2 3 4 5 b6 b7"));
-    public static LocrianNat9 = new ScaleType("locrianNat9", "Locrian Nat. 9", ChordScaleFormula.parse("1 2 b3 4 b5 b6 b7"));
-    public static AlteredDominant = new ScaleType("alteredDominant", "Altered Dominant", ChordScaleFormula.parse("1 b2 b3 b4 b5 b6 b7"));
-  
-    public static HarmonicMinor = new ScaleType("harmonicMinor", "Harmonic Minor", ChordScaleFormula.parse("1 2 b3 4 5 b6 7"));
-    public static LocrianNat6 = new ScaleType("locrianNat6", "Locrian Nat. 6", ChordScaleFormula.parse("1 b2 b3 4 b5 6 b7"));
-    public static IonianAug = new ScaleType("ionianAug", "Ionian Aug.", ChordScaleFormula.parse("1 2 3 4 #5 6 7"));
-    public static DorianSharp11 = new ScaleType("dorian#11", "Dorian #11", ChordScaleFormula.parse("1 2 b3 #4 5 6 b7"));
-    public static PhrygianMajor = new ScaleType("phrygianDominant", "Phrygian Dominant", ChordScaleFormula.parse("1 b2 3 4 5 b6 b7"));
-    public static LydianSharp9 = new ScaleType("lydian#9", "Lydian #9", ChordScaleFormula.parse("1 #2 3 #4 5 6 7"));
-    public static AlteredDominantbb7 = new ScaleType("alteredDominantbb7", "Altered Dominant bb7", ChordScaleFormula.parse("1 b2 b3 b4 b5 b6 bb7"));
-  
-    public static HarmonicMajor = new ScaleType("harmonicMajor", "Harmonic Major", ChordScaleFormula.parse("1 2 3 4 5 b6 7"));
-    public static Dorianb5 = new ScaleType("dorianb5", "Dorian b5", ChordScaleFormula.parse("1 2 b3 4 b5 6 b7"));
-    public static Phrygianb4 = new ScaleType("phrygianb4", "Phrygian b4", ChordScaleFormula.parse("1 b2 b3 b4 5 b6 b7"));
-    public static Lydianb3 = new ScaleType("lydianb3", "Lydian b3", ChordScaleFormula.parse("1 2 b3 #4 5 6 7"));
-    public static Mixolydianb2 = new ScaleType("mixolydianb2", "Mixolydian b2", ChordScaleFormula.parse("1 b2 3 4 5 6 b7"));
-    public static LydianAugmentedSharp2 = new ScaleType("lydianaug#2", "Lydian Augmented #2", ChordScaleFormula.parse("1 #2 3 #4 #5 6 7"));
-    public static Locrianbb7 = new ScaleType("locrianbb7", "Locrian bb7", ChordScaleFormula.parse("1 b2 b3 4 b5 b6 bb7"));
-  
-    public static DoubleHarmonicMajor = new ScaleType("doubleHarmonicMajor", "Double Harmonic Major", ChordScaleFormula.parse("1 b2 3 4 5 b6 7"));
-    public static LydianSharp2Sharp6 = new ScaleType("lydian#2#6", "Lydian #2 #6", ChordScaleFormula.parse("1 #2 3 #4 5 #6 7"));
-    public static Ultraphrygian = new ScaleType("ultraphrygian", "Ultraphrygian", ChordScaleFormula.parse("1 b2 b3 b4 5 b6 bb7"));
-    public static HungarianMinor = new ScaleType("hungarianMinor", "Hungarian Minor", ChordScaleFormula.parse("1 2 b3 #4 5 b6 7"));
-    public static Oriental = new ScaleType("oriental", "Oriental", ChordScaleFormula.parse("1 b2 3 4 b5 6 b7"));
-    public static IonianAugmentedSharp2 = new ScaleType("ionianAug#2", "Ionian Augmented #2", ChordScaleFormula.parse("1 #2 3 4 #5 6 7"));
-    public static Locrianbb3bb7 = new ScaleType("locrianbb3bb7", "Locrian bb3 bb7", ChordScaleFormula.parse("1 b2 bb3 4 b5 b6 bb7"));
-  
-    public static TonicDiminished = new ScaleType("tonicDiminished", "Tonic Diminished", ChordScaleFormula.parse("1 2 b3 4 b5 b6 bb7 7"));
-    public static DominantDiminished = new ScaleType("dominantDiminished", "Dominant Diminished", ChordScaleFormula.parse("1 b2 b3 b4 b5 5 6 b7"));
-    public static WholeTone = new ScaleType("wholeTone", "Whole Tone", ChordScaleFormula.parse("1 2 3 #4 #5 b7"));
-    public static Augmented = new ScaleType("augmented", "Augmented", ChordScaleFormula.parse("1 #2 3 5 #5 7"));
-  
-    public static MajorPentatonic = new ScaleType("majorPentatonic", "Major Pentatonic", ChordScaleFormula.parse("1 2 3 5 6"));
-    public static MajorPentatonicMode2 = new ScaleType("majorPentatonicMode2", "Major Pentatonic Mode 2", ChordScaleFormula.parse("1 2 4 5 b7"));
-    public static MajorPentatonicMode3 = new ScaleType("majorPentatonicMode3", "Major Pentatonic Mode 3", ChordScaleFormula.parse("1 b3 4 b6 b7"));
-    public static MajorPentatonicMode4 = new ScaleType("majorPentatonicMode4", "Major Pentatonic Mode 4", ChordScaleFormula.parse("1 2 4 5 6"));
-    public static MinorPentatonic = new ScaleType("minorPentatonic", "Minor Pentatonic", ChordScaleFormula.parse("1 b3 4 5 b7"));
-  
-    public static MajorBlues = new ScaleType("majorBlues", "Major Blues", ChordScaleFormula.parse("1 2 b3 3 5 6"));
-    public static MinorBlues = new ScaleType("minorBlues", "Minor Blues", ChordScaleFormula.parse("1 b3 4 b5 5 b7"));
-    public static Chromatic = new ScaleType("chromatic", "Chromatic", ChordScaleFormula.parse("1 b2 2 b3 3 4 b5 5 b6 6 b7 7"));
-  
-    public static MajorScaleModes = [
-      ScaleType.Ionian,
-      ScaleType.Dorian,
-      ScaleType.Phrygian,
-      ScaleType.Lydian,
-      ScaleType.Mixolydian,
-      ScaleType.Aeolian,
-      ScaleType.Locrian
-    ];
-    public static MajorPentatonicScaleModes = [
-      ScaleType.MajorPentatonic,
-      ScaleType.MajorPentatonicMode2,
-      ScaleType.MajorPentatonicMode3,
-      ScaleType.MajorPentatonicMode4,
-      ScaleType.MinorPentatonic,
-    ];
-    public static MelodicMinorScaleModes = [
-      ScaleType.MelodicMinor,
-      ScaleType.Dorianb2,
-      ScaleType.LydianAug,
-      ScaleType.MixolydianSharp11,
-      ScaleType.Mixolydianb6,
-      ScaleType.LocrianNat9,
-      ScaleType.AlteredDominant
-    ];
-    public static HarmonicMinorScaleModes = [
-      ScaleType.HarmonicMinor,
-      ScaleType.LocrianNat6,
-      ScaleType.IonianAug,
-      ScaleType.DorianSharp11,
-      ScaleType.PhrygianMajor,
-      ScaleType.LydianSharp9,
-      ScaleType.AlteredDominantbb7
-    ];
-    public static HarmonicMajorScaleModes = [
-      ScaleType.HarmonicMajor,
-      ScaleType.Dorianb5,
-      ScaleType.Phrygianb4,
-      ScaleType.Lydianb3,
-      ScaleType.Mixolydianb2,
-      ScaleType.LydianAugmentedSharp2,
-      ScaleType.Locrianbb7
-    ];
-    public static DoubleHarmonicMajorScaleModes = [
-      ScaleType.DoubleHarmonicMajor,
-      ScaleType.LydianSharp2Sharp6,
-      ScaleType.Ultraphrygian,
-      ScaleType.HungarianMinor,
-      ScaleType.Oriental,
-      ScaleType.IonianAugmentedSharp2,
-      ScaleType.Locrianbb3bb7
-    ];
-    public static DiminishedScales = [
-      ScaleType.TonicDiminished,
-      ScaleType.DominantDiminished
-    ];
-    public static Groups = [
-      new ScaleTypeGroup("Major Scale Modes", ScaleType.MajorScaleModes),
-      new ScaleTypeGroup("Melodic Minor Scale Modes", ScaleType.MelodicMinorScaleModes),
-      new ScaleTypeGroup("Harmonic Minor Scale Modes", ScaleType.HarmonicMinorScaleModes),
-      new ScaleTypeGroup("Harmonic Major Scale Modes", ScaleType.HarmonicMajorScaleModes),
-      new ScaleTypeGroup("Double Harmonic Major Scale Modes", ScaleType.DoubleHarmonicMajorScaleModes),
-      new ScaleTypeGroup("Diminished Scales", ScaleType.DiminishedScales),
-      new ScaleTypeGroup("Major Pentatonic Scale Modes", ScaleType.MajorPentatonicScaleModes),
-      new ScaleTypeGroup("Blues Scales", [
-          ScaleType.MajorBlues,
-          ScaleType.MinorBlues
-        ]
-      ),
-      new ScaleTypeGroup("Other Scales", [
-          ScaleType.WholeTone,
-          ScaleType.Augmented,
-          ScaleType.Chromatic
-        ]
-      )
-    ];
-    public static All = flattenArrays<ScaleType>(
-      ScaleType.Groups.map(st => st.scaleTypes)
-    );
-  
-    public pitchIntegers: Array<number>;
-  
-    public constructor(
-      public id: string,
-      public name: string,
-      public formula: ChordScaleFormula
-    ) {
-      this.pitchIntegers = formula.pitchIntegers;
-    }
-  
-    public get numPitches(): number {
-      return this.pitchIntegers.length;
-    }
-    
-    public equals(other: ScaleType): boolean {
-      return areArraysEqual(this.pitchIntegers, other.pitchIntegers);
-    }
-  
-    public getIntervals(): Array<Interval> {
-      return this.formula.parts.map(p => p.getIntervalFromRootNote());
-    }
-  
-    public getPitchClassForDegree(rootPitchClass: PitchClass, scaleDegree: number): PitchClass {
-      return this.formula.getPitchClassForDegree(rootPitchClass, scaleDegree);
-    }
-  
-    public getPitchClasses(rootPitchClass: PitchClass): Array<PitchClass> {
-      return this.formula.getPitchClasses(rootPitchClass);
-    }
-  
-    public getMode(scaleDegree: number): ScaleType {
-      precondition(scaleDegree >= 1);
-      precondition(scaleDegree <= this.numPitches);
-  
-      if (scaleDegree === 1) { return this; }
-  
-      const modePitchIntegers = getModePitchIntegers(this.pitchIntegers, scaleDegree);
-      const mode = ScaleType.All.find(scale => areArraysEqual(modePitchIntegers, scale.pitchIntegers));
-      return unwrapValueOrUndefined(mode);
-    }
-  
-    public getDiatonicChordScaleDegreeNumbers(scaleDegree: number, numChordPitches: number): Array<number> {
-      precondition(scaleDegree >= 1);
-      precondition(scaleDegree <= this.numPitches);
-      precondition(numChordPitches >= 1);
-      precondition(numChordPitches <= this.numPitches);
-  
-      const i = scaleDegree - 1;
-      const chordScaleDegreeNumbers = new Array<number>(numChordPitches);
-  
-      for (let chordI = 0; chordI < numChordPitches; chordI++) {
-        const unwrappedScaleI = i + (2 * chordI);
-        const baseScaleI = unwrappedScaleI % this.numPitches;
-        
-        chordScaleDegreeNumbers[chordI] = 1 + baseScaleI;
-      }
-  
-      return chordScaleDegreeNumbers;
-    }
-  
-    public getDiatonicChordPitchIntegers(scaleDegree: number, numChordPitches: number): Array<number> {
-      precondition(scaleDegree >= 1);
-      precondition(scaleDegree <= this.numPitches);
-      precondition(numChordPitches >= 1);
-      precondition(numChordPitches <= this.numPitches);
-  
-      const i = scaleDegree - 1;
-      const halfStepsToSubtract = this.pitchIntegers[i];
-      const chordPitchIntegers = new Array<number>(numChordPitches);
-  
-      for (let chordI = 0; chordI < chordPitchIntegers.length; chordI++) {
-        const unwrappedScaleI = i + (2 * chordI);
-        const baseScaleI = unwrappedScaleI % this.numPitches;
-        
-        chordPitchIntegers[chordI] = mod(this.pitchIntegers[baseScaleI] - halfStepsToSubtract, 12);
-      }
-  
-      return chordPitchIntegers;
-    }
-    
-    public getDiatonicCanonicalChordType(scaleDegree: number, numChordPitches: number): CanonicalChordType {
-      return new Set<number>(this.getDiatonicChordPitchIntegers(scaleDegree, numChordPitches));
-    }
-  
-    public getDiatonicChordType(scaleDegree: number, numChordPitches: number): ChordType {
-      const chordPitchIntegers = new Set<number>(this.getDiatonicChordPitchIntegers(scaleDegree, numChordPitches));
-      const chordType = ChordType.All.find(chordType =>
-        areSetsEqual(chordPitchIntegers, new Set<number>(chordType.pitchIntegers)));
-      return unwrapValueOrUndefined(chordType);
-    }
-  
-    public getDiatonicChordTypes(numChordPitches: number): Array<ChordType> {
-      precondition(numChordPitches >= 1);
-      precondition(numChordPitches <= this.numPitches);
-  
-      return this.pitchIntegers
-        .map((_, i) => this.getDiatonicChordType(1 + i, numChordPitches));
-    }
+    chordScaleDegreeNumbers[chordI] = 1 + baseScaleI;
   }
-  
-  export const scaleTypeLevels = [
-    {
-      name: "Major/Minor",
-      scaleTypes: [
-        ScaleType.Major,
-        ScaleType.NaturalMinor
-      ]
-    },
-    {
-      name: "More Minor Scales",
-      scaleTypes: [
-        ScaleType.Major,
-        ScaleType.NaturalMinor,
-        ScaleType.MelodicMinor,
-        ScaleType.HarmonicMinor
-      ]
-    },
-    {
-      name: "Modes of Major",
-      scaleTypes: ScaleType.MajorScaleModes
-        .concat([
-          ScaleType.NaturalMinor,
-          ScaleType.MelodicMinor,
-          ScaleType.HarmonicMinor
-        ])
-    },
-    {
-      name: "Modes of Mel. Minor",
-      scaleTypes: ScaleType.MajorScaleModes
-        .concat([
-          ScaleType.NaturalMinor,
-          ScaleType.HarmonicMinor
-        ])
-        .concat(ScaleType.MelodicMinorScaleModes)
-    },
-    {
-      name: "Diminished",
-      scaleTypes: ScaleType.MajorScaleModes
-        .concat([
-          ScaleType.NaturalMinor,
-          ScaleType.HarmonicMinor
-        ])
-        .concat(ScaleType.MelodicMinorScaleModes)
-        .concat(ScaleType.DiminishedScales)
-    },
-    {
-      name: "Whole Tone/Augmented",
-      scaleTypes: ScaleType.MajorScaleModes
-        .concat([
-          ScaleType.NaturalMinor,
-          ScaleType.HarmonicMinor
-        ])
-        .concat(ScaleType.MelodicMinorScaleModes)
-        .concat(ScaleType.DiminishedScales)
-        .concat([
-          ScaleType.WholeTone,
-          ScaleType.Augmented
-        ])
-    },
-    {
-      name: "All Scales",
-      scaleTypes: ScaleType.All
-    }
-  ];
+
+  return chordScaleDegreeNumbers;
+}
+
+export function getDiatonicChordPitchIntegers(
+  scaleType: ScaleType,
+  scaleDegree: number,
+  numChordPitches: number
+): Array<number> {
+  precondition(scaleDegree >= 1);
+  precondition(scaleDegree <= getNumPitches(scaleType));
+  precondition(numChordPitches >= 1);
+  precondition(numChordPitches <= getNumPitches(scaleType));
+
+  const i = scaleDegree - 1;
+  const halfStepsToSubtract = scaleType.pitchIntegers[i];
+  const chordPitchIntegers = new Array<number>(numChordPitches);
+
+  for (let chordI = 0; chordI < chordPitchIntegers.length; chordI++) {
+    const unwrappedScaleI = i + (2 * chordI);
+    const baseScaleI = unwrappedScaleI % getNumPitches(scaleType);
+    
+    chordPitchIntegers[chordI] = mod(scaleType.pitchIntegers[baseScaleI] - halfStepsToSubtract, 12);
+  }
+
+  return chordPitchIntegers;
+}
+
+export function getDiatonicCanonicalChordType(
+  scaleType: ScaleType,
+  scaleDegree: number,
+  numChordPitches: number
+): CanonicalChordType {
+  return new Set<number>(getDiatonicChordPitchIntegers(scaleType, scaleDegree, numChordPitches));
+}
+
+export function getDiatonicChordType(
+  scaleType: ScaleType,
+  scaleDegree: number,
+  numChordPitches: number
+): ChordType {
+  const chordPitchIntegers = new Set<number>(getDiatonicChordPitchIntegers(scaleType, scaleDegree, numChordPitches));
+  const chordType = ChordType.All.find(chordType =>
+    areSetsEqual(chordPitchIntegers, new Set<number>(chordType.pitchIntegers)));
+  return unwrapValueOrUndefined(chordType);
+}
+
+export function getDiatonicChordTypes(scaleType: ScaleType, numChordPitches: number): Array<ChordType> {
+  precondition(numChordPitches >= 1);
+  precondition(numChordPitches <= getNumPitches(scaleType));
+
+  return scaleType.pitchIntegers
+    .map((_, i) => getDiatonicChordType(scaleType, 1 + i, numChordPitches));
+}
+
+export const scaleTypeLevels = [
+  {
+    name: "Major/Minor",
+    scaleTypes: [
+      ScaleTypes.Ionian,
+      ScaleTypes.Aeolian
+    ]
+  },
+  {
+    name: "More Minor Scales",
+    scaleTypes: [
+      ScaleTypes.Ionian,
+      ScaleTypes.Aeolian,
+      ScaleTypes.MelodicMinor,
+      ScaleTypes.HarmonicMinor
+    ]
+  },
+  {
+    name: "Modes of Major",
+    scaleTypes: MajorScaleModes
+      .concat([
+        ScaleTypes.Aeolian,
+        ScaleTypes.MelodicMinor,
+        ScaleTypes.HarmonicMinor
+      ])
+  },
+  {
+    name: "Modes of Mel. Minor",
+    scaleTypes: MajorScaleModes
+      .concat([
+        ScaleTypes.Aeolian,
+        ScaleTypes.HarmonicMinor
+      ])
+      .concat(MelodicMinorScaleModes)
+  },
+  {
+    name: "Diminished",
+    scaleTypes: MajorScaleModes
+      .concat([
+        ScaleTypes.Aeolian,
+        ScaleTypes.HarmonicMinor
+      ])
+      .concat(MelodicMinorScaleModes)
+      .concat(DiminishedScales)
+  },
+  {
+    name: "Whole Tone/Augmented",
+    scaleTypes: MajorScaleModes
+      .concat([
+        ScaleTypes.Aeolian,
+        ScaleTypes.HarmonicMinor
+      ])
+      .concat(MelodicMinorScaleModes)
+      .concat(DiminishedScales)
+      .concat([
+        ScaleTypes.WholeTone,
+        ScaleTypes.Augmented
+      ])
+  },
+  {
+    name: "All Scales",
+    scaleTypes: AllScaleTypes
+  }
+];
