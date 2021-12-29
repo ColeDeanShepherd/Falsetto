@@ -68,14 +68,14 @@ export function getAccidentalString(signedAccidental: number, useSymbols: boolea
   return getAccidentalStringInternal(signedAccidental, useSymbols ? "♯" : "#", useSymbols ? "♭" : "b");
 }
 
-export function expandPitchRangeToIncludePitch(pitchRange: [PitchName, PitchName], pitch: PitchName): [PitchName, PitchName] {
+export function expandPitchRangeToIncludePitch(pitchRange: [PitchName, PitchName], pitchName: PitchName): [PitchName, PitchName] {
   // If the pitch is lower than the range's min pitch, lower the range's min pitch to the lower pitch.
-  if (getMidiNumber(pitch) < getMidiNumber(pitchRange[0])) {
-    return [pitch, pitchRange[1]];
+  if (getMidiNumber(pitchName) < getMidiNumber(pitchRange[0])) {
+    return [pitchName, pitchRange[1]];
   }
   // If the pitch is higher than the range's max pitch, raise the range's max pitch to the higher pitch.
-  else if (getMidiNumber(pitch) > getMidiNumber(pitchRange[1])) {
-    return [pitchRange[0], pitch];
+  else if (getMidiNumber(pitchName) > getMidiNumber(pitchRange[1])) {
+    return [pitchRange[0], pitchName];
   }
   // If the pitch is already in the range, we don't need to expand the range.
   else {
@@ -88,7 +88,7 @@ export function getNumPitchesInRange(pitchRange: [PitchName, PitchName]): number
 }
 
 export function tryWrapPitchOctave(
-  pitch: PitchName,
+  pitchName: PitchName,
   lowestPitch: PitchName,
   highestPitch: PitchName
 ): PitchName | undefined {
@@ -99,25 +99,25 @@ export function tryWrapPitchOctave(
   const pitchOctaveSpan = Math.ceil(pitchCountInRange / 12);
   
   // If the pitch is below the pitch range, shift it up by octaves until it isn't.
-  if (getMidiNumber(pitch) < lowestPitchMidiNumber) {
+  if (getMidiNumber(pitchName) < lowestPitchMidiNumber) {
     // TODO: optimize
     do {
-      pitch = addOctaves(pitch, pitchOctaveSpan);
-    } while (getMidiNumber(pitch) < lowestPitchMidiNumber);
+      pitchName = addOctaves(pitchName, pitchOctaveSpan);
+    } while (getMidiNumber(pitchName) < lowestPitchMidiNumber);
   }
   // Otherwise, if the pitch is above the pitch range, shift it down by octaves until it isn't.
-  else if (getMidiNumber(pitch) > highestPitchMidiNumber) {
+  else if (getMidiNumber(pitchName) > highestPitchMidiNumber) {
     // TODO: optimize
     do {
-      pitch = addOctaves(pitch, -pitchOctaveSpan);
-    } while (getMidiNumber(pitch) > highestPitchMidiNumber);
+      pitchName = addOctaves(pitchName, -pitchOctaveSpan);
+    } while (getMidiNumber(pitchName) > highestPitchMidiNumber);
   }
 
   // If the pitch is in range now, return it. Otherwise, return undefined.
-  const pitchMidiNumber = getMidiNumber(pitch);
+  const pitchMidiNumber = getMidiNumber(pitchName);
 
   return ((pitchMidiNumber >= lowestPitchMidiNumber) && (pitchMidiNumber <= highestPitchMidiNumber))
-    ? pitch
+    ? pitchName
     : undefined;
 }
 
@@ -150,8 +150,8 @@ export function getEnglishAccidentalString(signedAccidental: number): string {
   return getAccidentalStringInternal(signedAccidental, "sharp", "flat");
 }
 
-export function getUriComponent(pitch: PitchName, includeOctaveNumber: boolean = false): string {
-  return PitchLetter[pitch.letter] + getEnglishAccidentalString(pitch.signedAccidental) + (includeOctaveNumber ? pitch.octaveNumber.toString() : "");
+export function getUriComponent(pitchName: PitchName, includeOctaveNumber: boolean = false): string {
+  return PitchLetter[pitchName.letter] + getEnglishAccidentalString(pitchName.signedAccidental) + (includeOctaveNumber ? pitchName.octaveNumber.toString() : "");
 }
 
 export function parseFromUriComponent(uriComponent: string, octaveNumber: number): PitchName | undefined {
@@ -242,14 +242,14 @@ export function parseNoOctave(str: string, octaveNumber: number): PitchName | un
   return { letter: pitchLetter, signedAccidental, octaveNumber };
 }
 
-export function addPitchLetters(pitch: PitchName, pitchLetterOffset: number): PitchName {
+export function addPitchLetters(pitchName: PitchName, pitchLetterOffset: number): PitchName {
   return createPitchNameFromLineOrSpaceOnStaffNumber(
-    getLineOrSpaceOnStaffNumber(pitch) + pitchLetterOffset,
-    pitch.signedAccidental
+    getLineOrSpaceOnStaffNumber(pitchName) + pitchLetterOffset,
+    pitchName.signedAccidental
   );
 }
 
-export function isInRange(pitch: PitchName, minPitch?: PitchName, maxPitch?: PitchName): boolean {
+export function isInRange(pitchName: PitchName, minPitch?: PitchName, maxPitch?: PitchName): boolean {
   const minPitchMidiNumber = minPitch ? getMidiNumber(minPitch) : undefined;
   const maxPitchMidiNumber = maxPitch ? getMidiNumber(maxPitch) : undefined;
 
@@ -259,7 +259,7 @@ export function isInRange(pitch: PitchName, minPitch?: PitchName, maxPitch?: Pit
     (minPitchMidiNumber <= maxPitchMidiNumber)
   );
 
-  const pitchMidiNumber = getMidiNumber(pitch);
+  const pitchMidiNumber = getMidiNumber(pitchName);
 
   if (minPitchMidiNumber && (pitchMidiNumber < minPitchMidiNumber)) {
     return false;
@@ -272,23 +272,23 @@ export function isInRange(pitch: PitchName, minPitch?: PitchName, maxPitch?: Pit
   return true;
 }
 
-export function addHalfSteps(pitch: PitchName, numHalfSteps: number): PitchName {
-  return createPitchNameFromMidiNumber(getMidiNumber(pitch) + numHalfSteps);
+export function addHalfSteps(pitchName: PitchName, numHalfSteps: number): PitchName {
+  return createPitchNameFromMidiNumber(getMidiNumber(pitchName) + numHalfSteps);
 }
 
 export function addInterval(
-  pitch: PitchName,
+  pitchName: PitchName,
   direction: VerticalDirection,
   interval: Interval
 ): PitchName {
   const offsetSign = direction as number;
   
   const halfStepsOffset = offsetSign * interval.halfSteps;
-  const newMidiNumber = getMidiNumber(pitch) + halfStepsOffset;
+  const newMidiNumber = getMidiNumber(pitchName) + halfStepsOffset;
 
   const result = createPitchNameFromLineOrSpaceOnStaffNumber(
-    getLineOrSpaceOnStaffNumber(pitch) + (offsetSign * (interval.type - 1)),
-    pitch.signedAccidental
+    getLineOrSpaceOnStaffNumber(pitchName) + (offsetSign * (interval.type - 1)),
+    pitchName.signedAccidental
   );
   result.signedAccidental += newMidiNumber - getMidiNumber(result);
 
@@ -296,12 +296,12 @@ export function addInterval(
 }
 
 export function addOctaves(
-  pitch: PitchName, octaves: number
+  pitchName: PitchName, octaves: number
 ): PitchName {
   return {
-    letter: pitch.letter,
-    signedAccidental: pitch.signedAccidental,
-    octaveNumber: pitch.octaveNumber + octaves
+    letter: pitchName.letter,
+    signedAccidental: pitchName.signedAccidental,
+    octaveNumber: pitchName.octaveNumber + octaves
   };
 }
 
@@ -345,23 +345,23 @@ export function getIsBlackKey(pitchName: PitchName): boolean {
   return !getIsWhiteKey(pitchName);
 }
 
-export function equals(pitchName: PitchName, pitch: PitchName): boolean {
+export function equals(pitchName: PitchName, other: PitchName): boolean {
   return (
-    (pitchName.letter === pitch.letter) &&
-    (pitchName.signedAccidental === pitch.signedAccidental) &&
-    (pitchName.octaveNumber === pitch.octaveNumber)
+    (pitchName.letter === other.letter) &&
+    (pitchName.signedAccidental === other.signedAccidental) &&
+    (pitchName.octaveNumber === other.octaveNumber)
   );
 }
 
-export function equalsNoOctave(pitchName: PitchName, pitch: PitchName): boolean {
+export function equalsNoOctave(pitchName: PitchName, other: PitchName): boolean {
   return (
-    (pitchName.letter === pitch.letter) &&
-    (pitchName.signedAccidental === pitch.signedAccidental)
+    (pitchName.letter === other.letter) &&
+    (pitchName.signedAccidental === other.signedAccidental)
   );
 }
 
-export function isEnharmonic(pitchName: PitchName, pitch: PitchName): boolean {
-  return getMidiNumber(pitchName) === getMidiNumber(pitch);
+export function isEnharmonic(pitchName: PitchName, other: PitchName): boolean {
+  return getMidiNumber(pitchName) === getMidiNumber(other);
 }
 
 export function toString(pitchName: PitchName, includeOctaveNumber: boolean = true, useSymbols: boolean = false): string {
