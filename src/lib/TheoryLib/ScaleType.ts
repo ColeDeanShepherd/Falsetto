@@ -10,6 +10,13 @@ import { Interval } from "./Interval";
 import { PitchClass } from "./PitchClass";
 import { getModePitchIntegers } from "./Scale";
 
+export interface ScaleType {
+  id: string;
+  name: string;
+  formula: ChordScaleFormula;
+  pitchIntegers: Array<number>;
+}
+
 export interface ScaleTypeGroup {
   name: string;
   scaleTypes: Array<ScaleType>;
@@ -308,6 +315,8 @@ export const ScaleTypes = {
   } as ScaleType,
 };
 
+// #region Grouped Modes
+
 export const MajorScaleModes: Array<ScaleType> = [
   ScaleTypes.Ionian,
   ScaleTypes.Dorian,
@@ -388,12 +397,73 @@ export const AllScaleTypes = flattenArrays<ScaleType>(
   ScaleTypeGroups.map(st => st.scaleTypes)
 );
 
-export interface ScaleType {
-  id: string;
-  name: string;
-  formula: ChordScaleFormula;
-  pitchIntegers: Array<number>;
-}
+// #endregion Grouped Modes
+
+
+export const scaleTypeLevels = [
+  {
+    name: "Major/Minor",
+    scaleTypes: [
+      ScaleTypes.Ionian,
+      ScaleTypes.Aeolian
+    ]
+  },
+  {
+    name: "More Minor Scales",
+    scaleTypes: [
+      ScaleTypes.Ionian,
+      ScaleTypes.Aeolian,
+      ScaleTypes.MelodicMinor,
+      ScaleTypes.HarmonicMinor
+    ]
+  },
+  {
+    name: "Modes of Major",
+    scaleTypes: MajorScaleModes
+      .concat([
+        ScaleTypes.Aeolian,
+        ScaleTypes.MelodicMinor,
+        ScaleTypes.HarmonicMinor
+      ])
+  },
+  {
+    name: "Modes of Mel. Minor",
+    scaleTypes: MajorScaleModes
+      .concat([
+        ScaleTypes.Aeolian,
+        ScaleTypes.HarmonicMinor
+      ])
+      .concat(MelodicMinorScaleModes)
+  },
+  {
+    name: "Diminished",
+    scaleTypes: MajorScaleModes
+      .concat([
+        ScaleTypes.Aeolian,
+        ScaleTypes.HarmonicMinor
+      ])
+      .concat(MelodicMinorScaleModes)
+      .concat(DiminishedScales)
+  },
+  {
+    name: "Whole Tone/Augmented",
+    scaleTypes: MajorScaleModes
+      .concat([
+        ScaleTypes.Aeolian,
+        ScaleTypes.HarmonicMinor
+      ])
+      .concat(MelodicMinorScaleModes)
+      .concat(DiminishedScales)
+      .concat([
+        ScaleTypes.WholeTone,
+        ScaleTypes.Augmented
+      ])
+  },
+  {
+    name: "All Scales",
+    scaleTypes: AllScaleTypes
+  }
+];
 
 export function getNumPitches(scaleType: ScaleType): number {
   return scaleType.pitchIntegers.length;
@@ -499,68 +569,3 @@ export function getDiatonicChordTypes(scaleType: ScaleType, numChordPitches: num
   return scaleType.pitchIntegers
     .map((_, i) => getDiatonicChordType(scaleType, 1 + i, numChordPitches));
 }
-
-export const scaleTypeLevels = [
-  {
-    name: "Major/Minor",
-    scaleTypes: [
-      ScaleTypes.Ionian,
-      ScaleTypes.Aeolian
-    ]
-  },
-  {
-    name: "More Minor Scales",
-    scaleTypes: [
-      ScaleTypes.Ionian,
-      ScaleTypes.Aeolian,
-      ScaleTypes.MelodicMinor,
-      ScaleTypes.HarmonicMinor
-    ]
-  },
-  {
-    name: "Modes of Major",
-    scaleTypes: MajorScaleModes
-      .concat([
-        ScaleTypes.Aeolian,
-        ScaleTypes.MelodicMinor,
-        ScaleTypes.HarmonicMinor
-      ])
-  },
-  {
-    name: "Modes of Mel. Minor",
-    scaleTypes: MajorScaleModes
-      .concat([
-        ScaleTypes.Aeolian,
-        ScaleTypes.HarmonicMinor
-      ])
-      .concat(MelodicMinorScaleModes)
-  },
-  {
-    name: "Diminished",
-    scaleTypes: MajorScaleModes
-      .concat([
-        ScaleTypes.Aeolian,
-        ScaleTypes.HarmonicMinor
-      ])
-      .concat(MelodicMinorScaleModes)
-      .concat(DiminishedScales)
-  },
-  {
-    name: "Whole Tone/Augmented",
-    scaleTypes: MajorScaleModes
-      .concat([
-        ScaleTypes.Aeolian,
-        ScaleTypes.HarmonicMinor
-      ])
-      .concat(MelodicMinorScaleModes)
-      .concat(DiminishedScales)
-      .concat([
-        ScaleTypes.WholeTone,
-        ScaleTypes.Augmented
-      ])
-  },
-  {
-    name: "All Scales",
-    scaleTypes: AllScaleTypes
-  }
-];
