@@ -2,10 +2,10 @@ import { Pitch } from './Pitch';
 import { mod } from '../Core/MathUtils';
 import { precondition, invariant } from '../Core/Dbc';
 
-export class Interval {
-  public static readonly upDirectionSymbol = "↑";
-  public static readonly downDirectionSymbol = "↓";
+export const upDirectionSymbol = "↑";
+export const downDirectionSymbol = "↓";
 
+export class Interval {
   public static fromPitches(
     pitch1: Pitch,
     pitch2: Pitch
@@ -110,33 +110,6 @@ export class Interval {
   }
 
   // TODO: add tests
-  public get qualityString(): string {
-    switch (this.simpleIntervalType) {
-      case 1:
-      case 4:
-      case 5:
-      case 8:
-        if (this.quality === 0) {
-          return "P";
-        } else if (this.quality > 0) {
-          return "A".repeat(this.quality);
-        } else { // this.quality < 0
-          return "d".repeat(-this.quality);
-        }
-      default:
-        if (this.quality === 0) {
-          return "M";
-        } else if (this.quality >= 1) {
-          return "A".repeat(this.quality - 1);
-        } else if (this.quality === -1) {
-          return "m";
-        } else { // this.quality <= -2
-          return "d".repeat(-(this.quality + 1));
-        }
-    }
-  }
-
-  // TODO: add tests
   public get invertedSimple(): Interval {
     const simpleIntervalType = this.simpleIntervalType;
     if ((simpleIntervalType === 1) || (simpleIntervalType === 8)) {
@@ -154,76 +127,5 @@ export class Interval {
   }
   public toString(): string {
     return `${this.qualityString}${this.type}`;
-  }
-}
-
-export function intervalQualityStringToNumber(intervalQualityString: string): number {
-  switch (intervalQualityString) {
-    case "P":
-    case "M":
-      return 0;
-    case "m":
-    case "d":
-      return -1;
-    case "A":
-      return 1;
-    default:
-      throw new Error(`Unknown interval quality: ${intervalQualityString}`);
-  }
-}
-
-export function createIntervalLevels(includeUnison: boolean, separateA4D5: boolean) {
-  const unisonIntervalStrings = includeUnison ? ["P1"] : [];
-  const tritoneIntervalStrings = separateA4D5 ? ["A4", "d5"] : ["A4/d5"];
-
-  return [
-    {
-      name: "Perfect Intervals",
-      intervalStrings: unisonIntervalStrings
-        .concat(["P4", "P5", "P8"])
-    },
-    {
-      name: "m2, A4/d5, M7",
-      intervalStrings: unisonIntervalStrings
-        .concat(["m2", "P4"])
-        .concat(tritoneIntervalStrings)
-        .concat(["P5", "M7", "P8"])
-    },
-    {
-      name: "M2, m7",
-      intervalStrings: unisonIntervalStrings
-        .concat(["m2", "M2", "P4"])
-        .concat(tritoneIntervalStrings)
-        .concat(["P5", "m7", "M7", "P8"])
-    },
-    {
-      name: "3rds",
-      intervalStrings: unisonIntervalStrings
-        .concat(["m2", "M2", "m3", "M3", "P4"])
-        .concat(tritoneIntervalStrings)
-        .concat(["P5", "m7", "M7", "P8"])
-    },
-    {
-      name: "6ths (All Intervals)",
-      intervalStrings: unisonIntervalStrings
-      .concat(["m2", "M2", "m3", "M3", "P4"])
-      .concat(tritoneIntervalStrings)
-      .concat(["P5", "m6", "M6", "m7", "M7", "P8"])
-    }
-  ];
-}
-
-export function intervalQualityToNumber(intervalQuality: string): number {
-  switch (intervalQuality) {
-    case "P":
-    case "M":
-      return 0;
-    case "m":
-    case "d":
-      return -1;
-    case "A":
-      return 1;
-    default:
-      throw new Error(`Unknown interval quality: ${intervalQuality}`);
   }
 }

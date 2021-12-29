@@ -7,28 +7,28 @@ import { numMatchingCharsAtStart, numSubstringOccurrences } from '../Core/String
 import { parseSignedAccidental, PitchClassName } from './PitchClassName';
 import { parseEnglishSignedAccidental, PitchClass } from './PitchClass';
 
-export function pitchClassNameToPitch(pitchClassName: PitchClassName, octaveNumber: number): Pitch {
-  return new Pitch(pitchClassName.letter, pitchClassName.signedAccidental, octaveNumber);
+export function pitchClassNameToPitch(pitchClassName: PitchClassName, octaveNumber: number): PitchName {
+  return new PitchName(pitchClassName.letter, pitchClassName.signedAccidental, octaveNumber);
 }
 
-export function* getPitchesInRange(minPitch: Pitch, maxPitch: Pitch) {
+export function* getPitchesInRange(minPitch: PitchName, maxPitch: PitchName) {
   const minMidiNumber = minPitch.midiNumber;
   const maxMidiNumber = maxPitch.midiNumber;
 
   for (let midiNumber = minMidiNumber; midiNumber <= maxMidiNumber; midiNumber++) {
-    yield Pitch.createFromMidiNumber(midiNumber);
+    yield PitchName.createFromMidiNumber(midiNumber);
   }
 }
 
 export function getAmbiguousPitchRange(
-  minPitch: Pitch, maxPitch: Pitch,
+  minPitch: PitchName, maxPitch: PitchName,
   minSignedAccidental: number, maxSignedAccidental: number
-): Array<Pitch> {
+): Array<PitchName> {
   precondition(minSignedAccidental <= maxSignedAccidental);
 
   const minLineOrSpaceOnStaffNumber = minPitch.lineOrSpaceOnStaffNumber;
   const maxLineOrSpaceOnStaffNumber = maxPitch.lineOrSpaceOnStaffNumber;
-  const possibleNotes = new Array<Pitch>();
+  const possibleNotes = new Array<PitchName>();
 
   for (
     let lineOrSpaceOnStaffNumber = minLineOrSpaceOnStaffNumber;
@@ -40,7 +40,7 @@ export function getAmbiguousPitchRange(
       signedAccidental <= maxSignedAccidental;
       signedAccidental++
     ) {
-      possibleNotes.push(Pitch.createFromLineOrSpaceOnStaffNumber(
+      possibleNotes.push(PitchName.createFromLineOrSpaceOnStaffNumber(
         lineOrSpaceOnStaffNumber,
         signedAccidental
       ));
@@ -65,7 +65,7 @@ export function getAccidentalString(signedAccidental: number, useSymbols: boolea
   return getAccidentalStringInternal(signedAccidental, useSymbols ? "♯" : "#", useSymbols ? "♭" : "b");
 }
 
-export function expandPitchRangeToIncludePitch(pitchRange: [Pitch, Pitch], pitch: Pitch): [Pitch, Pitch] {
+export function expandPitchRangeToIncludePitch(pitchRange: [PitchName, PitchName], pitch: PitchName): [PitchName, PitchName] {
   // If the pitch is lower than the range's min pitch, lower the range's min pitch to the lower pitch.
   if (pitch.midiNumber < pitchRange[0].midiNumber) {
     return [pitch, pitchRange[1]];
@@ -80,15 +80,15 @@ export function expandPitchRangeToIncludePitch(pitchRange: [Pitch, Pitch], pitch
   }
 }
 
-export function getNumPitchesInRange(pitchRange: [Pitch, Pitch]): number {
+export function getNumPitchesInRange(pitchRange: [PitchName, PitchName]): number {
   return pitchRange[1].midiNumber - pitchRange[0].midiNumber + 1;
 }
 
 export function tryWrapPitchOctave(
-  pitch: Pitch,
-  lowestPitch: Pitch,
-  highestPitch: Pitch
-): Pitch | undefined {
+  pitch: PitchName,
+  lowestPitch: PitchName,
+  highestPitch: PitchName
+): PitchName | undefined {
   const lowestPitchMidiNumber = lowestPitch.midiNumber;
   const highestPitchMidiNumber = highestPitch.midiNumber;
   
@@ -99,14 +99,14 @@ export function tryWrapPitchOctave(
   if (pitch.midiNumber < lowestPitchMidiNumber) {
     // TODO: optimize
     do {
-      pitch = Pitch.addOctaves(pitch, pitchOctaveSpan);
+      pitch = PitchName.addOctaves(pitch, pitchOctaveSpan);
     } while (pitch.midiNumber < lowestPitchMidiNumber);
   }
   // Otherwise, if the pitch is above the pitch range, shift it down by octaves until it isn't.
   else if (pitch.midiNumber > highestPitchMidiNumber) {
     // TODO: optimize
     do {
-      pitch = Pitch.addOctaves(pitch, -pitchOctaveSpan);
+      pitch = PitchName.addOctaves(pitch, -pitchOctaveSpan);
     } while (pitch.midiNumber > highestPitchMidiNumber);
   }
 
@@ -147,11 +147,11 @@ export function getEnglishAccidentalString(signedAccidental: number): string {
   return getAccidentalStringInternal(signedAccidental, "sharp", "flat");
 }
 
-export function getUriComponent(pitch: Pitch, includeOctaveNumber: boolean = false): string {
+export function getUriComponent(pitch: PitchName, includeOctaveNumber: boolean = false): string {
   return PitchLetter[pitch.letter] + getEnglishAccidentalString(pitch.signedAccidental) + (includeOctaveNumber ? pitch.octaveNumber.toString() : "");
 }
 
-export function parseFromUriComponent(uriComponent: string, octaveNumber: number): Pitch | undefined {
+export function parseFromUriComponent(uriComponent: string, octaveNumber: number): PitchName | undefined {
   const pitchLetter = parsePitchLetter(uriComponent);
   if (pitchLetter === undefined) { return undefined; }
 
@@ -159,14 +159,14 @@ export function parseFromUriComponent(uriComponent: string, octaveNumber: number
   const signedAccidental = parseEnglishSignedAccidental(signedAccidentalStr);
   if (signedAccidental === undefined) { return undefined; }
 
-  return new Pitch(pitchLetter, signedAccidental, octaveNumber);
+  return new PitchName(pitchLetter, signedAccidental, octaveNumber);
 }
 
-export function isPitchLessThan(a: Pitch, b: Pitch): boolean {
+export function isPitchLessThan(a: PitchName, b: PitchName): boolean {
   return a.midiNumber < b.midiNumber;
 }
 
-export function isPitchGreaterThan(a: Pitch, b: Pitch): boolean {
+export function isPitchGreaterThan(a: PitchName, b: PitchName): boolean {
   return a.midiNumber > b.midiNumber;
 }
 
@@ -174,52 +174,52 @@ export function areMidiNumbersSamePitchClass(a: number, b: number): boolean {
   return (Math.abs(a - b)) % 12 === 0
 }
 
-export class Pitch {
-  public static createFromPitchClass(pitchClass: number, octaveNumber: number, useSharps: boolean = true): Pitch {
+export class PitchName {
+  public static createFromPitchClass(pitchClass: number, octaveNumber: number, useSharps: boolean = true): PitchName {
     switch (pitchClass) {
       case 0:
-        return new Pitch(PitchLetter.C, 0, octaveNumber);
+        return new PitchName(PitchLetter.C, 0, octaveNumber);
       case 1:
-        return useSharps ? new Pitch(PitchLetter.C, 1, octaveNumber) : new Pitch(PitchLetter.D, -1, octaveNumber);
+        return useSharps ? new PitchName(PitchLetter.C, 1, octaveNumber) : new PitchName(PitchLetter.D, -1, octaveNumber);
       case 2:
-        return new Pitch(PitchLetter.D, 0, octaveNumber);
+        return new PitchName(PitchLetter.D, 0, octaveNumber);
       case 3:
-        return useSharps ? new Pitch(PitchLetter.D, 1, octaveNumber) : new Pitch(PitchLetter.E, -1, octaveNumber);
+        return useSharps ? new PitchName(PitchLetter.D, 1, octaveNumber) : new PitchName(PitchLetter.E, -1, octaveNumber);
       case 4:
-        return new Pitch(PitchLetter.E, 0, octaveNumber);
+        return new PitchName(PitchLetter.E, 0, octaveNumber);
       case 5:
-        return new Pitch(PitchLetter.F, 0, octaveNumber);
+        return new PitchName(PitchLetter.F, 0, octaveNumber);
       case 6:
-        return useSharps ? new Pitch(PitchLetter.F, 1, octaveNumber) : new Pitch(PitchLetter.G, -1, octaveNumber);
+        return useSharps ? new PitchName(PitchLetter.F, 1, octaveNumber) : new PitchName(PitchLetter.G, -1, octaveNumber);
       case 7:
-        return new Pitch(PitchLetter.G, 0, octaveNumber);
+        return new PitchName(PitchLetter.G, 0, octaveNumber);
       case 8:
-        return useSharps ? new Pitch(PitchLetter.G, 1, octaveNumber) : new Pitch(PitchLetter.A, -1, octaveNumber);
+        return useSharps ? new PitchName(PitchLetter.G, 1, octaveNumber) : new PitchName(PitchLetter.A, -1, octaveNumber);
       case 9:
-        return new Pitch(PitchLetter.A, 0, octaveNumber);
+        return new PitchName(PitchLetter.A, 0, octaveNumber);
       case 10:
-        return useSharps ? new Pitch(PitchLetter.A, 1, octaveNumber) : new Pitch(PitchLetter.B, -1, octaveNumber);
+        return useSharps ? new PitchName(PitchLetter.A, 1, octaveNumber) : new PitchName(PitchLetter.B, -1, octaveNumber);
       case 11:
-        return new Pitch(PitchLetter.B, 0, octaveNumber);
+        return new PitchName(PitchLetter.B, 0, octaveNumber);
       default:
         throw new Error(`Invalid pitch class: ${pitchClass}`);
     }
   }
 
-  public static createFromMidiNumber(midiNumber: number, useSharps: boolean = true): Pitch {
+  public static createFromMidiNumber(midiNumber: number, useSharps: boolean = true): PitchName {
     const pitchClass = mod(midiNumber, 12);
     const octaveNumber = Math.floor(midiNumber / 12) - 1;
     return this.createFromPitchClass(pitchClass, octaveNumber, useSharps);
   }
   
-  public static createFromLineOrSpaceOnStaffNumber(lineOrSpaceOnStaffNumber: number, signedAccidental: number): Pitch {
+  public static createFromLineOrSpaceOnStaffNumber(lineOrSpaceOnStaffNumber: number, signedAccidental: number): PitchName {
     const letter = mod(lineOrSpaceOnStaffNumber + 2, 7) as PitchLetter;
     const octaveNumber = Math.floor(lineOrSpaceOnStaffNumber / 7);
-    return new Pitch(letter, signedAccidental, octaveNumber);
+    return new PitchName(letter, signedAccidental, octaveNumber);
   }
 
   // TODO: remove
-  public static parseNoOctave(str: string, octaveNumber: number): Pitch | undefined {
+  public static parseNoOctave(str: string, octaveNumber: number): PitchName | undefined {
     const pitchLetter = parsePitchLetter(str);
     if (pitchLetter === undefined) { return undefined; }
 
@@ -227,17 +227,17 @@ export class Pitch {
     const signedAccidental = parseSignedAccidental(signedAccidentalStr);
     if (signedAccidental === undefined) { return undefined; }
 
-    return new Pitch(pitchLetter, signedAccidental, octaveNumber);
+    return new PitchName(pitchLetter, signedAccidental, octaveNumber);
   }
 
-  public static addPitchLetters(pitch: Pitch, pitchLetterOffset: number): Pitch {
-    return Pitch.createFromLineOrSpaceOnStaffNumber(
+  public static addPitchLetters(pitch: PitchName, pitchLetterOffset: number): PitchName {
+    return PitchName.createFromLineOrSpaceOnStaffNumber(
       pitch.lineOrSpaceOnStaffNumber + pitchLetterOffset,
       pitch.signedAccidental
     );
   }
 
-  public static isInRange(pitch: Pitch, minPitch?: Pitch, maxPitch?: Pitch): boolean {
+  public static isInRange(pitch: PitchName, minPitch?: PitchName, maxPitch?: PitchName): boolean {
     const minPitchMidiNumber = minPitch ? minPitch.midiNumber : undefined;
     const maxPitchMidiNumber = maxPitch ? maxPitch.midiNumber : undefined;
 
@@ -260,21 +260,21 @@ export class Pitch {
     return true;
   }
 
-  public static addHalfSteps(pitch: Pitch, numHalfSteps: number): Pitch {
+  public static addHalfSteps(pitch: PitchName, numHalfSteps: number): PitchName {
     return this.createFromMidiNumber(pitch.midiNumber + numHalfSteps);
   }
 
   public static addInterval(
-    pitch: Pitch,
+    pitch: PitchName,
     direction: VerticalDirection,
     interval: Interval
-  ): Pitch {
+  ): PitchName {
     const offsetSign = direction as number;
     
     const halfStepsOffset = offsetSign * interval.halfSteps;
     const newMidiNumber = pitch.midiNumber + halfStepsOffset;
 
-    const result = Pitch.createFromLineOrSpaceOnStaffNumber(
+    const result = PitchName.createFromLineOrSpaceOnStaffNumber(
       pitch.lineOrSpaceOnStaffNumber + (offsetSign * (interval.type - 1)),
       pitch.signedAccidental
     );
@@ -284,16 +284,16 @@ export class Pitch {
   }
 
   public static addOctaves(
-    pitch: Pitch, octaves: number
-  ): Pitch {
-    return new Pitch(pitch.letter, pitch.signedAccidental, pitch.octaveNumber + octaves);
+    pitch: PitchName, octaves: number
+  ): PitchName {
+    return new PitchName(pitch.letter, pitch.signedAccidental, pitch.octaveNumber + octaves);
   }
 
-  public static min(a: Pitch, b: Pitch): Pitch {
+  public static min(a: PitchName, b: PitchName): PitchName {
     return (a.midiNumber <= b.midiNumber) ? a : b;
   }
 
-  public static max(a: Pitch, b: Pitch): Pitch {
+  public static max(a: PitchName, b: PitchName): PitchName {
     return (a.midiNumber >= b.midiNumber) ? a : b;
   }
 
@@ -335,7 +335,7 @@ export class Pitch {
     return !this.isWhiteKey;
   }
   
-  public equals(pitch: Pitch): boolean {
+  public equals(pitch: PitchName): boolean {
     return (
       (this.letter === pitch.letter) &&
       (this.signedAccidental === pitch.signedAccidental) &&
@@ -343,18 +343,18 @@ export class Pitch {
     );
   }
 
-  public equalsNoOctave(pitch: Pitch): boolean {
+  public equalsNoOctave(pitch: PitchName): boolean {
     return (
       (this.letter === pitch.letter) &&
       (this.signedAccidental === pitch.signedAccidental)
     );
   }
 
-  public copy(): Pitch {
-    return new Pitch(this.letter, this.signedAccidental, this.octaveNumber);
+  public copy(): PitchName {
+    return new PitchName(this.letter, this.signedAccidental, this.octaveNumber);
   }
 
-  public isEnharmonic(pitch: Pitch): boolean {
+  public isEnharmonic(pitch: PitchName): boolean {
     return this.midiNumber === pitch.midiNumber;
   }
 
