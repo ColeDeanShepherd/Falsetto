@@ -6,21 +6,12 @@ import { mod } from '../Core/MathUtils';
 import { parseSignedAccidental, PitchClassName } from './PitchClassName';
 import { parseEnglishSignedAccidental, PitchClass } from './PitchClass';
 
-export function pitchClassNameToPitch(pitchClassName: PitchClassName, octaveNumber: number): PitchName {
+export function pitchClassNameToPitchName(pitchClassName: PitchClassName, octaveNumber: number): PitchName {
   return {
     letter: pitchClassName.letter,
     signedAccidental: pitchClassName.signedAccidental,
     octaveNumber
   };
-}
-
-export function* getPitchesInRange(minPitch: PitchName, maxPitch: PitchName) {
-  const minMidiNumber = getMidiNumber(minPitch);
-  const maxMidiNumber = getMidiNumber(maxPitch);
-
-  for (let midiNumber = minMidiNumber; midiNumber <= maxMidiNumber; midiNumber++) {
-    yield createPitchNameFromMidiNumber(midiNumber);
-  }
 }
 
 export function getAmbiguousPitchRange(
@@ -66,25 +57,6 @@ function getAccidentalStringInternal(signedAccidental: number, sharpText: string
 
 export function getAccidentalString(signedAccidental: number, useSymbols: boolean = false): string {
   return getAccidentalStringInternal(signedAccidental, useSymbols ? "♯" : "#", useSymbols ? "♭" : "b");
-}
-
-export function expandPitchRangeToIncludePitch(pitchRange: [PitchName, PitchName], pitchName: PitchName): [PitchName, PitchName] {
-  // If the pitch is lower than the range's min pitch, lower the range's min pitch to the lower pitch.
-  if (getMidiNumber(pitchName) < getMidiNumber(pitchRange[0])) {
-    return [pitchName, pitchRange[1]];
-  }
-  // If the pitch is higher than the range's max pitch, raise the range's max pitch to the higher pitch.
-  else if (getMidiNumber(pitchName) > getMidiNumber(pitchRange[1])) {
-    return [pitchRange[0], pitchName];
-  }
-  // If the pitch is already in the range, we don't need to expand the range.
-  else {
-    return pitchRange;
-  }
-}
-
-export function getNumPitchesInRange(pitchRange: [PitchName, PitchName]): number {
-  return getMidiNumber(pitchRange[1]) - getMidiNumber(pitchRange[0]) + 1;
 }
 
 export function tryWrapPitchOctave(
