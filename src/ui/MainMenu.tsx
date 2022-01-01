@@ -120,6 +120,7 @@ export const MainMenu : React.FunctionComponent<{ collapseCategories: boolean }>
       <NavLinkView to="/metronome">Metronome</NavLinkView>
       <NavLinkView to="/tuner">Tuner</NavLinkView>
       <NavLinkView to={RandomChordGenerator.flashCardSet.route}>{RandomChordGenerator.flashCardSet.name}</NavLinkView>
+      <NavLinkView to={'/random-scale-generator'}>Random Scale Generator</NavLinkView>
     </MenuCategory>
   );
 

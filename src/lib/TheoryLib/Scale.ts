@@ -197,6 +197,15 @@ export class ScaleType {
     ScaleType.TonicDiminished,
     ScaleType.DominantDiminished
   ];
+  public static BluesScales = [
+    ScaleType.MajorBlues,
+    ScaleType.MinorBlues
+  ];
+  public static OtherScales = [
+    ScaleType.WholeTone,
+    ScaleType.Augmented,
+    ScaleType.Chromatic
+  ];
   public static Groups = [
     new ScaleTypeGroup("Major Scale Modes", ScaleType.MajorScaleModes),
     new ScaleTypeGroup("Melodic Minor Scale Modes", ScaleType.MelodicMinorScaleModes),
@@ -205,17 +214,8 @@ export class ScaleType {
     new ScaleTypeGroup("Double Harmonic Major Scale Modes", ScaleType.DoubleHarmonicMajorScaleModes),
     new ScaleTypeGroup("Diminished Scales", ScaleType.DiminishedScales),
     new ScaleTypeGroup("Major Pentatonic Scale Modes", ScaleType.MajorPentatonicScaleModes),
-    new ScaleTypeGroup("Blues Scales", [
-        ScaleType.MajorBlues,
-        ScaleType.MinorBlues
-      ]
-    ),
-    new ScaleTypeGroup("Other Scales", [
-        ScaleType.WholeTone,
-        ScaleType.Augmented,
-        ScaleType.Chromatic
-      ]
-    )
+    new ScaleTypeGroup("Blues Scales", ScaleType.BluesScales),
+    new ScaleTypeGroup("Other Scales", ScaleType.OtherScales)
   ];
   public static All = flattenArrays<ScaleType>(
     ScaleType.Groups.map(st => st.scaleTypes)

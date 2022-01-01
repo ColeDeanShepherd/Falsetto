@@ -7,7 +7,7 @@ import { Card } from "../../ui/Card/Card";
 import { Button } from "../../ui/Button/Button";
 import { Howl } from "howler";
 
-const clickAudioPath = "/audio/metronome_click.wav";
+export const metronomeClickAudioPath = "/audio/metronome_click.wav";
 
 export function getBeatIntervalS(bpm: number): number {
   const bps = bpm / 60;
@@ -173,7 +173,7 @@ export class Metronome extends React.Component<IMetronomeProps, IMetronomeState>
   }
   private play() {
     if (!this.clickSound) {
-      Audio.loadSoundAsync(clickAudioPath)
+      Audio.loadSoundAsync(metronomeClickAudioPath)
         .then(clickSound => {
           this.clickSound = clickSound;
           this.playAfterSoundsLoaded();

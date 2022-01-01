@@ -64,6 +64,7 @@ import { understandingThePianoKeyboardProduct } from '../../Products';
 import { tryParseIntFromAny } from '../../lib/Core/Utils';
 import { CheckoutSuccessPage } from '../CheckoutSuccessPage';
 import { CheckoutCancelledPage } from '../CheckoutCancelledPage';
+import { RandomScaleGenerator } from "../Tools/RandomScaleGenerator";
 
 export interface IRouteData {
   key?: string;
@@ -516,6 +517,15 @@ const routes: Array<IRouteData> = ([
     renderFn: () => (
       <LimitedWidthContentContainer>
         <GuitarScalesLesson />
+      </LimitedWidthContentContainer>
+    )
+  },
+  {
+    path: "/random-scale-generator",
+    title: "Random Scale Generator - Falsetto",
+    renderFn: () => (
+      <LimitedWidthContentContainer>
+        <RandomScaleGenerator />
       </LimitedWidthContentContainer>
     )
   },
