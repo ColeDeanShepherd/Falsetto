@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Select, MenuItem } from '@material-ui/core';
-import { WebMidi } from "webmidi";
+import WebMidi from "webmidi";
 
 import { AppModel } from '../../App/Model';
 import { ActionHandler, ActionBus } from '../../ActionBus';

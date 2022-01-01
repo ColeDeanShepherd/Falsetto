@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Checkbox } from "@material-ui/core";
-import Vex from "vexflow";
+import * as Vex from "vexflow";
 
 import * as FlashCardUtils from "../Utils";
 import { VexFlowComponent } from "../../Utils/VexFlowComponent";

@@ -71,7 +71,7 @@ export class GuitarChordsFlashCardMultiSelect extends React.Component<IGuitarCho
     );
 
     return (
-      <Grid container spacing={10}>
+      <Grid container spacing={32}>
         <Grid item xs={12}>{chordTypeCheckboxes}</Grid>
       </Grid>
     );

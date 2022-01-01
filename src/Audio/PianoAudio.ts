@@ -3,7 +3,6 @@ import { loadAndPlaySoundsSequentially, loadAndPlaySoundsSimultaneously, loadSou
 import { StringDictionary } from '../lib/Core/StringDictionary';
 import { removeIfFoundInArray } from '../lib/Core/ArrayUtils';
 import { IPitchesAudio } from './IPitchesAudio';
-import { Howl } from "howler";
 
 export const PianoPitchesAudio: IPitchesAudio = {
   getAudioFilePath: getPitchAudioFilePath

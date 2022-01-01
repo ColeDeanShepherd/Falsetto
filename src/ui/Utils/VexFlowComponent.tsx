@@ -1,5 +1,5 @@
 import * as React from "react";
-import Vex from "vexflow";
+import * as Vex from "vexflow";
 import { Size2D } from '../../lib/Core/Size2D';
 
 export interface IVexFlowComponentProps {

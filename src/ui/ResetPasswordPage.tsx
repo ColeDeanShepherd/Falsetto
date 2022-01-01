@@ -123,7 +123,7 @@ export class ResetPasswordPage extends React.Component<{}, IResetPasswordPageSta
     try {
       await this.apiClient.resetPasswordAsync(resetPasswordToken, password);
       this.setState({ succeeded: true });
-    } catch (ex: any) {
+    } catch (ex) {
       this.setState({ error: ex.toString() })
     }
   }

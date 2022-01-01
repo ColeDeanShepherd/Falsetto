@@ -1,5 +1,5 @@
 import * as React from "react";
-import Vex from "vexflow";
+import * as Vex from "vexflow";
 import { VexFlowComponent } from './VexFlowComponent';
 import { TimeSignature as TimeSignatureModel } from "../../lib/TheoryLib/TimeSignature";
 import { Size2D } from '../../lib/Core/Size2D';

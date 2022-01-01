@@ -155,7 +155,7 @@ export class FlashCardMultiSelect extends React.Component<IFlashCardMultiSelectP
     );
 
     return (
-      <Grid container spacing={10}>
+      <Grid container spacing={32}>
         <Grid item xs={12}>{intervalCheckboxes}</Grid>
       </Grid>
     );

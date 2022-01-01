@@ -124,7 +124,7 @@ export class SignUpPage extends React.Component<{}, ISignUpPageState> {
       const sessionToken = await this.apiClient.signUpAsync(email, password);
       
       ActionBus.instance.dispatch(new SignUpAction(sessionToken));
-    } catch (ex: any) {
+    } catch (ex) {
       this.setState({ error: ex.toString() })
     }
   }

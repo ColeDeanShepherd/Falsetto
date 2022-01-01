@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router';
 import { TextField } from "@material-ui/core";
 
 import { Card } from "../ui/Card/Card";
@@ -109,7 +109,7 @@ export class LoginPage extends React.Component<{}, ILoginPageState> {
       const sessionToken = await this.apiClient.logInAsync(email, password);
       
       ActionBus.instance.dispatch(new LoginAction(sessionToken));
-    } catch (ex: any) {
+    } catch (ex) {
       this.setState({ error: ex.toString() })
     }
   }

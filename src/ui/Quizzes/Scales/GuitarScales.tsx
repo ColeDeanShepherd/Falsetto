@@ -78,7 +78,7 @@ export class GuitarScalesFlashCardMultiSelect extends React.Component<IGuitarSca
     );
 
     return (
-      <Grid container spacing={10}>
+      <Grid container spacing={32}>
         <Grid item xs={12}>{scaleTypeCheckboxes}</Grid>
       </Grid>
     );

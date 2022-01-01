@@ -60,7 +60,7 @@ export class AppModel implements IDisposable {
 
       const userProfile = unwrapValueOrUndefined(getProfileResult.value);
       return Ok(userProfile);
-    } catch (err: any) {
+    } catch (err) {
       return Err(err.toString());
     }
   }

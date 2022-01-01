@@ -1,5 +1,5 @@
 import * as React from "react";
-import Vex from "vexflow";
+import * as Vex from "vexflow";
 import { Select, CircularProgress } from "@material-ui/core";
 
 import * as Utils from "../../lib/Core/Utils";
@@ -16,7 +16,6 @@ import { range, isPowerOf2, highestPowerOf2 } from '../../lib/Core/MathUtils';
 import { repeatGenerator } from '../../lib/Core/ArrayUtils';
 import { Card } from "../../ui/Card/Card";
 import { Button } from "../../ui/Button/Button";
-import { Howl } from "howler";
 
 const clickAudioPath = "/audio/metronome_click.wav";
 const woodBlockAudioPath = "/audio/wood_block.wav";
@@ -76,7 +75,7 @@ export class NoteValuePlayer extends React.Component<INoteValuePlayerProps, INot
               <Select
                 native
                 value={this.state.notesPerBeat}
-                onChange={event => this.onNoteValueChange(event.target.value as any)}
+                onChange={event => this.onNoteValueChange(event.target.value)}
               >
                 {range(1, maxNotesPerBeat).map(n => <option key={n} value={n}>{n}</option>)}
               </Select>

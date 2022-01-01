@@ -1,5 +1,5 @@
 import * as React from "react";
-import Vex from "vexflow";
+import * as Vex from "vexflow";
 import { Select, CircularProgress } from "@material-ui/core";
 
 import { TimeSignature } from "../../lib/TheoryLib/TimeSignature";
@@ -13,7 +13,6 @@ import { Size2D } from '../../lib/Core/Size2D';
 import { repeatGenerator } from '../../lib/Core/ArrayUtils';
 import { Card } from "../../ui/Card/Card";
 import { Button } from "../../ui/Button/Button";
-import { Howl } from "howler";
 
 const clickAudioPath = "/audio/metronome_click.wav";
 
@@ -149,7 +148,7 @@ export class TimeSignaturePlayer extends React.Component<ITimeSignaturePlayerPro
             <Select
               native
               value={this.rhythmPlayer.timeSignature.toString()}
-              onChange={event => this.onTimeSignatureChange(event.target.value as any)}
+              onChange={event => this.onTimeSignatureChange(event.target.value)}
             >
               <option value="4/4">4/4</option>
               <option value="3/4">3/4</option>
