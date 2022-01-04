@@ -142,7 +142,7 @@ export class PianoKeyboardMetrics {
     const pitches = new Array<Pitch>();
 
     for (let midiNumber = this.lowestPitch.midiNumber; midiNumber <= this.highestPitch.midiNumber; midiNumber++) {
-      pitches.push(Pitch.createFromMidiNumber(midiNumber));
+      pitches.push(createPitchFromMidiNumber(midiNumber));
     }
 
     return pitches;
@@ -154,7 +154,7 @@ export function renderPianoKeyboardKeyLabels(metrics: PianoKeyboardMetrics, useS
 
   for (let keyIndex = 0; keyIndex < metrics.keyCount; keyIndex++) {
     const midiNumber = metrics.lowestPitch.midiNumber + keyIndex;
-    const pitch = Pitch.createFromMidiNumber(midiNumber, (useSharps !== undefined) ? useSharps : true);
+    const pitch = createPitchFromMidiNumber(midiNumber, (useSharps !== undefined) ? useSharps : true);
     
     const labels = getLabels ? getLabels(pitch) : null;
     if (!labels || (labels.length === 0)) {
@@ -270,7 +270,7 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
 
     for (let i = 0; i < metrics.keyCount; i++) {
       const midiNumber = metrics.lowestPitch.midiNumber + i;
-      const pitch = Pitch.createFromMidiNumber(midiNumber);
+      const pitch = createPitchFromMidiNumber(midiNumber);
       
       const isKeyEnabled = this.isKeyEnabled(pitch);
 

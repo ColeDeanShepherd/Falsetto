@@ -1,13 +1,11 @@
 import * as React from "react";
 
-import * as Utils from "../../../lib/Core/Utils";
 import * as FlashCardUtils from "../Utils";
 import { createFlashCardId, FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
 import { Pitch } from "../../../lib/TheoryLib/Pitch";
 import { VerticalDirection } from "../../../lib/Core/VerticalDirection";
-import { Interval, createIntervalLevels, intervalQualityToNumber } from "../../../lib/TheoryLib/Interval";
-import { getValidKeyPitches } from '../../../lib/TheoryLib/Key';
+import {  } from '../../../lib/TheoryLib/Key';
 import { CheckboxColumnsFlashCardMultiSelect, CheckboxColumn, CheckboxColumnCell } from '../../Utils/CheckboxColumnsFlashCardMultiSelect';
 import { arrayContains } from '../../../lib/Core/ArrayUtils';
 

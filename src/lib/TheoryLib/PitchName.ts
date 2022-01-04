@@ -5,6 +5,7 @@ import { precondition } from '../Core/Dbc';
 import { mod } from '../Core/MathUtils';
 import { parseSignedAccidental, PitchClassName } from './PitchClassName';
 import { parseEnglishSignedAccidental, PitchClass } from './PitchClass';
+import { createPitch, Pitch } from './Pitch';
 
 export function pitchClassNameToPitchName(pitchClassName: PitchClassName, octaveNumber: number): PitchName {
   return {
@@ -159,6 +160,14 @@ export interface PitchName {
   octaveNumber: number;
 }
 
+export function createPitchName(letter: PitchLetter, signedAccidental: number, octaveNumber: number): PitchName {
+  return {
+    letter,
+    signedAccidental,
+    octaveNumber
+  };
+}
+
 export function createFromPitchClass(pitchClass: number, octaveNumber: number, useSharps: boolean = true): PitchName {
   switch (pitchClass) {
     case 0:
@@ -289,9 +298,12 @@ export function getClass(pitchName: PitchName): PitchClass {
   return getMidiNumberNoOctave(pitchName);
 }
 
+export function getPitch(pitchName: PitchName): Pitch {
+  return createPitch(pitchName.letter, pitchName.signedAccidental, pitchName.octaveNumber);
+}
+
 export function getMidiNumber(pitchName: PitchName): number {
-  const pitchLetterMidiNoteNumberOffset = pitchLetterToMidiNumberOffset(pitchName.letter);
-  return (12 * (pitchName.octaveNumber + 1)) + pitchLetterMidiNoteNumberOffset + pitchName.signedAccidental;
+  return getPitch(pitchName);
 }
 
 export function getMidiNumberNoOctave(pitchName: PitchName): number {

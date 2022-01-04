@@ -3,7 +3,6 @@ import * as React from "react";
 import { SlideGroup, Slide } from "../Slideshow/Slideshow";
 import { ChordType, getUriComponent as getChordTypeUriComponent } from '../../lib/TheoryLib/ChordType';
 import { ChordView } from '../../ui/Utils/ChordView';
-import { getValidKeyPitches } from '../../lib/TheoryLib/Key';
 import { Chord, getUriComponent as getChordUriComponent } from "../../lib/TheoryLib/Chord";
 import { LimitedWidthContentContainer } from "../../ui/Utils/LimitedWidthContentContainer";
 import { createStudyFlashCardSetComponent } from "../StudyFlashCards/View";

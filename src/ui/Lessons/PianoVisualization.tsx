@@ -13,8 +13,8 @@ import { flashCardSet as pianoNotesFlashCardSet } from '../Quizzes/Notes/PianoNo
 import { pitchClasses } from "../../lib/TheoryLib/PitchClass";
 import { ScaleType } from "../../lib/TheoryLib/ScaleType";
 
-const pianoKeyboardLowestPitch = new Pitch(PitchLetter.C, 0, 4);
-const pianoKeyboardHighestPitch = new Pitch(PitchLetter.B, 0, 5);
+const pianoKeyboardLowestPitch = createPitch(PitchLetter.C, 0, 4);
+const pianoKeyboardHighestPitch = createPitch(PitchLetter.B, 0, 5);
 
 // #region Scale Shape Flash Cards
 

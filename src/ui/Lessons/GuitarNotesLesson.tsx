@@ -20,111 +20,111 @@ const noteGroups = [
   {
     color: "lightgreen",
     notes: [
-      new StringedInstrumentNote(new Pitch(PitchLetter.G, 0, 2), 0),
-      new StringedInstrumentNote(new Pitch(PitchLetter.A, 0, 2), 0),
-      new StringedInstrumentNote(new Pitch(PitchLetter.B, 0, 2), 0),
-      new StringedInstrumentNote(new Pitch(PitchLetter.C, 0, 3), 1),
-      new StringedInstrumentNote(new Pitch(PitchLetter.D, 0, 3), 1),
-      new StringedInstrumentNote(new Pitch(PitchLetter.E, 0, 3), 1),
-      new StringedInstrumentNote(new Pitch(PitchLetter.F, 0, 3), 2),
+      new StringedInstrumentNote(createPitch(PitchLetter.G, 0, 2), 0),
+      new StringedInstrumentNote(createPitch(PitchLetter.A, 0, 2), 0),
+      new StringedInstrumentNote(createPitch(PitchLetter.B, 0, 2), 0),
+      new StringedInstrumentNote(createPitch(PitchLetter.C, 0, 3), 1),
+      new StringedInstrumentNote(createPitch(PitchLetter.D, 0, 3), 1),
+      new StringedInstrumentNote(createPitch(PitchLetter.E, 0, 3), 1),
+      new StringedInstrumentNote(createPitch(PitchLetter.F, 0, 3), 2),
       
-      new StringedInstrumentNote(new Pitch(PitchLetter.G, 0, 4), 5),
-      new StringedInstrumentNote(new Pitch(PitchLetter.A, 0, 4), 5),
-      new StringedInstrumentNote(new Pitch(PitchLetter.B, 0, 4), 5)
+      new StringedInstrumentNote(createPitch(PitchLetter.G, 0, 4), 5),
+      new StringedInstrumentNote(createPitch(PitchLetter.A, 0, 4), 5),
+      new StringedInstrumentNote(createPitch(PitchLetter.B, 0, 4), 5)
     ]
   },
   {
     color: "lightsalmon",
     notes: [
-      new StringedInstrumentNote(new Pitch(PitchLetter.G, 0, 3), 2),
-      new StringedInstrumentNote(new Pitch(PitchLetter.A, 0, 3), 2),
-      new StringedInstrumentNote(new Pitch(PitchLetter.B, 0, 3), 2),
-      new StringedInstrumentNote(new Pitch(PitchLetter.C, 0, 4), 3),
-      new StringedInstrumentNote(new Pitch(PitchLetter.D, 0, 4), 3),
-      new StringedInstrumentNote(new Pitch(PitchLetter.E, 0, 4), 3),
-      new StringedInstrumentNote(new Pitch(PitchLetter.F, 0, 4), 4)
+      new StringedInstrumentNote(createPitch(PitchLetter.G, 0, 3), 2),
+      new StringedInstrumentNote(createPitch(PitchLetter.A, 0, 3), 2),
+      new StringedInstrumentNote(createPitch(PitchLetter.B, 0, 3), 2),
+      new StringedInstrumentNote(createPitch(PitchLetter.C, 0, 4), 3),
+      new StringedInstrumentNote(createPitch(PitchLetter.D, 0, 4), 3),
+      new StringedInstrumentNote(createPitch(PitchLetter.E, 0, 4), 3),
+      new StringedInstrumentNote(createPitch(PitchLetter.F, 0, 4), 4)
     ]
   },
   {
     color: "lightblue",
     notes: [
-      new StringedInstrumentNote(new Pitch(PitchLetter.G, 0, 4), 4),
-      new StringedInstrumentNote(new Pitch(PitchLetter.A, 0, 4), 4),
-      new StringedInstrumentNote(new Pitch(PitchLetter.B, 0, 3), 4),
-      new StringedInstrumentNote(new Pitch(PitchLetter.C, 0, 3), 0),
-      new StringedInstrumentNote(new Pitch(PitchLetter.D, 0, 3), 0),
-      new StringedInstrumentNote(new Pitch(PitchLetter.E, 0, 2), 0),
-      new StringedInstrumentNote(new Pitch(PitchLetter.F, 0, 3), 1),
+      new StringedInstrumentNote(createPitch(PitchLetter.G, 0, 4), 4),
+      new StringedInstrumentNote(createPitch(PitchLetter.A, 0, 4), 4),
+      new StringedInstrumentNote(createPitch(PitchLetter.B, 0, 3), 4),
+      new StringedInstrumentNote(createPitch(PitchLetter.C, 0, 3), 0),
+      new StringedInstrumentNote(createPitch(PitchLetter.D, 0, 3), 0),
+      new StringedInstrumentNote(createPitch(PitchLetter.E, 0, 2), 0),
+      new StringedInstrumentNote(createPitch(PitchLetter.F, 0, 3), 1),
       
-      new StringedInstrumentNote(new Pitch(PitchLetter.C, 0, 5), 5),
-      new StringedInstrumentNote(new Pitch(PitchLetter.D, 0, 5), 5),
-      new StringedInstrumentNote(new Pitch(PitchLetter.E, 0, 4), 5)
+      new StringedInstrumentNote(createPitch(PitchLetter.C, 0, 5), 5),
+      new StringedInstrumentNote(createPitch(PitchLetter.D, 0, 5), 5),
+      new StringedInstrumentNote(createPitch(PitchLetter.E, 0, 4), 5)
     ]
   },
   {
     color: "yellow",
     notes: [
-      new StringedInstrumentNote(new Pitch(PitchLetter.G, 0, 3), 1),
-      new StringedInstrumentNote(new Pitch(PitchLetter.A, 0, 2), 1),
-      new StringedInstrumentNote(new Pitch(PitchLetter.B, 0, 2), 1),
-      new StringedInstrumentNote(new Pitch(PitchLetter.C, 0, 4), 2),
-      new StringedInstrumentNote(new Pitch(PitchLetter.D, 0, 3), 2),
-      new StringedInstrumentNote(new Pitch(PitchLetter.E, 0, 3), 2),
-      new StringedInstrumentNote(new Pitch(PitchLetter.F, 0, 4), 3)
+      new StringedInstrumentNote(createPitch(PitchLetter.G, 0, 3), 1),
+      new StringedInstrumentNote(createPitch(PitchLetter.A, 0, 2), 1),
+      new StringedInstrumentNote(createPitch(PitchLetter.B, 0, 2), 1),
+      new StringedInstrumentNote(createPitch(PitchLetter.C, 0, 4), 2),
+      new StringedInstrumentNote(createPitch(PitchLetter.D, 0, 3), 2),
+      new StringedInstrumentNote(createPitch(PitchLetter.E, 0, 3), 2),
+      new StringedInstrumentNote(createPitch(PitchLetter.F, 0, 4), 3)
     ]
   },
   {
     color: "turquoise",
     notes: [
-      new StringedInstrumentNote(new Pitch(PitchLetter.G, 0, 3), 3),
-      new StringedInstrumentNote(new Pitch(PitchLetter.A, 0, 3), 3),
-      new StringedInstrumentNote(new Pitch(PitchLetter.B, 0, 3), 3),
-      new StringedInstrumentNote(new Pitch(PitchLetter.C, 0, 4), 4),
-      new StringedInstrumentNote(new Pitch(PitchLetter.D, 0, 4), 4),
-      new StringedInstrumentNote(new Pitch(PitchLetter.E, 0, 4), 4),
-      new StringedInstrumentNote(new Pitch(PitchLetter.F, 0, 2), 0),
+      new StringedInstrumentNote(createPitch(PitchLetter.G, 0, 3), 3),
+      new StringedInstrumentNote(createPitch(PitchLetter.A, 0, 3), 3),
+      new StringedInstrumentNote(createPitch(PitchLetter.B, 0, 3), 3),
+      new StringedInstrumentNote(createPitch(PitchLetter.C, 0, 4), 4),
+      new StringedInstrumentNote(createPitch(PitchLetter.D, 0, 4), 4),
+      new StringedInstrumentNote(createPitch(PitchLetter.E, 0, 4), 4),
+      new StringedInstrumentNote(createPitch(PitchLetter.F, 0, 2), 0),
       
-      new StringedInstrumentNote(new Pitch(PitchLetter.F, 0, 4), 5)
+      new StringedInstrumentNote(createPitch(PitchLetter.F, 0, 4), 5)
     ]
   },
   {
     color: "lightgray",
     notes: [
-      new StringedInstrumentNote(new Pitch(PitchLetter.F, 1, 2), 0),
-      new StringedInstrumentNote(new Pitch(PitchLetter.G, 1, 2), 0),
-      new StringedInstrumentNote(new Pitch(PitchLetter.A, 1, 2), 0),
-      new StringedInstrumentNote(new Pitch(PitchLetter.C, 1, 3), 0),
-      new StringedInstrumentNote(new Pitch(PitchLetter.D, 1, 3), 0),
+      new StringedInstrumentNote(createPitch(PitchLetter.F, 1, 2), 0),
+      new StringedInstrumentNote(createPitch(PitchLetter.G, 1, 2), 0),
+      new StringedInstrumentNote(createPitch(PitchLetter.A, 1, 2), 0),
+      new StringedInstrumentNote(createPitch(PitchLetter.C, 1, 3), 0),
+      new StringedInstrumentNote(createPitch(PitchLetter.D, 1, 3), 0),
       
-      new StringedInstrumentNote(new Pitch(PitchLetter.F, 1, 3), 1),
-      new StringedInstrumentNote(new Pitch(PitchLetter.G, 1, 3), 1),
-      new StringedInstrumentNote(new Pitch(PitchLetter.A, 1, 2), 1),
-      new StringedInstrumentNote(new Pitch(PitchLetter.C, 1, 3), 1),
-      new StringedInstrumentNote(new Pitch(PitchLetter.D, 1, 3), 1),
+      new StringedInstrumentNote(createPitch(PitchLetter.F, 1, 3), 1),
+      new StringedInstrumentNote(createPitch(PitchLetter.G, 1, 3), 1),
+      new StringedInstrumentNote(createPitch(PitchLetter.A, 1, 2), 1),
+      new StringedInstrumentNote(createPitch(PitchLetter.C, 1, 3), 1),
+      new StringedInstrumentNote(createPitch(PitchLetter.D, 1, 3), 1),
 
-      new StringedInstrumentNote(new Pitch(PitchLetter.F, 1, 3), 2),
-      new StringedInstrumentNote(new Pitch(PitchLetter.G, 1, 3), 2),
-      new StringedInstrumentNote(new Pitch(PitchLetter.A, 1, 3), 2),
-      new StringedInstrumentNote(new Pitch(PitchLetter.C, 1, 4), 2),
-      new StringedInstrumentNote(new Pitch(PitchLetter.D, 1, 3), 2),
+      new StringedInstrumentNote(createPitch(PitchLetter.F, 1, 3), 2),
+      new StringedInstrumentNote(createPitch(PitchLetter.G, 1, 3), 2),
+      new StringedInstrumentNote(createPitch(PitchLetter.A, 1, 3), 2),
+      new StringedInstrumentNote(createPitch(PitchLetter.C, 1, 4), 2),
+      new StringedInstrumentNote(createPitch(PitchLetter.D, 1, 3), 2),
 
-      new StringedInstrumentNote(new Pitch(PitchLetter.F, 1, 4), 3),
-      new StringedInstrumentNote(new Pitch(PitchLetter.G, 1, 3), 3),
-      new StringedInstrumentNote(new Pitch(PitchLetter.A, 1, 3), 3),
-      new StringedInstrumentNote(new Pitch(PitchLetter.C, 1, 4), 3),
-      new StringedInstrumentNote(new Pitch(PitchLetter.D, 1, 4), 3),
+      new StringedInstrumentNote(createPitch(PitchLetter.F, 1, 4), 3),
+      new StringedInstrumentNote(createPitch(PitchLetter.G, 1, 3), 3),
+      new StringedInstrumentNote(createPitch(PitchLetter.A, 1, 3), 3),
+      new StringedInstrumentNote(createPitch(PitchLetter.C, 1, 4), 3),
+      new StringedInstrumentNote(createPitch(PitchLetter.D, 1, 4), 3),
       
-      new StringedInstrumentNote(new Pitch(PitchLetter.F, 1, 4), 4),
-      new StringedInstrumentNote(new Pitch(PitchLetter.G, 1, 4), 4),
-      new StringedInstrumentNote(new Pitch(PitchLetter.A, 1, 4), 4),
-      new StringedInstrumentNote(new Pitch(PitchLetter.C, 1, 4), 4),
-      new StringedInstrumentNote(new Pitch(PitchLetter.D, 1, 4), 4),
+      new StringedInstrumentNote(createPitch(PitchLetter.F, 1, 4), 4),
+      new StringedInstrumentNote(createPitch(PitchLetter.G, 1, 4), 4),
+      new StringedInstrumentNote(createPitch(PitchLetter.A, 1, 4), 4),
+      new StringedInstrumentNote(createPitch(PitchLetter.C, 1, 4), 4),
+      new StringedInstrumentNote(createPitch(PitchLetter.D, 1, 4), 4),
       
-      new StringedInstrumentNote(new Pitch(PitchLetter.F, 1, 4), 5),
-      new StringedInstrumentNote(new Pitch(PitchLetter.G, 1, 4), 5),
-      new StringedInstrumentNote(new Pitch(PitchLetter.A, 1, 4), 5),
-      new StringedInstrumentNote(new Pitch(PitchLetter.C, 1, 5), 5),
-      new StringedInstrumentNote(new Pitch(PitchLetter.D, 1, 5), 5)
+      new StringedInstrumentNote(createPitch(PitchLetter.F, 1, 4), 5),
+      new StringedInstrumentNote(createPitch(PitchLetter.G, 1, 4), 5),
+      new StringedInstrumentNote(createPitch(PitchLetter.A, 1, 4), 5),
+      new StringedInstrumentNote(createPitch(PitchLetter.C, 1, 5), 5),
+      new StringedInstrumentNote(createPitch(PitchLetter.D, 1, 5), 5)
     ]
   }
 ];

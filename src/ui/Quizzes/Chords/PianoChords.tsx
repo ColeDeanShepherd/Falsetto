@@ -14,8 +14,8 @@ import { PianoKeysAnswerSelect } from "../../Utils/PianoKeysAnswerSelect";
 
 const flashCardSetId = "pianoChords";
 
-const pianoLowestPitch = new Pitch(PitchLetter.C, 0, 4);
-const pianoHighestPitch = new Pitch(PitchLetter.B, 0, 5);
+const pianoLowestPitch = createPitch(PitchLetter.C, 0, 4);
+const pianoHighestPitch = createPitch(PitchLetter.B, 0, 5);
 
 const pianoMaxWidth = 300;
 
@@ -172,7 +172,7 @@ export function createFlashCards(chordTypes: Array<ChordType>): FlashCard[] {
     ambiguousKeyPitchStringsSymbols.map((rootPitchStr, i) =>
       chordTypes.map(chordType => {
         const halfStepsFromC = mod(i - 3, 12);
-        const rootPitch = Pitch.createFromMidiNumber((new Pitch(PitchLetter.C, 0, 4)).midiNumber + halfStepsFromC);
+        const rootPitch = createPitchFromMidiNumber((createPitch(PitchLetter.C, 0, 4)).midiNumber + halfStepsFromC);
         const pitches = new Chord(chordType, rootPitch).getPitchClasses();
 
         return new FlashCard(

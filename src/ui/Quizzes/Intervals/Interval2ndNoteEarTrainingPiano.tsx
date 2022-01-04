@@ -19,41 +19,41 @@ import { Button } from "../../../ui/Button/Button";
 
 const flashCardSetId = "pianoNextNoteEarTraining";
 
-const minPitch = new Pitch(PitchLetter.C, 0, 4);
-const maxPitch = new Pitch(PitchLetter.B, 0, 5);
+const minPitch = createPitch(PitchLetter.C, 0, 4);
+const maxPitch = createPitch(PitchLetter.B, 0, 5);
 const includeHarmonicIntervals = false;
 
 const pianoMaxHeight = 140;
 
 export const rootNotes = [
-  new Pitch(PitchLetter.C, 0, 4),
-  new Pitch(PitchLetter.C, 1, 4),
-  new Pitch(PitchLetter.D, -1, 4),
-  new Pitch(PitchLetter.D, 0, 4),
-  new Pitch(PitchLetter.E, -1, 4),
-  new Pitch(PitchLetter.E, 0, 4),
-  new Pitch(PitchLetter.F, 0, 4),
-  new Pitch(PitchLetter.F, 1, 4),
-  new Pitch(PitchLetter.G, -1, 4),
-  new Pitch(PitchLetter.G, 0, 4),
-  new Pitch(PitchLetter.A, -1, 4),
-  new Pitch(PitchLetter.A, 0, 4),
-  new Pitch(PitchLetter.B, -1, 4),
-  new Pitch(PitchLetter.B, 0, 4),
-  new Pitch(PitchLetter.C, 0, 5),
-  new Pitch(PitchLetter.C, 1, 5),
-  new Pitch(PitchLetter.D, -1, 5),
-  new Pitch(PitchLetter.D, 0, 5),
-  new Pitch(PitchLetter.E, -1, 5),
-  new Pitch(PitchLetter.E, 0, 5),
-  new Pitch(PitchLetter.F, 0, 5),
-  new Pitch(PitchLetter.F, 1, 5),
-  new Pitch(PitchLetter.G, -1, 5),
-  new Pitch(PitchLetter.G, 0, 5),
-  new Pitch(PitchLetter.A, -1, 5),
-  new Pitch(PitchLetter.A, 0, 5),
-  new Pitch(PitchLetter.B, -1, 5),
-  new Pitch(PitchLetter.B, 0, 5)
+  createPitch(PitchLetter.C, 0, 4),
+  createPitch(PitchLetter.C, 1, 4),
+  createPitch(PitchLetter.D, -1, 4),
+  createPitch(PitchLetter.D, 0, 4),
+  createPitch(PitchLetter.E, -1, 4),
+  createPitch(PitchLetter.E, 0, 4),
+  createPitch(PitchLetter.F, 0, 4),
+  createPitch(PitchLetter.F, 1, 4),
+  createPitch(PitchLetter.G, -1, 4),
+  createPitch(PitchLetter.G, 0, 4),
+  createPitch(PitchLetter.A, -1, 4),
+  createPitch(PitchLetter.A, 0, 4),
+  createPitch(PitchLetter.B, -1, 4),
+  createPitch(PitchLetter.B, 0, 4),
+  createPitch(PitchLetter.C, 0, 5),
+  createPitch(PitchLetter.C, 1, 5),
+  createPitch(PitchLetter.D, -1, 5),
+  createPitch(PitchLetter.D, 0, 5),
+  createPitch(PitchLetter.E, -1, 5),
+  createPitch(PitchLetter.E, 0, 5),
+  createPitch(PitchLetter.F, 0, 5),
+  createPitch(PitchLetter.F, 1, 5),
+  createPitch(PitchLetter.G, -1, 5),
+  createPitch(PitchLetter.G, 0, 5),
+  createPitch(PitchLetter.A, -1, 5),
+  createPitch(PitchLetter.A, 0, 5),
+  createPitch(PitchLetter.B, -1, 5),
+  createPitch(PitchLetter.B, 0, 5)
 ];
 
 export interface IConfigData {
@@ -93,8 +93,8 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
         <div>
           <PianoKeyboard
             maxHeight={pianoMaxHeight}
-            lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-            highestPitch={new Pitch(PitchLetter.B, 0, 5)}
+            lowestPitch={createPitch(PitchLetter.C, 0, 4)}
+            highestPitch={createPitch(PitchLetter.B, 0, 5)}
             pressedPitches={[this.props.pitch1]}
           />
         </div>
@@ -192,8 +192,8 @@ export function renderAnswerSelect(
   
   return <PianoKeysAnswerSelect
     maxHeight={pianoMaxHeight}
-    lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-    highestPitch={new Pitch(PitchLetter.B, 0, 5)}
+    lowestPitch={createPitch(PitchLetter.C, 0, 4)}
+    highestPitch={createPitch(PitchLetter.B, 0, 5)}
     correctAnswer={correctAnswer}
     onAnswer={info.onAnswer} lastCorrectAnswer={info.lastCorrectAnswer}
     incorrectAnswers={info.incorrectAnswers} instantConfirm={true} />;

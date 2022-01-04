@@ -10,7 +10,6 @@ import * as ScaleChords from "./Quizzes/Chords/ScaleChords";
 import * as ScaleEarTraining from "./Quizzes/Scales/ScaleEarTraining";
 import { Scale, ScaleTypeGroup, ScaleType, getUriComponent } from '../lib/TheoryLib/Scale';
 import { ScaleTypeSelect } from "./Utils/ScaleTypeSelect";
-import { getValidKeyPitches } from '../lib/TheoryLib/Key';
 import { isDevelopment } from '../Config';
 import { flattenArrays } from '../lib/Core/ArrayUtils';
 import { Card } from "../ui/Card/Card";

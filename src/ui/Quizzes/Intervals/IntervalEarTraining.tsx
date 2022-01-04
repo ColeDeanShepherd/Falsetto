@@ -38,7 +38,7 @@ export class FlashCardFrontSide extends React.Component<IFlashCardFrontSideProps
     const intervalHalfSteps = (this.props.direction === "↑")
       ? intervalIndex + 1
       : -(intervalIndex + 1);
-    const pitch2 = Pitch.createFromMidiNumber(pitch1.midiNumber + intervalHalfSteps);
+    const pitch2 = createPitchFromMidiNumber(pitch1.midiNumber + intervalHalfSteps);
 
     this.state = {
       pitches: [pitch1, pitch2]

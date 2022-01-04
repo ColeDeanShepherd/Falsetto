@@ -32,7 +32,7 @@ export class ScaleAudioPlayer extends React.Component<IScaleAudioPlayerProps, {}
       for (let i = 0; i < newPitches.length; i++) {
         const deltaOctaveNumber = Math.floor(i / scalePitches.length);
         const basePitch = scalePitches[i % (scalePitches.length)];
-        newPitches[i] = new Pitch(
+        newPitches[i] = createPitch(
           basePitch.letter,
           basePitch.signedAccidental,
           basePitch.octaveNumber + deltaOctaveNumber

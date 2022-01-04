@@ -25,8 +25,8 @@ interface IConfigData {
 }
 
 export function forEachScaleType(callbackFn: (scaleType: ScaleType, i: number) => void) {
-  for (let i = 0; i < ScaleType.All.length; i++) {
-    const scaleType = ScaleType.All[i];
+  for (let i = 0; i < AllScaleTypes.length; i++) {
+    const scaleType = AllScaleTypes[i];
     callbackFn(scaleType, i);
   }
 }
@@ -53,7 +53,7 @@ export class GuitarScalesFlashCardMultiSelect extends React.Component<IGuitarSca
   public render(): JSX.Element {
     const configData = this.props.studySessionInfo.configData as IConfigData;
     
-    const scaleTypeCheckboxTableRows = ScaleType.All
+    const scaleTypeCheckboxTableRows = AllScaleTypes
       .map((scaleType, i) => {
         const isChecked = configData.enabledScaleTypes.indexOf(scaleType) >= 0;
         const isEnabled = !isChecked || (configData.enabledScaleTypes.length > 1);
@@ -129,10 +129,10 @@ export function createFlashCardSet(title?: string, initialScaleTypes?: Array<Sca
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.getInitialConfigData = (): IConfigData => ({
     enabledScaleTypes: !initialScaleTypes
-      ? ScaleType.All
+      ? AllScaleTypes
         .filter((_, scaleIndex) => scaleIndex <= 7)
       : initialScaleTypes
-        .map(scaleType => unwrapValueOrUndefined(ScaleType.All.find(st => st.equals(scaleType))))
+        .map(scaleType => unwrapValueOrUndefined(AllScaleTypes.find(st => st.equals(scaleType))))
   });
   flashCardSet.renderFlashCardMultiSelect = renderFlashCardMultiSelect;
   flashCardSet.renderAnswerSelect = renderDistinctFlashCardSideAnswerSelect;
@@ -158,7 +158,7 @@ export function createFlashCards(): Array<FlashCard> {
   const flashCards = new Array<FlashCard>();
 
   forEachScaleType((scaleType, i) => {
-    const rootPitch = new Pitch(PitchLetter.F, 0, 2);
+    const rootPitch = createPitch(PitchLetter.F, 0, 2);
     const pitches = new ChordScaleFormula(scaleType.formula.parts.concat(new ChordScaleFormulaPart(8, 0, false))).getPitchClasses(rootPitch);
 
     const scale = new Scale(scaleType, pitchClassF);

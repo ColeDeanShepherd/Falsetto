@@ -6,21 +6,21 @@ import * as FlashCardUtils from "../Utils";
 import { VexFlowComponent } from "../../Utils/VexFlowComponent";
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
 import { createFlashCardId, FlashCard, FlashCardId } from "../../../FlashCard";
-import { Pitch } from "../../../lib/TheoryLib/Pitch";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { Size2D } from '../../../lib/Core/Size2D';
 import { range } from '../../../lib/Core/MathUtils';
+import { addPitchLetters, createPitchName, getAccidentalString, PitchName, toString, toVexFlowString } from "../../../lib/TheoryLib/PitchName";
 
 const flashCardSetId = "sheetMusicNotes";
 
 const clefs = [
   {
     name: "treble",
-    bottomLinePitch: new Pitch(PitchLetter.E, 0, 4)
+    bottomLinePitch: createPitchName(PitchLetter.E, 0, 4)
   },
   {
     name: "bass",
-    bottomLinePitch: new Pitch(PitchLetter.G, 0, 2)
+    bottomLinePitch: createPitchName(PitchLetter.G, 0, 2)
   }
 ];
 
@@ -49,10 +49,10 @@ function createFlashCardSet(): FlashCardSet {
   return flashCardSet;
 }
 export function createFlashCards(): FlashCard[] {
-  return allPitchesMap((clef, pitch) => {
-    const pitchAccidentalString = pitch.getAccidentalString();
-    const pitchAccidentalSymbolString = pitch.getAccidentalString(true);
-    const vexFlowPitchString = pitch.toVexFlowString();
+  return allPitchesMap((clef, pitchName) => {
+    const pitchAccidentalString = getAccidentalString(pitchName.signedAccidental);
+    const pitchAccidentalSymbolString = getAccidentalString(pitchName.signedAccidental, true);
+    const vexFlowPitchString = toVexFlowString(pitchName);
     
     const isTrebleNote = (clef === "treble");
     const trebleNotes = [
@@ -70,7 +70,7 @@ export function createFlashCards(): FlashCard[] {
       })
     ];
 
-    if (pitch.signedAccidental !== 0) {
+    if (pitchName.signedAccidental !== 0) {
       if (isTrebleNote) {
         for (const note of trebleNotes) {
           note.addAccidental(0, new Vex.Flow.Accidental(pitchAccidentalString));
@@ -83,7 +83,7 @@ export function createFlashCards(): FlashCard[] {
     }
 
     return FlashCard.fromRenderFns(
-      createFlashCardId(flashCardSetId, { clef: clef, pitch: pitch.toString(true) }),
+      createFlashCardId(flashCardSetId, { clef: clef, pitch: toString(pitchName, true) }),
       () => (  
         <SheetMusicSingleNote
           size={new Size2D(150, 200)}
@@ -91,18 +91,18 @@ export function createFlashCards(): FlashCard[] {
           bassNotes={bassNotes}
         />
       ),
-      `${PitchLetter[pitch.letter]}${pitchAccidentalSymbolString}`
+      `${PitchLetter[pitchName.letter]}${pitchAccidentalSymbolString}`
     );
   });
 }
-export function allPitchesMap<TResult>(mapFn: (clef: string, pitch: Pitch, index: number) => TResult): Array<TResult> {
+export function allPitchesMap<TResult>(mapFn: (clef: string, pitchName: PitchName, index: number) => TResult): Array<TResult> {
   const result = new Array<TResult>();
 
   let i = 0;
   clefs.forEach(clef => {
     range(0, 20).forEach(pitchLetterOffset => {
       range(-1, 1).forEach(signedAccidental => {
-        const pitch = Pitch.addPitchLetters(clef.bottomLinePitch, -6 + pitchLetterOffset);
+        const pitch = addPitchLetters(clef.bottomLinePitch, -6 + pitchLetterOffset);
         pitch.signedAccidental = signedAccidental;
         
         result.push(mapFn(clef.name, pitch, i));

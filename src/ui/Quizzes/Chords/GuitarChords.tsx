@@ -142,7 +142,7 @@ export function createFlashCards(): FlashCard[] {
   const guitarStyle = { width: "100%", maxWidth: "400px" };
 
   return chordTypes.map(chordType => {
-    const rootPitch = new Pitch(PitchLetter.F, 0, 2);
+    const rootPitch = createPitch(PitchLetter.F, 0, 2);
     const pitches = chordType.getPitches(rootPitch);
     
     return new FlashCard(

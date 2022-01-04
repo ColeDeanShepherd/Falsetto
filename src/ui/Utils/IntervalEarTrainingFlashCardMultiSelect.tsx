@@ -5,7 +5,6 @@ import * as Utils from "../../lib/Core/Utils";
 import { FlashCard, FlashCardId } from "../../FlashCard";
 import { Pitch } from "../../lib/TheoryLib/Pitch";
 import { FlashCardStudySessionInfo, FlashCardSet } from '../../FlashCardSet';
-import { getValidKeyPitches } from '../../lib/TheoryLib/Key';
 import { CheckboxColumnsFlashCardMultiSelect, CheckboxColumnCell, CheckboxColumn } from './CheckboxColumnsFlashCardMultiSelect';
 import { flattenArrays, arrayContains } from '../../lib/Core/ArrayUtils';
 
@@ -45,7 +44,7 @@ export function forEachInterval(
         const intervalHalfSteps = (direction === "↑")
           ? intervalIndex + 1
           : -(intervalIndex + 1);
-        const newPitch = Pitch.createFromMidiNumber(firstPitch.midiNumber + intervalHalfSteps);
+        const newPitch = createPitchFromMidiNumber(firstPitch.midiNumber + intervalHalfSteps);
 
         if (minPitch && (newPitch.midiNumber < minPitch.midiNumber)) {
           continue;

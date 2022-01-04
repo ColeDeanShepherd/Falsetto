@@ -15,24 +15,24 @@ import { arrayContains, toggleArrayElement } from '../../../lib/Core/ArrayUtils'
 const flashCardSetId = "sheetIntervals";
 
 const allowedPitches = [
-  new Pitch(PitchLetter.C, -1, 0),
-  new Pitch(PitchLetter.C, 0, 0),
-  new Pitch(PitchLetter.C, 1, 0),
-  new Pitch(PitchLetter.D, -1, 0),
-  new Pitch(PitchLetter.D, 0, 0),
-  new Pitch(PitchLetter.E, -1, 0),
-  new Pitch(PitchLetter.E, 0, 0),
-  new Pitch(PitchLetter.F, 0, 0),
-  new Pitch(PitchLetter.F, 1, 0),
-  new Pitch(PitchLetter.G, -1, 0),
-  new Pitch(PitchLetter.G, 0, 0),
-  new Pitch(PitchLetter.A, -1, 0),
-  new Pitch(PitchLetter.A, 0, 0),
-  new Pitch(PitchLetter.B, -1, 0),
-  new Pitch(PitchLetter.B, 0, 0)
+  createPitch(PitchLetter.C, -1, 0),
+  createPitch(PitchLetter.C, 0, 0),
+  createPitch(PitchLetter.C, 1, 0),
+  createPitch(PitchLetter.D, -1, 0),
+  createPitch(PitchLetter.D, 0, 0),
+  createPitch(PitchLetter.E, -1, 0),
+  createPitch(PitchLetter.E, 0, 0),
+  createPitch(PitchLetter.F, 0, 0),
+  createPitch(PitchLetter.F, 1, 0),
+  createPitch(PitchLetter.G, -1, 0),
+  createPitch(PitchLetter.G, 0, 0),
+  createPitch(PitchLetter.A, -1, 0),
+  createPitch(PitchLetter.A, 0, 0),
+  createPitch(PitchLetter.B, -1, 0),
+  createPitch(PitchLetter.B, 0, 0)
 ];
-const minPitch = new Pitch(PitchLetter.C, -1, 2);
-const maxPitch = new Pitch(PitchLetter.C, 1, 6);
+const minPitch = createPitch(PitchLetter.C, -1, 2);
+const maxPitch = createPitch(PitchLetter.C, 1, 6);
 const firstPitches = getAmbiguousPitchRange(minPitch, maxPitch, -1, 1)
   .filter(pitch =>
     allowedPitches.some(allowedPitch =>

@@ -190,7 +190,7 @@ export class PressPianoKeysAllOctavesView extends React.Component<IPressPianoKey
     const highestEnabledPitchMidiNumber = highestEnabledPitch.midiNumber;
 
     for (let midiNumber = lowestEnabledPitchMidiNumber; midiNumber <= highestEnabledPitchMidiNumber; midiNumber++) {
-      const midiNumberNoOctave = Pitch.createFromMidiNumber(midiNumber).midiNumberNoOctave;
+      const midiNumberNoOctave = createPitchFromMidiNumber(midiNumber).midiNumberNoOctave;
 
       if (
         correctPitchMidiNumberNoOctaves.has(midiNumberNoOctave) &&

@@ -105,7 +105,7 @@ export class PlayablePianoKeyboard extends React.Component<IPlayablePianoKeyboar
     }
 
     const pitches = [...pitchMidiNumbers]
-      .map(n => Pitch.createFromMidiNumber(n, /*useSharps*/ true));
+      .map(n => createPitchFromMidiNumber(n, /*useSharps*/ true));
 
     return pitches;
   }

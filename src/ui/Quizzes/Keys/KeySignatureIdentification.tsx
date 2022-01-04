@@ -12,21 +12,21 @@ import { Size2D } from '../../../lib/Core/Size2D';
 const flashCardSetId = "keySignatureIdentification";
 
 const allowedPitches = [
-  new Pitch(PitchLetter.C, -1, 0),
-  new Pitch(PitchLetter.C, 0, 0),
-  new Pitch(PitchLetter.C, 1, 0),
-  new Pitch(PitchLetter.D, -1, 0),
-  new Pitch(PitchLetter.D, 0, 0),
-  new Pitch(PitchLetter.E, -1, 0),
-  new Pitch(PitchLetter.E, 0, 0),
-  new Pitch(PitchLetter.F, 0, 0),
-  new Pitch(PitchLetter.F, 1, 0),
-  new Pitch(PitchLetter.G, -1, 0),
-  new Pitch(PitchLetter.G, 0, 0),
-  new Pitch(PitchLetter.A, -1, 0),
-  new Pitch(PitchLetter.A, 0, 0),
-  new Pitch(PitchLetter.B, -1, 0),
-  new Pitch(PitchLetter.B, 0, 0)
+  createPitch(PitchLetter.C, -1, 0),
+  createPitch(PitchLetter.C, 0, 0),
+  createPitch(PitchLetter.C, 1, 0),
+  createPitch(PitchLetter.D, -1, 0),
+  createPitch(PitchLetter.D, 0, 0),
+  createPitch(PitchLetter.E, -1, 0),
+  createPitch(PitchLetter.E, 0, 0),
+  createPitch(PitchLetter.F, 0, 0),
+  createPitch(PitchLetter.F, 1, 0),
+  createPitch(PitchLetter.G, -1, 0),
+  createPitch(PitchLetter.G, 0, 0),
+  createPitch(PitchLetter.A, -1, 0),
+  createPitch(PitchLetter.A, 0, 0),
+  createPitch(PitchLetter.B, -1, 0),
+  createPitch(PitchLetter.B, 0, 0)
 ];
 export const answers = [
   "C♭ Major, A♭ Minor",

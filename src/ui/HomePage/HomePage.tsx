@@ -31,8 +31,8 @@ export const NotesThumbnail: React.FunctionComponent<{}> = props => (
   <PianoKeyboard
     maxWidth={topicThumbnailSize.width} 
     maxHeight={topicThumbnailSize.height} /* from ".home-topic .thumbnail" in Stylesheet.css */
-    lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-    highestPitch={new Pitch(PitchLetter.B, 0, 4)}
+    lowestPitch={createPitch(PitchLetter.C, 0, 4)}
+    highestPitch={createPitch(PitchLetter.B, 0, 4)}
     renderExtrasFn={metrics => renderPianoKeyboardNoteNames(
       metrics,
       /*useSharps*/ true,
@@ -82,8 +82,8 @@ export class AnimatedPianoKeyboardThumbnail extends React.Component<IAnimatedPia
       <PianoKeyboard
         maxWidth={topicThumbnailSize.width} 
         maxHeight={topicThumbnailSize.height} /* from ".home-topic .thumbnail" in Stylesheet.css */
-        lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-        highestPitch={new Pitch(PitchLetter.B, 0, 4)}
+        lowestPitch={createPitch(PitchLetter.C, 0, 4)}
+        highestPitch={createPitch(PitchLetter.B, 0, 4)}
         pressedPitches={pressedPitches} />
     );
   }
@@ -95,7 +95,7 @@ export class AnimatedPianoKeyboardThumbnail extends React.Component<IAnimatedPia
   }
 }
 
-const scalesThumbnailScale = new Scale(ScaleType.Aeolian, new Pitch(PitchLetter.C, 0, 4));
+const scalesThumbnailScale = new Scale(ScaleType.Aeolian, createPitch(PitchLetter.C, 0, 4));
 const scalesThumbnailScalePitches = scalesThumbnailScale.getPitchClasses();
 const scalesThumbnailAnimationStepPitches = (
   () => {
@@ -120,22 +120,22 @@ export const ScalesThumbnail: React.FunctionComponent<{}> = props => (
     animationStepDurationMs={scalesThumbnailAnimationStepDurationMs} />
 );
 
-const chordsThumbnailPitches = (new Chord(ChordType.Minor, new Pitch(PitchLetter.C, 0, 4)))
+const chordsThumbnailPitches = (new Chord(ChordType.Minor, createPitch(PitchLetter.C, 0, 4)))
   .getPitchClasses();
 
 export const ChordsThumbnail: React.FunctionComponent<{}> = props => (
   <PianoKeyboard
     maxWidth={topicThumbnailSize.width} 
     maxHeight={topicThumbnailSize.height} /* from ".home-topic .thumbnail" in Stylesheet.css */
-    lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-    highestPitch={new Pitch(PitchLetter.B, 0, 4)}
+    lowestPitch={createPitch(PitchLetter.C, 0, 4)}
+    highestPitch={createPitch(PitchLetter.B, 0, 4)}
     pressedPitches={chordsThumbnailPitches} />
 );
 
 const chordProgressionsThumbnailAnimationStepPitches = [
-  [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.A, 0, 4)],
-  [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.B, 0, 4)],
-  [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4)]
+  [createPitch(PitchLetter.D, 0, 4), createPitch(PitchLetter.F, 0, 4), createPitch(PitchLetter.A, 0, 4)],
+  [createPitch(PitchLetter.D, 0, 4), createPitch(PitchLetter.F, 0, 4), createPitch(PitchLetter.G, 0, 4), createPitch(PitchLetter.B, 0, 4)],
+  [createPitch(PitchLetter.C, 0, 4), createPitch(PitchLetter.E, 0, 4), createPitch(PitchLetter.G, 0, 4)]
 ];
 const chordProgressionsThumbnaillAnimationStepDurationMs = 1000;
 

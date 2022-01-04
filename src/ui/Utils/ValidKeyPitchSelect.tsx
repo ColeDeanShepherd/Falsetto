@@ -1,6 +1,5 @@
 import * as React from "react";
 
-import { getValidKeyPitches } from '../../lib/TheoryLib/Key';
 import { Pitch } from '../../lib/TheoryLib/Pitch';
 import { pitchLetters } from '../../lib/TheoryLib/PitchLetter';
 import { toggleArrayElementCustomEquals } from '../../lib/Core/ArrayUtils';
@@ -81,7 +80,7 @@ export class ValidKeyPitchSelect extends React.Component<IValidKeyPitchSelectPro
     } else {
       newValue = toggleArrayElementCustomEquals(
         this.props.value,
-        new Pitch(
+        createPitch(
           pitch.letter, pitch.signedAccidental,
           pitch.octaveNumber + this.props.preferredOctaveNumber
         ),

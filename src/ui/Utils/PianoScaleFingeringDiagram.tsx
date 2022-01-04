@@ -26,8 +26,8 @@ export class PianoScaleFingeringDiagram extends React.Component<IPianoScaleFinge
     return (
       <PianoKeyboard
         maxWidth={300}
-        lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-        highestPitch={new Pitch(PitchLetter.C, 0, 6)}
+        lowestPitch={createPitch(PitchLetter.C, 0, 4)}
+        highestPitch={createPitch(PitchLetter.C, 0, 6)}
         pressedPitches={[]}
         renderExtrasFn={metrics => renderExtrasFn(metrics, pitches, scale.rootPitchClass)} />
     );

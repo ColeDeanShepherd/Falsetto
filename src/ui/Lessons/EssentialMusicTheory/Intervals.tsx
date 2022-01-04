@@ -38,7 +38,7 @@ const HalfStepsDiagram: React.FunctionComponent<{}> = props => {
   
   function renderHalfStepLabels(metrics: PianoKeyboardMetrics): JSX.Element {
     function renderHalfStepLabel(leftPitch: Pitch): JSX.Element {
-      const rightPitch = Pitch.createFromMidiNumber(leftPitch.midiNumber + 1);
+      const rightPitch = createPitchFromMidiNumber(leftPitch.midiNumber + 1);
       const leftKeyRect = metrics.getKeyRect(leftPitch);
       const rightKeyRect = metrics.getKeyRect(rightPitch);
 
@@ -71,8 +71,8 @@ const HalfStepsDiagram: React.FunctionComponent<{}> = props => {
 
     return (
       <g>
-        {renderHalfStepLabel(new Pitch(PitchLetter.E, 0, 4))}
-        {renderHalfStepLabel(new Pitch(PitchLetter.A, -1, 4))}
+        {renderHalfStepLabel(createPitch(PitchLetter.E, 0, 4))}
+        {renderHalfStepLabel(createPitch(PitchLetter.A, -1, 4))}
       </g>
     );
   }
@@ -81,8 +81,8 @@ const HalfStepsDiagram: React.FunctionComponent<{}> = props => {
     <PianoKeyboard
       maxWidth={300}
       margin={margin}
-      lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-      highestPitch={new Pitch(PitchLetter.B, 0, 4)}
+      lowestPitch={createPitch(PitchLetter.C, 0, 4)}
+      highestPitch={createPitch(PitchLetter.B, 0, 4)}
       pressedPitches={[]}
       onKeyPress={p => playPitches([p])}
       renderExtrasFn={renderHalfStepLabels} />
@@ -103,10 +103,10 @@ const IntervalsTable: React.FunctionComponent<{ showExamples?: boolean, showCate
       playingSounds = null;
     }
 
-    const basePitch = new Pitch(PitchLetter.C, 0, 4);
+    const basePitch = createPitch(PitchLetter.C, 0, 4);
     const pitches = (halfSteps === 0)
       ? [basePitch]
-      : [basePitch, Pitch.createFromMidiNumber(basePitch.midiNumber + halfSteps)];
+      : [basePitch, createPitchFromMidiNumber(basePitch.midiNumber + halfSteps)];
     playPitches(pitches)[0]
       .then(sounds => { playingSounds = sounds; });
   };

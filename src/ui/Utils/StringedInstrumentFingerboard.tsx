@@ -39,7 +39,7 @@ export function get1stStringedInstrumentNoteOnString(pitch: Pitch, stringIndex: 
 
   const openStringPitch = tuning.openStringPitches[stringIndex];
 
-  let notePitch = new Pitch(pitch.letter, pitch.signedAccidental, openStringPitch.octaveNumber);
+  let notePitch = createPitch(pitch.letter, pitch.signedAccidental, openStringPitch.octaveNumber);
   if (notePitch.midiNumber < openStringPitch.midiNumber) {
     notePitch.octaveNumber++;
   }

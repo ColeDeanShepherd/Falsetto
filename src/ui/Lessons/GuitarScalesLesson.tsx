@@ -22,11 +22,11 @@ import { NoteText } from "../Utils/NoteText";
 import { Card } from "../../ui/Card/Card";
 
 const fretCount = 11;
-const ionianRootPitch = new Pitch(PitchLetter.F, 0, 2);
+const ionianRootPitch = createPitch(PitchLetter.F, 0, 2);
 const ionianPitches = ScaleType.Ionian.getPitches(ionianRootPitch);
-const majorPentatonicRootPitch = new Pitch(PitchLetter.A, 0, 2);
+const majorPentatonicRootPitch = createPitch(PitchLetter.A, 0, 2);
 const majorPentatonicPitches = ScaleType.MajorPentatonic.getPitches(majorPentatonicRootPitch);
-const melodicMinorRootPitch = new Pitch(PitchLetter.F, 0, 2);
+const melodicMinorRootPitch = createPitch(PitchLetter.F, 0, 2);
 const melodicMinorPitches = ScaleType.MelodicMinor.getPitches(melodicMinorRootPitch);
 const noteHighlightColor = "lightblue";
 

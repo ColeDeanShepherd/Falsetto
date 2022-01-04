@@ -16,8 +16,8 @@ import { ScaleSelect } from "../Utils/ScaleSelect";
 import { GuitarPitchesAudio } from '../../Audio/GuitarAudio';
 import { Card } from "../../ui/Card/Card";
 
-const pianoKeyboardLowestPitch = new Pitch(PitchLetter.C, 0, 4);
-const pianoKeyboardHighestPitch = new Pitch(PitchLetter.B, 0, 5);
+const pianoKeyboardLowestPitch = createPitch(PitchLetter.C, 0, 4);
+const pianoKeyboardHighestPitch = createPitch(PitchLetter.B, 0, 5);
 
 export interface IScaleViewerProps {
   title?: string;
@@ -38,7 +38,7 @@ export class ScaleViewer extends React.Component<IScaleViewerProps, IScaleViewer
 
     this.state = {
       scaleTypeGroup: this.scaleTypeGroups[0],
-      scale: new Scale(this.scaleTypeGroups[0].scaleTypes[0], new Pitch(PitchLetter.C, 0, 4))
+      scale: new Scale(this.scaleTypeGroups[0].scaleTypes[0], createPitch(PitchLetter.C, 0, 4))
     };
   }
 

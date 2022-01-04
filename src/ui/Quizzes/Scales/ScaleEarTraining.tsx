@@ -16,10 +16,10 @@ import { ScaleType, scaleTypeLevels } from "../../../lib/TheoryLib/ScaleType";
 
 const flashCardSetId = "scaleEarTraining";
 
-const minPitch = new Pitch(PitchLetter.C, -1, 2);
-const maxPitch = new Pitch(PitchLetter.C, 1, 6);
+const minPitch = createPitch(PitchLetter.C, -1, 2);
+const maxPitch = createPitch(PitchLetter.C, 1, 6);
 const rootPitches = range(minPitch.midiNumber, maxPitch.midiNumber)
-  .map(midiNumber => Pitch.createFromMidiNumber(midiNumber));
+  .map(midiNumber => createPitchFromMidiNumber(midiNumber));
 
 // TODO: instead of generating all flash cards ahead of time, dynamically generate each one
 
@@ -82,7 +82,7 @@ interface IConfigData {
 export function forEachScaleType(callbackFn: (scaleType: ScaleType, i: number) => void) {
   let i = 0;
 
-  for (const scaleType of ScaleType.All) {
+  for (const scaleType of AllScaleTypes) {
     callbackFn(scaleType, i);
 
     i++;
@@ -114,12 +114,12 @@ export class ScaleNotesFlashCardMultiSelect extends React.Component<IScaleNotesF
     super(props);
 
     this.state = {
-      enabledScaleTypes: ScaleType.All.map(c => c.name)
+      enabledScaleTypes: AllScaleTypes.map(c => c.name)
     };
   }
   public render(): JSX.Element {
     const configData = this.props.studySessionInfo.configData as IConfigData;
-    const scaleTypeCheckboxTableRows = ScaleType.All
+    const scaleTypeCheckboxTableRows = AllScaleTypes
       .map((scale, i) => {
         const isChecked = configData.enabledScaleTypes.indexOf(scale.name) >= 0;
         const isEnabled = !isChecked || (configData.enabledScaleTypes.length > 1);
@@ -181,7 +181,7 @@ export function createFlashCards(): Array<FlashCard> {
 
   const flashCards = new Array<FlashCard>();
 
-  for (const scaleType of ScaleType.All) {
+  for (const scaleType of AllScaleTypes) {
     const iCopy = i;
     i++;
 
@@ -216,7 +216,7 @@ function createFlashCardSet(): FlashCardSet {
   );
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.getInitialConfigData = (): IConfigData => ({
-    enabledScaleTypes: ScaleType.All
+    enabledScaleTypes: AllScaleTypes
       .filter((_, scaleIndex) => scaleIndex <= 7)
       .map(scale => scale.name)
   });

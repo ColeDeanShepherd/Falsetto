@@ -12,7 +12,7 @@ import _32ndRest from "../../../img/sheet-music/32nd-rest.svg";
 import { Vector2D } from '../../../lib/Core/Vector2D';
 import { range } from '../../../lib/Core/MathUtils';
 import { Card } from "../../../ui/Card/Card";
-export const defaultRootPitch = new Pitch(PitchLetter.C, 0, 4);
+export const defaultRootPitch = createPitch(PitchLetter.C, 0, 4);
 
 export const MainTitle: React.FunctionComponent<{}> = props => <h1>{props.children}</h1>;
 export const SectionTitle: React.FunctionComponent<{}> = props => <h2>{props.children}</h2>;
@@ -22,10 +22,10 @@ export const OctavesPlayer: React.FunctionComponent<{}> = props => {
   return (
     <PianoKeyboard
       maxWidth={400}
-      lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-      highestPitch={new Pitch(PitchLetter.B, 0, 4)}
+      lowestPitch={createPitch(PitchLetter.C, 0, 4)}
+      highestPitch={createPitch(PitchLetter.B, 0, 4)}
       pressedPitches={[]}
-      onKeyPress={p => playPitchesSequentially(range(0, 3).map(i => new Pitch(p.letter, p.signedAccidental, p.octaveNumber - 2 + i)), 500, true)}
+      onKeyPress={p => playPitchesSequentially(range(0, 3).map(i => createPitch(p.letter, p.signedAccidental, p.octaveNumber - 2 + i)), 500, true)}
       renderExtrasFn={renderPianoKeyboardNoteNames} />
   );
 };

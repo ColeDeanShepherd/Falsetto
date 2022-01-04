@@ -65,7 +65,7 @@ export function findScales(pitches: Array<Pitch>): Array<[ScaleType, Pitch]> {
   const allPitchIntegers = getAllModePitchIntegers(basePitchIntegers);
   const scaleTypes = allPitchIntegers
     .map((pis, i): [ScaleType | undefined, Pitch] => [
-      ScaleType.All.find(ct => areArraysEqual(ct.pitchIntegers, pis)),
+      AllScaleTypes.find(ct => areArraysEqual(ct.pitchIntegers, pis)),
       pitches[i]
     ])
     .filter(t => t[0])
@@ -80,81 +80,81 @@ export function keyToPitch(keyString: string): Pitch | null {
   switch (keyString) {
     // bottom rows
     case "z":
-      return new Pitch(PitchLetter.C, 0, 4);
+      return createPitch(PitchLetter.C, 0, 4);
     case "s":
-      return new Pitch(PitchLetter.D, -1, 4);
+      return createPitch(PitchLetter.D, -1, 4);
     case "x":
-      return new Pitch(PitchLetter.D, 0, 4);
+      return createPitch(PitchLetter.D, 0, 4);
     case "d":
-      return new Pitch(PitchLetter.E, -1, 4);
+      return createPitch(PitchLetter.E, -1, 4);
     case "c":
-      return new Pitch(PitchLetter.E, 0, 4);
+      return createPitch(PitchLetter.E, 0, 4);
     case "v":
-      return new Pitch(PitchLetter.F, 0, 4);
+      return createPitch(PitchLetter.F, 0, 4);
     case "g":
-      return new Pitch(PitchLetter.G, -1, 4);
+      return createPitch(PitchLetter.G, -1, 4);
     case "b":
-      return new Pitch(PitchLetter.G, 0, 4);
+      return createPitch(PitchLetter.G, 0, 4);
     case "h":
-      return new Pitch(PitchLetter.A, -1, 4);
+      return createPitch(PitchLetter.A, -1, 4);
     case "n":
-      return new Pitch(PitchLetter.A, 0, 4);
+      return createPitch(PitchLetter.A, 0, 4);
     case "j":
-      return new Pitch(PitchLetter.B, -1, 4);
+      return createPitch(PitchLetter.B, -1, 4);
     case "m":
-      return new Pitch(PitchLetter.B, 0, 4);
+      return createPitch(PitchLetter.B, 0, 4);
     case ",":
-      return new Pitch(PitchLetter.C, 0, 5);
+      return createPitch(PitchLetter.C, 0, 5);
     case "l":
-      return new Pitch(PitchLetter.D, -1, 5);
+      return createPitch(PitchLetter.D, -1, 5);
     case ".":
-      return new Pitch(PitchLetter.D, 0, 5);
+      return createPitch(PitchLetter.D, 0, 5);
     case ";":
-      return new Pitch(PitchLetter.E, -1, 5);
+      return createPitch(PitchLetter.E, -1, 5);
     case "/":
-      return new Pitch(PitchLetter.E, 0, 5);
+      return createPitch(PitchLetter.E, 0, 5);
 
     // top rows
     case "q":
-      return new Pitch(PitchLetter.C, 0, 5);
+      return createPitch(PitchLetter.C, 0, 5);
     case "2":
-      return new Pitch(PitchLetter.D, -1, 5);
+      return createPitch(PitchLetter.D, -1, 5);
     case "w":
-      return new Pitch(PitchLetter.D, 0, 5);
+      return createPitch(PitchLetter.D, 0, 5);
     case "3":
-      return new Pitch(PitchLetter.E, -1, 5);
+      return createPitch(PitchLetter.E, -1, 5);
     case "e":
-      return new Pitch(PitchLetter.E, 0, 5);
+      return createPitch(PitchLetter.E, 0, 5);
     case "r":
-      return new Pitch(PitchLetter.F, 0, 5);
+      return createPitch(PitchLetter.F, 0, 5);
     case "5":
-      return new Pitch(PitchLetter.G, -1, 5);
+      return createPitch(PitchLetter.G, -1, 5);
     case "t":
-      return new Pitch(PitchLetter.G, 0, 5);
+      return createPitch(PitchLetter.G, 0, 5);
     case "6":
-      return new Pitch(PitchLetter.A, -1, 5);
+      return createPitch(PitchLetter.A, -1, 5);
     case "y":
-      return new Pitch(PitchLetter.A, 0, 5);
+      return createPitch(PitchLetter.A, 0, 5);
     case "7":
-      return new Pitch(PitchLetter.B, -1, 5);
+      return createPitch(PitchLetter.B, -1, 5);
     case "u":
-      return new Pitch(PitchLetter.B, 0, 5);
+      return createPitch(PitchLetter.B, 0, 5);
     case "i":
-      return new Pitch(PitchLetter.C, 0, 6);
+      return createPitch(PitchLetter.C, 0, 6);
     case "9":
-      return new Pitch(PitchLetter.C, 1, 6);
+      return createPitch(PitchLetter.C, 1, 6);
     case "o":
-      return new Pitch(PitchLetter.D, 0, 6);
+      return createPitch(PitchLetter.D, 0, 6);
     case "0":
-      return new Pitch(PitchLetter.D, 1, 6);
+      return createPitch(PitchLetter.D, 1, 6);
     case "p":
-      return new Pitch(PitchLetter.E, 0, 6);
+      return createPitch(PitchLetter.E, 0, 6);
     case "[":
-      return new Pitch(PitchLetter.F, 0, 6);
+      return createPitch(PitchLetter.F, 0, 6);
     case "=":
-      return new Pitch(PitchLetter.F, 1, 6);
+      return createPitch(PitchLetter.F, 1, 6);
     case "]":
-      return new Pitch(PitchLetter.G, 0, 6);
+      return createPitch(PitchLetter.G, 0, 6);
     
     default:
       return null;
@@ -239,8 +239,8 @@ export class IntervalChordScaleFinder extends React.Component<IIntervalChordScal
             <p>
               <PianoKeyboard
                 maxWidth={400}
-                lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-                highestPitch={new Pitch(PitchLetter.B, 0, 5)}
+                lowestPitch={createPitch(PitchLetter.C, 0, 4)}
+                highestPitch={createPitch(PitchLetter.B, 0, 5)}
                 onKeyPress={onPianoKeyPress}
                 renderLayeredExtrasFn={metrics => this.renderExtras(metrics)}
               />

@@ -73,14 +73,14 @@ export function getScaleTypeUriComponent(scaleType: ScaleType): string {
 }
 
 export function parseScaleTypeFromUriComponent(uriComponent: string): ScaleType | undefined {
-  return ScaleType.All.find(st => st.id === uriComponent);
+  return AllScaleTypes.find(st => st.id === uriComponent);
 }
 
 export class Scale {
   public static forAll(callback: (scale: Scale, i: number) => void) {
     let i = 0;
 
-    for (const scaleType of ScaleType.All) {
+    for (const scaleType of AllScaleTypes) {
       for (const rootPitchClass of pitchClasses) {
         const scale = new Scale(scaleType, rootPitchClass);
 
@@ -95,7 +95,7 @@ export class Scale {
     if (splitId.length !== 2) { return undefined; }
 
     const scaleTypeId = splitId[1];
-    const scaleType = ScaleType.All.find(st => st.id === scaleTypeId);
+    const scaleType = AllScaleTypes.find(st => st.id === scaleTypeId);
     if (!scaleType) { return undefined; }
 
     const scaleRootPitchString = splitId[0];

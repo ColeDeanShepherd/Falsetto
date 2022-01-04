@@ -36,7 +36,7 @@ export function createFlashCards(): FlashCard[] {
     )
   ]
   .concat(
-    (new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4)))
+    (new Scale(ScaleType.Major, createPitch(PitchLetter.C, 0, 4)))
       .getDiatonicCanonicalChords(/*numChordPitches*/ 3)
       .map((canonicalChord, i) => {
         const scaleDegreeNumber = 1 + i;

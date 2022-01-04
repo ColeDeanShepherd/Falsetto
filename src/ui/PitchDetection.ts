@@ -20,7 +20,7 @@ export class DatalantPitchDetector implements IPitchDetector {
 			const midiNumber = noteFromPitch(pitch);
 			const detuneCents = centsOffFromPitch(pitch, midiNumber);
 	
-			return new DetectedPitch(Pitch.createFromMidiNumber(midiNumber), detuneCents);
+			return new DetectedPitch(createPitchFromMidiNumber(midiNumber), detuneCents);
 		} else {
 			return null;
 		}

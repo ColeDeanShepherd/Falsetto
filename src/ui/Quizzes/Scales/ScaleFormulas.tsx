@@ -37,7 +37,7 @@ function createFlashCardSet(): FlashCardSet {
 }
 
 export function createFlashCards(): FlashCard[] {
-  return ScaleType.All
+  return AllScaleTypes
     .map(scaleType => new FlashCard(
       createFlashCardId(flashCardSetId, { scale: scaleType.name }),
       new FlashCardSide(scaleType.name),

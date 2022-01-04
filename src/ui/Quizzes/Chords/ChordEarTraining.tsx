@@ -16,10 +16,10 @@ import { Button } from "../../../ui/Button/Button";
 
 const flashCardSetId = "chordEarTraining";
 
-const minPitch = new Pitch(PitchLetter.C, -1, 2);
-const maxPitch = new Pitch(PitchLetter.C, 1, 6);
+const minPitch = createPitch(PitchLetter.C, -1, 2);
+const maxPitch = createPitch(PitchLetter.C, 1, 6);
 const rootPitches = range(minPitch.midiNumber, maxPitch.midiNumber)
-  .map(midiNumber => Pitch.createFromMidiNumber(midiNumber));
+  .map(midiNumber => createPitchFromMidiNumber(midiNumber));
 const chordTypes = ChordType.All;
 
 export interface IFlashCardFrontSideProps {

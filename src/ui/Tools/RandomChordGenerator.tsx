@@ -5,7 +5,6 @@ import { createFlashCardId, FlashCard, FlashCardId, FlashCardSide } from "../../
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../FlashCardSet";
 import { ChordType, chordTypeLevels } from "../../lib/TheoryLib/ChordType";
 import { CheckboxColumnsFlashCardMultiSelect, CheckboxColumnCell, CheckboxColumn } from '../Utils/CheckboxColumnsFlashCardMultiSelect';
-import { getValidKeyPitches } from '../../lib/TheoryLib/Key';
 import { Pitch } from '../../lib/TheoryLib/Pitch';
 import { arrayContains } from '../../lib/Core/ArrayUtils';
 

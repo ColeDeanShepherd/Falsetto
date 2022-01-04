@@ -89,8 +89,8 @@ export const FullPiano: React.FunctionComponent<{}> = props => (
     highestPitch={fullPianoHighestPitch} />
 );
 
-export const oneOctavePianoLowestPitch = new Pitch(PitchLetter.C, 0, 4);
-export const oneOctavePianoHighestPitch = new Pitch(PitchLetter.B, 0, 4);
+export const oneOctavePianoLowestPitch = createPitch(PitchLetter.C, 0, 4);
+export const oneOctavePianoHighestPitch = createPitch(PitchLetter.B, 0, 4);
 
 export const OneOctavePiano: React.FunctionComponent<{}> = props => (
   <PlayablePianoKeyboard
@@ -99,8 +99,8 @@ export const OneOctavePiano: React.FunctionComponent<{}> = props => (
     highestPitch={oneOctavePianoHighestPitch} />
 );
 
-export const twoOctavePianoLowestPitch = new Pitch(PitchLetter.C, 0, 3);
-export const twoOctavePianoHighestPitch = new Pitch(PitchLetter.B, 0, 4);
+export const twoOctavePianoLowestPitch = createPitch(PitchLetter.C, 0, 3);
+export const twoOctavePianoHighestPitch = createPitch(PitchLetter.B, 0, 4);
 
 export const TwoOctavePiano: React.FunctionComponent<{}> = props => (
   <PlayablePianoKeyboard
@@ -110,8 +110,8 @@ export const TwoOctavePiano: React.FunctionComponent<{}> = props => (
 );
 
 const PianoKeyTwoBlackKeysPatternDiagram: React.FunctionComponent<{}> = props => {
-  const lowestPitch = new Pitch(PitchLetter.C, 0, 4);
-  const highestPitch = new Pitch(PitchLetter.E, 0, 4);
+  const lowestPitch = createPitch(PitchLetter.C, 0, 4);
+  const highestPitch = createPitch(PitchLetter.E, 0, 4);
   const maxWidth = maxPianoWidth * (3 / fullPianoNumWhiteKeys);
 
   return (
@@ -124,8 +124,8 @@ const PianoKeyTwoBlackKeysPatternDiagram: React.FunctionComponent<{}> = props =>
 };
 
 const PianoKeyThreeBlackKeysPatternDiagram: React.FunctionComponent<{}> = props => {
-  const lowestPitch = new Pitch(PitchLetter.F, 0, 4);
-  const highestPitch = new Pitch(PitchLetter.B, 0, 4);
+  const lowestPitch = createPitch(PitchLetter.F, 0, 4);
+  const highestPitch = createPitch(PitchLetter.B, 0, 4);
   const maxWidth = maxPianoWidth * (4 / fullPianoNumWhiteKeys);
 
   return (
@@ -147,8 +147,8 @@ const PianoKeyPatternDiagram: React.FunctionComponent<{}> = props => {
   ): JSX.Element {
     const octaveNumber = patternOccurrenceIndex;
 
-    const leftPitch = Pitch.max(new Pitch(PitchLetter.C, 0, octaveNumber), fullPianoLowestPitch);
-    const rightPitch = Pitch.min(new Pitch(PitchLetter.B, 0, octaveNumber), fullPianoHighestPitch);
+    const leftPitch = Pitch.max(createPitch(PitchLetter.C, 0, octaveNumber), fullPianoLowestPitch);
+    const rightPitch = Pitch.min(createPitch(PitchLetter.B, 0, octaveNumber), fullPianoHighestPitch);
 
     const leftKeyRect = metrics.getKeyRect(leftPitch);
     const rightKeyRect = metrics.getKeyRect(rightPitch);
@@ -213,8 +213,8 @@ export interface IPianoNoteDiagramProps {
 function renderPianoNoteDiagram(props: IPianoNoteDiagramProps) {
   const { key, pitch, labelWhiteKeys, labelBlackKeys, showLetterPredicate, useSharps, onKeyPress }  = props;
 
-  const lowestPitch = new Pitch(PitchLetter.C, 0, 4);
-  const highestPitch = new Pitch(PitchLetter.B, 0, 4);
+  const lowestPitch = createPitch(PitchLetter.C, 0, 4);
+  const highestPitch = createPitch(PitchLetter.B, 0, 4);
 
   return (
     <PianoNotesDiagram
@@ -289,9 +289,9 @@ const ThirdsDiagram: React.FunctionComponent<{}> = props => {
   const margin = new Margin(0, 0, 0, maxWidth / 10);
 
   const pitches = [
-    new Pitch(PitchLetter.C, 0, 4),
-    new Pitch(PitchLetter.E, 0, 4),
-    new Pitch(PitchLetter.G, 0, 4),
+    createPitch(PitchLetter.C, 0, 4),
+    createPitch(PitchLetter.E, 0, 4),
+    createPitch(PitchLetter.G, 0, 4),
   ];
   
   function renderIntervalLabels(metrics: PianoKeyboardMetrics): JSX.Element {
@@ -356,8 +356,8 @@ const ThirdsDiagram: React.FunctionComponent<{}> = props => {
     <PlayablePianoKeyboard
       maxWidth={maxWidth}
       margin={margin}
-      lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-      highestPitch={new Pitch(PitchLetter.B, 0, 5)}
+      lowestPitch={createPitch(PitchLetter.C, 0, 4)}
+      highestPitch={createPitch(PitchLetter.B, 0, 5)}
       canPressKeyFn={p => new Set<number>(pitches.map(p => p.midiNumberNoOctave)).has(p.midiNumberNoOctave)}
       wrapOctave={true}
       renderExtrasFn={renderExtrasFn} />
@@ -593,7 +593,7 @@ function renderOrdinalNumeral(x: number): JSX.Element {
 }
 
 function renderDiatonicTriadSlideContents(scaleDegreeNumber: number): JSX.Element {
-  const scale = new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4));
+  const scale = new Scale(ScaleType.Major, createPitch(PitchLetter.C, 0, 4));
   const chord = scale.getDiatonicChord(scaleDegreeNumber, /*numChordPitches*/ 3);
 
   const chordTypeName = chord.type.name;
@@ -625,7 +625,7 @@ function createDiatonicTriadSlide(scaleDegreeNumber: number): Slide {
 }
 
 function createDiatonicTriadNotesQuizSlide(scaleDegreeNumber: number): Slide {
-  const scale = new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4));
+  const scale = new Scale(ScaleType.Major, createPitch(PitchLetter.C, 0, 4));
   const chord = scale.getDiatonicChord(scaleDegreeNumber, /*numChordPitches*/ 3);
 
   const chordPitches = chord.getPitchClasses();
@@ -722,7 +722,7 @@ export const pianoTheorySlideGroups = [
           <p>All note names are based on english letters. The highlighted key below, to the left of the group of 2 black keys, produces a note called <strong>C</strong>.</p>
           {renderPianoNoteDiagram({
             key: "pianoNoteDiagram", // prevent the component from unmounting when changing slides
-            pitch: new Pitch(PitchLetter.C, 0, 4),
+            pitch: createPitch(PitchLetter.C, 0, 4),
             labelWhiteKeys: true,
             labelBlackKeys: false
           })}
@@ -734,7 +734,7 @@ export const pianoTheorySlideGroups = [
           <p>Press all the <strong>C</strong>'s on your MIDI keyboard (or on-screen) to continue.</p>
           <PressPianoKeysAllOctavesSlide
             slideshow={slideshow}
-            pitches={[new Pitch(PitchLetter.C, 0, 4)]}
+            pitches={[createPitch(PitchLetter.C, 0, 4)]}
             />
         </div>
       )),
@@ -744,7 +744,7 @@ export const pianoTheorySlideGroups = [
           <p>When moving one white key to the right, we also move forward by one letter in the English alphabet, so this key is called <strong>D</strong>.</p>
           {renderPianoNoteDiagram({
             key: "pianoNoteDiagram", // prevent the component from unmounting when changing slides
-            pitch: new Pitch(PitchLetter.D, 0, 4),
+            pitch: createPitch(PitchLetter.D, 0, 4),
             labelWhiteKeys: true,
             labelBlackKeys: false
           })}
@@ -756,7 +756,7 @@ export const pianoTheorySlideGroups = [
           <p>Press all the <strong>D</strong>'s on your MIDI keyboard (or on-screen) to continue.</p>
           <PressPianoKeysAllOctavesSlide
             slideshow={slideshow}
-            pitches={[new Pitch(PitchLetter.D, 0, 4)]}
+            pitches={[createPitch(PitchLetter.D, 0, 4)]}
             />
         </div>
       )),
@@ -766,7 +766,7 @@ export const pianoTheorySlideGroups = [
           <p>This key is called <strong>E</strong>.</p>
           {renderPianoNoteDiagram({
             key: "pianoNoteDiagram", // prevent the component from unmounting when changing slides
-            pitch: new Pitch(PitchLetter.E, 0, 4),
+            pitch: createPitch(PitchLetter.E, 0, 4),
             labelWhiteKeys: true,
             labelBlackKeys: false
           })}
@@ -778,7 +778,7 @@ export const pianoTheorySlideGroups = [
           <p>Press all the <strong>E</strong>'s on your MIDI keyboard (or on-screen) to continue.</p>
           <PressPianoKeysAllOctavesSlide
             slideshow={slideshow}
-            pitches={[new Pitch(PitchLetter.E, 0, 4)]}
+            pitches={[createPitch(PitchLetter.E, 0, 4)]}
             />
         </div>
       )),
@@ -788,7 +788,7 @@ export const pianoTheorySlideGroups = [
           <p>This key is called <strong>F</strong>.</p>
           {renderPianoNoteDiagram({
             key: "pianoNoteDiagram", // prevent the component from unmounting when changing slides
-            pitch: new Pitch(PitchLetter.F, 0, 4),
+            pitch: createPitch(PitchLetter.F, 0, 4),
             labelWhiteKeys: true,
             labelBlackKeys: false
           })}
@@ -800,7 +800,7 @@ export const pianoTheorySlideGroups = [
           <p>Press all the <strong>F</strong>'s on your MIDI keyboard (or on-screen) to continue.</p>
           <PressPianoKeysAllOctavesSlide
             slideshow={slideshow}
-            pitches={[new Pitch(PitchLetter.F, 0, 4)]}
+            pitches={[createPitch(PitchLetter.F, 0, 4)]}
             />
         </div>
       )),
@@ -810,7 +810,7 @@ export const pianoTheorySlideGroups = [
           <p>This key is called <strong>G</strong>.</p>
           {renderPianoNoteDiagram({
             key: "pianoNoteDiagram", // prevent the component from unmounting when changing slides
-            pitch: new Pitch(PitchLetter.G, 0, 4),
+            pitch: createPitch(PitchLetter.G, 0, 4),
             labelWhiteKeys: true,
             labelBlackKeys: false
           })}
@@ -822,7 +822,7 @@ export const pianoTheorySlideGroups = [
           <p>Press all the <strong>G</strong>'s on your MIDI keyboard (or on-screen) to continue.</p>
           <PressPianoKeysAllOctavesSlide
             slideshow={slideshow}
-            pitches={[new Pitch(PitchLetter.G, 0, 4)]}
+            pitches={[createPitch(PitchLetter.G, 0, 4)]}
             />
         </div>
       )),
@@ -832,7 +832,7 @@ export const pianoTheorySlideGroups = [
           <p>After "G" there is no "H" key &mdash; instead we jump backwards through the English alphabet to <strong>A</strong>.</p>
           {renderPianoNoteDiagram({
             key: "pianoNoteDiagram", // prevent the component from unmounting when changing slides
-            pitch: new Pitch(PitchLetter.A, 0, 4),
+            pitch: createPitch(PitchLetter.A, 0, 4),
             labelWhiteKeys: true,
             labelBlackKeys: false
           })}
@@ -844,7 +844,7 @@ export const pianoTheorySlideGroups = [
           <p>Press all the <strong>A</strong>'s on your MIDI keyboard (or on-screen) to continue.</p>
           <PressPianoKeysAllOctavesSlide
             slideshow={slideshow}
-            pitches={[new Pitch(PitchLetter.A, 0, 4)]}
+            pitches={[createPitch(PitchLetter.A, 0, 4)]}
             />
         </div>
       )),
@@ -854,7 +854,7 @@ export const pianoTheorySlideGroups = [
           <p>The last white key is called <strong>B</strong>.</p>
           {renderPianoNoteDiagram({
             key: "pianoNoteDiagram", // prevent the component from unmounting when changing slides
-            pitch: new Pitch(PitchLetter.B, 0, 4),
+            pitch: createPitch(PitchLetter.B, 0, 4),
             labelWhiteKeys: true,
             labelBlackKeys: false
           })}
@@ -866,7 +866,7 @@ export const pianoTheorySlideGroups = [
           <p>Press all the <strong>B</strong>'s on your MIDI keyboard (or on-screen) to continue.</p>
           <PressPianoKeysAllOctavesSlide
             slideshow={slideshow}
-            pitches={[new Pitch(PitchLetter.B, 0, 4)]}
+            pitches={[createPitch(PitchLetter.B, 0, 4)]}
             />
         </div>
       )),
@@ -876,8 +876,8 @@ export const pianoTheorySlideGroups = [
           <p>Study this slide, then move to the next slide to practice your knowledge of white key names with an interactive exercise.</p>
           <PianoNotesDiagram
             key="pianoNoteDiagram" // prevent the component from unmounting when changing slides
-            lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-            highestPitch={new Pitch(PitchLetter.B, 0, 4)}
+            lowestPitch={createPitch(PitchLetter.C, 0, 4)}
+            highestPitch={createPitch(PitchLetter.B, 0, 4)}
             maxWidth={maxOneOctavePianoWidth}
             labelWhiteKeys={true}
             labelBlackKeys={false} />
@@ -903,11 +903,11 @@ export const pianoTheorySlideGroups = [
           <p>The '♯' ("sharp") symbol means the note is raised by one key, so C♯ means "the key to the right of C".</p>
           {renderPianoNoteDiagram({
             key: "pianoNoteDiagram", // prevent the component from unmounting when changing slides
-            pitch: new Pitch(PitchLetter.C, 1, 4),
+            pitch: createPitch(PitchLetter.C, 1, 4),
             labelWhiteKeys: true,
             labelBlackKeys: true,
             useSharps: true,
-            showLetterPredicate: p => (p.midiNumber <= (new Pitch(PitchLetter.C, 1, 4)).midiNumber)
+            showLetterPredicate: p => (p.midiNumber <= (createPitch(PitchLetter.C, 1, 4)).midiNumber)
           })}
         </div>
       )),
@@ -917,7 +917,7 @@ export const pianoTheorySlideGroups = [
           <p>Press all the <strong>C♯</strong>'s on your MIDI keyboard (or on-screen) to continue.</p>
           <PressPianoKeysAllOctavesSlide
             slideshow={slideshow}
-            pitches={[new Pitch(PitchLetter.C, 1, 4)]}
+            pitches={[createPitch(PitchLetter.C, 1, 4)]}
             />
         </div>
       )),
@@ -928,11 +928,11 @@ export const pianoTheorySlideGroups = [
           <p>The '♭' ("flat") symbol means the note is lowered by one key, so D♭ means "the key to the left of D".</p>
           {renderPianoNoteDiagram({
             key: "pianoNoteDiagram", // prevent the component from unmounting when changing slides
-            pitch: new Pitch(PitchLetter.D, -1, 4),
+            pitch: createPitch(PitchLetter.D, -1, 4),
             labelWhiteKeys: true,
             labelBlackKeys: true,
             useSharps: false,
-            showLetterPredicate: p => p.isEnharmonic(new Pitch(PitchLetter.D, 0, 4)) || p.isEnharmonic(new Pitch(PitchLetter.D, -1, 4))
+            showLetterPredicate: p => p.isEnharmonic(createPitch(PitchLetter.D, 0, 4)) || p.isEnharmonic(createPitch(PitchLetter.D, -1, 4))
           })}
         </div>
       )),
@@ -942,7 +942,7 @@ export const pianoTheorySlideGroups = [
           <p>Press all the <strong>D♭</strong>'s on your MIDI keyboard (or on-screen) to continue.</p>
           <PressPianoKeysAllOctavesSlide
             slideshow={slideshow}
-            pitches={[new Pitch(PitchLetter.D, -1, 4)]}
+            pitches={[createPitch(PitchLetter.D, -1, 4)]}
             />
         </div>
       )),
@@ -952,7 +952,7 @@ export const pianoTheorySlideGroups = [
           <p>This key is called <strong>D♯</strong>, or <strong>E♭</strong>.</p>
           {renderPianoNoteDiagram({
             key: "pianoNoteDiagram", // prevent the component from unmounting when changing slides
-            pitch: new Pitch(PitchLetter.D, 1, 4),
+            pitch: createPitch(PitchLetter.D, 1, 4),
             labelWhiteKeys: false,
             labelBlackKeys: true
           })}
@@ -964,7 +964,7 @@ export const pianoTheorySlideGroups = [
           <p>Press all the <strong>D♯/E♭</strong>'s on your MIDI keyboard (or on-screen) to continue.</p>
           <PressPianoKeysAllOctavesSlide
             slideshow={slideshow}
-            pitches={[new Pitch(PitchLetter.D, 1, 4)]}
+            pitches={[createPitch(PitchLetter.D, 1, 4)]}
             />
         </div>
       )),
@@ -974,7 +974,7 @@ export const pianoTheorySlideGroups = [
           <p>This key is called <strong>F♯</strong>, or <strong>G♭</strong>.</p>
           {renderPianoNoteDiagram({
             key: "pianoNoteDiagram", // prevent the component from unmounting when changing slides
-            pitch: new Pitch(PitchLetter.F, 1, 4),
+            pitch: createPitch(PitchLetter.F, 1, 4),
             labelWhiteKeys: false,
             labelBlackKeys: true
           })}
@@ -986,7 +986,7 @@ export const pianoTheorySlideGroups = [
           <p>Press all the <strong>F♯/G♭</strong>'s on your MIDI keyboard (or on-screen) to continue.</p>
           <PressPianoKeysAllOctavesSlide
             slideshow={slideshow}
-            pitches={[new Pitch(PitchLetter.F, 1, 4)]}
+            pitches={[createPitch(PitchLetter.F, 1, 4)]}
             />
         </div>
       )),
@@ -996,7 +996,7 @@ export const pianoTheorySlideGroups = [
           <p>This key is called <strong>G♯</strong>, or <strong>A♭</strong>.</p>
           {renderPianoNoteDiagram({
             key: "pianoNoteDiagram", // prevent the component from unmounting when changing slides
-            pitch: new Pitch(PitchLetter.G, 1, 4),
+            pitch: createPitch(PitchLetter.G, 1, 4),
             labelWhiteKeys: false,
             labelBlackKeys: true
           })}
@@ -1008,7 +1008,7 @@ export const pianoTheorySlideGroups = [
           <p>Press all the <strong>G♯/A♭</strong>'s on your MIDI keyboard (or on-screen) to continue.</p>
           <PressPianoKeysAllOctavesSlide
             slideshow={slideshow}
-            pitches={[new Pitch(PitchLetter.G, 1, 4)]}
+            pitches={[createPitch(PitchLetter.G, 1, 4)]}
             />
         </div>
       )),
@@ -1018,7 +1018,7 @@ export const pianoTheorySlideGroups = [
           <p>The last black key is called <strong>A♯</strong>, or <strong>B♭</strong>.</p>
           {renderPianoNoteDiagram({
             key: "pianoNoteDiagram", // prevent the component from unmounting when changing slides
-            pitch: new Pitch(PitchLetter.B, -1, 4),
+            pitch: createPitch(PitchLetter.B, -1, 4),
             labelWhiteKeys: false,
             labelBlackKeys: true
           })}
@@ -1030,7 +1030,7 @@ export const pianoTheorySlideGroups = [
           <p>Press all the <strong>A♯/B♭</strong>'s on your MIDI keyboard (or on-screen) to continue.</p>
           <PressPianoKeysAllOctavesSlide
             slideshow={slideshow}
-            pitches={[new Pitch(PitchLetter.A, 1, 4)]}
+            pitches={[createPitch(PitchLetter.A, 1, 4)]}
             />
         </div>
       )),
@@ -1040,8 +1040,8 @@ export const pianoTheorySlideGroups = [
           <p>Study this slide, then move to the next slide to practice your knowledge of black key names with an interactive exercise.</p>
           <PianoNotesDiagram
             key="pianoNoteDiagram" // prevent the component from unmounting when changing slides
-            lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-            highestPitch={new Pitch(PitchLetter.B, 0, 4)}
+            lowestPitch={createPitch(PitchLetter.C, 0, 4)}
+            highestPitch={createPitch(PitchLetter.B, 0, 4)}
             maxWidth={maxOneOctavePianoWidth}
             labelWhiteKeys={false}
             labelBlackKeys={true} />
@@ -1065,8 +1065,8 @@ export const pianoTheorySlideGroups = [
           <p>You have now learned the names of all 12 notes in the repeating pattern of piano keys!</p>
           <p>
             <PianoNotesDiagram
-              lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-              highestPitch={new Pitch(PitchLetter.B, 0, 4)}
+              lowestPitch={createPitch(PitchLetter.C, 0, 4)}
+              highestPitch={createPitch(PitchLetter.B, 0, 4)}
               maxWidth={maxOneOctavePianoWidth / 2}
               labelWhiteKeys={true}
               labelBlackKeys={true} />
@@ -1111,7 +1111,7 @@ export const pianoTheorySlideGroups = [
           <p>Also try starting and ending with <strong>C</strong> to hear how it sounds stable and "like home."</p>
           <p>
             <PianoScaleDronePlayer
-              scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))}
+              scale={new Scale(ScaleType.Ionian, createPitch(PitchLetter.C, 0, 4))}
               octaveCount={2}
               maxWidth={maxTwoOctavePianoWidth} />
           </p>
@@ -1119,7 +1119,7 @@ export const pianoTheorySlideGroups = [
       )),
 
       new Slide("c-major-scale-notes-quiz", (slideshow) => {
-        const pitches = new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4)).getPitchClasses();
+        const pitches = new Scale(ScaleType.Ionian, createPitch(PitchLetter.C, 0, 4)).getPitchClasses();
 
         return (
           <div>
@@ -1134,7 +1134,7 @@ export const pianoTheorySlideGroups = [
 
       // createMiniQuizSlide(
       //   "c-major-scale-notes-quiz",
-      //   [createPressAllScaleNotesFlashCard("cMajorScaleNotes", new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4)))]
+      //   [createPressAllScaleNotesFlashCard("cMajorScaleNotes", new Scale(ScaleType.Ionian, createPitch(PitchLetter.C, 0, 4)))]
       // ),
 
       new Slide("major", () => (
@@ -1150,7 +1150,7 @@ export const pianoTheorySlideGroups = [
 
           <p>
             <PianoScaleFormulaDiagram
-              scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))}
+              scale={new Scale(ScaleType.Ionian, createPitch(PitchLetter.C, 0, 4))}
               octaveCount={2}
               maxWidth={maxTwoOctavePianoWidth} />
           </p>
@@ -1167,7 +1167,7 @@ export const pianoTheorySlideGroups = [
           <p>Try coming up with musical phrases beginning and/or ending on the piano keyboard below to hear this for yourself!</p>
           <p>
             <PianoScaleDronePlayer
-              scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))}
+              scale={new Scale(ScaleType.Ionian, createPitch(PitchLetter.C, 0, 4))}
               octaveCount={2}
               maxWidth={maxTwoOctavePianoWidth} />
           </p>
@@ -1183,7 +1183,7 @@ export const pianoTheorySlideGroups = [
           <p>For example, another common type of scale is the <strong>natural minor scale</strong> (sometimes simply called the <strong>minor</strong> scale), which has a major-scale-relative formula of: <strong className="no-wrap">1, 2, 3♭, 4, 5, 6♭, 7♭</strong>.</p>
           <p>To figure out the notes of the <strong>C minor scale</strong>, for example, using the major-scale-relative formula above, we can take the notes of the <strong>C major scale</strong> (<span className="no-wrap">C, D, E, F, G, A, B</span>) and flattening degrees 3, 6, &amp; 7, giving us: <strong className="no-wrap">C, D, E♭, F, G, A♭, B♭</strong>.</p>
           <p><PianoScaleMajorRelativeFormulaDiagram
-            scale={new Scale(ScaleType.Aeolian, new Pitch(PitchLetter.C, 0, 4))}
+            scale={new Scale(ScaleType.Aeolian, createPitch(PitchLetter.C, 0, 4))}
             octaveCount={2}
             maxWidth={maxTwoOctavePianoWidth} /></p>
         </div>
@@ -1192,7 +1192,7 @@ export const pianoTheorySlideGroups = [
       createMiniQuizSlide("minor-scale-formula-quiz", [minorScaleFormulaFlashCard]),
       
       new Slide("c-minor-scale-notes-quiz", (slideshow) => {
-        const pitches = new Scale(ScaleType.Aeolian, new Pitch(PitchLetter.C, 0, 4)).getPitchClasses();
+        const pitches = new Scale(ScaleType.Aeolian, createPitch(PitchLetter.C, 0, 4)).getPitchClasses();
 
         return (
           <div>
@@ -1257,7 +1257,7 @@ export const pianoTheorySlideGroups = [
           <p><strong>Chords</strong> are sets of two or more notes played simultaneously.</p>
           <p>For example, here is a <strong>C Major</strong> chord, which consists of the three notes <strong>C, E, G</strong>, and has a root note of <strong>C</strong>.</p>
           <ChordView
-            chord={new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))}
+            chord={new Chord(ChordType.Major, createPitch(PitchLetter.C, 0, 4))}
             showChordInfoText={false}
             showChordFormulaOnPiano={false}
             maxWidth={maxTwoOctavePianoWidth} />
@@ -1269,15 +1269,15 @@ export const pianoTheorySlideGroups = [
           <p>It is important to note that you are free to repeat chord notes as many times as you like and play chord notes in any order.</p>
           <p>The following is still considered a <strong>C Major</strong> chord because it consists of the notes C, E, G:</p>
           <ChordDiagram
-            pitches={[new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5), new Pitch(PitchLetter.G, 0, 5),]}
-            scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))}
+            pitches={[createPitch(PitchLetter.E, 0, 4), createPitch(PitchLetter.G, 0, 4), createPitch(PitchLetter.C, 0, 5), createPitch(PitchLetter.G, 0, 5),]}
+            scale={new Scale(ScaleType.Ionian, createPitch(PitchLetter.C, 0, 4))}
             showScaleDegreeNumbers={false}
             maxWidth={maxTwoOctavePianoWidth} />
         </div>
       )),
       
       new Slide("c-major-chord-notes-quiz", (slideshow) => {
-        const pitches = new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4)).getPitchClasses();
+        const pitches = new Chord(ChordType.Major, createPitch(PitchLetter.C, 0, 4)).getPitchClasses();
 
         return (
           <div>
@@ -1310,7 +1310,7 @@ export const pianoTheorySlideGroups = [
           
           <p style={{fontSize: "1.25em", fontWeight: "bold", textDecoration: "underline", textAlign: "center"}}>C Major</p>
           <ChordView
-            chord={new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))}
+            chord={new Chord(ChordType.Major, createPitch(PitchLetter.C, 0, 4))}
             showChordInfoText={false}
             showChordFormulaOnPiano={true} />
         </div>
@@ -1324,14 +1324,14 @@ export const pianoTheorySlideGroups = [
           <p><p>So, C Minor chords, for example, consist the 1st, flattened 3rd, and 5th notes of the C Major scale: C, E♭, G.</p></p>
           <p style={{fontSize: "1.25em", fontWeight: "bold", textDecoration: "underline", textAlign: "center"}}>C Minor</p>
           <ChordView
-            chord={new Chord(ChordType.Minor, new Pitch(PitchLetter.C, 0, 4))}
+            chord={new Chord(ChordType.Minor, createPitch(PitchLetter.C, 0, 4))}
             showChordInfoText={false}
             showChordFormulaOnPiano={true} />
         </div>
       )),
       
       new Slide("c-minor-chord-notes-quiz", (slideshow) => {
-        const pitches = new Chord(ChordType.Minor, new Pitch(PitchLetter.C, 0, 4)).getPitchClasses();
+        const pitches = new Chord(ChordType.Minor, createPitch(PitchLetter.C, 0, 4)).getPitchClasses();
 
         return (
           <div>
@@ -1351,14 +1351,14 @@ export const pianoTheorySlideGroups = [
           <p>All <strong>Diminished chords</strong> have the major-scale-relative formula: <strong>1 3♭ 5♭</strong></p>
           <p style={{fontSize: "1.25em", fontWeight: "bold", textDecoration: "underline", textAlign: "center"}}>C Diminished</p>
           <ChordView
-            chord={new Chord(ChordType.Diminished, new Pitch(PitchLetter.C, 0, 4))}
+            chord={new Chord(ChordType.Diminished, createPitch(PitchLetter.C, 0, 4))}
             showChordInfoText={false}
             showChordFormulaOnPiano={true} />
         </div>
       )),
       
       new Slide("c-diminished-chord-notes-quiz", (slideshow) => {
-        const pitches = new Chord(ChordType.Diminished, new Pitch(PitchLetter.C, 0, 4)).getPitchClasses();
+        const pitches = new Chord(ChordType.Diminished, createPitch(PitchLetter.C, 0, 4)).getPitchClasses();
 
         return (
           <div>
@@ -1378,14 +1378,14 @@ export const pianoTheorySlideGroups = [
           <p>All <strong>Dominant 7th chords</strong> have the major-scale-relative formula: <strong>1 3 5 7♭</strong></p>
           <p style={{fontSize: "1.25em", fontWeight: "bold", textDecoration: "underline", textAlign: "center"}}>C Dominant 7</p>
           <ChordView
-            chord={new Chord(ChordType.Dom7, new Pitch(PitchLetter.C, 0, 4))}
+            chord={new Chord(ChordType.Dom7, createPitch(PitchLetter.C, 0, 4))}
             showChordInfoText={false}
             showChordFormulaOnPiano={true} />
         </div>
       )),
       
       new Slide("c-dominant-7-chord-notes-quiz", (slideshow) => {
-        const pitches = new Chord(ChordType.Dom7, new Pitch(PitchLetter.C, 0, 4)).getPitchClasses();
+        const pitches = new Chord(ChordType.Dom7, createPitch(PitchLetter.C, 0, 4)).getPitchClasses();
 
         return (
           <div>
@@ -1435,9 +1435,9 @@ export const pianoTheorySlideGroups = [
           <p>One example of a diatonic triad in the C Major scale is <strong>G Major</strong>, which has a root note of <strong>G</strong> (the 5th note in the C Major scale) and consists of the notes <strong>G, B, D</strong>, all of which are in the C Major scale:</p>
           <p>
             <ChordView
-              chord={new Chord(ChordType.Major, new Pitch(PitchLetter.G, 0, 4))}
+              chord={new Chord(ChordType.Major, createPitch(PitchLetter.G, 0, 4))}
               showChordInfoText={false}
-              scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
+              scale={new Scale(ScaleType.Major, createPitch(PitchLetter.C, 0, 4))}
               showScaleDegreesOnPiano={true} />
           </p>
         </div>
@@ -1454,7 +1454,7 @@ export const pianoTheorySlideGroups = [
         </div>
       )),
       new Slide("c-major-chord-notes-quiz", (slideshow) => {
-        const pitches = new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4)).getPitchClasses();
+        const pitches = new Chord(ChordType.Major, createPitch(PitchLetter.C, 0, 4)).getPitchClasses();
 
         return (
           <div>
@@ -1469,7 +1469,7 @@ export const pianoTheorySlideGroups = [
 
       createDiatonicTriadSlide(/*scaleDegreeNumber*/ 2),
       new Slide("d-minor-chord-notes-quiz", (slideshow) => {
-        const pitches = new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 4)).getPitchClasses();
+        const pitches = new Chord(ChordType.Minor, createPitch(PitchLetter.D, 0, 4)).getPitchClasses();
 
         return (
           <div>
@@ -1484,7 +1484,7 @@ export const pianoTheorySlideGroups = [
       
       createDiatonicTriadSlide(/*scaleDegreeNumber*/ 3),
       new Slide("e-minor-chord-notes-quiz", (slideshow) => {
-        const pitches = new Chord(ChordType.Minor, new Pitch(PitchLetter.E, 0, 4)).getPitchClasses();
+        const pitches = new Chord(ChordType.Minor, createPitch(PitchLetter.E, 0, 4)).getPitchClasses();
 
         return (
           <div>
@@ -1499,7 +1499,7 @@ export const pianoTheorySlideGroups = [
 
       createDiatonicTriadSlide(/*scaleDegreeNumber*/ 4),
       new Slide("f-major-chord-notes-quiz", (slideshow) => {
-        const pitches = new Chord(ChordType.Major, new Pitch(PitchLetter.F, 0, 4)).getPitchClasses();
+        const pitches = new Chord(ChordType.Major, createPitch(PitchLetter.F, 0, 4)).getPitchClasses();
 
         return (
           <div>
@@ -1514,7 +1514,7 @@ export const pianoTheorySlideGroups = [
 
       createDiatonicTriadSlide(/*scaleDegreeNumber*/ 5),
       new Slide("g-major-chord-notes-quiz", (slideshow) => {
-        const pitches = new Chord(ChordType.Major, new Pitch(PitchLetter.G, 0, 4)).getPitchClasses();
+        const pitches = new Chord(ChordType.Major, createPitch(PitchLetter.G, 0, 4)).getPitchClasses();
 
         return (
           <div>
@@ -1529,7 +1529,7 @@ export const pianoTheorySlideGroups = [
 
       createDiatonicTriadSlide(/*scaleDegreeNumber*/ 6),
       new Slide("a-minor-chord-notes-quiz", (slideshow) => {
-        const pitches = new Chord(ChordType.Minor, new Pitch(PitchLetter.A, 0, 4)).getPitchClasses();
+        const pitches = new Chord(ChordType.Minor, createPitch(PitchLetter.A, 0, 4)).getPitchClasses();
 
         return (
           <div>
@@ -1544,7 +1544,7 @@ export const pianoTheorySlideGroups = [
 
       createDiatonicTriadSlide(/*scaleDegreeNumber*/ 7),
       new Slide("b-diminished-chord-notes-quiz", (slideshow) => {
-        const pitches = new Chord(ChordType.Diminished, new Pitch(PitchLetter.B, 0, 4)).getPitchClasses();
+        const pitches = new Chord(ChordType.Diminished, createPitch(PitchLetter.B, 0, 4)).getPitchClasses();
 
         return (
           <div>
@@ -1599,8 +1599,8 @@ export const pianoTheorySlideGroups = [
           <p>The note you choose to make the lowest note in the chord (the bass) determines which <strong>inversion</strong> the chord is in.</p>
           <p>For example, a C Major chord played with a C (the root note) in the bass is said to be in <strong>root position</strong>:</p>
           <ChordDiagram
-            pitches={[new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5), new Pitch(PitchLetter.E, 0, 5),]}
-            scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))}
+            pitches={[createPitch(PitchLetter.C, 0, 4), createPitch(PitchLetter.G, 0, 4), createPitch(PitchLetter.C, 0, 5), createPitch(PitchLetter.E, 0, 5),]}
+            scale={new Scale(ScaleType.Ionian, createPitch(PitchLetter.C, 0, 4))}
             maxWidth={maxTwoOctavePianoWidth} />
         </div>
       )),
@@ -1608,8 +1608,8 @@ export const pianoTheorySlideGroups = [
         <div>
           <p>A C Major chord played with an E (the 2nd chord note up from the root note) in the bass is said to be in <strong>1st inversion</strong>:</p>
           <ChordDiagram
-            pitches={[new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.C, 0, 5), new Pitch(PitchLetter.E, 0, 5), new Pitch(PitchLetter.G, 0, 5)]}
-            scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))}
+            pitches={[createPitch(PitchLetter.E, 0, 4), createPitch(PitchLetter.C, 0, 5), createPitch(PitchLetter.E, 0, 5), createPitch(PitchLetter.G, 0, 5)]}
+            scale={new Scale(ScaleType.Ionian, createPitch(PitchLetter.C, 0, 4))}
             maxWidth={maxTwoOctavePianoWidth} />
         </div>
       )),
@@ -1617,8 +1617,8 @@ export const pianoTheorySlideGroups = [
         <div>
           <p>A C Major chord played with an G (the 3rd chord note up from the root note) in the bass is said to be in <strong>2nd inversion</strong>:</p>
           <ChordDiagram
-            pitches={[new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5), new Pitch(PitchLetter.E, 0, 5), new Pitch(PitchLetter.G, 0, 5)]}
-            scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))}
+            pitches={[createPitch(PitchLetter.G, 0, 4), createPitch(PitchLetter.C, 0, 5), createPitch(PitchLetter.E, 0, 5), createPitch(PitchLetter.G, 0, 5)]}
+            scale={new Scale(ScaleType.Ionian, createPitch(PitchLetter.C, 0, 4))}
             maxWidth={maxTwoOctavePianoWidth} />
           <p>And so on for chords with more than 3 notes...</p>
         </div>
@@ -1629,8 +1629,8 @@ export const pianoTheorySlideGroups = [
           <p>In this case, we say that you are playing an <strong>arpeggio</strong>, or an <strong>arpeggiated chord</strong>.</p>
           <p>Listen to the diagram below to hear a C Major arpeggio.</p>
           <ChordDiagram
-            pitches={[new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5), new Pitch(PitchLetter.E, 0, 5), new Pitch(PitchLetter.G, 0, 5)]}
-            scale={new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4))}
+            pitches={[createPitch(PitchLetter.C, 0, 4), createPitch(PitchLetter.E, 0, 4), createPitch(PitchLetter.G, 0, 4), createPitch(PitchLetter.C, 0, 5), createPitch(PitchLetter.E, 0, 5), createPitch(PitchLetter.G, 0, 5)]}
+            scale={new Scale(ScaleType.Ionian, createPitch(PitchLetter.C, 0, 4))}
             isArpeggio={true}
             maxWidth={maxTwoOctavePianoWidth} />
         </div>
@@ -1669,16 +1669,16 @@ export const pianoTheorySlideGroups = [
           <p>Below is an example of a chord progression consisting of the chords: D Minor, G Dominant 7 (abbreviated as "G7"), C Major</p>
           <ChordProgressionPlayer
             chordsPitches={[
-              [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.A, 0, 4)],
-              [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.B, 0, 4)],
-              [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]
+              [createPitch(PitchLetter.D, 0, 4), createPitch(PitchLetter.F, 0, 4), createPitch(PitchLetter.A, 0, 4)],
+              [createPitch(PitchLetter.D, 0, 4), createPitch(PitchLetter.F, 0, 4), createPitch(PitchLetter.G, 0, 4), createPitch(PitchLetter.B, 0, 4)],
+              [createPitch(PitchLetter.C, 0, 4), createPitch(PitchLetter.E, 0, 4), createPitch(PitchLetter.G, 0, 4), createPitch(PitchLetter.C, 0, 5)]
             ]}
             chords={[
-              new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 4)),
-              new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)),
-              new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))
+              new Chord(ChordType.Minor, createPitch(PitchLetter.D, 0, 4)),
+              new Chord(ChordType.Dom7, createPitch(PitchLetter.G, 0, 4)),
+              new Chord(ChordType.Major, createPitch(PitchLetter.C, 0, 4))
             ]}
-            scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
+            scale={new Scale(ScaleType.Major, createPitch(PitchLetter.C, 0, 4))}
             chordScaleDegreeNumbers={[2, 5, 1]}
             showRomanNumerals={false}
             maxWidth={maxTwoOctavePianoWidth} />
@@ -1788,16 +1788,16 @@ export const pianoTheorySlideGroups = [
           <p>Roman numeral chord progressions should have a similar feel regardless of which scale you play them in, as you'll hear in the diagram below:</p>
           <ChordProgressionPlayer
             chordsPitches={[
-              [new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.B, 0, 4)],
-              [new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.A, 0, 4), new Pitch(PitchLetter.C, 1, 5)],
-              [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 1, 4), new Pitch(PitchLetter.A, 0, 4), new Pitch(PitchLetter.D, 0, 5)]
+              [createPitch(PitchLetter.E, 0, 4), createPitch(PitchLetter.G, 0, 4), createPitch(PitchLetter.B, 0, 4)],
+              [createPitch(PitchLetter.E, 0, 4), createPitch(PitchLetter.G, 0, 4), createPitch(PitchLetter.A, 0, 4), createPitch(PitchLetter.C, 1, 5)],
+              [createPitch(PitchLetter.D, 0, 4), createPitch(PitchLetter.F, 1, 4), createPitch(PitchLetter.A, 0, 4), createPitch(PitchLetter.D, 0, 5)]
             ]}
             chords={[
-              new Chord(ChordType.Minor, new Pitch(PitchLetter.E, 0, 4)),
-              new Chord(ChordType.Dom7, new Pitch(PitchLetter.A, 0, 4)),
-              new Chord(ChordType.Major, new Pitch(PitchLetter.D, 0, 4))
+              new Chord(ChordType.Minor, createPitch(PitchLetter.E, 0, 4)),
+              new Chord(ChordType.Dom7, createPitch(PitchLetter.A, 0, 4)),
+              new Chord(ChordType.Major, createPitch(PitchLetter.D, 0, 4))
             ]}
-            scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.D, 0, 4))}
+            scale={new Scale(ScaleType.Major, createPitch(PitchLetter.D, 0, 4))}
             chordScaleDegreeNumbers={[2, 5, 1]}
             showRomanNumerals={true}
             maxWidth={maxTwoOctavePianoWidth} />
@@ -1817,17 +1817,17 @@ export const pianoTheorySlideGroups = [
           <p>The <strong>V7 - I</strong> chord progression in particular is one of the strongest sounding chord progressions there is, and you often hear it at the end of pieces of classical music.</p>
           <ChordProgressionPlayer
             chordsPitches={[
-              [new Pitch(PitchLetter.G, 0, 3), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.D, 0, 5), new Pitch(PitchLetter.B, 0, 5)],
-              [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.E, 0, 5), new Pitch(PitchLetter.C, 0, 6)]
+              [createPitch(PitchLetter.G, 0, 3), createPitch(PitchLetter.G, 0, 4), createPitch(PitchLetter.D, 0, 5), createPitch(PitchLetter.B, 0, 5)],
+              [createPitch(PitchLetter.C, 0, 4), createPitch(PitchLetter.G, 0, 4), createPitch(PitchLetter.E, 0, 5), createPitch(PitchLetter.C, 0, 6)]
             ]}
             chords={[
-              new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)),
-              new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))
+              new Chord(ChordType.Dom7, createPitch(PitchLetter.G, 0, 4)),
+              new Chord(ChordType.Major, createPitch(PitchLetter.C, 0, 4))
             ]}
-            scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
+            scale={new Scale(ScaleType.Major, createPitch(PitchLetter.C, 0, 4))}
             chordScaleDegreeNumbers={[5, 1]}
-            lowestPitch={new Pitch(PitchLetter.C, 0, 3)}
-            highestPitch={new Pitch(PitchLetter.B, 0, 6)}
+            lowestPitch={createPitch(PitchLetter.C, 0, 3)}
+            highestPitch={createPitch(PitchLetter.B, 0, 6)}
             octaveCount={4}
             showRomanNumerals={true}
             maxWidth={maxTwoOctavePianoWidth} />
@@ -1850,29 +1850,29 @@ export const pianoTheorySlideGroups = [
           <p>
             <ChordProgressionPlayer
               chordsPitches={[
-                [new Pitch(PitchLetter.C, 0, 3), new Pitch(PitchLetter.G, 0, 3), new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4)],
-                [new Pitch(PitchLetter.F, 0, 2), new Pitch(PitchLetter.A, 0, 3), new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.F, 0, 4)],
-                [new Pitch(PitchLetter.B, 0, 2), new Pitch(PitchLetter.F, 0, 3), new Pitch(PitchLetter.B, 0, 3), new Pitch(PitchLetter.D, 0, 4)],
-                [new Pitch(PitchLetter.E, 0, 2), new Pitch(PitchLetter.G, 0, 3), new Pitch(PitchLetter.B, 0, 3), new Pitch(PitchLetter.E, 0, 4)],
-                [new Pitch(PitchLetter.A, 0, 2), new Pitch(PitchLetter.E, 0, 3), new Pitch(PitchLetter.A, 0, 3), new Pitch(PitchLetter.C, 0, 4)],
-                [new Pitch(PitchLetter.D, 0, 2), new Pitch(PitchLetter.F, 0, 3), new Pitch(PitchLetter.A, 0, 3), new Pitch(PitchLetter.D, 0, 4)],
-                [new Pitch(PitchLetter.G, 0, 2), new Pitch(PitchLetter.D, 0, 3), new Pitch(PitchLetter.G, 0, 3), new Pitch(PitchLetter.B, 0, 3)],
-                [new Pitch(PitchLetter.C, 0, 2), new Pitch(PitchLetter.E, 0, 3), new Pitch(PitchLetter.G, 0, 3), new Pitch(PitchLetter.C, 0, 4)],
+                [createPitch(PitchLetter.C, 0, 3), createPitch(PitchLetter.G, 0, 3), createPitch(PitchLetter.C, 0, 4), createPitch(PitchLetter.E, 0, 4)],
+                [createPitch(PitchLetter.F, 0, 2), createPitch(PitchLetter.A, 0, 3), createPitch(PitchLetter.C, 0, 4), createPitch(PitchLetter.F, 0, 4)],
+                [createPitch(PitchLetter.B, 0, 2), createPitch(PitchLetter.F, 0, 3), createPitch(PitchLetter.B, 0, 3), createPitch(PitchLetter.D, 0, 4)],
+                [createPitch(PitchLetter.E, 0, 2), createPitch(PitchLetter.G, 0, 3), createPitch(PitchLetter.B, 0, 3), createPitch(PitchLetter.E, 0, 4)],
+                [createPitch(PitchLetter.A, 0, 2), createPitch(PitchLetter.E, 0, 3), createPitch(PitchLetter.A, 0, 3), createPitch(PitchLetter.C, 0, 4)],
+                [createPitch(PitchLetter.D, 0, 2), createPitch(PitchLetter.F, 0, 3), createPitch(PitchLetter.A, 0, 3), createPitch(PitchLetter.D, 0, 4)],
+                [createPitch(PitchLetter.G, 0, 2), createPitch(PitchLetter.D, 0, 3), createPitch(PitchLetter.G, 0, 3), createPitch(PitchLetter.B, 0, 3)],
+                [createPitch(PitchLetter.C, 0, 2), createPitch(PitchLetter.E, 0, 3), createPitch(PitchLetter.G, 0, 3), createPitch(PitchLetter.C, 0, 4)],
               ]}
               chords={[
-                new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 3)),
-                new Chord(ChordType.Major, new Pitch(PitchLetter.F, 0, 2)),
-                new Chord(ChordType.Diminished, new Pitch(PitchLetter.B, 0, 2)),
-                new Chord(ChordType.Minor, new Pitch(PitchLetter.E, 0, 2)),
-                new Chord(ChordType.Minor, new Pitch(PitchLetter.A, 0, 2)),
-                new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 2)),
-                new Chord(ChordType.Major, new Pitch(PitchLetter.G, 0, 2)),
-                new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 2)),
+                new Chord(ChordType.Major, createPitch(PitchLetter.C, 0, 3)),
+                new Chord(ChordType.Major, createPitch(PitchLetter.F, 0, 2)),
+                new Chord(ChordType.Diminished, createPitch(PitchLetter.B, 0, 2)),
+                new Chord(ChordType.Minor, createPitch(PitchLetter.E, 0, 2)),
+                new Chord(ChordType.Minor, createPitch(PitchLetter.A, 0, 2)),
+                new Chord(ChordType.Minor, createPitch(PitchLetter.D, 0, 2)),
+                new Chord(ChordType.Major, createPitch(PitchLetter.G, 0, 2)),
+                new Chord(ChordType.Major, createPitch(PitchLetter.C, 0, 2)),
               ]}
-              scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
+              scale={new Scale(ScaleType.Major, createPitch(PitchLetter.C, 0, 4))}
               chordScaleDegreeNumbers={[1, 4, 7, 3, 6, 2, 5, 1]}
-              lowestPitch={new Pitch(PitchLetter.C, 0, 2)}
-              highestPitch={new Pitch(PitchLetter.B, 0, 5)}
+              lowestPitch={createPitch(PitchLetter.C, 0, 2)}
+              highestPitch={createPitch(PitchLetter.B, 0, 5)}
               octaveCount={4}
               showRomanNumerals={true}
               maxWidth={maxTwoOctavePianoWidth} />
@@ -1900,25 +1900,25 @@ export const pianoTheorySlideGroups = [
           <p>
             <ChordProgressionPlayer
               chordsPitches={[
-                [new Pitch(PitchLetter.D, 0, 5), new Pitch(PitchLetter.F, 0, 5), new Pitch(PitchLetter.A, 0, 5)],
-                [new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.B, 0, 4), new Pitch(PitchLetter.D, 0, 5), new Pitch(PitchLetter.F, 0, 5)],
-                [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)],
+                [createPitch(PitchLetter.D, 0, 5), createPitch(PitchLetter.F, 0, 5), createPitch(PitchLetter.A, 0, 5)],
+                [createPitch(PitchLetter.G, 0, 4), createPitch(PitchLetter.B, 0, 4), createPitch(PitchLetter.D, 0, 5), createPitch(PitchLetter.F, 0, 5)],
+                [createPitch(PitchLetter.C, 0, 4), createPitch(PitchLetter.E, 0, 4), createPitch(PitchLetter.G, 0, 4), createPitch(PitchLetter.C, 0, 5)],
 
-                [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.A, 0, 4)],
-                [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.B, 0, 4)],
-                [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]
+                [createPitch(PitchLetter.D, 0, 4), createPitch(PitchLetter.F, 0, 4), createPitch(PitchLetter.A, 0, 4)],
+                [createPitch(PitchLetter.D, 0, 4), createPitch(PitchLetter.F, 0, 4), createPitch(PitchLetter.G, 0, 4), createPitch(PitchLetter.B, 0, 4)],
+                [createPitch(PitchLetter.C, 0, 4), createPitch(PitchLetter.E, 0, 4), createPitch(PitchLetter.G, 0, 4), createPitch(PitchLetter.C, 0, 5)]
               ]}
               chords={[
-                new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 4)),
-                new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)),
-                new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4)),
+                new Chord(ChordType.Minor, createPitch(PitchLetter.D, 0, 4)),
+                new Chord(ChordType.Dom7, createPitch(PitchLetter.G, 0, 4)),
+                new Chord(ChordType.Major, createPitch(PitchLetter.C, 0, 4)),
                 
-                new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 4)),
-                new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)),
-                new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))
+                new Chord(ChordType.Minor, createPitch(PitchLetter.D, 0, 4)),
+                new Chord(ChordType.Dom7, createPitch(PitchLetter.G, 0, 4)),
+                new Chord(ChordType.Major, createPitch(PitchLetter.C, 0, 4))
               ]}
               chordStartDelaysMs={[0, 1500, 3000, 6000, 7500, 9000]}
-              scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
+              scale={new Scale(ScaleType.Major, createPitch(PitchLetter.C, 0, 4))}
               chordScaleDegreeNumbers={[2, 5, 1, 2, 5, 1]}
               maxWidth={maxTwoOctavePianoWidth} />
           </p>
@@ -1946,25 +1946,25 @@ export const pianoTheorySlideGroups = [
           <p>
             <ChordProgressionPlayer
               chordsPitches={[
-                [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.A, 0, 4)],
-                [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.B, 0, 4)],
-                [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)],
+                [createPitch(PitchLetter.D, 0, 4), createPitch(PitchLetter.F, 0, 4), createPitch(PitchLetter.A, 0, 4)],
+                [createPitch(PitchLetter.D, 0, 4), createPitch(PitchLetter.F, 0, 4), createPitch(PitchLetter.G, 0, 4), createPitch(PitchLetter.B, 0, 4)],
+                [createPitch(PitchLetter.C, 0, 4), createPitch(PitchLetter.E, 0, 4), createPitch(PitchLetter.G, 0, 4), createPitch(PitchLetter.C, 0, 5)],
                 
-                [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.A, 0, 4)],
-                [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.B, 0, 4)],
-                [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]
+                [createPitch(PitchLetter.C, 0, 4), createPitch(PitchLetter.F, 0, 4), createPitch(PitchLetter.A, 0, 4)],
+                [createPitch(PitchLetter.D, 0, 4), createPitch(PitchLetter.F, 0, 4), createPitch(PitchLetter.G, 0, 4), createPitch(PitchLetter.B, 0, 4)],
+                [createPitch(PitchLetter.C, 0, 4), createPitch(PitchLetter.E, 0, 4), createPitch(PitchLetter.G, 0, 4), createPitch(PitchLetter.C, 0, 5)]
               ]}
               chords={[
-                new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 4)),
-                new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)),
-                new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4)),
+                new Chord(ChordType.Minor, createPitch(PitchLetter.D, 0, 4)),
+                new Chord(ChordType.Dom7, createPitch(PitchLetter.G, 0, 4)),
+                new Chord(ChordType.Major, createPitch(PitchLetter.C, 0, 4)),
                 
-                new Chord(ChordType.Major, new Pitch(PitchLetter.F, 0, 4)),
-                new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)),
-                new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))
+                new Chord(ChordType.Major, createPitch(PitchLetter.F, 0, 4)),
+                new Chord(ChordType.Dom7, createPitch(PitchLetter.G, 0, 4)),
+                new Chord(ChordType.Major, createPitch(PitchLetter.C, 0, 4))
               ]}
               chordStartDelaysMs={[0, 1500, 3000, 6000, 7500, 9000]}
-              scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
+              scale={new Scale(ScaleType.Major, createPitch(PitchLetter.C, 0, 4))}
               chordScaleDegreeNumbers={[2, 5, 1, 4, 5, 1]}
               maxWidth={maxTwoOctavePianoWidth} />
           </p>
@@ -1995,32 +1995,32 @@ export const pianoTheorySlideGroups = [
           <p>So, we can take a ii - V - I progression:</p>
           <ChordProgressionPlayer
             chordsPitches={[
-              [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.A, 0, 4)],
-              [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.B, 0, 4)],
-              [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]
+              [createPitch(PitchLetter.D, 0, 4), createPitch(PitchLetter.F, 0, 4), createPitch(PitchLetter.A, 0, 4)],
+              [createPitch(PitchLetter.D, 0, 4), createPitch(PitchLetter.F, 0, 4), createPitch(PitchLetter.G, 0, 4), createPitch(PitchLetter.B, 0, 4)],
+              [createPitch(PitchLetter.C, 0, 4), createPitch(PitchLetter.E, 0, 4), createPitch(PitchLetter.G, 0, 4), createPitch(PitchLetter.C, 0, 5)]
             ]}
             chords={[
-              new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 4)),
-              new Chord(ChordType.Dom7, new Pitch(PitchLetter.G, 0, 4)),
-              new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))
+              new Chord(ChordType.Minor, createPitch(PitchLetter.D, 0, 4)),
+              new Chord(ChordType.Dom7, createPitch(PitchLetter.G, 0, 4)),
+              new Chord(ChordType.Major, createPitch(PitchLetter.C, 0, 4))
             ]}
-            scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
+            scale={new Scale(ScaleType.Major, createPitch(PitchLetter.C, 0, 4))}
             chordScaleDegreeNumbers={[2, 5, 1]}
             maxWidth={maxTwoOctavePianoWidth} />
           
           <p>And use chord substitution to create a new chord progression - IV - V - I:</p>
           <ChordProgressionPlayer
             chordsPitches={[
-              [new Pitch(PitchLetter.D, 0, 4), new Pitch(PitchLetter.F, 0, 4), new Pitch(PitchLetter.A, 0, 4)],
-              [new Pitch(PitchLetter.C, 1, 4), new Pitch(PitchLetter.E, 1, 4), new Pitch(PitchLetter.G, 1, 4), new Pitch(PitchLetter.B, 0, 4)],
-              [new Pitch(PitchLetter.C, 0, 4), new Pitch(PitchLetter.E, 0, 4), new Pitch(PitchLetter.G, 0, 4), new Pitch(PitchLetter.C, 0, 5)]
+              [createPitch(PitchLetter.D, 0, 4), createPitch(PitchLetter.F, 0, 4), createPitch(PitchLetter.A, 0, 4)],
+              [createPitch(PitchLetter.C, 1, 4), createPitch(PitchLetter.E, 1, 4), createPitch(PitchLetter.G, 1, 4), createPitch(PitchLetter.B, 0, 4)],
+              [createPitch(PitchLetter.C, 0, 4), createPitch(PitchLetter.E, 0, 4), createPitch(PitchLetter.G, 0, 4), createPitch(PitchLetter.C, 0, 5)]
             ]}
             chords={[
-              new Chord(ChordType.Minor, new Pitch(PitchLetter.D, 0, 4)),
-              new Chord(ChordType.Dom7, new Pitch(PitchLetter.C, 1, 4)),
-              new Chord(ChordType.Major, new Pitch(PitchLetter.C, 0, 4))
+              new Chord(ChordType.Minor, createPitch(PitchLetter.D, 0, 4)),
+              new Chord(ChordType.Dom7, createPitch(PitchLetter.C, 1, 4)),
+              new Chord(ChordType.Major, createPitch(PitchLetter.C, 0, 4))
             ]}
-            scale={new Scale(ScaleType.Major, new Pitch(PitchLetter.C, 0, 4))}
+            scale={new Scale(ScaleType.Major, createPitch(PitchLetter.C, 0, 4))}
             chordScaleDegreeNumbers={[2, 2, 1]}
             chordScaleDegreeSignedAccidentals={[0, -1, 0]}
             maxWidth={maxTwoOctavePianoWidth} />

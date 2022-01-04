@@ -129,7 +129,7 @@ export function findGuitarScaleShapesRecursive(
     const i = state.guitarNotes.length;
     const scalePitch = scalePitches[i % scalePitches.length];
     const deltaOctave = Math.floor(i / scalePitches.length);
-    const pitch = new Pitch(scalePitch.letter, scalePitch.signedAccidental, scalePitch.octaveNumber + deltaOctave);
+    const pitch = createPitch(scalePitch.letter, scalePitch.signedAccidental, scalePitch.octaveNumber + deltaOctave);
     const guitarNoteSameString = new StringedInstrumentNote(pitch, state.stringIndex);
 
     // On all string, add notes until at the min.

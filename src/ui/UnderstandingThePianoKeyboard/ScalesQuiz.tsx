@@ -15,8 +15,8 @@ import { PianoScaleNotesAnswerSelect } from '../../ui/Utils/PianoScaleNotesAnswe
 
 const flashCardSetId = "ptScalesQuiz";
 
-const pianoLowestPitch = new Pitch(PitchLetter.C, 0, 4);
-const pianoHighestPitch = new Pitch(PitchLetter.B, 0, 5);
+const pianoLowestPitch = createPitch(PitchLetter.C, 0, 4);
+const pianoHighestPitch = createPitch(PitchLetter.B, 0, 5);
 const pianoMaxWidth = 240;
 
 function createFlashCardSet(): FlashCardSet {
@@ -123,8 +123,8 @@ export function createFlashCards(): FlashCard[] {
     ),
     majorScaleFormulaFlashCard,
     minorScaleFormulaFlashCard,
-    createPressAllScaleNotesFlashCard("cMajorNotes", new Scale(ScaleType.Ionian, new Pitch(PitchLetter.C, 0, 4)), "Major"),
-    createPressAllScaleNotesFlashCard("cMinorNotes", new Scale(ScaleType.Aeolian, new Pitch(PitchLetter.C, 0, 4)), "Natural Minor")
+    createPressAllScaleNotesFlashCard("cMajorNotes", new Scale(ScaleType.Ionian, createPitch(PitchLetter.C, 0, 4)), "Major"),
+    createPressAllScaleNotesFlashCard("cMinorNotes", new Scale(ScaleType.Aeolian, createPitch(PitchLetter.C, 0, 4)), "Natural Minor")
   ];
 }
 

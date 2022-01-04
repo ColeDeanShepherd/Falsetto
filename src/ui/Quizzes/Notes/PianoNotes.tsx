@@ -1,17 +1,16 @@
 import * as React from "react";
-import wu from "wu";
 
 import { PianoKeyboard } from "../../Utils/PianoKeyboard";
 import { createFlashCardId, FlashCard, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardLevel, FlashCardStudySessionInfo } from "../../../FlashCardSet";
-import { Pitch, getPitchesInRange } from "../../../lib/TheoryLib/Pitch";
+import { Pitch, getPitchesInRange, createPitch } from "../../../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
 import { PianoKeysAnswerSelect } from '../../Utils/PianoKeysAnswerSelect';
 
 const flashCardSetId = "pianoNotes1Octave";
 
-const lowestPitch = new Pitch(PitchLetter.C, 0, 4);
-const highestPitch = new Pitch(PitchLetter.B, 0, 4);
+const lowestPitch = createPitch(PitchLetter.C, 0, 4);
+const highestPitch = createPitch(PitchLetter.B, 0, 4);
 
 export const allPitches = [...getPitchesInRange(lowestPitch, highestPitch)];
 export const naturalPitches = allPitches
@@ -27,7 +26,8 @@ function renderAnswerSelect(
   const correctAnswer = [info.currentFlashCard.frontSide.data as Pitch];
   
   return <PianoKeysAnswerSelect
-    maxWidth={pianoMaxWidth} lowestPitch={lowestPitch} highestPitch={highestPitch}
+    maxWidth={pianoMaxWidth}
+    lowestPitch={lowestPitch} highestPitch={highestPitch}
     correctAnswer={correctAnswer}
     onAnswer={info.onAnswer} lastCorrectAnswer={info.lastCorrectAnswer}
     incorrectAnswers={info.incorrectAnswers} instantConfirm={true} wrapOctave={true} />;

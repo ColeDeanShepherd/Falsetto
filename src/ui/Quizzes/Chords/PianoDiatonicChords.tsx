@@ -14,8 +14,8 @@ import { PianoKeysAnswerSelect } from "../../Utils/PianoKeysAnswerSelect";
 import { canonicalChordTypeToString, getPitchClasses, CanonicalChord } from '../../../lib/TheoryLib/CanonicalChord';
 import { getChordExtensionTypeName } from "../../../lib/TheoryLib/ChordType";
 
-const pianoLowestPitch = new Pitch(PitchLetter.C, 0, 4);
-const pianoHighestPitch = new Pitch(PitchLetter.B, 0, 5);
+const pianoLowestPitch = createPitch(PitchLetter.C, 0, 4);
+const pianoHighestPitch = createPitch(PitchLetter.B, 0, 5);
 
 const pianoMaxWidth = 300;
 

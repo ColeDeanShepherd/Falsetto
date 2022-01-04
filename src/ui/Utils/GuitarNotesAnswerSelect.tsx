@@ -30,8 +30,8 @@ export class GuitarNotesAnswerSelect extends React.Component<IGuitarNotesAnswerS
       <div>
         <PianoKeyboard
           maxWidth={400}
-          lowestPitch={new Pitch(PitchLetter.C, 0, 4)}
-          highestPitch={new Pitch(PitchLetter.B, 0, 5)}
+          lowestPitch={createPitch(PitchLetter.C, 0, 4)}
+          highestPitch={createPitch(PitchLetter.B, 0, 5)}
           pressedPitches={this.state.selectedPitches}
           onKeyPress={pitch => this.onPitchClick(pitch)}
         />

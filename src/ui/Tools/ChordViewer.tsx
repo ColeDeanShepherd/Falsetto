@@ -30,7 +30,7 @@ export class ChordViewer extends React.Component<IChordViewerProps, IChordViewer
 
     this.state = {
       chordTypeGroup: this.chordTypeGroups[0],
-      chord: new Chord(this.chordTypeGroups[0].chordTypes[0], new Pitch(PitchLetter.C, 0, 4))
+      chord: new Chord(this.chordTypeGroups[0].chordTypes[0], createPitch(PitchLetter.C, 0, 4))
     };
   }
 

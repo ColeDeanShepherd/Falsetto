@@ -7,8 +7,8 @@ export function createFromPersistedData(
     persistedData.activeInputDeviceName,
     persistedData.activeInputDeviceMidiNumberRange
       ? [
-        Pitch.createFromMidiNumber(persistedData.activeInputDeviceMidiNumberRange[0]),
-        Pitch.createFromMidiNumber(persistedData.activeInputDeviceMidiNumberRange[1])
+        createPitchFromMidiNumber(persistedData.activeInputDeviceMidiNumberRange[0]),
+        createPitchFromMidiNumber(persistedData.activeInputDeviceMidiNumberRange[1])
       ]
       : undefined
   );

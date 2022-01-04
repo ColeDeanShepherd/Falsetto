@@ -11,7 +11,7 @@ import { unwrapValueOrUndefined } from "../../lib/Core/Utils";
 import { Margin } from "../../lib/Core/Margin";
 import { AppModel } from "../../App/Model";
 
-const lowestPitch = new Pitch(PitchLetter.C, 0, 4);
+const lowestPitch = createPitch(PitchLetter.C, 0, 4);
 const wrapOctave = true;
 
 export function onKeyPress(scale: Scale, keyPitch: Pitch) {
@@ -115,7 +115,7 @@ export class PianoScaleDronePlayer extends React.Component<IPianoScaleDronePlaye
   private get highestPitch(): Pitch {
     const { octaveCount } = this.props;
 
-    return new Pitch(PitchLetter.B, 0, 4 + (octaveCount - 1));
+    return createPitch(PitchLetter.B, 0, 4 + (octaveCount - 1));
   }
 
   private getStateFromProps(props: IPianoScaleDronePlayerProps) : IPianoScaleDronePlayerState {

@@ -5,8 +5,8 @@ export const fullPianoNumKeys = 88;
 export const fullPianoNumWhiteKeys = 52;
 export const fullPianoNumBlackKeys = 36;
 
-export const fullPianoLowestPitch = new Pitch(PitchLetter.A, 0, 0);
-export const fullPianoHighestPitch = new Pitch(PitchLetter.C, 0, 8);
+export const fullPianoLowestPitch = createPitch(PitchLetter.A, 0, 0);
+export const fullPianoHighestPitch = createPitch(PitchLetter.C, 0, 8);
 
 export const fullPianoAspectRatio = 8.1;
 

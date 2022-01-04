@@ -48,7 +48,7 @@ export class SheetMusicChord extends React.Component<ISheetMusicChordProps, {}> 
     const voiceTreble = new Vex.Flow.Voice({num_beats:4, beat_value: 4, resolution:Vex.Flow.RESOLUTION});
     const voiceBass = new Vex.Flow.Voice({num_beats:4, beat_value: 4, resolution:Vex.Flow.RESOLUTION});
     
-    const lowestTrebleClefPitch = new Pitch(PitchLetter.C, 0, 4);
+    const lowestTrebleClefPitch = createPitch(PitchLetter.C, 0, 4);
     const isPitchInTrebleClef = (pitch: Pitch) => pitch.midiNumber >= lowestTrebleClefPitch.midiNumber;
 
     // TODO: need to add accidentals

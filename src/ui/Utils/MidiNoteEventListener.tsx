@@ -143,14 +143,14 @@ export class MidiNoteEventListener extends React.Component<IMidiNoteEventListene
 
     if (midiInput) {
       this.onNoteOn = event => {
-        const pitch = Pitch.createFromMidiNumber(event.note.number);
+        const pitch = createPitchFromMidiNumber(event.note.number);
         
         if (this.props.onNoteOn) {
           this.props.onNoteOn(pitch, event.velocity);
         }
       };
       this.onNoteOff = event => {
-        const pitch = Pitch.createFromMidiNumber(event.note.number);
+        const pitch = createPitchFromMidiNumber(event.note.number);
         
         if (this.props.onNoteOff) {
           this.props.onNoteOff(pitch);

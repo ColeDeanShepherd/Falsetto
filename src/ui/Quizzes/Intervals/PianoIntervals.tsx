@@ -11,8 +11,8 @@ import { createIntervalLevels } from '../../../lib/TheoryLib/Interval';
 import { arrayContains, toggleArrayElement } from '../../../lib/Core/ArrayUtils';
 
 const pianoKeyboardMaxHeight = 120;
-const minPitch = new Pitch(PitchLetter.C, 0, 4);
-const maxPitch = new Pitch(PitchLetter.B, 0, 5);
+const minPitch = createPitch(PitchLetter.C, 0, 4);
+const maxPitch = createPitch(PitchLetter.B, 0, 5);
 
 const intervals = [
   "m2",
@@ -153,8 +153,8 @@ function forEachInterval(fn: (pitches: Array<Pitch>, intervalString: string) => 
       const halfSteps = pitch2MidiNumber - pitch1MidiNumber;
       if (halfSteps > 12) { continue; }
       
-      const lowPitch = Pitch.createFromMidiNumber(pitch1MidiNumber);
-      const highPitch = Pitch.createFromMidiNumber(pitch2MidiNumber);
+      const lowPitch = createPitchFromMidiNumber(pitch1MidiNumber);
+      const highPitch = createPitchFromMidiNumber(pitch2MidiNumber);
       const intervalString = intervals[halfSteps - 1];
 
       fn([lowPitch, highPitch], intervalString);

@@ -1,6 +1,5 @@
 import * as React from "react";
 
-import * as Utils from "../../../lib/Core/Utils";
 import * as FlashCardUtils from "../Utils";
 import { createFlashCardId, FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
@@ -8,12 +7,12 @@ import { Pitch } from "../../../lib/TheoryLib/Pitch";
 import { VerticalDirection } from "../../../lib/Core/VerticalDirection";
 import { Interval, createIntervalLevels, intervalQualityToNumber } from "../../../lib/TheoryLib/Interval";
 import { CheckboxColumnsFlashCardMultiSelect, CheckboxColumn, CheckboxColumnCell } from '../../Utils/CheckboxColumnsFlashCardMultiSelect';
-import { getValidKeyPitches } from '../../../lib/TheoryLib/Key';
 import { arrayContains } from '../../../lib/Core/ArrayUtils';
+import { validKeyPitchClassNames } from "../../../lib/TheoryLib/Key";
+import { PitchClassName } from "../../../lib/TheoryLib/PitchClassName";
 
 const flashCardSetId = "interval2ndNotes";
 
-const firstPitches = getValidKeyPitches(4);
 const intervals = [
   "m2",
   "M2",
@@ -32,18 +31,18 @@ const intervals = [
 const directions = ["↑", "↓"];
 
 interface IConfigData {
-  enabledFirstPitches: Pitch[];
-  enabledIntervals: string[];
-  enabledDirections: string[];
+  enabledFirstPitchClassNames: Array<PitchClassName>;
+  enabledIntervals: Array<string>;
+  enabledDirections: Array<string>;
 }
 
-export function forEachInterval(callbackFn: (firstPitch: Pitch, interval: string, direction: string, i: number) => void) {
+export function forEachInterval(callbackFn: (firstPitchClassName: PitchClassName, interval: string, direction: string, i: number) => void) {
   let i = 0;
 
-  for (const firstPitch of firstPitches) {
+  for (const firstPitchClassName of validKeyPitchClassNames) {
     for (const interval of intervals) {
       for (const direction of directions) {
-        callbackFn(firstPitch, interval, direction, i);
+        callbackFn(firstPitchClassName, interval, direction, i);
         i++;
       }
     }
@@ -56,7 +55,7 @@ export function configDataToEnabledFlashCardIds(
 
   forEachInterval((firstPitch, interval, direction, i) => {
     if (
-      arrayContains(configData.enabledFirstPitches, firstPitch) &&
+      arrayContains(configData.enabledFirstPitchClassNames, firstPitch) &&
       arrayContains(configData.enabledIntervals, interval) &&
       arrayContains(configData.enabledDirections, direction)
     ) {
@@ -76,7 +75,7 @@ export class IntervalNotesFlashCardMultiSelect extends React.Component<IInterval
   public render(): JSX.Element {
     const configData = this.props.studySessionInfo.configData as IConfigData;
     const selectedCellDatas = [
-      configData.enabledFirstPitches,
+      configData.enabledFirstPitchClassNames,
       configData.enabledIntervals,
       configData.enabledDirections
     ];
@@ -94,7 +93,7 @@ export class IntervalNotesFlashCardMultiSelect extends React.Component<IInterval
   private columns: Array<CheckboxColumn> = [
     new CheckboxColumn(
       "First Pitch",
-      firstPitches
+      validKeyPitchClassNames
         .map(rn => new CheckboxColumnCell(
           () => <span>{rn.toString(false, true)}</span>, rn
         )),
@@ -122,7 +121,7 @@ export class IntervalNotesFlashCardMultiSelect extends React.Component<IInterval
     if (!this.props.onChange) { return; }
 
     const newConfigData: IConfigData = {
-      enabledFirstPitches: newSelectedCellDatas[0] as Array<Pitch>,
+      enabledFirstPitchClassNames: newSelectedCellDatas[0] as Array<PitchClassName>,
       enabledIntervals: newSelectedCellDatas[1] as Array<string>,
       enabledDirections: newSelectedCellDatas[2] as Array<string>
     };
@@ -224,7 +223,7 @@ function createFlashCardSet(): FlashCardSet {
   );
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.getInitialConfigData = (): IConfigData => ({
-    enabledFirstPitches: firstPitches.slice(),
+    enabledFirstPitchClassNames: firstPitchClassNames.slice(),
     enabledIntervals: intervals.slice(),
     enabledDirections: directions.slice()
   });
@@ -242,7 +241,7 @@ function createFlashCardSet(): FlashCardSet {
           .map(fc => fc.id),
         (curConfigData: IConfigData) => (
           {
-            enabledFirstPitches: firstPitches.slice(),
+            enabledFirstPitchClassNames: firstPitchClassNames.slice(),
             enabledIntervals: level.intervalStrings.slice(),
             enabledDirections: directions.slice()
           } as IConfigData

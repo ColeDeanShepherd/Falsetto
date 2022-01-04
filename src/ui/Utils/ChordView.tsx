@@ -11,8 +11,8 @@ import { unwrapValueOrUndefined } from '../../lib/Core/Utils';
 import { PlayablePianoKeyboard } from './PlayablePianoKeyboard';
 import { Button } from "../../ui/Button/Button";
 
-const pianoLowestPitch = new Pitch(PitchLetter.C, 0, 4);
-const pianoHighestPitch = new Pitch(PitchLetter.B, 0, 5);
+const pianoLowestPitch = createPitch(PitchLetter.C, 0, 4);
+const pianoHighestPitch = createPitch(PitchLetter.B, 0, 5);
 
 function getPitchesInRange(lowestPitch: Pitch, highestPitch: Pitch, pitchesNoOctaveNumber: Array<Pitch>): Array<Pitch> {
   const pitchMidiNumberNoOctaves = pitchesNoOctaveNumber.map(p => p.midiNumberNoOctave);
@@ -23,7 +23,7 @@ function getPitchesInRange(lowestPitch: Pitch, highestPitch: Pitch, pitchesNoOct
   let result = new Array<Pitch>();
 
   for (let midiNumber = lowestPitchMidiNumber; midiNumber <= highestPitchMidiNumber; midiNumber++) {
-    const pitch = Pitch.createFromMidiNumber(midiNumber);
+    const pitch = createPitchFromMidiNumber(midiNumber);
 
     const pitchIndex = pitchMidiNumberNoOctaves.indexOf(pitch.midiNumberNoOctave);
     if (pitchIndex < 0) { continue; }
