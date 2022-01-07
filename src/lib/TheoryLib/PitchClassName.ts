@@ -1,7 +1,10 @@
 import { mod } from "../Core/MathUtils";
 import { numMatchingCharsAtStart } from "../Core/StringUtils";
+import { VerticalDirection } from "../Core/VerticalDirection";
+import { Interval } from "./Interval";
 import { parseEnglishSignedAccidental, PitchClass } from "./PitchClass";
-import { parsePitchLetter, PitchLetter, pitchLetterToMidiNumberOffset, pitchLetterToPitchClass } from "./PitchLetter";
+import { parsePitchLetter, PitchLetter, pitchLetters, pitchLetterToMidiNumberOffset, pitchLetterToPitchClass } from "./PitchLetter";
+import { getAccidentalString } from "./PitchName";
 import { MAX_MIDI_NUMBER_OFFSET } from "./Utils";
  
 export interface PitchClassName {
@@ -9,11 +12,27 @@ export interface PitchClassName {
   signedAccidental: number;
 }
 
+export function addInterval(
+  pitchClassName: PitchClassName,
+  direction: VerticalDirection,
+  interval: Interval
+): PitchClassName {
+  let deltaLetter = ((direction === VerticalDirection.Up) ? 1 : -1) * (interval.type - 1);
+  return {
+    letter: mod((pitchClassName.letter as number) + deltaLetter, pitchLetters.length) as PitchLetter,
+    signedAccidental: interval.halfSteps - Interval.getSimpleIntervalTypeHalfSteps(interval.simpleIntervalType)
+  };
+}
+
 export function pitchClassNameToPitchClass(pitchClassName: PitchClassName): PitchClass {
   return mod(
     pitchLetterToMidiNumberOffset(pitchClassName.letter) + pitchClassName.signedAccidental,
     MAX_MIDI_NUMBER_OFFSET
   );
+}
+
+export function toString(pitchName: PitchClassName, useSymbols: boolean = false): string {
+  return PitchLetter[pitchName.letter] + getAccidentalString(pitchName.signedAccidental, useSymbols);
 }
 
 export function parseSignedAccidental(str: string): number | undefined {

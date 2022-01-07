@@ -46,12 +46,51 @@ export const pitchClassMidiNumberOffsetMapping = createBiDirectionalDictionary<P
   [PitchClass.B]: 11
 });
 
+export const pitchClassStringMapping = createBiDirectionalDictionary<PitchClass, string>({
+  [PitchClass.C]: 'C',
+  [PitchClass.CSharpDFlat]: 'C#/Db',
+  [PitchClass.D]: 'D',
+  [PitchClass.DSharpEFlat]: 'D#/Eb',
+  [PitchClass.E]: 'E',
+  [PitchClass.F]: 'F',
+  [PitchClass.FSharpGFlat]: 'F#/Gb',
+  [PitchClass.G]: 'G',
+  [PitchClass.GSharpAFlat]: 'G#/Ab',
+  [PitchClass.A]: 'A',
+  [PitchClass.ASharpBFlat]: "A#/Bb",
+  [PitchClass.B]: 'B'
+});
+
+export const pitchClassStringMappingWithSymbols = createBiDirectionalDictionary<PitchClass, string>({
+  [PitchClass.C]: 'C',
+  [PitchClass.CSharpDFlat]: 'C♯/D♭',
+  [PitchClass.D]: 'D',
+  [PitchClass.DSharpEFlat]: 'D♯/E♭',
+  [PitchClass.E]: 'E',
+  [PitchClass.F]: 'F',
+  [PitchClass.FSharpGFlat]: 'F♯/G♭',
+  [PitchClass.G]: 'G',
+  [PitchClass.GSharpAFlat]: 'G♯/A♭',
+  [PitchClass.A]: 'A',
+  [PitchClass.ASharpBFlat]: "A♯/B♭",
+  [PitchClass.B]: 'B'
+});
+
 export function pitchClassToMidiNumberOffset(pitchClass: PitchClass): number {
   return get(pitchClassMidiNumberOffsetMapping, pitchClass);
 }
 
 export function midiNumberOffsetToPitchClass(midiNumberOffset: number): PitchClass {
   return getReverse(pitchClassMidiNumberOffsetMapping, midiNumberOffset);
+}
+
+export function toString(pitchClass: PitchClass, useSymbols: boolean = false): string {
+  return get(
+    useSymbols
+      ? pitchClassStringMappingWithSymbols
+      : pitchClassStringMapping,
+    pitchClass
+  );
 }
 
 export function parseEnglishSignedAccidental(str: string): number | undefined {

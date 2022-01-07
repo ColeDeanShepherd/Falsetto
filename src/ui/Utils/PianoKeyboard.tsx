@@ -2,7 +2,7 @@ import * as React from "react";
 import wu from "wu";
 
 import { getRectRoundedBottomPathDefString } from "../../lib/Core/SvgUtils";
-import { Pitch, getPitchesInRange } from '../../lib/TheoryLib/Pitch';
+import { Pitch, getPitchesInRange, getMidiNumber, getIsWhiteKey, createPitchFromMidiNumber, getIsBlackKey } from '../../lib/TheoryLib/Pitch';
 import { Rect2D } from '../../lib/Core/Rect2D';
 import { Margin } from '../../lib/Core/Margin';
 import { Size2D } from '../../lib/Core/Size2D';
@@ -11,6 +11,7 @@ import { invariant, precondition } from '../../lib/Core/Dbc';
 import { growRectAroundCenter, maxScaleFactorToFit } from '../../lib/Core/MathUtils';
 import { isBitSet } from '../../lib/Core/Utils';
 import { blackKeyWidthOverWhiteKeyWidth, blackKeyHeightOverWhiteKeyHeight, pianoWhiteKeyAspectRatio } from './PianoUtils';
+import { isInRange, toOneAccidentalAmbiguousString } from "../../lib/TheoryLib/PitchName";
 
 export class PianoKeyboardMetrics {
   public constructor(
@@ -27,11 +28,11 @@ export class PianoKeyboardMetrics {
       precondition(maxHeight >= 0);
     }
     
-    invariant(this.lowestPitch.midiNumber <= this.highestPitch.midiNumber);
+    invariant(getMidiNumber(this.lowestPitch) <= getMidiNumber(this.highestPitch));
 
     // Calculate key counts.
     const areKeysWhite = wu(getPitchesInRange(lowestPitch, highestPitch))
-      .map(p => p.isWhiteKey)
+      .map(p => getIsWhiteKey(p))
       .toArray();
 
     this.whiteKeyCount = 0;
@@ -125,12 +126,12 @@ export class PianoKeyboardMetrics {
   }
 
   public getKeyRect(pitch: Pitch): Rect2D {
-    precondition(pitch.midiNumber >= this.lowestPitch.midiNumber);
-    precondition(pitch.midiNumber <= this.highestPitch.midiNumber);
+    precondition(getMidiNumber(pitch) >= getMidiNumber(this.lowestPitch));
+    precondition(getMidiNumber(pitch) <= getMidiNumber(this.highestPitch));
 
-    const keyIndex = pitch.midiNumber - this.lowestPitch.midiNumber;
+    const keyIndex = getMidiNumber(pitch) - getMidiNumber(this.lowestPitch);
     return new Rect2D(
-      pitch.isWhiteKey ? this.whiteKeySize : this.blackKeySize,
+      getIsWhiteKey(pitch) ? this.whiteKeySize : this.blackKeySize,
       new Vector2D(
         this.keyLeftXs[keyIndex],
         0
@@ -141,7 +142,7 @@ export class PianoKeyboardMetrics {
   public getPitches(): Array<Pitch> {
     const pitches = new Array<Pitch>();
 
-    for (let midiNumber = this.lowestPitch.midiNumber; midiNumber <= this.highestPitch.midiNumber; midiNumber++) {
+    for (let midiNumber = getMidiNumber(this.lowestPitch); midiNumber <= getMidiNumber(this.highestPitch); midiNumber++) {
       pitches.push(createPitchFromMidiNumber(midiNumber));
     }
 
@@ -153,8 +154,9 @@ export function renderPianoKeyboardKeyLabels(metrics: PianoKeyboardMetrics, useS
   let texts = new Array<JSX.Element>(metrics.keyCount);
 
   for (let keyIndex = 0; keyIndex < metrics.keyCount; keyIndex++) {
-    const midiNumber = metrics.lowestPitch.midiNumber + keyIndex;
-    const pitch = createPitchFromMidiNumber(midiNumber, (useSharps !== undefined) ? useSharps : true);
+    const midiNumber = getMidiNumber(metrics.lowestPitch) + keyIndex;
+    const pitch = createPitchFromMidiNumber(midiNumber);
+    const isPitchWhiteKey = getIsWhiteKey(pitch);
     
     const labels = getLabels ? getLabels(pitch) : null;
     if (!labels || (labels.length === 0)) {
@@ -164,24 +166,24 @@ export function renderPianoKeyboardKeyLabels(metrics: PianoKeyboardMetrics, useS
     const fontSize = 0.6 * metrics.blackKeySize.width;
     const textStyle: any = {
       fontSize: `${fontSize}px`,
-      fill: pitch.isWhiteKey ? "black" : "white",
+      fill: isPitchWhiteKey ? "black" : "white",
       fontWeight: "bold",
       textAnchor: "middle",
       pointerEvents: "none"
     };
     const textYOffset = 0.3 * fontSize;
 
-    const highlightedNoteX = pitch.isWhiteKey
+    const highlightedNoteX = isPitchWhiteKey
       ? metrics.keyLeftXs[keyIndex] + (metrics.whiteKeySize.width / 2)
       : metrics.keyLeftXs[keyIndex] + (metrics.blackKeySize.width / 2);
-    const highlightedNoteY = pitch.isWhiteKey
+    const highlightedNoteY = isPitchWhiteKey
       ? (0.82 * metrics.whiteKeySize.height)
       : (metrics.blackKeySize.height / 2);
 
     for (let i = 0; i < labels.length; i++) {
       texts.push(
         <text
-          key={`${i}${pitch.midiNumber}`}
+          key={`${i}${midiNumber}`}
           x={highlightedNoteX}
           y={highlightedNoteY + textYOffset + (i * fontSize)}
           style={textStyle}>
@@ -203,7 +205,7 @@ export function renderPianoKeyHighlights(metrics: PianoKeyboardMetrics, pressedP
 
         return (
           <path
-            key={`p${p.midiNumber}`}
+            key={`p${getMidiNumber(p)}`}
             d={getRectRoundedBottomPathDefString(highlightRect.position, highlightRect.size, highlightRadius)}
             fill={fill ? fill : 'gray'} strokeWidth={0}
           />
@@ -222,7 +224,7 @@ export function renderPianoKeyboardNoteNames(metrics: PianoKeyboardMetrics, useS
     const includeOctaveNumber = false;
     const useSymbols = true;
     const splitPitchString = (useSharps === undefined)
-      ? pitch.toOneAccidentalAmbiguousString(includeOctaveNumber, useSymbols).split("/")
+      ? toOneAccidentalAmbiguousString(pitch, includeOctaveNumber, useSymbols).split("/")
       : [pitch.toString(includeOctaveNumber, useSymbols)];
     return splitPitchString;
   });
@@ -269,7 +271,7 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
     const style = this.getStyle(metrics);
 
     for (let i = 0; i < metrics.keyCount; i++) {
-      const midiNumber = metrics.lowestPitch.midiNumber + i;
+      const midiNumber = getMidiNumber(metrics.lowestPitch) + i;
       const pitch = createPitchFromMidiNumber(midiNumber);
       
       const isKeyEnabled = this.isKeyEnabled(pitch);
@@ -322,7 +324,7 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
 
       const className = isKeyEnabled ? "cursor-pointer" : "";
 
-      if (pitch.isWhiteKey) {
+      if (getIsWhiteKey(pitch)) {
         const position = new Vector2D(metrics.keyLeftXs[i], 0);
         const size = new Size2D(metrics.whiteKeySize.width, metrics.whiteKeySize.height);
         const fill = isKeyEnabled ? "white" : "gray";
@@ -360,10 +362,10 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
     }
 
     const whiteNoteHighlights = this.props.pressedPitches
-      ? renderPianoKeyHighlights(metrics, this.props.pressedPitches.filter(p => p.isWhiteKey))
+      ? renderPianoKeyHighlights(metrics, this.props.pressedPitches.filter(p => getIsWhiteKey(p)))
       : null;
     const blackNoteHighlights = this.props.pressedPitches
-      ? renderPianoKeyHighlights(metrics, this.props.pressedPitches.filter(p => p.isBlackKey))
+      ? renderPianoKeyHighlights(metrics, this.props.pressedPitches.filter(p => getIsBlackKey(p)))
       : null;
 
     const extraElements = this.props.renderExtrasFn
@@ -424,6 +426,6 @@ export class PianoKeyboard extends React.Component<IPianoKeyboardProps, {}> {
   private isKeyEnabled(pitch: Pitch): boolean {
     const { lowestEnabledPitch, highestEnabledPitch } = this.props;
 
-    return Pitch.isInRange(pitch, lowestEnabledPitch, highestEnabledPitch);
+    return isInRange(pitch, lowestEnabledPitch, highestEnabledPitch);
   }
 }

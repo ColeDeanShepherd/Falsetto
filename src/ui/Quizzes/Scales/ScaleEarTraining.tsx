@@ -7,7 +7,7 @@ import { randomElement } from "../../../lib/Core/Random";
 import * as FlashCardUtils from "../Utils";
 import { createFlashCardId, FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
-import { Pitch } from "../../../lib/TheoryLib/Pitch";
+import { createPitch, createPitchFromMidiNumber, Pitch } from "../../../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
 import { playPitchesSequentially } from "../../../Audio/PianoAudio";
 import { ChordScaleFormula, ChordScaleFormulaPart } from '../../../lib/TheoryLib/ChordScaleFormula';

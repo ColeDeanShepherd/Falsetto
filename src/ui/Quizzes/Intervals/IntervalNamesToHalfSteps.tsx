@@ -1,9 +1,8 @@
-import * as Utils from "../../../lib/Core/Utils";
 import * as FlashCardUtils from "../Utils";
 import { createFlashCardId, FlashCard, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardLevel } from "../../../FlashCardSet";
-import { createIntervalLevels } from '../../../lib/TheoryLib/Interval';
 import { arrayContains } from '../../../lib/Core/ArrayUtils';
+import { createIntervalLevels } from "../../../lib/TheoryLib/IntervalName";
 
 const flashCardSetId = "intervalHalfSteps";
 

@@ -5,9 +5,10 @@ import * as FlashCardUtils from "../Utils";
 import { createFlashCardId, FlashCard } from "../../../FlashCard";
 import { FlashCardSet } from "../../../FlashCardSet";
 import { VexFlowComponent } from "../../Utils/VexFlowComponent";
-import { Pitch } from "../../../lib/TheoryLib/Pitch";
+import { createPitch, Pitch } from "../../../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
 import { Size2D } from '../../../lib/Core/Size2D';
+import { toVexFlowKeySignatureString } from "../../../lib/TheoryLib/PitchName";
 
 const flashCardSetId = "keySignatureIdentification";
 
@@ -90,7 +91,7 @@ export function createFlashCards(): Array<FlashCard> {
       createFlashCardId(flashCardSetId, { keys: answers[i] }),
       size => <SheetMusicKeySignature
         size={new Size2D(300, 200)}
-        keySignature={pitch.toVexFlowKeySignatureString()}
+        keySignature={toVexFlowKeySignatureString(pitch)}
       />,
       answers[i]
     ));

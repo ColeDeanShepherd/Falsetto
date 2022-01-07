@@ -14,9 +14,9 @@ import {
   configDataToEnabledFlashCardIds,
   forEachInterval
 } from "../../Utils/IntervalEarTrainingFlashCardMultiSelect";
-import { createIntervalLevels } from '../../../lib/TheoryLib/Interval';
 import { arrayContains } from '../../../lib/Core/ArrayUtils';
 import { Button } from "../../../ui/Button/Button";
+import { createIntervalLevels } from "../../../lib/TheoryLib/IntervalName";
 
 const flashCardSetId = "nextNoteEarTraining";
 
@@ -71,7 +71,7 @@ export function createFlashCards(): Array<FlashCard> {
           flashCardSetId,
           {
             isHarmonic: isHarmonicInterval,
-            pitches: [pitch1.toString(true), pitch2.toString(true)]
+            pitches: [toString(pitch1, true), toString(pitch2, true)]
           }
         ),
         new FlashCardSide(

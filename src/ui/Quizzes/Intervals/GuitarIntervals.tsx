@@ -4,7 +4,7 @@ import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody } from "@mat
 import * as FlashCardUtils from "../Utils";
 import { createFlashCardId, FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
-import { Interval, createIntervalLevels } from "../../../lib/TheoryLib/Interval";
+import { downDirectionSymbol, Interval, upDirectionSymbol } from "../../../lib/TheoryLib/Interval";
 import {
   GuitarFretboard
 } from "../../Utils/GuitarFretboard";
@@ -19,6 +19,7 @@ import { StringedInstrumentNote } from '../../../lib/TheoryLib/StringedInstrumen
 import { range } from '../../../lib/Core/MathUtils';
 import { arrayContains, toggleArrayElement } from '../../../lib/Core/ArrayUtils';
 import { randomInt } from '../../../lib/Core/Random';
+import { createIntervalLevels } from "../../../lib/TheoryLib/IntervalName";
 
 const flashCardSetId = "guitarIntervals";
 const FRET_COUNT = StringedInstrumentFingerboard.DEFAULT_FRET_COUNT;
@@ -172,9 +173,9 @@ export function renderAnswerSelect(
   const configData = info.configData as IConfigData;
   
   const ascendingIntervals = configData.enabledIntervals
-    .map(i => Interval.upDirectionSymbol + " " + i);
+    .map(i => upDirectionSymbol + " " + i);
   const descendingIntervals = configData.enabledIntervals
-    .map(i => Interval.downDirectionSymbol + " " + i);
+    .map(i => downDirectionSymbol + " " + i);
   return (
     <div>
       {FlashCardUtils.renderStringAnswerSelectInternal(
@@ -275,8 +276,8 @@ export function createFlashCards(): Array<FlashCard> {
 
   forEachInterval((interval, direction, stringIndex0, deltaStringIndex, deltaFretNumber, i) => {
     const directionChar = (direction === VerticalDirection.Up)
-      ? Interval.upDirectionSymbol
-      : Interval.downDirectionSymbol;
+      ? upDirectionSymbol
+      : downDirectionSymbol;
 
     const flashCard = new FlashCard(
       createFlashCardId(flashCardSetId,

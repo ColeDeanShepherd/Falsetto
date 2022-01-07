@@ -2,7 +2,7 @@ import * as FlashCardUtils from "../Utils";
 import { createFlashCardId, FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardLevel, } from "../../../FlashCardSet";
 import { arrayContains } from '../../../lib/Core/ArrayUtils';
-import { scaleTypeLevels, ScaleType } from "../../../lib/TheoryLib/ScaleType";
+import { scaleTypeLevels, ScaleType, AllScaleTypes } from "../../../lib/TheoryLib/ScaleType";
 
 const flashCardSetId = "scaleFormulasMajor";
 

@@ -4,13 +4,13 @@ import { TableRow, TableCell, Table, TableHead, TableBody, Grid, Checkbox } from
 import { Size2D } from "../../../lib/Core/Size2D";
 import { FlashCard, FlashCardSide, FlashCardId, createFlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
-import { Pitch } from "../../../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
 import { ChordType, chordTypeLevels } from "../../../lib/TheoryLib/ChordType";
 import {  renderDistinctFlashCardSideAnswerSelect } from '../Utils';
 import { GuitarChordViewer } from '../../Utils/GuitarChordViewer';
 import { getStandardGuitarTuning } from '../../Utils/StringedInstrumentTuning';
 import { arrayContains, toggleArrayElement } from '../../../lib/Core/ArrayUtils';
+import { createPitch } from "../../../lib/TheoryLib/Pitch";
 
 const flashCardSetId = "guitarChordOrderedNotes";
 const guitarTuning = getStandardGuitarTuning(6);

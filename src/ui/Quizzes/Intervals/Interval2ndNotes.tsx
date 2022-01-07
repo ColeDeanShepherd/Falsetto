@@ -5,11 +5,12 @@ import { createFlashCardId, FlashCard, FlashCardId, FlashCardSide } from "../../
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
 import { Pitch } from "../../../lib/TheoryLib/Pitch";
 import { VerticalDirection } from "../../../lib/Core/VerticalDirection";
-import { Interval, createIntervalLevels, intervalQualityToNumber } from "../../../lib/TheoryLib/Interval";
+import { Interval } from "../../../lib/TheoryLib/Interval";
 import { CheckboxColumnsFlashCardMultiSelect, CheckboxColumn, CheckboxColumnCell } from '../../Utils/CheckboxColumnsFlashCardMultiSelect';
 import { arrayContains } from '../../../lib/Core/ArrayUtils';
 import { validKeyPitchClassNames } from "../../../lib/TheoryLib/Key";
-import { PitchClassName } from "../../../lib/TheoryLib/PitchClassName";
+import { addInterval, PitchClassName, toString } from "../../../lib/TheoryLib/PitchClassName";
+import { createIntervalLevels, intervalQualityToNumber } from "../../../lib/TheoryLib/IntervalName";
 
 const flashCardSetId = "interval2ndNotes";
 
@@ -95,7 +96,7 @@ export class IntervalNotesFlashCardMultiSelect extends React.Component<IInterval
       "First Pitch",
       validKeyPitchClassNames
         .map(rn => new CheckboxColumnCell(
-          () => <span>{rn.toString(false, true)}</span>, rn
+          () => <span>{toString(rn)}</span>, rn
         )),
       (a: Pitch, b: Pitch) => a === b
     ),
@@ -167,7 +168,7 @@ export function renderPitchAnswerSelect(
 export function createFlashCards(): Array<FlashCard> {
   const flashCards = new Array<FlashCard>();
 
-  forEachInterval((firstPitch, interval, direction, i) => {
+  forEachInterval((firstPitchClassName, interval, direction, i) => {
     const intervalQuality = interval[0];
     const intervalQualityNum = intervalQualityToNumber(intervalQuality);
 
@@ -175,8 +176,8 @@ export function createFlashCards(): Array<FlashCard> {
     const genericIntervalNum = parseInt(genericInterval, 10);
 
     const verticalDirection = (direction === "↑") ? VerticalDirection.Up : VerticalDirection.Down;
-    const newPitch = Pitch.addInterval(
-      firstPitch,
+    const newPitch = addInterval(
+      firstPitchClassName,
       verticalDirection,
       new Interval(genericIntervalNum, intervalQualityNum)
     );
@@ -185,16 +186,16 @@ export function createFlashCards(): Array<FlashCard> {
       createFlashCardId(
         flashCardSetId,
         {
-          firstPitch: firstPitch.toString(true, false),
+          firstPitchClassName: toString(firstPitchClassName, false),
           interval: interval.toString(),
           direction: VerticalDirection[verticalDirection]
         }
       ),
       new FlashCardSide(
-        firstPitch.toString(false, true) + " " + direction + " " + interval
+        toString(firstPitchClassName, true) + " " + direction + " " + interval
       ),
       new FlashCardSide(
-        newPitch.toString(false, true),
+        toString(newPitch, true),
         interval
       )
     );
@@ -223,7 +224,7 @@ function createFlashCardSet(): FlashCardSet {
   );
   flashCardSet.configDataToEnabledFlashCardIds = configDataToEnabledFlashCardIds;
   flashCardSet.getInitialConfigData = (): IConfigData => ({
-    enabledFirstPitchClassNames: firstPitchClassNames.slice(),
+    enabledFirstPitchClassNames: validKeyPitchClassNames.slice(),
     enabledIntervals: intervals.slice(),
     enabledDirections: directions.slice()
   });
@@ -241,7 +242,7 @@ function createFlashCardSet(): FlashCardSet {
           .map(fc => fc.id),
         (curConfigData: IConfigData) => (
           {
-            enabledFirstPitchClassNames: firstPitchClassNames.slice(),
+            enabledFirstPitchClassNames: validKeyPitchClassNames.slice(),
             enabledIntervals: level.intervalStrings.slice(),
             enabledDirections: directions.slice()
           } as IConfigData

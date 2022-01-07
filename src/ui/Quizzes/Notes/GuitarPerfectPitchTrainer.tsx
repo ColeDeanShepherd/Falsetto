@@ -9,7 +9,7 @@ import { FlashCard, FlashCardSide, FlashCardId, createFlashCardId } from "../../
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { StringedInstrumentNote, getStringedInstrumentNotes } from '../../../lib/TheoryLib/StringedInstrumentNote';
 import { playPitches } from '../../../Audio/GuitarAudio';
-import { Pitch } from '../../../lib/TheoryLib/Pitch';
+import { getMidiNumber, Pitch } from '../../../lib/TheoryLib/Pitch';
 import { Vector2D } from '../../../lib/Core/Vector2D';
 import { AnswerDifficulty } from '../../../Study/AnswerDifficulty';
 import { IConfigData, forEachNote, StringedInstrumentNotesFlashCardMultiSelect } from "../../Utils/StringedInstrumentNotes";
@@ -165,7 +165,7 @@ export class GuitarNoteAnswerSelect extends React.Component<IGuitarNoteAnswerSel
     }
 
     const correctAnswer = this.props.args.currentFlashCard.backSide.data as StringedInstrumentNote;
-    const isCorrect = this.state.selectedNote.pitch.midiNumber === correctAnswer.pitch.midiNumber;
+    const isCorrect = getMidiNumber(this.state.selectedNote.pitch) === getMidiNumber(correctAnswer.pitch);
     this.props.args.onAnswer(isCorrect ? AnswerDifficulty.Easy : AnswerDifficulty.Incorrect, this.state.selectedNote);
   }
 }

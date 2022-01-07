@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { getRomanNumerals } from "../../../lib/Core/Utils";
 
-import { Pitch } from "../../../lib/TheoryLib/Pitch";
+import { createPitch, Pitch } from "../../../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
 import { Scale, getUriComponent } from "../../../lib/TheoryLib/Scale";
 
@@ -13,6 +13,9 @@ import { PianoKeyboard } from "../../Utils/PianoKeyboard";
 import { PianoKeysAnswerSelect } from "../../Utils/PianoKeysAnswerSelect";
 import { canonicalChordTypeToString, getPitchClasses, CanonicalChord } from '../../../lib/TheoryLib/CanonicalChord';
 import { getChordExtensionTypeName } from "../../../lib/TheoryLib/ChordType";
+import { toString } from "../../../lib/TheoryLib/PitchClass";
+import { createFromPitchClass, getPitch } from "../../../lib/TheoryLib/PitchName";
+import { PitchClassName } from "../../../lib/TheoryLib/PitchClassName";
 
 const pianoLowestPitch = createPitch(PitchLetter.C, 0, 4);
 const pianoHighestPitch = createPitch(PitchLetter.B, 0, 5);
@@ -29,7 +32,7 @@ export function createFlashCardSet(scale: Scale, numChordPitches: number): Flash
 
   const flashCardSet = new FlashCardSet(
     flashCardSetId,
-    `${scale.rootPitchClass.toString(/*includeOctaveNumber*/ false)} ${scale.type.name} Diatonic ${chordExtensionTypeName}s`,
+    `${toString(scale.rootPitchClass, /*includeOctaveNumber*/ false)} ${scale.type.name} Diatonic ${chordExtensionTypeName}s`,
     () => createFlashCards(flashCardSetId, scale, numChordPitches));
   flashCardSet.route = `scale/${getUriComponent(scale)}/diatonic-${numChordPitches}-note-chords-exercise`;
   flashCardSet.renderAnswerSelect = renderChordNotesFlashCardAnswerSelect;
@@ -53,11 +56,14 @@ export function createChordNotesFlashCard(
   frontSideRenderFn: FlashCardSideRenderFn
 ): FlashCard {
   const chordPitches = getPitchClasses(canonicalChord)
-    .map(pitchClass => Pitch.createFromPitchClass(
-      pitchClass,
-      /*octaveNumber*/ 4,
-      /*useSharps*/ true
-    ));
+    .map(pitchClass => {
+      const pitchName = createFromPitchClass(
+        pitchClass,
+        /*octaveNumber*/ 4,
+        /*useSharps*/ true
+      );
+      return getPitch(pitchName);
+    });
 
   return new FlashCard(
     createFlashCardId(flashCardSetId, { chord: `${canonicalChord.rootPitchClass.toString()} ${canonicalChordTypeToString(canonicalChord.type)}` }),

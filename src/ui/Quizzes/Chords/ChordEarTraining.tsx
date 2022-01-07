@@ -4,7 +4,7 @@ import { Checkbox, TableRow, TableCell, Table, TableHead, TableBody, Grid } from
 import * as FlashCardUtils from "../Utils";
 import { createFlashCardId, FlashCard, FlashCardId, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
-import { Pitch } from "../../../lib/TheoryLib/Pitch";
+import { createPitch, createPitchFromMidiNumber, getMidiNumber, Pitch } from "../../../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
 import { Chord } from "../../../lib/TheoryLib/Chord";
 import { ChordType, chordTypeLevels } from "../../../lib/TheoryLib/ChordType";
@@ -18,7 +18,7 @@ const flashCardSetId = "chordEarTraining";
 
 const minPitch = createPitch(PitchLetter.C, -1, 2);
 const maxPitch = createPitch(PitchLetter.C, 1, 6);
-const rootPitches = range(minPitch.midiNumber, maxPitch.midiNumber)
+const rootPitches = range(getMidiNumber(minPitch), getMidiNumber(maxPitch))
   .map(midiNumber => createPitchFromMidiNumber(midiNumber));
 const chordTypes = ChordType.All;
 

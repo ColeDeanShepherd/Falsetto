@@ -1,4 +1,6 @@
+import { mod } from "../Core/MathUtils";
 import { PitchLetter, pitchLetterToMidiNumberOffset } from "./PitchLetter";
+import { arePitchOffsetsFromCWhiteKeys } from "./PitchName";
 
 // Pitches are simply MIDI note numbers.
 export type Pitch = number;
@@ -40,4 +42,13 @@ export function expandPitchRangeToIncludePitch(pitchRange: [Pitch, Pitch], pitch
 
 export function getNumPitchesInRange(pitchRange: [Pitch, Pitch]): number {
   return pitchRange[1] - pitchRange[0] + 1;
+}
+
+export function getIsWhiteKey(pitch: Pitch): boolean {
+  const positivePitchOffsetFromC = mod(getMidiNumber(pitch), 12);
+  return arePitchOffsetsFromCWhiteKeys[positivePitchOffsetFromC];
+}
+
+export function getIsBlackKey(pitch: Pitch): boolean {
+  return !getIsWhiteKey(pitch);
 }

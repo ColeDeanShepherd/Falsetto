@@ -3,7 +3,7 @@ import * as React from "react";
 import * as Utils from "../../../lib/Core/Utils";
 import { FlashCard, FlashCardSide, FlashCardId, createFlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
-import { Pitch } from "../../../lib/TheoryLib/Pitch";
+import { createPitch, Pitch } from "../../../lib/TheoryLib/Pitch";
 import { playPitchesSequentially } from "../../../Audio/PianoAudio";
 import {
   intervals,
