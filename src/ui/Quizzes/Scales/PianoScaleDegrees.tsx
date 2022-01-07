@@ -4,7 +4,7 @@ import { PianoKeyboard } from "../../Utils/PianoKeyboard";
 import { createFlashCardId, FlashCard, FlashCardSide } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 
-import { Pitch, tryWrapPitchOctave } from '../../../lib/TheoryLib/Pitch';
+import { createPitch, Pitch, tryWrapPitchOctave } from '../../../lib/TheoryLib/Pitch';
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
 import { Scale, getUriComponent } from '../../../lib/TheoryLib/Scale';
 
