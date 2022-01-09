@@ -1,9 +1,10 @@
-import { Pitch, getAccidentalString } from "./Pitch";
+import { addInterval, Pitch } from "./Pitch";
 import { VerticalDirection } from "../Core/VerticalDirection";
 import { Interval } from './Interval';
 import { precondition, invariant } from '../Core/Dbc';
 import { isNullOrWhiteSpace, takeCharsWhile } from '../Core/StringUtils';
 import { PitchClass } from "./PitchClass";
+import { getAccidentalString } from "./PitchName";
 
 export class ChordScaleFormula {
   public static parse(formulaString: string): ChordScaleFormula {
@@ -92,7 +93,7 @@ export class ChordScaleFormulaPart {
 
   public getPitch(rootPitch: Pitch): Pitch {
     const interval = this.getIntervalFromRootNote();
-    const pitch = Pitch.addInterval(rootPitch, VerticalDirection.Up, interval);
+    const pitch = addInterval(rootPitch, VerticalDirection.Up, interval);
 
     return pitch;
   }

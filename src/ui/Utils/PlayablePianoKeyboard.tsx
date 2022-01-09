@@ -1,9 +1,14 @@
-import { immutableAddIfNotFoundInArray, immutableRemoveIfFoundInArray, immutableToggleArrayElementCustomEquals } from '../../lib/Core/ArrayUtils';
-import { Pitch, tryWrapPitchOctave } from '../../lib/TheoryLib/Pitch';
+import React from "react";
+
+import {
+  immutableAddIfNotFoundInArray,
+  immutableRemoveIfFoundInArray,
+  immutableToggleArrayElementCustomEquals
+} from '../../lib/Core/ArrayUtils';
+import { equals, isInRange, Pitch, tryWrapPitchOctave } from '../../lib/TheoryLib/Pitch';
 import { AppModel } from "../../App/Model";
 import { PianoKeyboard, PianoKeyboardMetrics } from "./PianoKeyboard";
 import { MidiNoteEventListener } from "./MidiNoteEventListener";
-import React from "react";
 import { unwrapValueOrUndefined } from '../../lib/Core/Utils';
 import { Margin } from "../../lib/Core/Margin";
 import { Vector2D } from "../../lib/Core/Vector2D";
@@ -93,21 +98,15 @@ export class PlayablePianoKeyboard extends React.Component<IPlayablePianoKeyboar
     const { forcePressedPitches } = this.props;
     const { userPressedPitches } = this.state;
 
-    const pitchMidiNumbers = new Set<number>(
-      userPressedPitches
-        .map(p => p.midiNumber)
-    );
+    const pressedPitches = new Set<number>(userPressedPitches);
     
     if (forcePressedPitches) {
       for (const pitch of forcePressedPitches) {
-        pitchMidiNumbers.add(pitch.midiNumber);
+        pressedPitches.add(pitch);
       }
     }
 
-    const pitches = [...pitchMidiNumbers]
-      .map(n => createPitchFromMidiNumber(n, /*useSharps*/ true));
-
-    return pitches;
+    return [...pressedPitches];
   }
 
   private onKeyPress(pitch: Pitch, wasClick: boolean) {
@@ -123,7 +122,7 @@ export class PlayablePianoKeyboard extends React.Component<IPlayablePianoKeyboar
       ? tryWrapPitchOctave(pitch, lowestPitch, highestPitch)
       : pitch;
 
-    if (wrappedPitch && Pitch.isInRange(wrappedPitch, lowestPitch, highestPitch)) {
+    if (wrappedPitch && isInRange(wrappedPitch, lowestPitch, highestPitch)) {
       if (!this.isKeyEnabled(wrappedPitch)) { return; }
 
       if (!this.canPressKey(wrappedPitch)) {
@@ -142,7 +141,7 @@ export class PlayablePianoKeyboard extends React.Component<IPlayablePianoKeyboar
           newUserPressedPitches = immutableToggleArrayElementCustomEquals(
             prevState.userPressedPitches,
             wrappedPitch,
-            p => p.equals(pitch)
+            p => equals(p, pitch)
           );
         }
         // If MIDI event, press key.
@@ -150,13 +149,13 @@ export class PlayablePianoKeyboard extends React.Component<IPlayablePianoKeyboar
           newUserPressedPitches = immutableAddIfNotFoundInArray(
             prevState.userPressedPitches,
             wrappedPitch,
-            p => p.equals(pitch)
+            p => equals(p, pitch)
           );
         }
   
         //#endregion
         
-        isConsideredKeyPress = !prevState.userPressedPitches.find(p => p.equals(pitch));
+        isConsideredKeyPress = !prevState.userPressedPitches.find(p => equals(p, pitch));
 
         return { userPressedPitches: newUserPressedPitches };
       }, () => {
@@ -196,7 +195,7 @@ export class PlayablePianoKeyboard extends React.Component<IPlayablePianoKeyboar
           return {
             userPressedPitches: immutableRemoveIfFoundInArray(
               prevState.userPressedPitches,
-              (p, i) => p.equals(unwrapValueOrUndefined(wrappedPitch))
+              (p, i) => equals(p, unwrapValueOrUndefined(wrappedPitch))
             )
           };
         });
@@ -223,7 +222,7 @@ export class PlayablePianoKeyboard extends React.Component<IPlayablePianoKeyboar
   private isKeyEnabled(pitch: Pitch): boolean {
     const { lowestEnabledPitch, highestEnabledPitch } = this.props;
 
-    return Pitch.isInRange(pitch, lowestEnabledPitch, highestEnabledPitch);
+    return isInRange(pitch, lowestEnabledPitch, highestEnabledPitch);
   }
 }
  

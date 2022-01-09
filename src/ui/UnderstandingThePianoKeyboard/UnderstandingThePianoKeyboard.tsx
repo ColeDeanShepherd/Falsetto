@@ -3,9 +3,9 @@ import * as React from "react";
 import { Margin } from "../../lib/Core/Margin";
 import { Vector2D } from "../../lib/Core/Vector2D";
 
-import { Pitch } from '../../lib/TheoryLib/Pitch';
+import { createPitch, equals, getClass, max, min, Pitch } from '../../lib/TheoryLib/Pitch';
 import { PitchLetter } from '../../lib/TheoryLib/PitchLetter';
-import { ScaleType, Scale } from "../../lib/TheoryLib/Scale";
+import { Scale } from "../../lib/TheoryLib/Scale";
 import { ChordType } from "../../lib/TheoryLib/ChordType";
 import { Chord, getUriComponent } from "../../lib/TheoryLib/Chord";
 
@@ -50,6 +50,8 @@ import { renderNextButtonAnswerSelect, renderUserDeterminedCorrectnessAnswerSele
 import { ChordProgressionAnswerSelectView } from '../Utils/ChordProgressionAnswerSelectView';
 import { Slide, Slideshow, SlideGroup } from "../Slideshow/Slideshow";
 import { NoteText } from "../Utils/NoteText";
+import { ScaleTypes } from "../../lib/TheoryLib/ScaleType";
+import { toString } from "../../lib/TheoryLib/PitchClass";
 
 export const maxPianoWidth = 1000;
 export const maxOneOctavePianoWidth = 400;
@@ -147,8 +149,8 @@ const PianoKeyPatternDiagram: React.FunctionComponent<{}> = props => {
   ): JSX.Element {
     const octaveNumber = patternOccurrenceIndex;
 
-    const leftPitch = Pitch.max(createPitch(PitchLetter.C, 0, octaveNumber), fullPianoLowestPitch);
-    const rightPitch = Pitch.min(createPitch(PitchLetter.B, 0, octaveNumber), fullPianoHighestPitch);
+    const leftPitch = max(createPitch(PitchLetter.C, 0, octaveNumber), fullPianoLowestPitch);
+    const rightPitch = min(createPitch(PitchLetter.B, 0, octaveNumber), fullPianoHighestPitch);
 
     const leftKeyRect = metrics.getKeyRect(leftPitch);
     const rightKeyRect = metrics.getKeyRect(rightPitch);
@@ -265,8 +267,8 @@ export class PianoNotesDiagram extends React.Component<IPianoNotesDiagramProps, 
             ? showLetterPredicate
             : p => (
               highlightedPitch
-                ? ((labelWhiteKeys && p.isWhiteKey) || (labelBlackKeys && p.isBlackKey)) && (p.midiNumber <= highlightedPitch.midiNumber)
-                : (p.isWhiteKey ? labelWhiteKeys : labelBlackKeys)
+                ? ((labelWhiteKeys && isWhiteKey(p)) || (labelBlackKeys && isBlackKey(p))) && (p <= highlightedPitch)
+                : (isWhiteKey(p) ? labelWhiteKeys : labelBlackKeys)
             )
         )}
         wrapOctave={true} />
@@ -345,7 +347,7 @@ const ThirdsDiagram: React.FunctionComponent<{}> = props => {
         {renderPianoKeyboardNoteNames(
             metrics,
             /*useSharps*/ true,
-            /*showLetterPredicate*/ p => pitches.some(pitch => pitch.midiNumberNoOctave === p.midiNumberNoOctave)
+            /*showLetterPredicate*/ p => pitches.some(pitch => getClass(pitch) === getClass(p))
           )}
         {renderIntervalLabels(metrics)}
       </g>
@@ -358,7 +360,7 @@ const ThirdsDiagram: React.FunctionComponent<{}> = props => {
       margin={margin}
       lowestPitch={createPitch(PitchLetter.C, 0, 4)}
       highestPitch={createPitch(PitchLetter.B, 0, 5)}
-      canPressKeyFn={p => new Set<number>(pitches.map(p => p.midiNumberNoOctave)).has(p.midiNumberNoOctave)}
+      canPressKeyFn={p => new Set<number>(pitches.map(p => getClass(p))).has(getClass(p))}
       wrapOctave={true}
       renderExtrasFn={renderExtrasFn} />
   );
@@ -593,12 +595,12 @@ function renderOrdinalNumeral(x: number): JSX.Element {
 }
 
 function renderDiatonicTriadSlideContents(scaleDegreeNumber: number): JSX.Element {
-  const scale = new Scale(ScaleType.Major, createPitch(PitchLetter.C, 0, 4));
+  const scale = new Scale(ScaleTypes.Ionian, createPitch(PitchLetter.C, 0, 4));
   const chord = scale.getDiatonicChord(scaleDegreeNumber, /*numChordPitches*/ 3);
 
   const chordTypeName = chord.type.name;
   const chordPitchStrings = chord.getPitchClasses()
-    .map(p => p.toString(/*includeOctaveNumber*/ false, /*useSymbols*/ true));
+    .map(p => toString(p, /*useSymbols*/ true));
   const chordPitchesString = chordPitchStrings.join(", ");
   const chordName = `${chordPitchStrings[0]} ${chordTypeName}`;
 
@@ -625,13 +627,13 @@ function createDiatonicTriadSlide(scaleDegreeNumber: number): Slide {
 }
 
 function createDiatonicTriadNotesQuizSlide(scaleDegreeNumber: number): Slide {
-  const scale = new Scale(ScaleType.Major, createPitch(PitchLetter.C, 0, 4));
+  const scale = new Scale(ScaleTypes.Ionian, createPitch(PitchLetter.C, 0, 4));
   const chord = scale.getDiatonicChord(scaleDegreeNumber, /*numChordPitches*/ 3);
 
   const chordPitches = chord.getPitchClasses();
 
   const chordTypeName = chord.type.name;
-  const chordRootPitchString = chord.rootPitchClass.toString(/*includeOctaveNumber*/ false, /*useSymbols*/ true);
+  const chordRootPitchString = toString(chord.rootPitchClass, /*useSymbols*/ true);
   const chordName = `${chordRootPitchString} ${chordTypeName}`;
 
   const chordUriComponent = getUriComponent(chord);
@@ -907,7 +909,7 @@ export const pianoTheorySlideGroups = [
             labelWhiteKeys: true,
             labelBlackKeys: true,
             useSharps: true,
-            showLetterPredicate: p => (p.midiNumber <= (createPitch(PitchLetter.C, 1, 4)).midiNumber)
+            showLetterPredicate: p => (p <= createPitch(PitchLetter.C, 1, 4))
           })}
         </div>
       )),
@@ -932,7 +934,7 @@ export const pianoTheorySlideGroups = [
             labelWhiteKeys: true,
             labelBlackKeys: true,
             useSharps: false,
-            showLetterPredicate: p => p.isEnharmonic(createPitch(PitchLetter.D, 0, 4)) || p.isEnharmonic(createPitch(PitchLetter.D, -1, 4))
+            showLetterPredicate: p => equals(p, createPitch(PitchLetter.D, 0, 4)) || equals(p, createPitch(PitchLetter.D, -1, 4))
           })}
         </div>
       )),
@@ -1111,7 +1113,7 @@ export const pianoTheorySlideGroups = [
           <p>Also try starting and ending with <strong>C</strong> to hear how it sounds stable and "like home."</p>
           <p>
             <PianoScaleDronePlayer
-              scale={new Scale(ScaleType.Ionian, createPitch(PitchLetter.C, 0, 4))}
+              scale={new Scale(ScaleTypes.Ionian, createPitch(PitchLetter.C, 0, 4))}
               octaveCount={2}
               maxWidth={maxTwoOctavePianoWidth} />
           </p>
@@ -1119,7 +1121,7 @@ export const pianoTheorySlideGroups = [
       )),
 
       new Slide("c-major-scale-notes-quiz", (slideshow) => {
-        const pitches = new Scale(ScaleType.Ionian, createPitch(PitchLetter.C, 0, 4)).getPitchClasses();
+        const pitches = new Scale(ScaleTypes.Ionian, createPitch(PitchLetter.C, 0, 4)).getPitchClasses();
 
         return (
           <div>
@@ -1150,7 +1152,7 @@ export const pianoTheorySlideGroups = [
 
           <p>
             <PianoScaleFormulaDiagram
-              scale={new Scale(ScaleType.Ionian, createPitch(PitchLetter.C, 0, 4))}
+              scale={new Scale(ScaleTypes.Ionian, createPitch(PitchLetter.C, 0, 4))}
               octaveCount={2}
               maxWidth={maxTwoOctavePianoWidth} />
           </p>
@@ -1167,7 +1169,7 @@ export const pianoTheorySlideGroups = [
           <p>Try coming up with musical phrases beginning and/or ending on the piano keyboard below to hear this for yourself!</p>
           <p>
             <PianoScaleDronePlayer
-              scale={new Scale(ScaleType.Ionian, createPitch(PitchLetter.C, 0, 4))}
+              scale={new Scale(ScaleTypes.Ionian, createPitch(PitchLetter.C, 0, 4))}
               octaveCount={2}
               maxWidth={maxTwoOctavePianoWidth} />
           </p>
@@ -1183,7 +1185,7 @@ export const pianoTheorySlideGroups = [
           <p>For example, another common type of scale is the <strong>natural minor scale</strong> (sometimes simply called the <strong>minor</strong> scale), which has a major-scale-relative formula of: <strong className="no-wrap">1, 2, 3♭, 4, 5, 6♭, 7♭</strong>.</p>
           <p>To figure out the notes of the <strong>C minor scale</strong>, for example, using the major-scale-relative formula above, we can take the notes of the <strong>C major scale</strong> (<span className="no-wrap">C, D, E, F, G, A, B</span>) and flattening degrees 3, 6, &amp; 7, giving us: <strong className="no-wrap">C, D, E♭, F, G, A♭, B♭</strong>.</p>
           <p><PianoScaleMajorRelativeFormulaDiagram
-            scale={new Scale(ScaleType.Aeolian, createPitch(PitchLetter.C, 0, 4))}
+            scale={new Scale(ScaleTypes.Aeolian, createPitch(PitchLetter.C, 0, 4))}
             octaveCount={2}
             maxWidth={maxTwoOctavePianoWidth} /></p>
         </div>
@@ -1192,7 +1194,7 @@ export const pianoTheorySlideGroups = [
       createMiniQuizSlide("minor-scale-formula-quiz", [minorScaleFormulaFlashCard]),
       
       new Slide("c-minor-scale-notes-quiz", (slideshow) => {
-        const pitches = new Scale(ScaleType.Aeolian, createPitch(PitchLetter.C, 0, 4)).getPitchClasses();
+        const pitches = new Scale(ScaleTypes.Aeolian, createPitch(PitchLetter.C, 0, 4)).getPitchClasses();
 
         return (
           <div>
@@ -1270,7 +1272,7 @@ export const pianoTheorySlideGroups = [
           <p>The following is still considered a <strong>C Major</strong> chord because it consists of the notes C, E, G:</p>
           <ChordDiagram
             pitches={[createPitch(PitchLetter.E, 0, 4), createPitch(PitchLetter.G, 0, 4), createPitch(PitchLetter.C, 0, 5), createPitch(PitchLetter.G, 0, 5),]}
-            scale={new Scale(ScaleType.Ionian, createPitch(PitchLetter.C, 0, 4))}
+            scale={new Scale(ScaleTypes.Ionian, createPitch(PitchLetter.C, 0, 4))}
             showScaleDegreeNumbers={false}
             maxWidth={maxTwoOctavePianoWidth} />
         </div>
@@ -1437,7 +1439,7 @@ export const pianoTheorySlideGroups = [
             <ChordView
               chord={new Chord(ChordType.Major, createPitch(PitchLetter.G, 0, 4))}
               showChordInfoText={false}
-              scale={new Scale(ScaleType.Major, createPitch(PitchLetter.C, 0, 4))}
+              scale={new Scale(ScaleTypes.Ionian, createPitch(PitchLetter.C, 0, 4))}
               showScaleDegreesOnPiano={true} />
           </p>
         </div>
@@ -1678,7 +1680,7 @@ export const pianoTheorySlideGroups = [
               new Chord(ChordType.Dom7, createPitch(PitchLetter.G, 0, 4)),
               new Chord(ChordType.Major, createPitch(PitchLetter.C, 0, 4))
             ]}
-            scale={new Scale(ScaleType.Major, createPitch(PitchLetter.C, 0, 4))}
+            scale={new Scale(ScaleTypes.Ionian, createPitch(PitchLetter.C, 0, 4))}
             chordScaleDegreeNumbers={[2, 5, 1]}
             showRomanNumerals={false}
             maxWidth={maxTwoOctavePianoWidth} />
@@ -1797,7 +1799,7 @@ export const pianoTheorySlideGroups = [
               new Chord(ChordType.Dom7, createPitch(PitchLetter.A, 0, 4)),
               new Chord(ChordType.Major, createPitch(PitchLetter.D, 0, 4))
             ]}
-            scale={new Scale(ScaleType.Major, createPitch(PitchLetter.D, 0, 4))}
+            scale={new Scale(ScaleTypes.Ionian, createPitch(PitchLetter.D, 0, 4))}
             chordScaleDegreeNumbers={[2, 5, 1]}
             showRomanNumerals={true}
             maxWidth={maxTwoOctavePianoWidth} />
@@ -1824,7 +1826,7 @@ export const pianoTheorySlideGroups = [
               new Chord(ChordType.Dom7, createPitch(PitchLetter.G, 0, 4)),
               new Chord(ChordType.Major, createPitch(PitchLetter.C, 0, 4))
             ]}
-            scale={new Scale(ScaleType.Major, createPitch(PitchLetter.C, 0, 4))}
+            scale={new Scale(ScaleTypes.Ionian, createPitch(PitchLetter.C, 0, 4))}
             chordScaleDegreeNumbers={[5, 1]}
             lowestPitch={createPitch(PitchLetter.C, 0, 3)}
             highestPitch={createPitch(PitchLetter.B, 0, 6)}
@@ -1869,7 +1871,7 @@ export const pianoTheorySlideGroups = [
                 new Chord(ChordType.Major, createPitch(PitchLetter.G, 0, 2)),
                 new Chord(ChordType.Major, createPitch(PitchLetter.C, 0, 2)),
               ]}
-              scale={new Scale(ScaleType.Major, createPitch(PitchLetter.C, 0, 4))}
+              scale={new Scale(ScaleTypes.Ionian, createPitch(PitchLetter.C, 0, 4))}
               chordScaleDegreeNumbers={[1, 4, 7, 3, 6, 2, 5, 1]}
               lowestPitch={createPitch(PitchLetter.C, 0, 2)}
               highestPitch={createPitch(PitchLetter.B, 0, 5)}
@@ -1918,7 +1920,7 @@ export const pianoTheorySlideGroups = [
                 new Chord(ChordType.Major, createPitch(PitchLetter.C, 0, 4))
               ]}
               chordStartDelaysMs={[0, 1500, 3000, 6000, 7500, 9000]}
-              scale={new Scale(ScaleType.Major, createPitch(PitchLetter.C, 0, 4))}
+              scale={new Scale(ScaleTypes.Ionian, createPitch(PitchLetter.C, 0, 4))}
               chordScaleDegreeNumbers={[2, 5, 1, 2, 5, 1]}
               maxWidth={maxTwoOctavePianoWidth} />
           </p>
@@ -1964,7 +1966,7 @@ export const pianoTheorySlideGroups = [
                 new Chord(ChordType.Major, createPitch(PitchLetter.C, 0, 4))
               ]}
               chordStartDelaysMs={[0, 1500, 3000, 6000, 7500, 9000]}
-              scale={new Scale(ScaleType.Major, createPitch(PitchLetter.C, 0, 4))}
+              scale={new Scale(ScaleTypes.Ionian, createPitch(PitchLetter.C, 0, 4))}
               chordScaleDegreeNumbers={[2, 5, 1, 4, 5, 1]}
               maxWidth={maxTwoOctavePianoWidth} />
           </p>
@@ -2091,4 +2093,12 @@ export const pianoTheorySlideGroups = [
   )
 ];
 
+
+function isWhiteKey(p: number) {
+  throw new Error("Function not implemented.");
+}
+
+function isBlackKey(p: number): false | void {
+  throw new Error("Function not implemented.");
+}
 // #endregion Slides

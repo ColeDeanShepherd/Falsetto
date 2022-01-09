@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Pitch } from '../../lib/TheoryLib/Pitch';
+import { addOctaves, createPitch, Pitch } from '../../lib/TheoryLib/Pitch';
 import { Scale } from '../../lib/TheoryLib/Scale';
 import { PitchesAudioPlayer, PitchesAudioPlayerExports } from './PitchesAudioPlayer';
 import { IPitchesAudio } from '../../Audio/IPitchesAudio';
@@ -44,7 +44,7 @@ export class ScaleAudioPlayer extends React.Component<IScaleAudioPlayerProps, {}
     // If there's not a specified # of pitches to play, just add the root note an octave higher.
     else {
       return scalePitches.concat(
-        Pitch.addOctaves(scalePitches[0], 1)
+        addOctaves(scalePitches[0], 1)
       );
     }
   }

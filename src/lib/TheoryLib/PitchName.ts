@@ -5,7 +5,7 @@ import { precondition } from '../Core/Dbc';
 import { mod } from '../Core/MathUtils';
 import { parseSignedAccidental, PitchClassName } from './PitchClassName';
 import { parseEnglishSignedAccidental, PitchClass } from './PitchClass';
-import { createPitch, Pitch } from './Pitch';
+import { arePitchOffsetsFromCWhiteKeys, createPitch, Pitch } from './Pitch';
 
 export function pitchClassNameToPitchName(pitchClassName: PitchClassName, octaveNumber: number): PitchName {
   return {
@@ -94,20 +94,6 @@ export function tryWrapPitchOctave(
     : undefined;
 }
 
-export const arePitchOffsetsFromCWhiteKeys = [
-  true, // C
-  false, // C#/Db
-  true, // D
-  false, // D#/Eb
-  true, // E
-  true, // F
-  false, // F#/Gb
-  true, // G
-  false, // G#/Ab
-  true, // A
-  false, // A#/Bb
-  true, // B
-];
 export const ambiguousPitchStrings = [
   "C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb", "G", "G#/Ab", "A", "A#/Bb", "B"
 ];

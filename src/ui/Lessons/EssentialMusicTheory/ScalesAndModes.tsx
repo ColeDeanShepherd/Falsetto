@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Table, TableHead, TableBody, TableRow, TableCell } from "@material-ui/core";
 
-import { Pitch } from "../../../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
 
 import { createStudyFlashCardSetComponent } from "../../../ui/StudyFlashCards/View";
@@ -20,7 +19,8 @@ import { SectionProps, Term, SectionTitle, SubSectionTitle, defaultRootPitch } f
 import { NavLinkView } from "../../../ui/NavLinkView";
 import { PianoScaleFormulaDiagram } from "../../Utils/PianoScaleFormulaDiagram";
 import { NoteText } from "../../Utils/NoteText";
-import { ScaleType } from "../../../lib/TheoryLib/ScaleType";
+import { ScaleTypes } from "../../../lib/TheoryLib/ScaleType";
+import { createPitch } from "../../../lib/TheoryLib/Pitch";
 
 export const ScalesAndModesSection: React.FunctionComponent<SectionProps> = props => (
   <div>
@@ -34,7 +34,7 @@ export const ScalesAndModesSection: React.FunctionComponent<SectionProps> = prop
     <SubSectionTitle>The Major Scale</SubSectionTitle>
     <p>One of the most common scales, upon which other scales are often built by modifying notes, is the <Term>major scale</Term>. The <Term>major scale</Term> is a 7 note scale which can be built using the formula: "R W W H W W W", where "R" denotes the root name, "W" means the next note is a whole step higher, and "H" means the next note is a half step higher.</p>
     <p>So, a C major scale, a scale with a <Term>root note</Term> of C following the major scale formula, is comprised of the notes: C, D, E, F, G, A, B.</p>
-    <p style={{ textAlign: "center" }}><PianoScaleFormulaDiagram scale={new Scale(ScaleType.Ionian, createPitch(PitchLetter.C, 0, 4))} octaveCount={1} maxWidth={400} /></p>
+    <p style={{ textAlign: "center" }}><PianoScaleFormulaDiagram scale={new Scale(ScaleTypes.Ionian, createPitch(PitchLetter.C, 0, 4))} octaveCount={1} maxWidth={400} /></p>
 
     <NoteText>Though the notes of scales are often given in ascending order, they can be played in any order or repeated any number of times and still be considered the same scale. What makes a scale distinct is simply the set of notes it contains, not the order or the count of the notes.</NoteText>
 
@@ -42,7 +42,7 @@ export const ScalesAndModesSection: React.FunctionComponent<SectionProps> = prop
     <p>C Major scale formula: R, M2, M3, P4, P5, M6, M7</p>
 
     <p>Major scales often sound "happy" or "bright". Try playing the piano keyboard below to hear each note of the C major scale at the same time as the root note to internalize the sound of the major scale yourself.</p>
-    <p style={{ textAlign: "center" }}><PianoScaleDronePlayer scale={new Scale(ScaleType.Ionian, createPitch(PitchLetter.C, 0, 4))} octaveCount={1} maxWidth={400} /></p>
+    <p style={{ textAlign: "center" }}><PianoScaleDronePlayer scale={new Scale(ScaleTypes.Ionian, createPitch(PitchLetter.C, 0, 4))} octaveCount={1} maxWidth={400} /></p>
     
     <SubSectionTitle>Scale Degrees</SubSectionTitle>
     <p>Each note in a scale is sometimes called a <Term>scale degree</Term>, with the first note (the <Term>root note</Term>) called the 1st scale degree (C in C major), the next note above that called the 2nd scale degree (D in C major), the next note above that called the 3rd scale degree (E in C major), and so on.</p>
@@ -50,7 +50,7 @@ export const ScalesAndModesSection: React.FunctionComponent<SectionProps> = prop
     <p>The <Term>natural minor scale</Term> (commonly referred to simply as the <Term>minor scale</Term>) is another common scale with a "darker" sound. Relative to the major scale, the natural minor scale has the following formula: 1 2 b3 4 5 b6 b7, meaning the natural minor scale is a major scale with the 3rd, 6th, and 7th scale degrees flattened. So, a C natural minor scale is comprised of the notes C, D, E♭, F, G, A♭, B♭.</p>
     
     <p>Try playing the piano keyboard below to get a feel for the natural minor scale.</p>
-    <p style={{ textAlign: "center" }}><PianoScaleDronePlayer scale={new Scale(ScaleType.Aeolian, createPitch(PitchLetter.C, 0, 4))} octaveCount={1} maxWidth={400} /></p>
+    <p style={{ textAlign: "center" }}><PianoScaleDronePlayer scale={new Scale(ScaleTypes.Aeolian, createPitch(PitchLetter.C, 0, 4))} octaveCount={1} maxWidth={400} /></p>
 
     <SubSectionTitle>Modes</SubSectionTitle>
     <p>The <Term>modes</Term> of a scale are the different scales you get when you start on different notes of a "base" scale, and consider those starting notes the new <Term>root notes</Term>.</p>
@@ -71,49 +71,49 @@ export const ScalesAndModesSection: React.FunctionComponent<SectionProps> = prop
           <TableCell>C D E F G A B</TableCell>
           <TableCell>Ionian (a.k.a "Major")</TableCell>
           <TableCell>1 2 3 4 5 6 7</TableCell>
-          <TableCell><ScaleAudioPlayer scale={new Scale(ScaleType.Ionian, defaultRootPitch)} /></TableCell>
+          <TableCell><ScaleAudioPlayer scale={new Scale(ScaleTypes.Ionian, defaultRootPitch)} /></TableCell>
         </TableRow>
         <TableRow>
           <TableCell>D</TableCell>
           <TableCell>D E F G A B C</TableCell>
           <TableCell>Dorian</TableCell>
           <TableCell>1 2 b3 4 5 6 b7</TableCell>
-          <TableCell><ScaleAudioPlayer scale={new Scale(ScaleType.Dorian, defaultRootPitch)} /></TableCell>
+          <TableCell><ScaleAudioPlayer scale={new Scale(ScaleTypes.Dorian, defaultRootPitch)} /></TableCell>
         </TableRow>
         <TableRow>
           <TableCell>E</TableCell>
           <TableCell>E F G A B C D</TableCell>
           <TableCell>Phrygian</TableCell>
           <TableCell>1 b2 b3 4 5 b6 b7</TableCell>
-          <TableCell><ScaleAudioPlayer scale={new Scale(ScaleType.Phrygian, defaultRootPitch)} /></TableCell>
+          <TableCell><ScaleAudioPlayer scale={new Scale(ScaleTypes.Phrygian, defaultRootPitch)} /></TableCell>
         </TableRow>
         <TableRow>
           <TableCell>F</TableCell>
           <TableCell>F G A B C D E</TableCell>
           <TableCell>Lydian</TableCell>
           <TableCell>1 2 3 #4 5 6 7</TableCell>
-          <TableCell><ScaleAudioPlayer scale={new Scale(ScaleType.Lydian, defaultRootPitch)} /></TableCell>
+          <TableCell><ScaleAudioPlayer scale={new Scale(ScaleTypes.Lydian, defaultRootPitch)} /></TableCell>
         </TableRow>
         <TableRow>
           <TableCell>G</TableCell>
           <TableCell>G A B C D E F</TableCell>
           <TableCell>Mixolydian</TableCell>
           <TableCell>1 2 3 4 5 6 b7</TableCell>
-          <TableCell><ScaleAudioPlayer scale={new Scale(ScaleType.Mixolydian, defaultRootPitch)} /></TableCell>
+          <TableCell><ScaleAudioPlayer scale={new Scale(ScaleTypes.Mixolydian, defaultRootPitch)} /></TableCell>
         </TableRow>
         <TableRow>
           <TableCell>A</TableCell>
           <TableCell>A B C D E F G</TableCell>
           <TableCell>Aeolian (a.k.a "Natural Minor")</TableCell>
           <TableCell>1 2 b3 4 5 b6 b7</TableCell>
-          <TableCell><ScaleAudioPlayer scale={new Scale(ScaleType.Aeolian, defaultRootPitch)} /></TableCell>
+          <TableCell><ScaleAudioPlayer scale={new Scale(ScaleTypes.Aeolian, defaultRootPitch)} /></TableCell>
         </TableRow>
         <TableRow>
           <TableCell>B</TableCell>
           <TableCell>B C D E F G A</TableCell>
           <TableCell>Locrian</TableCell>
           <TableCell>1 b2 b3 4 b5 b6 b7</TableCell>
-          <TableCell><ScaleAudioPlayer scale={new Scale(ScaleType.Locrian, defaultRootPitch)} /></TableCell>
+          <TableCell><ScaleAudioPlayer scale={new Scale(ScaleTypes.Locrian, defaultRootPitch)} /></TableCell>
         </TableRow>
       </TableBody>
     </Table>

@@ -7,7 +7,6 @@ import {
 } from '../Utils/GuitarFretboard';
 import { StringedInstrumentMetrics } from "../Utils/StringedInstrumentFingerboard";
 import { getStandardGuitarTuning } from "../Utils/StringedInstrumentTuning";
-import { Pitch } from '../../lib/TheoryLib/Pitch';
 import { PitchLetter } from '../../lib/TheoryLib/PitchLetter';
 import { ScaleType, Scale } from '../../lib/TheoryLib/Scale';
 import { ScaleAudioPlayer } from '../Utils/ScaleAudioPlayer';
@@ -20,6 +19,7 @@ import { arrayMax } from '../../lib/Core/ArrayUtils';
 import { GuitarPitchesAudio } from '../../Audio/GuitarAudio';
 import { NoteText } from "../Utils/NoteText";
 import { Card } from "../../ui/Card/Card";
+import { createPitch } from "../../lib/TheoryLib/Pitch";
 
 const fretCount = 11;
 const ionianRootPitch = createPitch(PitchLetter.F, 0, 2);
