@@ -1,0 +1,15 @@
+﻿@using Html;
+@using static Html.HtmlHelpers;
+@page "/"
+
+<PageTitle>Index</PageTitle>
+
+@((MarkupString)GuitarFretboard.ToHtml())
+
+@code {
+    private Html.Element GuitarFretboard =
+        Svg(Children: new List<Element>
+        {
+            Rect()
+        });
+}
