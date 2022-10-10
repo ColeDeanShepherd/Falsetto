@@ -1,5 +1,6 @@
 ﻿@using Html;
-@using static Html.HtmlHelpers;
+@using static Html.HtmlHelpers.Elem;
+@using static Html.HtmlHelpers.Attr;
 @page "/"
 
 <PageTitle>Index</PageTitle>
@@ -8,8 +9,32 @@
 
 @code {
     private Html.Element GuitarFretboard =
-        Svg(Children: new List<Element>
-        {
-            Rect()
-        });
+        Svg(Attrs(Width(400), Height(140), Viewbox(0, 0, 400, 140)), Elems(
+            G(Attrs(Transform("translate(20,20)")), Elems(
+                // Wood
+                Rect(Attrs(X(0), Y(0), Width(360), Height(100), StrokeWidth(0), Fill("#844e30"))),
+                // Nut
+                Line(Attrs(X1(4), Y1(0), X2(4), Y2(100), Stroke("#a29f98"), StrokeWidth(8)))
+                // Fret Bars
+                ).Add(Enumerable.Range(1, 11).Map(i =>
+                {
+                    int x = 8 + (32 * i);
+                    return Line(Attrs(X1(x), Y1(0), X2(x), Y2(100), Stroke("#bebeba"), StrokeWidth(4)));
+                })
+                ).Add(Enumerable.Range(0, 6).Map(i =>
+                {
+                    int y = 5 + (18 * i);
+                    float lowestStringWidth = 3;
+                    float stringWidth = lowestStringWidth / (1 + ((float)(5 - i) / 4));
+                    return Line(Attrs(X1(8), Y1(y), X2(360), Y2(y), Stroke("#dad2cb"), StrokeWidth(stringWidth)));
+                })
+                // Fret Markers
+                ).Add((new[] { 2, 4, 6, 8 }).Map(i =>
+                {
+                    //<circle cx="88" cy="50" r="8" fill="#fdfcf8" stroke-width="0"></circle>
+                    int fretWidth = (360 - 8) / 11;
+                    int cx = 8 + (i * fretWidth) + (fretWidth / 2);
+                    return Circle(Attrs(CX(cx), CY(50), R(8), Fill("#fdfcf8"), StrokeWidth(0)));
+                })))
+        ));
 }
