@@ -61,7 +61,9 @@ public static class Guitar
     }
 
     public static Node GuitarFretboard(
-        List<GuitarNote> markedNotes)
+        Dictionary<string, object>? attributes,
+        List<GuitarNote> markedNotes,
+        NodeReference? nodeReference)
     {
         int width = 400;
         int height = 140;
@@ -86,7 +88,7 @@ public static class Guitar
                 _ => nutWidth + ((fretNumber - 1) * fretWidth) + (fretWidth / 2)
             };
 
-        return Svg(Attrs(Width(width), Height(height), Viewbox(0, 0, width, height)), Nodes(
+        return Svg(Attrs(Width(width), Height(height), Viewbox(0, 0, width, height)).Add(attributes), NodeReference: nodeReference, Children: Nodes(
             G(Attrs(TransformTranslate(padding, padding)), Nodes(
                 // Wood
                 Rect(Attrs(X(0), Y(0), Width(fretboardWidth), Height(fretboardHeight), StrokeWidth(0), Fill("#844e30"))),

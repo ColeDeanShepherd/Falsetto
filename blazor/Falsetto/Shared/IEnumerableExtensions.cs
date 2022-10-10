@@ -2,8 +2,29 @@
 
 public static class FalsettoIEnumerableExtensions
 {
+    public static IEnumerable<T> ForEach<T>(this IEnumerable<T> enumerable, Action<T> action)
+    {
+        foreach (T item in enumerable)
+        {
+            action(item);
+        }
+
+        return enumerable;
+    }
+
     public static IEnumerable<TResult> Map<TSource, TResult>(this IEnumerable<TSource> enumerable, Func<TSource, TResult> mapFn)
         => enumerable.Select(mapFn);
+
+    public static IEnumerable<TResult> Map<TSource, TResult>(this IEnumerable<TSource> enumerable, Func<TSource, uint, TResult> mapFn)
+    {
+        uint index = 0;
+
+        foreach (TSource item in enumerable)
+        {
+            yield return mapFn(item, index);
+            index++;
+        }
+    }
 
     public static IEnumerable<TResult> FlatMap<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, IEnumerable<TResult>> selector)
     {

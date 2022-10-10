@@ -6,30 +6,95 @@
 
 <PageTitle>Index</PageTitle>
 
-@((MarkupString)Div(Children: GuitarFretboards).ToHtml())
+<Falsetto.Client.Html.CSharpComponent Node="RootNode" />
 
 @code {
-    private List<Html.Node> GuitarFretboards =
-        Enumerable.Range(1, 11)
-            .Map(Convert.ToUInt32)
-            .Repeat(5)
-            .FlatMap((fretNumbers, i) =>
-                fretNumbers
-                    .Map(fn => new GuitarNote(StringIndex: i, FretNumber: fn)))
-            .FlatMap(note0 =>
-            {
-                GuitarNote note1 = new(StringIndex: 5, FretNumber: 6);
+    private List<(NodeReference, NodeReference)> FlashCardSideReferences = null!;
+    private List<(Html.Node, Html.Node)> FlashCards = null!;
+    private Html.Node RootNode = null!;
+    private uint? currentFlashCardIndex = null;
+    private Random random = new();
 
-                return new[]
-                {
-                    P(Children: Nodes(Text(Guitar.GetSimpleIntervalName(note0, note1)))),
-                    Guitar.GuitarFretboard(
-                        new List<GuitarNote>()
-                        {
-                            note0,
-                            note1,
-                        })
-                };
-            })
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        List<(GuitarNote, GuitarNote)> FlashCardDatas =
+            Enumerable.Range(1, 11)
+                .Map(Convert.ToUInt32)
+                .Repeat(5)
+                .FlatMap((fretNumbers, i) =>
+                    fretNumbers
+                        .Map(fn => new GuitarNote(StringIndex: i, FretNumber: fn)))
+                .Map(note0 => (note0, new GuitarNote(StringIndex: 5, FretNumber: 6)))
+                .ToList();
+
+        FlashCardSideReferences = FlashCardDatas
+            .Map(_ => (new NodeReference(), new NodeReference()))
             .ToList();
+
+        FlashCards =
+            FlashCardDatas
+                .Map((notes, index) =>
+                {
+                    (GuitarNote note0, GuitarNote note1) = notes;
+                    (NodeReference frontSideRef, NodeReference backSideRef) = FlashCardSideReferences[(int)index];
+
+                    Node frontSide =
+                        Guitar.GuitarFretboard(
+                            Attrs(Style("display: none")),
+                            new List<GuitarNote>()
+                                {
+                                note0,
+                                note1,
+                                },
+                            frontSideRef);
+
+                    Node backSide = P(Attrs(Style("display: none")), Nodes(Text(Guitar.GetSimpleIntervalName(note0, note1))), backSideRef);
+
+                    return (frontSide, backSide);
+                })
+                .ToList();
+
+        RootNode =
+            Div(Children:
+                FlashCards
+                    .FlatMap(sides => new[] { sides.Item1, sides.Item2 })
+                .ToList()
+                .Add(new[]
+                {
+                    Button(Attrs(Value("Flip"), OnClick(e => Flip()))),
+                    Button(Attrs(Value("Next"), OnClick(e => Next()))),
+                }));
+
+        Next();
+    }
+
+    private void Flip()
+    {
+        if (currentFlashCardIndex != null)
+        {
+            bool isFrontSideVisible = (string)(FlashCards[(int)currentFlashCardIndex].Item1.AsT1.Attributes!["style"]) != "display: none";
+            
+            FlashCards[(int)currentFlashCardIndex].Item1.AsT1.Attributes!["style"] = isFrontSideVisible ? "display: none" : "display: block";
+            FlashCards[(int)currentFlashCardIndex].Item2.AsT1.Attributes!["style"] = isFrontSideVisible ? "display: block" : "display: none";
+
+            StateHasChanged();
+        }
+    }
+
+    private void Next()
+    {
+        if (currentFlashCardIndex != null)
+        {
+            FlashCards[(int)currentFlashCardIndex].Item1.AsT1.Attributes!["style"] = "display: none";
+            FlashCards[(int)currentFlashCardIndex].Item2.AsT1.Attributes!["style"] = "display: none";
+        }
+
+        currentFlashCardIndex = (uint)random.Next(FlashCards.Count);
+
+        FlashCards[(int)currentFlashCardIndex].Item1.AsT1.Attributes!["style"] = "display: block";
+
+        StateHasChanged();
+    }
 }

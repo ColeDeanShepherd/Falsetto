@@ -1,4 +1,7 @@
-﻿using OneOf;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Rendering;
+using Microsoft.AspNetCore.Components.Web;
+using OneOf;
 
 namespace Falsetto.Client.Html;
 
@@ -9,10 +12,64 @@ public partial class Node : OneOfBase<TextNode, Element> { }
 
 public record TextNode(string Value);
 
+public record NodeReference
+{
+    public ElementReference ElementReference { get; set; }
+}
+
+public class CSharpComponent : ComponentBase
+{
+    [Parameter]
+    public Node Node { get; set; } = null!;
+
+    protected override void BuildRenderTree(RenderTreeBuilder builder)
+    {
+        base.BuildRenderTree(builder);
+
+        int sequence = 0;
+
+        void ProcessNode(Node node)
+        {
+            node.Switch(
+                textNode => builder.AddContent(sequence++, textNode.Value),
+                element =>
+                {
+                    builder.OpenElement(sequence++, element.Type);
+
+                    element.Attributes?
+                        .ForEach(attribute =>
+                        {
+                            if (attribute.Key == "onclick")
+                            {
+                                builder.AddAttribute(sequence++, attribute.Key, EventCallback.Factory.Create<MouseEventArgs>(this, (Action<MouseEventArgs>)attribute.Value));
+                            }
+                            else
+                            {
+                                builder.AddAttribute(sequence++, attribute.Key, attribute.Value);
+                            }
+                        });
+
+                    if (element.NodeReference != null)
+                    {
+                        builder.AddElementReferenceCapture(sequence++, x => element.NodeReference.ElementReference = x);
+                    }
+
+                    element.Children?
+                        .ForEach(ProcessNode);
+
+                    builder.CloseElement();
+                });
+        }
+
+        ProcessNode(Node);
+    }
+}
+
 public record Element(
     string Type,
     Dictionary<string, object>? Attributes = null,
-    List<Node>? Children = null);
+    List<Node>? Children = null,
+    NodeReference? NodeReference = null);
 
 public static class NodeExtensions
 {
@@ -47,39 +104,57 @@ public static class HtmlHelpers
 
         public static Node Div(
             Dictionary<string, object>? Attributes = null,
-            List<Node>? Children = null) =>
-            new Element("div", Attributes, Children);
+            List<Node>? Children = null,
+            NodeReference? NodeReference = null) =>
+            new Element("div", Attributes, Children, NodeReference);
 
         public static Node P(
             Dictionary<string, object>? Attributes = null,
-            List<Node>? Children = null) =>
-            new Element("p", Attributes, Children);
+            List<Node>? Children = null,
+            NodeReference? NodeReference = null) =>
+            new Element("p", Attributes, Children, NodeReference);
 
         public static Node Svg(
             Dictionary<string, object>? Attributes = null,
-            List<Node>? Children = null) =>
+            List<Node>? Children = null,
+            NodeReference? NodeReference = null) =>
             new Element(
                 "svg",
                 (Attributes ?? new Dictionary<string, object>())
                     .AddIfMissing("xmlns", "http://www.w3.org/2000/svg"),
-                Children);
+                Children,
+                NodeReference);
 
         public static Node G(
             Dictionary<string, object>? Attributes = null,
-            List<Node>? Children = null) =>
-            new Element("g", Attributes, Children);
+            List<Node>? Children = null,
+            NodeReference? NodeReference = null) =>
+            new Element("g", Attributes, Children, NodeReference);
 
         public static Node Rect(
-            Dictionary<string, object>? Attributes = null) =>
-            new Element("rect", Attributes);
+            Dictionary<string, object>? Attributes = null,
+            NodeReference? NodeReference = null) =>
+            new Element("rect", Attributes, Children: null, NodeReference);
 
         public static Node Line(
-            Dictionary<string, object>? Attributes = null) =>
-            new Element("line", Attributes);
+            Dictionary<string, object>? Attributes = null,
+            NodeReference? NodeReference = null) =>
+            new Element("line", Attributes, Children: null, NodeReference);
 
         public static Node Circle(
-            Dictionary<string, object>? Attributes = null) =>
-            new Element("circle", Attributes);
+            Dictionary<string, object>? Attributes = null,
+            NodeReference? NodeReference = null) =>
+            new Element("circle", Attributes, Children: null, NodeReference);
+
+        public static Node Button(
+            Dictionary<string, object>? Attributes = null,
+            NodeReference? NodeReference = null) =>
+            new Element(
+                "input",
+                (Attributes ?? new Dictionary<string, object>())
+                    .AddIfMissing("type", "button"),
+                Children: null,
+                NodeReference);
     }
 
     public static class Attr
@@ -137,5 +212,14 @@ public static class HtmlHelpers
 
         public static Attribute Viewbox(double x, double y, double width, double height) =>
             new Attribute("viewbox", $"{x} {y} {width} {height}");
+
+        public static Attribute Style(string value) =>
+            new Attribute("style", value);
+
+        public static Attribute Value(string value) =>
+            new Attribute("value", value);
+
+        public static Attribute OnClick(Action<MouseEventArgs> action) =>
+            new Attribute("onclick", action);
     }
 }
