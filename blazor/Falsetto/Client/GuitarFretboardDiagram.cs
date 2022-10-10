@@ -1,6 +1,7 @@
 ﻿using Falsetto.Client.Html;
 using static Falsetto.Client.Html.HtmlHelpers.Elem;
 using static Falsetto.Client.Html.HtmlHelpers.Attr;
+using Falsetto.Shared;
 
 namespace Falsetto.Client;
 
@@ -8,9 +9,58 @@ public record GuitarNote(
     uint StringIndex,
     uint FretNumber);
 
-public static class GuitarFretboardDiagram
+public static class Guitar
 {
-    public static Element GuitarFretboard(
+    public static string GetSimpleIntervalName(GuitarNote note0, GuitarNote note1)
+    {
+        ushort CreatePitch(PitchClass pitchClass, int octaveNumber) => (ushort)((12 * (octaveNumber + 1)) + pitchClass);
+
+        var openStringPitches = new[]
+        {
+            CreatePitch(PitchClass.E, 4),
+            CreatePitch(PitchClass.B, 3),
+            CreatePitch(PitchClass.G, 3),
+            CreatePitch(PitchClass.D, 3),
+            CreatePitch(PitchClass.A, 2),
+            CreatePitch(PitchClass.E, 2)
+        };
+
+        ushort GuitarNoteToPitch(GuitarNote guitarNote) => (ushort)(openStringPitches[guitarNote.StringIndex] + guitarNote.FretNumber);
+
+        ushort pitch0 = GuitarNoteToPitch(note0);
+        ushort pitch1 = GuitarNoteToPitch(note1);
+
+        int pitchDiff = Math.Abs(pitch1 - pitch0);
+        int simpleInterval = pitchDiff switch
+        {
+            0 => 0,
+            _ when (((pitchDiff % 12)) == 0) => 12,
+            _ => (pitchDiff % 12)
+        };
+
+        string[] simpleIntervalNames = new[]
+        {
+            "unison",
+            "minor 2nd",
+            "major 2nd",
+            "minor 3rd",
+            "major 3rd",
+            "perfect 4th",
+            "tritone",
+            "perfect 5th",
+            "minor 6th",
+            "major 6th",
+            "minor 7th",
+            "major 7th",
+            "octave"
+        };
+
+        string simpleIntervalName = simpleIntervalNames[simpleInterval];
+
+        return simpleIntervalName;
+    }
+
+    public static Node GuitarFretboard(
         List<GuitarNote> markedNotes)
     {
         int width = 400;
@@ -36,8 +86,8 @@ public static class GuitarFretboardDiagram
                 _ => nutWidth + ((fretNumber - 1) * fretWidth) + (fretWidth / 2)
             };
 
-        return Svg(Attrs(Width(width), Height(height), Viewbox(0, 0, width, height)), Elems(
-            G(Attrs(TransformTranslate(padding, padding)), Elems(
+        return Svg(Attrs(Width(width), Height(height), Viewbox(0, 0, width, height)), Nodes(
+            G(Attrs(TransformTranslate(padding, padding)), Nodes(
                 // Wood
                 Rect(Attrs(X(0), Y(0), Width(fretboardWidth), Height(fretboardHeight), StrokeWidth(0), Fill("#844e30"))),
                 // Nut
