@@ -53,10 +53,10 @@ public static class HtmlHelpers
         public static Dictionary<string, object> Attrs(params KeyValuePair<string, object>[] keyValuePairs) =>
             new Dictionary<string, object>(keyValuePairs);
 
-        public static KeyValuePair<string, object> Width(uint value) =>
+        public static KeyValuePair<string, object> Width(double value) =>
             new KeyValuePair<string, object>("width", value);
 
-        public static KeyValuePair<string, object> Height(uint value) =>
+        public static KeyValuePair<string, object> Height(double value) =>
             new KeyValuePair<string, object>("height", value);
 
         public static KeyValuePair<string, object> X(int value) =>
@@ -89,7 +89,7 @@ public static class HtmlHelpers
         public static KeyValuePair<string, object> Stroke(string value) =>
             new KeyValuePair<string, object>("stroke", value);
 
-        public static KeyValuePair<string, object> StrokeWidth(float value) =>
+        public static KeyValuePair<string, object> StrokeWidth(double value) =>
             new KeyValuePair<string, object>("stroke-width", value);
 
         public static KeyValuePair<string, object> Fill(string value) =>
@@ -98,7 +98,10 @@ public static class HtmlHelpers
         public static KeyValuePair<string, object> Transform(string value) =>
             new KeyValuePair<string, object>("transform", value);
 
-        public static KeyValuePair<string, object> Viewbox(uint x, uint y, uint width, uint height) =>
+        public static KeyValuePair<string, object> TransformTranslate(double x, double y) =>
+            new KeyValuePair<string, object>("transform", $"translate({x}, {y})");
+
+        public static KeyValuePair<string, object> Viewbox(double x, double y, double width, double height) =>
             new KeyValuePair<string, object>("viewbox", $"{x} {y} {width} {height}");
     }
 }

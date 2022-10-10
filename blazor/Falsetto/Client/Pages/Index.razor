@@ -31,7 +31,6 @@
                 // Fret Markers
                 ).Add((new[] { 2, 4, 6, 8 }).Map(i =>
                 {
-                    //<circle cx="88" cy="50" r="8" fill="#fdfcf8" stroke-width="0"></circle>
                     int fretWidth = (360 - 8) / 11;
                     int cx = 8 + (i * fretWidth) + (fretWidth / 2);
                     return Circle(Attrs(CX(cx), CY(50), R(8), Fill("#fdfcf8"), StrokeWidth(0)));
