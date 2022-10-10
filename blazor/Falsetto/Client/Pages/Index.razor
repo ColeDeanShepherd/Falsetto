@@ -5,8 +5,24 @@
 
 <PageTitle>Index</PageTitle>
 
-@((MarkupString)GuitarFretboard.ToHtml())
+@((MarkupString)Div(Children: GuitarFretboards).ToHtml())
 
 @code {
-    private Html.Element GuitarFretboard = Falsetto.Client.GuitarFretboardDiagram.GuitarFretboard();
+    private List<Html.Element> GuitarFretboards =
+        Enumerable.Range(1, 11)
+            .Map(Convert.ToUInt32)
+            .Repeat(5)
+            .FlatMap((fretNumbers, i) =>
+                fretNumbers
+                    .Map(fn => new GuitarNote(StringIndex: i, FretNumber: fn)))
+            .FlatMap(n => new[]
+            {
+                Falsetto.Client.GuitarFretboardDiagram.GuitarFretboard(
+                    new List<GuitarNote>()
+                    {
+                        n,
+                        new GuitarNote(StringIndex: 5, FretNumber: 6),
+                    })
+            })
+            .ToList();
 }

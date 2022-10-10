@@ -10,17 +10,13 @@ public record GuitarNote(
 
 public static class GuitarFretboardDiagram
 {
-    public static Element GuitarFretboard()
+    public static Element GuitarFretboard(
+        List<GuitarNote> markedNotes)
     {
         int width = 400;
         int height = 140;
         int padding = 20;
         int numFrets = 11;
-        List<GuitarNote> markedNotes = new()
-        {
-            new GuitarNote(StringIndex: 5, FretNumber: 0),
-            new GuitarNote(StringIndex: 3, FretNumber: 2),
-        };
 
         int fretboardWidth = width - (2 * padding);
         int fretboardHeight = height - (2 * padding);

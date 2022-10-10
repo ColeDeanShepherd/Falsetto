@@ -21,6 +21,11 @@ public static class HtmlHelpers
     {
         public static List<Element> Elems(params Element[] elements) => elements.ToList();
 
+        public static Element Div(
+            Dictionary<string, object>? Attributes = null,
+            List<Element>? Children = null) =>
+            new Element("div", Attributes, Children);
+
         public static Element Svg(
             Dictionary<string, object>? Attributes = null,
             List<Element>? Children = null) =>
