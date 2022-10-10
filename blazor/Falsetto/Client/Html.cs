@@ -59,31 +59,31 @@ public static class HtmlHelpers
         public static KeyValuePair<string, object> Height(double value) =>
             new KeyValuePair<string, object>("height", value);
 
-        public static KeyValuePair<string, object> X(int value) =>
+        public static KeyValuePair<string, object> X(double value) =>
             new KeyValuePair<string, object>("x", value);
 
-        public static KeyValuePair<string, object> Y(int value) =>
+        public static KeyValuePair<string, object> Y(double value) =>
             new KeyValuePair<string, object>("y", value);
 
-        public static KeyValuePair<string, object> X1(int value) =>
+        public static KeyValuePair<string, object> X1(double value) =>
             new KeyValuePair<string, object>("x1", value);
 
-        public static KeyValuePair<string, object> Y1(int value) =>
+        public static KeyValuePair<string, object> Y1(double value) =>
             new KeyValuePair<string, object>("y1", value);
 
-        public static KeyValuePair<string, object> X2(int value) =>
+        public static KeyValuePair<string, object> X2(double value) =>
             new KeyValuePair<string, object>("x2", value);
 
-        public static KeyValuePair<string, object> Y2(int value) =>
+        public static KeyValuePair<string, object> Y2(double value) =>
             new KeyValuePair<string, object>("y2", value);
 
-        public static KeyValuePair<string, object> CX(int value) =>
+        public static KeyValuePair<string, object> CX(double value) =>
             new KeyValuePair<string, object>("cx", value);
 
-        public static KeyValuePair<string, object> CY(int value) =>
+        public static KeyValuePair<string, object> CY(double value) =>
             new KeyValuePair<string, object>("cy", value);
 
-        public static KeyValuePair<string, object> R(int value) =>
+        public static KeyValuePair<string, object> R(double value) =>
             new KeyValuePair<string, object>("r", value);
 
         public static KeyValuePair<string, object> Stroke(string value) =>
