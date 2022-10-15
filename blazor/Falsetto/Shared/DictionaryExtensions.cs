@@ -44,4 +44,17 @@ public static class FalsettoDictionaryExtensions
 
         return dictionary;
     }
+
+    public static Dictionary<TKey, TValue> AddIfMissing<TKey, TValue>(
+        this Dictionary<TKey, TValue> dictionary,
+        KeyValuePair<TKey, TValue> keyValuePair)
+        where TKey : notnull
+    {
+        if (!dictionary.ContainsKey(keyValuePair.Key))
+        {
+            dictionary.Add(keyValuePair.Key, keyValuePair.Value);
+        }
+
+        return dictionary;
+    }
 }

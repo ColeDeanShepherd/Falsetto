@@ -36,22 +36,25 @@ public class CSharpComponent : ComponentBase
                 {
                     builder.OpenElement(sequence++, element.Type);
 
+                    int attrSequence = sequence++;
+
                     element.Attributes?
                         .ForEach(attribute =>
                         {
                             if (attribute.Key == "onclick")
                             {
-                                builder.AddAttribute(sequence++, attribute.Key, EventCallback.Factory.Create<MouseEventArgs>(this, (Action<MouseEventArgs>)attribute.Value));
+                                builder.AddAttribute(attrSequence, attribute.Key, EventCallback.Factory.Create<MouseEventArgs>(this, (Action<MouseEventArgs>)attribute.Value));
                             }
                             else
                             {
-                                builder.AddAttribute(sequence++, attribute.Key, attribute.Value);
+                                builder.AddAttribute(attrSequence, attribute.Key, attribute.Value);
                             }
                         });
 
+                    int nodeRefSequence = sequence++;
                     if (element.NodeReference != null)
                     {
-                        builder.AddElementReferenceCapture(sequence++, x => element.NodeReference.ElementReference = x);
+                        builder.AddElementReferenceCapture(nodeRefSequence, x => element.NodeReference.ElementReference = x);
                     }
 
                     element.Children?
@@ -221,5 +224,7 @@ public static class HtmlHelpers
 
         public static Attribute OnClick(Action<MouseEventArgs> action) =>
             new Attribute("onclick", action);
+
+        public static Attribute Hidden() => new Attribute("hidden", true);
     }
 }

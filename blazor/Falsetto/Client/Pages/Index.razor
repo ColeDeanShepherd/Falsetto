@@ -14,6 +14,7 @@
     private Html.Node RootNode = null!;
     private uint? currentFlashCardIndex = null;
     private Random random = new();
+    private bool isShowingFrontSide = true;
 
     protected override void OnInitialized()
     {
@@ -42,7 +43,7 @@
 
                     Node frontSide =
                         Guitar.GuitarFretboard(
-                            Attrs(Style("display: none")),
+                            Attrs(Hidden()),
                             new List<GuitarNote>()
                                 {
                                 note0,
@@ -50,7 +51,7 @@
                                 },
                             frontSideRef);
 
-                    Node backSide = P(Attrs(Style("display: none")), Nodes(Text(Guitar.GetSimpleIntervalName(note0, note1))), backSideRef);
+                    Node backSide = P(Attrs(Hidden()), Nodes(Text(Guitar.GetSimpleIntervalName(note0, note1))), backSideRef);
 
                     return (frontSide, backSide);
                 })
@@ -70,14 +71,29 @@
         Next();
     }
 
+    private Element GetFlashCardFrontSide(uint flashCardIndex) => FlashCards[(int)flashCardIndex].Item1.AsT1;
+    private Element GetFlashCardBackSide(uint flashCardIndex) => FlashCards[(int)flashCardIndex].Item2.AsT1;
+
+    private void SetIsVisible(Element element, bool value)
+    {
+        if (value)
+        {
+            element.Attributes?.Remove("hidden");
+        }
+        else
+        {
+            element.Attributes?.AddIfMissing(Hidden());
+        }
+    }
+
     private void Flip()
     {
         if (currentFlashCardIndex != null)
         {
-            bool isFrontSideVisible = (string)(FlashCards[(int)currentFlashCardIndex].Item1.AsT1.Attributes!["style"]) != "display: none";
-            
-            FlashCards[(int)currentFlashCardIndex].Item1.AsT1.Attributes!["style"] = isFrontSideVisible ? "display: none" : "display: block";
-            FlashCards[(int)currentFlashCardIndex].Item2.AsT1.Attributes!["style"] = isFrontSideVisible ? "display: block" : "display: none";
+            isShowingFrontSide = !isShowingFrontSide;
+
+            SetIsVisible(GetFlashCardFrontSide(currentFlashCardIndex.Value), isShowingFrontSide);
+            SetIsVisible(GetFlashCardBackSide(currentFlashCardIndex.Value), !isShowingFrontSide);
 
             StateHasChanged();
         }
@@ -87,13 +103,14 @@
     {
         if (currentFlashCardIndex != null)
         {
-            FlashCards[(int)currentFlashCardIndex].Item1.AsT1.Attributes!["style"] = "display: none";
-            FlashCards[(int)currentFlashCardIndex].Item2.AsT1.Attributes!["style"] = "display: none";
+            SetIsVisible(GetFlashCardFrontSide(currentFlashCardIndex.Value), false);
+            SetIsVisible(GetFlashCardBackSide(currentFlashCardIndex.Value), false);
         }
 
         currentFlashCardIndex = (uint)random.Next(FlashCards.Count);
 
-        FlashCards[(int)currentFlashCardIndex].Item1.AsT1.Attributes!["style"] = "display: block";
+        isShowingFrontSide = true;
+        SetIsVisible(GetFlashCardFrontSide(currentFlashCardIndex.Value), isShowingFrontSide);
 
         StateHasChanged();
     }
