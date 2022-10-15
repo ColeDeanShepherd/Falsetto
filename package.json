@@ -21,7 +21,7 @@
     "react-document-title": "^2.0.3",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "^2.1.8",
+    "react-scripts": "^5.0.1",
     "resize-observer-polyfill": "^1.5.1",
     "source-map-explorer": "^1.8.0",
     "stacktrace-js": "^2.0.0",
