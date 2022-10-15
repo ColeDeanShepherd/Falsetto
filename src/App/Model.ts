@@ -30,7 +30,7 @@ export class AppModel implements IDisposable {
     AppModel.instance = this;
 
     this.analytics = DependencyInjector.instance.getRequiredService<IAnalytics>("IAnalytics");
-    this.history = DependencyInjector.instance.getRequiredService<History<any>>("History");
+    this.history = DependencyInjector.instance.getRequiredService<History>("History");
     this.apiClient = DependencyInjector.instance.getRequiredService<IApiClient>("IApiClient");
 
     this.boundHandleAction = this.handleAction.bind(this);
@@ -61,12 +61,12 @@ export class AppModel implements IDisposable {
       const userProfile = unwrapValueOrUndefined(getProfileResult.value);
       return Ok(userProfile);
     } catch (err) {
-      return Err(err.toString());
+    return Err((err as Error).toString());
     }
   }
 
   private analytics: IAnalytics;
-  private history: History<any>;
+  private history: History;
   private apiClient: IApiClient;
 
   private boundHandleAction: ActionHandler;

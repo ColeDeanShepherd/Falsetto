@@ -19,7 +19,7 @@ export class ResetPasswordPage extends React.Component<{}, IResetPasswordPageSta
   public constructor(props: {}) {
     super(props);
 
-    this.history = DependencyInjector.instance.getRequiredService<History<any>>("History");
+    this.history = DependencyInjector.instance.getRequiredService<History>("History");
     this.apiClient = DependencyInjector.instance.getRequiredService<IApiClient>("IApiClient");
 
     this.boundOnPasswordChange = this.onPasswordChange.bind(this);
@@ -82,7 +82,7 @@ export class ResetPasswordPage extends React.Component<{}, IResetPasswordPageSta
     );
   }
 
-  private history: History<any>;
+  private history: History;
   private apiClient: IApiClient;
 
   private boundOnPasswordChange: (e: any) => void;
@@ -124,7 +124,7 @@ export class ResetPasswordPage extends React.Component<{}, IResetPasswordPageSta
       await this.apiClient.resetPasswordAsync(resetPasswordToken, password);
       this.setState({ succeeded: true });
     } catch (ex) {
-      this.setState({ error: ex.toString() })
+      this.setState({ error: (ex as Error).toString() })
     }
   }
 }

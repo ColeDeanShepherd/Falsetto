@@ -14,7 +14,7 @@ export class AppView extends React.Component<{}, {}> {
   public constructor(props: {}) {
     super(props);
 
-    this.history = DependencyInjector.instance.getRequiredService<History<any>>("History");
+    this.history = DependencyInjector.instance.getRequiredService<History>("History");
 
     this.boundHandleAction = this.handleAction.bind(this);
   }
@@ -38,7 +38,7 @@ export class AppView extends React.Component<{}, {}> {
     );
   }
 
-  private history: History<any>;
+  private history: History;
   
   private boundHandleAction: ActionHandler;
 

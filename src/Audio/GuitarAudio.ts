@@ -1,3 +1,4 @@
+import { Howl } from "howler";
 import { Pitch } from "../lib/TheoryLib/Pitch";
 import { loadAndPlaySoundsSequentially, loadAndPlaySoundsSimultaneously } from './Audio';
 import { IPitchesAudio } from "./IPitchesAudio";

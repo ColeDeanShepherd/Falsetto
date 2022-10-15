@@ -105,7 +105,7 @@ export const CheckoutPage = (props: { productId: number }) => {
         setError(result.error.message ? result.error.message : "");
       }
     } catch (ex) {
-      setError(ex.toString());
+      setError((ex as Error).toString());
     }
   }
 

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Redirect } from 'react-router';
+import { Redirect } from "react-router-dom";
 import { TextField } from "@material-ui/core";
 
 import { Card } from "../ui/Card/Card";
@@ -110,7 +110,7 @@ export class LoginPage extends React.Component<{}, ILoginPageState> {
       
       ActionBus.instance.dispatch(new LoginAction(sessionToken));
     } catch (ex) {
-      this.setState({ error: ex.toString() })
+      this.setState({ error: (ex as string).toString() })
     }
   }
 }

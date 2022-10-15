@@ -8,6 +8,7 @@ import { unwrapMaybe } from '../../lib/Core/Utils';
 import { IPitchesAudio } from '../../Audio/IPitchesAudio';
 import { PianoPitchesAudio } from '../../Audio/PianoAudio';
 import { Button } from "../../ui/Button/Button";
+import { Howl } from "howler";
 
 export enum PitchesAudioPlayerPlayState {
   PLAYABLE,

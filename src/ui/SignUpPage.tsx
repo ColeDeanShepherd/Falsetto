@@ -125,7 +125,7 @@ export class SignUpPage extends React.Component<{}, ISignUpPageState> {
       
       ActionBus.instance.dispatch(new SignUpAction(sessionToken));
     } catch (ex) {
-      this.setState({ error: ex.toString() })
+      this.setState({ error: (ex as Error).toString() })
     }
   }
 }

@@ -42,7 +42,7 @@ export class DependencyInjector {
   }
 
   private logger: ConsoleLogger;
-  private history: History<any>;
+  private history: History;
   private userManager: UserManager;
   private database: InMemoryDatabase; // new TwoTierDatabase();
   private analytics: IAnalytics;

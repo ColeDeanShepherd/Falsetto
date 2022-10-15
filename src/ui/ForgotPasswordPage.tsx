@@ -80,7 +80,7 @@ export class ForgotPasswordPage extends React.Component<{}, IForgotPasswordPageS
       await this.apiClient.emailResetPasswordLinkAsync(email);
       this.setState({ succeeded: true });
     } catch (ex) {
-      this.setState({ error: ex.toString() })
+      this.setState({ error: (ex as Error).toString() })
     }
   }
 }

@@ -1,4 +1,4 @@
-import { History, UnregisterCallback } from "history";
+import { History } from "history";
 import * as React from "react";
 
 import { flattenArrays } from '../../lib/Core/ArrayUtils';
@@ -66,7 +66,7 @@ export class Slideshow extends React.Component<ISlideshowProps, ISlideshowState>
   public constructor(props: ISlideshowProps) {
     super(props);
     
-    this.history = DependencyInjector.instance.getRequiredService<History<any>>("History");
+    this.history = DependencyInjector.instance.getRequiredService<History>("History");
     this.apiClient = DependencyInjector.instance.getRequiredService<IApiClient>("IApiClient");
 
     [this.state, this.slides] = this.getStateFromProps(props);
@@ -195,7 +195,7 @@ export class Slideshow extends React.Component<ISlideshowProps, ISlideshowState>
   }
   
   private apiClient: IApiClient;
-  private history: History<any>;
+  private history: History;
 
   // #region Event Handlers
 
