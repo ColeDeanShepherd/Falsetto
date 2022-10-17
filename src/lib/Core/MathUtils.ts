@@ -2,6 +2,7 @@ import { precondition } from './Dbc';
 import { Vector2D } from './Vector2D';
 import { Rect2D } from './Rect2D';
 import { Size2D } from './Size2D';
+import { i64 } from './Types';
 
 export const PI = 3.14159265359;
 export const TAU = 6.28318530718;
@@ -36,13 +37,13 @@ export function mod(n: number, m: number): number {
 }
 
 // TODO: add tests
-export function range(minValue: number, maxValue: number): Array<number> {
+export function range(minValue: i64, maxValueInclusive: i64): Array<i64> {
   precondition(Number.isInteger(minValue));
-  precondition(Number.isInteger(maxValue));
-  precondition(maxValue >= minValue);
+  precondition(Number.isInteger(maxValueInclusive));
+  precondition(maxValueInclusive >= minValue);
 
-  const numValues = 1 + (maxValue - minValue);
-  const result = new Array<number>(numValues);
+  const numValues = 1 + (maxValueInclusive - minValue);
+  const result = new Array<i64>(numValues);
 
   for (let i = 0; i < numValues; i++) {
     result[i] = minValue + i;

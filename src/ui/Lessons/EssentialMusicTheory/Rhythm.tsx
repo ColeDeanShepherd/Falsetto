@@ -12,25 +12,25 @@ import * as RhythmQuiz from "./RhythmQuiz";
 import * as NoteDurations from "../../Quizzes/Sheet Music/SheetMusicNoteDurations";
 import * as NoteValueNumbers from "../../Quizzes/Notes/NoteValueNumbers";
 
-import measures from "../../../img/sheet-music/measures.svg";
-import timeSignatureDiagram from "../../../img/sheet-music/time-signature.svg";
-import notesRestsDiagram from "../../../img/sheet-music/notes-and-rests.svg";
+import measures from "!file-loader!../../../img/sheet-music/measures.svg";
+import timeSignatureDiagram from "!file-loader!../../../img/sheet-music/time-signature.svg";
+import notesRestsDiagram from "!file-loader!../../../img/sheet-music/notes-and-rests.svg";
 
-import wholeNote from "../../../img/sheet-music/whole-note.svg";
-import wholeRest from "../../../img/sheet-music/whole-rest.svg";
-import halfNote from "../../../img/sheet-music/half-note.svg";
-import halfRest from "../../../img/sheet-music/half-rest.svg";
-import quarterNote from "../../../img/sheet-music/quarter-note.svg";
-import quarterRest from "../../../img/sheet-music/quarter-rest.svg";
-import eighthNote from "../../../img/sheet-music/eighth-note.svg";
-import eighthRest from "../../../img/sheet-music/eighth-rest.svg";
-import sixteenthNote from "../../../img/sheet-music/sixteenth-note.svg";
-import sixteenthRest from "../../../img/sheet-music/sixteenth-rest.svg";
-import _32ndNote from "../../../img/sheet-music/32nd-note.svg";
-import _32ndRest from "../../../img/sheet-music/32nd-rest.svg";
+import wholeNote from "!file-loader!../../../img/sheet-music/whole-note.svg";
+import wholeRest from "!file-loader!../../../img/sheet-music/whole-rest.svg";
+import halfNote from "!file-loader!../../../img/sheet-music/half-note.svg";
+import halfRest from "!file-loader!../../../img/sheet-music/half-rest.svg";
+import quarterNote from "!file-loader!../../../img/sheet-music/quarter-note.svg";
+import quarterRest from "!file-loader!../../../img/sheet-music/quarter-rest.svg";
+import eighthNote from "!file-loader!../../../img/sheet-music/eighth-note.svg";
+import eighthRest from "!file-loader!../../../img/sheet-music/eighth-rest.svg";
+import sixteenthNote from "!file-loader!../../../img/sheet-music/sixteenth-note.svg";
+import sixteenthRest from "!file-loader!../../../img/sheet-music/sixteenth-rest.svg";
+import _32ndNote from "!file-loader!../../../img/sheet-music/32nd-note.svg";
+import _32ndRest from "!file-loader!../../../img/sheet-music/32nd-rest.svg";
 
-import timeSignature44 from "../../../img/sheet-music/time-signature-4-4.svg";
-import timeSignature34 from "../../../img/sheet-music/time-signature-3-4.svg";
+import timeSignature44 from "!file-loader!../../../img/sheet-music/time-signature-4-4.svg";
+import timeSignature34 from "!file-loader!../../../img/sheet-music/time-signature-3-4.svg";
 
 import { TimeSignaturePlayer } from '../../Tools/TimeSignaturePlayer';
 import { NoteValuePlayer } from '../../Tools/NoteValuePlayer';

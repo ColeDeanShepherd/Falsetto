@@ -6,6 +6,7 @@ import { getStandardGuitarTuning, StringedInstrumentTuning } from '../../Utils/S
 import { StringedInstrumentNote } from "../../../lib/TheoryLib/StringedInstrumentNote";
 import { GuitarFretboard, renderGuitarNoteHighlightsAndLabels } from "../../Utils/GuitarFretboard";
 import { renderDistinctFlashCardSideAnswerSelect } from "../Utils";
+import { range } from "../../../lib/Core/MathUtils";
 
 const flashCardSetId = "guitarChords";
 const guitarTuning: StringedInstrumentTuning = getStandardGuitarTuning(/*stringCount*/ 6);
@@ -17,176 +18,37 @@ function createFlashCardSet() {
 }
 
 const flashCardsData = [
-  {
-    frontSide: {
-      lowestNote: guitarTuning.getNote(/*stringIndex*/1, /*fretNumber*/3),
-      higherStringFretOffsets: [-1, -3, -2, -3]
-    },
-    backSide: "Open C Major"
-  },
-  {
-    frontSide: {
-      lowestNote: guitarTuning.getNote(/*stringIndex*/1, /*fretNumber*/0),
-      higherStringFretOffsets: [2, 2, 2, 0]
-    },
-    backSide: "Open A Major"
-  },
-  {
-    frontSide: {
-      lowestNote: guitarTuning.getNote(/*stringIndex*/1, /*fretNumber*/0),
-      higherStringFretOffsets: [2, 2, 1, 0]
-    },
-    backSide: "Open A Minor"
-  },
-  {
-    frontSide: {
-      lowestNote: guitarTuning.getNote(/*stringIndex*/0, /*fretNumber*/3),
-      higherStringFretOffsets: [-1, -3, -3, -3, 0]
-    },
-    backSide: "Open G Major"
-  },
-  {
-    frontSide: {
-      lowestNote: guitarTuning.getNote(/*stringIndex*/0, /*fretNumber*/0),
-      higherStringFretOffsets: [2, 2, 1, 0, 0]
-    },
-    backSide: "Open E Major"
-  },
-  {
-    frontSide: {
-      lowestNote: guitarTuning.getNote(/*stringIndex*/0, /*fretNumber*/0),
-      higherStringFretOffsets: [2, 2, 0, 0, 0]
-    },
-    backSide: "Open E Minor"
-  },
-  {
-    frontSide: {
-      lowestNote: guitarTuning.getNote(/*stringIndex*/2, /*fretNumber*/0),
-      higherStringFretOffsets: [2, 3, 2]
-    },
-    backSide: "Open D Major"
-  },
-  {
-    frontSide: {
-      lowestNote: guitarTuning.getNote(/*stringIndex*/2, /*fretNumber*/0),
-      higherStringFretOffsets: [2, 3, 1]
-    },
-    backSide: "Open D Minor"
-  },
-  {
-    frontSide: {
-      lowestNote: guitarTuning.getNote(/*stringIndex*/0, /*fretNumber*/5),
-      higherStringFretOffsets: [2, 2, 1, 0, 0]
-    },
-    backSide: "Barred A Major"
-  },
-  {
-    frontSide: {
-      lowestNote: guitarTuning.getNote(/*stringIndex*/0, /*fretNumber*/5),
-      higherStringFretOffsets: [2, 2, 0, 0, 0]
-    },
-    backSide: "Barred A Minor"
-  },
-  {
-    frontSide: {
-      lowestNote: guitarTuning.getNote(/*stringIndex*/0, /*fretNumber*/5),
-      higherStringFretOffsets: [2, 0, 1, 0, 0]
-    },
-    backSide: "Barred A7"
-  },
-  {
-    frontSide: {
-      lowestNote: guitarTuning.getNote(/*stringIndex*/0, /*fretNumber*/5),
-      higherStringFretOffsets: [2, 0, 0, 0, 0]
-    },
-    backSide: "Barred Am7"
-  },
-  {
-    frontSide: {
-      lowestNote: guitarTuning.getNote(/*stringIndex*/0, /*fretNumber*/5),
-      higherStringFretOffsets: [1, 0, 0, undefined, undefined]
-    },
-    backSide: "Barred Am7b5"
-  },
-  {
-    frontSide: {
-      lowestNote: guitarTuning.getNote(/*stringIndex*/1, /*fretNumber*/5),
-      higherStringFretOffsets: [2, 2, 2, 0]
-    },
-    backSide: "Barred D Major"
-  },
-  {
-    frontSide: {
-      lowestNote: guitarTuning.getNote(/*stringIndex*/1, /*fretNumber*/5),
-      higherStringFretOffsets: [2, 2, 1, 0]
-    },
-    backSide: "Barred D Minor"
-  },
-  {
-    frontSide: {
-      lowestNote: guitarTuning.getNote(/*stringIndex*/1, /*fretNumber*/5),
-      higherStringFretOffsets: [2, 0, 2, 0]
-    },
-    backSide: "Barred D7"
-  },
-  {
-    frontSide: {
-      lowestNote: guitarTuning.getNote(/*stringIndex*/1, /*fretNumber*/5),
-      higherStringFretOffsets: [2, 0, 1, 0]
-    },
-    backSide: "Barred Dm7"
-  },
-  {
-    frontSide: {
-      lowestNote: guitarTuning.getNote(/*stringIndex*/1, /*fretNumber*/5),
-      higherStringFretOffsets: [1, 0, 1]
-    },
-    backSide: "Barred Dm7b5"
-  },
-  {
-    frontSide: {
-      lowestNote: guitarTuning.getNote(/*stringIndex*/2, /*fretNumber*/5),
-      higherStringFretOffsets: [2, 3, 2]
-    },
-    backSide: "G Major"
-  },
-  {
-    frontSide: {
-      lowestNote: guitarTuning.getNote(/*stringIndex*/2, /*fretNumber*/5),
-      higherStringFretOffsets: [2, 3, 1]
-    },
-    backSide: "G Minor"
-  },
-  {
-    frontSide: {
-      lowestNote: guitarTuning.getNote(/*stringIndex*/2, /*fretNumber*/5),
-      higherStringFretOffsets: [2, 1, 2]
-    },
-    backSide: "G7"
-  },
-  {
-    frontSide: {
-      lowestNote: guitarTuning.getNote(/*stringIndex*/2, /*fretNumber*/5),
-      higherStringFretOffsets: [2, 1, 1]
-    },
-    backSide: "Gm7"
-  },
+  { frontSide: [undefined,3,2,0,1,0], backSide: "Open C Major" },
+  { frontSide: [undefined,0,2,2,2,0], backSide: "Open A Major" },
+  { frontSide: [undefined,0,2,2,1,0], backSide: "Open A Minor" },
+  { frontSide: [3,2,0,0,0,3], backSide: "Open G Major" },
+  { frontSide: [0,2,2,1,0,0], backSide: "Open E Major" },
+  { frontSide: [0,2,2,0,0,0], backSide: "Open E Minor" },
+  { frontSide: [undefined,undefined,0,2,3,2], backSide: "Open D Major" },
+  { frontSide: [undefined,undefined,0,2,3,1], backSide: "Open D Minor" },
+  { frontSide: [5,7,7,6,5,5], backSide: "Barred A Major" },
+  { frontSide: [5,7,7,5,5,5], backSide: "Barred A Minor" },
+  { frontSide: [5,7,5,6,5,5], backSide: "Barred A7" },
+  { frontSide: [5,7,5,5,5,5], backSide: "Barred Am7" },
+  { frontSide: [5,6,5,5,undefined,undefined], backSide: "Barred Am7b5" },
+  { frontSide: [undefined,5,7,7,7,5], backSide: "Barred D Major" },
+  { frontSide: [undefined,5,7,7,6,5], backSide: "Barred D Minor" },
+  { frontSide: [undefined,5,7,5,7,5], backSide: "Barred D7" },
+  { frontSide: [undefined,5,7,5,6,5], backSide: "Barred Dm7" },
+  { frontSide: [undefined,5,6,5,6,undefined], backSide: "Barred Dm7b5" },
+  { frontSide: [undefined,undefined,5,7,8,7], backSide: "G Major" },
+  { frontSide: [undefined,undefined,5,7,8,6], backSide: "G Minor" },
+  { frontSide: [undefined,undefined,5,7,6,7], backSide: "G7" },
+  { frontSide: [undefined,undefined,5,7,6,6], backSide: "Gm7" }
 ];
 
-function getGuitarNotes(
-  lowestNote: StringedInstrumentNote,
-  higherStringFretOffsets: Array<number | undefined>
-): Array<StringedInstrumentNote> {
-  return [lowestNote]
-    .concat(
-      higherStringFretOffsets
-        .map((x, i) => (x !== undefined)
-          ? guitarTuning.getNote(lowestNote.stringIndex + 1 + i, lowestNote.getFretNumber(guitarTuning) + x)
-          : undefined)
-        .filter(x => x !== undefined)
-        .map(x => x as StringedInstrumentNote)
-      );
-}
+const getGuitarNotes = (fretNumbers: Array<number | undefined>): Array<StringedInstrumentNote> =>
+  fretNumbers
+    .map((n, i) => (n !== undefined)
+      ? guitarTuning.getNote(i, n)
+      : undefined)
+    .filter(x => x !== undefined)
+    .map(x => x as StringedInstrumentNote);
 
 export function createFlashCards(): FlashCard[] {
   const guitarStyle = { width: "100%", maxWidth: "400px" };
@@ -202,7 +64,7 @@ export function createFlashCards(): FlashCard[] {
             minFretNumber={0} fretCount={11}
             renderExtrasFn={metrics => renderGuitarNoteHighlightsAndLabels(
               metrics,
-              getGuitarNotes(d.frontSide.lowestNote, d.frontSide.higherStringFretOffsets),
+              getGuitarNotes(d.frontSide),
               "lightblue",
               (n, i) => ""
             )}

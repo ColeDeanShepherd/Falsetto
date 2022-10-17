@@ -10,7 +10,7 @@
     "@stripe/stripe-js": "^1.8.0",
     "bootstrap": "^4.5.0",
     "clone": "^2.1.2",
-    "core-js": "^2.6.9",
+    "core-js": "^3.25.5",
     "history": "^4.10.1",
     "howler": "^2.1.2",
     "js-cookie": "^2.2.1",
@@ -21,7 +21,7 @@
     "react-document-title": "^2.0.3",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "^2.1.8",
+    "react-scripts": "5.0.1",
     "resize-observer-polyfill": "^1.5.1",
     "source-map-explorer": "^1.8.0",
     "stacktrace-js": "^2.0.0",
@@ -35,7 +35,7 @@
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "start": "react-scripts start",
-    "build": "GENERATE_SOURCEMAP=false react-scripts build",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -52,6 +52,7 @@
     "@types/react-router-dom": "^5.1.5",
     "@types/stacktrace-js": "0.0.32",
     "@types/vexflow": "^1.2.38",
+    "@types/webmidi": "^2.0.6",
     "@types/wu": "^2.1.42",
     "typescript": "^4.8.4"
   },

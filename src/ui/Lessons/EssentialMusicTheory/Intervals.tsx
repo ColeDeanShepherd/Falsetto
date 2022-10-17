@@ -10,7 +10,7 @@ import { PitchLetter } from '../../../lib/TheoryLib/PitchLetter';
 
 import { createStudyFlashCardSetComponent } from '../../../ui/StudyFlashCards/View';
 
-import intervalQualityChart from "../../../img/interval-qualities.svg";
+import intervalQualityChart from "!file-loader!../../../img/interval-qualities.svg";
 
 import * as IntervalNamesToHalfSteps from "../../Quizzes/Intervals/IntervalNamesToHalfSteps";
 import * as IntervalEarTraining from "../../Quizzes/Intervals/IntervalEarTraining";
@@ -23,8 +23,8 @@ import * as Interval2ndNotes from "../../Quizzes/Intervals/Interval2ndNotes";
 import * as Interval2ndNoteEarTraining from "../../Quizzes/Intervals/Interval2ndNoteEarTraining";
 import * as Interval2ndNoteEarTrainingPiano from "../../Quizzes/Intervals/Interval2ndNoteEarTrainingPiano";
 
-import _32ndNote from "../../../img/sheet-music/32nd-note.svg";
-import _32ndRest from "../../../img/sheet-music/32nd-rest.svg";
+import _32ndNote from "!file-loader!../../../img/sheet-music/32nd-note.svg";
+import _32ndRest from "!file-loader!../../../img/sheet-music/32nd-rest.svg";
 
 import { Vector2D } from '../../../lib/Core/Vector2D';
 import { Margin } from '../../../lib/Core/Margin';
