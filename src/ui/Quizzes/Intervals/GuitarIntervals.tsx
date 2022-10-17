@@ -13,7 +13,7 @@ import {
   getIntervalDeltaFretNumber,
   StringedInstrumentFingerboard
 } from "../../Utils/StringedInstrumentFingerboard";
-import { standard6StringGuitarTuning } from "../../Utils/StringedInstrumentTuning";
+import { standard6StringGuitarTuning } from "../../../lib/TheoryLib/StringedInstrumentTuning";
 import { VerticalDirection } from "../../../lib/Core/VerticalDirection";
 import { StringedInstrumentNote } from '../../../lib/TheoryLib/StringedInstrumentNote';
 import { range } from '../../../lib/Core/MathUtils';

@@ -7,7 +7,7 @@ import { Pitch } from "../../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../../lib/TheoryLib/PitchLetter";
 import { GuitarFretboard, renderGuitarFretboardScaleExtras } from "./GuitarFretboard";
 import { getPreferredGuitarScaleShape } from "./GuitarFretboard";
-import { StringedInstrumentTuning } from './StringedInstrumentTuning';
+import { StringedInstrumentTuning } from '../../lib/TheoryLib/StringedInstrumentTuning';
 import { arrayMax } from '../../lib/Core/ArrayUtils';
 
 export const GuitarScaleViewer: React.FunctionComponent<{

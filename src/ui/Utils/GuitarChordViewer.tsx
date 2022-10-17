@@ -6,7 +6,7 @@ import { PitchLetter } from "../../lib/TheoryLib/PitchLetter";
 import { StringedInstrumentNote } from '../../lib/TheoryLib/StringedInstrumentNote';
 import { ChordType } from "../../lib/TheoryLib/ChordType";
 import { GuitarFretboard, renderGuitarNoteHighlightsAndLabels } from "./GuitarFretboard";
-import { StringedInstrumentTuning } from "./StringedInstrumentTuning";
+import { StringedInstrumentTuning } from "../../lib/TheoryLib/StringedInstrumentTuning";
 
 const MIN_FRET_NUMBER = 0;
 const MAX_FRET_NUMBER = 11;

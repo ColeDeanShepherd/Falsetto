@@ -4,7 +4,7 @@ import {
   GuitarFretboard
 } from "../../Utils/GuitarFretboard";
 import { StringedInstrumentMetrics } from "../../Utils/StringedInstrumentFingerboard";
-import { standard6StringGuitarTuning, StringedInstrumentTuning } from "../../Utils/StringedInstrumentTuning";
+import { standard6StringGuitarTuning, StringedInstrumentTuning } from "../../../lib/TheoryLib/StringedInstrumentTuning";
 import { FlashCard, FlashCardSide, FlashCardId, createFlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo } from "../../../FlashCardSet";
 import { StringedInstrumentNote, getStringedInstrumentNotes } from '../../../lib/TheoryLib/StringedInstrumentNote';

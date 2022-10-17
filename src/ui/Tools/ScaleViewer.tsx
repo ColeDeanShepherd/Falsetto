@@ -8,7 +8,7 @@ import { PianoKeyboard } from "../Utils/PianoKeyboard";
 import { playPitches, PianoPitchesAudio } from '../../Audio/PianoAudio';
 import * as PianoScaleDronePlayer from "../Utils/PianoScaleDronePlayer";
 import { getPreferredGuitarScaleShape } from '../Utils/GuitarFretboard';
-import { getStandardGuitarTuning } from "../Utils/StringedInstrumentTuning";
+import { getStandardGuitarTuning } from "../../lib/TheoryLib/StringedInstrumentTuning";
 import { ScaleAudioPlayer } from '../Utils/ScaleAudioPlayer';
 import { GuitarScaleViewer } from '../Utils/GuitarScaleViewer';
 import { arrayContains } from '../../lib/Core/ArrayUtils';

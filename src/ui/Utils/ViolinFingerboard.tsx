@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { StringedInstrumentNote } from '../../lib/TheoryLib/StringedInstrumentNote';
-import { StringedInstrumentTuning } from './StringedInstrumentTuning';
+import { StringedInstrumentTuning } from '../../lib/TheoryLib/StringedInstrumentTuning';
 import { StringedInstrumentMetrics, StringedInstrumentFingerboard } from './StringedInstrumentFingerboard';
 
 export interface IViolinFingerboardProps {

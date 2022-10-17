@@ -8,7 +8,7 @@ import { Vector2D } from '../../lib/Core/Vector2D';
 import { ScaleType, Scale } from '../../lib/TheoryLib/Scale';
 import { Chord } from '../../lib/TheoryLib/Chord';
 import { StringedInstrumentNote } from '../../lib/TheoryLib/StringedInstrumentNote';
-import { getStandardGuitarTuning, StringedInstrumentTuning } from './StringedInstrumentTuning';
+import { getStandardGuitarTuning, StringedInstrumentTuning } from '../../lib/TheoryLib/StringedInstrumentTuning';
 import { StringedInstrumentMetrics, StringedInstrumentFingerboard } from './StringedInstrumentFingerboard';
 import { arrayMin, arrayMax } from '../../lib/Core/ArrayUtils';
 import { precondition } from '../../lib/Core/Dbc';

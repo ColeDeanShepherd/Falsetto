@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { StringedInstrumentMetrics } from "../Utils/StringedInstrumentFingerboard";
-import { StringedInstrumentTuning } from "../Utils/StringedInstrumentTuning";
+import { StringedInstrumentTuning } from "../../lib/TheoryLib/StringedInstrumentTuning";
 import { StringedInstrumentNote } from '../../lib/TheoryLib/StringedInstrumentNote';
 import { Vector2D } from '../../lib/Core/Vector2D';
 import { range } from '../../lib/Core/MathUtils';

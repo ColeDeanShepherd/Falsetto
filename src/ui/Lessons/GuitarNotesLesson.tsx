@@ -6,7 +6,7 @@ import {
   renderFretNumbers
 } from '../Utils/GuitarFretboard';
 import { StringedInstrumentMetrics } from "../Utils/StringedInstrumentFingerboard";
-import { standard6StringGuitarTuning } from "../Utils/StringedInstrumentTuning"
+import { standard6StringGuitarTuning } from "../../lib/TheoryLib/StringedInstrumentTuning"
 import * as GuitarNotes from "../Quizzes/Notes/GuitarNotes";
 import { Pitch } from '../../lib/TheoryLib/Pitch';
 import { PitchLetter } from '../../lib/TheoryLib/PitchLetter';

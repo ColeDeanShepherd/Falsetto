@@ -4,7 +4,7 @@ import { TextField, Checkbox } from "@material-ui/core";
 import * as Utils from "../../lib/Core/Utils";
 import { FlashCardId, FlashCard, FlashCardSide, createFlashCardId } from "../../FlashCard";
 import { FlashCardStudySessionInfo, FlashCardSet } from "../../FlashCardSet";
-import { StringedInstrumentTuning } from './StringedInstrumentTuning';
+import { StringedInstrumentTuning } from '../../lib/TheoryLib/StringedInstrumentTuning';
 import { StringedInstrumentNote } from '../../lib/TheoryLib/StringedInstrumentNote';
 import { flattenArrays, arrayContains, immutableToggleArrayElement } from '../../lib/Core/ArrayUtils';
 import { clamp, range } from '../../lib/Core/MathUtils';

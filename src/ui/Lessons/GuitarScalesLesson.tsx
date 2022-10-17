@@ -6,7 +6,7 @@ import {
   getPreferredGuitarScaleShape, 
 } from '../Utils/GuitarFretboard';
 import { StringedInstrumentMetrics } from "../Utils/StringedInstrumentFingerboard";
-import { getStandardGuitarTuning } from "../Utils/StringedInstrumentTuning";
+import { getStandardGuitarTuning } from "../../lib/TheoryLib/StringedInstrumentTuning";
 import { Pitch } from '../../lib/TheoryLib/Pitch';
 import { PitchLetter } from '../../lib/TheoryLib/PitchLetter';
 import { ScaleType, Scale } from '../../lib/TheoryLib/Scale';

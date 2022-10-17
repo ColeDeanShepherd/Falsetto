@@ -2,11 +2,10 @@ import * as React from "react";
 
 import { FlashCard, FlashCardSide, createFlashCardId } from "../../../FlashCard";
 import { FlashCardSet } from "../../../FlashCardSet";
-import { getStandardGuitarTuning, StringedInstrumentTuning } from '../../Utils/StringedInstrumentTuning';
+import { getStandardGuitarTuning, StringedInstrumentTuning } from '../../../lib/TheoryLib/StringedInstrumentTuning';
 import { StringedInstrumentNote } from "../../../lib/TheoryLib/StringedInstrumentNote";
 import { GuitarFretboard, renderGuitarNoteHighlightsAndLabels } from "../../Utils/GuitarFretboard";
 import { renderDistinctFlashCardSideAnswerSelect } from "../Utils";
-import { range } from "../../../lib/Core/MathUtils";
 
 const flashCardSetId = "guitarChords";
 const guitarTuning: StringedInstrumentTuning = getStandardGuitarTuning(/*stringCount*/ 6);

@@ -7,7 +7,7 @@ import { FlashCard, FlashCardSide, FlashCardId, createFlashCardId } from "../../
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
 import { Pitch } from "../../../lib/TheoryLib/Pitch";
 import { PitchLetter } from "../../../lib/TheoryLib/PitchLetter";
-import { getStandardGuitarTuning } from "../../Utils/StringedInstrumentTuning";
+import { getStandardGuitarTuning } from "../../../lib/TheoryLib/StringedInstrumentTuning";
 import { ChordScaleFormula, ChordScaleFormulaPart } from '../../../lib/TheoryLib/ChordScaleFormula';
 import { GuitarScaleViewer } from '../../Utils/GuitarScaleViewer';
 import { renderDistinctFlashCardSideAnswerSelect } from '../Utils';

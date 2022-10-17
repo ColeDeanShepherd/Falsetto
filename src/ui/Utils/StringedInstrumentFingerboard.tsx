@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { Vector2D } from '../../lib/Core/Vector2D';
 import { StringedInstrumentNote } from '../../lib/TheoryLib/StringedInstrumentNote';
-import { StringedInstrumentTuning } from './StringedInstrumentTuning';
+import { StringedInstrumentTuning } from '../../lib/TheoryLib/StringedInstrumentTuning';
 import { Interval } from '../../lib/TheoryLib/Interval';
 import { VerticalDirection } from '../../lib/Core/VerticalDirection';
 import { Pitch } from '../../lib/TheoryLib/Pitch';

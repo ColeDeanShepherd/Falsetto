@@ -1,5 +1,5 @@
 import { Pitch } from "./Pitch";
-import { StringedInstrumentTuning } from '../../ui/Utils/StringedInstrumentTuning';
+import { StringedInstrumentTuning } from './StringedInstrumentTuning';
 import { precondition, invariant } from '../Core/Dbc';
 import { range } from '../Core/MathUtils';
 import { flattenArrays } from '../Core/ArrayUtils';

@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { GuitarFretboard } from "../../Utils/GuitarFretboard";
-import { standard6StringGuitarTuning } from "../../Utils/StringedInstrumentTuning";
+import { standard6StringGuitarTuning } from "../../../lib/TheoryLib/StringedInstrumentTuning";
 import { FlashCard, FlashCardId } from "../../../FlashCard";
 import { FlashCardSet, FlashCardStudySessionInfo, FlashCardLevel } from "../../../FlashCardSet";
 import { StringedInstrumentNote } from '../../../lib/TheoryLib/StringedInstrumentNote';
