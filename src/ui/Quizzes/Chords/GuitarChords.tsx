@@ -9,12 +9,7 @@ import { renderDistinctFlashCardSideAnswerSelect } from "../Utils";
 
 const flashCardSetId = "guitarChords";
 const guitarTuning: StringedInstrumentTuning = getStandardGuitarTuning(/*stringCount*/ 6);
-
-function createFlashCardSet() {
-  const flashCardSet = new FlashCardSet(flashCardSetId, "Guitar Chords", createFlashCards);
-  flashCardSet.renderAnswerSelect = renderDistinctFlashCardSideAnswerSelect;
-  return flashCardSet;
-}
+const guitarStyle = { width: "100%", maxWidth: "400px" };
 
 const flashCardsData = [
   { frontSide: [undefined,3,2,0,1,0], backSide: "Open C Major" },
@@ -41,6 +36,12 @@ const flashCardsData = [
   { frontSide: [undefined,undefined,5,7,6,6], backSide: "Gm7" }
 ];
 
+function createFlashCardSet() {
+  const flashCardSet = new FlashCardSet(flashCardSetId, "Guitar Chords", createFlashCards);
+  flashCardSet.renderAnswerSelect = renderDistinctFlashCardSideAnswerSelect;
+  return flashCardSet;
+}
+
 const getGuitarNotes = (fretNumbers: Array<number | undefined>): Array<StringedInstrumentNote> =>
   fretNumbers
     .map((n, i) => (n !== undefined)
@@ -49,10 +50,8 @@ const getGuitarNotes = (fretNumbers: Array<number | undefined>): Array<StringedI
     .filter(x => x !== undefined)
     .map(x => x as StringedInstrumentNote);
 
-export function createFlashCards(): FlashCard[] {
-  const guitarStyle = { width: "100%", maxWidth: "400px" };
-
-  return flashCardsData
+export const createFlashCards = (): FlashCard[] =>
+  flashCardsData
     .map((d, i) => new FlashCard(
       createFlashCardId(flashCardSetId, i + '.' + d.backSide),
       new FlashCardSide(
@@ -74,6 +73,5 @@ export function createFlashCards(): FlashCard[] {
       ),
       new FlashCardSide(d.backSide, d.backSide)
     ));
-}
 
 export const flashCardSet = createFlashCardSet();
