@@ -41,7 +41,7 @@ const flashCardsData = [
   { frontSide: [undefined, 5, 6, 5, 6, undefined], backSide: "Dm7b5" },
   { frontSide: [undefined, 5, 6, 4, 6, undefined], backSide: "Ddim7" },
   { frontSide: [undefined, 5, 7, 6, 6, 5], backSide: "DmM7" },
-  { frontSide: [undefined, 5, 4, 5, 6, undefined], backSide: "D7" },
+  { frontSide: [undefined, 5, 4, 5, 6, undefined], backSide: "D7#9" },
   
   { frontSide: [undefined, undefined, 5, 7, 8, 7], backSide: "G" },
   { frontSide: [undefined, undefined, 5, 7, 8, 6], backSide: "G Minor" },
