@@ -49,9 +49,6 @@ export class FlashCardSet {
   public moreInfoUri: string = "";
   public customNextFlashCardIdFilter?: CustomNextFlashCardIdFilter;
   public createFlashCardLevels?: (flashCardSet: FlashCardSet, flashCards: Array<FlashCard>) => Array<FlashCardLevel>;
-  public prerequisites: Array<FlashCardSet> = [];
-  public postrequisites: Array<FlashCardSet> = [];
-  public relatedSets: Array<FlashCardSet> = [];
   public route: string;
   
   public constructor(
@@ -60,15 +57,5 @@ export class FlashCardSet {
     public createFlashCards: () => Array<FlashCard>
   ) {
     this.route = "/" + this.name.toLowerCase().replace(/( )|(\/)|(\\)/g, "-");
-  }
-  
-  public addPrerequisite(prerequisite: FlashCardSet) {
-    this.prerequisites.push(prerequisite);
-    prerequisite.postrequisites.push(this);
-  }
-  
-  public addRelatedSet(relatedSet: FlashCardSet) {
-    this.relatedSets.push(relatedSet);
-    relatedSet.relatedSets.push(this);
   }
 }

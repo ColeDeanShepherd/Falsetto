@@ -131,22 +131,6 @@ export const flashCardSets = flattenArrays<FlashCardSet>(
   groupedFlashCardSets.map(g => g.flashCardSets)
 );
 
-export function relateSets(...params: Array<FlashCardSet>) {
-  for (let i = 0; i < (params.length - 1); i++) {
-    for (let j = i + 1; j < params.length; j++) {
-      if (i === j) { continue; }
-
-      params[i].addRelatedSet(params[j]);
-    }
-  }
-}
-
-function initFlashCardSetGraph() {
-  for (const group of groupedFlashCardSets) {
-    relateSets(...group.flashCardSets);
-  }
-}
-initFlashCardSetGraph();
 
 function forEachFlashCardSet(callback: (fcs: FlashCardSet) => void) {
   for (const set of flashCardSets) {

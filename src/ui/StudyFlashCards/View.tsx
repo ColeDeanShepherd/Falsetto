@@ -43,7 +43,6 @@ export interface IStudyFlashCardsViewProps {
   flashCardSet: FlashCardSet;
   enableSettings?: boolean;
   style?: any;
-  showRelatedExercises?: boolean;
   onQuizFinished?: () => void;
 }
 
@@ -364,27 +363,6 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
       cardContents = <p>Loading...</p>;
     }
 
-    const showRelatedExercises = (this.props.showRelatedExercises !== undefined)
-      ? this.props.showRelatedExercises
-      : false;
-    
-    const renderRelatedExercises = () => (
-      <Card style={cardStyle}>
-        <h2 className="h4 margin-bottom" style={{flexGrow: 1}}>
-          Related Exercises
-        </h2>
-
-        <ul>
-          {flashCardSet.relatedSets
-            .map(relatedSet => (
-              <li key={relatedSet.id}>
-                <NavLinkView to={relatedSet.route}>{relatedSet.name}</NavLinkView>
-              </li>
-            ))}
-        </ul>
-      </Card>
-    );
-
     const renderCard = (this.props.renderCard !== undefined)
       ? this.props.renderCard
       : true;
@@ -398,10 +376,6 @@ export class StudyFlashCardsView extends React.Component<IStudyFlashCardsViewPro
             </Card>
           )
           : cardContents}
-
-        {(showRelatedExercises && (flashCardSet.relatedSets.length > 0)) ? (
-          renderRelatedExercises()
-        ) : null}
       </div>
     );
   }
