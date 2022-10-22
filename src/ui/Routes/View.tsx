@@ -36,7 +36,6 @@ import { HomePage } from "../HomePage/HomePage";
 import { Glossary } from "../../ui/Glossary";
 import { Metronome } from '../../ui/Tools/Metronome';
 import { DiatonicChordPlayer } from '../../ui/Tools/DiatonicChordPlayer';
-import { KnowledgeMapPage } from '../../ui/KnowledgeMapPage';
 import { FlashCardSet } from '../../FlashCardSet';
 import { createStudyFlashCardSetComponent } from '../StudyFlashCards/View';
 import { LimitedWidthContentContainer } from '../../ui/Utils/LimitedWidthContentContainer';
@@ -48,7 +47,6 @@ import { createSlideGroups as createChordTypeMasteryLessonSlideGroups } from '..
 import { PageNotFoundView } from '../../ui/PageNotFoundView';
 import { ChordPage } from "../../ui/ChordPage";
 import { ChordExercisesPage } from '../ChordExercisesPage';
-import { understandingThePianoKeyboardProduct } from '../../Products';
 import { RandomScaleGenerator } from "../Tools/RandomScaleGenerator";
 
 export interface IRouteData {
@@ -196,23 +194,13 @@ const routes: Array<IRouteData> = ([
     )
   },
   {
-    path: "/knowledge-map",
-    title: "Knowledge Map - Falsetto",
-    renderFn: () => (
-      <LimitedWidthContentContainer>
-        <KnowledgeMapPage />
-      </LimitedWidthContentContainer>
-    )
-  },
-  {
     path: "/understanding-the-piano-keyboard/:slidePath+",
     title: "Understanding the Piano Keyboard - Falsetto",
     isPathExact: false,
     renderFn: (props: any) => (
       <Slideshow
         slideGroups={pianoTheorySlideGroups}
-        currentSlidePath={props.match.params.slidePath}
-        premiumProductId={understandingThePianoKeyboardProduct.id} />
+        currentSlidePath={props.match.params.slidePath} />
     )
   },
   {
@@ -222,8 +210,7 @@ const routes: Array<IRouteData> = ([
     renderFn: (props: any) => (
       <Slideshow
         slideGroups={pianoTheorySlideGroups}
-        currentSlidePath={""}
-        premiumProductId={understandingThePianoKeyboardProduct.id} />
+        currentSlidePath={""} />
     )
   },
   {
@@ -475,8 +462,7 @@ const routes: Array<IRouteData> = ([
             <DocumentTitle title={`${scaleName} Scale - Falsetto`}>
               <Slideshow
                 slideGroups={slideGroups}
-                currentSlidePath={props.match.params.slidePath}
-                premiumProductId={understandingThePianoKeyboardProduct.id} />
+                currentSlidePath={props.match.params.slidePath} />
             </DocumentTitle>
           );
         }} />
@@ -512,8 +498,7 @@ const routes: Array<IRouteData> = ([
             <DocumentTitle title={`${chordTypeName} Chord Mastery - Falsetto`}>
               <Slideshow
                 slideGroups={slideGroups}
-                currentSlidePath={props.match.params.slidePath}
-                premiumProductId={understandingThePianoKeyboardProduct.id} />
+                currentSlidePath={props.match.params.slidePath} />
             </DocumentTitle>
           );
         }} />

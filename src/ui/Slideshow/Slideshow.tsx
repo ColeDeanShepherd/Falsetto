@@ -102,7 +102,7 @@ export class Slideshow extends React.Component<ISlideshowProps, ISlideshowState>
   // TODO: show slide group
   public render(): JSX.Element {
     const { slides } = this;
-    const { slideGroups, premiumProductId } = this.props;
+    const { slideGroups } = this.props;
     const { slideIndex } = this.state;
 
     const slide = slides[slideIndex];
@@ -111,12 +111,6 @@ export class Slideshow extends React.Component<ISlideshowProps, ISlideshowState>
     if (!slideGroupInfo) {
       return <span style={{ padding: "0 1em" }}>Understanding the Piano Keyboard - Falsetto</span>;
     }
-
-    const slideGroup = slideGroupInfo[0];
-    
-    // const isSlideDisabledByPaywall = slideGroup.isPremium &&
-    //   ((userProfile === undefined) || !userProfile.boughtProductIds.some(pi => pi === premiumProductId));
-    const isSlideDisabledByPaywall = false;
 
     return (
       <div className="slideshow" style={{ height: "100%" }}>
