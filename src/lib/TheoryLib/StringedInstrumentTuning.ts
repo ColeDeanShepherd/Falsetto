@@ -13,14 +13,22 @@ export class StringedInstrumentTuning {
   }
 
   public getNote(stringIndex: number, fretNumber: number): StringedInstrumentNote {
-    precondition((stringIndex >= 0) && (stringIndex < this.stringCount));
-
-    const pitch = Pitch.createFromMidiNumber(
-      this.openStringPitches[stringIndex].midiNumber + fretNumber
-    );
-    return new StringedInstrumentNote(pitch, stringIndex);
+    return getNote(this, stringIndex, fretNumber);
   }
 }
+
+export function getNote(
+  tuning: StringedInstrumentTuning,
+  stringIndex: number,
+  fretNumber: number): StringedInstrumentNote {
+    precondition((stringIndex >= 0) && (stringIndex < tuning.stringCount));
+
+    const pitch = Pitch.createFromMidiNumber(
+      tuning.openStringPitches[stringIndex].midiNumber + fretNumber
+    );
+    return new StringedInstrumentNote(pitch, stringIndex);
+}
+
 export const standard6StringGuitarTuning = new StringedInstrumentTuning([
   new Pitch(PitchLetter.E, 0, 2),
   new Pitch(PitchLetter.A, 0, 2),
