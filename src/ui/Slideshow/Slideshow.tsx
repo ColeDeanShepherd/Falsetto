@@ -14,9 +14,6 @@ import { Button } from "../../ui/Button/Button";
 import "./Stylesheet.css"; // TODO: use a CSS preprocessor and split this into multiple files
 import { ActionBus } from '../../ActionBus';
 import { NavigateAction } from '../../App/Actions';
-import { UserProfile } from "../../UserProfile";
-import { IApiClient } from "../../ApiClient";
-import { PaywallOverlay } from "../Utils/PaywallOverlay/PaywallOverlay";
 import { unwrapValueOrUndefined } from '../../lib/Core/Utils';
 
 function getSlideGroup(slideGroups: Array<SlideGroup>, slideIndex: number): [SlideGroup, number] | undefined {
@@ -59,7 +56,6 @@ export interface ISlideshowProps {
 
 export interface ISlideshowState {
   slideIndex: number;
-  userProfile?: UserProfile;
 }
 
 export class Slideshow extends React.Component<ISlideshowProps, ISlideshowState> {
@@ -67,7 +63,6 @@ export class Slideshow extends React.Component<ISlideshowProps, ISlideshowState>
     super(props);
     
     this.history = DependencyInjector.instance.getRequiredService<History>("History");
-    this.apiClient = DependencyInjector.instance.getRequiredService<IApiClient>("IApiClient");
 
     [this.state, this.slides] = this.getStateFromProps(props);
   }
@@ -96,8 +91,6 @@ export class Slideshow extends React.Component<ISlideshowProps, ISlideshowState>
     AppModel.instance.pianoAudio.preloadSounds();
 
     this.registerKeyEventHandlers();
-    
-    this.loadProfileAsync();
   }
 
   public componentWillUnmount() {
@@ -110,7 +103,7 @@ export class Slideshow extends React.Component<ISlideshowProps, ISlideshowState>
   public render(): JSX.Element {
     const { slides } = this;
     const { slideGroups, premiumProductId } = this.props;
-    const { slideIndex, userProfile } = this.state;
+    const { slideIndex } = this.state;
 
     const slide = slides[slideIndex];
     
@@ -141,9 +134,7 @@ export class Slideshow extends React.Component<ISlideshowProps, ISlideshowState>
           <div style={{ display: "flex", flexDirection: "column", textAlign: "center", flexGrow: 1, height: "100%" }}>
             <LimitedWidthContentContainer style={{ flexGrow: 1 }}>
               <Card style={{ height: "100%", position: "relative" }}>
-                {!isSlideDisabledByPaywall
-                  ? slide.renderFn(this)
-                  : <PaywallOverlay premiumProductId={premiumProductId} />}
+                {slide.renderFn(this)}
               </Card>
             </LimitedWidthContentContainer>
           </div>
@@ -194,7 +185,6 @@ export class Slideshow extends React.Component<ISlideshowProps, ISlideshowState>
     );
   }
   
-  private apiClient: IApiClient;
   private history: History;
 
   // #region Event Handlers
@@ -334,17 +324,5 @@ export class Slideshow extends React.Component<ISlideshowProps, ISlideshowState>
     }
 
     return uriWithoutSlidePath;
-  }
-
-  private async loadProfileAsync() {
-    // TODO: error handling
-    const loadProfileResult = await AppModel.instance.loadProfileAsync();
-
-    if (loadProfileResult.isOk) {
-      const userProfile = unwrapValueOrUndefined(loadProfileResult.value);
-      this.setState({ userProfile: userProfile });
-    } else {
-      console.error(loadProfileResult.error);
-    }
   }
 }

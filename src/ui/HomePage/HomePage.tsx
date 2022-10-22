@@ -16,13 +16,6 @@ import { Chord } from '../../lib/TheoryLib/Chord';
 import { ChordType } from '../../lib/TheoryLib/ChordType';
 
 import "./Stylesheet.css";
-import { PaywallOverlay } from "../Utils/PaywallOverlay/PaywallOverlay";
-import { understandingThePianoKeyboardProduct } from '../../Products';
-import { UserProfile } from '../../UserProfile';
-import { IApiClient } from "../../ApiClient";
-import { DependencyInjector } from "../../DependencyInjector";
-import { AppModel } from "../../App/Model";
-import { unwrapValueOrUndefined } from "../../lib/Core/Utils";
 
 // #region Topic Thumbnails
 
@@ -150,7 +143,6 @@ export const ChordProgressionsThumbnail: React.FunctionComponent<{}> = props => 
 // #endregion
 
 export interface IHomePageState {
-  userProfile: UserProfile | undefined;
 }
 
 export class HomePage extends React.Component<{}, IHomePageState> {
@@ -161,17 +153,8 @@ export class HomePage extends React.Component<{}, IHomePageState> {
       userProfile: undefined
     };
   }
-  public componentDidMount() {
-    this.loadProfileAsync();
-  }
 
   public render(): JSX.Element {
-    const { userProfile } = this.state;
-
-    // const userOwnsUnderstandingThePianoKeyboardCourse = (userProfile !== undefined) &&
-    //   userProfile.boughtProductIds.some(pId => pId == understandingThePianoKeyboardProduct.id);
-    const userOwnsUnderstandingThePianoKeyboardCourse = true;
-    
     return (
       <div className="home-page">
         <div className="headline">
@@ -223,8 +206,6 @@ export class HomePage extends React.Component<{}, IHomePageState> {
               <p><NavLinkView to="/understanding-the-piano-keyboard/scales/summary">Review</NavLinkView></p>
               <p><NavLinkView to="/understanding-the-piano-keyboard/scales/exercise">Practice</NavLinkView></p>
             </div>
-            
-            {!userOwnsUnderstandingThePianoKeyboardCourse ? <PaywallOverlay premiumProductId={understandingThePianoKeyboardProduct.id} /> : null}
           </Card>
           
           <Card className="home-topic">
@@ -241,8 +222,6 @@ export class HomePage extends React.Component<{}, IHomePageState> {
               <p><NavLinkView to="/understanding-the-piano-keyboard/chords/diatonic-chords-review">Diatonic Chords Review</NavLinkView></p>
               <p><NavLinkView to="/understanding-the-piano-keyboard/chords/diatonic-chords-exercise">Diatonic Chords Practice</NavLinkView></p>
             </div>
-            
-            {!userOwnsUnderstandingThePianoKeyboardCourse ? <PaywallOverlay premiumProductId={understandingThePianoKeyboardProduct.id} /> : null}
           </Card>
           
           <Card className="home-topic">
@@ -256,8 +235,6 @@ export class HomePage extends React.Component<{}, IHomePageState> {
               <p><NavLinkView to="/understanding-the-piano-keyboard/chord-progressions/review">Review</NavLinkView></p>
               <p><NavLinkView to="/understanding-the-piano-keyboard/chord-progressions/exercise">Practice</NavLinkView></p>
             </div>
-            
-            {!userOwnsUnderstandingThePianoKeyboardCourse ? <PaywallOverlay premiumProductId={understandingThePianoKeyboardProduct.id} /> : null}
           </Card>
           
           <Card className="home-topic">
@@ -269,8 +246,6 @@ export class HomePage extends React.Component<{}, IHomePageState> {
               <h3><NavLinkView to="/scale-exercises">Scale Mastery</NavLinkView></h3>
               <p><NavLinkView to="/scale-exercises">Master 500+ Scales &amp; Diatonic Chords</NavLinkView></p>
             </div>
-            
-            {!userOwnsUnderstandingThePianoKeyboardCourse ? <PaywallOverlay premiumProductId={understandingThePianoKeyboardProduct.id} /> : null}
           </Card>
           
           <Card className="home-topic">
@@ -282,8 +257,6 @@ export class HomePage extends React.Component<{}, IHomePageState> {
               <h3><NavLinkView to="/chord-exercises">Chord Mastery</NavLinkView></h3>
               <p><NavLinkView to="/chord-exercises">Master 700+ Chords</NavLinkView></p>
             </div>
-            
-            {!userOwnsUnderstandingThePianoKeyboardCourse ? <PaywallOverlay premiumProductId={understandingThePianoKeyboardProduct.id} /> : null}
           </Card>
         </div>
         
@@ -293,17 +266,5 @@ export class HomePage extends React.Component<{}, IHomePageState> {
         </Card>
       </div>
     );
-  }
-
-  private async loadProfileAsync() {
-    // TODO: error handling
-    const loadProfileResult = await AppModel.instance.loadProfileAsync();
-
-    if (loadProfileResult.isOk) {
-      const userProfile = unwrapValueOrUndefined(loadProfileResult.value);
-      this.setState({ userProfile: userProfile });
-    } else {
-      console.error(loadProfileResult.error);
-    }
   }
 }

@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Route, Switch } from "react-router-dom";
 import DocumentTitle from "react-document-title";
-import * as QueryString from "query-string";
 
 import { flashCardSets } from "../../FlashCardGraph";
 
@@ -35,11 +34,9 @@ import { AboutPage } from "../../ui/AboutPage";
 import { ContributePage } from "../../ui/ContributePage";
 import { HomePage } from "../HomePage/HomePage";
 import { Glossary } from "../../ui/Glossary";
-import { ProfilePage } from "../../ui/ProfilePage";
 import { Metronome } from '../../ui/Tools/Metronome';
 import { DiatonicChordPlayer } from '../../ui/Tools/DiatonicChordPlayer';
 import { KnowledgeMapPage } from '../../ui/KnowledgeMapPage';
-import { MessagePage } from '../../ui/MessagePage';
 import { FlashCardSet } from '../../FlashCardSet';
 import { createStudyFlashCardSetComponent } from '../StudyFlashCards/View';
 import { LimitedWidthContentContainer } from '../../ui/Utils/LimitedWidthContentContainer';
@@ -51,19 +48,7 @@ import { createSlideGroups as createChordTypeMasteryLessonSlideGroups } from '..
 import { PageNotFoundView } from '../../ui/PageNotFoundView';
 import { ChordPage } from "../../ui/ChordPage";
 import { ChordExercisesPage } from '../ChordExercisesPage';
-
-import { LoginPage } from '../../ui/LoginPage';
-import { LogoutPage } from "../../ui/LogoutPage";
-import { ForgotPasswordPage} from "../ForgotPasswordPage";
-import { ResetPasswordPage } from "../ResetPasswordPage";
-import { SignUpPage } from '../SignUpPage';
-
-import { CheckoutPage } from '../CheckoutPage/View';
-
 import { understandingThePianoKeyboardProduct } from '../../Products';
-import { tryParseIntFromAny } from '../../lib/Core/Utils';
-import { CheckoutSuccessPage } from '../CheckoutSuccessPage';
-import { CheckoutCancelledPage } from '../CheckoutCancelledPage';
 import { RandomScaleGenerator } from "../Tools/RandomScaleGenerator";
 
 export interface IRouteData {
@@ -191,96 +176,6 @@ const routes: Array<IRouteData> = ([
         <HomePage />
       </LimitedWidthContentContainer>
     )
-  },
-  {
-    path: "/sign-up",
-    title: "Sign Up - Falsetto",
-    renderFn: () => (
-      <LimitedWidthContentContainer>
-        <SignUpPage />
-      </LimitedWidthContentContainer>
-    )
-  },
-  {
-    path: "/login",
-    title: "Login - Falsetto",
-    renderFn: () => (
-      <LimitedWidthContentContainer>
-        <LoginPage />
-      </LimitedWidthContentContainer>
-    )
-  },
-  {
-    path: "/logout",
-    title: "Logout - Falsetto",
-    renderFn: () => (
-      <LimitedWidthContentContainer>
-        <LogoutPage />
-      </LimitedWidthContentContainer>
-    )
-  },
-  {
-    path: "/profile",
-    title: "Profile - Falsetto",
-    renderFn: () => (
-      <LimitedWidthContentContainer>
-        <ProfilePage />
-      </LimitedWidthContentContainer>
-    )
-  },
-  {
-    path: "/forgot-password",
-    title: "Forgot Password - Falsetto",
-    renderFn: () => (
-      <LimitedWidthContentContainer>
-        <ForgotPasswordPage />
-      </LimitedWidthContentContainer>
-    )
-  },
-  {
-    path: "/reset-password",
-    title: "Reset Password - Falsetto",
-    renderFn: () => (
-      <LimitedWidthContentContainer>
-        <ResetPasswordPage />
-      </LimitedWidthContentContainer>
-    )
-  },
-  {
-    path: "/checkout",
-    title: "Checkout - Falsetto",
-    renderFn: () => {
-      const searchParams = QueryString.parse(window.location.search);
-      const productId = tryParseIntFromAny(searchParams.productId);
-
-      return (
-        <LimitedWidthContentContainer>
-          <CheckoutPage productId={productId} />
-        </LimitedWidthContentContainer>
-      );
-    }
-  },
-  {
-    path: "/checkout-success",
-    title: "Checkout Success - Falsetto",
-    renderFn: () => {
-      return (
-        <LimitedWidthContentContainer>
-          <CheckoutSuccessPage />
-        </LimitedWidthContentContainer>
-      );
-    }
-  },
-  {
-    path: "/checkout-cancelled",
-    title: "Checkout Cancelled - Falsetto",
-    renderFn: () => {
-      return (
-        <LimitedWidthContentContainer>
-          <CheckoutCancelledPage />
-        </LimitedWidthContentContainer>
-      );
-    }
   },
   {
     path: "/about",
