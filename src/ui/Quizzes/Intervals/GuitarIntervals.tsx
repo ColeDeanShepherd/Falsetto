@@ -21,6 +21,7 @@ import { arrayContains, toggleArrayElement } from '../../../lib/Core/ArrayUtils'
 import { randomInt } from '../../../lib/Core/Random';
 
 const flashCardSetId = "guitarIntervals";
+const MAX_FRET_DISTANCE = 7;
 const FRET_COUNT = StringedInstrumentFingerboard.DEFAULT_FRET_COUNT;
 
 const intervalStrings = [
@@ -43,14 +44,12 @@ const guitarTuning = standard6StringGuitarTuning;
 function forEachInterval(
   fn: (
     intervalString: string,
-    direction: VerticalDirection,
     stringIndex0: number,
     deltaStringIndex: number,
     deltaFretNumber: number,
     i: number
   ) => void
 ) {
-  const directions = [VerticalDirection.Up, VerticalDirection.Down];
   const firstStringIndices = [0, 3];
   const stringSpansPerFirstStringIndex = [
     range(1, 4), // E string
@@ -62,21 +61,19 @@ function forEachInterval(
   for (let intervalIndex = 0; intervalIndex < intervalStrings.length; intervalIndex++) {
     const interval = Interval.fromHalfSteps(1 + intervalIndex);
 
-    for (const direction of directions) {
-      for (let firstStringIndexIndex = 0; firstStringIndexIndex < firstStringIndices.length; firstStringIndexIndex++) {
-        const stringIndex0 = firstStringIndices[firstStringIndexIndex];
-        const stringSpans = stringSpansPerFirstStringIndex[firstStringIndexIndex];
+    for (let firstStringIndexIndex = 0; firstStringIndexIndex < firstStringIndices.length; firstStringIndexIndex++) {
+      const stringIndex0 = firstStringIndices[firstStringIndexIndex];
+      const stringSpans = stringSpansPerFirstStringIndex[firstStringIndexIndex];
 
-        for (const stringSpan of stringSpans) {
-          const deltaStringIndex = stringSpan - 1;
-          const deltaFretNumber = getIntervalDeltaFretNumber(
-            interval, direction, stringIndex0, deltaStringIndex, guitarTuning
-          );
+      for (const stringSpan of stringSpans) {
+        const deltaStringIndex = stringSpan - 1;
+        const deltaFretNumber = getIntervalDeltaFretNumber(
+          interval, VerticalDirection.Up, stringIndex0, deltaStringIndex, guitarTuning
+        );
 
-          if (Math.abs(deltaFretNumber) <= FRET_COUNT) {
-            fn(intervalStrings[intervalIndex], direction, stringIndex0, deltaStringIndex, deltaFretNumber, i);
-            i++;
-          }
+        if (Math.abs(deltaFretNumber) <= MAX_FRET_DISTANCE) {
+          fn(intervalStrings[intervalIndex], stringIndex0, deltaStringIndex, deltaFretNumber, i);
+          i++;
         }
       }
     }
@@ -85,7 +82,6 @@ function forEachInterval(
 
 interface IConfigData {
   enabledIntervals: string[];
-  // TODO: add enabledDirections?
 };
 
 export function configDataToEnabledFlashCardIds(
@@ -93,7 +89,7 @@ export function configDataToEnabledFlashCardIds(
 ): Array<FlashCardId> {
   const newEnabledFlashCardIds = new Array<FlashCardId>();
 
-  forEachInterval((interval, direction, stringIndex0, deltaStringIndex, deltaFretNumber, i) => {
+  forEachInterval((interval, stringIndex0, deltaStringIndex, deltaFretNumber, i) => {
     if (arrayContains(configData.enabledIntervals, interval)) {
       newEnabledFlashCardIds.push(flashCards[i].id);
     }
@@ -171,17 +167,12 @@ export function renderAnswerSelect(
 ): JSX.Element {
   const configData = info.configData as IConfigData;
   
-  const ascendingIntervals = configData.enabledIntervals
-    .map(i => Interval.upDirectionSymbol + " " + i);
-  const descendingIntervals = configData.enabledIntervals
-    .map(i => Interval.downDirectionSymbol + " " + i);
+  const intervals = configData.enabledIntervals;
+    
   return (
     <div>
       {FlashCardUtils.renderStringAnswerSelectInternal(
-        `${info.currentFlashCardId}.0`, ascendingIntervals, info
-      )}
-      {FlashCardUtils.renderStringAnswerSelectInternal(
-        `${info.currentFlashCardId}.1`, descendingIntervals, info
+        `${info.currentFlashCardId}.0`, intervals, info
       )}
     </div>
   );
@@ -273,11 +264,7 @@ export function renderFretboardExtras(metrics: StringedInstrumentMetrics, notes:
 export function createFlashCards(): Array<FlashCard> {
   const flashCards = new Array<FlashCard>();
 
-  forEachInterval((interval, direction, stringIndex0, deltaStringIndex, deltaFretNumber, i) => {
-    const directionChar = (direction === VerticalDirection.Up)
-      ? Interval.upDirectionSymbol
-      : Interval.downDirectionSymbol;
-
+  forEachInterval((interval, stringIndex0, deltaStringIndex, deltaFretNumber, i) => {
     const flashCard = new FlashCard(
       createFlashCardId(flashCardSetId,
         {
@@ -295,7 +282,7 @@ export function createFlashCards(): Array<FlashCard> {
         )
       ),
       new FlashCardSide(
-        directionChar + " " + interval,
+        interval,
         interval
       )
     );
