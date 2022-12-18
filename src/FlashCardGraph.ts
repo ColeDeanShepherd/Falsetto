@@ -42,6 +42,7 @@ import * as IntroQuiz from "./ui/UnderstandingThePianoKeyboard/IntroQuiz";
 import * as ScalesQuiz from "./ui/UnderstandingThePianoKeyboard/ScalesQuiz";
 
 import * as PianoScaleDegrees from "./ui/Quizzes/Scales/PianoScaleDegrees";
+import * as RelativeChordNotes from "./ui/Quizzes/Chords/RelativeChordNotes";
 import * as PianoDiatonicChords from "./ui/Quizzes/Chords/PianoDiatonicChords";
 
 import { FlashCardSet } from "./FlashCardSet";
@@ -109,6 +110,7 @@ export const groupedFlashCardSets = [
       //ChordFamilyDefinitions.flashCardSet,
       ChordFamilies.flashCardSet,
       ChordNotes.flashCardSet,
+      RelativeChordNotes.flashCardSet,
       AvailableChordTensions.flashCardSet,
       DiatonicTriads.flashCardSet,
       DiatonicSeventhChords.flashCardSet,

@@ -12,6 +12,7 @@ import * as IntervalQualitySymbolsToQualities from "./Quizzes/Intervals/Interval
 import * as GenericIntervalsToIntervalQualities from "./Quizzes/Intervals/GenericIntervalsToIntervalQualities";
 import * as IntervalsToConsonanceDissonance from "./Quizzes/Intervals/IntervalsToConsonanceDissonance";
 import * as ChordNotes from "./Quizzes/Chords/ChordNotes";
+import * as RelativeChordNotes from "./Quizzes/Chords/RelativeChordNotes";
 import * as ScaleCharacteristics from "./Quizzes/Scales/ScaleCharacteristics";
 import * as ScaleFamilies from "./Quizzes/Scales/ScaleFamilies";
 import * as ChordFamilies from "./Quizzes/Chords/ChordFamilies";
@@ -177,6 +178,7 @@ export const MainMenu : React.FunctionComponent<{ collapseCategories: boolean }>
     <MenuCategory title="Chord Exercises" collapseCategories={props.collapseCategories}>
       <NavLinkView to={ChordFamilies.flashCardSet.route}>{ChordFamilies.flashCardSet.name}</NavLinkView>
       <NavLinkView to={ChordNotes.flashCardSet.route}>{ChordNotes.flashCardSet.name}</NavLinkView>
+      <NavLinkView to={RelativeChordNotes.flashCardSet.route}>{RelativeChordNotes.flashCardSet.name}</NavLinkView>
       <NavLinkView to={AvailableChordTensions.flashCardSet.route}>{AvailableChordTensions.flashCardSet.name}</NavLinkView>
       <NavLinkView to={DiatonicTriads.flashCardSet.route}>{DiatonicTriads.flashCardSet.name}</NavLinkView>
       <NavLinkView to={DiatonicSeventhChords.flashCardSet.route}>{DiatonicSeventhChords.flashCardSet.name}</NavLinkView>
