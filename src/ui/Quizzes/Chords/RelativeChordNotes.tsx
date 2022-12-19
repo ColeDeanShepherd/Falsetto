@@ -31,7 +31,7 @@ const octaveNumber = 4;
 const lowestPitch = new Pitch(PitchLetter.C, 0, octaveNumber);
 const highestPitch = new Pitch(PitchLetter.B, 0, octaveNumber);
 
-const pianoMaxWidth = 200;
+const pianoMaxWidth = 300;
 
 interface IConfigData {
   enabledChordRootPitches: Array<Pitch>;

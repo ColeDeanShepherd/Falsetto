@@ -17,7 +17,7 @@ const flashCardSetId = "ptScalesQuiz";
 
 const pianoLowestPitch = new Pitch(PitchLetter.C, 0, 4);
 const pianoHighestPitch = new Pitch(PitchLetter.B, 0, 5);
-const pianoMaxWidth = 240;
+const pianoMaxWidth = 300;
 
 function createFlashCardSet(): FlashCardSet {
   const flashCardSet = new FlashCardSet(flashCardSetId, "Scales Exercise", createFlashCards);
