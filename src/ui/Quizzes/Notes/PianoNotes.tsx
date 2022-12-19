@@ -19,7 +19,7 @@ export const naturalPitches = allPitches
 export const accidentalPitches = allPitches
   .filter(p => !p.isNatural);
 
-const pianoMaxWidth = 200;
+const pianoMaxWidth = 300;
 
 function renderAnswerSelect(
   info: FlashCardStudySessionInfo
