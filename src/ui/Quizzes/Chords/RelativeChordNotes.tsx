@@ -35,10 +35,12 @@ const pianoMaxWidth = 300;
 
 interface IConfigData {
   enabledChordRootPitches: Array<Pitch>;
+  enabledIntervals: Array<number>;
 }
 
 const initialConfigData: IConfigData = {
-  enabledChordRootPitches: [commonKeyPitchesOctave0[0]]
+  enabledChordRootPitches: [commonKeyPitchesOctave0[0]],
+  enabledIntervals: chordNoteIntervalsAndNames.map((_, i) => i)
 };
 
 export function forEachRelativeChordNote(callbackFn: (rootPitch: Pitch, interval: number, name: string, i: number) => void) {
@@ -57,7 +59,9 @@ export function configDataToEnabledFlashCardIds(
   const newEnabledFlashCardIds = new Array<FlashCardId>();
 
   forEachRelativeChordNote((rootPitch, interval, name, i) => {
-    if (arrayContains(configData.enabledChordRootPitches, rootPitch)) {
+    if (
+         arrayContains(configData.enabledChordRootPitches, rootPitch)
+      && arrayContains(configData.enabledIntervals, interval)) {
       newEnabledFlashCardIds.push(flashCards[index].id);
     }
 
@@ -102,9 +106,40 @@ export class RelativeChordNotesFlashCardMultiSelect extends React.Component<IRel
       </Table>
     );
 
+    const intervalCheckboxTableRows = chordNoteIntervalsAndNames
+      .map(x => {
+        const isChecked = configData.enabledIntervals.indexOf(x.interval) >= 0;
+        const isEnabled = !isChecked || (configData.enabledIntervals.length > 1);
+
+        return (
+          <TableRow key={x.interval}>
+            <TableCell><Checkbox checked={isChecked} onChange={event => this.toggleIntervalEnabled(x.interval)} disabled={!isEnabled} /></TableCell>
+            <TableCell>{x.name}</TableCell>
+          </TableRow>
+        );
+      }, this);
+    const intervalCheckboxes = (
+      <Table className="table">
+        <TableHead>
+          <TableRow>
+            <TableCell />
+            <TableCell>Interval</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {intervalCheckboxTableRows}
+        </TableBody>
+      </Table>
+    );
+
     return (
       <Grid container spacing={32}>
-        <Grid item xs={12}>{chordRootNoteCheckboxes}</Grid>
+        <Grid item xs={6}>
+          {chordRootNoteCheckboxes}
+        </Grid>
+        <Grid item xs={6}>
+          {intervalCheckboxes}
+        </Grid>
       </Grid>
     );
   }
@@ -118,11 +153,29 @@ export class RelativeChordNotesFlashCardMultiSelect extends React.Component<IRel
     
     if (newEnabledChordRootPitches.length > 0) {
       const newConfigData: IConfigData = {
-        enabledChordRootPitches: newEnabledChordRootPitches
+        enabledChordRootPitches: newEnabledChordRootPitches,
+        enabledIntervals: configData.enabledIntervals
       };
       this.onChange(newConfigData);
     }
   }
+  
+  private toggleIntervalEnabled(interval: number) {
+    const configData = this.props.studySessionInfo.configData as IConfigData;
+    const newEnabledIntervals = toggleArrayElement(
+      configData.enabledIntervals,
+      interval
+    );
+    
+    if (newEnabledIntervals.length > 0) {
+      const newConfigData: IConfigData = {
+        enabledChordRootPitches: configData.enabledChordRootPitches,
+        enabledIntervals: newEnabledIntervals
+      };
+      this.onChange(newConfigData);
+    }
+  }
+
   private onChange(newConfigData: IConfigData) {
     if (!this.props.onChange) { return; }
 
