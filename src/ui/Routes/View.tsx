@@ -35,6 +35,7 @@ import { ContributePage } from "../../ui/ContributePage";
 import { HomePage } from "../HomePage/HomePage";
 import { Glossary } from "../../ui/Glossary";
 import { Metronome } from '../../ui/Tools/Metronome';
+import { InfiniteMelodyTrainer } from '../../ui/Tools/InfiniteMelodyTrainer';
 import { DiatonicChordPlayer } from '../../ui/Tools/DiatonicChordPlayer';
 import { FlashCardSet } from '../../FlashCardSet';
 import { createStudyFlashCardSetComponent } from '../StudyFlashCards/View';
@@ -336,6 +337,15 @@ const routes: Array<IRouteData> = ([
     renderFn: () => (
       <LimitedWidthContentContainer>
         <Metronome />
+      </LimitedWidthContentContainer>
+    )
+  },
+  {
+    path: "/infinite-melody-trainer",
+    title: "Infinite Melody Trainer - Falsetto",
+    renderFn: () => (
+      <LimitedWidthContentContainer>
+        <InfiniteMelodyTrainer />
       </LimitedWidthContentContainer>
     )
   },
