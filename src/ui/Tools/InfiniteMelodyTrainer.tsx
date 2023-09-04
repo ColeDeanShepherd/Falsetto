@@ -10,7 +10,7 @@ import { Button } from "../Button/Button";
 
 const minPitch = new Pitch(PitchLetter.C, 0, 4);
 const maxPitch = new Pitch(PitchLetter.B, 0, 4);
-const pianoMaxHeight = 140;
+const pianoMaxHeight = 240;
 
 interface IInfiniteMelodyTrainerProps {}
 
