@@ -150,6 +150,7 @@ export const MainMenu : React.FunctionComponent<{ collapseCategories: boolean }>
       <NavLinkView to={Interval2ndNoteEarTraining.flashCardSet.route}>{Interval2ndNoteEarTraining.flashCardSet.name}</NavLinkView>
       <NavLinkView to={Interval2ndNoteEarTrainingPiano.flashCardSet.route}>{Interval2ndNoteEarTrainingPiano.flashCardSet.name}</NavLinkView>
       <NavLinkView to={IntervalSinging.flashCardSet.route}>{IntervalSinging.flashCardSet.name}</NavLinkView>
+      <NavLinkView to={'/infinite-melody-ear-trainer'}>Infinite Melody Ear Trainer</NavLinkView>
     </MenuCategory>
   );
 

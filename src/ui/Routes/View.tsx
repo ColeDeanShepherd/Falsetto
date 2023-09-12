@@ -341,8 +341,8 @@ const routes: Array<IRouteData> = ([
     )
   },
   {
-    path: "/infinite-melody-trainer",
-    title: "Infinite Melody Trainer - Falsetto",
+    path: "/infinite-melody-ear-trainer",
+    title: "Infinite Melody Ear Trainer - Falsetto",
     renderFn: () => (
       <LimitedWidthContentContainer>
         <InfiniteMelodyTrainer />
