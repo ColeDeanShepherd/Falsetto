@@ -193,9 +193,7 @@ export const MainMenu : React.FunctionComponent<{ collapseCategories: boolean }>
   const otherCategory = (
     <MenuCategory title="Other" collapseCategories={props.collapseCategories}>
       <NavLinkView to={"/glossary"}>Glossary</NavLinkView>
-      <NavLinkView to="/contribute" style={{ fontWeight: "normal" }}>
-        Contribute
-      </NavLinkView>
+      <a href="https://freeappkit.com">FreeAppKit (partner site)</a>
     </MenuCategory>
   );
 
